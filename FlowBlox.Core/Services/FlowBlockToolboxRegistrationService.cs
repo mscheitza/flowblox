@@ -1,0 +1,38 @@
+﻿using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Services.Base;
+
+namespace FlowBlox.Core.Services
+{
+    public class FlowBlockToolboxRegistrationService : FlowBlockToolboxRegistrationServiceBase
+    {
+        public override IEnumerable<string> GetAllToolboxCategoriesInModule()
+        {
+            return
+             [
+                 FlowBloxToolboxCategory.Regex,
+                 FlowBloxToolboxCategory.XPath,
+                 FlowBloxToolboxCategory.CounterFormat,
+                 FlowBloxToolboxCategory.Format,
+                 FlowBloxToolboxCategory.SQL,
+                 FlowBloxToolboxCategory.Filter,
+                 FlowBloxToolboxCategory.DBConnection
+             ];
+        }
+
+        public override IEnumerable<string> GetAllToolboxResourcesInModule()
+        {
+            return
+            [
+                "FlowBlox.Core.Files.globalToolbox_counterformat.json",
+                "FlowBlox.Core.Files.globalToolbox_format.json",
+                "FlowBlox.Core.Files.globalToolbox_regex.json",
+                "FlowBlox.Core.Files.globalToolbox_regex_extended.json",
+                "FlowBlox.Core.Files.globalToolbox_sql_lite.json",
+                "FlowBlox.Core.Files.globalToolbox_sql_mssql.json",
+                "FlowBlox.Core.Files.globalToolbox_sql_mysql.json",
+                "FlowBlox.Core.Files.globalToolbox_sql_oracle.json",
+                "FlowBlox.Core.Files.globalToolbox_xpath.json"
+            ];
+        }
+    }
+}

@@ -1,0 +1,104 @@
+﻿{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "Oracle (Service Name)",
+      "Content": "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=%%Host%%)(PORT=%%Port%%)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=%%ServiceName%%)));User Id=%%User%%;Password=%%Password%%;",
+      "Description": "Standard Oracle connection string using TCP and service name."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "Oracle (SID)",
+      "Content": "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=%%Host%%)(PORT=%%Port%%))(CONNECT_DATA=(SID=%%SID%%)));User Id=%%User%%;Password=%%Password%%;",
+      "Description": "Oracle connection string using SID instead of service name."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "Oracle EZ Connect",
+      "Content": "Data Source=%%Host%%:%%Port%%/%%ServiceName%%;User Id=%%User%%;Password=%%Password%%;",
+      "Description": "Simplified Oracle EZ Connect syntax."
+    },
+
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "MSSQL (Integrated Security)",
+      "Content": "Server=%%ServerName%%;Database=%%DatabaseName%%;Integrated Security=True;",
+      "Description": "Microsoft SQL Server connection using Windows authentication."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "MSSQL (SQL Authentication)",
+      "Content": "Server=%%ServerName%%;Database=%%DatabaseName%%;User Id=%%User%%;Password=%%Password%%;",
+      "Description": "Microsoft SQL Server connection using SQL Server authentication."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "MSSQL (Trusted Connection with Instance)",
+      "Content": "Server=%%ServerName%%\\\\%%InstanceName%%;Database=%%DatabaseName%%;Trusted_Connection=True;",
+      "Description": "SQL Server connection using a specific named instance and trusted connection."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "MSSQL (With Connection Pooling)",
+      "Content": "Server=%%ServerName%%;Database=%%DatabaseName%%;User Id=%%User%%;Password=%%Password%%;Pooling=True;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0;",
+      "Description": "SQL Server connection with enabled connection pooling."
+    },
+
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "MySQL (Standard)",
+      "Content": "Server=%%Server%%;Port=%%Port%%;Database=%%Database%%;Uid=%%User%%;Pwd=%%Password%%;",
+      "Description": "Standard MySQL connection string with port, database and user credentials."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "MySQL (SSL Enabled)",
+      "Content": "Server=%%Server%%;Port=%%Port%%;Database=%%Database%%;Uid=%%User%%;Pwd=%%Password%%;SslMode=Required;",
+      "Description": "MySQL connection with SSL required."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "MySQL (Pooling)",
+      "Content": "Server=%%Server%%;Port=%%Port%%;Database=%%Database%%;Uid=%%User%%;Pwd=%%Password%%;Pooling=true;Min Pool Size=0;Max Pool Size=50;",
+      "Description": "MySQL connection with connection pooling enabled."
+    },
+
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "PostgreSQL (Standard)",
+      "Content": "Host=%%Host%%;Port=%%Port%%;Database=%%Database%%;Username=%%User%%;Password=%%Password%%;",
+      "Description": "PostgreSQL connection string using username and password authentication."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "PostgreSQL (SSL Enabled)",
+      "Content": "Host=%%Host%%;Port=%%Port%%;Database=%%Database%%;Username=%%User%%;Password=%%Password%%;SSL Mode=Require;",
+      "Description": "PostgreSQL connection with SSL required."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "PostgreSQL (Pooling)",
+      "Content": "Host=%%Host%%;Port=%%Port%%;Database=%%Database%%;Username=%%User%%;Password=%%Password%%;Pooling=true;MinPoolSize=1;MaxPoolSize=20;",
+      "Description": "PostgreSQL connection with pooling options."
+    },
+
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "SQLite (File Database)",
+      "Content": "Data Source=%%FilePath%%;Version=3;",
+      "Description": "SQLite connection using a local file path."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "SQLite (In-Memory)",
+      "Content": "Data Source=:memory:;Version=3;New=True;",
+      "Description": "SQLite in-memory database (non-persistent, useful for testing)."
+    },
+    {
+      "ToolboxCategory": "DBConnection",
+      "Name": "SQLite (Shared Cache)",
+      "Content": "Data Source=%%FilePath%%;Version=3;Cache=Shared;",
+      "Description": "SQLite connection with shared cache mode."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FlowBlox.UICore.Utilities
+{
+    public static class RegexUtil
+    {
+        public static string EscapeRegexValue(string value)
+        {
+            List<string> regexChars = new List<string>()
+                {
+                    "/", "[", "\\", "-", "]", ".", "?", "(", ")", "{", "}", "*", "|", "$", "^", "=", "#", "+"
+                };
+
+            foreach (string regexChar in regexChars)
+            {
+                value = value.Replace(regexChar, "\\" + regexChar);
+            }
+
+            foreach (string regexChar in regexChars)
+            {
+                value = value.Replace("\\\\" + regexChar, "\\" + regexChar);
+            }
+
+            return value;
+        }
+    }
+}

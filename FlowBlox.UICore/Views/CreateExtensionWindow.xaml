@@ -1,0 +1,77 @@
+﻿<mah:MetroWindow
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    x:Class="FlowBlox.UICore.Views.CreateExtensionWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    Title="{x:Static resources:CreateExtensionWindow.Title}" 
+    Height="400" Width="500"
+    WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <!-- Column definitions for the grid layout -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Row definitions for the grid layout -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Name Label and Input -->
+        <TextBlock Grid.Row="0" Grid.Column="0" 
+                   Text="{x:Static resources:CreateExtensionWindow.Label_Name}" 
+                   Margin="0,0,0,10"/>
+        <TextBox Grid.Row="1" Grid.Column="0" 
+                 Text="{Binding ExtensionName, UpdateSourceTrigger=PropertyChanged}"
+                 AcceptsReturn="False" />
+
+        <!-- Description Label and Input -->
+        <TextBlock Grid.Row="2" Grid.Column="0" 
+                   Text="{x:Static resources:CreateExtensionWindow.Label_Description}" 
+                   Margin="0,10,0,10"/>
+        <TextBox Grid.Row="3" Grid.Column="0" 
+                 Text="{Binding ExtensionDescription, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!-- Hint for Name format -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+            <iconPacks:PackIconMaterial Kind="InformationOutline" Foreground="DarkSlateGray" Margin="0,0,5,0"/>
+            <TextBlock Text="{x:Static resources:CreateExtensionWindow.Hint_NameFormat}" 
+                       Foreground="Gray" 
+                       FontStyle="Italic" 
+                       Width="200" 
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- Hint for Description -->
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+            <iconPacks:PackIconMaterial Kind="InformationOutline" Foreground="DarkSlateGray" Margin="0,0,5,0"/>
+            <TextBlock Text="{x:Static resources:CreateExtensionWindow.Hint_Description}" 
+                       Foreground="Gray" 
+                       FontStyle="Italic" 
+                       Width="200" 
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- Buttons at the bottom -->
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="{x:Static resources:CreateExtensionWindow.Button_Cancel}" Command="{Binding CancelCommand}" Margin="0,0,10,0" IsCancel="True"/>
+            <Button Content="{x:Static resources:CreateExtensionWindow.Button_Create}" Command="{Binding CreateCommand}" IsEnabled="{Binding CanCreate}" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

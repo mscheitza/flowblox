@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SyntaxDefinition name="Regex" extensions=".regex" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+  <Color name="SpecialChar" foreground="#FF0055CC" fontWeight="bold" />
+  <Color name="Group" foreground="#FF008800" />
+  <Color name="Quantifier" foreground="#FFAA00AA" />
+  <Color name="Anchor" foreground="#FF880000" />
+  <Color name="Comment" foreground="Gray" fontStyle="italic" />
+  <Color name="Default" foreground="Black" />
+
+  <RuleSet ignoreCase="false">
+    <!-- Escaped characters like \d \w \s \b -->
+    <Rule color="SpecialChar">
+      <Regex>\\[dDsSwWbB]</Regex>
+    </Rule>
+
+    <!-- Anchors ^ $ \A \z -->
+    <Rule color="Anchor">
+      <Regex>(\^|\$|\\A|\\z)</Regex>
+    </Rule>
+
+    <!-- Quantifiers: *, +, ?, {n}, {n,}, {n,m} -->
+    <Rule color="Quantifier">
+      <Regex>(\*|\+|\?|\{\d+(,\d*)?\})</Regex>
+    </Rule>
+
+    <!-- Grouping: ( ), (?: ), (?= ), (?! ) -->
+    <Rule color="Group">
+      <Regex>\(\?[:=!]</Regex>
+    </Rule>
+    <Rule color="Group">
+      <Regex>[\(\)]</Regex>
+    </Rule>
+
+    <!-- Comments in verbose mode -->
+    <Span color="Comment" begin="\#.*" end="\n" />
+
+    <!-- Character classes -->
+    <Rule color="SpecialChar">
+      <Regex>\[[^\]]+\]</Regex>
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>

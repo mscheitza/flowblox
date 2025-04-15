@@ -1,0 +1,418 @@
+﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Enums;
+using FlowBlox.Core.Extensions;
+using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.StartEndPatternSelector;
+using FlowBlox.Core.Models.FlowBlocks.WebRequest;
+using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.DeepCopier;
+using FlowBlox.Core.Util.Fields;
+using FlowBlox.Core.Util.FlowBlocks;
+using FlowBlox.Core.Util.Resources;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using SkiaSharp;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Drawing;
+
+namespace FlowBlox.Core.Models.FlowBlocks
+{
+    public class WebRequestParameter : FlowBloxReactiveObject
+    {
+        [Display(Name = "WebRequestParameter_Key", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection | UIOptions.FieldSelectionIsOptional)]
+        public string Key { get; set; }
+
+        [Display(Name = "WebRequestParameter_Value", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection | UIOptions.FieldSelectionIsOptional)]
+        public string Value { get; set; }
+    }
+
+    [FlowBlockUIGroup("WebRequestFlowBlock_Groups_Advanced", 0)]
+    [FlowBlockUIGroup("WebRequestFlowBlock_Groups_Payload", 1)]
+    [FlowBlockUIGroup("WebRequestFlowBlock_Groups_Authentication", 2)]
+    [Display(Name = "WebRequestFlowBlock_DisplayName", Description = "WebRequestFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    public class WebRequestFlowBlock : BaseSingleResultFlowBlock
+    {
+        [Display(Name = "WebRequestFlowBlock_Url", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        public string Url { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_HTTPAction", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        public HttpActions? HTTPAction { get; set; } = HttpActions.GET;
+
+        [Display(Name = "WebRequestFlowBlock_AssociatedWebRequest", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleWebRequests), SelectionDisplayMember = nameof(Name),
+            Operations = UIOperations.Link | UIOperations.Unlink)]
+        public WebRequestFlowBlock AssociatedWebRequest { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_IgnoreAlreadyProcessedContents", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 1)]
+        public bool IgnoreAlreadyProcessedContents { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_IgnoreAlreadyProcessedUrls", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 2)]
+        public bool IgnoreAlreadyProcessedUrls { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_CacheAlreadyProcessedContents", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 3)]
+        public bool CacheAlreadyProcessedContents { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_ContentCacheSize", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 4)]
+        public int ContentCacheSize { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_WebRequestTimeout", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 5)]
+        public int WebRequestTimeout { get; set; }
+
+        public string LiveURL { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_Payload_ContentType", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Payload", Order = 0)]
+        public string Payload_ContentType { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_Payload", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Payload", Order = 0)]
+        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
+        public string Payload { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_PostParameters", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Payload", Order = 1)]
+        [FlowBlockUI(Factory = UIFactory.GridView, UiOptions = UIOptions.EnableFieldSelection)]
+        public ObservableCollection<WebRequestParameter> PostParameters { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_HeaderParameters", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Payload", Order = 2)]
+        [FlowBlockUI(Factory = UIFactory.GridView, UiOptions = UIOptions.EnableFieldSelection)]
+        public ObservableCollection<WebRequestParameter> HeaderParameters { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_UserName", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Authentication", Order = 0)]
+        public string UserName { get; set; }
+
+        [Display(Name = "WebRequestFlowBlock_Password", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Authentication", Order = 1)]
+        [FlowBlockTextBox(PasswordChar = '*')]
+        public string Password { get; set; }
+
+        [JsonIgnore()]
+        [DeepCopierIgnore()]
+        public ConfigurableWebRequest InternalWebRequest { get; private set; }
+
+        public List<WebRequestFlowBlock> GetPossibleWebRequests()
+        {
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+            var webRequests = registry.GetFlowBlocks<WebRequestFlowBlock>();
+            return webRequests.ToList();
+        }
+
+        private string _result = string.Empty;
+
+        public string WindowHandle { get; set; }
+
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.cube_send, 16, SKColors.SeaGreen);
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.cube_send, 32, SKColors.SeaGreen);
+
+
+        private const int DefaultContentCacheSize = 209715200;
+        private const int DefaultWebRequestTimeout = 30000;
+
+        public WebRequestFlowBlock() : base()
+        {
+            this.HeaderParameters = new ObservableCollection<WebRequestParameter>();
+            this.PostParameters = new ObservableCollection<WebRequestParameter>();
+
+            this.ContentCacheSize = DefaultContentCacheSize;
+            this.WebRequestTimeout = DefaultWebRequestTimeout;
+        }
+
+        public override void OnAfterCreate()
+        {
+            this.Payload_ContentType = FlowBloxOptions.GetOptionInstance().OptionCollection["WebRequest.PostContentType"].Value;
+            this.WebRequestTimeout = FlowBloxOptions.GetOptionInstance().OptionCollection["WebRequest.Timeout"].GetValueInt();
+            base.OnAfterCreate();
+        }
+
+        public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
+
+        public override FlowBlockCategory GetCategory() => FlowBlockCategory.Web;
+
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(Url));
+            properties.Add(nameof(UserName));
+            properties.Add(nameof(Password));
+            return properties;
+        }
+
+        private readonly HashSet<string> _alreadyProcessedContents = new HashSet<string>();
+        private readonly HashSet<string> _alreadyProcessedUrls = new HashSet<string>();
+
+        private void CheckAlreadyProcessed(BaseRuntime runtime, string[] urls, ref string result)
+        {
+            if (!string.IsNullOrEmpty(result))
+            {
+                if (this.IgnoreAlreadyProcessedContents)
+                {
+                    string contentHash = null;
+
+                    // Try to determine a content hash from the body tag of the current HTTP content.
+                    if (result.Contains("<body") && result.Contains("</body>"))
+                    {
+                        var bodyList = PatternSelector.SelectPatternFromContext(result, "<body", "</body>", true);
+                        if (bodyList.Count == 1)
+                        {
+                            string bodyContent = bodyList[0];
+                            contentHash = string.Format("{0:X}", bodyContent.GetHashCode());
+                        }
+                    }
+
+                    // If that didn't work, try to derive a content hash from the entire page.
+                    if (string.IsNullOrEmpty(contentHash))
+                        contentHash = string.Format("{0:X}", result.GetHashCode());
+
+                    // If the determination of the content hash was successful, add the content hash to the internal registry:
+                    if (!string.IsNullOrEmpty(contentHash))
+                    {
+                        if (!_alreadyProcessedContents.Contains(contentHash))
+                        {
+                            _alreadyProcessedContents.Add(contentHash);
+                        }
+                        else
+                        {
+                            runtime.Report(CreateAlreadyProcessedLogMessage());
+                            result = string.Empty;
+                        }
+                    }
+                }
+
+                // URL überprüfen, falls definiert und erlaubt:
+                var validUrls = urls.ExceptNull();
+                if (IgnoreAlreadyProcessedUrls && validUrls.Any())
+                {
+                    var alreadyProcessedUrls = validUrls.Where(x => _alreadyProcessedUrls.Contains(x));
+                    if (alreadyProcessedUrls.Any())
+                    {
+                        runtime.Report(CreateAlreadyProcessedLogMessage(alreadyProcessedUrls.ToArray()));
+                        result = string.Empty;
+                    }
+                    else
+                    {
+                        foreach(var validUrl in validUrls)
+                        {
+                            if (!_alreadyProcessedUrls.Contains(validUrl))
+                                _alreadyProcessedUrls.Add(validUrl);
+                        }
+                    }
+                }
+            }
+        }
+
+        private string CreateAlreadyProcessedLogMessage() => "This content has already been processed. (!) Note: To disable this feature, you must disable the web request cache function.";
+
+        private string CreateAlreadyProcessedLogMessage(string url) => CreateAlreadyProcessedLogMessage(new[] { url });
+
+        private string CreateAlreadyProcessedLogMessage(string[] urls)
+        {
+            var urlsString = string.Join(", ", urls);
+            var logMessage = $"Url/s has/have already been processed: {urlsString} (!) Note: To disable this feature, you must disable the URL cache function.";
+            return logMessage;
+        }
+
+        private bool IsAlreadyProcessed(string url)
+        {
+            if (!IgnoreAlreadyProcessedUrls)
+                return false;
+
+            if (string.IsNullOrEmpty(url))
+                return false;
+
+            if (_alreadyProcessedUrls.Contains(url))
+                return true;
+
+            return false;
+        }
+
+        public override bool Execute(BaseRuntime runtime, object data)
+        {
+            return this.Invoke(runtime, data, () =>
+            {
+                runtime.Focus(this);
+                Wait(runtime);
+                SetParentElement(data);
+
+                this._result = string.Empty;
+
+                string url = FlowBloxFieldHelper.ReplaceFieldsInString(this.Url);
+                if (!IsAlreadyProcessed(url))
+                {
+                    var invocationResult = InvokeWebRequest(runtime, url);
+
+                    if (!invocationResult.Success)
+                    {
+                        runtime.Report($"The following content was generated by the failed web request:{Environment.NewLine}{invocationResult.Content}");
+                        CreateNotification(runtime, WebRequestNotifications.WebRequestInvocationFailed);
+                    }
+                    else
+                    {
+                        _result = invocationResult.Content;
+                        CheckAlreadyProcessed(runtime, new string[] { url, invocationResult.UrlCalled }, ref _result);
+                    }
+                }
+                else
+                {
+                    runtime.Report(CreateAlreadyProcessedLogMessage(url));
+                }
+
+                GenerateResult(runtime, _result);
+            });
+        }
+
+        public class WebRequestInvocationResult
+        {
+            public bool Success { get; set; }
+            public string UrlCalled { get; set; }
+            public string Content { get; set; }
+
+            public WebRequestInvocationResult(bool success, string urlCalled, string content)
+            {
+                Success = success;
+                UrlCalled = urlCalled;
+                Content = content;
+            }
+        }
+
+        private MemoryCache _cache;
+
+        private WebRequestInvocationResult InvokeWebRequest(BaseRuntime runtime, string url)
+        {
+            if (string.IsNullOrEmpty(url))
+                return new WebRequestInvocationResult(false, default, default);
+
+            if (CacheAlreadyProcessedContents)
+            {
+                if (_cache.TryGetValue(url, out WebRequestInvocationResult cachedResult))
+                    return cachedResult;
+            }
+
+            runtime.Report("URL \"" + url + "\" was generated by Extractor \"" + Name + "\"", FlowBloxLogLevel.Info);
+
+            ConfigurableWebRequest webRequest = null;
+            if (this.AssociatedWebRequest != null)
+                webRequest = this.AssociatedWebRequest.InternalWebRequest;
+
+            if (webRequest == null)
+                webRequest = new ConfigurableWebRequest();
+
+            this.InternalWebRequest = webRequest;
+
+            webRequest.Url = url;
+            webRequest.HttpAction = this.HTTPAction?.ToString();
+            webRequest.Timeout = this.WebRequestTimeout;
+            webRequest.UserAgent = FlowBloxOptions.GetOptionInstance().OptionCollection["WebRequest.UserAgent"].Value;
+            webRequest.Accept = FlowBloxOptions.GetOptionInstance().OptionCollection["WebRequest.Accept"].Value;
+            webRequest.AcceptEncoding = FlowBloxOptions.GetOptionInstance().OptionCollection["WebRequest.AcceptEncoding"].Value;
+            webRequest.KeepAlive = FlowBloxOptions.GetOptionInstance().OptionCollection["WebRequest.KeepAlive"].GetValueBoolean();
+            webRequest.ExpectContinue = FlowBloxOptions.GetOptionInstance().OptionCollection["WebRequest.ExpectContinue"].GetValueBoolean();
+            webRequest.Version = FlowBloxOptions.GetOptionInstance().OptionCollection["WebRequest.Version"].Value;
+            webRequest.UserName = this.UserName;
+            webRequest.Password = this.Password;
+            webRequest.ContentType = this.Payload_ContentType;
+            webRequest.Headers = FlowBloxFieldHelper.ReplaceFieldsInDictionary(this.HeaderParameters.ToDictionary(x => x.Key, y => y.Value));
+            webRequest.Payload = new WebRequestPayloadCreator(this).GetPayload(runtime, this.PostParameters.ToDictionary(x => x.Key, y => y.Value));
+
+            var webRequestResult = webRequest.Invoke(webRequest);
+
+            if (url != webRequestResult.UrlCalled)
+                runtime.Report("URL \"" + url + "\" was redirected to URL \"" + webRequestResult.UrlCalled + "\"", FlowBloxLogLevel.Info);
+
+            var webRequestInvocationResult = new WebRequestInvocationResult(webRequestResult.Success, webRequestResult.UrlCalled, webRequestResult.Content);
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions();
+            cacheEntryOptions.SetSize(1);
+            _cache.Set(url, webRequestResult, cacheEntryOptions);
+
+            return webRequestInvocationResult;
+        }
+
+        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
+        {
+            this.Url = FlowBloxFieldHelper.ReplaceFQName(this.Url, oldFQFieldName, newFQFieldName);
+            this.Payload = FlowBloxFieldHelper.ReplaceFQName(this.Payload, oldFQFieldName, newFQFieldName);
+
+            foreach (var headerParameter in HeaderParameters)
+            {
+                headerParameter.Key = FlowBloxFieldHelper.ReplaceFQName(headerParameter.Key, oldFQFieldName, newFQFieldName);
+                headerParameter.Value = FlowBloxFieldHelper.ReplaceFQName(headerParameter.Value, oldFQFieldName, newFQFieldName);
+            };
+
+            foreach (var postParameter in PostParameters)
+            {
+                postParameter.Key = FlowBloxFieldHelper.ReplaceFQName(postParameter.Key, oldFQFieldName, newFQFieldName);
+                postParameter.Value = FlowBloxFieldHelper.ReplaceFQName(postParameter.Value, oldFQFieldName, newFQFieldName);
+            };
+
+            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
+        }
+
+        public override void RuntimeStarted(BaseRuntime runtime)
+        {
+            _cache = new MemoryCache(new MemoryCacheOptions
+            {
+                SizeLimit = this.ContentCacheSize
+            });
+
+            base.RuntimeStarted(runtime);
+        }
+
+        public override void RuntimeFinished(BaseRuntime runtime)
+        {
+            if (_cache != null)
+            {
+                _cache.Clear();
+                _cache = null;
+            }
+            
+            if (this.InternalWebRequest != null)
+            {
+                this.InternalWebRequest.Dispose();
+                this.InternalWebRequest = null;
+            }
+
+            _alreadyProcessedContents.Clear();
+            _alreadyProcessedUrls.Clear();
+        }
+
+        public override void OptionsInit(List<OptionElement> defaults)
+        {
+            defaults.AddRange([
+                new OptionElement("WebRequest.Timeout", "30000", "How long should an HTTPWebRequest be allowed to execute? (specified in milliseconds)", OptionElement.OptionType.Integer),
+                new OptionElement("WebRequest.Encoding", "Default", "Possible encodings: Default, ASCII, or UTF8", OptionElement.OptionType.Text),
+                new OptionElement("WebRequest.Accept", "*/*", "What content should the HTTPWebRequest accept?", OptionElement.OptionType.Text),
+                new OptionElement("WebRequest.AcceptEncoding", "gzip, deflate, br", "Specifies the accepted content encoding for the HTTP request (e.g., gzip, deflate, br).", OptionElement.OptionType.Text),
+                new OptionElement("WebRequest.UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0", "The UserAgent of the HTTPWebRequest.", OptionElement.OptionType.Text),
+                new OptionElement("WebRequest.KeepAlive", "true", "Should the internal HTTPRequest establish a permanent connection to the remote host?", OptionElement.OptionType.Boolean, "Keep Alive"),
+                new OptionElement("WebRequest.ExpectContinue", "true", "Should the HTTPRequest include an Expect: 100-Continue header when making a request?", OptionElement.OptionType.Boolean, "Expect Continue"),
+                new OptionElement("WebRequest.Version", "2.0", "Specifies the HTTP protocol version to be used for the request (e.g., 1.0, 1.1, 2.0).", OptionElement.OptionType.Text),
+                new OptionElement("WebRequest.PostContentType", "application/x-www-form-urlencoded", "In case of an HTTP/POST request, this value will be passed for the ContentType.", OptionElement.OptionType.Text),
+            ]);
+
+            base.OptionsInit(defaults);
+        }
+
+        public override List<Type> NotificationTypes
+        {
+            get
+            {
+                var notificationTypes = base.NotificationTypes;
+                notificationTypes.Add(typeof(WebRequestNotifications));
+                return notificationTypes;
+            }
+        }
+
+        public enum WebRequestNotifications
+        {
+            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "Web request invocation failed")]
+            WebRequestInvocationFailed
+        }
+    }
+}

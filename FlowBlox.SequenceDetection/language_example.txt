@@ -1,0 +1,35 @@
+
+pattern detection
+
+@pattern1 = create pattern from content #c1 with @plz = 44309 matching 
+	https://www.gelbeseiten.de/gsbiz/168d03a5-77f4-4ba1-bf7a-05812519a5be,
+	https://www.gelbeseiten.de/gsbiz/168d03a5-77f4-4ba1-bf7a-05812519a5be,
+	
+	50 times
+
+@pattern2 = create pattern from content 
+
+
+execution
+
+@plz_liste = loadfromfile("C:\\temp\\plz_liste.txt")
+
+foreach(@plz in @plz_liste)
+{
+	#c1
+	open https://www.gelbeseiten.de/
+	@inputWas = find input by subtext "WAS"
+	@inputWo = find input by subtext "WO"
+	@button = find button by subtext "Finden"
+
+	enter at @inputWas value "Friseur"
+	enter at @inputWo value @plz
+	
+	click at @button
+	
+	#c1 end
+}
+
+
+
+

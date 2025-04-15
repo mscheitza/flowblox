@@ -1,0 +1,94 @@
+﻿{
+    "ToolboxElements": [
+        {
+            "Content": "//*[contains(text(), '<Substring>')]",
+            "Description": "Selects all elements that contain the given substring in their text content.",
+            "Name": "Find Element Containing Text",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//*[text()='<Text>']",
+            "Description": "Selects all elements where the text content exactly matches the given value.",
+            "Name": "Find Element By Exact Text",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//*[@<Attribute>='<Value>']",
+            "Description": "Selects elements that have a specific attribute with the given value.",
+            "Name": "Find Element By Attribute",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//*[contains(@<Attribute>, '<Substring>')]",
+            "Description": "Selects elements whose attribute contains the given substring.",
+            "Name": "Find Element By Attribute Contains",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//*[starts-with(@<Attribute>, '<Prefix>')]",
+            "Description": "Selects elements whose attribute value starts with the given prefix.",
+            "Name": "Find Element By Attribute Starts With",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//*[substring(@<Attribute>, string-length(@<Attribute>) - string-length('<Suffix>') + 1) = '<Suffix>']",
+            "Description": "Selects elements whose attribute value ends with the given suffix.",
+            "Name": "Find Element By Attribute Ends With",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "/*",
+            "Description": "Selects the root element of the document.",
+            "Name": "Select Root Element",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//<ElementName>//*",
+            "Description": "Selects all descendant nodes of a specific element.",
+            "Name": "Select All Descendants Of Element",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//<Parent>/<Child>",
+            "Description": "Selects child elements with the given name under a specific parent.",
+            "Name": "Select Direct Children",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "(//<ElementName>)[1]",
+            "Description": "Selects the first element matching the given name.",
+            "Name": "Select Element By Position (First)",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "(//<ElementName>)[last()]",
+            "Description": "Selects the last element matching the given name.",
+            "Name": "Select Element By Position (Last)",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "(//<ElementName>)[<Index>]",
+            "Description": "Selects the element at the given index (1-based).",
+            "Name": "Select Element By Index",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//*[namespace-uri()='<NamespaceURI>']",
+            "Description": "Selects all nodes that belong to the specified namespace URI.",
+            "Name": "Select Nodes With Specific Namespace",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//comment()",
+            "Description": "Selects all XML/HTML comments in the document.",
+            "Name": "Select Comments",
+            "ToolboxCategory": "XPath"
+        },
+        {
+            "Content": "//processing-instruction()",
+            "Description": "Selects all processing instructions (e.g., <?xml ...?>).",
+            "Name": "Select Processing Instructions",
+            "ToolboxCategory": "XPath"
+        }
+    ]
+}

@@ -1,0 +1,122 @@
+﻿{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Date (German) – dd.MM.yyyy HH:mm:ss",
+      "Content": "dd.MM.yyyy HH:mm:ss",
+      "Description": "Date/time format commonly used in Germany (24-hour clock)."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Date (US) – MM/dd/yyyy hh:mm:sszzz",
+      "Content": "MM/dd/yyyy hh:mm:sszzz",
+      "Description": "US-style date with 12-hour clock and time zone offset."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "ISO 8601 (Round-trip) – o",
+      "Content": "o",
+      "Description": "Round-trip date/time pattern, preserves full precision (e.g., 2025-08-26T12:34:56.7890123Z)."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Sortable DateTime – s",
+      "Content": "s",
+      "Description": "Sortable, culture-invariant date/time (yyyy-MM-ddTHH:mm:ss)."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Date Only – yyyy-MM-dd",
+      "Content": "yyyy-MM-dd",
+      "Description": "Date-only ISO-like pattern (useful for filenames and logs)."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Time Only – HH:mm:ss",
+      "Content": "HH:mm:ss",
+      "Description": "24-hour time only."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "RFC1123 – r",
+      "Content": "r",
+      "Description": "RFC1123 pattern (e.g., Tue, 26 Aug 2025 10:15:30 GMT)."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Invariant Date with Time Zone",
+      "Content": "yyyy-MM-ddTHH:mm:ssK",
+      "Description": "ISO-like date/time including time zone information."
+    },
+
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Integer (No Grouping)",
+      "Content": "0",
+      "Description": "Formats integral values without thousand separators."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Integer (Grouped)",
+      "Content": "#,##0",
+      "Description": "Formats integral values with thousand separators."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Integer (Zero-Padded, 6 digits)",
+      "Content": "000000",
+      "Description": "Left-pads integers with zeros to 6 digits (e.g., 42 → 000042)."
+    },
+
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Number (2 Decimals)",
+      "Content": "0.00",
+      "Description": "Fixed-point with exactly two decimal places."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Number (Up to 3 Decimals)",
+      "Content": "0.###",
+      "Description": "Up to three decimal places (trailing zeros suppressed)."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Number (Grouped, 2 Decimals)",
+      "Content": "#,##0.00",
+      "Description": "Thousand separators with two decimal places."
+    },
+
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Currency (Culture-aware) – C",
+      "Content": "C",
+      "Description": "Currency format with symbol and decimals per current culture."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Percent (2 Decimals) – P2",
+      "Content": "P2",
+      "Description": "Percentage with two decimal places (e.g., 0.1234 → 12.34%)."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "Hexadecimal (8 digits) – X8",
+      "Content": "X8",
+      "Description": "Uppercase hex, left-padded to 8 digits."
+    },
+
+    {
+      "ToolboxCategory": "Format",
+      "Name": "TimeSpan (Constant) – c",
+      "Content": "c",
+      "Description": "Constant TimeSpan format (e.g., d.hh:mm:ss.fffffff)."
+    },
+    {
+      "ToolboxCategory": "Format",
+      "Name": "TimeSpan (General short) – g",
+      "Content": "g",
+      "Description": "TimeSpan general short format; culture-aware."
+    }
+  ]
+}

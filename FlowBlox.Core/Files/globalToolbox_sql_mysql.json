@@ -1,0 +1,40 @@
+﻿{
+    "ToolboxElements": [
+        {
+            "Content": "INSERT INTO <Table> (<KeyColumn>, <Column0>)\nVALUES (<KeyValue>, <Value0>);",
+            "Description": "Insert a row with a unique key and one data column.",
+            "Name": "MySQL Insert (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<KeyColumn>, <Column0>, <Column1>)\nVALUES (<KeyValue>, <Value0>, <Value1>);",
+            "Description": "Insert a row with a unique key and two data columns.",
+            "Name": "MySQL Insert (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<KeyColumn>, <Column0>, <Column1>, <Column2>)\nVALUES (<KeyValue>, <Value0>, <Value1>, <Value2>);",
+            "Description": "Insert a row with a unique key and three data columns.",
+            "Name": "MySQL Insert (3 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<KeyColumn>, <Column0>)\nVALUES (<KeyValue>, <Value0>)\nON DUPLICATE KEY UPDATE <Column0>=VALUES(<Column0>);",
+            "Description": "Upsert using ON DUPLICATE KEY UPDATE for one data column (requires UNIQUE/PK on <KeyColumn>).",
+            "Name": "MySQL Upsert (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<KeyColumn>, <Column0>, <Column1>)\nVALUES (<KeyValue>, <Value0>, <Value1>)\nON DUPLICATE KEY UPDATE <Column0>=VALUES(<Column0>), <Column1>=VALUES(<Column1>);",
+            "Description": "Upsert for two data columns; updates both on key conflict.",
+            "Name": "MySQL Upsert (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<KeyColumn>, <Column0>, <Column1>, <Column2>)\nVALUES (<KeyValue>, <Value0>, <Value1>, <Value2>)\nON DUPLICATE KEY UPDATE <Column0>=VALUES(<Column0>), <Column1>=VALUES(<Column1>), <Column2>=VALUES(<Column2>);",
+            "Description": "Upsert for three data columns; updates all on key conflict.",
+            "Name": "MySQL Upsert (3 Columns)",
+            "ToolboxCategory": "SQL"
+        }
+    ]
+}

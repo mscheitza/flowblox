@@ -1,0 +1,45 @@
+﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Util.Fields;
+using FlowBlox.Core.Util.Resources;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FlowBlox.Core.Models.Components.Modifier
+{
+    [Display(Name = "ReplaceModifier", ResourceType = typeof(FlowBloxTexts))]
+    public class ReplaceModifier : ModifierBase
+    {
+        [Required()]
+        [Display(Name = "ReplaceModifier_Search", Order = 0, ResourceType = typeof(FlowBloxTexts))]
+        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        public string Search { get; set; }
+
+        [Required()]
+        [Display(Name = "ReplaceModifier_Replace", Order = 1, ResourceType = typeof(FlowBloxTexts))]
+        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        public string Replace { get; set; }
+
+        public override string Modify(BaseRuntime runtime, string value)
+        {
+            string search = FlowBloxFieldHelper.ReplaceFieldsInString(this.Search);
+            string replace = FlowBloxFieldHelper.ReplaceFieldsInString(this.Replace);
+            var replaced = value.Replace(search, replace);
+            return replaced;
+        }
+
+        public override string ToString()
+        {
+            var format = FlowBloxResourceUtil.GetLocalizedString(nameof(ReplaceModifier), nameof(ObjectDisplayName));
+
+            return string.Format(format, 
+                !string.IsNullOrEmpty(this.Search) ? this.Search : "?", 
+                !string.IsNullOrEmpty(this.Replace) ? this.Replace : "?");
+        }
+    }
+}

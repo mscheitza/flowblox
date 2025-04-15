@@ -1,0 +1,46 @@
+﻿{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "CounterFormat",
+      "Name": "Counter Alpha Upper (2–5 chars)",
+      "Content": "Aa+3",
+      "Description": "Uppercase alpha counter with a minimum of 2 chars, expandable up to 5 (custom pattern)."
+    },
+    {
+      "ToolboxCategory": "CounterFormat",
+      "Name": "Counter Alpha3 then Alpha2",
+      "Content": "aaa,aa",
+      "Description": "Composite alpha counter: first 3 lowercase, then 2 lowercase (custom pattern)."
+    },
+    {
+      "ToolboxCategory": "CounterFormat",
+      "Name": "Counter Alpha Mixed (3 chars)",
+      "Content": "Aaa",
+      "Description": "Mixed-case alpha counter with 3 chars: 1 upper + 2 lower (custom pattern)."
+    },
+    {
+      "ToolboxCategory": "CounterFormat",
+      "Name": "Counter Alpha Upper (3 chars)",
+      "Content": "AAA",
+      "Description": "All-uppercase alpha counter with 3 characters (custom pattern)."
+    },
+    {
+      "ToolboxCategory": "CounterFormat",
+      "Name": "Counter Alpha Lower (3 chars)",
+      "Content": "aaa",
+      "Description": "All-lowercase alpha counter with 3 characters (custom pattern)."
+    },
+    {
+      "ToolboxCategory": "CounterFormat",
+      "Name": "Counter Numeric (6 digits, zero-padded)",
+      "Content": "000000",
+      "Description": "Numeric counter padded to 6 digits (custom pattern)."
+    },
+    {
+      "ToolboxCategory": "CounterFormat",
+      "Name": "Counter Numeric (3 digits, zero-padded)",
+      "Content": "000",
+      "Description": "Numeric counter padded to 3 digits (custom pattern)."
+    }
+  ]
+}

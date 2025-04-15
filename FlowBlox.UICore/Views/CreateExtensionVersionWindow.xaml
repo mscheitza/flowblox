@@ -1,0 +1,55 @@
+﻿<mah:MetroWindow
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    x:Class="FlowBlox.UICore.Views.CreateExtensionVersionWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    Title="{x:Static resources:CreateExtensionVersionWindow.Title}" Height="300" Width="500"
+    WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <!-- Column definitions for the grid layout -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Version Label and Input -->
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   Text="{x:Static resources:CreateExtensionVersionWindow.Label_Version}"
+                   Margin="0,0,0,10"/>
+        <TextBox Grid.Row="1" Grid.Column="0"
+                 Text="{Binding Version, UpdateSourceTrigger=PropertyChanged}"
+                 ToolTip="{x:Static resources:CreateExtensionVersionWindow.ToolTip_Format}"/>
+
+        <!-- Hint for Version format -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+            <iconPacks:PackIconMaterial Kind="InformationOutline" Foreground="DarkSlateGray" Margin="0,0,5,0"/>
+            <TextBlock Text="{x:Static resources:CreateExtensionVersionWindow.Hint_VersionFormat}" 
+                       Foreground="Gray" 
+                       FontStyle="Italic" 
+                       Width="200" 
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- Buttons at the bottom -->
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="{x:Static resources:CreateExtensionVersionWindow.Button_Cancel}" Command="{Binding CancelCommand}" Margin="0,0,10,0" IsCancel="True"/>
+            <Button Content="{x:Static resources:CreateExtensionVersionWindow.Button_Create}" Command="{Binding CreateCommand}" IsEnabled="{Binding CanCreate}" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

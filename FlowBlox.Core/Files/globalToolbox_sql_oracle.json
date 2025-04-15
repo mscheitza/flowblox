@@ -1,0 +1,58 @@
+﻿{
+    "ToolboxElements": [
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>)\nVALUES (<PrimaryKeyValue>, <Value0>);",
+            "Description": "Insert a row with primary key and one data column.",
+            "Name": "Oracle Insert (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>);",
+            "Description": "Insert a row with primary key and two data columns.",
+            "Name": "Oracle Insert (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>, <Value2>);",
+            "Description": "Insert a row with primary key and three data columns.",
+            "Name": "Oracle Insert (3 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>)\nVALUES (<SequenceName>.NEXTVAL, <Value0>);",
+            "Description": "Insert using a sequence for the primary key and one data column.",
+            "Name": "Oracle Insert with Sequence (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>)\nVALUES (<SequenceName>.NEXTVAL, <Value0>, <Value1>);",
+            "Description": "Insert using a sequence for the primary key and two data columns.",
+            "Name": "Oracle Insert with Sequence (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>)\nVALUES (<SequenceName>.NEXTVAL, <Value0>, <Value1>, <Value2>);",
+            "Description": "Insert using a sequence for the primary key and three data columns.",
+            "Name": "Oracle Insert with Sequence (3 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "MERGE INTO <Table> t\nUSING (SELECT <PrimaryKeyValue> AS <PrimaryKeyColumn>, <Value0> AS <Column0> FROM dual) s\nON (t.<PrimaryKeyColumn> = s.<PrimaryKeyColumn>)\nWHEN MATCHED THEN\n  UPDATE SET t.<Column0> = s.<Column0>\nWHEN NOT MATCHED THEN\n  INSERT (<PrimaryKeyColumn>, <Column0>)\n  VALUES (s.<PrimaryKeyColumn>, s.<Column0>);",
+            "Description": "Upsert using MERGE with one data column.",
+            "Name": "Oracle Upsert MERGE (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "MERGE INTO <Table> t\nUSING (SELECT <PrimaryKeyValue> AS <PrimaryKeyColumn>, <Value0> AS <Column0>, <Value1> AS <Column1> FROM dual) s\nON (t.<PrimaryKeyColumn> = s.<PrimaryKeyColumn>)\nWHEN MATCHED THEN\n  UPDATE SET t.<Column0> = s.<Column0>, t.<Column1> = s.<Column1>\nWHEN NOT MATCHED THEN\n  INSERT (<PrimaryKeyColumn>, <Column0>, <Column1>)\n  VALUES (s.<PrimaryKeyColumn>, s.<Column0>, s.<Column1>);",
+            "Description": "Upsert using MERGE with two data columns.",
+            "Name": "Oracle Upsert MERGE (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "MERGE INTO <Table> t\nUSING (SELECT <PrimaryKeyValue> AS <PrimaryKeyColumn>, <Value0> AS <Column0>, <Value1> AS <Column1>, <Value2> AS <Column2> FROM dual) s\nON (t.<PrimaryKeyColumn> = s.<PrimaryKeyColumn>)\nWHEN MATCHED THEN\n  UPDATE SET t.<Column0> = s.<Column0>, t.<Column1> = s.<Column1>, t.<Column2> = s.<Column2>\nWHEN NOT MATCHED THEN\n  INSERT (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>)\n  VALUES (s.<PrimaryKeyColumn>, s.<Column0>, s.<Column1>, s.<Column2>);",
+            "Description": "Upsert using MERGE with three data columns.",
+            "Name": "Oracle Upsert MERGE (3 Columns)",
+            "ToolboxCategory": "SQL"
+        }
+    ]
+}

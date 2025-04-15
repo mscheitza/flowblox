@@ -1,0 +1,58 @@
+﻿{
+    "ToolboxElements": [
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>)\nVALUES (<PrimaryKeyValue>, <Value0>);",
+            "Description": "Insert a row with primary key and one data column.",
+            "Name": "MSSQL Insert (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>);",
+            "Description": "Insert a row with primary key and two data columns.",
+            "Name": "MSSQL Insert (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>, <Value2>);",
+            "Description": "Insert a row with primary key and three data columns.",
+            "Name": "MSSQL Insert (3 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "BEGIN TRAN\nIF EXISTS (SELECT 1 FROM <Table> WHERE <PrimaryKeyColumn> = <PrimaryKeyValue>)\n    UPDATE <Table> SET <Column0>=<Value0> WHERE <PrimaryKeyColumn> = <PrimaryKeyValue>;\nELSE\n    INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>) VALUES (<PrimaryKeyValue>, <Value0>);\nCOMMIT TRAN;",
+            "Description": "Upsert pattern using IF EXISTS with one data column.",
+            "Name": "MSSQL Upsert IfExists (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "BEGIN TRAN\nIF EXISTS (SELECT 1 FROM <Table> WHERE <PrimaryKeyColumn> = <PrimaryKeyValue>)\n    UPDATE <Table> SET <Column0>=<Value0>, <Column1>=<Value1> WHERE <PrimaryKeyColumn> = <PrimaryKeyValue>;\nELSE\n    INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>) VALUES (<PrimaryKeyValue>, <Value0>, <Value1>);\nCOMMIT TRAN;",
+            "Description": "Upsert pattern using IF EXISTS with two data columns.",
+            "Name": "MSSQL Upsert IfExists (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "BEGIN TRAN\nIF EXISTS (SELECT 1 FROM <Table> WHERE <PrimaryKeyColumn> = <PrimaryKeyValue>)\n    UPDATE <Table> SET <Column0>=<Value0>, <Column1>=<Value1>, <Column2>=<Value2> WHERE <PrimaryKeyColumn> = <PrimaryKeyValue>;\nELSE\n    INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>) VALUES (<PrimaryKeyValue>, <Value0>, <Value1>, <Value2>);\nCOMMIT TRAN;",
+            "Description": "Upsert pattern using IF EXISTS with three data columns.",
+            "Name": "MSSQL Upsert IfExists (3 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "MERGE <Table> AS target\nUSING (SELECT <PrimaryKeyValue> AS <PrimaryKeyColumn>, <Value0> AS <Column0>) AS source\nON (target.<PrimaryKeyColumn> = source.<PrimaryKeyColumn>)\nWHEN MATCHED THEN\n    UPDATE SET target.<Column0> = source.<Column0>\nWHEN NOT MATCHED THEN\n    INSERT (<PrimaryKeyColumn>, <Column0>) VALUES (source.<PrimaryKeyColumn>, source.<Column0>);",
+            "Description": "Upsert pattern using MERGE statement with one data column.",
+            "Name": "MSSQL Upsert MERGE (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "MERGE <Table> AS target\nUSING (SELECT <PrimaryKeyValue> AS <PrimaryKeyColumn>, <Value0> AS <Column0>, <Value1> AS <Column1>) AS source\nON (target.<PrimaryKeyColumn> = source.<PrimaryKeyColumn>)\nWHEN MATCHED THEN\n    UPDATE SET target.<Column0> = source.<Column0>, target.<Column1> = source.<Column1>\nWHEN NOT MATCHED THEN\n    INSERT (<PrimaryKeyColumn>, <Column0>, <Column1>) VALUES (source.<PrimaryKeyColumn>, source.<Column0>, source.<Column1>);",
+            "Description": "Upsert pattern using MERGE statement with two data columns.",
+            "Name": "MSSQL Upsert MERGE (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "MERGE <Table> AS target\nUSING (SELECT <PrimaryKeyValue> AS <PrimaryKeyColumn>, <Value0> AS <Column0>, <Value1> AS <Column1>, <Value2> AS <Column2>) AS source\nON (target.<PrimaryKeyColumn> = source.<PrimaryKeyColumn>)\nWHEN MATCHED THEN\n    UPDATE SET target.<Column0> = source.<Column0>, target.<Column1> = source.<Column1>, target.<Column2> = source.<Column2>\nWHEN NOT MATCHED THEN\n    INSERT (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>) VALUES (source.<PrimaryKeyColumn>, source.<Column0>, source.<Column1>, source.<Column2>);",
+            "Description": "Upsert pattern using MERGE statement with three data columns.",
+            "Name": "MSSQL Upsert MERGE (3 Columns)",
+            "ToolboxCategory": "SQL"
+        }
+    ]
+}

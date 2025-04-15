@@ -1,0 +1,333 @@
+﻿using FlowBlox.Core;
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.Grid.Elements.Util;
+using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Converters.PropertyView;
+using FlowBlox.UICore.Utilities;
+using FlowBlox.UICore.Views;
+using MahApps.Metro.Controls;
+using MahApps.Metro.IconPacks;
+using System.ComponentModel;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Media;
+
+namespace FlowBlox.UICore.Factory.PropertyView
+{
+    public class AssociationControlFactory : WpfPropertyViewControlFactory
+    {
+        private readonly RelayCommand _createCommand;
+        private readonly RelayCommand _linkCommand;
+        private readonly RelayCommand _unlinkCommand;
+        private readonly RelayCommand _editCommand;
+        private readonly RelayCommand _deleteCommand;
+
+        private TextBox _textBox;
+
+        public AssociationControlFactory(Window window, PropertyInfo property, object target, bool readOnly)
+            : base(window, property, target, readOnly)
+        {
+            _createCommand = new RelayCommand(ExecuteCreate, CanCreate);
+            _linkCommand = new RelayCommand(ExecuteLink, CanLink);
+            _unlinkCommand = new RelayCommand(ExecuteUnlink, CanUnlink);
+            _editCommand = new RelayCommand(ExecuteEdit, CanEdit);
+            _deleteCommand = new RelayCommand(ExecuteDelete, CanDelete);
+        }
+
+        private string _resolvedFlowBlockHintText;
+        public string ResolvedFlowBlockHintText
+        {
+            get => _resolvedFlowBlockHintText;
+            private set
+            {
+                if (_resolvedFlowBlockHintText != value)
+                {
+                    _resolvedFlowBlockHintText = value;
+                    OnPropertyChanged(nameof(ResolvedFlowBlockHintText));
+                }
+            }
+        }
+
+        private string ComputeResolvedFlowBlockHintText()
+        {
+            var fbResolvable = _property.GetCustomAttribute<AssociatedFlowBlockResolvableAttribute>();
+            if (fbResolvable == null)
+                return null;
+
+            var currentValue = _property.GetValue(_target);
+            if (currentValue is BaseFlowBlock)
+                return null;
+
+            var method = typeof(BaseFlowBlock).GetMethod(
+                GlobalConstants.GetPreviousFlowBlockOnPathMethodName,
+                BindingFlags.NonPublic | BindingFlags.Instance,
+                null,
+                new[] { typeof(BaseFlowBlock), typeof(Type[]) },
+                null);
+
+            if (method != null && _target is BaseFlowBlock flowBlock)
+            {
+                var requiredType = _property.PropertyType;
+                var result = method.Invoke(flowBlock, [flowBlock, new[] { requiredType }]);
+
+                if (result is BaseFlowBlock resolvedViaPath)
+                {
+                    return string.Format(
+                        FlowBloxResourceUtil.GetLocalizedString("AssociationControlFactory_Resolvable", typeof(FlowBloxTexts)),
+                        resolvedViaPath.Name);
+                }
+            }
+
+            return FlowBloxResourceUtil.GetLocalizedString("AssociationControlFactory_NotResolvable", typeof(FlowBloxTexts));
+        }
+
+        private void AppendResolvedFlowBlockHint(StackPanel stackPanel)
+        {
+            var textBlock = new TextBlock
+            {
+                FontStyle = FontStyles.Italic,
+                Foreground = Brushes.Gray,
+                Margin = new Thickness(5, 5, 0, 0),
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            var binding = new Binding(nameof(ResolvedFlowBlockHintText))
+            {
+                Source = this
+            };
+
+            textBlock.SetBinding(TextBlock.TextProperty, binding);
+            stackPanel.Children.Add(textBlock);
+            UpdateResolvedFlowBlockHintText();
+            TryRegisterTargetPropertyListener();
+        }
+
+        private void TryRegisterTargetPropertyListener()
+        {
+            if (_target is INotifyPropertyChanged notifier)
+                notifier.PropertyChanged += TargetOnPropertyChanged;
+        }
+
+        private void TargetOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == _property.Name || 
+                e.PropertyName == nameof(BaseFlowBlock.ReferencedFlowBlocks))
+            {
+                UpdateResolvedFlowBlockHintText();
+            }
+        }
+
+        private void UpdateResolvedFlowBlockHintText()
+        {
+            ResolvedFlowBlockHintText = ComputeResolvedFlowBlockHintText();
+        }
+
+        public StackPanel Create()
+        {
+            var stackPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(5)
+            };
+
+            _textBox = new TextBox
+            {
+                IsReadOnly = true,
+                Width = 200
+            };
+
+            var binding = new Binding(_property.Name)
+            {
+                Source = _target,
+                Converter = new AssociationControlTextConverter(),
+                Mode = BindingMode.OneWay
+            };
+
+            _textBox.SetBinding(TextBox.TextProperty, binding);
+
+            stackPanel.Children.Add(new PackIconMaterial
+            {
+                Kind = PackIconMaterialKind.Cube,
+                Width = 14,
+                Height = 14,
+                Margin = new Thickness(0, 0, 5, 0),
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(33, 150, 243))
+            });
+
+            stackPanel.Children.Add(_textBox);
+
+            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Create) == true)
+                stackPanel.Children.Add(CreateButton(PackIconMaterialKind.Plus, _createCommand));
+
+            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Link) == true)
+                stackPanel.Children.Add(CreateButton(PackIconMaterialKind.Link, _linkCommand));
+
+            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Unlink) == true)
+                stackPanel.Children.Add(CreateButton(PackIconMaterialKind.LinkOff, _unlinkCommand));
+
+            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
+                stackPanel.Children.Add(CreateButton(PackIconMaterialKind.Pencil, _editCommand));
+
+            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
+                stackPanel.Children.Add(CreateButton(PackIconMaterialKind.Delete, _deleteCommand));
+
+            AppendResolvedFlowBlockHint(stackPanel);
+
+            return stackPanel;
+        }
+
+        private Button CreateButton(PackIconMaterialKind iconKind, RelayCommand command)
+        {
+            return new Button
+            {
+                Content = new PackIconMaterial
+                {
+                    Kind = iconKind,
+                    Width = 12,
+                    Height = 12
+                },
+                Width = 24,
+                Height = 24,
+                Margin = new Thickness(5, 0, 0, 0),
+                Command = command
+            };
+        }
+
+        private void ExecuteCreate()
+        {
+            var newInstance = CreateNewInstance(_window);
+            if (newInstance != null)
+            {
+                var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(newInstance, readOnly: false))
+                {
+                    Owner = _window,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
+                if (propertyView.ShowDialog() == true)
+                {
+                    _property.SetValue(_target, newInstance);
+                    FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+                    InvalidateAll();
+                }
+            }
+        }
+
+        private async void ExecuteLink()
+        {
+            if (string.IsNullOrEmpty(_flowBlockUIAttribute?.SelectionFilterMethod))
+            {
+                await MessageBoxHelper.ShowMessageBoxAsync(
+                        (MetroWindow)_window,
+                        FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Title"),
+                        string.Format(
+                            FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Message"),
+                            _property.Name)
+                    );
+
+                return;
+            }
+
+
+            var filterMethod = GetSelectionFilterMethod(_target, _flowBlockUIAttribute.SelectionFilterMethod);
+            if (filterMethod == null)
+            {
+                await MessageBoxHelper.ShowMessageBoxAsync(
+                    (MetroWindow)_window,
+                    FlowBloxResourceUtil.GetLocalizedString("Global_FilterMethodNotFound_Title"),
+                    string.Format(
+                        FlowBloxResourceUtil.GetLocalizedString("Global_FilterMethodNotFound_Message"),
+                        _flowBlockUIAttribute.SelectionFilterMethod,
+                        _target.GetType().Name)
+                );
+
+                return;
+            }
+
+            var items = filterMethod.Invoke(_target, null) as IEnumerable<object>;
+            if (items == null || !items.Any())
+            {
+                await MessageBoxHelper.ShowMessageBoxAsync(
+                        (MetroWindow)_window,
+                        FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Title"),
+                        FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Message")
+                    );
+
+                return;
+            }
+
+            var dialog = new MultiValueSelectionDialog(
+                FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Title"),
+                FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Text"),
+                new GenericSelectionHandler<object>(items.Cast<object>(), x => x.ToString()))
+            {
+                Owner = _window,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                _property.SetValue(_target, dialog.SelectedItem.Value);
+                FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+                InvalidateAll();
+            }
+        }
+
+        private void ExecuteUnlink()
+        {
+            _property.SetValue(_target, null);
+            FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+            InvalidateAll();
+        }
+
+        private void ExecuteEdit()
+        {
+            var item = _property.GetValue(_target);
+            if (item != null)
+            {
+                var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(item, readOnly: _readOnly))
+                {
+                    Owner = _window,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
+                if (propertyView.ShowDialog() == true)
+                    FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+            }
+        }
+
+        private async void ExecuteDelete()
+        {
+            var item = _property.GetValue(_target);
+            if (item != null && await IsDeletableAsync(item, _window))
+            {
+                _property.SetValue(_target, null);
+                FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+                DeleteInstance(item);
+                InvalidateAll();
+            }
+        }
+
+        private bool CanEdit() => _property.GetValue(_target) != null;
+
+        private bool CanCreate() => ! _readOnly;
+
+        private bool CanLink() => !_readOnly;
+
+        private bool CanUnlink() => _property.GetValue(_target) != null && !_readOnly;
+
+        private bool CanDelete() => _property.GetValue(_target) != null && !_readOnly;
+
+        private void InvalidateAll()
+        {
+            _unlinkCommand.Invalidate();
+            _editCommand.Invalidate();
+            _deleteCommand.Invalidate();
+        }
+    }
+}

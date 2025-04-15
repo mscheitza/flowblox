@@ -1,0 +1,51 @@
+﻿using FlowBlox.Core.Util.Controls;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace FlowBlox.Core.Components
+{
+    public class FlowBloxNumericTextBox : Panel
+    {
+        private NumericTextBox numericTextBox;
+        private Panel textBoxContainer;
+
+        public FlowBloxNumericTextBox()
+        {
+            InitializeComponents();
+        }
+
+        public NumericTextBox InnerNumericTextBox => numericTextBox;
+
+        private void InitializeComponents()
+        {
+            numericTextBox = new NumericTextBox
+            {
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None
+            };
+
+            ControlHelper.EnableDoubleBuffer(numericTextBox);
+
+            textBoxContainer = new Panel
+            {
+                Dock = DockStyle.Fill,
+                Padding = new Padding(3, 3, 3, 3),
+                BackColor = Color.White,
+                Tag = FlowBloxStyle.StyleIgnoreSelf
+            };
+            textBoxContainer.Controls.Add(numericTextBox);
+
+            this.Controls.Add(textBoxContainer);
+
+            this.Height = 24;
+            this.SetStyle(ControlStyles.Selectable, true);
+            this.TabStop = true;
+        }
+    }
+}

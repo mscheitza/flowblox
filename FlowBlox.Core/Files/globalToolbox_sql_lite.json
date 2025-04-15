@@ -1,0 +1,58 @@
+﻿{
+    "ToolboxElements": [
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>)\nVALUES (<PrimaryKeyValue>, <Value0>);",
+            "Description": "Insert a row with primary key and one data column.",
+            "Name": "SQLite Insert (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>);",
+            "Description": "Insert a row with primary key and two data columns.",
+            "Name": "SQLite Insert (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>, <Value2>);",
+            "Description": "Insert a row with primary key and three data columns.",
+            "Name": "SQLite Insert (3 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT OR REPLACE INTO <Table> (<PrimaryKeyColumn>, <Column0>)\nVALUES (<PrimaryKeyValue>, <Value0>);",
+            "Description": "Upsert using INSERT OR REPLACE with one data column (replaces entire row).",
+            "Name": "SQLite Upsert Replace (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT OR REPLACE INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>);",
+            "Description": "Upsert using INSERT OR REPLACE with two data columns.",
+            "Name": "SQLite Upsert Replace (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT OR REPLACE INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>, <Value2>);",
+            "Description": "Upsert using INSERT OR REPLACE with three data columns.",
+            "Name": "SQLite Upsert Replace (3 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>)\nVALUES (<PrimaryKeyValue>, <Value0>)\nON CONFLICT(<PrimaryKeyColumn>) DO UPDATE SET <Column0>=excluded.<Column0>;",
+            "Description": "Upsert using ON CONFLICT DO UPDATE for one data column.",
+            "Name": "SQLite Upsert Conflict (1 Column)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>)\nON CONFLICT(<PrimaryKeyColumn>) DO UPDATE SET <Column0>=excluded.<Column0>, <Column1>=excluded.<Column1>;",
+            "Description": "Upsert using ON CONFLICT DO UPDATE for two data columns.",
+            "Name": "SQLite Upsert Conflict (2 Columns)",
+            "ToolboxCategory": "SQL"
+        },
+        {
+            "Content": "INSERT INTO <Table> (<PrimaryKeyColumn>, <Column0>, <Column1>, <Column2>)\nVALUES (<PrimaryKeyValue>, <Value0>, <Value1>, <Value2>)\nON CONFLICT(<PrimaryKeyColumn>) DO UPDATE SET <Column0>=excluded.<Column0>, <Column1>=excluded.<Column1>, <Column2>=excluded.<Column2>;",
+            "Description": "Upsert using ON CONFLICT DO UPDATE for three data columns.",
+            "Name": "SQLite Upsert Conflict (3 Columns)",
+            "ToolboxCategory": "SQL"
+        }
+    ]
+}

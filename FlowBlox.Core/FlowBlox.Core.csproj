@@ -1,0 +1,94 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <SignAssembly>False</SignAssembly>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Company>FlowBlox Community</Company>
+    <Copyright>Copyright © 2025 Marcel Scheitza and contributors. Licensed under the MIT License.</Copyright>
+    <Authors>Marcel Scheitza and contributors</Authors>
+    <Product>FlowBlox</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Files\globalToolbox_counterformat.json" />
+    <None Remove="Files\globalToolbox_dbconnection.json" />
+    <None Remove="Files\globalToolbox_format.json" />
+    <None Remove="Files\globalToolbox_regex.json" />
+    <None Remove="Files\globalToolbox_regex_extended.json" />
+    <None Remove="Files\globalToolbox_sql_lite.json" />
+    <None Remove="Files\globalToolbox_sql_mssql.json" />
+    <None Remove="Files\globalToolbox_sql_mysql.json" />
+    <None Remove="Files\globalToolbox_sql_oracle.json" />
+    <None Remove="Files\globalToolbox_xpath.json" />
+    <None Remove="Models\FlowBlocks\WebBrowser\duplicate_tab_shortcut_1.5.1.0.crx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="32.0.3" />
+    <PackageReference Include="EPPlus" Version="8.0.5" />
+    <PackageReference Include="log4net" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.16" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.36" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.22.0" />
+    <PackageReference Include="Microsoft.ML.Tokenizers" Version="1.0.2" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Gpt2" Version="1.0.2" />
+    <PackageReference Include="MySql.Data" Version="8.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.8.0" />
+    <PackageReference Include="PdfPig" Version="0.1.11" />
+    <PackageReference Include="Selenium.Support" Version="4.33.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.33.0" />
+    <PackageReference Include="SkiaSharp" Version="3.119.0" />
+    <PackageReference Include="Svg.Skia" Version="3.0.6" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
+    <PackageReference Include="Ude.NetStandard" Version="1.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="FlowBloxIcons.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FlowBloxIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Update="FlowBloxTexts.Designer.cs">
+      <DependentUpon>FlowBloxTexts.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\**\*.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Files\globalToolbox_dbconnection.json" />
+    <EmbeddedResource Include="Files\globalToolbox_counterformat.json" />
+    <EmbeddedResource Include="Files\globalToolbox_format.json" />
+    <EmbeddedResource Include="Files\globalToolbox_regex.json" />
+    <EmbeddedResource Include="Files\globalToolbox_regex_extended.json" />
+    <EmbeddedResource Include="Files\globalToolbox_sql_lite.json" />
+    <EmbeddedResource Include="Files\globalToolbox_sql_mssql.json" />
+    <EmbeddedResource Include="Files\globalToolbox_sql_mysql.json" />
+    <EmbeddedResource Include="Files\globalToolbox_sql_oracle.json" />
+    <EmbeddedResource Include="Files\globalToolbox_xpath.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="FlowBloxIcons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FlowBloxIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="FlowBloxTexts.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>FlowBloxTexts.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlowBlox.SequenceDetection\FlowBlox.SequenceDetection.csproj" />
+  </ItemGroup>
+</Project>

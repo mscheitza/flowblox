@@ -1,0 +1,94 @@
+﻿{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Starts With Text",
+      "Content": "^(%%Text%%)",
+      "Description": "Matches if the input starts with the given text."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Ends With Text",
+      "Content": "(%%Text%%)$",
+      "Description": "Matches if the input ends with the given text."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Contains Pattern",
+      "Content": "^(.*%%Pattern%%).*$",
+      "Description": "Matches if the input contains the specified pattern anywhere."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Does Not Contain Pattern",
+      "Content": "^(?!.*%%Pattern%%).*$",
+      "Description": "Matches if the input does not contain the specified pattern."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "File Extension Match",
+      "Content": "\\.(%%FileExtension%%)$",
+      "Description": "Matches if the input ends with the given file extension."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Digits Only",
+      "Content": "^[0-9]+$",
+      "Description": "Matches if the input contains only digits."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Email Address",
+      "Content": "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+      "Description": "Basic validation for email addresses."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Extract Numbers",
+      "Content": "(\\d+)",
+      "Description": "Captures all sequences of digits inside the text."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Positive Lookahead",
+      "Content": "^(?=.*%%Pattern%%).*$",
+      "Description": "Matches if the input contains the given pattern (using lookahead)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Negative Lookahead",
+      "Content": "^(?!.*%%Pattern%%).*$",
+      "Description": "Matches if the input does not contain the given pattern (using lookahead)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Positive Lookbehind",
+      "Content": "(?<=%%Prefix%%)%%Pattern%%",
+      "Description": "Matches a pattern that is preceded by the given prefix (using lookbehind)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Negative Lookbehind",
+      "Content": "(?<!%%Prefix%%)%%Pattern%%",
+      "Description": "Matches a pattern that is not preceded by the given prefix (using negative lookbehind)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Whitespace",
+      "Content": "\\s+",
+      "Description": "Matches any whitespace (spaces, tabs, line breaks)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Non-Whitespace",
+      "Content": "\\S+",
+      "Description": "Matches any sequence of non-whitespace characters."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Word Boundary",
+      "Content": "\\b%%Word%%\\b",
+      "Description": "Matches a word only if it stands alone (word boundaries)."
+    }
+  ]
+}

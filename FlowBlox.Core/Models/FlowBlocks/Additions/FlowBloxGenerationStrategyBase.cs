@@ -1,0 +1,106 @@
+﻿using CsvHelper;
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Testing;
+using FlowBlox.Core.Util.DeepCopier;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FlowBlox.Core.Models.FlowBlocks.Additions
+{
+    public abstract class FlowBloxGenerationStrategyBase
+    {
+        protected FlowBloxGenerationStrategyBase()
+        {
+        }
+
+        protected FlowBloxGenerationStrategyBase(BaseFlowBlock flowBlock)
+        {
+            this.Name = GetNameInContextOf(flowBlock);
+            this.Source = flowBlock;
+        }
+
+        private string GetNameInContextOf(BaseFlowBlock flowBlock)
+        {
+            string baseName = this.GetType().Name;
+            string name = baseName + "_0";
+            int counter = 0;
+
+            while (flowBlock.GenerationStrategies.Any(gs => gs.Name == name))
+            {
+                counter++;
+                name = baseName + "_" + counter;
+            }
+
+            return name;
+        }
+
+        [Display(Name = "Global_Name", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        public string Name { get; set; }
+
+        [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleFieldElements), 
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
+            Operations = UIOperations.Link | UIOperations.Unlink)]
+        [Required()]
+        public virtual FieldElement InputField { get; set; }
+
+        private BaseFlowBlock _source;
+
+        public BaseFlowBlock Source
+        {
+            get
+            {
+                return _source;
+            }
+            set
+            {
+                _source = value;
+                OnAfterSourceChanged();
+            }
+        }
+
+        protected virtual void OnAfterSourceChanged()
+        {
+            if (this.Source == null)
+                return;
+
+            if (this.Source is BasePipeFlowBlock)
+            {
+                var pipeFlowBlock = (BasePipeFlowBlock)this.Source;
+
+                if (pipeFlowBlock.InputField != null)
+                    this.InputField = pipeFlowBlock.InputField;
+
+                pipeFlowBlock.PropertyChanged -= pipeFlowBlock_PropertyChange;
+                pipeFlowBlock.PropertyChanged += pipeFlowBlock_PropertyChange;
+            }
+        }
+
+        private void pipeFlowBlock_PropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SequenceDetectionFlowBlock.InputField))
+            {
+                var pipeFlowBlock = (BasePipeFlowBlock)this.Source;
+                this.InputField = pipeFlowBlock.InputField;
+            }
+        }
+
+        public abstract bool CanExecute(out Dictionary<FlowBloxTestDefinition, List<string>> testDefinitionToMessages, out List<string> messages);
+
+        public List<FieldElement> GetPossibleFieldElements()
+        {
+            return this.Source.GetPossibleFieldElements();
+        }
+
+        public abstract object Execute(Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults);
+
+        public abstract void Assign(object value);
+    }
+}

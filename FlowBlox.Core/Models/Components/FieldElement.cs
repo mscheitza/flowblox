@@ -1,0 +1,381 @@
+﻿using FlowBlox.Core.Util;
+using FlowBlox.Core.Models.Components.Modifier;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Runtime;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using FlowBlox.Core.Models.FlowBlocks.Additions;
+using FlowBlox.Core.Interfaces;
+using FlowBlox.SequenceDetection.Util;
+using FlowBlox.Core.Util.Resources;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Provider;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
+using FlowBlox.Core.Enums;
+using System.Collections.ObjectModel;
+
+namespace FlowBlox.Core.Models.Components
+{
+    [Display(Name = "FieldElement", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBlockUIGroup("Global_Groups_Default", 0, ControlAlignment.Top)]
+    [FlowBlockUIGroup("FieldElement_Groups_Conditions", 10, ControlAlignment.Fill)]
+    [FlowBlockUIGroup("FieldElement_Groups_Modifiers", 20, ControlAlignment.Fill)]
+    [Serializable()]
+    public class FieldElement : ManagedObject
+    {
+        private const string FallbackFieldFormat = "Field{0}";
+
+        private FieldNameGenerationMode? _nameGenerationMode;
+
+        public FieldElement()
+        {
+            this.Conditions = new ObservableCollection<Condition>();
+            this.Modifiers = new ObservableCollection<ModifierBase>();
+            this.FieldType = new TypeElement()
+            {
+                FieldType = FieldTypes.Text
+            };
+        }
+
+        public FieldElement(BaseResultFlowBlock resultFlowBlock) : this()
+        {
+            this.Source = resultFlowBlock;
+        }
+
+        public FieldElement(BaseResultFlowBlock resultFlowBlock, FieldNameGenerationMode nameGenerationMode) : this(resultFlowBlock)
+        {
+            this._nameGenerationMode = nameGenerationMode;
+        }
+
+        public override bool HandleRequirements => false;
+
+        public override void OnAfterCreate()
+        {
+            if (this.Source != null)
+            {
+                if (_nameGenerationMode != null)
+                    this.Name = GetDefaultFieldName(this.Source, this, nameGenerationMode: _nameGenerationMode.Value);
+                else
+                    this.Name = GetDefaultFieldName(this.Source, this);
+            }
+        }
+
+        public override bool IsDeletable(out List<IFlowBloxComponent> dependencies)
+        {
+            base.IsDeletable(out dependencies);
+
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+
+            foreach(var flowBlock in registry.GetFlowBlocks())
+            {
+                if (flowBlock.GetAssociatedFields().Contains(registry.GetOriginalRef(this)))
+                    dependencies.AddIfNotExists(flowBlock);
+            }
+
+            foreach (var managedObject in registry.GetManagedObjects())
+            {
+                if (managedObject.GetAssociatedFields().Contains(this) ||
+                    managedObject.GetAssociatedFields().Contains(registry.GetOriginalRef(this)))
+                {
+                    dependencies.AddIfNotExists(managedObject);
+                }        
+            }
+
+            return !dependencies.Any();
+        }
+
+        private static string GetDefaultFieldName(
+            BaseResultFlowBlock source,
+            FieldElement field = null,
+            string flowBlockName = null,
+            FieldNameGenerationMode nameGenerationMode = FieldNameGenerationMode.UseFallbackIndexOnly)
+        {
+            if (flowBlockName == null)
+                flowBlockName = source.Name;
+
+            if (nameGenerationMode == FieldNameGenerationMode.DeriveFromFlowBlock)
+            {
+                if (flowBlockName.IndexOf(source.NamePrefix) == 0)
+                {
+                    var nameSuffix = flowBlockName.Substring(source.NamePrefix.Length);
+                    if (!string.IsNullOrEmpty(nameSuffix) && !Regex.IsMatch(nameSuffix, @"\d+$"))
+                        return nameSuffix;
+                }
+            }
+
+            // Fallback (either explicitly or by failed DeriveFromFlowBlock rule):
+            int fieldIndex;
+            if (field != null)
+            {
+                fieldIndex = source.Fields.IndexOf(field);
+                if (fieldIndex < 0)
+                    fieldIndex = source.Fields.Count;
+            }
+            else
+            {
+                fieldIndex = source.Fields.Count;
+            }
+
+            return string.Format(FallbackFieldFormat, fieldIndex);
+        }
+
+        private void Source_OnNameChanged(BaseFlowBlock flowBlock, string oldSourceName, string newSourceName)
+        {
+            var oldFieldName = GetDefaultFieldName(this.Source, this, oldSourceName, FieldNameGenerationMode.DeriveFromFlowBlock);
+            
+            if (this.Name == oldFieldName)
+            {
+                var newFieldName = GetDefaultFieldName(this.Source, this, newSourceName, FieldNameGenerationMode.DeriveFromFlowBlock);
+                this.Name = newFieldName;
+            }
+
+            string fQOld = GetFullyQualifiedName(oldSourceName, oldFieldName);
+            string fQNew = GetFullyQualifiedName(newSourceName, this.Name);
+
+            this.OnNameChanged?.Invoke(this, fQOld, fQNew);
+        }
+
+        public delegate void FieldElementNameChangedEventHandler(FieldElement field, string oldName, string newName);
+
+        public delegate void FieldElementValueChangedEventHandler(FieldElement field, string oldValue, string newValue);
+
+        public event FieldElementNameChangedEventHandler OnNameChanged;
+
+        public event FieldElementValueChangedEventHandler OnValueChanged;
+
+        private string _fieldName { get; set; }
+
+        [ActivationCondition(ActivationMethod = nameof(IsRegularField))]
+        [Display(Name = "Global_FlowBlock", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        public virtual string FlowBlockName => this.Source?.Name ?? string.Empty;
+
+        [Required()]
+        [Display(Name = "PropertyNames_Name", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [CustomValidation(typeof(FlowBloxComponent), nameof(ValidateName))]
+        public override string Name
+        {
+            get
+            {
+                return _fieldName;
+            }
+            set
+            {
+                bool changed = _fieldName != value;
+                bool isNew = string.IsNullOrEmpty(_fieldName);
+
+                this._fieldName = value;
+
+                if (!isNew && changed)
+                {
+                    string oldFieldName = _fieldName;
+
+                    string fQOld = GetFullyQualifiedName(Source, UserField, oldFieldName);
+                    string fQNew = GetFullyQualifiedName(Source, UserField, value);
+
+                    OnNameChanged?.Invoke(this, fQOld, fQNew);
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        [Display(Name = "FieldElement_FieldType", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        public TypeElement FieldType { get; set; }
+
+        public bool UserField { get; set; }
+
+        public UserFieldTypes UserFieldType { get; set; }
+
+        public bool IsRegularField() => !UserField;
+
+        private string _stringValue;
+
+        public bool ShouldSerializeStringValue() => UserField;
+
+        [ActivationCondition(MemberName = nameof(UserFieldType), Values = [ UserFieldTypes.Input, UserFieldTypes.Memory])]
+        [Display(Name = "FieldElement_StringValue", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        public string StringValue
+        {
+            get
+            {
+                var runtime = _threadLocalRuntime.Value;
+                if (runtime != null && 
+                    _runtimeToFieldValue.TryGetValue(runtime, out var value))
+                {
+                    return value;
+                }
+                return _stringValue;
+            }
+            set
+            {
+                _stringValue = value;
+            }
+        }
+
+        public string ShortStringValue => GetShortStringValue(this.StringValue);
+
+        public static string GetShortStringValue(string value) => TextHelper.ShortenString(value, 100, true);
+
+        public Type GetConfiguredType()
+        {
+            switch (this.FieldType?.FieldType)
+            {
+                case FieldTypes.Text:
+                    return typeof(string);
+                case FieldTypes.Integer:
+                    return typeof(int);
+                case FieldTypes.DateTime:
+                    return typeof(DateTime);
+                case FieldTypes.Double:
+                    return typeof(double);
+                case FieldTypes.Boolean:
+                    return typeof(bool);
+                case FieldTypes.ByteArray:
+                    return typeof(byte[]);
+            }
+
+            return typeof(string);
+        }
+
+        public object Value
+        {
+            get
+            {
+                var fieldType = FieldType?.FieldType;
+
+                return fieldType switch
+                {
+                    FieldTypes.Boolean => FieldType.ValueBoolean,
+                    FieldTypes.Integer => FieldType.ValueInteger,
+                    FieldTypes.Long => FieldType.ValueLong,
+                    FieldTypes.Float => FieldType.ValueFloat,
+                    FieldTypes.Double => FieldType.ValueDouble,
+                    FieldTypes.DateTime => FieldType.ValueDateTime,
+                    FieldTypes.ByteArray => FieldType.ValueByteArray,
+                    _ => StringValue
+                };
+            }
+        }
+
+
+        [ActivationCondition(MemberName = nameof(UserFieldType), Value = UserFieldTypes.Input)]
+        [Display(Name = "FieldElement_ListOfValues", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [FlowBlockUI(Factory = UIFactory.GridView)]
+        public ObservableCollection<ValueItem> ListOfValues { get; set; }
+
+        private BaseResultFlowBlock _source;
+
+        [JsonIgnore()]
+        public virtual BaseResultFlowBlock Source
+        {
+            get
+            {
+                return _source;
+            }
+            set
+            {
+                if (value != null)
+                    value.OnNameChanged += Source_OnNameChanged;
+
+                _source = value;
+            }
+        }
+
+        [ActivationCondition(ActivationMethod = nameof(IsRegularField))]
+        [Display(Name = "FieldElement_Conditions", ResourceType = typeof(FlowBloxTexts), GroupName = "FieldElement_Groups_Conditions", Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        public ObservableCollection<Condition> Conditions { get; set; }
+
+        [ActivationCondition(ActivationMethod = nameof(IsRegularField))]
+        [Display(Name = "FieldElement_Modifiers", ResourceType = typeof(FlowBloxTexts), GroupName = "FieldElement_Groups_Modifiers", Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete, DisplayLabel = false)]
+        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(ModifierBase.ObjectDisplayName) })]
+        public ObservableCollection<ModifierBase> Modifiers { get; set; }
+
+        public string FullyQualifiedName => GetFullyQualifiedName(Source, UserField, Name);
+
+        public bool Pending { get; internal set; }
+
+        public static bool IsFullyQualifiedName(string name)
+        {
+            return (name.IndexOf("$") == 0) && name.Contains("::");
+        }
+
+        public static string GetSourceId(string fullyQualifiedFieldName)
+        {
+            return fullyQualifiedFieldName.Split("$:".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+        }
+
+        public static string GetFieldName(string fullyQualifiedFieldName)
+        {
+            return fullyQualifiedFieldName.Split("$:".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[1];
+        }
+
+        public static string GetFullyQualifiedName(BaseFlowBlock source, bool userField, string fieldName)
+        {
+            if (source == null)
+            {
+                if (!userField)
+                    throw new Exception("The source object must not be null in field definition. FieldName=" + fieldName);
+                else
+                    return "$" + "User" + "::" + fieldName;
+            }
+
+            return "$" + source.Name + "::" + fieldName;
+        }
+
+        public static string GetFullyQualifiedName(string elementName, string fieldName)
+        {
+            return "$" + elementName + "::" + fieldName;
+        }
+
+        private readonly Dictionary<BaseRuntime, string> _runtimeToFieldValue = new Dictionary<BaseRuntime, string>();
+
+        private ThreadLocal<BaseRuntime> _threadLocalRuntime = new ThreadLocal<BaseRuntime>(() => null);
+
+        public void SetValueWithoutEvaluation(BaseRuntime runtime, string value, bool runtimeBound = false)
+        {
+            this.Pending = false;
+            string oldValue = this.StringValue;
+            if (oldValue != value)
+            {
+                if (runtimeBound)
+                {
+                    _threadLocalRuntime.Value = runtime;
+                    _runtimeToFieldValue[runtime] = value;
+                }
+                else
+                    this.StringValue = value;
+
+                OnValueChanged?.Invoke(this, oldValue, value);
+                runtime.NotifyFieldChange(this);
+            }
+        }
+
+        public void SetValue(BaseRuntime runtime, string value, bool runtimeBound = false)
+        {
+            if (value != this.StringValue)
+            {
+                if (!string.IsNullOrEmpty(value))
+                    runtime.Report($"Field value changed: " + this.FullyQualifiedName + "=" + GetShortStringValue(value));
+                else
+                    runtime.Report($"Field value changed: " + this.FullyQualifiedName + "=" + "<null>");
+            }
+            SetValueWithoutEvaluation(runtime, value, runtimeBound);
+        }
+
+        public override void RuntimeStarted(BaseRuntime runtime)
+        {
+            if (IsRegularField())
+                this.SetValueWithoutEvaluation(runtime, string.Empty);
+            base.RuntimeStarted(runtime);
+        }
+
+        public override string ToString() => this.FullyQualifiedName;
+    }
+}

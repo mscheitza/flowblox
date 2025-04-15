@@ -1,0 +1,106 @@
+﻿{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Expression In Brackets",
+      "Content": "\\(.*?\\)",
+      "Description": "Matches any text enclosed in round brackets."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Letters And Umlauts",
+      "Content": "[A-Za-zÄäÖöÜüß]*",
+      "Description": "Matches sequences of letters including German umlauts."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Date (dd.MM.yyyy)",
+      "Content": "[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}",
+      "Description": "Matches dates in German format (e.g., 31.12.2025)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Email Address",
+      "Content": "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*",
+      "Description": "Basic validation for email addresses."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Does Not Contain Pattern",
+      "Content": "^(?!.*%%Pattern%%).*$",
+      "Description": "Matches input strings that do not contain the specified pattern."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Absolute And Relative URLs",
+      "Content": "(?<=href=\"|src=\")[\\/]*(?:[A-Za-z0-9-._~!$&'()*+,;=:@]|%[0-9a-fA-F]{2})*(?:\\/(?:[A-Za-z0-9-._~!$&'()*+,;=:@]|%[0-9a-fA-F]{2})*)*",
+      "Description": "Extracts values from href/src attributes (absolute or relative URLs)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Hostname",
+      "Content": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$",
+      "Description": "Matches valid hostnames."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "HTML/XML Tag",
+      "Content": "(?>\\<).*?(?>\\>)",
+      "Description": "Matches text enclosed within angle brackets (basic tag match)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Absolute URL",
+      "Content": "^(?:(?:https?|ftp):\\/\\/)(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3})(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:\\/[^\\s]*)?$",
+      "Description": "Validates absolute HTTP/HTTPS/FTP URLs."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Relative URL",
+      "Content": "^(?!www\\.|(?:http|ftp)s?:\\/\\/|[A-Za-z]:\\\\|\\/\\/).*",
+      "Description": "Matches relative URLs that are not absolute or Windows paths."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Link From Parent Container",
+      "Content": "(?<=href\\=\").*?(?=\\\")",
+      "Description": "Extracts links from href attributes."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Pattern With Conditions",
+      "Content": "(?>%%PatternStart%%).*?(?>%%PatternEnd%%)",
+      "Description": "Matches content between defined start and end patterns."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Pattern Between Conditions",
+      "Content": "(?<=%%PatternStart%%).*?(?=%%PatternEnd%%)",
+      "Description": "Extracts content between start and end patterns using lookarounds."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Postal Code (5 Digits)",
+      "Content": "[0-9]{5,5}",
+      "Description": "Matches 5-digit postal codes (e.g., German ZIP codes)."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Valid Relative URL",
+      "Content": "^(?!www\\.|(?:http|ftp)s?:\\/\\/|[A-Za-z]:\\\\|\\/\\/).*",
+      "Description": "Validates that a path is a relative URL."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Extract Text From HTML Tag",
+      "Content": "(?<=\\>).*?(?=\\<)",
+      "Description": "Extracts the inner text of an HTML/XML tag."
+    },
+    {
+      "ToolboxCategory": "Regex",
+      "Name": "Area Code",
+      "Content": "[0-9]{4,7}",
+      "Description": "Matches telephone area codes with 4–7 digits."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using Mysqlx.Crud;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FlowBlox.Core.Models.FlowBlocks.Format
+{
+    [Display(Name = "FormatParameterDefinition", ResourceType = typeof(FlowBloxTexts))]
+    public class FormatParameterDefinition : FieldRequiredDefinitionBase
+    {
+        public FormatParameterDefinition()
+        {
+            this.IsRequired = true;
+        }
+
+        [Required()]
+        [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBlockUI(SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), SelectionFilterMethod = nameof(BaseFlowBlock.GetPossibleFieldElements))]
+        public override FieldElement Field { get; set; }
+
+        [Display(Name = "FormatParameterDefinition_IsRequired", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        public override bool IsRequired { get; set; }
+    }
+}

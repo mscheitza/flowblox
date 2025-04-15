@@ -1,0 +1,284 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Xml;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using System.Linq;
+using System.Drawing;
+using FlowBlox.Core.Provider;
+using System.Data;
+using FlowBlox.Core.Constants;
+using System.ComponentModel.DataAnnotations;
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Extensions;
+using FlowBlox.Core.Models.FlowBlocks.Additions;
+using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Enums;
+using FlowBlox.Core.Models.FlowBlocks.TableWriter;
+using FlowBlox.Core.Models.FlowBlocks.Format;
+using FlowBlox.Core.Util;
+using System.Collections.ObjectModel;
+using SkiaSharp;
+
+namespace FlowBlox.Core.Models.FlowBlocks
+{
+    [FlowBlockUIGroup("TableWriterFlowBlock_Groups_Schema", 0)]
+    [Display(Name = "TableWriterFlowBlock_DisplayName", Description = "TableWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    public class TableWriterFlowBlock : BaseFlowBlock
+    {
+        private readonly Dictionary<string, DataRow> _rowKeyCache = new Dictionary<string, DataRow>();
+
+        private ObservableCollection<TableColumnDefinition> _tableColumnDefinitions;
+        private DataTable _currentTableData;
+        private List<string> _keyColumns;
+
+        [Required()]
+        [Display(Name = "TableWriterFlowBlock_ReferencedTable", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleWritableTables), SelectionDisplayMember = nameof(IWritableTable.Name))]
+        public IWritableTable ReferencedTable { get; set; }
+
+        [Display(Name = "TableWriterFlowBlock_CreateNewDatasets", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBlockUI(Factory = UIFactory.Default)]
+        public bool CreateNewDatasets { get; set; } = true;
+
+        [Display(Name = "TableWriterFlowBlock_UpdateExistingDatasets", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [FlowBlockUI(Factory = UIFactory.Default)]
+        public bool UpdateExistingDatasets { get; set; } = true;
+
+        public List<IWritableTable> GetPossibleWritableTables()
+        {
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+            var tables = registry.GetManagedObjects<IWritableTable>();
+            return tables.ToList();
+        }
+
+        [Display(Name = "TableWriterFlowBlock_TableColumnDefinitions", ResourceType = typeof(FlowBloxTexts), GroupName = "TableWriterFlowBlock_Groups_Schema", Order = 0)]
+        [CustomValidation(typeof(TableWriterFlowBlock), nameof(ValidateTableColumnDefinitions))]
+        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        public ObservableCollection<TableColumnDefinition> TableColumnDefinitions
+        {
+            get
+            {
+                return _tableColumnDefinitions;
+            }
+            set
+            {
+                _tableColumnDefinitions = value;
+                SetFieldRequirements(_tableColumnDefinitions);
+            }
+        }
+
+        public static ValidationResult ValidateTableColumnDefinitions(ObservableCollection<TableColumnDefinition> tableColumnDefinitions, ValidationContext context)
+        {
+            var duplicateNames = tableColumnDefinitions
+                .GroupBy(x => x.ColumnName)
+                .Where(g => g.Count() > 1)
+                .Select(g => g.Key)
+                .ToList();
+
+            if (duplicateNames.Any())
+            {
+                var errorMessage = string.Format(
+                    FlowBloxResourceUtil.GetLocalizedString("FlowBloxComponent_Validation_NameAlreadyExists"), 
+                    string.Join(", ", duplicateNames));
+
+                return new ValidationResult(errorMessage, [context.MemberName]);
+            }
+
+            return ValidationResult.Success;
+        }
+
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.table_arrow_up, 16, SKColors.Orange);
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.table_arrow_up, 32, SKColors.Orange);
+
+
+        public TableWriterFlowBlock()
+        {
+            this.TableColumnDefinitions = new ObservableCollection<TableColumnDefinition>();
+        }
+
+        public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
+
+        public override FlowBlockCategory GetCategory() => FlowBlockCategory.IO;
+
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(ReferencedTable));
+            return properties;
+        }
+
+        private bool CanAppend(IList<TableColumnDefinition> columnDefinitions)
+        {
+            if (!columnDefinitions.Any(x => x.IsKeyColumn))
+                return CreateNewDatasets;
+
+            string rowKey = string.Join(GlobalConstants.KeyCacheSeparator, columnDefinitions
+                .Where(x => x.IsKeyColumn)
+                .Select(x => x.Field.Value));
+
+            if (_rowKeyCache.ContainsKey(rowKey))
+                return UpdateExistingDatasets;
+
+            return CreateNewDatasets;
+        }
+
+        private string GetRowKey(DataRow row)
+        {
+            if (_keyColumns == null || !_keyColumns.Any())
+                return null;
+
+            var keyParts = new List<string>();
+            foreach (var columnName in _keyColumns)
+            {
+                if (!_currentTableData.Columns.Contains(columnName))
+                    throw new InvalidOperationException($"Unable to find key column \"{columnName}\" in current table data.");
+
+                keyParts.Add(row[columnName].ToString());
+            }
+            return string.Join(GlobalConstants.KeyCacheSeparator, keyParts);
+        }
+
+        private void AppendRowToKeyCache(DataRow row)
+        {
+            var rowKey = GetRowKey(row);
+            if (rowKey != null && !_rowKeyCache.ContainsKey(rowKey))
+                _rowKeyCache.Add(rowKey, row);
+        }
+
+        private bool CreateOrUpdateDataRowFromCurrentSchemaDefinition(DataTable dataTable, IList<TableColumnDefinition> columnDefinitions)
+        {
+            if (!CanAppend(columnDefinitions))
+                return false;
+
+            _currentTableData = SyncSchemaAndDataTable(dataTable, columnDefinitions);
+            DataRow dataRow = _currentTableData.NewRow();
+            foreach (var columnDefinition in columnDefinitions)
+            {
+                dataRow[columnDefinition.ColumnName] = columnDefinition.Field.Value ?? DBNull.Value;
+            }
+
+            var rowKey = GetRowKey(dataRow);
+            if (rowKey != null && _rowKeyCache?.TryGetValue(rowKey, out DataRow existingRow) == true)
+            {
+                // Update existing row
+                foreach (var columnDefinition in columnDefinitions)
+                {
+                    existingRow[columnDefinition.ColumnName] = columnDefinition.Field.Value ?? DBNull.Value;
+                }
+            }
+            else
+            {
+                // Create new row
+                _currentTableData.Rows.Add(dataRow);
+                AppendRowToKeyCache(dataRow);
+            }
+
+            return true;
+        }
+
+        private static DataTable SyncSchemaAndDataTable(DataTable dataTable, IList<TableColumnDefinition> columnDefinitions)
+        {
+            if (dataTable == null)
+                dataTable = new DataTable();
+
+            foreach (var columnDefinition in columnDefinitions)
+            {
+                if (!dataTable.Columns.Contains(columnDefinition.ColumnName))
+                {
+                    var newColumn = new DataColumn(columnDefinition.ColumnName, columnDefinition.Field.GetConfiguredType());
+                    dataTable.Columns.Add(newColumn);
+
+                    // Bestimme die Position der aktuellen Spalte in der Definitionsliste
+                    int currentIndex = columnDefinitions.IndexOf(columnDefinition);
+
+                    // Bestimme die Position, an der die Spalte eingefügt werden soll
+                    int insertPosition = dataTable.Columns.Count - 1;
+
+                    if (currentIndex > 0)
+                    {
+                        // Wenn es eine vorherige Spalte gibt, füge nach dieser Spalte ein
+                        var previousColumnDefinition = columnDefinitions[currentIndex - 1];
+                        if (dataTable.Columns.Contains(previousColumnDefinition.ColumnName))
+                        {
+                            insertPosition = dataTable.Columns.IndexOf(previousColumnDefinition.ColumnName) + 1;
+                        }
+                    }
+                    else if (currentIndex < columnDefinitions.Count - 1)
+                    {
+                        // Wenn es eine nachfolgende Spalte gibt, versuche, vor dieser einzufügen
+                        var nextColumnDefinition = columnDefinitions[currentIndex + 1];
+                        if (dataTable.Columns.Contains(nextColumnDefinition.ColumnName))
+                        {
+                            insertPosition = dataTable.Columns.IndexOf(nextColumnDefinition.ColumnName);
+                        }
+                    }
+
+                    // Aktualisiere die Position der neuen Spalte
+                    dataTable.Columns[columnDefinition.ColumnName].SetOrdinal(insertPosition);
+                }
+            }
+
+            return dataTable;
+        }
+
+        public override bool Execute(BaseRuntime runtime, object data)
+        {
+            return this.Invoke(runtime, data, () => 
+            {
+                runtime.Focus(this);
+                Wait(runtime);
+                SetParentElement(data);
+                if (CreateOrUpdateDataRowFromCurrentSchemaDefinition(_currentTableData, this.TableColumnDefinitions))
+                    this.ReferencedTable.Write(_currentTableData);
+                ExecuteNextFlowBlocks(runtime);
+            });
+        }
+
+        private void InitRowKeyCache()
+        {
+            _rowKeyCache.Clear();
+
+            if (_currentTableData == null)
+                return;
+
+            foreach (DataRow row in _currentTableData.Rows)
+            {
+                AppendRowToKeyCache(row);
+            }
+        }
+
+        private void OnReadableTableInitializedOrChanged(IReadableTable readableTable)
+        {
+            if (readableTable.CanRead())
+            {
+                this._currentTableData = ((IReadableTable)ReferencedTable).Read();
+                InitRowKeyCache();
+            }
+            else
+            {
+                this._currentTableData = null;
+                InitRowKeyCache();
+            }
+        }
+
+        public override void RuntimeStarted(BaseRuntime runtime)
+        {
+            this._keyColumns = this.TableColumnDefinitions
+                .Where(x => x.IsKeyColumn)
+                .Select(x => x.ColumnName)
+                .ToList();
+
+            if (ReferencedTable is IReadableTable)
+            {
+                var readableTable = (IReadableTable)ReferencedTable;
+                readableTable.AddDataSourceChangedListener(() => OnReadableTableInitializedOrChanged(readableTable));
+                OnReadableTableInitializedOrChanged(readableTable);
+            }
+            base.RuntimeStarted(runtime);
+        }
+    }
+
+}

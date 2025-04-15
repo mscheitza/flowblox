@@ -1,0 +1,30 @@
+﻿<Window x:Class="FlowBlox.UICore.Views.MultiValueSelectionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Width="400" Height="200"
+        WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Description}" Margin="10"/>
+        <ComboBox Grid.Row="1" ItemsSource="{Binding Items}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedItem}" Margin="10"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="{x:Static resources:MultiValueSelectionDialog.Button_Cancel}" IsCancel="True" Click="CancelButton_Click" Margin="0,0,10,0" />
+            <Button Content="{x:Static resources:MultiValueSelectionDialog.Button_OK}" IsDefault="True" Click="OkButton_Click" IsEnabled="{Binding IsItemSelected}"/>
+        </StackPanel>
+    </Grid>
+</Window>
