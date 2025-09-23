@@ -35,14 +35,14 @@ namespace FlowBlox.Core.Provider.Registry
         public override IEnumerable<IManagedObject> GetManagedObjects()
         {
             return base.GetManagedObjects()
-                .Concat(base.GetManagedObjects())
+                .Concat(_transientManagedObjects)
                 .Except(_unregisteredManagedObjects);
         }
 
         public override IEnumerable<T> GetManagedObjects<T>()
         {
             return base.GetManagedObjects<T>()
-                .Concat(base.GetManagedObjects<T>())
+                .Concat(_transientManagedObjects.OfType<T>())
                 .Except(_unregisteredManagedObjects.OfType<T>());
         }
 

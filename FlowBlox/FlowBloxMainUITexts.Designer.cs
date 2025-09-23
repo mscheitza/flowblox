@@ -115,6 +115,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die GitHub-Repository öffnen ähnelt.
+        /// </summary>
+        internal static string AppWindow_GitHub_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_GitHub_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Konnte das aktuelle FlowBlox.Grid nicht als Bitmap (*.bmp) exportieren. Bitte überprüfen Sie die Logfiles, um weitere Informationen zu erhalten. ähnelt.
         /// </summary>
         internal static string AppWindow_GridExportFailed_Message {
@@ -138,6 +147,15 @@ namespace FlowBlox {
         internal static string AppWindow_itmAbout_Text {
             get {
                 return ResourceManager.GetString("AppWindow_itmAbout_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Nach aktualisierter Version suchen... ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmCheckForNewVersion_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmCheckForNewVersion_Text", resourceCulture);
             }
         }
         
@@ -611,6 +629,123 @@ namespace FlowBlox {
         internal static string AppWindow_UnloadProjectFailed_Title {
             get {
                 return ResourceManager.GetString("AppWindow_UnloadProjectFailed_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fehler bei der Updateprüfung. ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_Error_Message {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_Error_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_Error_Title {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_Error_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Beim Prüfen auf Updates ist ein unerwarteter Fehler aufgetreten. ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_Exception_Message {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_Exception_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_Exception_Title {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_Exception_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Diese Funktion ist nur für die MSIX-installierte Version verfügbar. ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_NotPackaged_Message {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_NotPackaged_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_NotPackaged_Title {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_NotPackaged_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Kein Update verfügbar. ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_NoUpdates_Message {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_NoUpdates_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_NoUpdates_Title {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_NoUpdates_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Die Updatequelle ist unbekannt. Öffne die Website zur manuellen Prüfung. ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_UnknownSource_Message {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_UnknownSource_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateCheck_UnknownSource_Title {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateCheck_UnknownSource_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Das Update konnte nicht installiert werden. Bitte versuche es später erneut oder lade die aktuelle Version von der Website. ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateInstall_Failed_Message {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateInstall_Failed_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update fehlgeschlagen ähnelt.
+        /// </summary>
+        internal static string AppWindow_UpdateInstall_Failed_Title {
+            get {
+                return ResourceManager.GetString("AppWindow_UpdateInstall_Failed_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox-Website öffnen ähnelt.
+        /// </summary>
+        internal static string AppWindow_VisitOnline_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_VisitOnline_Text", resourceCulture);
             }
         }
         

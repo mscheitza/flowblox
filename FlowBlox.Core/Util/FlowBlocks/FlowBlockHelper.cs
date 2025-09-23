@@ -32,7 +32,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
             if (!string.IsNullOrEmpty(description))
                 return description;
             else
-                return string.Format(FlowBloxResourceUtil.GetLocalizedString("BaseFlowBlock_DefaultDescription"), new[] { FlowBloxComponentHelper.GetDisplayName(flowBlock) });
+                return string.Format(FlowBloxResourceUtil.GetLocalizedString("BaseFlowBlock_DefaultDescription"), [FlowBloxComponentHelper.GetDisplayName(flowBlock)]);
         }
 
         public static void ApplyFieldSelectionRequiredOption(object target, IEnumerable<FieldElement> fieldElements, bool isRequired)

@@ -23,12 +23,5 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         {
             Entries = new List<FlowBlockTestDataset>();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

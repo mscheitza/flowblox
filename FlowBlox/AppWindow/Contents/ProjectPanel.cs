@@ -457,7 +457,10 @@ namespace FlowBlox.AppWindow.Contents
                     {
                         dependendFlowBlocks.RemoveAll(x => selectedFlowBlocks.Contains(x));
                         if (dependendFlowBlocks.Any())
-                            dependendFlowBlocks.ForEach(flowBlock => allReferences.Add(string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"), selectedFlowBlock, flowBlock)));
+                            dependendFlowBlocks.ForEach(flowBlock => allReferences.Add(
+                                string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"), 
+                                    selectedFlowBlock, 
+                                    flowBlock)));
                     }
 
                     foreach (var managedObject in selectedFlowBlock.DefinedManagedObjects)
@@ -467,7 +470,10 @@ namespace FlowBlox.AppWindow.Contents
                             dependendComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
                             dependendComponents.RemoveAll(x => selectedDefinedManagedObjects.Contains(x));
                             if (dependendComponents.Any())
-                                dependendComponents.ForEach(comp => allReferences.Add(string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"), managedObject, comp)));
+                                dependendComponents.ForEach(comp => allReferences.Add(
+                                    string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"), 
+                                        managedObject, 
+                                        comp)));
                         }
                     }
                 }

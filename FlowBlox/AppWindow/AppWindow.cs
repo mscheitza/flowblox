@@ -5,6 +5,7 @@ using FlowBlox.Core.Authentication;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Exceptions;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Interceptors;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.ObjectManager;
@@ -12,24 +13,27 @@ using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Services;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.Grid.Provider;
-using FlowBlox.Views;
 using FlowBlox.UICore.Views;
+using FlowBlox.Views;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using Windows.ApplicationModel;
+using Windows.Management.Deployment;
 using static FlowBlox.Core.Interceptors.RuntimeBacktraceInterceptor;
-using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
-using FlowBlox.Core.Services;
 
 namespace FlowBlox.AppWindow
 {
@@ -774,7 +778,6 @@ namespace FlowBlox.AppWindow
             }
         }
 
-        private string _latestRuntimeLogfilePath;
         private void itmOpenRuntimeLogDirectory_Click(object sender, EventArgs e)
         {
             var logger = FlowBloxLogManager.Instance.GetLogger();
@@ -903,9 +906,120 @@ namespace FlowBlox.AppWindow
 
         private void itmGitHub_Click(object sender, EventArgs e) => OpenUrl("https://github.com/mscheitza/flowblox");
 
-        private void itmCheckForNewVersion_Click(object sender, EventArgs e)
+        private async void itmCheckForNewVersion_Click(object sender, EventArgs e)
         {
-            
+            try
+            {
+                if (!IsRunningPackaged())
+                {
+                    FlowBloxMessageBox.Show(
+                        this,
+                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NotPackaged_Message", typeof(FlowBloxMainUITexts)),
+                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NotPackaged_Title", typeof(FlowBloxMainUITexts)),
+                        FlowBloxMessageBox.Buttons.OK,
+                        FlowBloxMessageBox.Icons.Info);
+                    return;
+                }
+
+                var result = await Package.Current.CheckUpdateAvailabilityAsync();
+                switch (result.Availability)
+                {
+                    case PackageUpdateAvailability.NoUpdates:
+                        FlowBloxMessageBox.Show(
+                            this,
+                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NoUpdates_Message", typeof(FlowBloxMainUITexts)),
+                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NoUpdates_Title", typeof(FlowBloxMainUITexts)),
+                            FlowBloxMessageBox.Buttons.OK,
+                            FlowBloxMessageBox.Icons.Info);
+                        return;
+
+                    case PackageUpdateAvailability.Available:
+                    case PackageUpdateAvailability.Required:
+                        await InstallUpdateNowAsync();
+                        return;
+
+                    case PackageUpdateAvailability.Unknown:
+                        FlowBloxMessageBox.Show(
+                            this,
+                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_UnknownSource_Message", typeof(FlowBloxMainUITexts)),
+                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_UnknownSource_Title", typeof(FlowBloxMainUITexts)),
+                            FlowBloxMessageBox.Buttons.OK,
+                            FlowBloxMessageBox.Icons.Warning);
+                        OpenUrl("https://www.flowblox.net/");
+                        return;
+
+                    case PackageUpdateAvailability.Error:
+                    default:
+                        FlowBloxMessageBox.Show(
+                            this,
+                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Error_Message", typeof(FlowBloxMainUITexts)),
+                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Error_Title", typeof(FlowBloxMainUITexts)),
+                            FlowBloxMessageBox.Buttons.OK,
+                            FlowBloxMessageBox.Icons.Error);
+                        return;
+                }
+            }
+            catch (Exception ex)
+            {
+                var logger = FlowBloxLogManager.Instance.GetLogger();
+                logger.Exception(ex);
+                FlowBloxMessageBox.Show(
+                    this,
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Exception_Message", typeof(FlowBloxMainUITexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Exception_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Error);
+            }
+        }
+
+        private static bool IsRunningPackaged()
+        {
+            try
+            {
+                var _ = Package.Current;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private async Task InstallUpdateNowAsync()
+        {
+            var appInstallerUri = Package.Current.GetAppInstallerInfo()?.Uri;
+            if (appInstallerUri == null)
+                appInstallerUri = new Uri("https://flowblox.net/app/FlowBlox.appinstaller");
+
+            var pm = new PackageManager();
+
+            var options = AddPackageByAppInstallerOptions.ForceTargetAppShutdown;
+
+            try
+            {
+                // Starts the update immediately; Windows will close the app automatically if necessary.
+                var op = pm.AddPackageByAppInstallerFileAsync(appInstallerUri, options, pm.GetDefaultPackageVolume());
+                var result = await op.AsTask();
+
+                if (result != null && 
+                    result.ErrorText != null && 
+                    result.ExtendedErrorCode != null)
+                {
+                    throw new InvalidOperationException($"An error occurred when attempting to start the update: {result.ErrorText}", result.ExtendedErrorCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                var logger = FlowBloxLogManager.Instance.GetLogger();
+                logger.Exception(ex);
+
+                FlowBloxMessageBox.Show(
+                    null,
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateInstall_Failed_Message", typeof(FlowBloxMainUITexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateInstall_Failed_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Error);
+            }
         }
 
         private void itmReportProblem_Click(object sender, EventArgs e) => OpenUrl("https://www.flowblox.net/reportproblem");

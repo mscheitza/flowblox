@@ -29,6 +29,7 @@ namespace FlowBlox.Grid.Elements.Util
             method?.Invoke(component, new object[] { propertyName });
         }
 
+
         public static string GetDisplayName(object inst)
         {
             if (inst == null)

@@ -127,7 +127,7 @@ namespace FlowBlox.Views.PropertyView
                 {
                     if (_listView.SelectedItems.Count > 0)
                     {
-                        if (_listView.SelectedItems.Cast<ListViewItem>().Any(x => !IsDeletable(x, _listView.FindForm())))
+                        if (_listView.SelectedItems.Cast<ListViewItem>().Any(x => !IsDeletable(x.Tag, _listView.FindForm())))
                             return;
 
                         foreach (var selectedItem in _listView.SelectedItems.Cast<ListViewItem>())

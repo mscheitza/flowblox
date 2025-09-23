@@ -76,11 +76,11 @@ namespace FlowBlox.Core.Provider.Registry
             IEnumerable<IFlowBloxComponent> candidates;
             if (typeof(BaseFlowBlock).IsAssignableFrom(type))
             {
-                candidates = _flowBlocks;
+                candidates = GetFlowBlocks();
             }
             else if (typeof(IManagedObject).IsAssignableFrom(type))
             {
-                candidates = _managedObjects;
+                candidates = GetManagedObjects();
             }
             else
             {

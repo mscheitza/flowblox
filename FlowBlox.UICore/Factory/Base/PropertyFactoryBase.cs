@@ -114,7 +114,9 @@ namespace FlowBlox.UICore.Factory.Base
 
         public bool IsDeletable(object instance, TOwner owner)
         {
-            return Task.Run(async () => await IsDeletableAsync(instance, owner)).GetAwaiter().GetResult();
+            return Task.Run(async () => await IsDeletableAsync(instance, owner))
+                .GetAwaiter()
+                .GetResult();
         }
 
         public async Task<bool> IsDeletableAsync(object instance, TOwner owner)
@@ -134,11 +136,11 @@ namespace FlowBlox.UICore.Factory.Base
                     if (!isDeletable && dependencies != null)
                     {
                         var allReferences = new List<string>();
-                        foreach (var dependency in dependencies.Where(x => x != _target))
+                        foreach (var dependency in dependencies.Where(x => x != _target && x != instance))
                         {
                             allReferences.Add(string.Format(
                                 FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),
-                                FlowBloxComponentHelper.GetDisplayName(instance),
+                                instance,
                                 dependency));
                         }
 

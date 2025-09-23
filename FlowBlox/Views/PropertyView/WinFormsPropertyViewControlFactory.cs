@@ -69,7 +69,7 @@ namespace FlowBlox.Views.PropertyView
             {
                 if (owner.InvokeRequired)
                 {
-                    owner.Invoke(new System.Windows.Forms.MethodInvoker(() =>
+                    owner.BeginInvoke(new System.Windows.Forms.MethodInvoker(() =>
                     {
                         ShowDependencyViolationDialog(owner, allReferences, dependencies);
                     }));
