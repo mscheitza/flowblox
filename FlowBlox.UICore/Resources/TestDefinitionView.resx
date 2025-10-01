@@ -174,4 +174,34 @@
   <data name="Text_SelectionMode_Index_Watermark" xml:space="preserve">
     <value>Bitte geben Sie den Index an...</value>
   </data>
+  <data name="Column_ExpectationTarget" xml:space="preserve">
+    <value>Erwartungsziel</value>
+  </data>
+  <data name="Column_Index" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="Column_Operator" xml:space="preserve">
+    <value>Vergleichsoperator</value>
+  </data>
+  <data name="Column_Value" xml:space="preserve">
+    <value>Wert</value>
+  </data>
+  <data name="Icon_RequiredForExecution_Tooltip" xml:space="preserve">
+    <value>Diese Testfall-Konfiguration ist für die Ausführung erforderlich.</value>
+  </data>
+  <data name="Label_SelectedConfiguration" xml:space="preserve">
+    <value>Ausgewählte Testkonfiguration</value>
+  </data>
+  <data name="StackPanel_SelectedConfiguration_Tooltip" xml:space="preserve">
+    <value>Für jedes Feld kann eine Testkonfiguration festgelegt werden.</value>
+  </data>
+  <data name="TabItem_Expectations" xml:space="preserve">
+    <value>Testerwartungen</value>
+  </data>
+  <data name="Toolbar_Add" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
+  <data name="Toolbar_Delete" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
 </root>

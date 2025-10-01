@@ -88,6 +88,42 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Erwartungsziel ähnelt.
+        /// </summary>
+        public static string Column_ExpectationTarget {
+            get {
+                return ResourceManager.GetString("Column_ExpectationTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Index ähnelt.
+        /// </summary>
+        public static string Column_Index {
+            get {
+                return ResourceManager.GetString("Column_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Vergleichsoperator ähnelt.
+        /// </summary>
+        public static string Column_Operator {
+            get {
+                return ResourceManager.GetString("Column_Operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        /// </summary>
+        public static string Column_Value {
+            get {
+                return ResourceManager.GetString("Column_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Log-Level ähnelt.
         /// </summary>
         public static string GridViewColumn_LogLevel {
@@ -115,6 +151,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Diese Testfall-Konfiguration ist für die Ausführung erforderlich. ähnelt.
+        /// </summary>
+        public static string Icon_RequiredForExecution_Tooltip {
+            get {
+                return ResourceManager.GetString("Icon_RequiredForExecution_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name: ähnelt.
         /// </summary>
         public static string Label_Name {
@@ -133,11 +178,38 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgewählte Testkonfiguration ähnelt.
+        /// </summary>
+        public static string Label_SelectedConfiguration {
+            get {
+                return ResourceManager.GetString("Label_SelectedConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open in editor ähnelt.
         /// </summary>
         public static string MenuItem_OpenInEditor {
             get {
                 return ResourceManager.GetString("MenuItem_OpenInEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Für jedes Feld kann eine Testkonfiguration festgelegt werden. ähnelt.
+        /// </summary>
+        public static string StackPanel_SelectedConfiguration_Tooltip {
+            get {
+                return ResourceManager.GetString("StackPanel_SelectedConfiguration_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Testerwartungen ähnelt.
+        /// </summary>
+        public static string TabItem_Expectations {
+            get {
+                return ResourceManager.GetString("TabItem_Expectations", resourceCulture);
             }
         }
         
@@ -228,6 +300,24 @@ namespace FlowBlox.UICore.Resources {
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hinzufügen ähnelt.
+        /// </summary>
+        public static string Toolbar_Add {
+            get {
+                return ResourceManager.GetString("Toolbar_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
+        /// </summary>
+        public static string Toolbar_Delete {
+            get {
+                return ResourceManager.GetString("Toolbar_Delete", resourceCulture);
             }
         }
     }

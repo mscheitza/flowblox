@@ -68,9 +68,20 @@ namespace FlowBlox.Core.Models.Testing
                 foreach (var userFieldTestConfiguration in entryOfUserFields.FlowBloxTestConfigurations)
                 {
                     var field = userFieldTestConfiguration.FieldElement;
-                    var fieldValue = userFieldTestConfiguration.UserInput;
-                    field.SetValue(_localRuntime, fieldValue, true);
-                    fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
+                    if (userFieldTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput)
+                    {
+                        var fieldValue = userFieldTestConfiguration.UserInput;
+                        field.SetValue(_localRuntime, fieldValue, true);
+                        fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
+                    }
+                    else if (userFieldTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.Keep)
+                    {
+                        fieldValueAssignments[field.FullyQualifiedName] = userFieldTestConfiguration.FieldElement.StringValue;
+                    }
+                    else
+                    {
+                        fieldValueAssignments[field.FullyQualifiedName] = string.Empty;
+                    }
                 }
             }
 
@@ -148,7 +159,7 @@ namespace FlowBlox.Core.Models.Testing
                                 fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
                             }   
 
-                            if (FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExistingValue)
+                            if (FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue)
                             {
                                 if (!fieldValues.Any(x => x == FlowBloxTestConfiguration.UserInput))
                                 {

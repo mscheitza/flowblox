@@ -10,6 +10,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         private bool _execute;
         private List<FlowBloxTestConfiguration> _flowBloxTestConfigurations;
 
+        public FlowBloxTestDefinition ParentTestDefinition { get; set; }
+
         public BaseFlowBlock FlowBlock
         {
             get => _flowBlock;
@@ -31,6 +33,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
                 if (_execute != value)
                 {
                     _execute = value;
+                    ParentTestDefinition?.RecalculateRequiredFlagsAcrossDefinition();
                     OnPropertyChanged();
                 }
             }

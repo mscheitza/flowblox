@@ -10,6 +10,7 @@
     xmlns:globalConverters="clr-namespace:FlowBlox.UICore.Converters"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:coreEnums="clr-namespace:FlowBlox.Core.Enums;assembly=FlowBlox.Core"
     Title="{x:Static resources:TestDefinitionView.Title}"
     Height="800" Width="1200"
     mc:Ignorable="d">
@@ -29,10 +30,11 @@
             <converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter"/>
             <converters:RuntimeLogsToVisibilityConverter x:Key="RuntimeLogsToVisibilityConverter"/>
             <converters:TestResultsToVisibilityConverter x:Key="TestResultsToVisibilityConverter"/>
-            <converters:SelectionModeToVisibilityConverter x:Key="SelectionModeToVisibilityConverter"/>
+            <converters:UserInputEnabledConverter x:Key="UserInputEnabledConverter"/>
             <converters:FlowBlockToVisibilityConverter x:Key="FlowBlockToVisibilityConverter"/>
             <converters:TabControlVisibilityConverter x:Key="TabControlVisibilityConverter"/>
             <viewModel:TestDefinitionViewModel x:Key="TestDefinitionViewModel"/>
+            <converters:IndexDisplayConverter x:Key="IndexDisplayConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -117,10 +119,19 @@
                                                         <ColumnDefinition Width="200" SharedSizeGroup="col5"/>
                                                         <ColumnDefinition Width="250" SharedSizeGroup="col6"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <Label Content="{Binding FieldElement.Name}" Grid.Column="0" VerticalAlignment="Top"/>
+                                                    <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding FieldElement.Name}" VerticalAlignment="Center"/>
+                                                        <iconPacks:PackIconMaterial Kind="StarFourPointsOutline"
+                                                            Width="16" 
+                                                            Height="16" 
+                                                            Margin="5,0,0,0"
+                                                            Foreground="#E65100"
+                                                            ToolTip="{x:Static resources:TestDefinitionView.Icon_RequiredForExecution_Tooltip}"
+                                                            Visibility="{Binding RequiredForExecution, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                    </StackPanel>
                                                     <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0,0,5,0">
                                                         <ComboBox SelectedItem="{Binding SelectionMode}"
-                                                                  ItemsSource="{Binding Path=DataContext.SelectionModes, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                                                  ItemsSource="{Binding PossibleSelectionModes}"
                                                                   VerticalAlignment="Center" Margin="0 0 0 5">
                                                             <ComboBox.ItemTemplate>
                                                                 <DataTemplate>
@@ -136,7 +147,7 @@
                                                              Visibility="{Binding IsIndexVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                                     </StackPanel>
                                                     <TextBox Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" VerticalAlignment="Top" Margin="0 0 5 0"
-                                                             Visibility="{Binding SelectionMode, Converter={StaticResource SelectionModeToVisibilityConverter}}" />
+                                                             IsEnabled="{Binding SelectionMode, Converter={StaticResource UserInputEnabledConverter}}" />
                                                     <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Top" 
                                                                 Visibility="{Binding Path=DataContext.FlowBlock, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid, AncestorLevel=2}, Converter={StaticResource FlowBlockToVisibilityConverter}}">
                                                         <TextBox Text="{Binding ExpectationConditions, Converter={StaticResource ExpectationConditionConverter}}" VerticalAlignment="Center" IsReadOnly="True" Width="200" />
@@ -160,12 +171,173 @@
         <!-- TabControl for Test Results and Runtime Logs -->
         <TabControl Grid.Row="2" Margin="10">
 
-            <TabControl.Visibility>
-                <MultiBinding Converter="{StaticResource TabControlVisibilityConverter}">
-                    <Binding Path="TestResults" />
-                    <Binding Path="RuntimeLogs" />
-                </MultiBinding>
-            </TabControl.Visibility>
+            <TabItem Header="{x:Static resources:TestDefinitionView.TabItem_Expectations}">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontSize="16"/>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- SelectedConfiguration -->
+                    <StackPanel Grid.Row="0"
+                                Orientation="Horizontal" 
+                                Margin="0,0,0,8" 
+                                ToolTip="{x:Static resources:TestDefinitionView.StackPanel_SelectedConfiguration_Tooltip}">
+                        <TextBlock VerticalAlignment="Center"
+                           Text="{x:Static resources:TestDefinitionView.Label_SelectedConfiguration}"
+                           Margin="0,0,8,0"/>
+                        <ComboBox Width="380"
+                          ItemsSource="{Binding Configurations}"
+                          SelectedItem="{Binding SelectedConfiguration, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding FieldElement.Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Toolbar -->
+                    <ToolBar Grid.Row="1">
+                        <Button ToolTip="{x:Static resources:TestDefinitionView.Toolbar_Add}"
+                                Command="{Binding AddExpectationCommand}">
+                            <iconPacks:PackIconMaterial Kind="Plus" Width="16" Height="16" Foreground="DarkGreen" />
+                        </Button>
+                        <Button ToolTip="{x:Static resources:TestDefinitionView.Toolbar_Delete}"
+                                Command="{Binding DeleteExpectationCommand}"
+                                CommandParameter="{Binding SelectedExpectation}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="True">
+                                            <Setter Property="Foreground" Value="#C62828"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                            <Setter Property="Opacity" Value="0.6"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <iconPacks:PackIconMaterial Kind="Delete" Width="16" Height="16" />
+                        </Button>
+                    </ToolBar>
+
+                    <!-- ExpectationConditions -->
+                    <DataGrid Grid.Row="2"
+                      x:Name="expectationsGrid"
+                      ItemsSource="{Binding SelectedConfiguration.ExpectationConditions}"
+                      SelectedItem="{Binding SelectedExpectation, Mode=TwoWay}"
+                      HorizontalAlignment="Stretch" 
+                      VerticalAlignment="Stretch"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="True"
+                      IsReadOnly="False">
+                        
+                        <!-- ExpectationTarget -->
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="{x:Static resources:TestDefinitionView.Column_ExpectationTarget}" Width="Auto" MinWidth="200">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <Binding Path="ExpectationConditionTarget" Converter="{StaticResource EnumDisplayNameConverter}"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedItem="{Binding ExpectationConditionTarget, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding DataContext.ExpectationTargets, RelativeSource={RelativeSource AncestorType=Window}}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Index -->
+                            <DataGridTemplateColumn Header="{x:Static resources:TestDefinitionView.Column_Index}" Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource IndexDisplayConverter}">
+                                                    <Binding Path="ExpectationConditionTarget"/>
+                                                    <Binding Path="Index"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Index, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ExpectationConditionTarget}"
+                                                                     Value="{x:Static coreEnums:ExpectationConditionTarget.ValueAtIndex}">
+                                                            <Setter Property="IsEnabled" Value="True"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Operator -->
+                            <DataGridTemplateColumn Header="{x:Static resources:TestDefinitionView.Column_Operator}" Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <Binding Path="Operator" Converter="{StaticResource EnumDisplayNameConverter}"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedItem="{Binding Operator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                   ItemsSource="{Binding DataContext.ComparisonOperators, RelativeSource={RelativeSource AncestorType=Window}}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Value -->
+                            <DataGridTextColumn Header="{x:Static resources:TestDefinitionView.Column_Value}"
+                                        Binding="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
 
             <TabItem Header="{x:Static resources:TestDefinitionView.TabItem_TestResults}" Visibility="{Binding TestResults, Converter={StaticResource TestResultsToVisibilityConverter}}">
                 <TabItem.HeaderTemplate>

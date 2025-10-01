@@ -1015,7 +1015,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ziel-Eigenschaft ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Erwartungsziel ähnelt.
         /// </summary>
         public static string ExpectationCondition_ExpectationConditionTarget {
             get {
@@ -1056,6 +1056,15 @@ namespace FlowBlox.Core {
         public static string ExpectationConditionTarget_NumberOfDatasets {
             get {
                 return ResourceManager.GetString("ExpectationConditionTarget_NumberOfDatasets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Wert an Stelle ähnelt.
+        /// </summary>
+        public static string ExpectationConditionTarget_ValueAtIndex {
+            get {
+                return ResourceManager.GetString("ExpectationConditionTarget_ValueAtIndex", resourceCulture);
             }
         }
         
@@ -1366,6 +1375,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Aktuellen Wert beibehalten ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfigurationSelectionMode_Keep {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_Keep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automatische Auswahl: Letzer Wert ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_Last {
@@ -1375,7 +1393,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzereingabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manuelle Benutzereingabe ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_UserInput {
             get {
@@ -1384,11 +1402,11 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzereingabe muss existieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzereingabe wird erwartet ähnelt.
         /// </summary>
-        public static string FlowBloxTestConfigurationSelectionMode_UserInput_ExistingValue {
+        public static string FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue {
             get {
-                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_UserInput_ExistingValue", resourceCulture);
+                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue", resourceCulture);
             }
         }
         

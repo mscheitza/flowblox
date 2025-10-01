@@ -112,7 +112,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceDetection
                                      x.ExpectationConditionTarget == ExpectationConditionTarget.FirstValue ||
                                      x.ExpectationConditionTarget == ExpectationConditionTarget.LastValue)?.Value;
 
-            if (string.IsNullOrEmpty(result.ExpectedValue) && testConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExistingValue)
+            if (string.IsNullOrEmpty(result.ExpectedValue) && testConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue)
             {
                 result.ExpectedValue = testConfiguration.UserInput;
             }

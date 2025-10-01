@@ -793,7 +793,7 @@
     <value>Anzahl der Datensätze</value>
   </data>
   <data name="ExpectationCondition_ExpectationConditionTarget" xml:space="preserve">
-    <value>Ziel-Eigenschaft</value>
+    <value>Erwartungsziel</value>
   </data>
   <data name="FlowBloxTestConfiguration" xml:space="preserve">
     <value>Testfallkonfiguration</value>
@@ -805,10 +805,10 @@
     <value>Automatische Auswahl: Letzer Wert</value>
   </data>
   <data name="FlowBloxTestConfigurationSelectionMode_UserInput" xml:space="preserve">
-    <value>Benutzereingabe</value>
+    <value>Manuelle Benutzereingabe</value>
   </data>
-  <data name="FlowBloxTestConfigurationSelectionMode_UserInput_ExistingValue" xml:space="preserve">
-    <value>Benutzereingabe muss existieren</value>
+  <data name="FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue" xml:space="preserve">
+    <value>Benutzereingabe wird erwartet</value>
   </data>
   <data name="FlowBloxTestConfiguration_ExpectationConditions" xml:space="preserve">
     <value>Erwartete Ergebnisse</value>
@@ -1673,5 +1673,11 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   </data>
   <data name="PDF2TextFlowBlock_Description" xml:space="preserve">
     <value>Liest ein PDF-Dokument aus der angegebenen Datenquelle und gibt den extrahierten Klartext seitenweise als Ergebnis zurück.</value>
+  </data>
+  <data name="ExpectationConditionTarget_ValueAtIndex" xml:space="preserve">
+    <value>Wert an Stelle</value>
+  </data>
+	<data name="FlowBloxTestConfigurationSelectionMode_Keep" xml:space="preserve">
+    <value>Aktuellen Wert beibehalten</value>
   </data>
 </root>

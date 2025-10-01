@@ -41,6 +41,7 @@ namespace FlowBlox.Core.Models.Testing
                 {
                     entry = new FlowBlockTestDataset()
                     {
+                        ParentTestDefinition = testDefinition,
                         FlowBloxTestConfigurations = new List<FlowBloxTestConfiguration>()
                     };
 
@@ -67,6 +68,7 @@ namespace FlowBlox.Core.Models.Testing
                 {
                     entry = new FlowBlockTestDataset()
                     {
+                        ParentTestDefinition = testDefinition,
                         FlowBlock = flowBlock,
                         Execute = capturedFlowBlockIndex == capturedFlowBlocks.Count - 1,
                         FlowBloxTestConfigurations = new List<FlowBloxTestConfiguration>()

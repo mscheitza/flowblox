@@ -1,27 +1,19 @@
-﻿using FlowBlox.Core.Models.Testing;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using MahApps.Metro.Controls.Dialogs;
-using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.UICore.Commands;
+﻿using FlowBlox.Core.Enums;
+using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
-using System.ComponentModel;
-using FlowBlox.Core.Enums;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
-using System;
-using System.Windows.Data;
-using System.Collections.Generic;
-using FlowBlox.UICore.Converters.TestDefinition;
-using System.Linq;
-using System.Windows.Controls;
-using FlowBlox.UICore.Converters.Insight;
-using System.Windows;
+using FlowBlox.Core.Models.Testing;
+using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters;
-using FlowBlox.UICore.Resources;
-using FlowBlox.UICore.Views;
-using FlowBlox.UICore.Utilities;
-using FlowBlox.Core.Util;
 using FlowBlox.UICore.Models;
+using FlowBlox.UICore.Utilities;
+using FlowBlox.UICore.Views;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace FlowBlox.UICore.ViewModels
 {
@@ -39,9 +31,12 @@ namespace FlowBlox.UICore.ViewModels
             ExecuteTestCommand = new RelayCommand(ExecuteTest);
             EditConditionsCommand = new RelayCommand(EditConditions);
             OpenInEditorCommand = new RelayCommand(OpenInEditor);
+            AddExpectationCommand = new RelayCommand(_ => AddExpectation(), _ => SelectedConfiguration != null);
+            DeleteExpectationCommand = new RelayCommand(_ => DeleteExpectation(), _ => SelectedConfiguration?.ExpectationConditions != null && SelectedExpectation != null);
             _testDefinition = new FlowBloxTestDefinition();
             SubscribeToPropertyChangeEvents(_testDefinition);
             _testExecutor = new FlowBloxTestExecutor();
+            Configurations = new ObservableCollection<FlowBloxTestConfiguration>();
             RuntimeLogs = new ObservableCollection<RuntimeLog>();
             BindingOperations.EnableCollectionSynchronization(RuntimeLogs, new object());
             _testDefinitionUsages = new List<BaseFlowBlock>();
@@ -59,8 +54,9 @@ namespace FlowBlox.UICore.ViewModels
                     {
                         if (e.PropertyName == nameof(FlowBloxTestConfiguration.SelectionMode))
                         {
-                            if (config.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExistingValue ||
+                            if (config.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue ||
                                 config.SelectionMode == FlowBloxTestConfigurationSelectionMode.First ||
+                                config.SelectionMode == FlowBloxTestConfigurationSelectionMode.Index ||
                                 config.SelectionMode == FlowBloxTestConfigurationSelectionMode.Last)
                             {
                                 entry.Execute = true;
@@ -72,6 +68,67 @@ namespace FlowBlox.UICore.ViewModels
                 }
             }
         }
+
+        private void LoadCurrentCondfigurations(FlowBloxTestDefinition testDefinition, BaseFlowBlock currentFlowBlock)
+        {
+            Configurations.Clear();
+
+            if (testDefinition == null || currentFlowBlock == null)
+            {
+                SelectedConfiguration = null;
+                return;
+            }
+
+            var configs = testDefinition.Entries
+                .Where(e => e.FlowBlock == currentFlowBlock)
+                .SelectMany(e => e.FlowBloxTestConfigurations)
+                .ToList();
+
+            Configurations.AddRange(configs);
+
+            SelectedConfiguration = Configurations.FirstOrDefault();
+        }
+
+        private void AddExpectation()
+        {
+            if (SelectedConfiguration == null)
+                return;
+
+            if (SelectedConfiguration.ExpectationConditions == null)
+                SelectedConfiguration.ExpectationConditions = new ObservableCollection<ExpectationCondition>();
+
+            var defaultOp = Enum.GetValues(typeof(ComparisonOperator)).Cast<ComparisonOperator>().First();
+
+            var ec = new ExpectationCondition
+            {
+                ExpectationConditionTarget = ExpectationConditionTarget.FirstValue,
+                Index = 0,
+                Operator = defaultOp,
+                Value = string.Empty
+            };
+
+            SelectedConfiguration.ExpectationConditions.Add(ec);
+            SelectedExpectation = ec;
+            IsDirty = true;
+        }
+
+        private void DeleteExpectation()
+        {
+            if (SelectedConfiguration?.ExpectationConditions == null || SelectedExpectation == null)
+                return;
+
+            SelectedConfiguration.ExpectationConditions.Remove(SelectedExpectation);
+            SelectedExpectation = null;
+            IsDirty = true;
+        }
+
+        public List<ExpectationConditionTarget> ExpectationTargets => Enum.GetValues(typeof(ExpectationConditionTarget))
+            .Cast<ExpectationConditionTarget>()
+            .ToList();
+
+        public List<ComparisonOperator> ComparisonOperators => Enum.GetValues(typeof(ComparisonOperator))
+            .Cast<ComparisonOperator>()
+            .ToList();
 
         public bool IsDirty
         {
@@ -86,7 +143,6 @@ namespace FlowBlox.UICore.ViewModels
                 }
             }
         }
-
 
         private void _testDefinition_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -118,6 +174,7 @@ namespace FlowBlox.UICore.ViewModels
             set
             {
                 _currentFlowBlock = value;
+                LoadCurrentCondfigurations(_testDefinition, _currentFlowBlock);
                 OnPropertyChanged(nameof(CurrentFlowBlock));
             }
         }
@@ -132,22 +189,43 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        public ObservableCollection<FlowBloxTestConfigurationSelectionMode> SelectionModes { get; set; } = new ObservableCollection<FlowBloxTestConfigurationSelectionMode>
+        public ObservableCollection<FlowBloxTestConfiguration> Configurations { get; }
+
+        private FlowBloxTestConfiguration _selectedConfiguration;
+        public FlowBloxTestConfiguration SelectedConfiguration
         {
-            FlowBloxTestConfigurationSelectionMode.UserInput,
-            FlowBloxTestConfigurationSelectionMode.UserInput_ExistingValue,
-            FlowBloxTestConfigurationSelectionMode.First,
-            FlowBloxTestConfigurationSelectionMode.Index,
-            FlowBloxTestConfigurationSelectionMode.Last
-        };
+            get => _selectedConfiguration;
+            set
+            {
+                if (_selectedConfiguration != value)
+                {
+                    _selectedConfiguration = value;
+                    OnPropertyChanged(nameof(SelectedConfiguration));
+                }
+            }
+        }
+
+        private ExpectationCondition _selectedExpectation;
+        public ExpectationCondition SelectedExpectation
+        {
+            get => _selectedExpectation;
+            set
+            {
+                if (_selectedExpectation != value)
+                {
+                    _selectedExpectation = value;
+                    OnPropertyChanged(nameof(SelectedExpectation));
+                }
+            }
+        }
 
         public ObservableCollection<RuntimeLog> RuntimeLogs { get; set; }
 
-        public ICommand ExecuteTestCommand { get; }
-
-        public ICommand EditConditionsCommand { get; }
-
-        public ICommand OpenInEditorCommand { get; }
+        public RelayCommand ExecuteTestCommand { get; }
+        public RelayCommand EditConditionsCommand { get; }
+        public RelayCommand OpenInEditorCommand { get; }
+        public RelayCommand AddExpectationCommand { get; }
+        public RelayCommand DeleteExpectationCommand { get; }
 
         public List<string> TestResultsColumnNames { get; private set; }
         public ObservableCollection<FlowBlockOutDataset> TestResults { get; private set; }
@@ -243,8 +321,6 @@ namespace FlowBlox.UICore.ViewModels
             RuntimeLogs.Add(log);
             OnPropertyChanged(nameof(RuntimeLogs));
         }
-
-        
 
         private void EditConditions(object target)
         {

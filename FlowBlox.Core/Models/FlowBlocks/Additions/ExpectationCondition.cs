@@ -12,13 +12,49 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
 {
     public class ExpectationCondition : Condition
     {
+        private ExpectationConditionTarget _expectationConditionTarget;
+
         [Display(Name = "ExpectationCondition_ExpectationConditionTarget", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ComboBox)]
-        public ExpectationConditionTarget ExpectationConditionTarget { get; set; }
+        public ExpectationConditionTarget ExpectationConditionTarget
+        {
+            get => _expectationConditionTarget;
+            set
+            {
+                if (_expectationConditionTarget != value)
+                {
+                    _expectationConditionTarget = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private int _index;
+
+        [Display(Name = "ExpectationCondition_ExpectationConditionTarget", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        public int Index
+        {
+            get => _index;
+            set
+            {
+                if (_index != value)
+                {
+                    _index = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DisplayName));
+                }
+            }
+        }
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", ExpectationConditionTarget.GetDisplayName(), base.ToString());
+            var targetText = ExpectationConditionTarget.GetDisplayName();
+
+            if (ExpectationConditionTarget == ExpectationConditionTarget.ValueAtIndex)
+                targetText = $"{targetText} {Index}";
+
+            return $"{targetText} {base.ToString()}";
         }
     }
 }

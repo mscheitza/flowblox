@@ -12,19 +12,19 @@ using FlowBlox.Core.Enums;
 
 namespace FlowBlox.UICore.Converters.TestDefinition
 {
-    public class SelectionModeToVisibilityConverter : IValueConverter
+    public class UserInputEnabledConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is FlowBloxTestConfigurationSelectionMode selectionMode)
             {
-                if (selectionMode == FlowBloxTestConfigurationSelectionMode.First ||
-                    selectionMode == FlowBloxTestConfigurationSelectionMode.Last)
+                if (selectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue ||
+                    selectionMode == FlowBloxTestConfigurationSelectionMode.UserInput)
                 {
-                    return Visibility.Collapsed;
+                    return true;
                 }
             }
-            return Visibility.Visible;
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
