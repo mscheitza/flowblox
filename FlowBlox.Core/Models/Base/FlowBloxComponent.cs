@@ -72,6 +72,9 @@ namespace FlowBlox.Core.Models.Base
             if (fieldElement == null)
                 throw new ArgumentNullException(nameof(fieldElement));
 
+            if (!IsLoaded)
+                return;
+
             if (isRequired)
             {
                 if (!RequiredFields.Contains(fieldElement))
@@ -88,6 +91,30 @@ namespace FlowBlox.Core.Models.Base
                     OnPropertyChanged(nameof(RequiredFields));
                 }
             }
+        }
+
+        protected void SetRequiredInputField(
+            ref FieldElement storage,
+            FieldElement value,
+            string[] additionalNotifies = null,
+            [CallerMemberName] string propertyName = null)
+        {
+            if (ReferenceEquals(storage, value))
+                return;
+
+            if (storage != null)
+                SetFieldRequirement(storage, isRequired: false);
+
+            storage = value;
+
+            if (storage != null)
+                SetFieldRequirement(storage, isRequired: true);
+
+            OnPropertyChanged(propertyName);
+
+            if (additionalNotifies != null)
+                foreach (var n in additionalNotifies)
+                    OnPropertyChanged(n);
         }
 
         public string Version { get; private set; }

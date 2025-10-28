@@ -3,6 +3,7 @@ using MahApps.Metro.IconPacks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -28,6 +29,24 @@ namespace FlowBlox.UICore.Factory.PropertyView
             _preselectedInstance = instance;
         }
 
+        protected void UpdateEmptyMessageVisibilityOnCollectionChanged(FrameworkElement emptyMessage, IList list)
+        {
+            if (list is INotifyCollectionChanged incc)
+            {
+                var weakEmptyMessage = new WeakReference<FrameworkElement>(emptyMessage);
+                var weakList = new WeakReference<IList>(list);
+                NotifyCollectionChangedEventHandler handler = (s, e) =>
+                {
+                    if (!weakEmptyMessage.TryGetTarget(out var emptyMessage) || 
+                        !weakList.TryGetTarget(out var list))
+                    {
+                        return;
+                    }
+                    UpdateEmptyMessageVisibility(emptyMessage, list);
+                };
+                incc.CollectionChanged += handler;
+            }
+        }
 
         protected void UpdateEmptyMessageVisibility(FrameworkElement frameworkElement, IList list)
         {

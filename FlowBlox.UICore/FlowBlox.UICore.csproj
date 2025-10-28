@@ -39,6 +39,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\EditContentView.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EditContentView.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\ExtensionsWindow.Designer.cs">
       <DependentUpon>ExtensionsWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -121,6 +126,10 @@
     <EmbeddedResource Update="Resources\CreateExtensionWindow.resx">
       <LastGenOutput>CreateExtensionWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EditContentView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditContentView.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ExtensionsWindow.resx">
       <LastGenOutput>ExtensionsWindow.Designer.cs</LastGenOutput>

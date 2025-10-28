@@ -21,6 +21,7 @@ namespace FlowBlox.Core.Provider.Registry
         private HashSet<BaseFlowBlock> _flowBlocks;
         private HashSet<IManagedObject> _managedObjects;
         private Dictionary<IFlowBloxComponent, IFlowBloxComponent> _originalReferences;
+        private IDictionary<IFlowBloxComponent, IFlowBloxComponent> _originalReferencesReversed;
 
         public delegate void ManagedObjectRemovedHandler(ManagedObjectRemovedEventArgs eventArgs);
         public delegate void ManagedObjectAddedHandler(ManagedObjectAddedEventArgs eventArgs);
@@ -33,6 +34,7 @@ namespace FlowBlox.Core.Provider.Registry
             _flowBlocks = new HashSet<BaseFlowBlock>();
             _managedObjects = new HashSet<IManagedObject>();
             _originalReferences = new Dictionary<IFlowBloxComponent, IFlowBloxComponent>();
+            _originalReferencesReversed = new Dictionary<IFlowBloxComponent, IFlowBloxComponent>();
         }
 
         public FlowBloxRegistry(FlowBloxRegistry copyFrom) : this()
@@ -323,6 +325,9 @@ namespace FlowBlox.Core.Provider.Registry
                 _originalReferences[to] = from;
             else
                 _originalReferences[to] = _originalReferences[from];
+
+            if (_originalReferences.TryReverseDictionary(out IDictionary<IFlowBloxComponent, IFlowBloxComponent> reversed))
+                _originalReferencesReversed = reversed;
         }
 
         public IFlowBloxComponent GetOriginalRef(IFlowBloxComponent flowBloxComponent)
@@ -330,6 +335,42 @@ namespace FlowBlox.Core.Provider.Registry
             return _originalReferences.TryGetValue(flowBloxComponent, out var originalReference)
                 ? originalReference
                 : flowBloxComponent;
+        }
+
+        /// <summary>
+        /// Reloads the given FlowBlox components within the current transaction context,
+        /// returning the copied references that correspond to the original references whenever available.
+        /// </summary>
+        /// <typeparam name="T">FlowBlox component type.</typeparam>
+        /// <param name="flowBloxComponents">The components to reload.</param>
+        /// <returns>An enumerable of reloaded components casted to <typeparamref name="T"/>.</returns>
+        public IEnumerable<T> Reload<T>(IEnumerable<T> flowBloxComponents)
+            where T : class, IFlowBloxComponent
+        {
+            if (flowBloxComponents == null)
+                return Enumerable.Empty<T>();
+
+            return flowBloxComponents.Select(Reload);
+        }
+
+        /// <summary>
+        /// Reloads a single FlowBlox component within the current transaction context,
+        /// returning the copied reference that corresponds to the original reference whenever available.
+        /// </summary>
+        /// <typeparam name="T">FlowBlox component type.</typeparam>
+        /// <param name="flowBloxComponent">The component to reload.</param>
+        /// <returns>
+        /// The reloaded component casted to <typeparamref name="T"/>.
+        /// </returns>
+        public T Reload<T>(T flowBloxComponent)
+            where T : class, IFlowBloxComponent
+        {
+            if (flowBloxComponent == null)
+                return null;
+
+            return _originalReferencesReversed.TryGetValue(flowBloxComponent, out var copiedReference) ? 
+                (T)copiedReference : 
+                flowBloxComponent;
         }
 
         public T CreateFlowBlockUnregistered<T>() where T : BaseFlowBlock

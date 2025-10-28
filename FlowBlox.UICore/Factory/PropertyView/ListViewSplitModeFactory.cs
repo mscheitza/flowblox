@@ -137,7 +137,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 _list.Add(newInstance);
                 _property.SetValue(_target, _list);
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-                UpdateEmptyMessageVisibility(_emptyMessage, _list);
             }
         }
 

@@ -236,7 +236,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 AddNewItem(list, listItemType, dataGrid);
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-                UpdateEmptyMessageVisibility(emptyMessage, list);
             }, () => !_readOnly);
 
             _deleteCommand = new RelayCommand(async () =>
@@ -247,7 +246,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     {
                         list.Remove(item);
                         FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-                        UpdateEmptyMessageVisibility(emptyMessage, list);
                     }
                 }
             }, () => dataGrid.SelectedItems.Count > 0 && !_readOnly);
@@ -357,6 +355,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
             };
+
+            UpdateEmptyMessageVisibilityOnCollectionChanged(emptyMessage, list);
 
             return ResizableControlContainer.Create(stackPanel, minHeight: 150);
         }

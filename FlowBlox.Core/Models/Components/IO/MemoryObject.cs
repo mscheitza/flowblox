@@ -27,11 +27,17 @@ namespace FlowBlox.Core.Models.Components.IO
             this.EncodingName = DotNetEncodingNames.Default;
         }
 
+        private FieldElement _field;
+
         [Required()]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
-        public FieldElement Field { get; set; }
+        public FieldElement Field 
+        {
+            get => _field;
+            set => SetRequiredInputField(ref _field, value);
+        }
 
         [Required()]
         [Display(Name = "PropertyNames_FileName", ResourceType = typeof(FlowBloxTexts), Order = 2)]

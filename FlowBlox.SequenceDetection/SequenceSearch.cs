@@ -69,7 +69,7 @@ namespace FlowBlox.SequenceDetection
                         int length = terminationIndex - position;
                         var value = adjustedContent.Substring(position, length);
                         index = position + length;
-                        result.Add(value);
+                        result.Add(value.Trim());
                     }
                 }
 

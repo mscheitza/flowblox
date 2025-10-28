@@ -9,6 +9,7 @@ using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.SequenceDetection;
+using FlowBlox.SequenceDetection.Constants;
 using Google.Protobuf;
 using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json;
@@ -33,6 +34,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public override void OnAfterCreate()
         {
+            MaxSequenceGenerationRuntimeSeconds = SequenceDetectionConstants.DefaultSequenceDetectionScannerTimeout;
             CreateDefaultGenerationStrategy();
             base.OnAfterCreate();
         }
@@ -42,10 +44,29 @@ namespace FlowBlox.Core.Models.FlowBlocks
             this.GenerationStrategies.Add(new SequenceDetectionGenerationStrategy(this));
         }
 
+        [Display(Name = "SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds", ResourceType = typeof(FlowBloxTexts))]
+        [FlowBlockUI(Factory = UIFactory.Default)]
+        [Range(1, int.MaxValue, 
+            ErrorMessageResourceName = "SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds", 
+            ErrorMessageResourceType = typeof(FlowBloxTexts))]
+        public int MaxSequenceGenerationRuntimeSeconds { get; set; }
+
+        private string _sequenceDetectionPattern;
+
         [Display(Name = "SequenceDetectionFlowBlock_SequenceDetectionPattern", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(ReadOnly = true)]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
-        public string SequenceDetectionPattern { get; set; }
+        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true, SyntaxHighlighting = "JSON")]
+        public string SequenceDetectionPattern
+        {
+            get => _sequenceDetectionPattern;
+            set
+            {
+                if (_sequenceDetectionPattern != value)
+                {
+                    _sequenceDetectionPattern = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;
 

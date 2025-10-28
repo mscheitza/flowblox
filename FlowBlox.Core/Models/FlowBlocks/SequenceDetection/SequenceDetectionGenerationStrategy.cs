@@ -51,9 +51,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceDetection
                 .Select(x => ConvertToSequenceDetectionInputEntry(x.Key, x.Value))
                 .ToList();
 
+            var sequenceDetectionFlowBlock = GetSequenceDetectionFlowBlock();
             SequenceDetectionService sequenceDetectionService = SequenceDetectionService.Instance;
             var sequenceDetectionPattern = sequenceDetectionService.Detect(new SequenceDetectionInputData()
             {
+                Timeout = sequenceDetectionFlowBlock.MaxSequenceGenerationRuntimeSeconds,
                 Entries = inputEntries
             });
             return sequenceDetectionPattern;

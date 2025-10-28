@@ -17,6 +17,7 @@ using MahApps.Metro.IconPacks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -164,13 +165,15 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowDown, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveDown"), moveDownCommand, Brushes.Blue));
             }
 
-            // Refresh Commands bei Selektion
+            // RelayCommands with enable logic
             listView.SelectionChanged += (s, e) =>
             {
                 editCommand.Invalidate();
                 deleteCommand.Invalidate();
                 unlinkCommand.Invalidate();
             };
+
+            UpdateEmptyMessageVisibilityOnCollectionChanged(_emptyMessage, _list);
 
             var frameworkElement = CreateFrameworkElement(stackPanel, listView);
             return ResizableControlContainer.Create(frameworkElement);
@@ -234,7 +237,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     _list.Add(newInstance);
                     _property.SetValue(_target, _list);
                     FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-                    UpdateEmptyMessageVisibility(_emptyMessage, _list);
                 }
             }
         }
@@ -274,7 +276,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     _list.Add(inst);
                     _property.SetValue(_target, _list);
                     FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-                    UpdateEmptyMessageVisibility(_emptyMessage, _list);
                 }
             }
             else
@@ -293,7 +294,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     _list.Add(dialog.SelectedItem.Value);
                     _property.SetValue(_target, _list);
                     FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-                    UpdateEmptyMessageVisibility(_emptyMessage, _list);
                 }
             }
         }
@@ -316,7 +316,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 _property.SetValue(_target, _list);
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
                 DeleteInstance(item);
-                UpdateEmptyMessageVisibility(_emptyMessage, _list);
             }
         }
 
@@ -327,7 +326,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 _list.Remove(item);
                 _property.SetValue(_target, _list);
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-                UpdateEmptyMessageVisibility(_emptyMessage, _list);
             }
         }
 

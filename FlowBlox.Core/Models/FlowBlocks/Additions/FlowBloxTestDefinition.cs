@@ -39,6 +39,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         /// </summary>
         public void RecalculateRequiredFlagsAcrossDefinition()
         {
+            if (!IsLoaded)
+                return;
+
             var requiredFQNames = this.Entries
                 .Where(ds => ds.Execute && ds.FlowBlock != null)
                 .SelectMany(ds => ds.FlowBlock.GetRequiredFields())

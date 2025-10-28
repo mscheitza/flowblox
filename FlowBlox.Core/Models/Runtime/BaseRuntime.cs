@@ -48,6 +48,7 @@ namespace FlowBlox.Core.Models.Runtime
         public bool StopOnError { get; set; }
         public int StepTimeunit { get; set; }
         public bool ExecutionFlowEnabled { get; set; }
+        public bool DisableInterceptors { get; set; }
 
         private readonly IEnumerable<IRuntimeInterceptor> _interceptors;
 
@@ -106,9 +107,12 @@ namespace FlowBlox.Core.Models.Runtime
         {
             FieldChanged?.Invoke(fieldElement);
 
-            foreach (var interceptor in _interceptors)
+            if (!DisableInterceptors)
             {
-                interceptor.NotifyFieldChange(fieldElement);
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyFieldChange(fieldElement);
+                }
             }
 
             HandlePause();
@@ -118,9 +122,12 @@ namespace FlowBlox.Core.Models.Runtime
         {
             RuntimeStarted?.Invoke(this);
 
-            foreach (var interceptor in _interceptors)
+            if (!DisableInterceptors)
             {
-                interceptor.NotifyRuntimeStarted();
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyRuntimeStarted();
+                }
             }
         }
 
@@ -128,9 +135,12 @@ namespace FlowBlox.Core.Models.Runtime
         {
             Finish?.Invoke(this);
 
-            foreach (var interceptor in _interceptors)
+            if (!DisableInterceptors)
             {
-                interceptor.NotifyRuntimeFinished();
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyRuntimeFinished();
+                }
             }
         }
 
@@ -138,17 +148,23 @@ namespace FlowBlox.Core.Models.Runtime
         {
             Report($"Invocation started for flow block: \"{flowBlock.Name}\"", FlowBloxLogLevel.Info);
 
-            foreach (var interceptor in _interceptors)
+            if (!DisableInterceptors)
             {
-                interceptor.NotifyInvocationStarted(flowBlock);
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyInvocationStarted(flowBlock);
+                }
             }
         }
 
         internal void NotifyInvocationFinished(BaseFlowBlock flowBlock)
         {
-            foreach (var interceptor in _interceptors)
+            if (!DisableInterceptors)
             {
-                interceptor.NotifyInvocationFinished(flowBlock);
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyInvocationFinished(flowBlock);
+                }
             }
 
             Report($"Invocation finished for flow block: \"{flowBlock.Name}\"", FlowBloxLogLevel.Info);
@@ -159,9 +175,12 @@ namespace FlowBlox.Core.Models.Runtime
             if (StopOnWarning)
                 Pause = true;
 
-            foreach (var interceptor in _interceptors)
+            if (!DisableInterceptors)
             {
-                interceptor.NotifyWarning(baseFlowBlock, message);
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyWarning(baseFlowBlock, message);
+                }
             }
         }
 
@@ -170,9 +189,12 @@ namespace FlowBlox.Core.Models.Runtime
             if (StopOnError)
                 Pause = true;
 
-            foreach (var interceptor in _interceptors)
+            if (!DisableInterceptors)
             {
-                interceptor.NotifyError(baseFlowBlock, message, exception);
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyError(baseFlowBlock, message, exception);
+                }
             }
         }
 

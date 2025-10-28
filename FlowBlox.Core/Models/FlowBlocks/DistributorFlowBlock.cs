@@ -16,11 +16,17 @@ namespace FlowBlox.Core.Models.FlowBlocks
     [Display(Name = "DistributorFlowBlock_DisplayName", Description = "DistributorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class DistributorFlowBlock : BaseResultFlowBlock
     {
+        private FieldElement _inputField;
+
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleFieldElements), 
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
         [Required()]
-        public FieldElement InputField { get; set; }
+        public FieldElement InputField 
+        {
+            get => _inputField;
+            set => SetRequiredInputField(ref _inputField, value);
+        }
 
         public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);
 

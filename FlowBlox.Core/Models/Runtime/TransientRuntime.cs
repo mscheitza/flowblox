@@ -9,6 +9,7 @@ namespace FlowBlox.Core.Models.Runtime
         public TransientRuntime(FlowBloxProject project) : base(project)
         {
             this.ExecutionFlowEnabled = false;
+            this.DisableInterceptors = true;
         }
 
         public void InitializeRuntime(List<BaseFlowBlock> capturedFlowBlocks)

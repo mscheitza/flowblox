@@ -17,19 +17,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [Required()]
         public FieldElement InputField
         {
-            get { return _inputField; }
-            set
-            {
-                if (_inputField != null)
-                    SetFieldRequirement(_inputField, false);
-
-                _inputField = value;
-
-                if (_inputField != null)
-                    SetFieldRequirement(_inputField, true);
-
-                OnPropertyChanged(nameof(InputField));
-            }
+            get => _inputField;
+            set => SetRequiredInputField(ref _inputField, value);
         }
 
         public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);

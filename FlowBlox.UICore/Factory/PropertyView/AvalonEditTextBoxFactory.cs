@@ -4,6 +4,7 @@ using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
@@ -27,6 +28,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
             _readOnly = readOnly;
         }
 
+        private bool _updatingFromModel;
+        private bool _updatingToModel;
+        private bool _initialized;
+
         public FrameworkElement Create(FlowBlockTextBoxAttribute textAttr)
         {
             var editor = new TextEditor
@@ -42,7 +47,26 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 FontSize = 12
             };
 
-            editor.TextChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+            if (_target is INotifyPropertyChanged inpc)
+            {
+                PropertyChangedEventHandler propertyChangedEventHandler = (s, e) =>
+                {
+                    if (!_initialized)
+                        return;
+
+                    if (_updatingToModel)
+                        return;
+
+                    if (e.PropertyName == _property.Name)
+                    {
+                        _updatingFromModel = true;
+                        editor.Text = (string)_property.GetValue(_target);
+                        _updatingFromModel = false;
+                    }
+                };
+
+                inpc.PropertyChanged += propertyChangedEventHandler;
+            }
 
             SetHighlighting(editor, textAttr.SyntaxHighlighting);
 
@@ -51,13 +75,19 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             editor.TextChanged += (s, e) =>
             {
+                if (_updatingFromModel)
+                    return;
+
                 if (_property.CanWrite)
                 {
                     var current = _property.GetValue(_target) as string;
                     var newText = editor.Text;
                     if (current != newText)
                     {
+                        _updatingToModel = true;
                         _property.SetValue(_target, newText);
+                        FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+                        _updatingToModel = false;
                     }
                 }
             };
@@ -70,6 +100,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         e.Handled = true;
                 };
             }
+
+            _initialized = true;
 
             return ResizableControlContainer.Create(editor);
         }

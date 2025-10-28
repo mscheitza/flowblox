@@ -4,11 +4,14 @@ using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Registry;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
+using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -30,6 +33,7 @@ namespace FlowBlox.UICore.ViewModels
         {
             ExecuteTestCommand = new RelayCommand(ExecuteTest);
             EditConditionsCommand = new RelayCommand(EditConditions);
+            EditContentCommand = new RelayCommand(EditContent);
             OpenInEditorCommand = new RelayCommand(OpenInEditor);
             AddExpectationCommand = new RelayCommand(_ => AddExpectation(), _ => SelectedConfiguration != null);
             DeleteExpectationCommand = new RelayCommand(_ => DeleteExpectation(), _ => SelectedConfiguration?.ExpectationConditions != null && SelectedExpectation != null);
@@ -161,6 +165,7 @@ namespace FlowBlox.UICore.ViewModels
                 if (_testDefinition != value)
                 {
                     _testDefinition = value;
+                    _testDefinition.RecalculateRequiredFlagsAcrossDefinition();
                     SubscribeToPropertyChangeEvents(_testDefinition);
                     OnPropertyChanged(nameof(TestDefinition));
                     OnPropertyChanged(nameof(CanExecute));
@@ -175,7 +180,28 @@ namespace FlowBlox.UICore.ViewModels
             {
                 _currentFlowBlock = value;
                 LoadCurrentCondfigurations(_testDefinition, _currentFlowBlock);
+                LoadCapturedFlowBlocks(_currentFlowBlock);
                 OnPropertyChanged(nameof(CurrentFlowBlock));
+            }
+        }
+
+        private void LoadCapturedFlowBlocks(BaseFlowBlock currentFlowBlock)
+        {
+            FlowBloxTestCapture flowBloxCapture = new FlowBloxTestCapture();
+            FlowBloxRegistry registry = FlowBloxRegistryProvider.GetRegistry();
+            var capturedFlowBlocks = flowBloxCapture.CreateCapture(registry.GetStartFlowBlock(), currentFlowBlock);
+            flowBloxCapture.CreateCapture(registry.GetStartFlowBlock(), currentFlowBlock);
+            CapturedFlowBlocks = flowBloxCapture.GetCapturedFlowBlocks();
+        }
+
+        private IEnumerable<BaseFlowBlock> _capturedFlowBlocks;
+        public IEnumerable<BaseFlowBlock> CapturedFlowBlocks
+        {
+            get => _capturedFlowBlocks;
+            set
+            {
+                _capturedFlowBlocks = value;
+                OnPropertyChanged(nameof(CapturedFlowBlocks));
             }
         }
 
@@ -223,6 +249,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public RelayCommand ExecuteTestCommand { get; }
         public RelayCommand EditConditionsCommand { get; }
+        public RelayCommand EditContentCommand { get; }
         public RelayCommand OpenInEditorCommand { get; }
         public RelayCommand AddExpectationCommand { get; }
         public RelayCommand DeleteExpectationCommand { get; }
@@ -337,6 +364,26 @@ namespace FlowBlox.UICore.ViewModels
             { 
                 flowBloxTestConfiguration.ExpectationConditions = flowBloxTestConfiguration.ExpectationConditions;
                 OnPropertyChanged(nameof(TestDefinition));
+            }
+        }
+
+        private void EditContent(object target)
+        {
+            var configuration = target as FlowBloxTestConfiguration;
+            if (configuration == null)
+                return;
+
+            var view = new EditContentView(configuration.UserInput)
+            {
+                Owner = _ownerWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            
+            var result = view.ShowDialog();
+            if (result == true)
+            {
+                configuration.UserInput = view.ContentText;
             }
         }
 

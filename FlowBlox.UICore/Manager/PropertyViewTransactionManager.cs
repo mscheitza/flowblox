@@ -42,6 +42,11 @@ namespace FlowBlox.UICore.Manager
 				_refMappings[source] = copy;
 				_registry.ReplaceRef((BaseFlowBlock)source, (BaseFlowBlock)copy);
 			}
+
+			if (copy is IFlowBloxComponent)
+			{
+				((IFlowBloxComponent)copy).OnAfterLoad();
+			}
 		}
 
 		public class OpenResult

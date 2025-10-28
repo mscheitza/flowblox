@@ -3214,6 +3214,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximale Laufzeit der Sequenz-Generierung (Sekunden) ähnelt.
+        /// </summary>
+        public static string SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds {
+            get {
+                return ResourceManager.GetString("SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Die maximale Laufzeit der Sequenz-Generierung muss mindestens eine Sekunde betragen. ähnelt.
+        /// </summary>
+        public static string SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds {
+            get {
+                return ResourceManager.GetString("SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Wagenrücklauf ähnelt.
         /// </summary>
         public static string SpecialCharacter_CarriageReturn {

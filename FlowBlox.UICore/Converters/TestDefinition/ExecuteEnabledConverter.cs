@@ -14,13 +14,16 @@ namespace FlowBlox.UICore.Converters.TestDefinition
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length != 2 || !(values[0] is FlowBlockTestDataset entry) || !(values[1] is List<BaseFlowBlock> testDefinitionUsages))
+            if (values.Length != 3 ||
+                !(values[0] is BaseFlowBlock currentFlowBlock) ||
+                !(values[1] is FlowBlockTestDataset entry) || 
+                !(values[2] is List<BaseFlowBlock> testDefinitionUsages))
                 return false;
             
-            if (testDefinitionUsages.Contains(entry.FlowBlock))
+            if (testDefinitionUsages.Except([currentFlowBlock]) .Contains(entry.FlowBlock))
                 return false;
 
-            return !entry.Execute;
+            return true;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -23,7 +23,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             return fieldElements;
         }
 
-        public override string DisplayName => GetDisplayName(fieldElement => fieldElement.FullyQualifiedName);
+        public override string DisplayName => GetDisplayName(fieldElement => fieldElement?.FullyQualifiedName);
 
         public override string ShortDisplayName => GetDisplayName(fieldElement => fieldElement.Name);
 

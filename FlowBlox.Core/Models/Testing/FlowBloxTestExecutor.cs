@@ -161,15 +161,18 @@ namespace FlowBlox.Core.Models.Testing
 
                             if (FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue)
                             {
-                                if (!fieldValues.Any(x => x == FlowBloxTestConfiguration.UserInput))
+                                if (!string.IsNullOrWhiteSpace(FlowBloxTestConfiguration.UserInput))
                                 {
-                                    _localRuntime.Report($"Test case: There is no value \"{TextHelper.ShortenString(FlowBloxTestConfiguration.UserInput, 100, true)}\" in field values from field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
-                                    return new FlowBloxTestResult(false, fieldValueAssignments);
-                                }
+                                    if (!fieldValues.Any(x => x == FlowBloxTestConfiguration.UserInput))
+                                    {
+                                        _localRuntime.Report($"Test case: There is no value \"{TextHelper.ShortenString(FlowBloxTestConfiguration.UserInput, 100, true)}\" in field values from field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
+                                        return new FlowBloxTestResult(false, fieldValueAssignments);
+                                    }
 
-                                var fieldValue = FlowBloxTestConfiguration.UserInput;
-                                field.SetValue(_localRuntime, fieldValue);
-                                fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
+                                    var fieldValue = FlowBloxTestConfiguration.UserInput;
+                                    field.SetValue(_localRuntime, fieldValue);
+                                    fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
+                                }
                             }
                         }
 

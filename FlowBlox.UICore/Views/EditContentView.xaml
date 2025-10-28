@@ -1,0 +1,102 @@
+﻿<mah:MetroWindow
+    x:Class="FlowBlox.UICore.Views.EditContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:viewModel="clr-namespace:FlowBlox.UICore.ViewModels"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    mc:Ignorable="d"
+    Title="{x:Static resources:EditContentView.Window_Title}"
+    Height="600" Width="900">
+
+    <!-- ViewModel -->
+    <Window.DataContext>
+        <viewModel:EditContentViewModel />
+    </Window.DataContext>
+
+    <!-- Ressourcen inkl. MahApps-Theme -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <ToolBar Grid.Row="0" Padding="4">
+            
+            <!-- Import (Text) -->
+            <Button Command="{Binding ImportTextFromFileCommand}"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_ImportText_Tooltip}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="FileImport" Foreground="#1565C0" Width="16" Height="16" Margin="0,0,6,0"/>
+                    <TextBlock Text="{x:Static resources:EditContentView.Toolbar_ImportText}"/>
+                </StackPanel>
+            </Button>
+
+            <!-- Import (Bytes -> Base64) -->
+            <Button Command="{Binding ImportBytesFromFileCommand}"
+                    Margin="6,0,0,0"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_ImportBytes_Tooltip}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="DatabaseImport" Foreground="#6A1B9A" Width="16" Height="16" Margin="0,0,6,0"/>
+                    <TextBlock Text="{x:Static resources:EditContentView.Toolbar_ImportBytes}"/>
+                </StackPanel>
+            </Button>
+
+            <Separator Margin="6,0,6,0"/>
+
+            <!-- Syntax Highlighting Selection -->
+            <TextBlock Text="{x:Static resources:EditContentView.Label_Syntax}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+            <ComboBox ItemsSource="{Binding AvailableHighlightingNames}"
+                      SelectedItem="{Binding SelectedHighlightingName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      MinWidth="180"
+                      ToolTip="{x:Static resources:EditContentView.Combo_Syntax_Tooltip}">
+            </ComboBox>
+        </ToolBar>
+
+        <!-- AvalonEdit Editor -->
+        <avalonedit:TextEditor Grid.Row="1"
+                               x:Name="Editor"
+                               Document="{Binding Document}"
+                               FontFamily="JetBrains Mono"
+                               FontSize="12"
+                               ShowLineNumbers="True"
+                               HorizontalScrollBarVisibility="Auto"
+                               VerticalScrollBarVisibility="Auto"
+                               SyntaxHighlighting="{Binding SelectedHighlightingDefinition}">
+        </avalonedit:TextEditor>
+
+        <!-- Bottom Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+            <Button Command="{Binding CancelCommand}"
+                    IsCancel="True"
+                    Margin="0,0,8,0">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="ArrowLeft" Width="16" Height="16" Margin="0,0,6,0"/>
+                    <TextBlock Text="{x:Static resources:EditContentView.Button_Back}"/>
+                </StackPanel>
+            </Button>
+
+            <Button Command="{Binding ApplyCommand}"
+                    IsDefault="True">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="ContentSave" Width="16" Height="16" Margin="0,0,6,0"/>
+                    <TextBlock Text="{x:Static resources:EditContentView.Button_Apply}"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

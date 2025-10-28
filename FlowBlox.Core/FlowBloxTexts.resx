@@ -1677,7 +1677,13 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="ExpectationConditionTarget_ValueAtIndex" xml:space="preserve">
     <value>Wert an Stelle</value>
   </data>
-	<data name="FlowBloxTestConfigurationSelectionMode_Keep" xml:space="preserve">
+  <data name="FlowBloxTestConfigurationSelectionMode_Keep" xml:space="preserve">
     <value>Aktuellen Wert beibehalten</value>
+  </data>
+  <data name="SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
+    <value>Maximale Laufzeit der Sequenz-Generierung (Sekunden)</value>
+  </data>
+  <data name="SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
+    <value>Die maximale Laufzeit der Sequenz-Generierung muss mindestens eine Sekunde betragen.</value>
   </data>
 </root>

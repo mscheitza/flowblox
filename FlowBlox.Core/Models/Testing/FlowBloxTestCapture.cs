@@ -1,16 +1,19 @@
 ﻿using FlowBlox.Core.Models.FlowBlocks.Base;
-using System;
-using System.Collections.Generic;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Registry;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZstdSharp.Unsafe;
 
 namespace FlowBlox.Core.Models.Testing
 {
-    internal class FlowBloxTestCapture
+    public class FlowBloxTestCapture
     {
         private List<BaseFlowBlock> _capturedFlowBlocks;
+        private FlowBloxRegistry _registry;
+
+        public FlowBloxTestCapture()
+        {
+            this._registry = FlowBloxRegistryProvider.GetRegistry();
+        }
 
         public List<BaseFlowBlock> GetCapturedFlowBlocks() => _capturedFlowBlocks;
 
@@ -25,17 +28,24 @@ namespace FlowBlox.Core.Models.Testing
             if (capturedFlowBlocks == null)
                 capturedFlowBlocks = new List<BaseFlowBlock>();
 
-            foreach (var nextFlowBlock in flowBlock.GetNextFlowBlocks())
+            bool targetCaptured = false;
+            var nextFlowBlocks = flowBlock.GetNextFlowBlocks();
+            if (nextFlowBlocks.Any(nextFlowBlock => nextFlowBlock == targetFlowBlock))
             {
-                capturedFlowBlocks.Add(nextFlowBlock);
-
-                if (nextFlowBlock == targetFlowBlock)
-                    return true;
-
-                return CaptureFlowBlocks(nextFlowBlock, targetFlowBlock, ref capturedFlowBlocks);
+                capturedFlowBlocks.Add(targetFlowBlock);
+                targetCaptured = true;
             }
+            else
+            {
+                foreach (var nextFlowBlock in nextFlowBlocks)
+                {
+                    capturedFlowBlocks.Add(nextFlowBlock);
 
-            return false;
+                    if (CaptureFlowBlocks(nextFlowBlock, targetFlowBlock, ref capturedFlowBlocks))
+                        targetCaptured = true;
+                }
+            }
+            return targetCaptured;
         }
     }
 }

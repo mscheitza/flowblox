@@ -105,7 +105,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     }
                     else
                     {
-                        OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" successful after regeneration.", FlowBloxLogLevel.Error));
+                        OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" successful after regeneration.", FlowBloxLogLevel.Success));
                     }
                 }
             }

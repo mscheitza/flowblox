@@ -53,13 +53,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             return true;
         }
 
+        private FieldElement _inputField;
+
         [Required]
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBlockUI(Factory = UIFactory.Association,
                      SelectionFilterMethod = nameof(GetPossibleFieldElements),
                      SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
                      Operations = UIOperations.Link | UIOperations.Unlink)]
-        public FieldElement InputField { get; set; }
+        public FieldElement InputField
+        {
+            get => _inputField;
+            set => SetRequiredInputField(ref _inputField, value);
+        }
 
         public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);
 
