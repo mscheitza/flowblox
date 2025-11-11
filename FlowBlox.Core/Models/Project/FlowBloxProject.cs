@@ -20,6 +20,7 @@ using Newtonsoft.Json.Linq;
 using FlowBlox.Core.DependencyInjection;
 using Google.Protobuf;
 using FlowBlox.Core.Exceptions;
+using FlowBlox.Core.Models.Base;
 
 namespace FlowBlox.Core.Models.Project
 {
@@ -235,13 +236,15 @@ namespace FlowBlox.Core.Models.Project
             // ProjectDependendData
             CreateProjectDependendDataObjectsIfNotExist();
 
+            List<IFlowBloxComponent> loadedComponents = new List<IFlowBloxComponent>();
+
             // FlowBlocks
             if (this.FlowBlocks != null)
             {
                 foreach (var flowBlock in this.FlowBlocks.ExceptNull())
                 {
                     this.FlowBloxRegistry.RegisterFlowBlock(flowBlock);
-                    flowBlock.OnAfterLoad();
+                    loadedComponents.Add(flowBlock);
                 }
             }
 
@@ -253,7 +256,7 @@ namespace FlowBlox.Core.Models.Project
                     .Where(x => x is not FieldElement))
                 {
                     this.FlowBloxRegistry.Register(managedObject);
-                    managedObject.OnAfterLoad();
+                    loadedComponents.Add(managedObject);
                 }
             }
 
@@ -263,8 +266,14 @@ namespace FlowBlox.Core.Models.Project
                 foreach (var userField in this.UserFields)
                 {
                     this.FlowBloxRegistry.Register(userField);
-                    userField.OnAfterLoad();
+                    loadedComponents.Add(userField);
                 }
+            }
+
+            // Process OnAfterLoad-Events
+            foreach (var loadedComponent in loadedComponents)
+            {
+                loadedComponent.OnAfterLoad();
             }
 
             Logger.Info("Project loaded successfully.");

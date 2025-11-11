@@ -55,6 +55,7 @@ namespace FlowBlox.Core.Models.Base
         [ActivationCondition(MemberName = nameof(HandleRequirements), Value = true)]
         [Display(Name = "FlowBloxComponent_RequiredFields", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
+            UiOptions = UIOptions.FieldSelectionHideRequired | UIOptions.FieldSelectionDefaultNotRequired,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
         [FlowBlockListView(LVColumnMemberNames = [nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name)])]

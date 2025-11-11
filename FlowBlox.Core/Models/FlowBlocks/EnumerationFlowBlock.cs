@@ -20,7 +20,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
     {
         [Display(Name = "EnumerationFlowBlock_Parameters", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
-            UiOptions = UIOptions.FieldSelectionIsOptional,
+            UiOptions = UIOptions.FieldSelectionDefaultNotRequired,
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
         [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
         public ObservableCollection<FieldElement> Parameters { get; set; } = new();

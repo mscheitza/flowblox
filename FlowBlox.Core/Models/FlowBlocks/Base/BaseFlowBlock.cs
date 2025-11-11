@@ -94,7 +94,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         private void UndoWarn(BaseRuntime runtime) => OnUndoWarn?.Invoke(runtime);
 
-        private void UndoError(BaseRuntime runtime) => OnUndoWarn?.Invoke(runtime);
+        private void UndoError(BaseRuntime runtime) => OnUndoError?.Invoke(runtime);
 
         [DeepCopierIgnore()]
         public virtual List<Type> NotificationTypes
@@ -178,6 +178,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public void ResetNotifications(BaseRuntime runtime)
         {
             this.UndoWarn(runtime);
+            this.UndoError(runtime);
             this.Flag(runtime, FlowBlockFlags.None);
         }
 

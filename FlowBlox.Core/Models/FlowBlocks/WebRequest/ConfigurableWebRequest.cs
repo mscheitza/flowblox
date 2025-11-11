@@ -29,6 +29,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebRequest
         public string ContentType { get; set; }
         public IDictionary<string, string> Headers { get; set; }
         public string Payload { get; set; }
+        public ResponseBodyKind ResponseBodyKind { get; set; }
 
         public HttpClient Client { get; }
 
@@ -41,6 +42,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebRequest
                 CookieContainer = new CookieContainer(),
                 UseCookies = true,
                 AllowAutoRedirect = true,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.Brotli,
                 ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) =>
                 {
                     return sslPolicyErrors == System.Net.Security.SslPolicyErrors.None;
@@ -98,19 +100,49 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebRequest
             }
 
             HttpResponseMessage response = await Client.SendAsync(requestMessage);
-            var encoding = GetEncodingFromContentType(response.Content.Headers);
-
-            using (var responseStream = await response.Content.ReadAsStreamAsync())
-            using (var streamReader = new StreamReader(responseStream, encoding))
+            var headers = response.Content.Headers;
+            if (this.ResponseBodyKind == ResponseBodyKind.Bytes)
             {
-                string content = await streamReader.ReadToEndAsync();
-                return new ConfigurableWebRequestResult()
+                byte[] data = await response.Content.ReadAsByteArrayAsync();
+                return new ConfigurableWebRequestResult
                 {
                     Success = response.IsSuccessStatusCode,
                     UrlCalled = response.RequestMessage.RequestUri.ToString(),
-                    Content = content
+                    BodyKind = ResponseBodyKind.Bytes,
+                    Bytes = data,
+                    FileName = ResolveFileName(response, response.RequestMessage.RequestUri)
                 };
             }
+            else
+            {
+                var encoding = GetEncodingFromContentType(headers);
+                using (var responseStream = await response.Content.ReadAsStreamAsync())
+                using (var streamReader = new StreamReader(responseStream, encoding, detectEncodingFromByteOrderMarks: true))
+                {
+                    string content = await streamReader.ReadToEndAsync();
+                    return new ConfigurableWebRequestResult
+                    {
+                        Success = response.IsSuccessStatusCode,
+                        UrlCalled = response.RequestMessage.RequestUri.ToString(),
+                        BodyKind = ResponseBodyKind.Text,
+                        Content = content
+                    };
+                }
+            }
+        }
+
+        private static string ResolveFileName(HttpResponseMessage resp, Uri requestUri)
+        {
+            var contentDisposition = resp.Content.Headers.ContentDisposition;
+            var name = contentDisposition?.FileNameStar ?? contentDisposition?.FileName;
+            if (!string.IsNullOrEmpty(name))
+                return name.Trim('\"');
+
+            var last = Path.GetFileName(requestUri.LocalPath);
+            if (!string.IsNullOrEmpty(last))
+                return last;
+
+            throw new InvalidOperationException("No filename could be determined.");
         }
 
         private static Encoding GetEncodingFromContentType(HttpContentHeaders headers)

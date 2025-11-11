@@ -39,12 +39,11 @@ namespace FlowBlox.Services
         public FieldSelectionResult InvokeFieldSelection(object target, FlowBlockUIAttribute flowBlockUI, IList items, Window window)
         {
             var flowBlock = target as BaseFlowBlock;
-            if (flowBlock == null)
-                return new FieldSelectionResult();
 
             var fieldSelectionWindow = new FieldSelectionWindow(flowBlock, items)
             {
-                IsRequired = !flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionIsOptional)
+                IsRequired = !flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionDefaultNotRequired),
+                HideRequired = flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionHideRequired)
             };
 
             var dialogResult = WindowsFormWPFHelper.ShowWinFormsDialog(fieldSelectionWindow, window);

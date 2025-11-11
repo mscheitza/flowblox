@@ -1,12 +1,19 @@
 ﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Grid.Elements.Util;
+using FlowBlox.UICore.Factory.PropertyView.Colorizer;
+using Google.Protobuf.Reflection;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -20,12 +27,14 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private readonly PropertyInfo _property;
         private readonly object _target;
         private readonly bool _readOnly;
+        private readonly FieldRegexResolver _fieldRegexResolver;
 
         public AvalonEditTextBoxFactory(PropertyInfo property, object target, bool readOnly)
         {
             _property = property ?? throw new ArgumentNullException(nameof(property));
             _target = target ?? throw new ArgumentNullException(nameof(target));
             _readOnly = readOnly;
+            _fieldRegexResolver = new FieldRegexResolver();
         }
 
         private bool _updatingFromModel;
@@ -69,6 +78,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
             }
 
             SetHighlighting(editor, textAttr.SyntaxHighlighting);
+
+            editor.TextArea.TextView.LineTransformers.Add(new RegexColorizer(
+                _fieldRegexResolver.ResolveFieldRegex(), 
+                (Brush)new BrushConverter().ConvertFromString("#FF7F00FF"))); // strong violet
 
             if (_property.GetValue(_target) is string value)
                 editor.Text = value;

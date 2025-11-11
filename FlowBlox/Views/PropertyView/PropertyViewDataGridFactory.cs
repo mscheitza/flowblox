@@ -374,7 +374,7 @@ namespace FlowBlox.Views.PropertyView
             var flowBlock = _target as BaseFlowBlock;
             FieldSelectionWindow fieldSelectionWindow = new FieldSelectionWindow(flowBlock)
             {
-                IsRequired = !_flowBlockUIAttribute.UiOptions.HasFlag(UIOptions.FieldSelectionIsOptional)
+                IsRequired = !_flowBlockUIAttribute.UiOptions.HasFlag(UIOptions.FieldSelectionDefaultNotRequired)
             };
             if (fieldSelectionWindow.ShowDialog(_dataGridView.FindForm()) == DialogResult.OK)
             {

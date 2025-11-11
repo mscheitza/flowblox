@@ -91,7 +91,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Bottom" Margin="10">
 
             <!-- Back -->
-            <Button Margin="5" Command="{Binding CancelCommand}">
+            <Button Margin="5" Command="{Binding CancelCommand}" IsCancel="True">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="ArrowLeft"
                                         Width="14"
@@ -119,7 +119,8 @@
             <!-- Save -->
             <Button Margin="5"
                 Command="{Binding SaveCommand}"
-                Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
+                IsDefault="True">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="ContentSave"
                                         Width="14"

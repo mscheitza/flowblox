@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowBlox.UICore.Utilities
+namespace FlowBlox.Core.Utilities
 {
     public static class RegexUtil
     {

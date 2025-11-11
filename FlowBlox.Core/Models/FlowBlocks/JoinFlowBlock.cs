@@ -40,7 +40,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Display(Name = "JoinFlowBlock_JoinedParameters", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
-            UiOptions = UIOptions.FieldSelectionIsOptional,
+            UiOptions = UIOptions.FieldSelectionDefaultNotRequired,
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
         [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
         public ObservableCollection<FieldElement> JoinedParameters { get; set; }

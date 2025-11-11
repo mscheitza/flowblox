@@ -62,6 +62,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 IsReadOnly = _flowBlockUIAttribute?.ReadOnly ?? false,
                 CanUserAddRows = false,
                 CanUserDeleteRows = _flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Delete) ?? false,
+                CanUserSortColumns = _dataGridAttribute?.IsMovable != true,
                 SelectionMode = DataGridSelectionMode.Extended,
                 ColumnWidth = DataGridLength.Auto
             };

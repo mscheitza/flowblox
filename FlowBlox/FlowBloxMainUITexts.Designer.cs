@@ -966,6 +966,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block anzeigen ähnelt.
+        /// </summary>
+        internal static string FieldView_checkBoxShowFlowBlock_Text {
+            get {
+                return ResourceManager.GetString("FieldView_checkBoxShowFlowBlock_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Feldwert(e) &amp;kopieren ähnelt.
         /// </summary>
         internal static string FieldView_itmCopy_Text {

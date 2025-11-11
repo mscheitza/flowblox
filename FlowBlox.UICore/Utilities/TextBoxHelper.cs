@@ -1,19 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.FlowBlocks;
-using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Views;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Models.DialogService;
 using FlowBlox.UICore.Enums;
+using FlowBlox.Core.Utilities;
 
 namespace FlowBlox.UICore.Utilities
 {

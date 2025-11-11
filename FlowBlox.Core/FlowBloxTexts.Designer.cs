@@ -628,6 +628,51 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Setzt mehrere URI-Teile zu einer vollständig aufgelösten URL zusammen. ähnelt.
+        /// </summary>
+        public static string ConcatUriFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ConcatUriFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die URI zusammenfügen ähnelt.
+        /// </summary>
+        public static string ConcatUriFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ConcatUriFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die URI-Teil ähnelt.
+        /// </summary>
+        public static string ConcatUriFlowBlock_UriPart_DisplayName {
+            get {
+                return ResourceManager.GetString("ConcatUriFlowBlock_UriPart_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        /// </summary>
+        public static string ConcatUriFlowBlock_UriPart_Value {
+            get {
+                return ResourceManager.GetString("ConcatUriFlowBlock_UriPart_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die URI-Teile ähnelt.
+        /// </summary>
+        public static string ConcatUriFlowBlock_UriParts {
+            get {
+                return ResourceManager.GetString("ConcatUriFlowBlock_UriParts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Bedingung ähnelt.
         /// </summary>
         public static string Condition {
@@ -3169,6 +3214,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Datenschlüssel ähnelt.
+        /// </summary>
+        public static string ResultFieldByEnumValue_EnumValue {
+            get {
+                return ResourceManager.GetString("ResultFieldByEnumValue_EnumValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tokenisiert Text für Frage-Antwort-Modelle mithilfe von Byte Pair Encoding (BPE) basierend auf vocab.json und merges.txt. Verwendet dabei das für RoBERTa-Modelle typische Satzformat. ähnelt.
         /// </summary>
         public static string RobertaQATokenizer_Description {
@@ -4461,6 +4515,24 @@ namespace FlowBlox.Core {
         public static string WebRequestFlowBlock_PostParameters {
             get {
                 return ResourceManager.GetString("WebRequestFlowBlock_PostParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Antwort-Typ ähnelt.
+        /// </summary>
+        public static string WebRequestFlowBlock_ResponseBodyKind {
+            get {
+                return ResourceManager.GetString("WebRequestFlowBlock_ResponseBodyKind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ergebnis-Felder ähnelt.
+        /// </summary>
+        public static string WebRequestFlowBlock_ResultFields {
+            get {
+                return ResourceManager.GetString("WebRequestFlowBlock_ResultFields", resourceCulture);
             }
         }
         

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using FlowBlox.Core;
 using FlowBlox.Core.Models.Components;
-using FlowBlox.Core;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using System.Linq;
 using FlowBlox.Core.Provider;
-using System.Diagnostics.Eventing.Reader;
-using System.Collections;
-using Microsoft.Win32;
-using FlowBlox.Grid;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util.Controls;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace FlowBlox.Views
 {
@@ -40,6 +37,18 @@ namespace FlowBlox.Views
             set
             {
                 cbRequired.Checked = value;
+            }
+        }
+
+        public bool HideRequired
+        {
+            get
+            {
+                return !cbRequired.Visible;
+            }
+            set
+            {
+                cbRequired.Visible = !value;
             }
         }
 
@@ -72,6 +81,10 @@ namespace FlowBlox.Views
         {
             if (flowBlock != null)
                 fieldElements = fieldElements.OrderByDescending(x => flowBlock.ReferencedFlowBlocks.Contains(x.Source));
+
+            // If no field elements were passed, load them from the registry
+            if (fieldElements == null || !fieldElements.Any())
+                fieldElements = _registry.GetFieldElements();
 
             // Append user fields
             fieldElements = fieldElements.Concat(_registry.GetUserFields())

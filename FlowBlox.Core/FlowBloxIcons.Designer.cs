@@ -233,6 +233,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        internal static byte[] link {
+            get {
+                object obj = ResourceManager.GetObject("link", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         internal static byte[] magnify_scan {
             get {
                 object obj = ResourceManager.GetObject("magnify_scan", resourceCulture);

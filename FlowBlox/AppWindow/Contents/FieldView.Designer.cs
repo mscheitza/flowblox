@@ -37,11 +37,15 @@
             itmRefresh = new System.Windows.Forms.ToolStripMenuItem();
             tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             lvFields = new System.Windows.Forms.ListView();
+            chFlowBlockName = new System.Windows.Forms.ColumnHeader();
             chFieldName = new System.Windows.Forms.ColumnHeader();
             chFieldValue = new System.Windows.Forms.ColumnHeader();
             tbFilter = new System.Windows.Forms.TextBox();
+            flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            checkBoxShowFlowBlock = new FlowBlox.Core.Components.FlowBloxCheckBox();
             contextMenuStrip.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
+            flowLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
             // contextMenuStrip
@@ -88,30 +92,41 @@
             tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel.Controls.Add(lvFields, 0, 1);
             tableLayoutPanel.Controls.Add(tbFilter, 0, 0);
+            tableLayoutPanel.Controls.Add(flowLayoutPanel, 0, 2);
             tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             tableLayoutPanel.Name = "tableLayoutPanel";
-            tableLayoutPanel.RowCount = 2;
+            tableLayoutPanel.RowCount = 3;
             tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             tableLayoutPanel.Size = new System.Drawing.Size(315, 589);
             tableLayoutPanel.TabIndex = 1;
             // 
             // lvFields
             // 
-            lvFields.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { chFieldName, chFieldValue });
+            lvFields.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { chFlowBlockName, chFieldName, chFieldValue });
             lvFields.ContextMenuStrip = contextMenuStrip;
             lvFields.Dock = System.Windows.Forms.DockStyle.Fill;
             lvFields.FullRowSelect = true;
             lvFields.GridLines = true;
             lvFields.Location = new System.Drawing.Point(3, 31);
+            lvFields.MultiSelect = false;
             lvFields.Name = "lvFields";
-            lvFields.Size = new System.Drawing.Size(309, 555);
+            lvFields.OwnerDraw = true;
+            lvFields.Size = new System.Drawing.Size(309, 525);
             lvFields.TabIndex = 0;
             lvFields.UseCompatibleStateImageBehavior = false;
             lvFields.View = System.Windows.Forms.View.Details;
+            lvFields.DrawItem += lvFields_DrawItem;
+            lvFields.DrawSubItem += lvFields_DrawSubItem;
             lvFields.SelectedIndexChanged += lvFields_SelectedIndexChanged;
             lvFields.DoubleClick += lvFields_DoubleClick;
+            // 
+            // chFlowBlockName
+            // 
+            chFlowBlockName.Text = "Flow-Block";
+            chFlowBlockName.Width = 90;
             // 
             // chFieldName
             // 
@@ -133,18 +148,39 @@
             tbFilter.TextChanged += tbFilter_TextChanged;
             tbFilter.KeyDown += tbFilter_KeyDown;
             // 
+            // flowLayoutPanel
+            // 
+            flowLayoutPanel.Controls.Add(checkBoxShowFlowBlock);
+            flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            flowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            flowLayoutPanel.Location = new System.Drawing.Point(3, 562);
+            flowLayoutPanel.Name = "flowLayoutPanel";
+            flowLayoutPanel.Size = new System.Drawing.Size(309, 24);
+            flowLayoutPanel.TabIndex = 2;
+            // 
+            // checkBoxShowFlowBlock
+            // 
+            checkBoxShowFlowBlock.Checked = false;
+            checkBoxShowFlowBlock.Location = new System.Drawing.Point(111, 3);
+            checkBoxShowFlowBlock.Name = "checkBoxShowFlowBlock";
+            checkBoxShowFlowBlock.Size = new System.Drawing.Size(195, 24);
+            checkBoxShowFlowBlock.TabIndex = 0;
+            checkBoxShowFlowBlock.Text = "checkBoxShowFlowBlock_Text";
+            checkBoxShowFlowBlock.Click += checkBoxShowFlowBlock_Click;
+            // 
             // FieldView
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             AutoScroll = true;
             Controls.Add(tableLayoutPanel);
-            Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            Font = new System.Drawing.Font("Calibri", 9F);
             Name = "FieldView";
             Size = new System.Drawing.Size(315, 589);
             contextMenuStrip.ResumeLayout(false);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
+            flowLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -159,5 +195,8 @@
         private System.Windows.Forms.ColumnHeader chFieldName;
         private System.Windows.Forms.ColumnHeader chFieldValue;
         private System.Windows.Forms.TextBox tbFilter;
+        private System.Windows.Forms.ColumnHeader chFlowBlockName;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
+        private Core.Components.FlowBloxCheckBox checkBoxShowFlowBlock;
     }
 }

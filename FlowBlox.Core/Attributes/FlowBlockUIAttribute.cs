@@ -30,8 +30,9 @@ namespace FlowBlox.Core.Attributes
     {
         EnableFieldSelection = 1,
         EnableFileSelection = 2,
-        FieldSelectionIsOptional = 4,
-        EnableFolderSelection = 8
+        FieldSelectionDefaultNotRequired = 4,
+        FieldSelectionHideRequired = 8,
+        EnableFolderSelection = 16
     }
 
     [AttributeUsage(AttributeTargets.Property)]

@@ -187,16 +187,6 @@ namespace FlowBlox.Core
 
                 typeof(ListView).GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(listView, true, null);
 
-                listView.DrawSubItem += (s, e) =>
-                {
-                    e.DrawDefault = true;
-                };
-
-                listView.DrawItem += (s, e) =>
-                {
-                    e.DrawDefault = true;
-                };
-
                 listView.DrawColumnHeader += (s, e) =>
                 {
                     e.DrawBackground();

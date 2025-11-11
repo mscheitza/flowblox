@@ -174,7 +174,7 @@ namespace FlowBlox.Views.PropertyView
                     {
                         var fieldSelectionWindow = new FieldSelectionWindow(_target, items)
                         {
-                            IsRequired = !_flowBlockUIAttribute.UiOptions.HasFlag(Options.FieldSelectionIsOptional)
+                            IsRequired = !_flowBlockUIAttribute.UiOptions.HasFlag(Options.FieldSelectionDefaultNotRequired)
                         };
                         fieldSelectionWindow.MultiSelect = false;
                         if (fieldSelectionWindow.ShowDialog(_listView.FindForm()) == DialogResult.OK)

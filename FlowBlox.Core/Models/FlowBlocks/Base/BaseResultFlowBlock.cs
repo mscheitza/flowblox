@@ -27,7 +27,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private string _startValue;
 
         [Display(Name = "BaseResultFlowBlock_StartValue", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection | UIOptions.FieldSelectionIsOptional)]
+        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection | UIOptions.FieldSelectionDefaultNotRequired)]
         public string StartValue
         {
             get => _startValue;

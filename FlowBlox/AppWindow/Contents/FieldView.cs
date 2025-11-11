@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using FlowBlox.Core;
-using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Util;
-using FlowBlox.Core.Provider;
-using FlowBlox.Core.Util.Controls;
-using System.Linq;
-using FlowBlox.Core.Util.Resources;
+﻿using FlowBlox.Core;
 using FlowBlox.Core.Events;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.Controls;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Utilities;
+using K4os.Compression.LZ4.Internal;
+using OpenQA.Selenium.BiDi.Modules.Script;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Documents;
+using System.Windows.Forms;
 
 namespace FlowBlox.Views
 {
@@ -29,13 +33,38 @@ namespace FlowBlox.Views
             FlowBloxUILocalizationUtil.Localize(this);
             ListViewHelper.EnableDoubleBuffer(lvFields);
             _adjustmentHandler = ListViewColumnAdjustmentHandler.Register(lvFields);
+            checkBoxShowFlowBlock.CheckedChanged += CheckBoxShowFlowBlock_CheckedChanged;
+            _savedFlowBlockColWidth = chFlowBlockName.Width;
             UpdateUI();
+        }
+
+        private void CheckBoxShowFlowBlock_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateUI();
+        }
+
+        private int _savedFlowBlockColWidth;
+        private void SetFlowBlockColumnVisible(bool visible)
+        {
+            // TODO: Ein/Ausblenden fixen
+            var col = chFlowBlockName;
+            if (visible)
+            {
+                col.Width = _savedFlowBlockColWidth;
+            }
+            else
+            {
+                _savedFlowBlockColWidth = col.Width;
+                col.Width = 0;
+            }
+            lvFields.Invalidate();
         }
 
         private void UpdateUI()
         {
             itmCopy.Enabled = (lvFields.SelectedItems.Count > 0);
             itmOpenFieldValue.Enabled = (lvFields.SelectedItems.Count == 1);
+            SetFlowBlockColumnVisible(checkBoxShowFlowBlock.Checked);
         }
 
         private void InitializeFields()
@@ -51,13 +80,13 @@ namespace FlowBlox.Views
             var registry = FlowBloxRegistryProvider.GetRegistry();
             registry.OnManagedObjectRemoved -= Registry_OnManagedObjectRemoved;
             registry.OnManagedObjectRemoved += Registry_OnManagedObjectRemoved;
-            
+
             _adjustmentHandler.AdjustListViewColumns();
         }
 
         private void Registry_OnManagedObjectRemoved(ManagedObjectRemovedEventArgs eventArgs)
         {
-            foreach(var lvItemFieldElement in lvFields.Items
+            foreach (var lvItemFieldElement in lvFields.Items
                 .Cast<ListViewItem>()
                 .Where(x => x.Tag == eventArgs.RemovedObject)
                 .ToList())
@@ -71,8 +100,10 @@ namespace FlowBlox.Views
             string name = fieldElement.Name;
             ListViewItem lvItemFieldElement = new ListViewItem();
             lvItemFieldElement.Name = name;
-            lvItemFieldElement.Text = name;
+            lvItemFieldElement.Text = fieldElement.FlowBlockName;
             lvItemFieldElement.Tag = fieldElement;
+            lvItemFieldElement.SubItems[0].Tag = fieldElement.FlowBlockName;
+            lvItemFieldElement.SubItems.Add(fieldElement.Name);
             lvItemFieldElement.SubItems.Add(fieldElement.Pending ?
                 FlowBloxResourceUtil.GetLocalizedString("FieldElement_PendingValue") : fieldElement.StringValue);
             _fieldMap[fieldElement] = lvItemFieldElement;
@@ -207,6 +238,64 @@ namespace FlowBlox.Views
                 // Unterdrücken Sie die Weiterleitung des Ereignisses
                 e.SuppressKeyPress = true;
             }
+        }
+
+        private void lvFields_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            bool selected = e.Item.Selected || ((ListView)sender).SelectedIndices.Contains(e.ItemIndex);
+            var backColor = selected ? SystemColors.Highlight : e.SubItem.BackColor;
+            var foreColor = selected ? SystemColors.HighlightText : e.SubItem.ForeColor;
+            using (var back = new SolidBrush(backColor))
+                e.Graphics.FillRectangle(back, e.Bounds);
+
+            // Only column 0 receives the "BlockName + FieldName" rendering
+            if (e.ColumnIndex == 0)
+            {
+                // Retrieve data
+                string blockName = e.SubItem.Tag as string ?? string.Empty;
+
+                // Fonts/Colors
+                using var smallFont = new Font(e.SubItem.Font.FontFamily, Math.Max(6f, e.SubItem.Font.Size - 2f), e.SubItem.Font.Style);
+                var gray = selected ?
+                    ControlPaint.LightLight(foreColor) :
+                    Color.FromArgb(96, 116, 168);
+
+                // Layout
+                var bounds = e.Bounds;
+                var paddingLeft = 6;       // etwas Abstand zum linken Rand
+                var gap = 6;               // Abstand zwischen Blockname und Feldname
+                var yCenter = bounds.Top + (bounds.Height / 2);
+
+                // TextFlags
+                var flags = TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine;
+
+                // Measure & draw block name
+                var maxWidth = bounds.Width - paddingLeft;
+                var blockRect = new Rectangle(bounds.Left + paddingLeft, bounds.Top, maxWidth, bounds.Height);
+                var blockSize = TextRenderer.MeasureText(blockName, smallFont, new Size(int.MaxValue, int.MaxValue), flags);
+
+                // Effective drawn width (with ellipse, possibly smaller than Measure)
+                TextRenderer.DrawText(e.Graphics, blockName, smallFont, blockRect, gray, flags | TextFormatFlags.VerticalCenter);
+
+                return;
+            }
+
+            // Draw all other columns by default (including selection)
+            TextRenderer.DrawText(e.Graphics, e.SubItem.Text ?? string.Empty, e.SubItem.Font, e.Bounds, foreColor, 
+                TextFormatFlags.EndEllipsis | 
+                TextFormatFlags.NoPrefix | 
+                TextFormatFlags.VerticalCenter | 
+                TextFormatFlags.SingleLine);
+        }
+
+        private void lvFields_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+
+        }
+
+        private void checkBoxShowFlowBlock_Click(object sender, EventArgs e)
+        {
+            UpdateUI();
         }
     }
 }

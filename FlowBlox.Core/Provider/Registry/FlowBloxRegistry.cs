@@ -163,7 +163,7 @@ namespace FlowBlox.Core.Provider.Registry
             return GetFieldElements().FirstOrDefault(x => x.FullyQualifiedName == fullyQualifiedFieldName);
         }
 
-        public FieldElement CreateField(BaseResultFlowBlock source, FieldNameGenerationMode nameGenerationMode)
+        public FieldElement CreateField(BaseResultFlowBlock source, FieldNameGenerationMode nameGenerationMode = FieldNameGenerationMode.UseFallbackIndexOnly)
         {
             var field = new FieldElement(source, nameGenerationMode);
             field.OnAfterCreate();

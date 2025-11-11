@@ -1,17 +1,11 @@
-﻿using FlowBlox.Core.Util;
-using FlowBlox.Core.Models.Components;
+﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Provider;
 using FlowBlox.Views;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using FlowBlox.UICore.Enums;
-using FlowBlox.UICore.Utilities;
+using FlowBlox.Core.Utilities;
 
 namespace FlowBlox.Grid.Elements.Util
 {

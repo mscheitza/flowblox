@@ -1686,4 +1686,28 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
     <value>Die maximale Laufzeit der Sequenz-Generierung muss mindestens eine Sekunde betragen.</value>
   </data>
+  <data name="ResultFieldByEnumValue_EnumValue" xml:space="preserve">
+    <value>Datenschlüssel</value>
+  </data>
+  <data name="WebRequestFlowBlock_ResponseBodyKind" xml:space="preserve">
+    <value>Antwort-Typ</value>
+  </data>
+  <data name="WebRequestFlowBlock_ResultFields" xml:space="preserve">
+    <value>Ergebnis-Felder</value>
+  </data>
+	<data name="ConcatUriFlowBlock_DisplayName" xml:space="preserve">
+    <value>URI zusammenfügen</value>
+  </data>
+	<data name="ConcatUriFlowBlock_Description" xml:space="preserve">
+    <value>Setzt mehrere URI-Teile zu einer vollständig aufgelösten URL zusammen.</value>
+  </data>
+	<data name="ConcatUriFlowBlock_UriParts" xml:space="preserve">
+    <value>URI-Teile</value>
+  </data>
+	<data name="ConcatUriFlowBlock_UriPart_DisplayName" xml:space="preserve">
+    <value>URI-Teil</value>    
+  </data>
+	<data name="ConcatUriFlowBlock_UriPart_Value" xml:space="preserve">
+    <value>Wert</value>
+  </data>
 </root>

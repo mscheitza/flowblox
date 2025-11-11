@@ -294,6 +294,11 @@ namespace FlowBlox.Core.Util.DeepCopier
 
             if (property.PropertyType.GetGenericTypeDefinition() == typeof(ObservableCollection<>))
             {
+                if (property.Name == "RequiredFields")
+                {
+
+                }
+
                 Type collectionType = typeof(ObservableCollection<>).MakeGenericType(itemType);
                 return (IList)Activator.CreateInstance(collectionType);
             }
