@@ -80,7 +80,7 @@ namespace FlowBlox.Core.Components
                 Dock = DockStyle.Fill,
                 Padding = new Padding(3, 3, 3, 3),
                 BackColor = Color.White,
-                Tag = FlowBloxStyle.StyleIgnoreSelf
+                Tag = FlowBloxStyleTags.StyleIgnoreSelf
             };
             ControlHelper.EnableDoubleBuffer(textBoxContainer);
             ControlHelper.EnableOptimizedDoubleBuffer(textBoxContainer);
@@ -187,7 +187,7 @@ namespace FlowBlox.Core.Components
         public void EnableDeveloperMode()
         {
             this.textBox.Font = new Font("JetBrains Mono", 8f, FontStyle.Regular);
-            this.textBox.Tag = FlowBloxStyle.StyleKeepFont;
+            this.textBox.Tag = FlowBloxStyleTags.StyleKeepFont;
         }
 
         private void TextBox_Click(object sender, EventArgs e)

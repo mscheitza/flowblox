@@ -61,7 +61,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Produktinformationen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Product information ähnelt.
         /// </summary>
         internal static string About_groupBoxProductInformation_Text {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Informationen über FlowBlox ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die About FlowBlox ähnelt.
         /// </summary>
         internal static string About_Text {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wollen Sie das Projekt &quot;{0}&quot; wirklich schließen? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to close the project &quot;{0}&quot;? ähnelt.
         /// </summary>
         internal static string AppWindow_CloseProjectConfirm_Message {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt schließen? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Close Project? ähnelt.
         /// </summary>
         internal static string AppWindow_CloseProjectConfirm_Title {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte melden Sie diesen Fehler an https://www.flowblox.net/. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please report this error at https://www.flowblox.net/. ähnelt.
         /// </summary>
         internal static string AppWindow_ErrorReport_Message {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox Fehlerbericht ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox Error Report ähnelt.
         /// </summary>
         internal static string AppWindow_ErrorReport_Title {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die GitHub-Repository öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open GitHub repository ähnelt.
         /// </summary>
         internal static string AppWindow_GitHub_Text {
             get {
@@ -124,7 +124,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Konnte das aktuelle FlowBlox.Grid nicht als Bitmap (*.bmp) exportieren. Bitte überprüfen Sie die Logfiles, um weitere Informationen zu erhalten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Could not export the current FlowBlox.Grid as a bitmap (*.bmp). Please check the log files for more information. ähnelt.
         /// </summary>
         internal static string AppWindow_GridExportFailed_Message {
             get {
@@ -133,7 +133,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox.Grid: Problem beim Exportieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox.Grid: Export Problem ähnelt.
         /// </summary>
         internal static string AppWindow_GridExportFailed_Title {
             get {
@@ -142,7 +142,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die I&amp;nfo über FlowBlox ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;About FlowBlox ähnelt.
         /// </summary>
         internal static string AppWindow_itmAbout_Text {
             get {
@@ -151,7 +151,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nach aktualisierter Version suchen... ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Check for updates... ähnelt.
         /// </summary>
         internal static string AppWindow_itmCheckForNewVersion_Text {
             get {
@@ -160,7 +160,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt sch&amp;ließen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Close project ähnelt.
         /// </summary>
         internal static string AppWindow_itmCloseProject_Text {
             get {
@@ -169,7 +169,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Kopieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Copy ähnelt.
         /// </summary>
         internal static string AppWindow_itmCopy_Text {
             get {
@@ -178,7 +178,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Neues Projekt &amp;erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Create new project ähnelt.
         /// </summary>
         internal static string AppWindow_itmCreateProject_Text {
             get {
@@ -187,7 +187,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Element &amp;entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Delete element ähnelt.
         /// </summary>
         internal static string AppWindow_itmDeleteElement_Text {
             get {
@@ -196,7 +196,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Andockbare Dialoge ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Dockable panels ähnelt.
         /// </summary>
         internal static string AppWindow_itmDockablePanels_Text {
             get {
@@ -205,7 +205,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eigenschaften &amp;bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Edit properties ähnelt.
         /// </summary>
         internal static string AppWindow_itmEditProject_Text {
             get {
@@ -214,7 +214,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Lizenz ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;License ähnelt.
         /// </summary>
         internal static string AppWindow_itmLicense_Text {
             get {
@@ -223,7 +223,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anmelden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Sign in ähnelt.
         /// </summary>
         internal static string AppWindow_itmLogin_Text {
             get {
@@ -232,7 +232,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abmelden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sign &amp;out ähnelt.
         /// </summary>
         internal static string AppWindow_itmLogout_Text {
             get {
@@ -241,7 +241,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Lizenzverwaltung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage licenses ähnelt.
         /// </summary>
         internal static string AppWindow_itmManageLicenses_Text {
             get {
@@ -250,7 +250,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Überwachung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Monitoring ähnelt.
         /// </summary>
         internal static string AppWindow_itmMonitor_Text {
             get {
@@ -259,7 +259,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anwendung-Logfile(s) anzeigen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Show application log file(s) ähnelt.
         /// </summary>
         internal static string AppWindow_itmOpenApplicationLogDirectory_Text {
             get {
@@ -268,7 +268,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgabeverzeichnis ö&amp;ffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Open output folder ähnelt.
         /// </summary>
         internal static string AppWindow_itmOpenOutputDir_Text {
             get {
@@ -277,7 +277,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt ö&amp;ffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Open project ähnelt.
         /// </summary>
         internal static string AppWindow_itmOpenProject_Text {
             get {
@@ -286,7 +286,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projektverzeichnis öff&amp;nen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open project &amp;folder ähnelt.
         /// </summary>
         internal static string AppWindow_itmOpenProjectDir_Text {
             get {
@@ -295,7 +295,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Laufzeit-Logfile(s) anzeigen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Show runtime log file(s) ähnelt.
         /// </summary>
         internal static string AppWindow_itmOpenRuntimeLogDirectory_Text {
             get {
@@ -304,7 +304,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Optionen... ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Options... ähnelt.
         /// </summary>
         internal static string AppWindow_itmOptions_Text {
             get {
@@ -313,7 +313,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Einfügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Paste ähnelt.
         /// </summary>
         internal static string AppWindow_itmPaste_Text {
             get {
@@ -322,7 +322,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beenden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Exit ähnelt.
         /// </summary>
         internal static string AppWindow_itmQuitApplication_Text {
             get {
@@ -331,7 +331,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Wiederholen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Redo ähnelt.
         /// </summary>
         internal static string AppWindow_itmRedo_Text {
             get {
@@ -340,7 +340,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Registrieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Register ähnelt.
         /// </summary>
         internal static string AppWindow_itmRegister_Text {
             get {
@@ -349,7 +349,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Problem melden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Report a problem ähnelt.
         /// </summary>
         internal static string AppWindow_itmReportProblem_Text {
             get {
@@ -358,7 +358,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt &amp;speichern unter ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save project &amp;as ähnelt.
         /// </summary>
         internal static string AppWindow_itmSaveAs_Text {
             get {
@@ -367,7 +367,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt &amp;speichern ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Save project ähnelt.
         /// </summary>
         internal static string AppWindow_itmSaveProject_Text {
             get {
@@ -385,7 +385,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Rückgängig ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Undo ähnelt.
         /// </summary>
         internal static string AppWindow_itmUndo_Text {
             get {
@@ -394,7 +394,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Benutzerdefinierte Felder ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Custom fields ähnelt.
         /// </summary>
         internal static string AppWindow_itmUserFields_Text {
             get {
@@ -412,7 +412,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Edit ähnelt.
         /// </summary>
         internal static string AppWindow_mnItmEdit_Text {
             get {
@@ -421,7 +421,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Hilfe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Help ähnelt.
         /// </summary>
         internal static string AppWindow_mnItmHelp_Text {
             get {
@@ -439,7 +439,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Projekt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Project ähnelt.
         /// </summary>
         internal static string AppWindow_mnItmProject_Text {
             get {
@@ -448,7 +448,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Fenster ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Window ähnelt.
         /// </summary>
         internal static string AppWindow_mnItmWindows_Text {
             get {
@@ -457,7 +457,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wollen Sie das Projekt &quot;{0}&quot; wirklich schließen und ein neues Projekt erstellen? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to close the project &quot;{0}&quot; and create a new project? ähnelt.
         /// </summary>
         internal static string AppWindow_NewProjectConfirm_Message {
             get {
@@ -466,7 +466,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Neues Projekt erstellen? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create New Project? ähnelt.
         /// </summary>
         internal static string AppWindow_NewProjectConfirm_Title {
             get {
@@ -475,7 +475,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wollen Sie das Projekt &quot;{0}&quot; wirklich schließen und ein anderes Projekt laden? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to close the project &quot;{0}&quot; and load another project? ähnelt.
         /// </summary>
         internal static string AppWindow_OpenProjectConfirm_Message {
             get {
@@ -484,7 +484,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Neues Projekt laden? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Load New Project? ähnelt.
         /// </summary>
         internal static string AppWindow_OpenProjectConfirm_Title {
             get {
@@ -493,7 +493,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Seite konnte nicht geöffnet werden: {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The page could not be opened: {0} ähnelt.
         /// </summary>
         internal static string AppWindow_OpenUrlFailed_Message {
             get {
@@ -502,7 +502,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Seite konnte nicht geöffnet werden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Could Not Open Page ähnelt.
         /// </summary>
         internal static string AppWindow_OpenUrlFailed_Title {
             get {
@@ -511,8 +511,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Das Projekt konnte nicht vollständig geladen werden. Beim Schließen dieses Fensters wird automatisch ein Fehlerbericht generiert. Bitte prüfen Sie zusätzlich die Logdateien, um weitere Details zu den Ursachen des Problems zu erhalten.
-        ///   ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The project could not be fully loaded. When you close this window, an error report will be generated automatically. Please also check the log files for more details about the causes of the problem. ähnelt.
         /// </summary>
         internal static string AppWindow_ProjectLoadFailed_Message {
             get {
@@ -521,7 +520,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt nicht vollständig geladen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project Not Fully Loaded ähnelt.
         /// </summary>
         internal static string AppWindow_ProjectLoadFailed_Title {
             get {
@@ -530,7 +529,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinweis beim Öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notice on Open ähnelt.
         /// </summary>
         internal static string AppWindow_ProjectNotice_Title {
             get {
@@ -539,7 +538,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte halten Sie erst die aktuelle Ausführung an, bevor Sie FlowBlox schließen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please stop the current execution before closing FlowBlox. ähnelt.
         /// </summary>
         internal static string AppWindow_RuntimeActiveClose_Message {
             get {
@@ -548,7 +547,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Achtung: Laufzeit aktiv ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Caution: Runtime Active ähnelt.
         /// </summary>
         internal static string AppWindow_RuntimeActiveClose_Title {
             get {
@@ -557,7 +556,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wollen Sie die Änderungen an dem Projekt &quot;{0}&quot; speichern, bevor Sie FlowBlox verlassen? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do you want to save changes to the project &quot;{0}&quot; before leaving FlowBlox? ähnelt.
         /// </summary>
         internal static string AppWindow_SaveBeforeExit_Message {
             get {
@@ -566,7 +565,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt speichern? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save Project? ähnelt.
         /// </summary>
         internal static string AppWindow_SaveBeforeExit_Title {
             get {
@@ -575,7 +574,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Der Speichervorgang konnte nicht erfolgreich abgeschlossen werden. Bitte überprüfen Sie die Logfiles um mehr Informationen zu erhalten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The save operation could not be completed successfully. Please check the log files for more information. ähnelt.
         /// </summary>
         internal static string AppWindow_SaveFailed_Message {
             get {
@@ -584,7 +583,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern fehlgeschlagen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save Failed ähnelt.
         /// </summary>
         internal static string AppWindow_SaveFailed_Title {
             get {
@@ -593,7 +592,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die (!) Stellen Sie sicher, dass Ihre Änderungen gespeichert wurden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die (!) Make sure your changes have been saved. ähnelt.
         /// </summary>
         internal static string AppWindow_SaveReminder_Message {
             get {
@@ -611,11 +610,11 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Das Projekt konnte nicht vollständig entladen werden. Die folgenden Assemblies oder Erweiterungen sind weiterhin im Speicher und verhindern ein sauberes Entladen:
+        ///   Sucht eine lokalisierte Zeichenfolge, die The project could not be fully unloaded. The following assemblies or extensions are still in memory and prevent a clean unload:
         ///
         ///{0}
         ///
-        ///Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustellen. ähnelt.
+        ///The application will now restart to restore a clean environment. ähnelt.
         /// </summary>
         internal static string AppWindow_UnloadProjectFailed_Message {
             get {
@@ -624,7 +623,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt konnte nicht entladen werden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Could Not Unload Project ähnelt.
         /// </summary>
         internal static string AppWindow_UnloadProjectFailed_Title {
             get {
@@ -633,7 +632,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Fehler bei der Updateprüfung. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error while checking for updates. ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_Error_Message {
             get {
@@ -642,7 +641,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update Check ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_Error_Title {
             get {
@@ -651,7 +650,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beim Prüfen auf Updates ist ein unerwarteter Fehler aufgetreten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die An unexpected error occurred while checking for updates. ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_Exception_Message {
             get {
@@ -660,7 +659,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update Check ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_Exception_Title {
             get {
@@ -669,7 +668,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Diese Funktion ist nur für die MSIX-installierte Version verfügbar. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This feature is only available for the MSIX-installed version. ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_NotPackaged_Message {
             get {
@@ -678,7 +677,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update Check ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_NotPackaged_Title {
             get {
@@ -687,7 +686,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Kein Update verfügbar. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No update available. ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_NoUpdates_Message {
             get {
@@ -696,7 +695,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update Check ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_NoUpdates_Title {
             get {
@@ -705,7 +704,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Updatequelle ist unbekannt. Öffne die Website zur manuellen Prüfung. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The update source is unknown. Opening the website for manual checking. ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_UnknownSource_Message {
             get {
@@ -714,7 +713,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Updateprüfung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update Check ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_UnknownSource_Title {
             get {
@@ -723,7 +722,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Das Update konnte nicht installiert werden. Bitte versuche es später erneut oder lade die aktuelle Version von der Website. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The update could not be installed. Please try again later or download the current version from the website. ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateInstall_Failed_Message {
             get {
@@ -732,7 +731,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Update fehlgeschlagen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update Failed ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateInstall_Failed_Title {
             get {
@@ -741,7 +740,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox-Website öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open FlowBlox website ähnelt.
         /// </summary>
         internal static string AppWindow_VisitOnline_Text {
             get {
@@ -750,7 +749,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterungen verwalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage extensions ähnelt.
         /// </summary>
         internal static string ComponentLibraryPanel_btManageExtensions_Text {
             get {
@@ -759,7 +758,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Komponentenbibliothek ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Component library ähnelt.
         /// </summary>
         internal static string ComponentLibraryPanel_Text {
             get {
@@ -768,7 +767,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string CreateEntryWindow_btApply_Text {
             get {
@@ -777,7 +776,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string CreateEntryWindow_btCancel_Text {
             get {
@@ -786,7 +785,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eintrag erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create Entry ähnelt.
         /// </summary>
         internal static string CreateEntryWindow_Text {
             get {
@@ -795,7 +794,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string EditValueWindow_btApply_Text {
             get {
@@ -804,7 +803,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string EditValueWindow_btCancel_Text {
             get {
@@ -813,7 +812,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reguläre Ausdrücke automatisch maskieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatically escape regular expressions ähnelt.
         /// </summary>
         internal static string EditValueWindow_cbMaskRegex_Text {
             get {
@@ -822,7 +821,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hier können Sie einen Wert erstellen oder bearbeiten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Here you can create or edit a value. ähnelt.
         /// </summary>
         internal static string EditValueWindow_lbDescription_Text {
             get {
@@ -840,7 +839,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value: ähnelt.
         /// </summary>
         internal static string EditValueWindow_lbValue_Text {
             get {
@@ -849,7 +848,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value {0} ähnelt.
         /// </summary>
         internal static string EditValueWindow_Text {
             get {
@@ -858,7 +857,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Weiter ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Next ähnelt.
         /// </summary>
         internal static string EditValueWindow_TextContinue {
             get {
@@ -867,7 +866,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create value ähnelt.
         /// </summary>
         internal static string EditValueWindow_TextCreateValue {
             get {
@@ -876,7 +875,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit value ähnelt.
         /// </summary>
         internal static string EditValueWindow_TextEditValue {
             get {
@@ -885,7 +884,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte geben Sie einen gültigen Wert ein. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please enter a valid value. ähnelt.
         /// </summary>
         internal static string EditValueWindow_TextInvalid_Message {
             get {
@@ -894,7 +893,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ungültige Eingabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Invalid Input ähnelt.
         /// </summary>
         internal static string EditValueWindow_TextInvalid_Title {
             get {
@@ -903,7 +902,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string FieldSelectionWindiw_btCancel_Text {
             get {
@@ -912,7 +911,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string FieldSelectionWindow_btApply_Text {
             get {
@@ -921,7 +920,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string FieldSelectionWindow_btCancel_Text {
             get {
@@ -930,7 +929,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erforderlich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required ähnelt.
         /// </summary>
         internal static string FieldSelectionWindow_cbRequired_Text {
             get {
@@ -939,7 +938,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte wählen Sie ein vorhandenes Feldelement aus. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please select an existing field element. ähnelt.
         /// </summary>
         internal static string FieldSelectionWindow_lbDescription_Text {
             get {
@@ -948,7 +947,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Felddefinitionen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field definitions ähnelt.
         /// </summary>
         internal static string FieldSelectionWindow_lbFieldDefinitions_Text {
             get {
@@ -957,7 +956,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldauswahl: Wählen Sie ein Feldelement aus ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field Selection: Choose a field element ähnelt.
         /// </summary>
         internal static string FieldSelectionWindow_Text {
             get {
@@ -966,7 +965,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block anzeigen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Show flow block ähnelt.
         /// </summary>
         internal static string FieldView_checkBoxShowFlowBlock_Text {
             get {
@@ -975,7 +974,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldwert(e) &amp;kopieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Copy field value(s) ähnelt.
         /// </summary>
         internal static string FieldView_itmCopy_Text {
             get {
@@ -984,7 +983,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Im Standardeditor ö&amp;ffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open in &amp;default editor ähnelt.
         /// </summary>
         internal static string FieldView_itmOpenFieldValue_Text {
             get {
@@ -993,7 +992,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Aktualisieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Refresh ähnelt.
         /// </summary>
         internal static string FieldView_itmRefresh_Text {
             get {
@@ -1002,7 +1001,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldansicht ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field view ähnelt.
         /// </summary>
         internal static string FieldView_Text {
             get {
@@ -1011,7 +1010,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string FlowBlockMainView_btApply_Text {
             get {
@@ -1020,7 +1019,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string FlowBlockMainView_btCancel_Text {
             get {
@@ -1029,7 +1028,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgabefeld: {0} (Vollqualifizierter Feldname: {1}) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output field: {0} (Fully qualified field name: {1}) ähnelt.
         /// </summary>
         internal static string FlowBlockUIElementRenderer_Field_Tooltip {
             get {
@@ -1038,7 +1037,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dieses Feld ist für die Ausführung erforderlich: {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This field is required for execution: {0} ähnelt.
         /// </summary>
         internal static string FlowBlockUIElementRenderer_RequiredFields_Tooltip {
             get {
@@ -1047,7 +1046,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string GridView_btApply_Text {
             get {
@@ -1056,7 +1055,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string GridView_btCancel_Text {
             get {
@@ -1065,7 +1064,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Legen Sie hier die Größe Ihres Rasters fest. Die Werte werden sofort auf das aktuelle Projekt-Raster übernommen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Set the size of your grid here. The values are applied immediately to the current project grid. ähnelt.
         /// </summary>
         internal static string GridView_lbDescription_Text {
             get {
@@ -1074,7 +1073,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Höhe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Height ähnelt.
         /// </summary>
         internal static string GridView_lbHeight_Text {
             get {
@@ -1083,7 +1082,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Breite ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Width ähnelt.
         /// </summary>
         internal static string GridView_lbWidth_Text {
             get {
@@ -1092,7 +1091,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Raster bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit grid ähnelt.
         /// </summary>
         internal static string GridView_Text {
             get {
@@ -1101,7 +1100,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string InsertTextOrField_btApply_Text {
             get {
@@ -1110,7 +1109,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string InsertTextOrField_btCancel_Text {
             get {
@@ -1119,7 +1118,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feld &amp;auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Select field ähnelt.
         /// </summary>
         internal static string InsertTextOrField_btSelectField_Text {
             get {
@@ -1128,7 +1127,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Einen Feldwert übergeben: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Pass a field value: ähnelt.
         /// </summary>
         internal static string InsertTextOrField_lbInsertField_Text {
             get {
@@ -1137,7 +1136,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Einen eigenen Wert eingeben: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enter a custom value: ähnelt.
         /// </summary>
         internal static string InsertTextOrField_lbInsertText_Text {
             get {
@@ -1146,7 +1145,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgewählter Parameter ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selected parameter ähnelt.
         /// </summary>
         internal static string InsertTextOrField_lbParameterHeader_Text {
             get {
@@ -1155,7 +1154,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte wählen... ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please choose... ähnelt.
         /// </summary>
         internal static string InsertTextOrField_NoFieldSelected_Text {
             get {
@@ -1164,7 +1163,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert eingeben oder Feld auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enter value or select field ähnelt.
         /// </summary>
         internal static string InsertTextOrField_Text {
             get {
@@ -1173,7 +1172,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Hinzufügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Add ähnelt.
         /// </summary>
         internal static string OptionsWindow_btAdd_Text {
             get {
@@ -1182,7 +1181,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Remove ähnelt.
         /// </summary>
         internal static string OptionsWindow_btDelete_Text {
             get {
@@ -1191,7 +1190,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Standardoptionen laden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Load &amp;default options ähnelt.
         /// </summary>
         internal static string OptionsWindow_btRevert_Text {
             get {
@@ -1200,7 +1199,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Speichern ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Save ähnelt.
         /// </summary>
         internal static string OptionView_btApply_Text {
             get {
@@ -1209,7 +1208,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beschreibung: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Description: ähnelt.
         /// </summary>
         internal static string OptionView_labelDescription_Text {
             get {
@@ -1227,7 +1226,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Option bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit option ähnelt.
         /// </summary>
         internal static string OptionView_labelTitleHeader_Text {
             get {
@@ -1236,7 +1235,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Typ: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type: ähnelt.
         /// </summary>
         internal static string OptionView_labelType_Text {
             get {
@@ -1245,7 +1244,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value: ähnelt.
         /// </summary>
         internal static string OptionView_labelValue_Text {
             get {
@@ -1254,7 +1253,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinzufügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
         internal static string OptionWindow_btAdd_Text {
             get {
@@ -1263,7 +1262,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string OptionWindow_btApply_Text {
             get {
@@ -1272,7 +1271,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string OptionWindow_btCancel_Text {
             get {
@@ -1281,7 +1280,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
         internal static string OptionWindow_btDelete_Text {
             get {
@@ -1290,7 +1289,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Optionen zurücksetzen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset options ähnelt.
         /// </summary>
         internal static string OptionWindow_btRevert_Text {
             get {
@@ -1299,7 +1298,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Durch diesen Befehl werden bestehende Optionswerte wieder auf ihren Standard zurückgesetzt. Wollen Sie wirklich die Standardoptionen wiederherstellen? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This command resets existing option values to their defaults. Do you really want to restore the default options? ähnelt.
         /// </summary>
         internal static string OptionWindow_RevertOptions_Message {
             get {
@@ -1308,7 +1307,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Optionen zurücksetzen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset Options ähnelt.
         /// </summary>
         internal static string OptionWindow_RevertOptions_Title {
             get {
@@ -1317,7 +1316,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Optionen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Options ähnelt.
         /// </summary>
         internal static string OptionWindow_Text {
             get {
@@ -1326,7 +1325,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Probleme ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Problems ähnelt.
         /// </summary>
         internal static string ProblemsView_Text {
             get {
@@ -1335,7 +1334,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verbinden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Connect ähnelt.
         /// </summary>
         internal static string ProjectPanel_btConnectionMode_Text {
             get {
@@ -1344,7 +1343,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Ausführen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Run ähnelt.
         /// </summary>
         internal static string ProjectPanel_btExecute_Text {
             get {
@@ -1353,7 +1352,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Rastergröße anpassen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Adjust &amp;grid size ähnelt.
         /// </summary>
         internal static string ProjectPanel_btGridSettings_Text {
             get {
@@ -1362,7 +1361,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Pausieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Pause ähnelt.
         /// </summary>
         internal static string ProjectPanel_btPause_Text {
             get {
@@ -1371,7 +1370,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select ähnelt.
         /// </summary>
         internal static string ProjectPanel_btSelectionMode_Text {
             get {
@@ -1380,7 +1379,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Stoppen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Stop ähnelt.
         /// </summary>
         internal static string ProjectPanel_btStopExecution_Text {
             get {
@@ -1389,7 +1388,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Haltepunkt &amp;entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove &amp;breakpoint ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmBreakPoint_Remove_Text {
             get {
@@ -1398,7 +1397,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Haltepunkt &amp;setzen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Set breakpoint ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmBreakPoint_Set_Text {
             get {
@@ -1407,7 +1406,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Haltepunkt &amp;setzten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Breakpoint ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmBreakPoint_Text {
             get {
@@ -1416,7 +1415,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Index &amp;festlegen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Set index ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmDefineIndex_Text {
             get {
@@ -1425,7 +1424,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verbindung e&amp;ntfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Delete connection ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmDeleteConnection_Text {
             get {
@@ -1434,7 +1433,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block e&amp;ntfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Delete flow block ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmDeleteElement_Text {
             get {
@@ -1443,7 +1442,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eigenschaften &amp;bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Edit properties ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmEditElement_Edit_Text {
             get {
@@ -1452,7 +1451,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eigenschaften &amp;bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Edit properties ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmEditElement_Text {
             get {
@@ -1461,7 +1460,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eigenschaften &amp;betrachten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;View properties ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmEditElement_View_Text {
             get {
@@ -1470,7 +1469,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Index verwalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage &amp;index ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmIndex_Text {
             get {
@@ -1479,7 +1478,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingangsdatensätze einsehen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Inspect input records ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmInsightInput_Text {
             get {
@@ -1488,7 +1487,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgangsdatensätze einsehen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Inspect output records ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmInsightOutput_Text {
             get {
@@ -1497,7 +1496,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Unterdrückte &amp;Meldungen verwalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage suppressed &amp;messages ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmManageWarningSuppressions_Text {
             get {
@@ -1506,7 +1505,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die A&amp;ktualisieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Refresh ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmRefresh_Text {
             get {
@@ -1515,7 +1514,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Index &amp;entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Remove index ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmRemoveIndex_Text {
             get {
@@ -1524,7 +1523,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string ProjectView_btApply_Text {
             get {
@@ -1533,7 +1532,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string ProjectView_btCancel_Text {
             get {
@@ -1542,7 +1541,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projekt erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create project ähnelt.
         /// </summary>
         internal static string ProjectView_CreateProject_Text {
             get {
@@ -1551,7 +1550,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit project ähnelt.
         /// </summary>
         internal static string ProjectView_EditProject_Text {
             get {
@@ -1560,7 +1559,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersteller ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creator ähnelt.
         /// </summary>
         internal static string ProjectView_lbCreator_Text {
             get {
@@ -1569,7 +1568,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hier können Sie ein neues Projekt erstellen oder die Projekteigenschaften bearbeiten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Here you can create a new project or edit the project properties. ähnelt.
         /// </summary>
         internal static string ProjectView_lbDescription_Text {
             get {
@@ -1578,7 +1577,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinweis beim Öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notice on open ähnelt.
         /// </summary>
         internal static string ProjectView_lbNoteOnOpening_Text {
             get {
@@ -1587,7 +1586,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projektbeschreibung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project description ähnelt.
         /// </summary>
         internal static string ProjectView_lbProjectDescription_Text {
             get {
@@ -1596,7 +1595,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Projektbezeichnung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project name ähnelt.
         /// </summary>
         internal static string ProjectView_lbProjectName_Text {
             get {
@@ -1605,7 +1604,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beim Ermitteln der verfügbaren Aktionen für die Komponente ist ein Fehler aufgetreten. Weitere Details finden Sie in den Anwendungsprotokollen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die An error occurred while determining the available actions for the component. See the application logs for details. ähnelt.
         /// </summary>
         internal static string PropertyViewListViewFactory_ComponentActionsLoadingFailure_Message {
             get {
@@ -1614,7 +1613,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Fehler beim Laden der Aktionen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to Load Actions ähnelt.
         /// </summary>
         internal static string PropertyViewListViewFactory_ComponentActionsLoadingFailure_Title {
             get {
@@ -1623,7 +1622,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte wählen Sie ein Objekt aus. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please select an object. ähnelt.
         /// </summary>
         internal static string PropertyViewListViewFactory_SelectionDialog_Message {
             get {
@@ -1632,7 +1631,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select ähnelt.
         /// </summary>
         internal static string PropertyViewListViewFactory_SelectionDialog_Title {
             get {
@@ -1641,7 +1640,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string PropertyWindow_btApply_Text {
             get {
@@ -1650,7 +1649,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string PropertyWindow_btCancel_Text {
             get {
@@ -1659,7 +1658,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Annehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string RenameWindow_btApply_Text {
             get {
@@ -1668,7 +1667,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Back ähnelt.
         /// </summary>
         internal static string RenameWindow_btCancel_Text {
             get {
@@ -1677,7 +1676,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die --- Aktueller Wert: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die --- Current value: ähnelt.
         /// </summary>
         internal static string RenameWindow_lbCurrentValue_Text {
             get {
@@ -1686,7 +1685,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die --- Neuer Wert: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die --- New value: ähnelt.
         /// </summary>
         internal static string RenameWindow_lbNewValue_Text {
             get {
@@ -1695,7 +1694,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eintrag umbenennen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Rename Entry ähnelt.
         /// </summary>
         internal static string RenameWindow_Text {
             get {
@@ -1704,7 +1703,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgabe lee&amp;ren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Clea&amp;r output ähnelt.
         /// </summary>
         internal static string RuntimeView_btClear_Text {
             get {
@@ -1713,7 +1712,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Fortsetzen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Continue ähnelt.
         /// </summary>
         internal static string RuntimeView_btContinue_Text {
             get {
@@ -1722,7 +1721,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Logfile öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open &amp;log file ähnelt.
         /// </summary>
         internal static string RuntimeView_btOpenLogfile_Text {
             get {
@@ -1740,7 +1739,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Aktualisieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Refresh ähnelt.
         /// </summary>
         internal static string RuntimeView_btRefresh_Text {
             get {
@@ -1749,7 +1748,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausführung &amp;stoppen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Stop execution ähnelt.
         /// </summary>
         internal static string RuntimeView_btStopExecution_Text {
             get {
@@ -1758,7 +1757,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Schrittweise &amp;ausführen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Run step by step ähnelt.
         /// </summary>
         internal static string RuntimeView_cbStepwiseExecution_Text {
             get {
@@ -1767,7 +1766,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bei &amp;Fehler anhalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Stop on &amp;error ähnelt.
         /// </summary>
         internal static string RuntimeView_cbStopOnError_Text {
             get {
@@ -1776,7 +1775,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bei &amp;Warnung anhalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Stop on &amp;warning ähnelt.
         /// </summary>
         internal static string RuntimeView_cbStopOnWarning_Text {
             get {
@@ -1785,7 +1784,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Exportverzeichnis ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Export folder ähnelt.
         /// </summary>
         internal static string RuntimeView_itmExportDir_Text {
             get {
@@ -1794,7 +1793,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Laufzeit ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime ähnelt.
         /// </summary>
         internal static string RuntimeView_Text {
             get {
@@ -1803,7 +1802,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beim Versuch die Ansicht zu erzeugen ist es zu einem unerwarteten Fehler gekommen. Bitte überprüfen Sie die Logfiles, um mehr Informationen zu erhalten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die An unexpected error occurred while trying to create the view. Please check the log files for more information. ähnelt.
         /// </summary>
         internal static string WindowsFormWPFHelper_ShowDialog_Failure_Message {
             get {
@@ -1812,7 +1811,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anzeigen des Dialogs fehlgeschlagen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to Show Dialog ähnelt.
         /// </summary>
         internal static string WindowsFormWPFHelper_ShowDialog_Failure_Title {
             get {

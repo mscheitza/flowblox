@@ -28,7 +28,7 @@ namespace FlowBlox.UICore.Views
             InitializeComponent();
             var viewModel = (GenerationViewModel)DataContext;
             viewModel.CurrentFlowBlock = currentFlowBlock;
-            viewModel.Generate();
+            _ = viewModel.Generate();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

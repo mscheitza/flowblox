@@ -1,19 +1,21 @@
 ﻿using FlowBlox.Core;
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Events;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
-using FlowBlox.Core.Util;
+using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.Grid;
+using FlowBlox.Grid.Elements.UserControls;
+using FlowBlox.Grid.Provider;
 using FlowBlox.UICore.Utilities;
-using K4os.Compression.LZ4.Internal;
-using OpenQA.Selenium.BiDi.Modules.Script;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Windows.Documents;
 using System.Windows.Forms;
 
 namespace FlowBlox.Views
@@ -25,6 +27,10 @@ namespace FlowBlox.Views
     {
         private readonly Dictionary<FieldElement, ListViewItem> _fieldMap = new Dictionary<FieldElement, ListViewItem>();
         private readonly ListViewColumnAdjustmentHandler _adjustmentHandler;
+        private FlowBloxProjectComponentProvider _componentProvider;
+        private readonly Font _smallFont;
+        private FlowBloxRegistry _registry;
+        private readonly FlowBloxUIRegistry _uiRegistry;
 
         public FieldView()
         {
@@ -32,10 +38,25 @@ namespace FlowBlox.Views
             FlowBloxStyle.ApplyStyle(this);
             FlowBloxUILocalizationUtil.Localize(this);
             ListViewHelper.EnableDoubleBuffer(lvFields);
+            _smallFont = new Font(lvFields.Font.FontFamily, Math.Max(6f, lvFields.Font.Size - 2f), lvFields.Font.Style);
             _adjustmentHandler = ListViewColumnAdjustmentHandler.Register(lvFields);
+            _adjustmentHandler.ApplyColumnFont(chFlowBlockName.Index, _smallFont);
+            _adjustmentHandler.OnColumnWidthCalculated += (s, e) =>
+            {
+                if (e.Column == chFlowBlockName && e.CalculatedWidth > 0)
+                    _savedFlowBlockColWidth = e.CalculatedWidth;
+            };
             checkBoxShowFlowBlock.CheckedChanged += CheckBoxShowFlowBlock_CheckedChanged;
-            _savedFlowBlockColWidth = chFlowBlockName.Width;
+            _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
+            _registry = FlowBloxRegistryProvider.GetRegistry();
+            _uiRegistry = _componentProvider.GetCurrentUIRegistry();
+            _uiRegistry.FlowBlockUIElementRegistered += _uiRegistry_FlowBlockUIElementRegistered;
             UpdateUI();
+        }
+
+        private void _uiRegistry_FlowBlockUIElementRegistered(object sender, Grid.Events.FlowBlockUIElementRegisteredEventArgs e)
+        {
+            RegisterElementSelectedChangedByUser(e.UIElement);
         }
 
         private void CheckBoxShowFlowBlock_CheckedChanged(object sender, EventArgs e)
@@ -46,13 +67,13 @@ namespace FlowBlox.Views
         private int _savedFlowBlockColWidth;
         private void SetFlowBlockColumnVisible(bool visible)
         {
-            // TODO: Ein/Ausblenden fixen
             var col = chFlowBlockName;
             if (visible)
             {
-                col.Width = _savedFlowBlockColWidth;
+                if (col.Width == 0)
+                    col.Width = _savedFlowBlockColWidth;
             }
-            else
+            else if (col.Width > 0)
             {
                 _savedFlowBlockColWidth = col.Width;
                 col.Width = 0;
@@ -77,9 +98,8 @@ namespace FlowBlox.Views
                 AppendField(fieldElement);
             }
 
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-            registry.OnManagedObjectRemoved -= Registry_OnManagedObjectRemoved;
-            registry.OnManagedObjectRemoved += Registry_OnManagedObjectRemoved;
+            _registry.OnManagedObjectRemoved -= Registry_OnManagedObjectRemoved;
+            _registry.OnManagedObjectRemoved += Registry_OnManagedObjectRemoved;
 
             _adjustmentHandler.AdjustListViewColumns();
         }
@@ -114,6 +134,46 @@ namespace FlowBlox.Views
 
             fieldElement.OnValueChanged -= FieldElement_OnValueChange;
             fieldElement.OnValueChanged += FieldElement_OnValueChange;
+
+            if (fieldElement.IsRegularField())
+            {
+                var uiElement = _uiRegistry.GetUIElementToGridElement(fieldElement.Source);
+                RegisterElementSelectedChangedByUser(uiElement);
+            }
+        }
+
+        private void RegisterElementSelectedChangedByUser(FlowBlockUIElement uiElement)
+        {
+            if (uiElement == null)
+                return;
+
+            uiElement.ElementSelectedChangedByUser -= UiElement_ElementSelectedChangedByUser;
+            uiElement.ElementSelectedChangedByUser += UiElement_ElementSelectedChangedByUser;
+        }
+
+        private void UiElement_ElementSelectedChangedByUser(FlowBlockUIElement sender, bool selected)
+        {
+            var resultFlowBlock = sender.InternalFlowBlock as BaseResultFlowBlock;
+            if (resultFlowBlock == null)
+                return;
+
+            var selectedFields = _uiRegistry.UIElements
+                .Where(x => x.ElementSelected)
+                .SelectMany(x => (x.InternalFlowBlock as BaseResultFlowBlock)?.Fields ?? Enumerable.Empty<FieldElement>())
+                .ToList();
+
+            foreach (ListViewItem lvItemFieldElement in lvFields.Items)
+            {
+                var fieldElement = (FieldElement)lvItemFieldElement.Tag;
+                if (fieldElement == null) 
+                    continue;
+
+                bool fieldSelected = false;
+                if (selectedFields.Contains(fieldElement))
+                    fieldSelected = true;
+
+                lvItemFieldElement.Selected = fieldSelected;
+            }
         }
 
         private void FieldElement_OnValueChange(FieldElement field, string oldValue, string newValue)
@@ -126,7 +186,7 @@ namespace FlowBlox.Views
 
             if (_fieldMap.TryGetValue(field, out var _listViewItem))
             {
-                _listViewItem.SubItems[1].Text = newValue;
+                _listViewItem.SubItems[2].Text = newValue;
             }
         }
 
@@ -143,18 +203,6 @@ namespace FlowBlox.Views
                 _listViewItem.Name = field.Name;
                 _listViewItem.Text = field.Name;
             }
-        }
-
-        public int GetWidth()
-        {
-            int Width = 19;
-
-            foreach (ColumnHeader ColumnHeader in lvFields.Columns)
-            {
-                Width += ColumnHeader.Width;
-            }
-
-            return Width;
         }
 
         private void itmCopy_Click(object sender, EventArgs e)
@@ -205,16 +253,18 @@ namespace FlowBlox.Views
 
         private void tbFilter_TextChanged(object sender, EventArgs e) => InitializeFields();
 
-        internal void OnProjectLoaded() => InitializeFields();
+        internal void OnAfterUIRegistryInitialized() => InitializeFields();
 
         private IEnumerable<FieldElement> GetFieldsWithFilter(string filter)
         {
             List<FieldElement> fields =
             [
                 .. FlowBloxRegistryProvider.GetRegistry().GetUserFields(),
-                .. FlowBloxRegistryProvider.GetRegistry().GetRuntimeFields(),
+                .. FlowBloxRegistryProvider.GetRegistry().GetRuntimeFields(true),
             ];
-            return fields.Where(x => string.IsNullOrEmpty(filter) || x.FullyQualifiedName.ToLower().Contains(filter.ToLower()));
+            return fields.Where(x => 
+                string.IsNullOrEmpty(filter) || 
+                x.FullyQualifiedName.ToLower().Contains(filter.ToLower()));
         }
 
         internal new bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -255,15 +305,13 @@ namespace FlowBlox.Views
                 string blockName = e.SubItem.Tag as string ?? string.Empty;
 
                 // Fonts/Colors
-                using var smallFont = new Font(e.SubItem.Font.FontFamily, Math.Max(6f, e.SubItem.Font.Size - 2f), e.SubItem.Font.Style);
                 var gray = selected ?
                     ControlPaint.LightLight(foreColor) :
                     Color.FromArgb(96, 116, 168);
 
                 // Layout
                 var bounds = e.Bounds;
-                var paddingLeft = 6;       // etwas Abstand zum linken Rand
-                var gap = 6;               // Abstand zwischen Blockname und Feldname
+                var paddingLeft = 6;
                 var yCenter = bounds.Top + (bounds.Height / 2);
 
                 // TextFlags
@@ -272,10 +320,10 @@ namespace FlowBlox.Views
                 // Measure & draw block name
                 var maxWidth = bounds.Width - paddingLeft;
                 var blockRect = new Rectangle(bounds.Left + paddingLeft, bounds.Top, maxWidth, bounds.Height);
-                var blockSize = TextRenderer.MeasureText(blockName, smallFont, new Size(int.MaxValue, int.MaxValue), flags);
+                var blockSize = TextRenderer.MeasureText(blockName, _smallFont, new Size(int.MaxValue, int.MaxValue), flags);
 
                 // Effective drawn width (with ellipse, possibly smaller than Measure)
-                TextRenderer.DrawText(e.Graphics, blockName, smallFont, blockRect, gray, flags | TextFormatFlags.VerticalCenter);
+                TextRenderer.DrawText(e.Graphics, blockName, _smallFont, blockRect, gray, flags | TextFormatFlags.VerticalCenter);
 
                 return;
             }

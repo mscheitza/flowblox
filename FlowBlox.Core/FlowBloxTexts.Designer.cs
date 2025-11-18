@@ -61,7 +61,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Aktivierungsbedingungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Activation conditions ähnelt.
         /// </summary>
         public static string ActivatableManagedObject_Groups_ActivationConditions {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erforderliche Felder ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required fields ähnelt.
         /// </summary>
         public static string ActivatableManagedObject_RequiredFields {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Eigenschaft \&quot;{0}\&quot; ist erforderlich. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The property &quot;{0}&quot; is required. ähnelt.
         /// </summary>
         public static string ActivationConditionAttribute_Messages_IsRequired {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die EOS-Token-ID ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die EOS token ID ähnelt.
         /// </summary>
         public static string AiTokenizerBase_EOSToken {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die ID des End-of-Sequence-Tokens, das vom Modell zur Beendigung der Textgenerierung verwendet wird. Standard ist 50256 bei GPT2-kompatiblen Modellen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The ID of the end-of-sequence token used by the model to stop text generation. Default is 50256 for GPT-2 compatible models. ähnelt.
         /// </summary>
         public static string AiTokenizerBase_EOSToken_Tooltip {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &quot;{0}&quot; muss gesetzt sein oder ein vorheriger Flow-Block vom Typ &quot;{1}&quot; muss im Ablauf vorhanden sein. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &quot;{0}&quot; must be set or a previous flow block of type &quot;{1}&quot; must exist in the flow. ähnelt.
         /// </summary>
         public static string AssociatedFlowBlockRequired_ValidationMessage {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Keine automatische Ermittlung möglich. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic resolution not possible. ähnelt.
         /// </summary>
         public static string AssociationControlFactory_NotResolvable {
             get {
@@ -124,7 +124,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatisch ermittelt: {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Resolved automatically: {0} ähnelt.
         /// </summary>
         public static string AssociationControlFactory_Resolvable {
             get {
@@ -133,7 +133,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte wählen... ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please select... ähnelt.
         /// </summary>
         public static string AssociationTextBox_Empty {
             get {
@@ -142,7 +142,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Base64-codierten Text entschlüsseln ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Decode base64-encoded text ähnelt.
         /// </summary>
         public static string Base64ToTextModifier {
             get {
@@ -151,7 +151,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Base64 dekodieren mit {0}-Kodierung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Decode base64 with {0} encoding ähnelt.
         /// </summary>
         public static string Base64ToTextModifier_ObjectDisplayName {
             get {
@@ -160,7 +160,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Aktivierungsbedingungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Activation conditions ähnelt.
         /// </summary>
         public static string BaseFlowBlock_ActivationConditions {
             get {
@@ -169,7 +169,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bezug (Flow-Block) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reference (flow block) ähnelt.
         /// </summary>
         public static string BaseFlowBlock_AssociatedInputReference {
             get {
@@ -178,7 +178,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Der Bezug wird bei mindestens zwei verbundenen FlowBlocks automatisch auf den ersten gemeinsamen FlowBlock aller Pfade festgelegt und kann nicht verändert werden. Bei nur einem verbundenen Flow-Block kann der Bezug manuell festgelegt werden. Der Bezug bewirkt, dass die Aktionen des aktuellen FlowBlocks erst ausgeführt werden, wenn die Iteration des Bezug-FlowBlocks vollständig abgeschlossen wurde. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die With at least two connected flow blocks, the reference is set automatically to the first common flow block across all paths and cannot be changed. With only one connected flow block, the reference can be set manually. The reference ensures that the actions of the current flow block are executed only after the referenced flow block has completed its iteration. ähnelt.
         /// </summary>
         public static string BaseFlowBlock_AssociatedInputReference_Tooltip {
             get {
@@ -187,7 +187,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die In diesem Bereich können Sie alle notwendigen Einstellungen für den „{0}“-FlowBlock vornehmen. Nehmen Sie die gewünschten Anpassungen vor und klicken Sie anschließend auf „Annehmen“, um Ihre Änderungen zu speichern. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die In this area you can configure all required settings for the “{0}” flow block. Make the desired adjustments and then click “Apply” to save your changes. ähnelt.
         /// </summary>
         public static string BaseFlowBlock_DefaultDescription {
             get {
@@ -196,7 +196,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verwendete Felder ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Used fields ähnelt.
         /// </summary>
         public static string BaseFlowBlock_FieldUsages {
             get {
@@ -205,7 +205,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Generierungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generations ähnelt.
         /// </summary>
         public static string BaseFlowBlock_GenerationStrategies {
             get {
@@ -214,7 +214,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Aktivierung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Activation ähnelt.
         /// </summary>
         public static string BaseFlowBlock_Groups_ActivationConditions {
             get {
@@ -223,7 +223,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abhängigkeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Dependencies ähnelt.
         /// </summary>
         public static string BaseFlowBlock_Groups_Dependencies {
             get {
@@ -232,7 +232,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input ähnelt.
         /// </summary>
         public static string BaseFlowBlock_Groups_Input {
             get {
@@ -241,7 +241,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Testfälle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test cases ähnelt.
         /// </summary>
         public static string BaseFlowBlock_Groups_Tests {
             get {
@@ -250,7 +250,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nur im Fall eines aktiven Vorgängers akivieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Activate only if a predecessor is active ähnelt.
         /// </summary>
         public static string BaseFlowBlock_InheritRequirementsNotMet {
             get {
@@ -259,7 +259,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingabeverhalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input behavior ähnelt.
         /// </summary>
         public static string BaseFlowBlock_InputBehaviorAssignments {
             get {
@@ -268,7 +268,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Duplikate in Eingabedatensätzen ignorieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ignore duplicates in input records ähnelt.
         /// </summary>
         public static string BaseFlowBlock_InputIgnoreDuplicates {
             get {
@@ -286,7 +286,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verbundene Flow-Blocks ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Connected flow blocks ähnelt.
         /// </summary>
         public static string BaseFlowBlock_ReferencedElements {
             get {
@@ -295,7 +295,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Testfälle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test cases ähnelt.
         /// </summary>
         public static string BaseFlowBlock_TestDefinitions {
             get {
@@ -304,7 +304,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die End-Index ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die End index ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_EndIndex {
             get {
@@ -313,7 +313,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_Groups_Output {
             get {
@@ -322,7 +322,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Duplikate in Ergebnisdatensätzen entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove duplicates in result records ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_IgnoreDuplicates {
             get {
@@ -331,7 +331,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgabeverhalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output behavior ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_OutputBehavior {
             get {
@@ -340,7 +340,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Start-Index ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start index ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_StartIndex {
             get {
@@ -349,7 +349,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Start-Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start value ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_StartValue {
             get {
@@ -358,7 +358,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Generieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generate ähnelt.
         /// </summary>
         public static string BaseResultFlowBlockUIActions_Generate {
             get {
@@ -367,7 +367,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verwendet ein Vokabular im BERT-Format zur Tokenisierung von Text. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses a BERT-format vocabulary to tokenize text. ähnelt.
         /// </summary>
         public static string BertTokenizer_Description {
             get {
@@ -376,7 +376,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die BERT Tokenizer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die BERT tokenizer ähnelt.
         /// </summary>
         public static string BertTokenizer_DisplayName {
             get {
@@ -385,7 +385,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Vokabular-Datei ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Vocabulary file ähnelt.
         /// </summary>
         public static string BertTokenizer_VocabFile {
             get {
@@ -394,7 +394,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Pfad zur Vokabular-Datei (.txt) für den BERT Tokenizer. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path to the vocabulary (.txt) file for the BERT tokenizer. ähnelt.
         /// </summary>
         public static string BertTokenizer_VocabFile_Tooltip {
             get {
@@ -403,7 +403,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verwendet Byte Pair Encoding (BPE) mit vocab.json und merges.txt zur Tokenisierung von Text für Transformer-Modelle. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses byte pair encoding (BPE) with vocab.json and merges.txt to tokenize text for transformer models. ähnelt.
         /// </summary>
         public static string BpeAiTokenizer_Description {
             get {
@@ -412,7 +412,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die BPE-Tokenizer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die BPE tokenizer ähnelt.
         /// </summary>
         public static string BpeAiTokenizer_DisplayName {
             get {
@@ -421,7 +421,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer-Konfiguration ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer configuration ähnelt.
         /// </summary>
         public static string BpeAiTokenizer_TokenizerConfiguration {
             get {
@@ -430,7 +430,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinzufügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
         public static string Buttons_Add {
             get {
@@ -439,7 +439,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Übernehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
         public static string Buttons_Apply {
             get {
@@ -448,7 +448,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
         public static string Buttons_Cancel {
             get {
@@ -457,7 +457,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
         /// </summary>
         public static string Buttons_Edit {
             get {
@@ -466,7 +466,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verknüpfen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Link ähnelt.
         /// </summary>
         public static string Buttons_Link {
             get {
@@ -475,7 +475,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nach unten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Move down ähnelt.
         /// </summary>
         public static string Buttons_MoveDown {
             get {
@@ -484,7 +484,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nach oben ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Move up ähnelt.
         /// </summary>
         public static string Buttons_MoveUp {
             get {
@@ -493,7 +493,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
         public static string Buttons_Remove {
             get {
@@ -502,7 +502,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Trennen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unlink ähnelt.
         /// </summary>
         public static string Buttons_Unlink {
             get {
@@ -511,7 +511,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die enthält ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die contains ähnelt.
         /// </summary>
         public static string ComparisonOperator_Contains {
             get {
@@ -520,7 +520,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die ist gleich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die equals ähnelt.
         /// </summary>
         public static string ComparisonOperator_Equals {
             get {
@@ -529,7 +529,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die ist größer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die is greater than ähnelt.
         /// </summary>
         public static string ComparisonOperator_GreaterThan {
             get {
@@ -538,7 +538,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die ist größer oder gleich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die is greater than or equal to ähnelt.
         /// </summary>
         public static string ComparisonOperator_GreaterThanOrEquals {
             get {
@@ -547,7 +547,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die hat keinen Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die has no value ähnelt.
         /// </summary>
         public static string ComparisonOperator_HasNoValue {
             get {
@@ -556,7 +556,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die hat einen Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die has a value ähnelt.
         /// </summary>
         public static string ComparisonOperator_HasValue {
             get {
@@ -565,7 +565,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die ist kleiner ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die is less than ähnelt.
         /// </summary>
         public static string ComparisonOperator_LowerThan {
             get {
@@ -574,7 +574,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die ist kleiner oder gleich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die is less than or equal to ähnelt.
         /// </summary>
         public static string ComparisonOperator_LowerThanOrEquals {
             get {
@@ -583,7 +583,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die enthält nicht ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die does not contain ähnelt.
         /// </summary>
         public static string ComparisonOperator_NotContains {
             get {
@@ -592,7 +592,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die ungleich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die not equal ähnelt.
         /// </summary>
         public static string ComparisonOperator_NotEquals {
             get {
@@ -601,7 +601,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Regulärer Ausdruck ist falsch ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die regular expression is false ähnelt.
         /// </summary>
         public static string ComparisonOperator_RegexIsFalse {
             get {
@@ -610,7 +610,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Regulärer Ausdruck ist wahr ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die regular expression is true ähnelt.
         /// </summary>
         public static string ComparisonOperator_RegexIsTrue {
             get {
@@ -619,7 +619,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Komponenten-Aktionen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Component actions ähnelt.
         /// </summary>
         public static string ComponentActions {
             get {
@@ -628,7 +628,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Setzt mehrere URI-Teile zu einer vollständig aufgelösten URL zusammen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Joins multiple URI parts into a fully resolved URL. ähnelt.
         /// </summary>
         public static string ConcatUriFlowBlock_Description {
             get {
@@ -637,7 +637,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die URI zusammenfügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Concatenate URI ähnelt.
         /// </summary>
         public static string ConcatUriFlowBlock_DisplayName {
             get {
@@ -646,7 +646,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die URI-Teil ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die URI part ähnelt.
         /// </summary>
         public static string ConcatUriFlowBlock_UriPart_DisplayName {
             get {
@@ -655,7 +655,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string ConcatUriFlowBlock_UriPart_Value {
             get {
@@ -664,7 +664,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die URI-Teile ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die URI parts ähnelt.
         /// </summary>
         public static string ConcatUriFlowBlock_UriParts {
             get {
@@ -673,7 +673,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bedingung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Condition ähnelt.
         /// </summary>
         public static string Condition {
             get {
@@ -682,7 +682,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Vergleichsoperator ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Comparison operator ähnelt.
         /// </summary>
         public static string Condition_Operator {
             get {
@@ -691,7 +691,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string Condition_Value {
             get {
@@ -700,7 +700,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Angabe der Eigenschaft &quot;{0}&quot; ist erforderlich. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The property &quot;{0}&quot; must be provided. ähnelt.
         /// </summary>
         public static string ConditionallyRequiredAttribute_ValidationFailed_Message {
             get {
@@ -709,7 +709,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Alphanumerischer Bereich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Alphanumeric range ähnelt.
         /// </summary>
         public static string CounterFlowBlock_AlphaRange {
             get {
@@ -718,7 +718,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zählertyp ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Counter type ähnelt.
         /// </summary>
         public static string CounterFlowBlock_CounterType {
             get {
@@ -727,7 +727,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block zur Erzeugung von numerischen oder alphanumerischen Werten, die an nachfolgende Flow-Blocks weitergegeben werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow block that generates numeric or alphanumeric values and passes them to subsequent flow blocks. ähnelt.
         /// </summary>
         public static string CounterFlowBlock_Description {
             get {
@@ -736,7 +736,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zähler ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Counter ähnelt.
         /// </summary>
         public static string CounterFlowBlock_DisplayName {
             get {
@@ -745,7 +745,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Endwert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Final value ähnelt.
         /// </summary>
         public static string CounterFlowBlock_FinalValue {
             get {
@@ -763,7 +763,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Startwert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start value ähnelt.
         /// </summary>
         public static string CounterFlowBlock_StartValue {
             get {
@@ -772,7 +772,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Trennzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Separator ähnelt.
         /// </summary>
         public static string CsvTable_Separator {
             get {
@@ -781,7 +781,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabelle &amp;öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Open table ähnelt.
         /// </summary>
         public static string CsvTableUIActions_Open {
             get {
@@ -790,7 +790,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datenquellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Data sources ähnelt.
         /// </summary>
         public static string DataObjectManager_DisplayName {
             get {
@@ -799,7 +799,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dateiobjekte ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die File objects ähnelt.
         /// </summary>
         public static string DataObjectManager_Groups_FileObjects {
             get {
@@ -808,7 +808,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speicherobjekte ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Memory objects ähnelt.
         /// </summary>
         public static string DataObjectManager_Groups_MemoryObjects {
             get {
@@ -817,7 +817,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die erste Zeile enthält die Spaltenüberschriften ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The first row contains the column headers ähnelt.
         /// </summary>
         public static string DataTableBase_FirstRowHeader {
             get {
@@ -826,7 +826,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Csv-Tabellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die CSV tables ähnelt.
         /// </summary>
         public static string DataTableManager_CsvTables {
             get {
@@ -835,7 +835,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datentabellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Data tables ähnelt.
         /// </summary>
         public static string DataTableManager_DisplayName {
             get {
@@ -844,7 +844,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die CSV-Tabellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die CSV tables ähnelt.
         /// </summary>
         public static string DataTableManager_Groups_CsvTables {
             get {
@@ -853,7 +853,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Excel-Tabellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Excel tables ähnelt.
         /// </summary>
         public static string DataTableManager_Groups_ExcelTables {
             get {
@@ -862,7 +862,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die SQL-Tabellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die SQL tables ähnelt.
         /// </summary>
         public static string DataTableManager_Groups_SqlTables {
             get {
@@ -871,7 +871,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block zur bedingten Ausführung von Pfaden basierend auf konfigurierbaren Entscheidungsregeln. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow block for conditional path execution based on configurable decision rules. ähnelt.
         /// </summary>
         public static string DecisionFlowBlock_Description {
             get {
@@ -880,7 +880,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Entscheidung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Decision ähnelt.
         /// </summary>
         public static string DecisionFlowBlock_DisplayName {
             get {
@@ -889,7 +889,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Entscheidungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Decisions ähnelt.
         /// </summary>
         public static string DecisionFlowBlock_Groups_Decisions {
             get {
@@ -898,7 +898,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die folgenden Felder wurden mehrfach verwendet: {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The following fields were used multiple times: {0} ähnelt.
         /// </summary>
         public static string DecisionFlowBlock_Validation_DuplicateFields {
             get {
@@ -907,7 +907,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dekodieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Decode ähnelt.
         /// </summary>
         public static string Direction_Decode {
             get {
@@ -916,7 +916,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Enkodieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Encode ähnelt.
         /// </summary>
         public static string Direction_Encode {
             get {
@@ -925,7 +925,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erhält einen einzelnen Eingabewert und verteilt diesen auf eine beliebige Anzahl definierter Ausgabefeldwerte. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Receives a single input value and distributes it to any number of defined output field values. ähnelt.
         /// </summary>
         public static string DistributorFlowBlock_Description {
             get {
@@ -934,7 +934,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verteilen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Distribute ähnelt.
         /// </summary>
         public static string DistributorFlowBlock_DisplayName {
             get {
@@ -943,7 +943,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert aus Eingangsfeld auf folgende Felder verteilen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Distribute value from input field to the following fields ähnelt.
         /// </summary>
         public static string DistributorFlowBlock_DisributedFields {
             get {
@@ -952,7 +952,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block zum Herunterladen von Dateien aus dem Internet unter Verwendung einer URL. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow block for downloading files from the internet using a URL. ähnelt.
         /// </summary>
         public static string DownloaderFlowBlock_Description {
             get {
@@ -961,7 +961,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei herunterladen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download file ähnelt.
         /// </summary>
         public static string DownloaderFlowBlock_DisplayName {
             get {
@@ -970,7 +970,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Strg + F für Feldauswahl ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ctrl + F for field selection ähnelt.
         /// </summary>
         public static string EnableFieldSelection_Hint {
             get {
@@ -979,7 +979,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gibt jeden verlinkten Parameterwert einzeln aus. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Outputs each linked parameter value individually. ähnelt.
         /// </summary>
         public static string EnumerationFlowBlock_Description {
             get {
@@ -988,7 +988,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Einzelne Werte ausgeben ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output individual values ähnelt.
         /// </summary>
         public static string EnumerationFlowBlock_DisplayName {
             get {
@@ -997,7 +997,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zu enumerierende Parameter ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Parameters to enumerate ähnelt.
         /// </summary>
         public static string EnumerationFlowBlock_Parameters {
             get {
@@ -1006,7 +1006,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Felder, deren Werte einzeln ausgegeben werden sollen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fields whose values should be output individually. ähnelt.
         /// </summary>
         public static string EnumerationFlowBlock_Parameters_Tooltip {
             get {
@@ -1015,7 +1015,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verbindungszeichenfolge ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Connection string ähnelt.
         /// </summary>
         public static string ExecuteSQLFlowBlock_ConnectionString {
             get {
@@ -1024,7 +1024,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datenbanktyp ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Database type ähnelt.
         /// </summary>
         public static string ExecuteSQLFlowBlock_DbType {
             get {
@@ -1033,7 +1033,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Führt einen SQL-Befehl auf einer externen Datenbankverbindung aus. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Executes an SQL command on an external database connection. ähnelt.
         /// </summary>
         public static string ExecuteSQLFlowBlock_Description {
             get {
@@ -1042,7 +1042,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die SQL ausführen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execute SQL ähnelt.
         /// </summary>
         public static string ExecuteSQLFlowBlock_DisplayName {
             get {
@@ -1051,7 +1051,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die SQL-Anweisung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die SQL statement ähnelt.
         /// </summary>
         public static string ExecuteSQLFlowBlock_SQLStatement {
             get {
@@ -1060,7 +1060,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erwartungsziel ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expectation target ähnelt.
         /// </summary>
         public static string ExpectationCondition_ExpectationConditionTarget {
             get {
@@ -1069,7 +1069,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beliebiger Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Any value ähnelt.
         /// </summary>
         public static string ExpectationConditionTarget_AnyValue {
             get {
@@ -1078,7 +1078,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erster Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die First value ähnelt.
         /// </summary>
         public static string ExpectationConditionTarget_FirstValue {
             get {
@@ -1087,7 +1087,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Letzter Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Last value ähnelt.
         /// </summary>
         public static string ExpectationConditionTarget_LastValue {
             get {
@@ -1096,7 +1096,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anzahl der Datensätze ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Number of records ähnelt.
         /// </summary>
         public static string ExpectationConditionTarget_NumberOfDatasets {
             get {
@@ -1105,7 +1105,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert an Stelle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value at index ähnelt.
         /// </summary>
         public static string ExpectationConditionTarget_ValueAtIndex {
             get {
@@ -1114,7 +1114,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feld-Bedingung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field condition ähnelt.
         /// </summary>
         public static string FieldCondition_DisplayName {
             get {
@@ -1123,7 +1123,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feld-Element ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field element ähnelt.
         /// </summary>
         public static string FieldElement {
             get {
@@ -1132,7 +1132,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bedingungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Conditions ähnelt.
         /// </summary>
         public static string FieldElement_Conditions {
             get {
@@ -1141,7 +1141,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldtyp ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field type ähnelt.
         /// </summary>
         public static string FieldElement_FieldType {
             get {
@@ -1150,7 +1150,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bedingungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Conditions ähnelt.
         /// </summary>
         public static string FieldElement_Groups_Conditions {
             get {
@@ -1159,7 +1159,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatische Anpassungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic adjustments ähnelt.
         /// </summary>
         public static string FieldElement_Groups_Modifiers {
             get {
@@ -1168,7 +1168,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Werteliste ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die List of values ähnelt.
         /// </summary>
         public static string FieldElement_ListOfValues {
             get {
@@ -1177,7 +1177,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatische Anpassungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic adjustments ähnelt.
         /// </summary>
         public static string FieldElement_Modifiers {
             get {
@@ -1186,7 +1186,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;&lt;wartend&gt;&gt; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;&lt;pending&gt;&gt; ähnelt.
         /// </summary>
         public static string FieldElement_PendingValue {
             get {
@@ -1195,7 +1195,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string FieldElement_StringValue {
             get {
@@ -1204,7 +1204,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei &amp;löschen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Delete file ähnelt.
         /// </summary>
         public static string FileObjectUIActions_Delete {
             get {
@@ -1213,7 +1213,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Öff&amp;nen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Open ähnelt.
         /// </summary>
         public static string FileObjectUIActions_Open {
             get {
@@ -1222,7 +1222,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verzeichnis ö&amp;ffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open &amp;directory ähnelt.
         /// </summary>
         public static string FileObjectUIActions_OpenDirectory {
             get {
@@ -1231,7 +1231,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte wählen Sie, wie die Datei geöffnet werden soll: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please choose how to open the file: ähnelt.
         /// </summary>
         public static string FileOpenMode_Dialog_Message {
             get {
@@ -1240,7 +1240,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open file ähnelt.
         /// </summary>
         public static string FileOpenMode_Dialog_Title {
             get {
@@ -1249,7 +1249,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Öffnen mit FlowBlox-Standardeditor ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open with FlowBlox default editor ähnelt.
         /// </summary>
         public static string FileOpenMode_FlowBloxEditor {
             get {
@@ -1258,7 +1258,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Öffnen mit Windows-Standardanwendung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open with Windows default application ähnelt.
         /// </summary>
         public static string FileOpenMode_WindowsDefaultApp {
             get {
@@ -1267,7 +1267,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Liest Inhalte aus einer Datei zur weiteren Verarbeitung. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads contents from a file for further processing. ähnelt.
         /// </summary>
         public static string FileReaderFlowBlock_Description {
             get {
@@ -1276,7 +1276,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei lesen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Read file ähnelt.
         /// </summary>
         public static string FileReaderFlowBlock_DisplayName {
             get {
@@ -1285,7 +1285,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dateipfad ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die File path ähnelt.
         /// </summary>
         public static string FileReaderFlowBlock_FilePath {
             get {
@@ -1294,7 +1294,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Schreibt Daten in eine Datei. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Writes data to a file. ähnelt.
         /// </summary>
         public static string FileWriterFlowBlock_Description {
             get {
@@ -1303,7 +1303,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei schreiben ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Write file ähnelt.
         /// </summary>
         public static string FileWriterFlowBlock_DisplayName {
             get {
@@ -1312,7 +1312,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern konnte aufgrund eines technisches Fehler nicht durchgeführt werden. Bitte überprüfen Sie die Logfiles für weitere Informationen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Saving could not be completed due to a technical error. Please check the log files for more information. ähnelt.
         /// </summary>
         public static string FlowBlockMainView_ApplyFailed_Message {
             get {
@@ -1321,7 +1321,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern fehlgeschlagen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save failed ähnelt.
         /// </summary>
         public static string FlowBlockMainView_ApplyFailed_Title {
             get {
@@ -1330,7 +1330,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte geben Sie eine gültige Bezeichnung für Ihren Flow-Block an. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please enter a valid label for your flow block. ähnelt.
         /// </summary>
         public static string FlowBlockMainView_InvalidName_Message {
             get {
@@ -1339,7 +1339,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bezeichnung ungültig ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Invalid label ähnelt.
         /// </summary>
         public static string FlowBlockMainView_InvalidName_Title {
             get {
@@ -1348,7 +1348,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erforderliche Felder ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required fields ähnelt.
         /// </summary>
         public static string FlowBloxComponent_RequiredFields {
             get {
@@ -1357,7 +1357,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte legen Sie einen eindeutigen Namen fest. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please specify a unique name. ähnelt.
         /// </summary>
         public static string FlowBloxComponent_Validation_NameRequired {
             get {
@@ -1366,7 +1366,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Das Feldelement hat keine Quelle. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The field element has no source. ähnelt.
         /// </summary>
         public static string FlowBloxComponentNameValidator_FieldSourceNotSet {
             get {
@@ -1375,7 +1375,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Es existiert bereits eine Komponente mit dem Bezeichner &quot;{0}&quot;. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die A component with the identifier &quot;{0}&quot; already exists. ähnelt.
         /// </summary>
         public static string FlowBloxComponentNameValidator_NameAlreadyExists {
             get {
@@ -1384,7 +1384,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Testfallkonfiguration ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test case configuration ähnelt.
         /// </summary>
         public static string FlowBloxTestConfiguration {
             get {
@@ -1393,7 +1393,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erwartete Ergebnisse ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expected results ähnelt.
         /// </summary>
         public static string FlowBloxTestConfiguration_ExpectationConditions {
             get {
@@ -1402,7 +1402,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatische Auswahl: Erster Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic selection: first value ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_First {
             get {
@@ -1411,7 +1411,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatische Auswahl: Index ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic selection: index ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_Index {
             get {
@@ -1420,7 +1420,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Aktuellen Wert beibehalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Keep current value ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_Keep {
             get {
@@ -1429,7 +1429,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatische Auswahl: Letzer Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic selection: last value ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_Last {
             get {
@@ -1438,7 +1438,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manuelle Benutzereingabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manual user input ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_UserInput {
             get {
@@ -1447,7 +1447,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzereingabe wird erwartet ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die User input expected ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue {
             get {
@@ -1456,7 +1456,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die --- Erster Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die --- first value ähnelt.
         /// </summary>
         public static string FlowBloxTestControl_CbItem_FirstValue {
             get {
@@ -1465,7 +1465,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die --- Letzter Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die --- last value ähnelt.
         /// </summary>
         public static string FlowBloxTestControl_CbItem_LastValue {
             get {
@@ -1474,7 +1474,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die --- Manuelle Eingabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die --- manual input ähnelt.
         /// </summary>
         public static string FlowBloxTestControl_CbItem_ManualExecution {
             get {
@@ -1483,7 +1483,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erforderlich für Ausführung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required for execution ähnelt.
         /// </summary>
         public static string FlowBloxTestDefinition_RequiredForExecution {
             get {
@@ -1492,7 +1492,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zusätzliche Elemente ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Additional elements ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Additional {
             get {
@@ -1510,7 +1510,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Kontrollfluss ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Control flow ähnelt.
         /// </summary>
         public static string FloxBloxCategory_ControlFlow {
             get {
@@ -1519,7 +1519,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extensions ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Extensions {
             get {
@@ -1528,7 +1528,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Generierung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generation ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Generation {
             get {
@@ -1537,7 +1537,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingabe-/Ausgabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input/output ähnelt.
         /// </summary>
         public static string FloxBloxCategory_IO {
             get {
@@ -1546,7 +1546,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Logik ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Logic ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Logic {
             get {
@@ -1555,7 +1555,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Persistierung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Persistence ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Persistence {
             get {
@@ -1564,7 +1564,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswahl ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selection ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Selection {
             get {
@@ -1573,7 +1573,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Serialisierung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Serialization ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Serialization {
             get {
@@ -1600,7 +1600,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Textoperationen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text operations ähnelt.
         /// </summary>
         public static string FloxBloxCategory_TextOperations {
             get {
@@ -1609,7 +1609,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Web-Komponenten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web components ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Web {
             get {
@@ -1618,7 +1618,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Formatiert Texte oder numerische Werte mithilfe von Platzhaltern gemäß den .NET-Formatierungsregeln. Siehe: https://learn.microsoft.com/en-us/dotnet/standard/base-types/composite-formatting ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Formats text or numeric values using placeholders according to .NET formatting rules. See: https://learn.microsoft.com/en-us/dotnet/standard/base-types/composite-formatting ähnelt.
         /// </summary>
         public static string FormatFlowBlock_Description {
             get {
@@ -1627,7 +1627,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Formatieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Format ähnelt.
         /// </summary>
         public static string FormatFlowBlock_DisplayName {
             get {
@@ -1636,7 +1636,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Format-Ausdruck ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Format expression ähnelt.
         /// </summary>
         public static string FormatFlowBlock_FormatExpression {
             get {
@@ -1645,7 +1645,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Format-Parameter ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Format parameters ähnelt.
         /// </summary>
         public static string FormatFlowBlock_FormatParameters {
             get {
@@ -1654,7 +1654,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Anzahl der Formatparameter ({0}) stimmt nicht mit der Anzahl der verknüpften Feld-Elemente ({1}) überein. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The number of format parameters ({0}) does not match the number of linked field elements ({1}). ähnelt.
         /// </summary>
         public static string FormatFlowBlock_Validation_InvalidFieldElementCount {
             get {
@@ -1663,7 +1663,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Format-Parameter ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Format parameter ähnelt.
         /// </summary>
         public static string FormatParameterDefinition {
             get {
@@ -1672,7 +1672,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erforderlich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required ähnelt.
         /// </summary>
         public static string FormatParameterDefinition_IsRequired {
             get {
@@ -1681,7 +1681,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinzufügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
         public static string Global_Add {
             get {
@@ -1690,7 +1690,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create ähnelt.
         /// </summary>
         public static string Global_Create {
             get {
@@ -1699,7 +1699,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Inhalt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content ähnelt.
         /// </summary>
         public static string Global_DefaultResultFieldName {
             get {
@@ -1708,8 +1708,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Löschaktion kann nicht durchgeführt werden, weil dadurch bestehende Abhängkeiten verletzt werden:
-        ///{0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The delete action cannot be performed because it would violate existing dependencies: {0} ähnelt.
         /// </summary>
         public static string Global_DependencyViolation_Message {
             get {
@@ -1718,7 +1717,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die zu löschende Komponente &quot;{0}&quot; wird von &quot;{1}&quot; verwendet ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The component to be deleted &quot;{0}&quot; is used by &quot;{1}&quot; ähnelt.
         /// </summary>
         public static string Global_DependencyViolation_Message_Entry {
             get {
@@ -1727,7 +1726,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verletzung von Abhängigkeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Dependency violation ähnelt.
         /// </summary>
         public static string Global_DependencyViolation_Title {
             get {
@@ -1736,7 +1735,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
         /// </summary>
         public static string Global_Edit {
             get {
@@ -1745,7 +1744,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldelement ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field element ähnelt.
         /// </summary>
         public static string Global_FieldElement {
             get {
@@ -1754,7 +1753,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Auswahlmethode &apos;{0}&apos; wurde nicht in der Zielklasse &apos;{1}&apos; gefunden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The selection method &apos;{0}&apos; was not found in the target class &apos;{1}&apos;. ähnelt.
         /// </summary>
         public static string Global_FilterMethodNotFound_Message {
             get {
@@ -1763,7 +1762,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswahlmethode nicht gefunden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selection method not found ähnelt.
         /// </summary>
         public static string Global_FilterMethodNotFound_Title {
             get {
@@ -1772,7 +1771,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow block ähnelt.
         /// </summary>
         public static string Global_FlowBlock {
             get {
@@ -1781,7 +1780,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Allgemein ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die General ähnelt.
         /// </summary>
         public static string Global_Groups_Default {
             get {
@@ -1790,7 +1789,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anforderungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Requirements ähnelt.
         /// </summary>
         public static string Global_Groups_Requirements {
             get {
@@ -1799,7 +1798,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingabefeld ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input field ähnelt.
         /// </summary>
         public static string Global_InputField {
             get {
@@ -1808,7 +1807,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verknüpfen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Link ähnelt.
         /// </summary>
         public static string Global_Link {
             get {
@@ -1817,7 +1816,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Fehler ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error ähnelt.
         /// </summary>
         public static string Global_MessageBox_Error_Title {
             get {
@@ -1826,7 +1825,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinweis ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notice ähnelt.
         /// </summary>
         public static string Global_MessageBox_Notification_Title {
             get {
@@ -1835,8 +1834,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die folgenden Typen besitzen kein DisplayAttribute:
-        ///{0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The following types do not have a DisplayAttribute: {0} ähnelt.
         /// </summary>
         public static string Global_MissingDisplayAttributes_Message {
             get {
@@ -1845,7 +1843,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anzeige-Fehler ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Display error ähnelt.
         /// </summary>
         public static string Global_MissingDisplayAttributes_Title {
             get {
@@ -1854,7 +1852,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Für die Eigenschaft &apos;{0}&apos; wurde keine Auswahlmethode (SelectionFilterMethod) definiert. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No selection method (SelectionFilterMethod) was defined for the property &apos;{0}&apos;. ähnelt.
         /// </summary>
         public static string Global_MissingFilterMethod_Message {
             get {
@@ -1863,7 +1861,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswahlmethode fehlt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selection method missing ähnelt.
         /// </summary>
         public static string Global_MissingFilterMethod_Title {
             get {
@@ -1872,7 +1870,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nach unten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Move down ähnelt.
         /// </summary>
         public static string Global_MoveDown {
             get {
@@ -1881,7 +1879,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nach oben ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Move up ähnelt.
         /// </summary>
         public static string Global_MoveUp {
             get {
@@ -1899,7 +1897,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Es konnten keine auswählbaren Objekte gefunden werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No selectable objects could be found. ähnelt.
         /// </summary>
         public static string Global_NoItemsFound_Message {
             get {
@@ -1908,7 +1906,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Keine Auswahl möglich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No selection possible ähnelt.
         /// </summary>
         public static string Global_NoItemsFound_Title {
             get {
@@ -1917,7 +1915,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
         public static string Global_Remove {
             get {
@@ -1926,7 +1924,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgabefeld ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output field ähnelt.
         /// </summary>
         public static string Global_ResultField {
             get {
@@ -1935,7 +1933,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select ähnelt.
         /// </summary>
         public static string Global_Select {
             get {
@@ -1944,7 +1942,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswahl ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selection ähnelt.
         /// </summary>
         public static string Global_Selection {
             get {
@@ -1953,7 +1951,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wählen Sie bitte einen Eintrag aus der Liste aus. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please select an entry from the list. ähnelt.
         /// </summary>
         public static string Global_SelectionDialog_Message {
             get {
@@ -1962,7 +1960,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eintrag auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select entry ähnelt.
         /// </summary>
         public static string Global_SelectionDialog_Title {
             get {
@@ -1971,7 +1969,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Trennen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unlink ähnelt.
         /// </summary>
         public static string Global_Unlink {
             get {
@@ -1980,7 +1978,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Validierung fehlgeschlagen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Validation failed ähnelt.
         /// </summary>
         public static string Global_ValidationFailed_Title {
             get {
@@ -1989,7 +1987,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Haltebedingungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hold conditions ähnelt.
         /// </summary>
         public static string HoldConditionManager_DisplayName {
             get {
@@ -1998,7 +1996,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Haltebedingungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hold conditions ähnelt.
         /// </summary>
         public static string HoldConditionManager_HoldConditions {
             get {
@@ -2007,7 +2005,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP Enkodierung/Dekodierung (Automatische Anpassung) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP encoding/decoding (automatic adjustment) ähnelt.
         /// </summary>
         public static string HttpEncodeDecodeModifier {
             get {
@@ -2016,7 +2014,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Richtung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Direction ähnelt.
         /// </summary>
         public static string HttpEncodeDecodeModifier_Direction {
             get {
@@ -2025,7 +2023,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Modus ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mode ähnelt.
         /// </summary>
         public static string HttpEncodeDecodeModifier_Mode {
             get {
@@ -2043,7 +2041,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datensätze kombinieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Combine records ähnelt.
         /// </summary>
         public static string InputBehavior_Cross {
             get {
@@ -2052,7 +2050,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gültige Datensätze kombinieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Combine valid records ähnelt.
         /// </summary>
         public static string InputBehavior_CrossValid {
             get {
@@ -2061,7 +2059,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erster Datensatz ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die First record ähnelt.
         /// </summary>
         public static string InputBehavior_First {
             get {
@@ -2070,7 +2068,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erster gültiger Datensatz ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die First valid record ähnelt.
         /// </summary>
         public static string InputBehavior_FirstValid {
             get {
@@ -2079,7 +2077,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Letzter Datensatz ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Last record ähnelt.
         /// </summary>
         public static string InputBehavior_Last {
             get {
@@ -2088,7 +2086,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Letzter gültiger Datensatz ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Last valid record ähnelt.
         /// </summary>
         public static string InputBehavior_LastValid {
             get {
@@ -2097,7 +2095,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingabeverhalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input behavior ähnelt.
         /// </summary>
         public static string InputBehaviorAssignment_Behavior {
             get {
@@ -2106,7 +2104,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feld-Übertragung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field transfer ähnelt.
         /// </summary>
         public static string InvocationFieldTransferConfig {
             get {
@@ -2115,7 +2113,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Übertragen von ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Transfer from ähnelt.
         /// </summary>
         public static string InvocationFieldTransferConfig_TransferFrom {
             get {
@@ -2124,7 +2122,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Übertragen nach ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Transfer to ähnelt.
         /// </summary>
         public static string InvocationFieldTransferConfig_TransferTo {
             get {
@@ -2133,7 +2131,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ruft einen Ziel-Flow-Block auf und überträgt dabei definierte Ausgabe-Feldwerte aus dem Eingangs-Flow-Block mittels konfigurierbarem Feldmapping. Alle Ausgabefelder des Ziel-Flow-Blocks müssen durch ein Mapping abgedeckt sein. Dieser Flow-Block eignet sich insbesondere zur Realisierung wiederholter Abläufe. Beachten Sie, dass der Ziel-Flow-Block auf dem Pfad des Eingangs-Flow-Blocks liegen muss. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Calls a target flow block and transfers defined output field values from the input flow block using a configurable field mapping. All output fields of the target flow block must be covered by a mapping. This flow block is particularly suitable for implementing repeated processes. Note that the target flow block must be on the path of the input flow block. ähnelt.
         /// </summary>
         public static string InvokerFlowBlock_Description {
             get {
@@ -2142,7 +2140,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Rekursiver Aufruf ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recursive call ähnelt.
         /// </summary>
         public static string InvokerFlowBlock_DisplayName {
             get {
@@ -2151,7 +2149,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldübertragungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field transfers ähnelt.
         /// </summary>
         public static string InvokerFlowBlock_FieldTransferConfigs {
             get {
@@ -2160,7 +2158,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Übertragungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Transfers ähnelt.
         /// </summary>
         public static string InvokerFlowBlock_Groups_Transferrations {
             get {
@@ -2169,7 +2167,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ziel-Flowblock ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target flow block ähnelt.
         /// </summary>
         public static string InvokerFlowBlock_TargetFlowBlock {
             get {
@@ -2178,7 +2176,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Der Ziel-Flow-Block muss im aktuellen Ausführungspfad liegen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The target flow block must lie on the current execution path. ähnelt.
         /// </summary>
         public static string InvokerFlowBlock_Validation_TargetNotReachable {
             get {
@@ -2187,7 +2185,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Alle Felder des Ziel-Flow-Blocks müssen abgebildet werden. Es fehlen Übertragungen für folgende Felder: {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die All fields of the target flow block must be mapped. Mappings are missing for the following fields: {0} ähnelt.
         /// </summary>
         public static string InvokerFlowBlock_Validation_UnmappedFields {
             get {
@@ -2196,7 +2194,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Kombiniert mehrere Eingaben zu einer konsolidierten Ausgabe. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Combines multiple inputs into a consolidated output. ähnelt.
         /// </summary>
         public static string JoinFlowBlock_Description {
             get {
@@ -2205,7 +2203,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zusammenführen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Merge ähnelt.
         /// </summary>
         public static string JoinFlowBlock_DisplayName {
             get {
@@ -2214,7 +2212,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zusammenzuführende Feldwerte ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fields to merge ähnelt.
         /// </summary>
         public static string JoinFlowBlock_JoinedParameters {
             get {
@@ -2223,7 +2221,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Trennzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Separator ähnelt.
         /// </summary>
         public static string JoinFlowBlock_Separator {
             get {
@@ -2232,7 +2230,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Spezielles Trennzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Special separator ähnelt.
         /// </summary>
         public static string JoinFlowBlock_SpecialSeparator {
             get {
@@ -2241,7 +2239,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Es wurde mehr als ein Trennzeichen angegeben. Bitte geben Sie entweder ein Trennzeichen oder ein spezielles Trennzeichen an. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die More than one separator was specified. Please specify either a separator or a special separator. ähnelt.
         /// </summary>
         public static string JoinFlowBlock_Validation_ManySeparatorsDefined {
             get {
@@ -2250,7 +2248,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Es wurde kein Trennzeichen angegeben. Bitte geben Sie entweder ein Trennzeichen oder ein spezielles Trennzeichen an. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No separator was specified. Please specify either a separator or a special separator. ähnelt.
         /// </summary>
         public static string JoinFlowBlock_Validation_NoSeparatorDefined {
             get {
@@ -2259,7 +2257,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erzeugt ein JSON-Objekt aus einem angegebenen JSON-Text und stellt es nachfolgenden Flow-Blocks zur Verfügung. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a JSON object from the given JSON text and makes it available to subsequent flow blocks. ähnelt.
         /// </summary>
         public static string JsonObjectFlowBlock_Description {
             get {
@@ -2268,7 +2266,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Objekt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON object ähnelt.
         /// </summary>
         public static string JsonObjectFlowBlock_DisplayName {
             get {
@@ -2277,7 +2275,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Inhalt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON content ähnelt.
         /// </summary>
         public static string JsonObjectFlowBlock_JsonContent {
             get {
@@ -2286,7 +2284,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zugehöriges JSON-Objekt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated JSON object ähnelt.
         /// </summary>
         public static string JsonObjectOutputFlowBlock_AssociatedJsonObject {
             get {
@@ -2295,7 +2293,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datumsformat ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Date format ähnelt.
         /// </summary>
         public static string JsonObjectOutputFlowBlock_DateFormatHandling {
             get {
@@ -2304,7 +2302,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gibt ein JSON-Objekt aus und speichert es im Ausgabefeld. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Outputs a JSON object and stores it in the output field. ähnelt.
         /// </summary>
         public static string JsonObjectOutputFlowBlock_Description {
             get {
@@ -2313,7 +2311,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Objekt-Ausgabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON object output ähnelt.
         /// </summary>
         public static string JsonObjectOutputFlowBlock_DisplayName {
             get {
@@ -2322,7 +2320,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Mehrzeilige Ausgabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Multi-line output ähnelt.
         /// </summary>
         public static string JsonObjectOutputFlowBlock_Indented {
             get {
@@ -2331,7 +2329,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nullwertbehandlung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Null value handling ähnelt.
         /// </summary>
         public static string JsonObjectOutputFlowBlock_NullValueHandling {
             get {
@@ -2340,7 +2338,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zugehöriges JSON-Objekt (über JSON-Objekt) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated JSON object (via JSON object) ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_AssociatedJsonObject {
             get {
@@ -2349,7 +2347,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Objekt (über &quot;JSON-Objekt schreiben&quot; Flow-Block) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON object (via &quot;Write JSON object&quot; flow block) ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_AssociatedJsonObjectWriter {
             get {
@@ -2358,7 +2356,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erstellt bei Bedarf ein neues JSON-Objekt oder aktualisiert das bestehende um die Eigenschaft-/Wert-Zuweisungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a new JSON object if needed, or updates the existing one with the property/value assignments ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_Description {
             get {
@@ -2367,7 +2365,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Objekt schreiben ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Write JSON object ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_DisplayName {
             get {
@@ -2376,7 +2374,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Zuweisungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON assignments ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_JsonAssignments {
             get {
@@ -2385,7 +2383,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Pfad ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_Path {
             get {
@@ -2394,7 +2392,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Liest ein JSON-Objekt ein und gibt den Wert oder die Werte zurück, die dem angegebenen JSON-Pfad entsprechen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads a JSON object and returns the value or values that match the specified JSON path. ähnelt.
         /// </summary>
         public static string JsonPathSelectorFlowBlock_Description {
             get {
@@ -2403,7 +2401,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Pfad-Selektor ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path selector ähnelt.
         /// </summary>
         public static string JsonPathSelectorFlowBlock_DisplayName {
             get {
@@ -2412,7 +2410,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Inhalt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON content ähnelt.
         /// </summary>
         public static string JsonPathSelectorFlowBlock_JsonContent {
             get {
@@ -2421,7 +2419,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Pfad ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path ähnelt.
         /// </summary>
         public static string JsonPathSelectorFlowBlock_Path {
             get {
@@ -2430,7 +2428,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON-Property-Zuweisung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON property assignment ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_DisplayName {
             get {
@@ -2439,7 +2437,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldwert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field value ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_FieldValue {
             get {
@@ -2448,7 +2446,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ist Array ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Is array ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_IsArray {
             get {
@@ -2457,7 +2455,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Property-Name ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Property name ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_PropertyName {
             get {
@@ -2466,7 +2464,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Property-Pfad ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Property path ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_PropertyPath {
             get {
@@ -2475,7 +2473,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_Value {
             get {
@@ -2484,7 +2482,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zeilenweise extrahieren (Automatische Anpassung) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extract lines (Auto adjustment) ähnelt.
         /// </summary>
         public static string LineExtractorModifier {
             get {
@@ -2493,7 +2491,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anzahl der Zeilen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Number of lines ähnelt.
         /// </summary>
         public static string LineExtractorModifier_LineCount {
             get {
@@ -2502,7 +2500,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Text von Zeile {0} bis {1} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text from line {0} to {1} ähnelt.
         /// </summary>
         public static string LineExtractorModifier_ObjectDisplayName {
             get {
@@ -2511,7 +2509,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erste Zeile ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die First line ähnelt.
         /// </summary>
         public static string LineExtractorModifier_StartLine {
             get {
@@ -2520,8 +2518,8 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Es sind keine Datensätze vorhanden.
-        ///Nutzen Sie die Schaltfläche &quot;+&quot;, um der Tabelle Datensätze hinzuzufügen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No records available.
+        ///Use the &quot;+&quot; button to add entries to the table. ähnelt.
         /// </summary>
         public static string ListFactoryBase_NoDataAvailable_Text {
             get {
@@ -2530,7 +2528,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte wählen Sie ein Element in der Liste aus, um die Details anzuzeigen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please select an element from the list to view its details. ähnelt.
         /// </summary>
         public static string ListViewSplitModeFactory_NoElementSelected_Text {
             get {
@@ -2539,7 +2537,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verwendet das LLaMA-Tokenisierungsmodell (SentencePiece), um Texte in Token-IDs umzuwandeln und zurück. Unterstützt spezielle Token-Übersetzungen wie das Ersetzen des „Ġ“-Zeichens durch Leerzeichen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses the LLaMA tokenization model (SentencePiece) to convert text to and from token IDs. Supports special token mappings such as replacing the “Ġ” character with a space. ähnelt.
         /// </summary>
         public static string LlamaAiTokenizer_Description {
             get {
@@ -2548,7 +2546,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die LLaMA-AI-Tokenizer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die LLaMA AI Tokenizer ähnelt.
         /// </summary>
         public static string LlamaAiTokenizer_DisplayName {
             get {
@@ -2557,7 +2555,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Pfad zum Tokenizer-Modell ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer model path ähnelt.
         /// </summary>
         public static string LlamaAiTokenizer_TokenizerModelPath {
             get {
@@ -2566,7 +2564,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Geben Sie den vollständigen Pfad zur Tokenizer-Modell-Datei (SentencePiece .model) an, die für LLaMA verwendet werden soll. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Specify the full path to the SentencePiece tokenizer model (.model) to be used for LLaMA. ähnelt.
         /// </summary>
         public static string LlamaAiTokenizer_TokenizerModelPath_Tooltip {
             get {
@@ -2575,7 +2573,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Exportieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Export ähnelt.
         /// </summary>
         public static string MemoryObjectUIActions_Export {
             get {
@@ -2584,7 +2582,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Importieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Import ähnelt.
         /// </summary>
         public static string MemoryObjectUIActions_Import {
             get {
@@ -2593,7 +2591,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ö&amp;ffnen (Bearbeitung möglich) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die O&amp;pen (editable) ähnelt.
         /// </summary>
         public static string MemoryObjectUIActions_Open {
             get {
@@ -2602,7 +2600,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dient zur Einbindung von Kommentaren oder Hinweisen im Flow-Diagramm. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Used to insert comments or notes into the flow diagram. ähnelt.
         /// </summary>
         public static string NoteFlowBlock_Description {
             get {
@@ -2611,7 +2609,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinweis ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Note ähnelt.
         /// </summary>
         public static string NoteFlowBlock_DisplayName {
             get {
@@ -2620,7 +2618,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Notiz ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Note ähnelt.
         /// </summary>
         public static string NoteFlowBlock_Note {
             get {
@@ -2629,7 +2627,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Fehler ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error ähnelt.
         /// </summary>
         public static string NotificationType_Error {
             get {
@@ -2638,7 +2636,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Keine ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die None ähnelt.
         /// </summary>
         public static string NotificationType_None {
             get {
@@ -2647,7 +2645,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Warnung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Warning ähnelt.
         /// </summary>
         public static string NotificationType_Warning {
             get {
@@ -2656,7 +2654,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausführungsprovider ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execution provider ähnelt.
         /// </summary>
         public static string OnnxBaseFlowBlock_AiExecutionProvider {
             get {
@@ -2665,7 +2663,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Assoziierter ONNX-Flow-Block (Inferenz-Session) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated ONNX Flow Block (Inference Session) ähnelt.
         /// </summary>
         public static string OnnxBaseFlowBlock_AssociatedOnnxFlowBlock {
             get {
@@ -2674,7 +2672,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Übernimmt die vorhandene Inferenz-Session des ausgewählten ONNX-Flow-Blocks, sofern verfügbar. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reuses the existing inference session of the selected ONNX flow block, if available. ähnelt.
         /// </summary>
         public static string OnnxBaseFlowBlock_AssociatedOnnxFlowBlock_Tooltip {
             get {
@@ -2683,7 +2681,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterte ONNX-Einstellungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Advanced ONNX settings ähnelt.
         /// </summary>
         public static string OnnxBaseFlowBlock_Groups_ExtendedSettings {
             get {
@@ -2692,7 +2690,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Kontext ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Context ähnelt.
         /// </summary>
         public static string OnnxQuestionAnsweringFlowBlock_Context {
             get {
@@ -2710,7 +2708,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Strategie zur Positionsauswahl ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Position selection strategy ähnelt.
         /// </summary>
         public static string OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy {
             get {
@@ -2719,7 +2717,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Legt fest, wie die beste Start- und Endposition aus den Logits ausgewählt wird – z.B. per ArgMax oder benutzerdefinierter Bewertungsmethode. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines how the best start and end positions are chosen from logits – e.g., via ArgMax or a custom evaluation method. ähnelt.
         /// </summary>
         public static string OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy_Tooltip {
             get {
@@ -2737,7 +2735,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Frage ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Question ähnelt.
         /// </summary>
         public static string OnnxQuestionAnsweringFlowBlock_Question {
             get {
@@ -2746,7 +2744,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die KI-Tokenizer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Tokenizer ähnelt.
         /// </summary>
         public static string OnnxTextGenerationFlowBlock_AiTokenizer {
             get {
@@ -2755,7 +2753,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Führt ein ONNX-Modell mit einem angegebenen Prompt unter Verwendung eines ausgewählten Tokenizers aus. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Executes an ONNX model with a given prompt using a selected tokenizer. ähnelt.
         /// </summary>
         public static string OnnxTextGenerationFlowBlock_Description {
             get {
@@ -2764,7 +2762,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die ONNX Text-Generierung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die ONNX Text Generation ähnelt.
         /// </summary>
         public static string OnnxTextGenerationFlowBlock_DisplayName {
             get {
@@ -2773,7 +2771,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Maximale Anzahl zu generierender Tokens ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum number of tokens to generate ähnelt.
         /// </summary>
         public static string OnnxTextGenerationFlowBlock_MaxTokens {
             get {
@@ -2782,7 +2780,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Pfad zum ONNX-Modell ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die ONNX model path ähnelt.
         /// </summary>
         public static string OnnxTextGenerationFlowBlock_ModelPath {
             get {
@@ -2800,7 +2798,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Token-Auswahlstrategie ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Token selection strategy ähnelt.
         /// </summary>
         public static string OnnxTextGenerationFlowBlock_TokenSelectionStrategy {
             get {
@@ -2809,7 +2807,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bestimmt, wie der nächste Token im Textgenerierungsprozess ausgewählt wird. &apos;ArgMax&apos; wählt immer den wahrscheinlichsten Token. &apos;Sample&apos; wählt zufällig anhand der Wahrscheinlichkeitsverteilung. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Determines how the next token is selected during text generation. &apos;ArgMax&apos; always chooses the most likely token. &apos;Sample&apos; randomly selects based on probability distribution. ähnelt.
         /// </summary>
         public static string OnnxTextGenerationFlowBlock_TokenSelectionStrategy_Tooltip {
             get {
@@ -2818,7 +2816,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Alle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die All ähnelt.
         /// </summary>
         public static string OutputBehavior_All {
             get {
@@ -2827,7 +2825,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erster Datensatz ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die First record ähnelt.
         /// </summary>
         public static string OutputBehavior_First {
             get {
@@ -2836,7 +2834,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Letzter Datensatz ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Last record ähnelt.
         /// </summary>
         public static string OutputBehavior_Last {
             get {
@@ -2845,7 +2843,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bereich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Range ähnelt.
         /// </summary>
         public static string OutputBehavior_Range {
             get {
@@ -2854,7 +2852,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Liest ein PDF-Dokument aus der angegebenen Datenquelle und gibt den extrahierten Klartext seitenweise als Ergebnis zurück. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads a PDF document from the specified data source and returns the extracted plain text by pages. ähnelt.
         /// </summary>
         public static string PDF2TextFlowBlock_Description {
             get {
@@ -2863,7 +2861,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die PDF zu Text (PdfPig) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die PDF to Text (PdfPig) ähnelt.
         /// </summary>
         public static string PDF2TextFlowBlock_DisplayName {
             get {
@@ -2872,7 +2870,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verwendet das Phi-2-Tokenizer-Modell zur Tokenisierung und Detokenisierung von Text für AI-Inferenz. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses the Phi-2 tokenizer model for tokenizing and detokenizing text for AI inference. ähnelt.
         /// </summary>
         public static string Phi2AiTokenizer_Description {
             get {
@@ -2890,7 +2888,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer-Konfiguration ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer configuration ähnelt.
         /// </summary>
         public static string Phi2AiTokenizer_TokenizerConfiguration {
             get {
@@ -2899,7 +2897,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wählen Sie den zu verwendenden Vokabular-/Merges-Tokenizer für das Phi-2 Modell. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select the vocabulary/merges tokenizer to be used with the Phi-2 model. ähnelt.
         /// </summary>
         public static string Phi2AiTokenizer_TokenizerConfiguration_Tooltip {
             get {
@@ -2908,7 +2906,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte geben Sie den Namen des Flow-Blocks an. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please enter the name of the Flow Block. ähnelt.
         /// </summary>
         public static string ProjectPanel_AssignFlowBlockName_Description {
             get {
@@ -2917,7 +2915,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die {0} erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create {0} ähnelt.
         /// </summary>
         public static string ProjectPanel_AssignFlowBlockName_Title {
             get {
@@ -2926,7 +2924,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datenquelle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Data source ähnelt.
         /// </summary>
         public static string PropertyNames_DataSource {
             get {
@@ -2935,7 +2933,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die TextEncoding ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text encoding ähnelt.
         /// </summary>
         public static string PropertyNames_EncodingName {
             get {
@@ -2944,7 +2942,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wählen Sie das Text-Encoding aus, das zur Umwandlung von Zeichen in Bytefolgen und zurück verwendet wird. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select the text encoding used to convert characters to and from byte sequences. ähnelt.
         /// </summary>
         public static string PropertyNames_EncodingName_Tooltip {
             get {
@@ -2953,7 +2951,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dateiname ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die File name ähnelt.
         /// </summary>
         public static string PropertyNames_FileName {
             get {
@@ -2962,7 +2960,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die File ähnelt.
         /// </summary>
         public static string PropertyNames_FilePath {
             get {
@@ -2980,7 +2978,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string PropertyNames_Value {
             get {
@@ -2989,7 +2987,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte überprüfen Sie die folgenden Angaben: {0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please review the following entries: {0} ähnelt.
         /// </summary>
         public static string PropertyViewTabControl_FormInvalid_Message {
             get {
@@ -2998,7 +2996,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Formulardaten ungültig ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Invalid form data ähnelt.
         /// </summary>
         public static string PropertyViewTabControl_FormInvalid_Title {
             get {
@@ -3007,7 +3005,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern konnte aufgrund eines technisches Fehler nicht durchgeführt werden. Bitte überprüfen Sie die Logfiles für weitere Informationen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Saving could not be completed due to a technical error. Please check the log files for more information. ähnelt.
         /// </summary>
         public static string PropertyWindo_ApplyFailed_Message {
             get {
@@ -3016,7 +3014,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern fehlgeschlagen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save failed ähnelt.
         /// </summary>
         public static string PropertyWindow_ApplyFailed_Title {
             get {
@@ -3025,7 +3023,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Regulärer Ausdruck trifft zu (Automatische Anpassung) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Regular expression match (auto adjustment) ähnelt.
         /// </summary>
         public static string RegexMatchModifier {
             get {
@@ -3034,7 +3032,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verhalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Behavior ähnelt.
         /// </summary>
         public static string RegexMatchModifier_Behavior {
             get {
@@ -3043,7 +3041,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Treffer sammeln zu &quot;{0}&quot; Verhalten &quot;{1}&quot; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Collect matches for &quot;{0}&quot; with behavior &quot;{1}&quot; ähnelt.
         /// </summary>
         public static string RegexMatchModifier_ObjectDisplayName {
             get {
@@ -3052,7 +3050,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetzen durch ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replace with ähnelt.
         /// </summary>
         public static string RegexMatchModifier_Replace {
             get {
@@ -3061,7 +3059,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Regulärer Ausdruck (Suchbegriff) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Regular expression (search term) ähnelt.
         /// </summary>
         public static string RegexMatchModifier_Search {
             get {
@@ -3070,7 +3068,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Trennzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Separator ähnelt.
         /// </summary>
         public static string RegexMatchModifier_Separator {
             get {
@@ -3079,7 +3077,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Alle Treffer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die All matches ähnelt.
         /// </summary>
         public static string RegexMatchModifierBehavior_All {
             get {
@@ -3088,7 +3086,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Nur eindeutige Treffer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Distinct matches only ähnelt.
         /// </summary>
         public static string RegexMatchModifierBehavior_Distinct {
             get {
@@ -3097,7 +3095,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Der erste Treffer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die First match only ähnelt.
         /// </summary>
         public static string RegexMatchModifierBehavior_First {
             get {
@@ -3106,7 +3104,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetzen durch regulären Ausdruck (Automatische Anpassung) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replace using regular expression (auto adjustment) ähnelt.
         /// </summary>
         public static string RegexReplaceModifier {
             get {
@@ -3115,7 +3113,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetze &quot;{0}&quot; durch &quot;{1}&quot; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replace &quot;{0}&quot; with &quot;{1}&quot; ähnelt.
         /// </summary>
         public static string RegexReplaceModifier_ObjectDisplayName {
             get {
@@ -3124,7 +3122,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Case-Sensitiv ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Case sensitive ähnelt.
         /// </summary>
         public static string RegexSelectorFlowBlock_CaseSensitive {
             get {
@@ -3133,7 +3131,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block zur Auswahl von Textmustern mithilfe regulärer Ausdrücke. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow Block for selecting text patterns using regular expressions. ähnelt.
         /// </summary>
         public static string RegexSelectorFlowBlock_Description {
             get {
@@ -3142,7 +3140,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Regulärer Ausdruck ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Regular expression ähnelt.
         /// </summary>
         public static string RegexSelectorFlowBlock_DisplayName {
             get {
@@ -3151,7 +3149,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gruppenname ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Group name ähnelt.
         /// </summary>
         public static string RegexSelectorFlowBlock_Group {
             get {
@@ -3160,7 +3158,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Mehrzeilig ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Multiline ähnelt.
         /// </summary>
         public static string RegexSelectorFlowBlock_Multiline {
             get {
@@ -3169,7 +3167,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Regulärer Ausdruck ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Regular expression ähnelt.
         /// </summary>
         public static string RegexSelectorFlowBlock_RegularExpression {
             get {
@@ -3178,7 +3176,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetzen (Automatische Anpassung) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replace (auto adjustment) ähnelt.
         /// </summary>
         public static string ReplaceModifier {
             get {
@@ -3187,7 +3185,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetze &quot;{0}&quot; durch &quot;{1}&quot; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replace &quot;{0}&quot; with &quot;{1}&quot; ähnelt.
         /// </summary>
         public static string ReplaceModifier_ObjectDisplayName {
             get {
@@ -3196,7 +3194,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetzen durch ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replace with ähnelt.
         /// </summary>
         public static string ReplaceModifier_Replace {
             get {
@@ -3205,7 +3203,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Suchbegriff ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search term ähnelt.
         /// </summary>
         public static string ReplaceModifier_Search {
             get {
@@ -3214,7 +3212,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datenschlüssel ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Data key ähnelt.
         /// </summary>
         public static string ResultFieldByEnumValue_EnumValue {
             get {
@@ -3223,7 +3221,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenisiert Text für Frage-Antwort-Modelle mithilfe von Byte Pair Encoding (BPE) basierend auf vocab.json und merges.txt. Verwendet dabei das für RoBERTa-Modelle typische Satzformat. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizes text for question-answering models using Byte Pair Encoding (BPE) based on vocab.json and merges.txt, following the sentence format typical for RoBERTa models. ähnelt.
         /// </summary>
         public static string RobertaQATokenizer_Description {
             get {
@@ -3232,7 +3230,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die RoBERTa BPE-Tokenizer (Q&amp;A) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die RoBERTa BPE Tokenizer (Q&amp;A) ähnelt.
         /// </summary>
         public static string RobertaQATokenizer_DisplayName {
             get {
@@ -3241,7 +3239,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer-Konfiguration ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer configuration ähnelt.
         /// </summary>
         public static string RobertaQATokenizer_TokenizerConfiguration {
             get {
@@ -3250,7 +3248,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erkennt vordefinierte Zeichenfolgen innerhalb eines Eingabetextes. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Detects predefined sequences within an input text. ähnelt.
         /// </summary>
         public static string SequenceDetectionFlowBlock_Description {
             get {
@@ -3259,7 +3257,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Sequenz-Erkennung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sequence Detection ähnelt.
         /// </summary>
         public static string SequenceDetectionFlowBlock_DisplayName {
             get {
@@ -3268,7 +3266,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Maximale Laufzeit der Sequenz-Generierung (Sekunden) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum runtime of sequence generation (seconds) ähnelt.
         /// </summary>
         public static string SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds {
             get {
@@ -3277,7 +3275,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die maximale Laufzeit der Sequenz-Generierung muss mindestens eine Sekunde betragen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The maximum runtime of sequence generation must be at least one second. ähnelt.
         /// </summary>
         public static string SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds {
             get {
@@ -3286,7 +3284,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wagenrücklauf ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Carriage return ähnelt.
         /// </summary>
         public static string SpecialCharacter_CarriageReturn {
             get {
@@ -3295,7 +3293,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetzt durch einen Wagenrücklauf (\\r). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replaces with a carriage return (\\r). ähnelt.
         /// </summary>
         public static string SpecialCharacter_CarriageReturn_Tooltip {
             get {
@@ -3304,7 +3302,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zeilenumbruch ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Line break ähnelt.
         /// </summary>
         public static string SpecialCharacter_LineBreak {
             get {
@@ -3313,7 +3311,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetzt durch einen Zeilenumbruch (\\n). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replaces with a line break (\\n). ähnelt.
         /// </summary>
         public static string SpecialCharacter_LineBreak_Tooltip {
             get {
@@ -3322,7 +3320,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Leerzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Space ähnelt.
         /// </summary>
         public static string SpecialCharacter_Space {
             get {
@@ -3331,7 +3329,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetzt durch ein Leerzeichen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replaces with a space. ähnelt.
         /// </summary>
         public static string SpecialCharacter_Space_Tooltip {
             get {
@@ -3340,7 +3338,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabulator ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tab ähnelt.
         /// </summary>
         public static string SpecialCharacter_Tab {
             get {
@@ -3349,7 +3347,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ersetzt durch einen Tabulator (\\t). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replaces with a tab (\\t). ähnelt.
         /// </summary>
         public static string SpecialCharacter_Tab_Tooltip {
             get {
@@ -3358,7 +3356,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zeilenumbruch ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Line break ähnelt.
         /// </summary>
         public static string SpecialSeparator_NewLine {
             get {
@@ -3367,7 +3365,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabstopp ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tab stop ähnelt.
         /// </summary>
         public static string SpecialSeparator_Tab {
             get {
@@ -3376,7 +3374,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datenbanktyp ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Database type ähnelt.
         /// </summary>
         public static string SQLTable_DbType {
             get {
@@ -3385,7 +3383,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Der Typ der Datenbank (z. B. MSSQL, MySQL, Oracle, SQLite). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The type of the database (e.g., MSSQL, MySQL, Oracle, SQLite). ähnelt.
         /// </summary>
         public static string SQLTable_DbType_Tooltip {
             get {
@@ -3394,7 +3392,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verbindungszeichenfolge ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Connection string ähnelt.
         /// </summary>
         public static string SQLTable_SQLConnectionstring {
             get {
@@ -3403,7 +3401,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Verbindungszeichenfolge, die zum Aufbau der Datenbankverbindung verwendet wird. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The connection string used to establish the database connection. ähnelt.
         /// </summary>
         public static string SQLTable_SQLConnectionstring_Tooltip {
             get {
@@ -3412,7 +3410,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die SQL-Anweisung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die SQL statement ähnelt.
         /// </summary>
         public static string SQLTable_SQLStatement {
             get {
@@ -3421,7 +3419,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die SQL-Abfrage, mit der die Tabellendaten ausgelesen werden. Parameter können über Felder definiert werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The SQL query used to read the table data. Parameters can be defined via fields. ähnelt.
         /// </summary>
         public static string SQLTable_SQLStatement_Tooltip {
             get {
@@ -3430,7 +3428,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Endmuster ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die End pattern ähnelt.
         /// </summary>
         public static string StartEndPattern_EndPattern {
             get {
@@ -3448,7 +3446,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Startmuster ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start pattern ähnelt.
         /// </summary>
         public static string StartEndPattern_StartPattern {
             get {
@@ -3457,7 +3455,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wählt Inhalte zwischen definierten Start- und Endmustern aus einem Text. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects content between defined start and end patterns from a text. ähnelt.
         /// </summary>
         public static string StartEndPatternSelectorFlowBlock_Description {
             get {
@@ -3466,7 +3464,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Start/Ende-Mustererkennung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start/End pattern recognition ähnelt.
         /// </summary>
         public static string StartEndPatternSelectorFlowBlock_DisplayName {
             get {
@@ -3475,7 +3473,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Start-/Endmuster ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start/End patterns ähnelt.
         /// </summary>
         public static string StartEndPatternSelectorFlowBlock_StartEndPatterns {
             get {
@@ -3484,7 +3482,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Initialer Einstiegspunkt für die Ausführung eines Flow-Diagramms. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Initial entry point for executing a flow diagram. ähnelt.
         /// </summary>
         public static string StartFlowBlock_Description {
             get {
@@ -3502,7 +3500,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Textabschnitt extrahieren (Automatische Anpassung) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extract text segment (auto adjustment) ähnelt.
         /// </summary>
         public static string SubstringModifier {
             get {
@@ -3520,7 +3518,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Länge ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Length ähnelt.
         /// </summary>
         public static string SubstringModifier_Length {
             get {
@@ -3529,7 +3527,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Text von Zeichen {0} bis {1} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text from character {0} to {1} ähnelt.
         /// </summary>
         public static string SubstringModifier_ObjectDisplayName {
             get {
@@ -3538,7 +3536,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Spaltenbezeichner ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Column identifier ähnelt.
         /// </summary>
         public static string TableColumnDefinition_ColumnName {
             get {
@@ -3547,7 +3545,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ist Schlüsselspalte ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Is key column ähnelt.
         /// </summary>
         public static string TableColumnDefinition_IsKeyColumn {
             get {
@@ -3556,7 +3554,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ist erforderlich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Is required ähnelt.
         /// </summary>
         public static string TableColumnDefinition_IsRequired {
             get {
@@ -3565,7 +3563,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabellen-Selektor ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Table selector ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock {
             get {
@@ -3574,7 +3572,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Spaltenbedingungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Column conditions ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock_DatasetColumnConditions {
             get {
@@ -3583,7 +3581,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Liest strukturierte Daten aus einer Tabelle zur weiteren Verarbeitung. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads structured data from a table for further processing. ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock_Description {
             get {
@@ -3592,7 +3590,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabelle lesen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Read table ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock_DisplayName {
             get {
@@ -3601,7 +3599,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Spaltenbedingungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Column conditions ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock_Groups_DatasetColumnConditions {
             get {
@@ -3610,7 +3608,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feld-/Spaltenmapping ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field/column mapping ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock_Groups_FieldColumnMapping {
             get {
@@ -3619,7 +3617,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Mapping-Einträge ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mapping entries ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock_MappingEntries {
             get {
@@ -3628,7 +3626,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Referenzierte Tabelle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Referenced table ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock_ReferencedTable {
             get {
@@ -3637,7 +3635,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Name der bedingten Spalte ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Name of conditional column ähnelt.
         /// </summary>
         public static string TableSelectorColumnCondition_ColumnName {
             get {
@@ -3646,7 +3644,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabellenselektor-Mapping Eintrag ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Table selector mapping entry ähnelt.
         /// </summary>
         public static string TableSelectorMappingEntry {
             get {
@@ -3655,7 +3653,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Spaltenbezeichner ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Column identifier ähnelt.
         /// </summary>
         public static string TableSelectorMappingEntry_ColumnName {
             get {
@@ -3664,7 +3662,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabellenspalten-Mapping ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Table column mapping ähnelt.
         /// </summary>
         public static string TableSelectorMappingEntry_DisplayName {
             get {
@@ -3673,7 +3671,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Neue Datensätze erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create new records ähnelt.
         /// </summary>
         public static string TableWriterFlowBlock_CreateNewDatasets {
             get {
@@ -3682,7 +3680,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Schreibt strukturierte Daten in eine Tabelle zur späteren Verwendung. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Writes structured data to a table for later use. ähnelt.
         /// </summary>
         public static string TableWriterFlowBlock_Description {
             get {
@@ -3691,7 +3689,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabelle schreiben ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Write table ähnelt.
         /// </summary>
         public static string TableWriterFlowBlock_DisplayName {
             get {
@@ -3709,7 +3707,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Referenzierte Tabelle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Referenced table ähnelt.
         /// </summary>
         public static string TableWriterFlowBlock_ReferencedTable {
             get {
@@ -3718,7 +3716,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tabellen-/Spaltendefinitionen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Table/column definitions ähnelt.
         /// </summary>
         public static string TableWriterFlowBlock_TableColumnDefinitions {
             get {
@@ -3727,7 +3725,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Vorhandene Datensätze aktualisieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update existing records ähnelt.
         /// </summary>
         public static string TableWriterFlowBlock_UpdateExistingDatasets {
             get {
@@ -3736,7 +3734,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Duplikate in Spaltenbezeichnern gefunden: {0}. Jeder Spaltenbezeichner muss eindeutig sein. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Duplicates found in column identifiers: {0}. Each column identifier must be unique. ähnelt.
         /// </summary>
         public static string TableWriterFlowBlock_Validation_DuplicateColumnNames {
             get {
@@ -3745,7 +3743,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feld einfügen oder ausgewählten Text ersetzen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Insert field or replace selected text ähnelt.
         /// </summary>
         public static string TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip {
             get {
@@ -3754,7 +3752,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select file ähnelt.
         /// </summary>
         public static string TextBoxWithOptionalButtonsCreator_EnableFileSelection_Tooltip {
             get {
@@ -3763,7 +3761,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ordner auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select folder ähnelt.
         /// </summary>
         public static string TextBoxWithOptionalButtonsCreator_EnableFolderSelection_Tooltip {
             get {
@@ -3772,7 +3770,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Toolbox öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open toolbox ähnelt.
         /// </summary>
         public static string TextBoxWithOptionalButtonsCreator_EnableToolbox_Tooltip {
             get {
@@ -3781,7 +3779,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verwendet die Tiktoken-Tokenisierung mit vorkonfiguriertem Vokabular und Kodierung für GPT-basierte Modelle. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses tiktoken tokenization with preconfigured vocabulary and encoding for GPT-based models. ähnelt.
         /// </summary>
         public static string TiktokenAiTokenizer_Description {
             get {
@@ -3790,7 +3788,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tiktoken-Tokenizer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tiktoken tokenizer ähnelt.
         /// </summary>
         public static string TiktokenAiTokenizer_DisplayName {
             get {
@@ -3799,7 +3797,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Modellname ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Model name ähnelt.
         /// </summary>
         public static string TiktokenAiTokenizer_ModelName {
             get {
@@ -3808,7 +3806,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gibt den Namen des GPT-Modells an, das für die Tokenisierung verwendet werden soll (z.B. gpt2, gpt-neo, gpt-3.5). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Specifies the name of the GPT model to be used for tokenization (e.g., gpt2, gpt-neo, gpt-3.5). ähnelt.
         /// </summary>
         public static string TiktokenAiTokenizer_ModelName_Tooltip {
             get {
@@ -3817,7 +3815,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Token-Ersetzungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Token replacements ähnelt.
         /// </summary>
         public static string TokenizerBase_TokenTranslations {
             get {
@@ -3826,7 +3824,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Optionales Mapping zur Umwandlung von Zeichen nach der Decodierung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional mapping for transforming characters after decoding ähnelt.
         /// </summary>
         public static string TokenizerBase_TokenTranslations_Tooltip {
             get {
@@ -3835,7 +3833,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zielzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target character ähnelt.
         /// </summary>
         public static string TokenTranslation_DestinationCharacter {
             get {
@@ -3844,7 +3842,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Quellzeichen (in Modellausgabe) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source character (in model output) ähnelt.
         /// </summary>
         public static string TokenTranslation_SourceCharacter {
             get {
@@ -3853,7 +3851,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Sonderzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Special character ähnelt.
         /// </summary>
         public static string TokenTranslation_SpecialCharacter {
             get {
@@ -3862,7 +3860,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Typ-Element ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type element ähnelt.
         /// </summary>
         public static string TypeElement {
             get {
@@ -3871,7 +3869,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datumsformat ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Date format ähnelt.
         /// </summary>
         public static string TypeElement_DateFormat {
             get {
@@ -3880,7 +3878,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dezimaltrennzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Decimal separator ähnelt.
         /// </summary>
         public static string TypeElement_DecimalSeparator {
             get {
@@ -3889,7 +3887,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Typ ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type ähnelt.
         /// </summary>
         public static string TypeElement_FieldType {
             get {
@@ -3898,7 +3896,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tausendertrennzeichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Thousands separator ähnelt.
         /// </summary>
         public static string TypeElement_GroupSeparator {
             get {
@@ -3907,7 +3905,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Darf NULL-Werte enthalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die May contain NULL values ähnelt.
         /// </summary>
         public static string TypeElement_IsNullable {
             get {
@@ -3916,7 +3914,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die CSV-Tabelle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die CSV table ähnelt.
         /// </summary>
         public static string TypeNames_CsvTable {
             get {
@@ -3925,7 +3923,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Excel-Tabelle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Excel table ähnelt.
         /// </summary>
         public static string TypeNames_ExcelTable {
             get {
@@ -3934,7 +3932,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei-Objekt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die File object ähnelt.
         /// </summary>
         public static string TypeNames_FileObject {
             get {
@@ -3943,7 +3941,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gespeichertes Objekt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Stored object ähnelt.
         /// </summary>
         public static string TypeNames_MemoryObject {
             get {
@@ -3952,7 +3950,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die SQL-Tabelle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die SQL table ähnelt.
         /// </summary>
         public static string TypeNames_SQLTable {
             get {
@@ -3961,7 +3959,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzerdefinierte Felder können als Eingabeparameter verwendet werden und dienen auch dazu, Informationen während der Projektausführung zwischenzuspeichern. Sie lassen sich sowohl manuell setzen als auch über Argumente übergeben (z. B. bei Verwendung von FlowBlox.CLI) und können zur Laufzeit gelesen und verändert werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Custom fields can be used as input parameters and also serve to temporarily store information during project execution. They can be set manually as well as passed via arguments (e.g., when using FlowBlox.CLI) and can be read and modified at runtime. ähnelt.
         /// </summary>
         public static string UserFieldObjectManager_Description {
             get {
@@ -3970,7 +3968,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzerdefinierte Felder verwalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage custom fields ähnelt.
         /// </summary>
         public static string UserFieldObjectManager_DisplayName {
             get {
@@ -3979,7 +3977,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzerdefinierte Eingabefelder ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Custom input fields ähnelt.
         /// </summary>
         public static string UserFieldObjectManager_InputFields {
             get {
@@ -3988,7 +3986,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzerdefinierte Speicherfelder ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Custom memory fields ähnelt.
         /// </summary>
         public static string UserFieldObjectManager_MemoryFields {
             get {
@@ -3997,7 +3995,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingabefeld ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input field ähnelt.
         /// </summary>
         public static string UserFieldTypes_Input {
             get {
@@ -4006,7 +4004,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speicherfeld ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Memory field ähnelt.
         /// </summary>
         public static string UserFieldTypes_Memory {
             get {
@@ -4015,7 +4013,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Keine Auswahl ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No selection ähnelt.
         /// </summary>
         public static string UserFieldTypes_None {
             get {
@@ -4024,7 +4022,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wertelement ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value item ähnelt.
         /// </summary>
         public static string ValueItem {
             get {
@@ -4033,7 +4031,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anzeigename ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Display name ähnelt.
         /// </summary>
         public static string ValueItem_DisplayName {
             get {
@@ -4042,7 +4040,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string ValueItem_Value {
             get {
@@ -4051,7 +4049,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Vocab-Merges-Konfiguration ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Vocab-merges configuration ähnelt.
         /// </summary>
         public static string VocabMergesConfiguration_DisplayName {
             get {
@@ -4060,7 +4058,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Merges-Datei (merges.txt) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Merges file (merges.txt) ähnelt.
         /// </summary>
         public static string VocabMergesConfiguration_MergesFile {
             get {
@@ -4069,7 +4067,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Optional: Wähle direkt die Merges-Datei aus, falls kein Verzeichnis angegeben ist. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional: Select the merges file directly if no directory is specified. ähnelt.
         /// </summary>
         public static string VocabMergesConfiguration_MergesFile_Tooltip {
             get {
@@ -4078,7 +4076,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer-Verzeichnis ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer directory ähnelt.
         /// </summary>
         public static string VocabMergesConfiguration_TokenizerDirectory {
             get {
@@ -4087,7 +4085,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wähle ein Verzeichnis, das die Dateien „vocab.json“ und „merges.txt“ enthält. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select a directory that contains the files “vocab.json” and “merges.txt”. ähnelt.
         /// </summary>
         public static string VocabMergesConfiguration_TokenizerDirectory_Tooltip {
             get {
@@ -4096,7 +4094,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Vocab-Datei (vocab.json) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Vocab file (vocab.json) ähnelt.
         /// </summary>
         public static string VocabMergesConfiguration_VocabFile {
             get {
@@ -4105,7 +4103,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Optional: Wähle direkt die Vocab-Datei aus, falls kein Verzeichnis angegeben ist. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional: Select the vocab file directly if no directory is specified. ähnelt.
         /// </summary>
         public static string VocabMergesConfiguration_VocabFile_Tooltip {
             get {
@@ -4114,7 +4112,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verknüpfter Web-Browser (Flow-Block) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Linked web browser (Flow Block) ähnelt.
         /// </summary>
         public static string WebActionFlowblockBase_AssociatedWebBrowser {
             get {
@@ -4123,7 +4121,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bei Fehler ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die On error ähnelt.
         /// </summary>
         public static string WebBrowserEventAbortionTypes_ByFailure {
             get {
@@ -4132,7 +4130,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bei Erreichen des Limits oder Fehler ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die On limit reached or error ähnelt.
         /// </summary>
         public static string WebBrowserEventAbortionTypes_ByLimitOrFailure {
             get {
@@ -4141,7 +4139,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Klick ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Click ähnelt.
         /// </summary>
         public static string WebBrowserEventTypes_Click {
             get {
@@ -4150,7 +4148,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Alle anklicken ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Click all ähnelt.
         /// </summary>
         public static string WebBrowserEventTypes_ClickAll {
             get {
@@ -4159,7 +4157,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enter ähnelt.
         /// </summary>
         public static string WebBrowserEventTypes_Enter {
             get {
@@ -4168,7 +4166,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Scrollen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Scroll ähnelt.
         /// </summary>
         public static string WebBrowserEventTypes_Scroll {
             get {
@@ -4177,7 +4175,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zu URL wechseln ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Switch to URL ähnelt.
         /// </summary>
         public static string WebBrowserEventTypes_SwitchToUrl {
             get {
@@ -4186,7 +4184,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die DOM aktualisieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update DOM ähnelt.
         /// </summary>
         public static string WebBrowserEventTypes_UpdateDOM {
             get {
@@ -4195,7 +4193,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei hochladen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upload file ähnelt.
         /// </summary>
         public static string WebBrowserEventTypes_UploadFile {
             get {
@@ -4204,7 +4202,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verbundener Web-Browser ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Connected web browser ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_AssociatedWebBrowser {
             get {
@@ -4213,7 +4211,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Simuliert einen einfachen Browser zur Darstellung oder Analyse von Webseiteninhalten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Simulates a simple browser for displaying or analyzing web page content. ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_Description {
             get {
@@ -4222,7 +4220,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Webbrowser ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web browser ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_DisplayName {
             get {
@@ -4231,7 +4229,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterte Einstellungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Advanced settings ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_Groups_Advanced {
             get {
@@ -4240,7 +4238,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (in Sekunden) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (seconds) ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_Timeout {
             get {
@@ -4249,7 +4247,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Url ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die URL ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_Url {
             get {
@@ -4258,7 +4256,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Aufruflimit ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Call limit ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_CallLimit {
             get {
@@ -4267,7 +4265,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Spezieller Modus: Tab klonen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Special mode: clone tab ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_CloneTab {
             get {
@@ -4276,7 +4274,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die CSS-Selektor ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die CSS selector ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_CSSSelector {
             get {
@@ -4285,7 +4283,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reagiert auf Benutzerinteraktionen oder Ereignisse innerhalb einer Webkomponente. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Responds to user interactions or events within a web component. ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_Description {
             get {
@@ -4294,7 +4292,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Web-Ereignis ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web event ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_DisplayName {
             get {
@@ -4303,7 +4301,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ermittlung des Elements erforderlich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Element determination required ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_ElementDeterminationRequired {
             get {
@@ -4312,7 +4310,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterte Einstellungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Advanced settings ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_Groups_Advanced {
             get {
@@ -4321,7 +4319,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eingabetext ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input text ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_InputText {
             get {
@@ -4330,7 +4328,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wartezeit nach Ausführung (in Millisekunden) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Waiting time after execution (milliseconds) ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_WaitingTimeAfterExecution {
             get {
@@ -4339,7 +4337,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Web-Browser-Ereignisabbruchtyp ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web browser event abortion type ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_WebBrowserEventAbortionType {
             get {
@@ -4348,7 +4346,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ereignistyp ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Event type ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_WebBrowserEventType {
             get {
@@ -4366,7 +4364,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verknüpfter Web-Request ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Linked web request ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_AssociatedWebRequest {
             get {
@@ -4375,7 +4373,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bereits abgerufene Inhalte erneut verwenden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reuse already retrieved content ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_CacheAlreadyProcessedContents {
             get {
@@ -4384,7 +4382,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Größe des Inhalt-Speichers (in Bytes) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content cache size (in bytes) ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_ContentCacheSize {
             get {
@@ -4393,7 +4391,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Sendet eine HTTP-Anfrage an einen Webserver und verarbeitet die Antwort. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sends an HTTP request to a web server and processes the response. ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_Description {
             get {
@@ -4402,7 +4400,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Cache deaktivieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Disable cache ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_DisableCache {
             get {
@@ -4411,7 +4409,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Webanfrage ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web request ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_DisplayName {
             get {
@@ -4420,7 +4418,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterte Einstellungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Advanced settings ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_Groups_Advanced {
             get {
@@ -4429,7 +4427,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Authentifizierung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Authentication ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_Groups_Authentication {
             get {
@@ -4447,7 +4445,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Header-Parameter ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Header parameters ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_HeaderParameters {
             get {
@@ -4456,7 +4454,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP-Aktion ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP action ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_HTTPAction {
             get {
@@ -4465,7 +4463,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bereits verarbeitete Inhalte nicht erneut verarbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do not reprocess already processed content ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_IgnoreAlreadyProcessedContents {
             get {
@@ -4474,7 +4472,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bereits verarbeitete URLs nicht erneut verarbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do not reprocess already processed URLs ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_IgnoreAlreadyProcessedUrls {
             get {
@@ -4483,7 +4481,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Passwort ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_Password {
             get {
@@ -4501,7 +4499,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Typ des Inhalts ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content type ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_Payload_ContentType {
             get {
@@ -4510,7 +4508,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die POST-Parameter ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die POST parameters ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_PostParameters {
             get {
@@ -4519,7 +4517,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Antwort-Typ ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Response type ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_ResponseBodyKind {
             get {
@@ -4528,7 +4526,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ergebnis-Felder ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result fields ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_ResultFields {
             get {
@@ -4546,7 +4544,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzername ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Username ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_UserName {
             get {
@@ -4555,7 +4553,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (in Millisekunden) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (milliseconds) ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_WebRequestTimeout {
             get {
@@ -4573,7 +4571,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string WebRequestParameter_Value {
             get {
@@ -4582,7 +4580,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die CSS-Selektor ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die CSS selector ähnelt.
         /// </summary>
         public static string WebSelectorFlowBlock_CSSSelector {
             get {
@@ -4591,7 +4589,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wählt Elemente aus einer Webseite anhand von CSS-Selektoren oder XPath aus. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects elements from a web page using CSS selectors or XPath. ähnelt.
         /// </summary>
         public static string WebSelectorFlowBlock_Description {
             get {
@@ -4600,7 +4598,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Web-Selektor ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web selector ähnelt.
         /// </summary>
         public static string WebSelectorFlowBlock_DisplayName {
             get {
@@ -4609,7 +4607,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Inneres HTML ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Inner HTML ähnelt.
         /// </summary>
         public static string WebSelectorFlowBlock_InnerContent {
             get {
@@ -4627,7 +4625,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feld ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field ähnelt.
         /// </summary>
         public static string XmlAssignment_FieldValue {
             get {
@@ -4636,7 +4634,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string XmlAssignment_Value {
             get {
@@ -4654,7 +4652,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erzeugt ein neues XML-Dokument oder lädt ein bestehendes XML zur weiteren Verarbeitung. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a new XML document or loads an existing XML for further processing. ähnelt.
         /// </summary>
         public static string XmlDocumentFlowBlock_Description {
             get {
@@ -4663,7 +4661,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML-Dokument ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document ähnelt.
         /// </summary>
         public static string XmlDocumentFlowBlock_DisplayName {
             get {
@@ -4672,7 +4670,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML-Inhalt ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML content ähnelt.
         /// </summary>
         public static string XmlDocumentFlowBlock_XmlContent {
             get {
@@ -4681,7 +4679,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zuweisungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Assignments ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_Assignments {
             get {
@@ -4690,7 +4688,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Referenz-Knoten (über &quot;XML-Knoten schreiben&quot; Flow-Block) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reference node (via &quot;Write XML node&quot; Flow Block) ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter {
             get {
@@ -4699,7 +4697,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Verknüpftes XML-Dokument (über XML-Dokument Flow-Block) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Linked XML document (via XML document Flow Block) ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument {
             get {
@@ -4708,7 +4706,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Fügt einem bestehenden XML-Dokument einen neuen Knoten hinzu. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Adds a new node to an existing XML document. ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_Description {
             get {
@@ -4717,7 +4715,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML-Knoten schreiben ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Write XML node ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_DisplayName {
             get {
@@ -4726,7 +4724,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ziel-XPath ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target XPath ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_XPath {
             get {
@@ -4735,7 +4733,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML-Dokument (Flow-Block) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document (Flow Block) ähnelt.
         /// </summary>
         public static string XmlDocumentOutputFlowBlock_AssociatedXmlDocument {
             get {
@@ -4744,7 +4742,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichert das aktuelle XML-Dokument in ein Ausgabefeld als Byte-Array oder String. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Saves the current XML document to an output field as a byte array or string. ähnelt.
         /// </summary>
         public static string XmlDocumentOutputFlowBlock_Description {
             get {
@@ -4753,7 +4751,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML-Dokument Ausgabe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document output ähnelt.
         /// </summary>
         public static string XmlDocumentOutputFlowBlock_DisplayName {
             get {
@@ -4762,7 +4760,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgabe einrücken ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Indent output ähnelt.
         /// </summary>
         public static string XmlDocumentOutputFlowBlock_Indent {
             get {
@@ -4771,7 +4769,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Neue Zeile bei Attributen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die New line for attributes ähnelt.
         /// </summary>
         public static string XmlDocumentOutputFlowBlock_NewLineOnAttributes {
             get {
@@ -4780,7 +4778,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML-Deklaration unterdrücken ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Suppress XML declaration ähnelt.
         /// </summary>
         public static string XmlDocumentOutputFlowBlock_OmitXmlDeclaration {
             get {
@@ -4789,7 +4787,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML-Dokument (Flow-Block) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document (Flow Block) ähnelt.
         /// </summary>
         public static string XmlDocumentUpdaterFlowBlock_AssociatedXmlDocument {
             get {
@@ -4798,7 +4796,16 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wählt einen oder mehrere XML-Knoten basierend auf einem XPath-Ausdruck aus. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document (Flow Block) ähnelt.
+        /// </summary>
+        public static string XmlDocumentXPathSelector_AssociatedXmlDocument {
+            get {
+                return ResourceManager.GetString("XmlDocumentXPathSelector_AssociatedXmlDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects one or more XML nodes based on an XPath expression. ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelector_Description {
             get {
@@ -4807,7 +4814,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XPath-Selektor ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath selector ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelector_DisplayName {
             get {
@@ -4816,7 +4823,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML-Dokumentenquelle ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document source ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelector_DocumentSource {
             get {

@@ -40,6 +40,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public bool ExecuteGeneration()
         {
+            return Task.Run(async() => await ExecuteGenerationAsync())
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        public async Task<bool> ExecuteGenerationAsync()
+        {
             var testResults = new Dictionary<FlowBloxTestDefinition, FlowBloxTestResult>();
 
             var success = true;
@@ -52,7 +59,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 var runtime = testExecutor.GetRuntime();
                 runtime.LogMessageCreated += Runtime_LogMessageCreated;
 
-                var testResult = testExecutor.ExecuteTest();
+                var testResult = await testExecutor.ExecuteTestAsync();
                 if (!testResult.Success)
                 {
                     OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" failed, so the generation strategies are executed.", FlowBloxLogLevel.Info));
@@ -97,7 +104,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     var testExecutor = new FlowBloxTestExecutor();
                     testExecutor.Initialize(testDefinition, _flowBlock);
 
-                    var testResult1 = testExecutor.ExecuteTest();
+                    var testResult1 = await testExecutor.ExecuteTestAsync();
                     if (!testResult1.Success)
                     {
                         OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" failed after regeneration.", FlowBloxLogLevel.Error));

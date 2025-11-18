@@ -1,5 +1,4 @@
 ﻿using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Attributes;
 using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Provider;
@@ -19,7 +18,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         public static List<FieldElement> GetPossibleFieldElements()
         {
             var registry = FlowBloxRegistryProvider.GetRegistry();
-            var fieldElements = registry.GetAllFields().ToList();
+            var fieldElements = registry.GetFieldElements(true).ToList();
             return fieldElements;
         }
 

@@ -149,7 +149,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceDetection
             messages = new List<string>();
             if (foundOKTestDefinitions.Count < 2)
             {
-                messages.Add("At least two test cases are required.");
+                messages.Add("At least two test cases are required to execute sequence recognition.");
                 return false;
             }
 

@@ -25,7 +25,8 @@ namespace FlowBlox.AppWindow.ContentFactories
             var dockContent = new DockContent
             {
                 Text = _displayName,
-                Name = _displayName
+                Name = _displayName,
+                DockAreas = DockAreas.DockBottom
             };
 
             // Factory-Methode zur Erstellung des PropertyViewTabControl

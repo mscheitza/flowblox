@@ -1,7 +1,4 @@
-﻿using FlowBlox.Core;
-using FlowBlox.Core.Util.Controls;
-using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace FlowBlox.AppWindow.Contents
@@ -28,6 +25,7 @@ namespace FlowBlox.AppWindow.Contents
             this.Controls.Add(userControl);
             this.Name = typeof(T).Name.ToLower() + "DockPanel";
             this.Text = userControl.Text;
+            this.Name = userControl.Text;
             this.ResumeLayout(false);
         }
 

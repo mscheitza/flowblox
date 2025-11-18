@@ -1,0 +1,13 @@
+﻿Ich arbeite an der englischen Übersetzung meiner FlowBlox WinForms/WPF .resx-Dateien. Bitte beachte:
+
+Bitte generell sentence case zur Übersetzung verwenden, auch bei Fenstertiteln (_Text, _DisplayName, _Title Suffix)
+
+& = Access Key, sinnvoll auf englisches Wort legen, sonst unverändert lassen
+
+Platzhalter wie {0} oder Steuerzeichen nicht verändern
+
+Antworte immer mit identischem XML-Format, nur übersetzte <value>-Texte
+
+Es soll gültiges XML ausgegeben werden (damit man es per "Kopieren" direkt übernehmen kann)
+
+Keine zusätzlichen Erklärungen oder Kommentare

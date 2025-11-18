@@ -3,17 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
-using System.Text.RegularExpressions;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core;
-using FlowBlox.Core.Util;
-using FlowBlox.Core.Exceptions;
-using FlowBlox.Core.Provider;
 using FlowBlox.Grid.Elements.UserControls.Renderer;
-using static FlowBlox.Views.FlowBloxMessageBox;
-using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
 using FlowBlox.AppWindow.Contents;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -49,6 +42,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         public delegate void ErrorEventHandler(BaseRuntime runtime, string message);
         public delegate void FlagsChangedEventHandler(BaseRuntime runtime, FlowBlockFlags flowBlockFlags);
         public delegate void DoubleClickEventHandler(object sender);
+        public delegate void ElementSelectedChangedEventHandler(FlowBlockUIElement sender, bool selected);
 
         private BaseFlowBlock _flowBlock;
 
@@ -65,6 +59,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         public event ResultFieldDoubleClickEventHandler ResultFieldDoubleClick;
         public event ConditionDoubleClickEventHandler ConditionDoubleClick;
         public event ModifierDoubleClickEventHandler ModifierDoubleClick;
+        public event ElementSelectedChangedEventHandler ElementSelectedChangedByUser;
 
         public void RaisePropertyDoubleClick(string propertyName) => PropertyDoubleClick?.Invoke(this, propertyName);
         public void RaiseResultFieldDoubleClick(FieldElement fieldElement) => ResultFieldDoubleClick?.Invoke(this, fieldElement);
@@ -83,7 +78,23 @@ namespace FlowBlox.Grid.Elements.UserControls
         private string warningMessage;
         private FlowBlockFlags currentFlags;
 
-        public bool ElementSelected { get; set; }
+        private bool _elementSelected;
+        public bool ElementSelected
+        {
+            get => _elementSelected;
+            set
+            {
+                if (_elementSelected == value) 
+                    return;
+                
+                _elementSelected = value;
+
+                ElementSelectedChangedByUser?.Invoke(
+                    this,
+                    value
+                );
+            }
+        }
 
         public DateTime ElementSelectedAt { get; set; }
 

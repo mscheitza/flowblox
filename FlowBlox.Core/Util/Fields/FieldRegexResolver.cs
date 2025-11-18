@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Util.Fields
         public Regex ResolveFieldRegex()
         {
             var registry = FlowBloxRegistryProvider.GetRegistry();
-            var fields = registry?.GetAllFields();
+            var fields = registry?.GetFieldElements();
 
             var fullyQualifiedFieldNames = fields
                 .Select(f => f?.FullyQualifiedName)

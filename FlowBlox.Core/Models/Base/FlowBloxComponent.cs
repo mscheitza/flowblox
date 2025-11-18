@@ -5,23 +5,13 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
-using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
-using OpenQA.Selenium.BiDi.Modules.Script;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace FlowBlox.Core.Models.Base
 {
@@ -64,7 +54,7 @@ namespace FlowBlox.Core.Models.Base
         public virtual List<FieldElement> GetPossibleFieldElements()
         {
             return FlowBloxRegistryProvider.GetRegistry()
-                .GetAllFields()
+                .GetFieldElements(true)
                 .ToList();
         }
 
@@ -118,7 +108,7 @@ namespace FlowBlox.Core.Models.Base
                     OnPropertyChanged(n);
         }
 
-        public string Version { get; private set; }
+        public string Version { get; set; }
 
         [JsonIgnore]
         public virtual SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.component, 16);

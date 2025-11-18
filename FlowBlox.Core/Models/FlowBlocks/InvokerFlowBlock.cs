@@ -1,17 +1,18 @@
-﻿using System.Drawing;
-using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Extensions;
-using FlowBlox.Core.Enums;
+﻿using CsvHelper;
 using FlowBlox.Core.Attributes;
-using System.ComponentModel.DataAnnotations;
-using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Provider;
-using FlowBlox.Core.Models.Runtime;
-using FlowBlox.Core.Util;
-using System.Collections.ObjectModel;
+using FlowBlox.Core.Enums;
+using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
@@ -19,14 +20,16 @@ namespace FlowBlox.Core.Models.FlowBlocks
     public class InvocationFieldTransferConfig : FlowBloxReactiveObject
     {
         [Required()]
-        [Display(Name = "InvocationFieldTransferConfig_TransferFrom", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
+        [Display(Name = "InvocationFieldTransferConfig_TransferFrom", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox,
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(InvokerFlowBlock.GetPossibleTransferFromFieldElements))]
         public FieldElement TransferFrom { get; set; }
 
         [Required()]
-        [Display(Name = "InvocationFieldTransferConfig_TransferTo", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
+        [Display(Name = "InvocationFieldTransferConfig_TransferTo", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox,
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
             SelectionFilterMethod = nameof(InvokerFlowBlock.GetPossibleTransferToFieldElements))]
         public FieldElement TransferTo { get; set; }
     }
@@ -40,7 +43,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public InvokerFlowBlock() : base ()
         {
-            this.FieldTransferConfigs = new List<InvocationFieldTransferConfig>();
+            this.FieldTransferConfigs = new ObservableCollection<InvocationFieldTransferConfig>();
         }
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;
@@ -110,9 +113,9 @@ namespace FlowBlox.Core.Models.FlowBlocks
             SelectionFilterMethod = nameof(GetPossibleReferencedElements),
             SelectionDisplayMember = nameof(Name))]
         [CustomValidation(typeof(InvokerFlowBlock), nameof(ValidateFieldTransferConfigs))]
-        public List<InvocationFieldTransferConfig> FieldTransferConfigs { get; set; }
+        public ObservableCollection<InvocationFieldTransferConfig> FieldTransferConfigs { get; set; }
 
-        public static ValidationResult ValidateFieldTransferConfigs(List<InvocationFieldTransferConfig> transferConfigs, ValidationContext context)
+        public static ValidationResult ValidateFieldTransferConfigs(ObservableCollection<InvocationFieldTransferConfig> transferConfigs, ValidationContext context)
         {
             var block = context.ObjectInstance as InvokerFlowBlock;
             if (block?.TargetFlowBlock is BaseResultFlowBlock targetResultBlock)
@@ -125,8 +128,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 {
                     var fieldNames = string.Join(", ", unmappedFields.Select(f => f.FullyQualifiedName));
                     return new ValidationResult(
-                        string.Format(FlowBloxResourceUtil.GetLocalizedString("InvokerFlowBlock_Validation_UnmappedFields", fieldNames), 
-                        [context.MemberName]));
+                        string.Format(FlowBloxResourceUtil.GetLocalizedString("InvokerFlowBlock_Validation_UnmappedFields"),
+                        fieldNames), [context.MemberName]);
                 }
             }
             return ValidationResult.Success;

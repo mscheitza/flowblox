@@ -8,6 +8,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         Cross,
         [Display(Name = "InputBehavior_CrossValid", ResourceType = typeof(FlowBloxTexts))]
         CrossValid,
+        [Display(Name = "InputBehavior_RowWise", ResourceType = typeof(FlowBloxTexts))]
+        RowWise,
         [Display(Name = "InputBehavior_First", ResourceType = typeof(FlowBloxTexts))]
         First,
         [Display(Name = "InputBehavior_FirstValid", ResourceType = typeof(FlowBloxTexts))]

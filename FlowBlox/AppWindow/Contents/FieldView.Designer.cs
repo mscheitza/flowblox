@@ -111,11 +111,11 @@
             lvFields.FullRowSelect = true;
             lvFields.GridLines = true;
             lvFields.Location = new System.Drawing.Point(3, 31);
-            lvFields.MultiSelect = false;
             lvFields.Name = "lvFields";
             lvFields.OwnerDraw = true;
             lvFields.Size = new System.Drawing.Size(309, 525);
             lvFields.TabIndex = 0;
+            lvFields.Tag = "style_listview_draw_custom";
             lvFields.UseCompatibleStateImageBehavior = false;
             lvFields.View = System.Windows.Forms.View.Details;
             lvFields.DrawItem += lvFields_DrawItem;
@@ -161,9 +161,9 @@
             // checkBoxShowFlowBlock
             // 
             checkBoxShowFlowBlock.Checked = false;
-            checkBoxShowFlowBlock.Location = new System.Drawing.Point(111, 3);
+            checkBoxShowFlowBlock.Location = new System.Drawing.Point(112, 3);
             checkBoxShowFlowBlock.Name = "checkBoxShowFlowBlock";
-            checkBoxShowFlowBlock.Size = new System.Drawing.Size(195, 24);
+            checkBoxShowFlowBlock.Size = new System.Drawing.Size(194, 24);
             checkBoxShowFlowBlock.TabIndex = 0;
             checkBoxShowFlowBlock.Text = "checkBoxShowFlowBlock_Text";
             checkBoxShowFlowBlock.Click += checkBoxShowFlowBlock_Click;

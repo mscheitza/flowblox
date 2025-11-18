@@ -48,7 +48,8 @@ namespace FlowBlox.Core.Models.Components
 
         public FieldElement GetReferencedField()
         {
-            return FlowBloxRegistryProvider.GetRegistry().GetAllFields()
+            return FlowBloxRegistryProvider.GetRegistry()
+                .GetFieldElements()
                 .FirstOrDefault(x => x.FieldType == this);
         }
 

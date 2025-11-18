@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using FlowBlox.Core.Util.Json.ContractResolver;
+using FlowBlox.Core.Util.Json.SerializationBinder;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Runtime.Loader;
 
 namespace FlowBlox.Core.Util.Json
@@ -27,14 +30,36 @@ namespace FlowBlox.Core.Util.Json
 
         public static JsonSerializerSettings ProjectImport(Dictionary<string, AssemblyLoadContext> loadContexts)
         {
-            var projectImport = new JsonSerializerSettings
+            var jsonSettings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore,
                 TypeNameHandling = TypeNameHandling.All,
                 SerializationBinder = new FlowBloxSerializationBinder(loadContexts)
             };
-            return projectImport;
+            jsonSettings.Converters.Add(new StringEnumConverter
+            {
+                AllowIntegerValues = true
+            });
+            jsonSettings.Error = (sender, args) =>
+            {
+                System.Diagnostics.Debug.WriteLine($"JSON error at path '{args.ErrorContext.Path}': {args.ErrorContext.Error}");
+            };
+            return jsonSettings;
+        }
+
+        public static JsonSerializerSettings ProjectExport()
+        {
+            JsonSerializerSettings jsonSettings = new JsonSerializerSettings();
+            jsonSettings.Formatting = Formatting.Indented;
+            jsonSettings.TypeNameHandling = TypeNameHandling.All;
+            jsonSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+            jsonSettings.ContractResolver = new ProjectContractResolver();
+            jsonSettings.Converters.Add(new StringEnumConverter
+            {
+                AllowIntegerValues = true
+            });
+            return jsonSettings;
         }
 
         private JsonSettings() 

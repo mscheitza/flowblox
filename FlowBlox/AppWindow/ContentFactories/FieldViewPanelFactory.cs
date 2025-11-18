@@ -15,7 +15,8 @@ namespace FlowBlox.AppWindow.ContentFactories
         {
             var dockContent = new DockContentUserControlWrapper<FieldView>
             {
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                DockAreas = DockAreas.DockLeft | DockAreas.DockRight | DockAreas.DockBottom
             };
             var key = typeof(FieldView).FullName;
             return Create(key, dockContent);

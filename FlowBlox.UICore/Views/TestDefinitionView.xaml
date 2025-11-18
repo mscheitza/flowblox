@@ -12,7 +12,7 @@
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
     xmlns:coreEnums="clr-namespace:FlowBlox.Core.Enums;assembly=FlowBlox.Core"
     Title="{x:Static resources:TestDefinitionView.Title}"
-    Height="800" Width="1200"
+    Height="800" Width="1220"
     mc:Ignorable="d">
 
     <Window.DataContext>
@@ -133,6 +133,8 @@
                                                         <ColumnDefinition Width="200" SharedSizeGroup="col5"/>
                                                         <ColumnDefinition Width="250" SharedSizeGroup="col6"/>
                                                     </Grid.ColumnDefinitions>
+
+                                                    <!-- Column 0 -->
                                                     <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
                                                         <TextBlock Text="{Binding FieldElement.Name}" VerticalAlignment="Center"/>
                                                         <iconPacks:PackIconMaterial Kind="StarFourPointsOutline"
@@ -143,10 +145,12 @@
                                                             ToolTip="{x:Static resources:TestDefinitionView.Icon_RequiredForExecution_Tooltip}"
                                                             Visibility="{Binding RequiredForExecution, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                                     </StackPanel>
+
+                                                    <!-- Column 1 -->
                                                     <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0,0,5,0">
                                                         <ComboBox SelectedItem="{Binding SelectionMode}"
-                                                                  ItemsSource="{Binding PossibleSelectionModes}"
-                                                                  VerticalAlignment="Center" Margin="0 0 0 5">
+                                                              ItemsSource="{Binding PossibleSelectionModes}"
+                                                              VerticalAlignment="Center" Margin="0 0 0 5">
                                                             <ComboBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}"/>
@@ -160,29 +164,52 @@
                                                              mah:TextBoxHelper.Watermark="{x:Static resources:TestDefinitionView.Text_SelectionMode_Index_Watermark}"
                                                              Visibility="{Binding IsIndexVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                                     </StackPanel>
-                                                    
-                                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top" IsEnabled="{Binding SelectionMode, Converter={StaticResource UserInputEnabledConverter}}">
-                                                        <TextBox Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}" 
-                                                                 VerticalAlignment="Center" 
-                                                                 Margin="0 0 5 0"
-                                                                  />
-                                                        <Button Margin="5,0,0,0"
+
+                                                    <!-- Column 2 -->
+                                                    <Grid Grid.Column="2"
+                                                      VerticalAlignment="Top"
+                                                      IsEnabled="{Binding SelectionMode, Converter={StaticResource UserInputEnabledConverter}}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBox Grid.Column="0"
+                                                             Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}" 
+                                                             VerticalAlignment="Center" 
+                                                             Margin="0 0 5 0" />
+
+                                                        <Button Grid.Column="1"
+                                                            Margin="0,0,5,0"
                                                             Command="{Binding DataContext.EditContentCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                                             CommandParameter="{Binding}">
                                                             <iconPacks:PackIconMaterial Kind="Pencil" Width="14" Height="14"/>
                                                         </Button>
-                                                    </StackPanel>
-                                                    
-                                                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Top" 
-                                                                Visibility="{Binding Path=DataContext.FlowBlock, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid, AncestorLevel=2}, Converter={StaticResource FlowBlockToVisibilityConverter}}">
-                                                        <TextBox Text="{Binding ExpectationConditions, Converter={StaticResource ExpectationConditionConverter}}" VerticalAlignment="Center" IsReadOnly="True" Width="200" />
-                                                        <Button Content="..." 
-                                                                Margin="5,0,0,0"
-                                                                Command="{Binding DataContext.EditConditionsCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                                                CommandParameter="{Binding}" />
-                                                    </StackPanel>
+                                                    </Grid>
+
+                                                    <!-- Column 3 -->
+                                                    <Grid Grid.Column="3"
+                                                        VerticalAlignment="Top"
+                                                        Visibility="{Binding Path=DataContext.FlowBlock, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid, AncestorLevel=2}, Converter={StaticResource FlowBlockToVisibilityConverter}}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBox Grid.Column="0"
+                                                             Text="{Binding ExpectationConditions, Converter={StaticResource ExpectationConditionConverter}}"
+                                                             VerticalAlignment="Center"
+                                                             IsReadOnly="True"
+                                                             Margin="0,0,5,0" />
+
+                                                        <Button Grid.Column="1"
+                                                            Content="..." 
+                                                            Command="{Binding DataContext.EditConditionsCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                                            CommandParameter="{Binding}" />
+                                                    </Grid>
                                                 </Grid>
                                             </DataTemplate>
+
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </Grid>

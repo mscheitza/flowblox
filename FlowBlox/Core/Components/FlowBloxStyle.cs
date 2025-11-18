@@ -12,20 +12,13 @@ using FlowBlox.Grid.Elements.UserControls;
 namespace FlowBlox.Core
 {
     /// <summary>
-    /// Die Stilgebende Klasse der Applikation. Der aktuelle Style kann in der [General.Style] Option definiert werden.
-    /// In dieser Version können Stile noch nicht eigens definiert werden.
+    /// The application's style class. The current style can be defined in the "General.Style" option.
+    /// In this version, styles cannot yet be defined manually.
     /// </summary>
     public class FlowBloxStyle
     {
-        public const string StyleIgnore = "style_ignore";
-        public const string StyleIgnoreSelf = "style_ignore_self";
-        public const string StyleHighlight = "style_highlight";
-        public const string StyleHighlightHint = "style_highlight_hint";
-        public const string StyleHeader = "style_header";
-        public const string StyleKeepFont = "style_keep_font";
-
         /// <summary>
-        /// Wendet einen Stil auf ein <see cref="FlowBlockUIElement"/> an. 
+        /// Applies a style to a <see cref="FlowBlockUIElement"/>.
         /// </summary>
         /// <param name="uiElement"></param>
         internal static void ApplyStyle(FlowBlockUIElement uiElement)
@@ -47,7 +40,8 @@ namespace FlowBlox.Core
         }
 
         /// <summary>
-        /// Wendet einen Stil auf ein <c>System.Windows.Forms.Form</c> Objekt an. Diese Methode sollte nach der <c>InitializeComponent</c> Methode gerufen werden.
+        /// Applies a style to a <see cref="System.Windows.Forms.Form"/> object.
+        /// This method should be called after the `InitializeComponent` method.
         /// </summary>
         /// <param name="form"></param>
         public static void ApplyStyle(Form form)
@@ -70,24 +64,24 @@ namespace FlowBlox.Core
         }
 
         /// <summary>
-        /// Wendet einen Stil auf ein <c>System.Windows.Forms.Control</c> Objekt an.
+        /// Applies a style to a <see cref="System.Windows.Forms.Control"/> object.
         /// </summary>
         /// <param name="control"></param>
         public static void ApplyStyle(Control control)
         {
-            if (control.Tag == StyleIgnore)
+            if (HasTag(control.Tag, FlowBloxStyleTags.StyleIgnore))
                 return;
 
-            if (control.Tag != StyleIgnoreSelf)
+            if (!HasTag(control.Tag, FlowBloxStyleTags.StyleIgnoreSelf))
             {
                 FlowBloxSyleBase style = GetStyleFromOptions();
                 if (style != null)
                 {
-                    if (control.Tag == StyleHighlight)
+                    if (HasTag(control.Tag, FlowBloxStyleTags.StyleHighlight))
                         control.BackColor = style.ControlHighlightBackColor;
-                    else if (control.Tag == StyleHighlightHint)
+                    else if (HasTag(control.Tag, FlowBloxStyleTags.StyleHighlightHint))
                         control.BackColor = style.ControlHighlightHintBackColor;
-                    else if (control.Tag == StyleHeader)
+                    else if (HasTag(control.Tag, FlowBloxStyleTags.StyleHeader))
                     {
                         control.BackColor = style.ControlHeaderBackColor;
                         control.ForeColor = style.ControlHeaderForeColor;
@@ -99,7 +93,7 @@ namespace FlowBlox.Core
 
                     control.ForeColor = style.ControlForeColor;
 
-                    if (control.Tag != StyleKeepFont)
+                    if (!HasTag(control.Tag, FlowBloxStyleTags.StyleKeepFont))
                         control.Font = style.DefaultFont;
                 }
 
@@ -119,6 +113,9 @@ namespace FlowBlox.Core
             }
         }
 
+        /// <summary>
+        /// Returns the currently selected style object based on the configured option.
+        /// </summary>
         private static FlowBloxSyleBase GetStyleFromOptions()
         {
             string selectedStyle = FlowBloxOptions.GetOptionInstance().OptionCollection["General.Style"].Value;
@@ -126,6 +123,31 @@ namespace FlowBlox.Core
                 return new FlowBloxProfessionalStyle();
 
             return null;
+        }
+
+        /// <summary>
+        /// Checks whether a given tag matches a FlowBlox style tag.
+        /// Supports comma, semicolon and pipe separated tag lists.
+        /// </summary>
+        private static bool HasTag(object tag, string expected)
+        {
+            if (tag == null)
+                return false;
+
+            if (tag.Equals(expected))
+                return true;
+
+            if (tag is string s)
+            {
+                var parts = s.Split([',', ';', '|'], StringSplitOptions.RemoveEmptyEntries);
+                foreach (var p in parts)
+                {
+                    if (p.Trim().Equals(expected, StringComparison.Ordinal))
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         private static void ApplyStyle(TextBox textBox)
@@ -143,18 +165,14 @@ namespace FlowBlox.Core
             FlowBloxSyleBase style = GetStyleFromOptions();
             if (style != null)
             {
-
-                // Verwendung eines flachen Stils für Zellen und Header
                 dataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 dataGridView.CellBorderStyle = DataGridViewCellBorderStyle.Single;
                 dataGridView.BorderStyle = BorderStyle.None;
 
-                // Anwendung eines flachen Styles auf ScrollBars
                 dataGridView.ScrollBars = ScrollBars.Both;
                 dataGridView.ColumnHeadersDefaultCellStyle.Font = style.HeaderFont;
                 dataGridView.ColumnHeadersDefaultCellStyle.Padding = new Padding(5);
 
-                // Einstellen der Höhe der Kopfzeilen
                 dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
                 dataGridView.ColumnHeadersHeight = 40;
             }
@@ -187,14 +205,20 @@ namespace FlowBlox.Core
 
                 typeof(ListView).GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(listView, true, null);
 
+                if (!HasTag(listView.Tag, FlowBloxStyleTags.StyleListViewDrawCustom))
+                {
+                    listView.DrawSubItem += (s, e) => e.DrawDefault = true;
+                    listView.DrawItem += (s, e) => e.DrawDefault = true;
+                }
+
                 listView.DrawColumnHeader += (s, e) =>
                 {
                     e.DrawBackground();
                     using (var headerFont = style.HeaderFont)
                     {
-                        TextRenderer.DrawText(e.Graphics, e.Header.Text, headerFont, e.Bounds, SystemColors.WindowText, 
-                            TextFormatFlags.VerticalCenter | 
-                            TextFormatFlags.LeftAndRightPadding | 
+                        TextRenderer.DrawText(e.Graphics, e.Header.Text, headerFont, e.Bounds, SystemColors.WindowText,
+                            TextFormatFlags.VerticalCenter |
+                            TextFormatFlags.LeftAndRightPadding |
                             TextFormatFlags.Left);
                     }
                 };

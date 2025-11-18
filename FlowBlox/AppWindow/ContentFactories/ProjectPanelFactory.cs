@@ -1,6 +1,4 @@
 ﻿using FlowBlox.AppWindow.Contents;
-using System;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -16,7 +14,8 @@ namespace FlowBlox.AppWindow.ContentFactories
         {
             var dockContent = new ProjectPanel()
             {
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                DockAreas = DockAreas.Document
             };
             var key = typeof(ProjectPanel).FullName;
             return Create(key, dockContent);

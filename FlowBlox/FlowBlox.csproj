@@ -82,11 +82,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>FlowBloxMainUIImages.resx</DependentUpon>
     </Compile>
-    <Compile Update="Grid\Elements\UI\NoteUIElement.cs" />
     <Compile Update="FlowBloxMainUITexts.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FlowBloxMainUITexts.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Grid\Elements\UI\NoteUIElement.cs" />
+    <Compile Update="FlowBloxMainUITexts.de.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FlowBloxMainUITexts.de.resx</DependentUpon>
     </Compile>
     <Compile Update="Core\Components\SplitTableLayoutPanel.cs">
       <SubType>Component</SubType>

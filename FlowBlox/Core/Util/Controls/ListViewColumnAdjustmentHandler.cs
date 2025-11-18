@@ -1,18 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace FlowBlox.Core.Util.Controls
 {
+    public class ColumnWidthCalculatedEventArgs : EventArgs
+    {
+        public ColumnHeader Column { get; }
+        public int ColumnIndex { get; }
+        public int CalculatedWidth { get; }
+
+        public ColumnWidthCalculatedEventArgs(ColumnHeader column, int columnIndex, int calculatedWidth)
+        {
+            Column = column;
+            ColumnIndex = columnIndex;
+            CalculatedWidth = calculatedWidth;
+        }
+    }
+
     public class ListViewColumnAdjustmentHandler
     {
         private const int DefaultColumnWidth = 200;
 
         private ListView _listView;
         private Form _form;
+
+        public event EventHandler<ColumnWidthCalculatedEventArgs> OnColumnWidthCalculated;
 
         public static ListViewColumnAdjustmentHandler Register(ListView listView) => new ListViewColumnAdjustmentHandler(listView);
 
@@ -54,6 +68,18 @@ namespace FlowBlox.Core.Util.Controls
             _listView.ResumeLayout();
         }
 
+        private readonly Dictionary<int, Font> _overrideFonts = new Dictionary<int, Font>();
+        public void ApplyColumnFont(int index, Font font)
+        {
+            if (index < 0) 
+                return;
+
+            if (font == null)
+                _overrideFonts.Remove(index);
+            else
+                _overrideFonts[index] = font;
+        }
+
         private void AdjustListViewColumnWidthByContent(ListView listView)
         {
             var columnIndexToWidth = new Dictionary<int, int>();
@@ -72,12 +98,26 @@ namespace FlowBlox.Core.Util.Controls
             {
                 for (int i = 0; i < listView.Columns.Count - 1; i++)
                 {
-                    int width = TextRenderer.MeasureText(item.SubItems[i].Text, listView.Font).Width + 10;
+                    Font measureFont;
+                    if (_overrideFonts.TryGetValue(i, out var overrideFont) && overrideFont != null)
+                        measureFont = overrideFont;
+                    else
+                        measureFont = item.SubItems[i].Font;
+
+                    int width = TextRenderer.MeasureText(item.SubItems[i].Text, measureFont).Width + 10;
                     if (width > columnIndexToWidth[i])
                     {
                         columnIndexToWidth[i] = width;
                     }
                 }
+            }
+
+            // Trigger event (for all columns except the last fill column)
+            for (int i = 0; i < listView.Columns.Count - 1; i++)
+            {
+                var col = listView.Columns[i];
+                int calc = columnIndexToWidth[i];
+                OnColumnWidthCalculated?.Invoke(this, new ColumnWidthCalculatedEventArgs(col, i, calc));
             }
 
             // Also include column header names in the width calculation
@@ -95,6 +135,9 @@ namespace FlowBlox.Core.Util.Controls
             // Apply the calculated column widths, except for the last column
             for (int i = 0; i < listView.Columns.Count - 1; i++)
             {
+                if (listView.Columns[i].Width == 0)
+                    continue;
+
                 listView.Columns[i].Width = columnIndexToWidth[i];
                 leftWidth -= columnIndexToWidth[i];
             }

@@ -51,6 +51,11 @@ namespace FlowBlox.Core.Models.Testing
             _localRuntime.InitializeRuntime(_capturedFlowBlocks);
         }
 
+        public Task<FlowBloxTestResult> ExecuteTestAsync()
+        {
+            return Task.Run(ExecuteTest);
+        }
+
         public FlowBloxTestResult ExecuteTest()
         {
             if (_localRuntime == null ||

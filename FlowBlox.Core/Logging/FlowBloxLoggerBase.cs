@@ -31,9 +31,12 @@ namespace FlowBlox.Core.Logging
             logger.Info(message);
         }
 
-        public void Warn(string message)
+        public void Warn(string message, Exception e = null)
         {
-            logger.Warn(message);
+            if (e != null)
+                logger.Warn(message, e);
+            else
+                logger.Warn(message);
         }
 
         public void Error(string message, Exception e = null)

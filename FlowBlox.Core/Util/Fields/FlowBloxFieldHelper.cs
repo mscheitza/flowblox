@@ -45,7 +45,7 @@ namespace FlowBlox.Core.Util.Fields
             if (value == null)
                 return null;
 
-            foreach (FieldElement fieldElement in FlowBloxRegistryProvider.GetRegistry().GetAllFields())
+            foreach (FieldElement fieldElement in FlowBloxRegistryProvider.GetRegistry().GetFieldElements())
             {
                 if (value.Contains(fieldElement.FullyQualifiedName))
                     value = value.Replace(fieldElement.FullyQualifiedName, fieldElement.StringValue ?? "");
@@ -72,7 +72,7 @@ namespace FlowBlox.Core.Util.Fields
         {
             parameters = new Dictionary<string, object>();
             int index = 0;
-            foreach (FieldElement fieldElement in FlowBloxRegistryProvider.GetRegistry().GetAllFields())
+            foreach (FieldElement fieldElement in FlowBloxRegistryProvider.GetRegistry().GetFieldElements())
             {
                 if (sqlStatement.Contains(fieldElement.FullyQualifiedName))
                 {

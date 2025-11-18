@@ -85,7 +85,9 @@ namespace FlowBlox.Views.PropertyView
             {
                 var uiAttribute = property.GetCustomAttribute<FlowBlockUIAttribute>();
                 var highlight = uiAttribute?.Factory == UIFactory.ListView || uiAttribute?.Factory == UIFactory.GridView;
-                var tag = highlight ? FlowBloxStyle.StyleHighlight : FlowBloxStyle.StyleHeader;
+                var tag = highlight ? 
+                    FlowBloxStyleTags.StyleHighlight : 
+                    FlowBloxStyleTags.StyleHeader;
 
                 var flp = new FlowLayoutPanel()
                 {
@@ -118,7 +120,7 @@ namespace FlowBlox.Views.PropertyView
                         ForeColor = Color.Red,
                         Font = new Font("Calibri", 11.25f),
                         Margin = new Padding(0),
-                        Tag = FlowBloxStyle.StyleIgnore
+                        Tag = FlowBloxStyleTags.StyleIgnore
                     };
                     flp.Controls.Add(asteriskLabel);
                 }
@@ -132,7 +134,7 @@ namespace FlowBlox.Views.PropertyView
                         TextAlign = ContentAlignment.MiddleLeft,
                         Margin = new Padding(0),
                         AutoSize = true,
-                        Tag = FlowBloxStyle.StyleHighlightHint
+                        Tag = FlowBloxStyleTags.StyleHighlightHint
                     };
                     flp.Controls.Add(hintLabel);
                 }

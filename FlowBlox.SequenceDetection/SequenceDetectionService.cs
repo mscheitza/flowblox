@@ -29,14 +29,14 @@ namespace FlowBlox.SequenceDetection
             if (targetData.Entries == null)
                 throw new InvalidOperationException("The target data mus have entries.");
 
-            SequenceDetectionPattern? result = default(SequenceDetectionPattern);
+            SequenceDetectionPattern? result = default;
             List<Task<SequenceDetectionPattern?>> tasks = new List<Task<SequenceDetectionPattern?>>();
             var cancellationToken = new CancellationTokenSource();
             if (targetData.Timeout > 0)
                 cancellationToken.CancelAfter(TimeSpan.FromSeconds(targetData.Timeout));
             foreach (var entry in targetData.Entries)
             {
-                IEnumerable<SequenceDetectionInputEntry> otherEntries = targetData.Entries.Except(new[] { entry });
+                IEnumerable<SequenceDetectionInputEntry> otherEntries = targetData.Entries.Except([entry]);
 
                 if (string.IsNullOrEmpty(entry.Match))
                     throw new ArgumentException("Match must not be null or empty");

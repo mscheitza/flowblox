@@ -72,9 +72,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.Core
                 mergesPath = FlowBloxFieldHelper.ReplaceFieldsInString(MergesFile);
             }
 
-            vocabPath = @"C:\Temp\Onnx\onnx\mistral-7b-instruct\mistral-vocab.json";
-            mergesPath = @"C:\Temp\Onnx\onnx\mistral-7b-instruct\mistral-merges.txt";
-
             if (!File.Exists(vocabPath) || !File.Exists(mergesPath))
                 throw new FileNotFoundException("Tokenizer files not found: vocab.json or merges.txt");
 

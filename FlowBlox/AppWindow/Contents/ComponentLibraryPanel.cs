@@ -1,9 +1,7 @@
-﻿using FlowBlox.Core;
-using FlowBlox.Core.Models.Components;
+﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Drawing;
 using FlowBlox.Core.Util.WPF;
@@ -13,7 +11,6 @@ using FlowBlox.UICore.Views;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Runtime.Loader;
 using System.Windows.Forms;

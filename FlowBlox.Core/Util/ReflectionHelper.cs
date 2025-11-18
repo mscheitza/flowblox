@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace FlowBlox.Core.Util
 {
@@ -14,26 +15,6 @@ namespace FlowBlox.Core.Util
                     return type;
             }
 
-            return null;
-        }
-
-        public static Type FindTypeBySimpleName<TBase>(string simpleClassName)
-        {
-            Type baseType = typeof(TBase);
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                Type[] types = assembly.GetExportedTypes()
-                    .Where(t => t.Name.Equals(simpleClassName, StringComparison.OrdinalIgnoreCase))
-                    .ToArray();
-
-                foreach (Type type in types)
-                {
-                    if (baseType.IsAssignableFrom(type))
-                    {
-                        return type;
-                    }
-                }
-            }
             return null;
         }
 

@@ -17,9 +17,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
 {
     public class StartEndPattern : FlowBloxReactiveObject
     {
+        [Required]
         [Display(Name = "StartEndPattern_StartPattern", ResourceType = typeof(FlowBloxTexts))]
         public string StartPattern { get; set; }
 
+        [Required]
         [Display(Name = "StartEndPattern_EndPattern", ResourceType = typeof(FlowBloxTexts))]
         public string EndPattern { get; set; }
 

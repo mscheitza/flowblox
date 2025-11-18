@@ -586,55 +586,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public override List<FieldElement> GetPossibleFieldElements()
         { 
             var registry = FlowBloxRegistryProvider.GetRegistry();
-            var fieldElements = registry.GetAllFields()
+            var fieldElements = registry.GetFieldElements(true)
                 .OrderByDescending(x => this.ReferencedFlowBlocks.Contains(x.Source))
                 .ToList();
 
             return fieldElements;
-        }
-
-        private void AppendSortedElement<T>(SortedDictionary<int, T> sortedElementList, T gridElement) where T : BaseFlowBlock
-        {
-            if (gridElement.ElementIndex < 0)
-            {
-                int LastIndex = sortedElementList.Count > 0 ? sortedElementList.Keys.Last() : -1;
-                sortedElementList[LastIndex + 1] = gridElement;
-            }
-            else
-            {
-                if (!sortedElementList.ContainsKey(gridElement.ElementIndex))
-                {
-                    sortedElementList[gridElement.ElementIndex] = gridElement;
-                }
-                else
-                {
-                    int Index = gridElement.ElementIndex + 1;
-                    while (sortedElementList.ContainsKey(Index))
-                    {
-                        Index++;
-                    }
-                    sortedElementList[Index] = gridElement;
-                }
-            }
-        }
-
-        public List<T> SortByIndex<T>(IEnumerable<T> elementList) where T : BaseFlowBlock
-        {
-            SortedDictionary<int, T> SortedElementList = new SortedDictionary<int, T>();
-
-            foreach (T GridElement in elementList)
-            {
-                if (GridElement.ElementIndex >= 0)
-                    AppendSortedElement(SortedElementList, GridElement);
-            }
-
-            foreach (BaseFlowBlock GridElement in elementList)
-            {
-                if (GridElement.ElementIndex < 0)
-                    AppendSortedElement(SortedElementList, (T)GridElement);
-            }
-
-            return SortedElementList.Values.ToList();
         }
 
         public static string GetValidIdentifier(string identifier)
@@ -673,10 +629,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public List<BaseFlowBlock> GetNextFlowBlocks()
         {
-            var nextElements = FlowBloxRegistryProvider.GetRegistry().GetInputFlowBlocks()
-                .Where(x => x.ReferencedFlowBlocks.Contains(this));
-
-            return SortByIndex(nextElements);
+            return FlowBloxRegistryProvider.GetRegistry().GetInputFlowBlocks()
+                .Where(x => x.ReferencedFlowBlocks.Contains(this))
+                .OrderBy(x => x.ElementIndex)
+                .ToList();
         }
 
         /// <summary>

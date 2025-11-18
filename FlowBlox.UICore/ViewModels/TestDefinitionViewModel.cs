@@ -14,6 +14,7 @@ using FlowBlox.UICore.Views;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -31,7 +32,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public TestDefinitionViewModel()
         {
-            ExecuteTestCommand = new RelayCommand(ExecuteTest);
+            ExecuteTestCommand = new RelayCommand(ExecuteTestAsync);
             EditConditionsCommand = new RelayCommand(EditConditions);
             EditContentCommand = new RelayCommand(EditContent);
             OpenInEditorCommand = new RelayCommand(OpenInEditor);
@@ -258,13 +259,14 @@ namespace FlowBlox.UICore.ViewModels
         public ObservableCollection<FlowBlockOutDataset> TestResults { get; private set; }
         public ObservableCollection<DataGridColumn> TestResultsColumns { get; private set; }
 
-        private void ExecuteTest()
+        private async void ExecuteTestAsync()
         {
             RuntimeLogs.Clear();
 
             _testExecutor.Initialize(_testDefinition, _currentFlowBlock);
             _testExecutor.GetRuntime().LogMessageCreated += TestDefinitionViewModel_LogMessageCreated;
-            _testExecutor.ExecuteTest();
+            await _testExecutor.ExecuteTestAsync();
+
             _testExecutor.Shutdown();
 
             if (_currentFlowBlock is BaseResultFlowBlock resultFlowBlock && resultFlowBlock.GridElementResult.ResultCount > 0)

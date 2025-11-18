@@ -3,6 +3,7 @@ using FlowBlox.Core.Models.Components;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
+    // TODO: RowWise implementieren.
     public class FlowBlockInputDatasetSelector
     {
         private Dictionary<BaseFlowBlock, HashSet<FlowBlockOut>> passedResults;

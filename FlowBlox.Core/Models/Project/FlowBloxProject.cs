@@ -1,26 +1,20 @@
-﻿using System.Runtime.Loader;
-using System.Runtime.Serialization;
-using FlowBlox.Core.Factories;
+﻿using FlowBlox.Core.Constants;
+using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Extensions;
+using FlowBlox.Core.Factories;
+using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Logging;
+using FlowBlox.Core.Migration;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Json;
-using FlowBlox.Core.Util.Json.ContractResolver;
-using FlowBlox.Core.Models.FlowBlocks.Base;
-using Newtonsoft.Json;
-using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Provider.Registry;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
-using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Interfaces;
-using System.Reflection;
-using FlowBlox.Core.Logging;
-using FlowBlox.Core.Constants;
-using Newtonsoft.Json.Linq;
-using FlowBlox.Core.DependencyInjection;
 using Google.Protobuf;
-using FlowBlox.Core.Exceptions;
-using FlowBlox.Core.Models.Base;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Runtime.Loader;
 
 namespace FlowBlox.Core.Models.Project
 {
@@ -52,7 +46,7 @@ namespace FlowBlox.Core.Models.Project
         [JsonIgnore()]
         public List<FlowBloxProjectExtension> Extensions { get; set; }
 
-        private static readonly ILogger Logger = FlowBloxLogManager.Instance.GetLogger();
+        private static readonly ILogger _logger = FlowBloxLogManager.Instance.GetLogger();
 
         public FlowBloxProject()
         {
@@ -62,7 +56,7 @@ namespace FlowBlox.Core.Models.Project
             this.FlowBloxRegistry = new FlowBloxRegistry();
             this.Extensions = new List<FlowBloxProjectExtension>();
             this.ProjectDependendDataObjects = new List<IProjectDependendData>();
-            Logger.Info("FlowBloxProject instance created.");
+            _logger.Info("FlowBloxProject instance created.");
         }
 
         private static Dictionary<string, AssemblyLoadContext> LoadExtensions(IEnumerable<FlowBloxProjectExtension> extensions)
@@ -100,7 +94,7 @@ namespace FlowBlox.Core.Models.Project
         {
             var reloadResult = new FlowBloxProjectReloadResult();
 
-            Logger.Info("Reloading extensions...");
+            _logger.Info("Reloading extensions...");
             
             var weakReferences = new Dictionary<WeakReference, List<string>>();
 
@@ -127,7 +121,7 @@ namespace FlowBlox.Core.Models.Project
                 {
                     reloadResult.Success = false;
                     reloadResult.UnloadableExtensions.Add($"{extension.Name}/{extension.Version}");
-                    Logger.Warn($"Failed to load extension: {extension.Name} Version: {extension.Version}");
+                    _logger.Warn($"Failed to load extension: {extension.Name} Version: {extension.Version}");
                 }
             }
 
@@ -149,18 +143,18 @@ namespace FlowBlox.Core.Models.Project
 
             if (reloadResult.Success)
             {
-                Logger.Info("Extensions reloaded successfully.");
+                _logger.Info("Extensions reloaded successfully.");
             }
             else
             {
                 if (reloadResult.RemainingAssemblies.Any())
                 {
-                    Logger.Warn($"Extensions could not be reloaded successfully. Remaining assemblies: {string.Join(", ", reloadResult.RemainingAssemblies)}.");
+                    _logger.Warn($"Extensions could not be reloaded successfully. Remaining assemblies: {string.Join(", ", reloadResult.RemainingAssemblies)}.");
                 }
 
                 if (reloadResult.UnloadableExtensions.Any())
                 {
-                    Logger.Warn($"Failed to load the following extensions: {string.Join(", ", reloadResult.UnloadableExtensions)}.");
+                    _logger.Warn($"Failed to load the following extensions: {string.Join(", ", reloadResult.UnloadableExtensions)}.");
                 }
             }
 
@@ -175,12 +169,12 @@ namespace FlowBlox.Core.Models.Project
             string directoryPath = extension.LocalExtensionDirectory;
             if (!loadContexts.ContainsKey(directoryPath))
             {
-                Logger.Info($"Loading extension from {directoryPath}.");
+                _logger.Info($"Loading extension from {directoryPath}.");
                 var loadContext = new FlowBloxProjectLoadContext(directoryPath);
                 loadContexts.Add(directoryPath, loadContext);
                 loadContext.LoadAssembliesFromDirectory();
                 OnAfterExtensionLoaded(loadContext);
-                Logger.Info($"Extension loaded successfully from {directoryPath}.");
+                _logger.Info($"Extension loaded successfully from {directoryPath}.");
                 return loadContext;
             }
             return null;
@@ -200,10 +194,10 @@ namespace FlowBlox.Core.Models.Project
             FlowBlockCategory.InvokeDeregistration(loadContext);
             FlowBloxServiceLocator.Instance.UnregisterServices(loadContext);
             BeforeUnloadExtension?.Invoke(this, loadContext);
-            Logger.Info($"Unloading extension at {directoryPath}.");
+            _logger.Info($"Unloading extension at {directoryPath}.");
             loadContext.Unload();
             _loadContexts.Remove(directoryPath);
-            Logger.Info($"Extension unloaded successfully from {directoryPath}.");
+            _logger.Info($"Extension unloaded successfully from {directoryPath}.");
         }
 
         public IEnumerable<T> CreateInstances<T>(Func<Type, bool> typeFilter = null) => AppDomainInstanceFactory.CreateInstances<T>(_loadContexts.Values, typeFilter);
@@ -221,14 +215,14 @@ namespace FlowBlox.Core.Models.Project
                 {
                     var instance = (IProjectDependendData)Activator.CreateInstance(dependendDataType);
                     this.ProjectDependendDataObjects.Add(instance);
-                    Logger.Info($"Created instance of {dependendDataType.FullName} as project dependend data.");
+                    _logger.Info($"Created instance of {dependendDataType.FullName} as project dependend data.");
                 }
             }
         }
 
         internal void OnProjectLoaded()
         {
-            Logger.Info("Loading project...");
+            _logger.Info("Loading project...");
 
             var options = FlowBloxOptions.GetOptionInstance();
             options.InitDefaults(false);
@@ -276,26 +270,26 @@ namespace FlowBlox.Core.Models.Project
                 loadedComponent.OnAfterLoad();
             }
 
-            Logger.Info("Project loaded successfully.");
+            _logger.Info("Project loaded successfully.");
         }
 
         internal void OnProjectClosed()
         {
-            Logger.Info("Closing project...");
+            _logger.Info("Closing project...");
 
             var reloadResult = ReloadExtensions(_loadContexts.Keys);
 
             if (!reloadResult.Success)
                 throw new ProjectExtensionsUnloadException(reloadResult.RemainingAssemblies, reloadResult.UnloadableExtensions);
 
-            Logger.Info("Project closed successfully.");
+            _logger.Info("Project closed successfully.");
         }
 
         private const string ExtensionFileSuffix = ".extensions";
 
         public static FlowBloxProject FromFile(string fileName)
         {
-            Logger.Info($"Loading project from file: {fileName}");
+            _logger.Info($"Loading project from file: {fileName}");
             try
             {
                 var extensionsFilePath = Path.Combine(
@@ -308,9 +302,9 @@ namespace FlowBlox.Core.Models.Project
                 {
                     extensions = JsonHelper.DeserializeJsonFromFile<List<FlowBloxProjectExtension>>(extensionsFilePath);
                     loadContexts = LoadExtensions(extensions);
-                    Logger.Info($"Extensions loaded from {extensionsFilePath}");
+                    _logger.Info($"Extensions loaded from {extensionsFilePath}");
                 }
-                var settings = loadContexts != null ? JsonSettings.ProjectImport(loadContexts) : JsonSettings.Default;
+                var settings = JsonSettings.ProjectImport(loadContexts);
                 var projectFileContent = File.ReadAllText(fileName);
                 AdjustFileContentBeforeDeserialization(fileName, ref projectFileContent);
                 var project = JsonConvert.DeserializeObject<FlowBloxProject>(projectFileContent, settings);
@@ -325,12 +319,12 @@ namespace FlowBlox.Core.Models.Project
                     }
                 }
 
-                Logger.Info($"Project loaded successfully from {fileName}");
+                _logger.Info($"Project loaded successfully from {fileName}");
                 return project;
             }
             catch (Exception ex)
             {
-                Logger.Error($"Failed to load project from file: {fileName}", ex);
+                _logger.Error($"Failed to load project from file: {fileName}", ex);
                 throw;
             }
         }
@@ -371,7 +365,7 @@ namespace FlowBlox.Core.Models.Project
                 if (typeName == null)
                     continue;
 
-                Type componentType = Type.GetType(typeName);
+                Type componentType = TypeNameHelper.FindTypeByFullOrSimpleName(typeName);
                 if (componentType == null)
                     continue;
 
@@ -411,7 +405,7 @@ namespace FlowBlox.Core.Models.Project
 
         public void Save(string fileName)
         {
-            Logger.Info($"Saving project to file: {fileName}");
+            _logger.Info($"Saving project to file: {fileName}");
             try
             {
                 var extensionsFilePath = Path.Combine(
@@ -427,7 +421,7 @@ namespace FlowBlox.Core.Models.Project
                 this.UserFields = new List<FieldElement>();
                 this.UserFields.AddRange(this.FlowBloxRegistry.GetUserFields());
 
-                var projectFileContent = JsonConvert.SerializeObject(this, CreateCustomJsonSettings());
+                var projectFileContent = JsonConvert.SerializeObject(this, JsonSettings.ProjectExport());
                 AdjustFileContentAfterSerialization(fileName, ref projectFileContent);
                 File.WriteAllText(fileName, projectFileContent);
 
@@ -435,23 +429,13 @@ namespace FlowBlox.Core.Models.Project
                     Extensions : 
                     new List<FlowBloxProjectExtension>());
 
-                Logger.Info($"Project saved successfully to {fileName}");
+                _logger.Info($"Project saved successfully to {fileName}");
             }
             catch (Exception ex)
             {
-                Logger.Error($"Failed to save project to file: {fileName}", ex);
+                _logger.Error($"Failed to save project to file: {fileName}", ex);
                 throw;
             }
-        }
-
-        public static JsonSerializerSettings CreateCustomJsonSettings()
-        {
-            JsonSerializerSettings customSettings = new JsonSerializerSettings();
-            customSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-            customSettings.TypeNameHandling = TypeNameHandling.All;
-            customSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-            customSettings.ContractResolver = new ProjectContractResolver();
-            return customSettings;
         }
     }
 }

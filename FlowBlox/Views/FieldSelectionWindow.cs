@@ -83,7 +83,7 @@ namespace FlowBlox.Views
                 fieldElements = fieldElements.OrderByDescending(x => flowBlock.ReferencedFlowBlocks.Contains(x.Source));
 
             // If no field elements were passed, load them from the registry
-            if (fieldElements == null || !fieldElements.Any())
+            if (fieldElements == null)
                 fieldElements = _registry.GetFieldElements();
 
             // Append user fields

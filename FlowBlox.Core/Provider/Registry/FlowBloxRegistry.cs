@@ -52,9 +52,12 @@ namespace FlowBlox.Core.Provider.Registry
                 .ToList();
         }
 
-        public List<FieldElement> GetAllFields() => GetFieldElements().ToList();
-
-        public List<FieldElement> GetRuntimeFields() => GetFieldElements().Where(x => !x.UserField).ToList();
+        public List<FieldElement> GetRuntimeFields(bool orderedByExecutionFlow = false)
+        {
+            return GetFieldElements(orderedByExecutionFlow)
+                .Where(x => !x.UserField)
+                .ToList();
+        }
 
         public List<FieldElement> GetUserFields(UserFieldTypes userFieldType = UserFieldTypes.None)
         {
@@ -206,7 +209,38 @@ namespace FlowBlox.Core.Provider.Registry
             return _managedObjects.Where(obj => type.IsInstanceOfType(obj));
         }
 
-        public IEnumerable<FieldElement> GetFieldElements() => _managedObjects.OfType<FieldElement>();
+        private IEnumerable<FieldElement> GetFieldElementsRecursiveOrderedByExecutionFlow(BaseFlowBlock baseFlowBlock)
+        {
+            if (baseFlowBlock is BaseResultFlowBlock resultFlowBlock)
+            {
+                foreach(var field in resultFlowBlock.Fields)
+                {
+                    yield return field;
+                }
+            }
+
+            foreach (var nextFlowBlock in baseFlowBlock.GetNextFlowBlocks())
+            {
+                foreach(var fieldElement in GetFieldElementsRecursiveOrderedByExecutionFlow(nextFlowBlock))
+                {
+                    yield return fieldElement;
+                }
+            }
+        }
+
+        public IEnumerable<FieldElement> GetFieldElements(bool orderedByExecutionFlow = false)
+        {
+            var startFlowBlock = GetStartFlowBlock();
+            if (orderedByExecutionFlow && startFlowBlock != null)
+            {
+                var result = GetFieldElementsRecursiveOrderedByExecutionFlow(startFlowBlock);
+                return result.Concat(_managedObjects.OfType<FieldElement>().Except(result));
+            }
+            else
+            {
+                return _managedObjects.OfType<FieldElement>();
+            }
+        }
 
         public void RegisterFlowBlock(BaseFlowBlock flowBlock)  
         {

@@ -91,6 +91,7 @@ namespace FlowBlox.AppWindow
             WarningStrip = new System.Windows.Forms.StatusStrip();
             labelWarning = new System.Windows.Forms.ToolStripStatusLabel();
             dockPanel = new FlowBlox.AppWindow.Contents.BufferedDockPanel();
+            itmResetDockablePanels = new System.Windows.Forms.ToolStripMenuItem();
             menuStrip.SuspendLayout();
             statusStrip.SuspendLayout();
             WarningStrip.SuspendLayout();
@@ -322,7 +323,7 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmWindows
             // 
-            mnItmWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmUserFields, itmDockablePanels, toolStripSeparator6, itmToolbox });
+            mnItmWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmUserFields, itmDockablePanels, itmResetDockablePanels, toolStripSeparator6, itmToolbox });
             mnItmWindows.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmWindows.Name = "mnItmWindows";
             mnItmWindows.Size = new System.Drawing.Size(130, 19);
@@ -543,6 +544,14 @@ namespace FlowBlox.AppWindow
             dockPanel.ContentAdded += DockPanel_ContentAdded;
             dockPanel.ContentRemoved += DockPanel_ContentRemoved;
             // 
+            // itmResetDockablePanels
+            // 
+            itmResetDockablePanels.Image = (System.Drawing.Image)resources.GetObject("itmResetDockablePanels.Image");
+            itmResetDockablePanels.Name = "itmResetDockablePanels";
+            itmResetDockablePanels.Size = new System.Drawing.Size(229, 22);
+            itmResetDockablePanels.Text = "itmResetDockablePanels_Text";
+            itmResetDockablePanels.Click += itmResetDockablePanels_Click;
+            // 
             // AppWindow
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -634,6 +643,7 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripMenuItem itmVisitOnline;
         private System.Windows.Forms.ToolStripMenuItem itmGitHub;
         private System.Windows.Forms.ToolStripMenuItem itmCheckForNewVersion;
+        private System.Windows.Forms.ToolStripMenuItem itmResetDockablePanels;
     }
 }
 

@@ -130,9 +130,11 @@ namespace FlowBlox.Views
 
         private void Initialize()
         {
+            ControlHelper.EnableDoubleBuffer(toolStrip);
+            ControlHelper.EnableOptimizedDoubleBuffer(toolStrip);
             ControlHelper.EnableDoubleBuffer(richtTextBox);
             ControlHelper.EnableOptimizedDoubleBuffer(richtTextBox);
-            this.richtTextBox.Tag = FlowBloxStyle.StyleIgnore;
+            this.richtTextBox.Tag = FlowBloxStyleTags.StyleIgnore;
             UpdateUI();
         }
 

@@ -119,7 +119,9 @@ namespace FlowBlox.AppWindow.Contents
 
             mainPanel.MouseWheel += new MouseEventHandler(mainPanel_MouseWheel);
             ControlHelper.EnableDoubleBuffer(toolStrip_Mode);
+            ControlHelper.EnableOptimizedDoubleBuffer(toolStrip_Mode);
             ControlHelper.EnableDoubleBuffer(toolStrip_Runtime);
+            ControlHelper.EnableOptimizedDoubleBuffer(toolStrip_Runtime);
             InitDoubleBuffer();
         }
 
@@ -747,7 +749,8 @@ namespace FlowBlox.AppWindow.Contents
         {
             foreach (var uiElement in FlowBloxUIRegistry.UIElements)
             {
-                uiElement.MarkElement(ElementState.Unmarked);
+                if (_lastMouseButton == MouseButtons.Left)
+                    uiElement.MarkElement(ElementState.Unmarked);
             }
             _recentFlowBlock = null;
             if (_latestGridInteraction != GridInteractions.PrintReferenceLines)
@@ -848,9 +851,11 @@ namespace FlowBlox.AppWindow.Contents
         }
 
         private HashSet<FlowBloxArrow> _selectedArrows = new HashSet<FlowBloxArrow>();
-
+        private MouseButtons _lastMouseButton;
         private void mainPanel_MouseDown(object sender, MouseEventArgs e)
         {
+            _lastMouseButton = e.Button;
+
             if (!mainPanel.Enabled || !mainPanel.Visible)
                 return;
 
@@ -890,7 +895,10 @@ namespace FlowBlox.AppWindow.Contents
             ScrollGrid();
         }
 
-        private void background_Scroll_DoWork(object sender, DoWorkEventArgs e) { System.Threading.Thread.Sleep(ScrollGridTimeunit); }
+        private void background_Scroll_DoWork(object sender, DoWorkEventArgs e) 
+        { 
+            System.Threading.Thread.Sleep(ScrollGridTimeunit); 
+        }
 
         private void itmRemoveIndex_Click(object sender, EventArgs e)
         {

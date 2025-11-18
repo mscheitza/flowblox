@@ -31,13 +31,14 @@ namespace FlowBlox.Core.Components
             };
 
             ControlHelper.EnableDoubleBuffer(numericTextBox);
+            ControlHelper.EnableOptimizedDoubleBuffer(numericTextBox);
 
             textBoxContainer = new Panel
             {
                 Dock = DockStyle.Fill,
                 Padding = new Padding(3, 3, 3, 3),
                 BackColor = Color.White,
-                Tag = FlowBloxStyle.StyleIgnoreSelf
+                Tag = FlowBloxStyleTags.StyleIgnoreSelf
             };
             textBoxContainer.Controls.Add(numericTextBox);
 

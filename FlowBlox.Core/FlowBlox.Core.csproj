@@ -91,4 +91,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FlowBlox.SequenceDetection\FlowBlox.SequenceDetection.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\NewFolder\" />
+  </ItemGroup>
 </Project>

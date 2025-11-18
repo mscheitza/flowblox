@@ -234,7 +234,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
                     }
                 }
 
-                // URL überprüfen, falls definiert und erlaubt:
+                // Check URL if defined and allowed:
                 var validUrls = urls.ExceptNull();
                 if (IgnoreAlreadyProcessedUrls && validUrls.Any())
                 {
@@ -386,7 +386,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             var cacheEntryOptions = new MemoryCacheEntryOptions();
             cacheEntryOptions.SetSize(1);
             _cache.Set(url, webRequestResult, cacheEntryOptions);
-            // TODO: Bei der Laufzeit Ausführung kommt es hier zu einer Null-Reference Exception.
+            // TODO: A null reference exception occurs at runtime.
             return webRequestInvocationResult;
         }
 

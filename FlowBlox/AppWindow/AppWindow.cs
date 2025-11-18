@@ -137,6 +137,9 @@ namespace FlowBlox.AppWindow
             itmSaveProject.Enabled = (project != null) && (!isRuntimeActive);
             itmSaveAs.Enabled = (project != null) && (!isRuntimeActive);
 
+            itmDockablePanels.Enabled = project != null;
+            itmResetDockablePanels.Enabled = project != null;
+
             itmOpenRuntimeLogDirectory.Enabled = !string.IsNullOrEmpty(RuntimeLogfilePath);
 
             itmLogin.Enabled = !FlowBloxAccountManager.Instance.IsLoggedIn;
@@ -155,17 +158,24 @@ namespace FlowBlox.AppWindow
             this._componentLibraryPanel?.UpdateUI();
         }
 
-        private void InitializeDockPanel()
+        private void InitializeDockPanel(bool exceptProjectPanel = false)
         {
+            this.dockPanel.SuspendLayout();
+            
             this.dockPanel.Theme = new VS2015DarkTheme();
 
-            foreach (var dockContent in dockPanel.Contents.OfType<DockContent>().ToList())
+            foreach (var dockContent in dockPanel.Contents
+                .OfType<DockContent>()
+                .Where(x => !exceptProjectPanel || x is not ProjectPanel).ToList())
             {
                 dockContent.Close();
             }
 
-            var projectPanelFactory = new ProjectPanelFactory(dockPanel);
-            _dockContentProjectPanel = projectPanelFactory.Create();
+            if (!exceptProjectPanel)
+            {
+                var projectPanelFactory = new ProjectPanelFactory(dockPanel);
+                _dockContentProjectPanel = projectPanelFactory.Create();
+            }
 
             var componentLibraryPanelFactory = new ComponentLibraryPanelFactory(dockPanel);
             _componentLibraryPanel = componentLibraryPanelFactory.Create();
@@ -181,6 +191,8 @@ namespace FlowBlox.AppWindow
 
             var runtimeViewPanelFactory = new RuntimeViewPanelFactory(dockPanel);
             _runtimeViewPanel = runtimeViewPanelFactory.Create();
+
+            this.dockPanel.ResumeLayout();
         }
 
         private void DockPanel_ContentAdded(object sender, DockContentEventArgs e)
@@ -336,8 +348,7 @@ namespace FlowBlox.AppWindow
         private void OnAfterUIRegistryInitialized()
         {
             InitializeDockPanel();
-
-            this._fieldViewPanel.UserControl.OnProjectLoaded();
+            this._fieldViewPanel.UserControl.OnAfterUIRegistryInitialized();
             this._dockContentProjectPanel.OnAfterUIRegistryInitialized();
         }
 
@@ -1001,8 +1012,8 @@ namespace FlowBlox.AppWindow
                 var op = pm.AddPackageByAppInstallerFileAsync(appInstallerUri, options, pm.GetDefaultPackageVolume());
                 var result = await op.AsTask();
 
-                if (result != null && 
-                    result.ErrorText != null && 
+                if (result != null &&
+                    result.ErrorText != null &&
                     result.ExtendedErrorCode != null)
                 {
                     throw new InvalidOperationException($"An error occurred when attempting to start the update: {result.ErrorText}", result.ExtendedErrorCode);
@@ -1057,6 +1068,13 @@ namespace FlowBlox.AppWindow
                     FlowBloxMessageBox.Icons.Warning
                 );
             }
+        }
+
+        private void itmResetDockablePanels_Click(object sender, EventArgs e)
+        {
+            FlowBloxOptions.GetOptionInstance().GetOption("MainPanel.DockSettings").Value = string.Empty;
+            FlowBloxOptions.GetOptionInstance().Save();
+            InitializeDockPanel(true);
         }
 
         internal T GetAccessibleComponent<T>() where T : System.Windows.Forms.Control

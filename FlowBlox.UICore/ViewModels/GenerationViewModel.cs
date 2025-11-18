@@ -71,12 +71,12 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        public void Generate()
+        public async Task Generate()
         {
             RuntimeLogs.Clear();
             FlowBlockGenerationStrategyExecutor generationStrategyExecutor = new FlowBlockGenerationStrategyExecutor(CurrentFlowBlock, TestScope.All);
             generationStrategyExecutor.LogCreated += GenerationStrategyExecutor_LogCreated;
-            generationStrategyExecutor.ExecuteGeneration();
+            await generationStrategyExecutor.ExecuteGenerationAsync();
         }
 
         private void OpenInEditor(object target)

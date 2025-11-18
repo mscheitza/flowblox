@@ -3,6 +3,7 @@ using FlowBlox.Core.Util.Controls;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -55,6 +56,15 @@ namespace FlowBlox.AppWindow.ContentFactories
             FlowBloxOptions.GetOptionInstance().Save();
         }
 
+
+        protected Task SaveSettingsAsync(string key, DockContentSettings settings)
+        {
+            return Task.Run(() =>
+            {
+                SaveSettings(key, settings);
+            });
+        }
+
         protected T Create(string key, T dockContent)
         {
             var settings = LoadSettings(key);
@@ -97,7 +107,7 @@ namespace FlowBlox.AppWindow.ContentFactories
                 SaveSettings(key, settings);
             };
 
-            dockContent.SizeChanged += (s, e) =>
+            dockContent.SizeChanged += async (s, e) =>
             {
                 if (!_ready)
                     return;
@@ -109,12 +119,9 @@ namespace FlowBlox.AppWindow.ContentFactories
                 {
                     settings.Width = dockContent.Width;
                     settings.Height = dockContent.Height;
-                    SaveSettings(key, settings);
+                    await SaveSettingsAsync(key, settings);
                 }
             };
-
-            ControlHelper.EnableDoubleBufferedRecursive(dockContent);
-            ControlHelper.EnableOptimizedDoubleBufferRecursive(dockContent);
 
             return dockContent;
         }

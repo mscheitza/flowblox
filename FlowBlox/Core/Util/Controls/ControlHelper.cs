@@ -14,45 +14,24 @@ namespace FlowBlox.Core.Util.Controls
     {
         public static void EnableDoubleBuffer(Control control)
         {
-            PropertyInfo propertyInfo = typeof(Control).GetProperty("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo propertyInfo = typeof(Control).GetProperty("DoubleBuffered", 
+                BindingFlags.SetProperty | 
+                BindingFlags.NonPublic | 
+                BindingFlags.Instance);
+
             if (propertyInfo != null)
                 propertyInfo.SetValue(control, true, null);
-        }
-
-        public static void EnableDoubleBufferedRecursive(Control control)
-        {
-            if (control == null || control.IsDisposed)
-                return;
-
-            foreach (Control childControl in control.Controls)
-            {
-                EnableDoubleBufferedRecursive(childControl);
-            }
-        }
-
-        public static void EnableOptimizedDoubleBufferRecursive(Control control)
-        {
-            EnableOptimizedDoubleBuffer(control);
-
-            foreach (Control child in control.Controls)
-            {
-                EnableOptimizedDoubleBufferRecursive(child);
-            }
         }
 
         public static void EnableOptimizedDoubleBuffer(Control control)
         {
             MethodInfo setStyleMethod = control.GetType().GetMethod("SetStyle", BindingFlags.NonPublic | BindingFlags.Instance);
             if (setStyleMethod != null)
-            {
                 setStyleMethod.Invoke(control, [ControlStyles.OptimizedDoubleBuffer, true]);
-            }
 
             MethodInfo updateStylesMethod = control.GetType().GetMethod("UpdateStyles", BindingFlags.NonPublic | BindingFlags.Instance);
             if (updateStylesMethod != null)
-            {
                 updateStylesMethod.Invoke(control, null);
-            }
         }
 
         public static bool IsChildControl(Control parent, Control child)

@@ -16,7 +16,8 @@ namespace FlowBlox.AppWindow.ContentFactories
             var dockContent = new DockContentUserControlWrapper<RuntimeView>
             {
                 Dock = DockStyle.Fill,
-                Padding = new Padding(0, 0, 0, 25)
+                Padding = new Padding(0, 0, 0, 25),
+                DockAreas = DockAreas.DockBottom
             };
             var key = typeof(RuntimeView).FullName;
             return Create(key, dockContent);
