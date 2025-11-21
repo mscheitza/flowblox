@@ -34,7 +34,7 @@ namespace FlowBlox.Core.Interfaces
 
         void OnAfterSave();
 
-        void OptionsInit(List<OptionElement> defaults);
+        void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions);
 
         void RuntimeStarted(BaseRuntime runtime);
 

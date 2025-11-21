@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.WebBrowser;
@@ -91,7 +92,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         protected virtual void HandleFailure(BaseRuntime runtime, WebBrowserActionResult result)
         {
             if (result.Exception != null)
-                runtime.Report(result.Exception.ToString());
+                runtime.Report("A problem occurred while executing the web action.", FlowBloxLogLevel.Error, result.Exception);
 
             HandleFailure(runtime, result.Status);
         }
@@ -101,7 +102,9 @@ namespace FlowBlox.Core.Models.FlowBlocks
             if (enumValue != null)
                 CreateNotification(runtime, enumValue);
 
-            GenerateResult(runtime);
+            var webBrowserFlowBlock = AssociatedWebBrowser ?? GetPreviousFlowBlockOnPath<WebBrowserFlowBlock>(this);
+            var webBrowser = webBrowserFlowBlock.InternalWebBrowser;
+            GenerateResult(runtime, webBrowser.DOMContent);
         }
     }
 }

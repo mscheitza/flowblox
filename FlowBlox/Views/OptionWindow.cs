@@ -133,7 +133,6 @@ namespace FlowBlox.Views
             treeViewOptions.EndUpdate();
         }
 
-
         /// <summary>
         /// Expands the specified node and all of its parent nodes up to the root.
         /// </summary>

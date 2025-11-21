@@ -1510,9 +1510,6 @@ Use the "+" button to add entries to the table.</value>
   <data name="WebBrowserFlowBlock_Groups_Advanced" xml:space="preserve">
 		<value>Advanced settings</value>
 	</data>
-  <data name="WebBrowserFlowBlock_Timeout" xml:space="preserve">
-		<value>Timeout (seconds)</value>
-	</data>
   <data name="WebBrowserFlowBlock_Url" xml:space="preserve">
 		<value>URL</value>
 	</data>
@@ -1714,4 +1711,31 @@ Use the "+" button to add entries to the table.</value>
   <data name="InputBehavior_RowWise" xml:space="preserve">
     <value>Row upon row</value>
   </data>
+  <data name="InputBehavior_RowWiseValid" xml:space="preserve">
+    <value>Row upon row - valid rows</value>
+  </data>
+  <data name="StartEndPatternSelectorFlowBlock_IncludePatternInResult" xml:space="preserve">
+    <value>Include pattern in output value</value>
+  </data>
+  <data name="StartEndPatternSelectorFlowBlock_ReturnOptions" xml:space="preserve">
+    <value>Return options</value>
+  </data>
+  <data name="WebBrowserFlowBlock_RetryLimit" xml:space="preserve">
+  <value>Maximum number of retry attempts</value>
+</data>
+  <data name="WebBrowserFlowBlock_RetryTimeunit" xml:space="preserve">
+  <value>Retry interval (in milliseconds)</value>
+</data>
+  <data name="WebBrowserFlowBlock_Timeout" xml:space="preserve">
+  <value>Timeout (in seconds)</value>
+</data>
+  <data name="WebBrowserFlowBlock_Timeout_Tooltip" xml:space="preserve">
+  <value>Specifies the maximum number of seconds to wait for a browser operation before a timeout occurs.</value>
+</data>
+  <data name="WebBrowserFlowBlock_RetryLimit_Tooltip" xml:space="preserve">
+  <value>Defines how many times a failed browser action will be retried before an error is returned.</value>
+</data>
+  <data name="WebBrowserFlowBlock_RetryTimeunit_Tooltip" xml:space="preserve">
+  <value>The delay in milliseconds between retry attempts.</value>
+</data>
 </root>

@@ -21,7 +21,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Format
 
         [Required()]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), SelectionFilterMethod = nameof(BaseFlowBlock.GetPossibleFieldElements))]
+        [FlowBlockUI(Factory = UIFactory.ComboBox,
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
+            SelectionFilterMethod = nameof(BaseFlowBlock.GetPossibleFieldElements))]
         public override FieldElement Field { get; set; }
 
         [Display(Name = "FormatParameterDefinition_IsRequired", ResourceType = typeof(FlowBloxTexts), Order = 1)]

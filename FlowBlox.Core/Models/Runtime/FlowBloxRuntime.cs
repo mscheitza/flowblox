@@ -210,12 +210,14 @@ namespace FlowBlox.Core.Models.Runtime
             catch(RuntimeCancellationException e)
             {
                 this.Running = false;
+                this.OnAfterRuntimeFinished();
                 this.NotifyRuntimeFinished();
             }
             catch (Exception e)
             {
                 this.Running = false;
                 this.Report("Runtime execution has aborted due to an critical error.", FlowBloxLogLevel.Error, e);
+                this.OnAfterRuntimeFinished();
                 this.NotifyRuntimeFinished();
             }
         }

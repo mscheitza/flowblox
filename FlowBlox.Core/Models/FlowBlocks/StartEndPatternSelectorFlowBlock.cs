@@ -37,6 +37,10 @@ namespace FlowBlox.Core.Models.FlowBlocks
         [FlowBlockDataGrid(IsMovable = true)]
         public ObservableCollection<StartEndPattern> StartEndPatterns { get; set; }
 
+        [Display(Name = "StartEndPatternSelectorFlowBlock_IncludePatternInResult", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [FlowBlockCheckbox(HeaderLabel = "StartEndPatternSelectorFlowBlock_ReturnOptions")]
+        public bool IncludePatternInResult { get; set; }
+
         public override SKImage Icon16 => base.Icon16;
         public override SKImage Icon32 => base.Icon32;
 
@@ -89,6 +93,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
                             results = new List<string>();
                             runtime.Report($"Index {startEndPattern.Index.Value} is out of range at {results.Count} results.");
                         }
+                    }
+
+                    if (this.IncludePatternInResult)
+                    {
+                        results = results.Select(val => string.Concat(startEndPattern.StartPattern, val, startEndPattern.EndPattern)).ToList();
                     }
                 }
 

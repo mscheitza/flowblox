@@ -6,6 +6,7 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters.PropertyView;
+using FlowBlox.UICore.Factory.PropertyView.HintTextResolver;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
@@ -57,34 +58,20 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private string ComputeResolvedFlowBlockHintText()
         {
             var fbResolvable = _property.GetCustomAttribute<AssociatedFlowBlockResolvableAttribute>();
-            if (fbResolvable == null)
-                return null;
-
-            var currentValue = _property.GetValue(_target);
-            if (currentValue is BaseFlowBlock)
-                return null;
-
-            var method = typeof(BaseFlowBlock).GetMethod(
-                GlobalConstants.GetPreviousFlowBlockOnPathMethodName,
-                BindingFlags.NonPublic | BindingFlags.Instance,
-                null,
-                new[] { typeof(BaseFlowBlock), typeof(Type[]) },
-                null);
-
-            if (method != null && _target is BaseFlowBlock flowBlock)
+            if (fbResolvable != null)
             {
-                var requiredType = _property.PropertyType;
-                var result = method.Invoke(flowBlock, [flowBlock, new[] { requiredType }]);
-
-                if (result is BaseFlowBlock resolvedViaPath)
-                {
-                    return string.Format(
-                        FlowBloxResourceUtil.GetLocalizedString("AssociationControlFactory_Resolvable", typeof(FlowBloxTexts)),
-                        resolvedViaPath.Name);
-                }
+                var resolver = new AssociatedFlowBlockResolvableHintTextResolver(_target, _property);
+                return resolver.ResolveHintText(fbResolvable);
             }
 
-            return FlowBloxResourceUtil.GetLocalizedString("AssociationControlFactory_NotResolvable", typeof(FlowBloxTexts));
+            var customResolvable = _property.GetCustomAttribute<AssociatedFlowBlockResolvableCustomAttribute>();
+            if (customResolvable != null)
+            {
+                var resolver = new AssociatedFlowBlockResolvableCustomHintTextResolver(_target, _property);
+                return resolver.ResolveHintText(customResolvable);
+            }
+
+            return null;
         }
 
         private void AppendResolvedFlowBlockHint(StackPanel stackPanel)

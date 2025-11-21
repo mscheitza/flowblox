@@ -1,34 +1,20 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FlowBlox.Core.Models.FlowBlocks.Base.DatasetSelection;
+using FlowBloxTest.DatasetSelection;
 using NSubstitute;
+using System.Collections.ObjectModel;
 
 namespace FlowBloxTest.Components
 {
     [TestClass]
-    public class FlowBlockInputDatasetSelectorTests
+    public class FlowBlockCombinationDatasetSelectorTests : FlowBlockDatasetSelectorTestBase
     {
-        private Dictionary<FieldElement, string> GetPrecedingFieldValues(FieldElement fieldElement, string value) => GetPrecedingFieldValues(new Tuple<FieldElement, string>(fieldElement, value));
-
-        private Dictionary<FieldElement, string> GetPrecedingFieldValues(params Tuple<FieldElement, string>[] fieldValues)
-        {
-            var result = new Dictionary<FieldElement, string>();
-            foreach (var fieldValue in fieldValues)
-            {
-                result[fieldValue.Item1] = fieldValue.Item2;
-            }
-            return result;
-        }
-
         [TestMethod]
         public void Test_GetResults_WithSpecificSetup_ReturnsFilteredResults()
         {
-            // Erstelle Substitutes für die FlowBlocks
+            // Create substitutes for the FlowBlocks
             var fb1 = Substitute.For<BaseResultFlowBlock>();
             fb1.Name.Returns("FB1");
 
@@ -47,7 +33,7 @@ namespace FlowBloxTest.Components
             var fb4_ReferencedFlowBlocks = new ObservableCollection<BaseFlowBlock> { fb2, fb3 };
             fb4.ReferencedFlowBlocks.Returns(fb4_ReferencedFlowBlocks);
 
-            // Erstelle Substitutes für FieldElements
+            // Create substitutes for FieldElements
             var fb1Field = Substitute.For<FieldElement>();
             fb1Field.Name.Returns("FB1-Feld");
             fb1Field.Source.Returns(fb2);
@@ -62,7 +48,7 @@ namespace FlowBloxTest.Components
 
             var precedingFieldValues = GetPrecedingFieldValues(fb1Field, "FB1-Value1");
 
-            // Erstelle Mock-Daten für FlowBlockOut und FlowBlockOutDataset
+            // Create mock data for FlowBlockOut and FlowBlockOutDataset
             var fb2Outs = new List<FlowBlockOutDataset>
             {
                 new FlowBlockOutDataset { FieldValueMappings = new List<FlowBlockOutDatasetFieldValueMapping> { new FlowBlockOutDatasetFieldValueMapping { Field = fb2Field, Value = "Value1", PrecedingFieldValues = precedingFieldValues } } },
@@ -89,17 +75,17 @@ namespace FlowBloxTest.Components
                 new InputBehaviorAssignment() { FlowBlock = fb3, Behavior = InputBehavior.Cross }
             };
 
-            FlowBlockInputDatasetSelector flowBlockInputDatasetSelector = new FlowBlockInputDatasetSelector(passedResults, inputAssignments);
+            FlowBlockCombinationDatasetSelector flowBlockInputDatasetSelector = new FlowBlockCombinationDatasetSelector(passedResults, inputAssignments);
             var results = flowBlockInputDatasetSelector.GetResults();
 
-            // Ergebnisabgleich
-            Assert.AreEqual(9, results.Count, "Die Anzahl der zurückgegebenen Kombinationen sollte 9 sein.");
+            // Results comparison
+            Assert.AreEqual(9, results.Count, "The number of returned combinations should be 9.");
         }
 
         [TestMethod]
         public void Test_GetResults_WithIntegrityCheck_ReturnsEighteenCombinations()
         {
-            // Erstelle Substitutes für die FlowBlocks
+            // Create substitutes for the FlowBlocks
             var fb1 = Substitute.For<BaseResultFlowBlock>();
             fb1.Name.Returns("FB1");
 
@@ -135,7 +121,7 @@ namespace FlowBloxTest.Components
             var precedingFieldValuesForFB1Value2 = GetPrecedingFieldValues(fb1Field, "FB1-Value2");
 
 
-            // Erstelle Mock-Daten für FlowBlockOut und FlowBlockOutDataset
+            // Create substitutes for FieldElements
             var fb2Outs = new List<FlowBlockOutDataset>
             {
                 new FlowBlockOutDataset { FieldValueMappings = new List<FlowBlockOutDatasetFieldValueMapping> { new FlowBlockOutDatasetFieldValueMapping { Field = fb2Field, Value = "FB1_Value1_FB2_Value1", PrecedingFieldValues = precedingFieldValuesForFB1Value1 } } },
@@ -177,12 +163,12 @@ namespace FlowBloxTest.Components
                 new InputBehaviorAssignment() { FlowBlock = fb3, Behavior = InputBehavior.Cross }
             };
 
-            // Verwende die erweiterten Datasets und InputAssignments in deinem FlowBlockInputDatasetSelector
-            FlowBlockInputDatasetSelector flowBlockInputDatasetSelector = new FlowBlockInputDatasetSelector(passedResultsExtended, inputAssignments);
-            var results = flowBlockInputDatasetSelector.GetResults();
+            // Use the extended datasets and InputAssignments in your FlowBlockInputDatasetSelector
+            FlowBlockCombinationDatasetSelector datasetSelector = new FlowBlockCombinationDatasetSelector(passedResultsExtended, inputAssignments);
+            var results = datasetSelector.GetResults();
 
-            // Ergebnisabgleich
-            Assert.AreEqual(18, results.Count, "Die Anzahl der zurückgegebenen Kombinationen sollte 18 sein.");
+            // Results comparison
+            Assert.AreEqual(18, results.Count, "The number of returned combinations should be 18.");
         }
     }
 }

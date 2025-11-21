@@ -5,6 +5,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid;
@@ -125,7 +126,9 @@ namespace FlowBlox.Views
             lvItemFieldElement.SubItems[0].Tag = fieldElement.FlowBlockName;
             lvItemFieldElement.SubItems.Add(fieldElement.Name);
             lvItemFieldElement.SubItems.Add(fieldElement.Pending ?
-                FlowBloxResourceUtil.GetLocalizedString("FieldElement_PendingValue") : fieldElement.StringValue);
+                FlowBloxResourceUtil.GetLocalizedString("FieldElement_PendingValue") : 
+                TextHelper.ShortenString(fieldElement.StringValue, 500, true));
+
             _fieldMap[fieldElement] = lvItemFieldElement;
             lvFields.Items.Add(lvItemFieldElement);
 
@@ -186,7 +189,7 @@ namespace FlowBlox.Views
 
             if (_fieldMap.TryGetValue(field, out var _listViewItem))
             {
-                _listViewItem.SubItems[2].Text = newValue;
+                _listViewItem.SubItems[2].Text = TextHelper.ShortenString(newValue, 500, true);
             }
         }
 

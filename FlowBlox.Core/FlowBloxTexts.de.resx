@@ -1512,9 +1512,6 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="WebBrowserFlowBlock_Groups_Advanced" xml:space="preserve">
 		<value>Erweiterte Einstellungen</value>
 	</data>
-  <data name="WebBrowserFlowBlock_Timeout" xml:space="preserve">
-		<value>Timeout (in Sekunden)</value>
-	</data>
   <data name="WebBrowserFlowBlock_Url" xml:space="preserve">
 		<value>Url</value>
 	</data>
@@ -1716,4 +1713,31 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="InputBehavior_RowWise" xml:space="preserve">
     <value>Reihenweise</value>
   </data>
+  <data name="InputBehavior_RowWiseValid" xml:space="preserve">
+    <value>Reihenweise - gültige Zeilen</value>
+  </data>
+  <data name="StartEndPatternSelectorFlowBlock_IncludePatternInResult" xml:space="preserve">
+    <value>Muster in Ausgabewert einschließen</value>
+  </data>
+  <data name="StartEndPatternSelectorFlowBlock_ReturnOptions" xml:space="preserve">
+    <value>Rückgabeoptionen</value>
+  </data>
+  <data name="WebBrowserFlowBlock_RetryLimit" xml:space="preserve">
+  <value>Maximale Anzahl der Wiederholungsversuche</value>
+</data>
+  <data name="WebBrowserFlowBlock_RetryTimeunit" xml:space="preserve">
+  <value>Warteintervall zwischen Wiederholungen (in Millisekunden)</value>
+</data>
+  <data name="WebBrowserFlowBlock_Timeout" xml:space="preserve">
+  <value>Timeout (in Sekunden)</value>
+</data>
+  <data name="WebBrowserFlowBlock_Timeout_Tooltip" xml:space="preserve">
+  <value>Legt fest, wie viele Sekunden maximal auf eine Browseraktion gewartet wird, bevor ein Timeout ausgelöst wird.</value>
+</data>
+  <data name="WebBrowserFlowBlock_RetryLimit_Tooltip" xml:space="preserve">
+  <value>Gibt an, wie oft ein fehlgeschlagener Browserzugriff erneut versucht wird, bevor ein Fehler zurückgegeben wird.</value>
+</data>
+  <data name="WebBrowserFlowBlock_RetryTimeunit_Tooltip" xml:space="preserve">
+  <value>Zeitspanne in Millisekunden, die zwischen zwei Wiederholungsversuchen gewartet wird.</value>
+</data>
 </root>

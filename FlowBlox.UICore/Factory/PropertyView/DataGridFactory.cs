@@ -120,6 +120,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         },
                         IsReadOnly = !childProperty.CanWrite || flowBlockUIAttribute?.ReadOnly == true
                     };
+                    ApplyCenteredTextColumnStyles(column);
                     dataGrid.Columns.Add(column);
                     columnAttributeMap[column] = flowBlockUIAttribute;
                 }
@@ -195,6 +196,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                             },
                             IsReadOnly = true
                         };
+                        ApplyCenteredTextColumnStyles(fallbackColumn);
                         dataGrid.Columns.Add(fallbackColumn);
                     }
                 }
@@ -360,6 +362,13 @@ namespace FlowBlox.UICore.Factory.PropertyView
             UpdateEmptyMessageVisibilityOnCollectionChanged(emptyMessage, list);
 
             return ResizableControlContainer.Create(stackPanel, minHeight: 150);
+        }
+
+        private void ApplyCenteredTextColumnStyles(DataGridTextColumn column)
+        {
+            var elementStyle = new Style(typeof(TextBlock));
+            elementStyle.Setters.Add(new Setter(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center));
+            column.ElementStyle = elementStyle;
         }
 
         private void OnPreviewKeyDownForFieldSelection(object sender, KeyEventArgs e)

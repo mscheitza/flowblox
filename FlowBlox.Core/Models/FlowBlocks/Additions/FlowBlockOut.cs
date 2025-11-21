@@ -25,6 +25,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         public List<FlowBlockOutDatasetFieldValueMapping> FieldValueMappings { get; set; }
     }
 
+    /// <summary>
+    /// Stellt eine Ergebnis-Datensatz Sammlung eines Flow-Blocks dar. 
+    /// <para>Eine Ergebnisdatensatz-Sammlung hat mehrere Ergebnisdatensätze.</para>
+    /// <para>Ein Ergebnisdatensatz hat pro Feld einen zugewiesenen Wert.</para>
+    /// <para>Jedes FlowBlockOutDatasetFieldValueMapping ist hinsichtlich seiner Felder identisch, sie unterscheiden sich hinsichtlich ihrer Werte.</para>
+    /// </summary>
     public class FlowBlockOut
     {
         public static FlowBlockOut CreateEmptyResult() 

@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
@@ -30,35 +31,47 @@ namespace FlowBlox.Views
         public void AppendMessage(RichTextBox richTextBox, FlowBloxLogLevel logLevel, string message)
         {
             Color logColor = GetForeColorForLogLevel(logLevel);
-
             string logLine = GetLine(logLevel, message) + Environment.NewLine;
 
             if (richTextBox.InvokeRequired)
             {
-                richTextBox.Invoke(new Action(() => AppendLog(richTextBox, logLine, logColor)));
+                richTextBox.Invoke(new Action(() => AppendInternal(richTextBox, logLine, logColor)));
             }
             else
             {
-                AppendLog(richTextBox, logLine, logColor);
+                AppendInternal(richTextBox, logLine, logColor);
             }
-
-            if (richTextBox.Text.Length > TextBoxMaxLength)
-            {
-                int index = richTextBox.Text.Length - TextBoxMaxLength;
-                richTextBox.Text = richTextBox.Text.Substring(index, TextBoxMaxLength);
-            }
-            richTextBox.SelectionStart = richTextBox.TextLength;
-            richTextBox.ScrollToCaret();
         }
 
-        private void AppendLog(RichTextBox richTextBox, string text, Color color)
+        private void AppendInternal(RichTextBox richTextBox, string logLine, Color logColor)
         {
-            richTextBox.SelectionStart = richTextBox.TextLength;
-            richTextBox.SelectionLength = 0;
-            richTextBox.SelectionColor = color;
-            richTextBox.AppendText(text);
-            richTextBox.SelectionColor = richTextBox.ForeColor;
-            richTextBox.Refresh();
+            richTextBox.BeginUpdate();
+            try
+            {
+                // Append with color
+                int start = richTextBox.TextLength;
+                richTextBox.SelectionStart = start;
+                richTextBox.SelectionLength = 0;
+                richTextBox.SelectionColor = logColor;
+                richTextBox.AppendText(logLine);
+                richTextBox.SelectionColor = richTextBox.ForeColor;
+
+                // Trim from the beginning while preserving formatting
+                if (richTextBox.TextLength > TextBoxMaxLength)
+                {
+                    int excess = richTextBox.TextLength - TextBoxMaxLength;
+                    richTextBox.SelectionStart = 0;
+                    richTextBox.SelectionLength = excess;
+                    richTextBox.SelectedText = string.Empty;
+                }
+
+                richTextBox.SelectionStart = richTextBox.TextLength;
+                richTextBox.ScrollToCaret();
+            }
+            finally
+            {
+                richTextBox.EndUpdate();
+            }
         }
 
         private Color GetForeColorForLogLevel(FlowBloxLogLevel logLevel)

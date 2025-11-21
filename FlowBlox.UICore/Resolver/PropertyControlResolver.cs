@@ -54,8 +54,7 @@ namespace FlowBlox.UICore.Resolver
                 flowBlockUI?.ReadOnly == true ||
                 !property.CanWrite;
 
-            bool useLabel = flowBlockUI?.DisplayLabel == false ? false : true;
-            FrameworkElement control = CreateControl(property, target, displayName, flowBlockUI, readOnly, preselectedInstance, ref useLabel);
+            FrameworkElement control = CreateControl(property, target, displayName, flowBlockUI, readOnly, preselectedInstance);
 
             if (!string.IsNullOrWhiteSpace(description))
             {
@@ -77,12 +76,14 @@ namespace FlowBlox.UICore.Resolver
             if (activationAttr != null)
                 isActive = activationAttr.IsActive(target);
 
+            var labelSettings = GetLabelSettings(property, displayName, flowBlockUI);
+
             var propertyControlViewModel = new PropertyControlViewModel()
             {
                 PropertyName = property.Name,
                 Target = target,
-                UseLabel = useLabel,
-                Label = displayName,
+                UseLabel = labelSettings.UseLabel,
+                Label = labelSettings.LabelText,
                 Value = property.GetValue(target),
                 ValueType = property.PropertyType,
                 IsEnabled = !FlowBlockUIAttributeHelper.IsDynamicallyReadOnly(target, flowBlockUI),
@@ -95,14 +96,36 @@ namespace FlowBlox.UICore.Resolver
             return propertyControlViewModel;
         }
 
+        private (bool UseLabel, string LabelText) GetLabelSettings(
+            PropertyInfo property,
+            string displayName,
+            FlowBlockUIAttribute flowBlockUI)
+        {
+            // If DisplayLabel is explicitly set to false, never show a label.
+            bool displayLabel = flowBlockUI?.DisplayLabel ?? true;
+            if (!displayLabel)
+                return (false, string.Empty);
+
+            // Special handling for boolean properties (checkboxes)
+            if (property.PropertyType == typeof(bool))
+            {
+                var checkboxAttribute = property.GetCustomAttribute<FlowBlockCheckboxAttribute>();
+                if (string.IsNullOrWhiteSpace(checkboxAttribute?.HeaderLabel))
+                    return (false, string.Empty);
+
+                var resolvedLabel = FlowBloxResourceUtil.GetLocalizedString(checkboxAttribute.HeaderLabel, checkboxAttribute.ResourceType);
+                return (true, resolvedLabel);
+            }
+            return (true, displayName);
+        }
+
         private FrameworkElement CreateControl(
             PropertyInfo property, 
             object target, 
             string displayName, 
             FlowBlockUIAttribute flowBlockUI, 
             bool readOnly, 
-            object preselectedInstance, 
-            ref bool useLabel)
+            object preselectedInstance)
         {
             var binding = new Binding(property.Name)
             {
@@ -115,8 +138,6 @@ namespace FlowBlox.UICore.Resolver
 
             if (property.PropertyType == typeof(bool))
             {
-                useLabel = false;
-
                 var stackPanel = new StackPanel
                 {
                     Orientation = Orientation.Horizontal

@@ -8,12 +8,22 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
         [FlowBlockNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "Element not found")]
         ElementNotFound,
+
         [FlowBlockNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "Element is not applicable")]
         ElementNotApplicable,
+
         [FlowBlockNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "URL could not be accessed")]
-        UrlNotAccessible
+        UrlNotAccessible,
+
+        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [Display(Name = "Element is stale (DOM changed)")]
+        ElementStale,
+
+        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [Display(Name = "Unknown browser error")]
+        UnknownError
     }
 
     public class WebBrowserActionResult

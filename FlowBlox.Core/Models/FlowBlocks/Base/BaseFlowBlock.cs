@@ -7,6 +7,7 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
+using FlowBlox.Core.Models.FlowBlocks.Base.DatasetSelection;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
@@ -439,7 +440,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, ReadOnlyMethod = nameof(GetInputReferenceReadonly), 
             SelectionFilterMethod = nameof(GetPossibleInputReference), 
             SelectionDisplayMember = nameof(Name))]
+        [AssociatedFlowBlockResolvableCustom(nameof(InputReference), nameof(CanDisplayAssociatedInputReferenceHint))]
         public BaseFlowBlock AssociatedInputReference { get; set; }
+
+        public bool CanDisplayAssociatedInputReferenceHint() => this.ReferencedFlowBlocks.Count() > 1;
 
         public virtual BaseFlowBlock InputReference
         {
@@ -654,8 +658,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public override void RuntimeStarted(BaseRuntime runtime)
         {
-            runtime.Report($"Initializing runtime for FlowBlock \"{this.Name}\".");
-
             if (this.HasInputReference)
                 runtime.Report($"FlowBlock \"{this.Name}\": Collecting all inputs until the completion of iteration by \"{InputReference.Name}\".");
 
@@ -674,8 +676,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public override void RuntimeFinished(BaseRuntime runtime)
         {
-            runtime.Report($"Finishing runtime for FlowBlock \"{this.Name}\".");
-
             if (this.InputReference != null)
             {
                 this.InputReference.IterationStart -= InputReference_IterationStart;
@@ -869,9 +869,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         private void InputReference_IterationEnd(BaseRuntime runtime)
         {
-            FlowBlockInputDatasetSelector flowBlockInputSelector = new FlowBlockInputDatasetSelector(_passedResults, this.InputBehaviorAssignments);
-
-            var results = flowBlockInputSelector.GetResults();
+            var selector = FlowBlockDatasetSelectorFactory.Create(_passedResults, this.InputBehaviorAssignments);
+            var results = selector.GetResults();
             FilterInputDatasets(ref results);
 
             InputDatasets = results;

@@ -1,23 +1,18 @@
 ﻿using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Components;
 
-namespace FlowBlox.Core.Models.FlowBlocks.Base
+namespace FlowBlox.Core.Models.FlowBlocks.Base.DatasetSelection
 {
-    // TODO: RowWise implementieren.
-    public class FlowBlockInputDatasetSelector
+    public class FlowBlockCombinationDatasetSelector : FlowBlockDatasetSelectorBase
     {
-        private Dictionary<BaseFlowBlock, HashSet<FlowBlockOut>> passedResults;
-        private IList<InputBehaviorAssignment> inputBehaviorAssignments;
-
-        public FlowBlockInputDatasetSelector(
-            Dictionary<BaseFlowBlock, HashSet<FlowBlockOut>> passedResults, 
-            IList<InputBehaviorAssignment> inputBehaviorAssignments)
+        public FlowBlockCombinationDatasetSelector(
+            Dictionary<BaseFlowBlock, HashSet<FlowBlockOut>> passedResults,
+            IList<InputBehaviorAssignment> inputBehaviorAssignments) : base(passedResults, inputBehaviorAssignments)
         {
-            this.passedResults = passedResults;
-            this.inputBehaviorAssignments = inputBehaviorAssignments;
+
         }
 
-        public List<FlowBlockOutDataset> GetResults()
+        public override List<FlowBlockOutDataset> GetResults()
         {
             var resultList = new List<FlowBlockOutDataset>();
             var listOfLists = passedResults.Select(x => x.Value.SelectMany(fbo => fbo.Results).ToList()).ToList();
@@ -41,9 +36,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                         FieldElement fieldElement = fieldAndValue.Key;
                         string fieldValue = fieldAndValue.Value;
 
-                        // Wenn es mindestens ein Feld in anderen vorangegangenen Feldern existiert und die Werte abweichen, dann sind die Stränge nicht kompatibel.
+                        // If at least one field exists in other preceding fields and the values ​​differ, then the strands are not compatible.
                         if (allPrecedingAndCurrentFieldValues
-                            .Except(new[] { precedingAndCurrentFieldValues })
+                            .Except([precedingAndCurrentFieldValues])
                             .Any(x => x.ContainsKey(fieldElement) && x[fieldElement] != fieldValue))
                         {
                             filtered.Remove(flowBlockoutDataset);
@@ -77,12 +72,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             if (IsInputBehavior(listOfLists[depth], InputBehavior.FirstValid))
             {
                 var validDatasets = listOfLists[depth].Where(x => IsValid(x));
-                Recurse(validDatasets.Any() ? validDatasets.First() : listOfLists[depth].First(), listOfLists, depth, current, result);
+                Recurse(validDatasets.Any() ? 
+                    validDatasets.First() : 
+                    listOfLists[depth].First(), listOfLists, depth, current, result);
             }
             else if (IsInputBehavior(listOfLists[depth], InputBehavior.LastValid))
             {
                 var validDatasets = listOfLists[depth].Where(x => IsValid(x));
-                Recurse(validDatasets.Any() ? validDatasets.Last() : listOfLists[depth].First(), listOfLists, depth, current, result);
+                Recurse(validDatasets.Any() ? 
+                    validDatasets.Last() : 
+                    listOfLists[depth].First(), listOfLists, depth, current, result);
             }
             else if (IsInputBehavior(listOfLists[depth], InputBehavior.Cross))
             {
@@ -112,11 +111,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             current.RemoveRange(current.Count - item.FieldValueMappings.Count, item.FieldValueMappings.Count);
         }
 
-        private bool IsValid(FlowBlockOutDataset item)
-        {
-            return item.FieldValueMappings.Any(x => !string.IsNullOrEmpty(x.Value));
-        }
-
         private bool IsInputBehavior(List<FlowBlockOutDataset> items, InputBehavior inputBehavior)
         {
             if (items.Count == 0)
@@ -130,11 +124,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             var underlyingFlowBlock = field.Source;
 
             return GetInputBehaviorAssignment(underlyingFlowBlock).Behavior == inputBehavior;
-        }
-
-        private InputBehaviorAssignment GetInputBehaviorAssignment(BaseResultFlowBlock underlyingFlowBlock)
-        {
-            return inputBehaviorAssignments.Single(y => y.FlowBlock == underlyingFlowBlock);
         }
     }
 }

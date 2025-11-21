@@ -68,7 +68,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public WebEventFlowBlock() : base()
         {
-            this.WaitingTimeAfterExecution = 100;
+            this.WaitingTimeAfterExecution = WebBrowserConstants.DefaultWaitingTimeAfterExecution;
         }
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;

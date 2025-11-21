@@ -2095,6 +2095,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Row upon row ähnelt.
+        /// </summary>
+        public static string InputBehavior_RowWise {
+            get {
+                return ResourceManager.GetString("InputBehavior_RowWise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Row upon row - valid rows ähnelt.
+        /// </summary>
+        public static string InputBehavior_RowWiseValid {
+            get {
+                return ResourceManager.GetString("InputBehavior_RowWiseValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Input behavior ähnelt.
         /// </summary>
         public static string InputBehaviorAssignment_Behavior {
@@ -3473,6 +3491,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Include pattern in output value ähnelt.
+        /// </summary>
+        public static string StartEndPatternSelectorFlowBlock_IncludePatternInResult {
+            get {
+                return ResourceManager.GetString("StartEndPatternSelectorFlowBlock_IncludePatternInResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Return options ähnelt.
+        /// </summary>
+        public static string StartEndPatternSelectorFlowBlock_ReturnOptions {
+            get {
+                return ResourceManager.GetString("StartEndPatternSelectorFlowBlock_ReturnOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Start/End patterns ähnelt.
         /// </summary>
         public static string StartEndPatternSelectorFlowBlock_StartEndPatterns {
@@ -4238,11 +4274,56 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (seconds) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum number of retry attempts ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_RetryLimit {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_RetryLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines how many times a failed browser action will be retried before an error is returned. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_RetryLimit_Tooltip {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_RetryLimit_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Retry interval (in milliseconds) ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_RetryTimeunit {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_RetryTimeunit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The delay in milliseconds between retry attempts. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_RetryTimeunit_Tooltip {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_RetryTimeunit_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (in seconds) ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_Timeout {
             get {
                 return ResourceManager.GetString("WebBrowserFlowBlock_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Specifies the maximum number of seconds to wait for a browser operation before a timeout occurs. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_Timeout_Tooltip {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_Timeout_Tooltip", resourceCulture);
             }
         }
         

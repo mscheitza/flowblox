@@ -12,6 +12,7 @@ using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using Mysqlx.Crud;
+using Newtonsoft.Json;
 using SkiaSharp;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -31,27 +32,108 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 if (_internalWebBrowser == null)
                 {
                     var options = FlowBloxOptions.GetOptionInstance().OptionCollection;
-                    var serviceName = options.ContainsKey("WebBrowser.ServiceName") ? options["WebBrowser.ServiceName"].Value : typeof(ChromeWebBrowser).Name;
-                    _internalWebBrowser = WebBrowserProvider.Create(serviceName);
+                    if (!options.TryGetValue("WebBrowser.ServiceName", out var serviceNameOption) || string.IsNullOrWhiteSpace(serviceNameOption.Value))
+                    {
+                        throw new InvalidOperationException(
+                            "Option 'WebBrowser.ServiceName' is not configured or is empty. " +
+                            "Please configure a valid web browser service name.");
+                    }
+
+                    var serviceName = serviceNameOption.Value;
+
+                    if (!options.TryGetValue("WebBrowser.ServiceSettings", out var serializedSettings) || string.IsNullOrWhiteSpace(serializedSettings.Value))
+                    {
+                        throw new InvalidOperationException(
+                            "Option 'WebBrowser.ServiceSettings' is not configured or is empty. " +
+                            "Please provide valid web browser settings.");
+                    }
+
+                    _internalWebBrowser = WebBrowserFactory.Create(serviceName, serializedSettings.Value);
                 }
+
                 return _internalWebBrowser;
             }
         }
 
-        [Display(Name = "WebBrowserFlowBlock_AssociatedWebBrowser", ResourceType = typeof(FlowBloxTexts), GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 0)]
+        public WebBrowserFlowBlock()
+        {
+            this.RetryTimeunit = WebBrowserConstants.DefaultRetryTimeunit;
+            this.RetryLimit = WebBrowserConstants.DefaultRetryLimit;
+            this.Timeout = WebBrowserConstants.DefaultTimeout;
+        }
+
+        public override void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions)
+        {
+            var chromeServiceName = typeof(ChromeWebBrowser).Name;
+            var firefoxServiceName = typeof(FirefoxWebBrowser).Name;
+
+            // Determine the currently configured service name (if any)
+            string configuredServiceName = null;
+
+            var existingServiceNameOption = currentOptions
+                .FirstOrDefault(o => o.Name == "WebBrowser.ServiceName");
+
+            if (!string.IsNullOrWhiteSpace(existingServiceNameOption?.Value))
+                configuredServiceName = existingServiceNameOption.Value;
+
+            // If nothing is configured yet, fall back to Chrome as default
+            var effectiveServiceName = string.IsNullOrWhiteSpace(configuredServiceName)
+                ? chromeServiceName
+                : configuredServiceName;
+
+            // Add default for WebBrowser.ServiceName (Chrome as the general default)
+            defaults.Add(new OptionElement(
+                "WebBrowser.ServiceName",
+                chromeServiceName,
+                "The default web browser implementation used for web automation.",
+                OptionElement.OptionType.Text));
+
+            // Choose default settings DTO based on the effective service name
+            SeleniumWebBrowserSettingsDto defaultSettings;
+            if (string.Equals(effectiveServiceName, firefoxServiceName, StringComparison.OrdinalIgnoreCase))
+                defaultSettings = FirefoxWebBrowserSettingsDto.CreateDefault();
+            else
+            {
+                // Fallback and also the normal default: Chrome
+                defaultSettings = ChromeWebBrowserSettingsDto.CreateDefault();
+            }
+
+            var defaultSettingsJson = JsonConvert.SerializeObject(defaultSettings, Formatting.Indented);
+
+            defaults.Add(new OptionElement(
+                "WebBrowser.ServiceSettings",
+                defaultSettingsJson,
+                "JSON settings for the default web browser implementation.",
+                OptionElement.OptionType.Text));
+
+            base.OptionsInit(defaults, currentOptions);
+        }
+
+        [Display(Name = "WebBrowserFlowBlock_AssociatedWebBrowser", ResourceType = typeof(FlowBloxTexts), 
+            GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleWebBrowsers), 
             SelectionDisplayMember = nameof(Name))]
         public WebBrowserFlowBlock AssociatedWebBrowser { get; set; }
 
-        [Display(Name = "WebBrowserFlowBlock_Timeout", ResourceType = typeof(FlowBloxTexts), GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 1)]
+        [Display(Name = "WebBrowserFlowBlock_Timeout", Description = "WebBrowserFlowBlock_Timeout_Tooltip", ResourceType = typeof(FlowBloxTexts), 
+            GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 1)]
         [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
         public int Timeout { get; set; }
+
+        [Display(Name = "WebBrowserFlowBlock_RetryLimit", Description = "WebBrowserFlowBlock_RetryLimit_Tooltip", ResourceType = typeof(FlowBloxTexts),
+            GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 2)]
+        public int RetryLimit { get; set; }
+
+        [Display(Name = "WebBrowserFlowBlock_RetryTimeunit", Description = "WebBrowserFlowBlock_RetryTimeunit_Tooltip", ResourceType = typeof(FlowBloxTexts),
+            GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 3)]
+        public int RetryTimeunit { get; set; }
 
         public List<WebBrowserFlowBlock> GetPossibleWebBrowsers()
         {
             return FlowBloxRegistryProvider.GetRegistry()
                 .GetFlowBlocks<WebBrowserFlowBlock>()
+                .Except([this])
                 .ToList();
         }
 
@@ -61,11 +143,6 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.web, 16, SKColors.DeepSkyBlue);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.web, 32, SKColors.DeepSkyBlue);
-
-        public WebBrowserFlowBlock() : base()
-        {
-            
-        }
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
 
@@ -92,16 +169,18 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 Wait(runtime);
                 SetParentElement(data);
 
-                // Timeout setzen
+                // Advanced configuration
                 InternalWebBrowser.Timeout = Timeout;
+                InternalWebBrowser.RetryLimit = RetryLimit;
+                InternalWebBrowser.RetryTimeunit = RetryTimeunit;
 
-                // URL ermitteln
+                // Determine URL
                 string url = FlowBloxFieldHelper.ReplaceFieldsInString(this.Url);
-                
-                // URL öffnen
+
+                // Open URL
                 InternalWebBrowser.Open(url);
 
-                // Im Falle eines assoziierten Web-Browsers werden die Cookies gesetzt und die Seite neu geladen
+                // In the case of an associated web browser, the cookies are set and the page is reloaded.
                 if (this.AssociatedWebBrowser?.InternalWebBrowser != null)
                 {
                     var associatedWebBrowser = this.AssociatedWebBrowser.InternalWebBrowser;
@@ -119,7 +198,15 @@ namespace FlowBlox.Core.Models.FlowBlocks
         {
             if (_internalWebBrowser != null)
             {
-                _internalWebBrowser.Close();
+                try
+                {
+                    _internalWebBrowser.Close();
+                }
+                catch(Exception e)
+                {
+                    runtime.Report("An error occurred while closing the web browser instance.", FlowBloxLogLevel.Warning, e);
+                }
+                
                 _internalWebBrowser = null;
             }
 

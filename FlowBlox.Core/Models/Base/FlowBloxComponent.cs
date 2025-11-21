@@ -215,19 +215,34 @@ namespace FlowBlox.Core.Models.Base
             this.RegisterPropertyChangedEventHandlers();
         }
 
+        /// <summary>
+        /// Initializes option defaults for this component or FlowBlock.
+        /// This overload also receives the currently stored options, allowing the implementation to choose defaults dynamically.
+        /// </summary>
+        /// <param name="defaults">A list to which default option definitions are added.</param>
+        /// <param name="currentOptions">The existing configured options, enabling conditional initialization</param>
+        public virtual void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions) => OptionsInit(defaults);
+
+
+        /// <summary>
+        /// Initializes default options for this component or FlowBlock.
+        /// Derived classes should override this method to declare their configurable default settings. 
+        /// These defaults can be modified by the user.
+        /// </summary>
+        /// <param name="defaults">A list to which default option definitions are added.</param>
         public virtual void OptionsInit(List<OptionElement> defaults)
         {
-            
+            // This method can be implemented in derived classes.
         }
 
         public virtual void RuntimeFinished(BaseRuntime runtime)
         {
-            
+            // This method can be implemented in derived classes.
         }
 
         public virtual void RuntimeStarted(BaseRuntime runtime)
         {
-            
+            // This method can be implemented in derived classes.
         }
     }
 }

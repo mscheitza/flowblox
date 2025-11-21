@@ -226,11 +226,12 @@ namespace FlowBlox.Core.Models.Runtime
 
         protected virtual void OnBeforeRuntimeStarted(BaseFlowBlock startFlowBlock, IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<IManagedObject> managedObjects)
         {
+            Report($"Initializing runtime for managed objects...");
             foreach (var managedObject in managedObjects)
             {
                 managedObject.RuntimeStarted(this);
             }
-
+            Report($"Initializing runtime for flow blocks...");
             InitializeFlowBlock(startFlowBlock);
             var notInitialized = flowBlocks.Except(flowBlocks.OfType<NoteFlowBlock>()).Where(x => !_initializedFlowBlocks.Contains(x));
             if (notInitialized.Any())
@@ -238,19 +239,22 @@ namespace FlowBlox.Core.Models.Runtime
                 var notInitializedNames = string.Join(", ", notInitialized.Select(x => x.Name));
                 throw new InvalidOperationException($"The following FlowBlocks have not been initialized: {notInitializedNames}. Please check their dependencies and ensure they are correctly configured to allow proper initialization.");
             }
+            Report($"Runtime initialization completed.");
         }
 
         protected virtual void OnAfterRuntimeFinished(IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<IManagedObject> managedObjects)
         {
+            Report($"Finishing runtime for managed objects...");
             foreach (var managedObject in managedObjects)
             {
                 managedObject.RuntimeFinished(this);
             }
-
-            foreach(var flowBlock in flowBlocks)
+            Report($"Finishing runtime for flow blocks...");
+            foreach (var flowBlock in flowBlocks)
             {
                 flowBlock.RuntimeFinished(this);
             }
+            Report($"Finishing runtime completed.");
         }
 
         private void IntegrityCheck(IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<FieldElement> userFields)
@@ -326,9 +330,16 @@ namespace FlowBlox.Core.Models.Runtime
 
         protected virtual void OnBeforeRuntimeStarted()
         {
+            InitDefaultOptions();
             var registry = FlowBloxRegistryProvider.GetRegistry();
             var flowBlocks = registry.GetFlowBlocks();
             OnBeforeRuntimeStarted(flowBlocks);
+        }
+
+        private void InitDefaultOptions()
+        {
+            var options = FlowBloxOptions.GetOptionInstance();
+            options.InitDefaults(false);
         }
 
         protected virtual void OnAfterRuntimeFinished(IEnumerable<BaseFlowBlock> flowBlocks)

@@ -117,20 +117,27 @@ namespace FlowBlox.Core.Util
 
             foreach(var optionsRegistration in FlowBloxServiceLocator.Instance.GetServices<IOptionsRegistration>())
             {
-                optionsRegistration.OptionsInit(defaultOptions);
+                optionsRegistration.OptionsInit(defaultOptions, [.. OptionCollection.Values]);
             }
 
             foreach (var component in
                 FlowBloxProjectManager.Instance.ActiveProject?.CreateInstances<IFlowBloxComponent>() ??
                 AppDomainInstanceFactory.CreateInstances<IFlowBloxComponent>())
             {
-                component.OptionsInit(defaultOptions);
+                component.OptionsInit(defaultOptions, [.. OptionCollection.Values]);
             }
 
-            foreach (var option in defaultOptions)
+            lock (_saveLock)
             {
-                if (!OptionCollection.ContainsKey(option.Name) || overwrite)
-                    OptionCollection[option.Name] = option;
+                foreach (var option in defaultOptions)
+                {
+                    bool hasOptionValue = false;
+                    if (OptionCollection.TryGetValue(option.Name, out OptionElement resolvedOption))
+                        hasOptionValue = !string.IsNullOrWhiteSpace(resolvedOption.Value);
+
+                    if (!hasOptionValue || overwrite)
+                        OptionCollection[option.Name] = option;
+                }
             }
         }
 

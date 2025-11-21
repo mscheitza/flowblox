@@ -13,7 +13,7 @@ using System.Xml;
 namespace FlowBlox.Core.Models.FlowBlocks.Xml
 {
     [Display(Name = "XmlDocumentXPathSelector_DisplayName", Description = "XmlDocumentXPathSelector_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class XmlDocumentXPathSelector : BaseSingleResultFlowBlock
+    public class XmlDocumentXPathSelectorFlowBlock : BaseSingleResultFlowBlock
     {
         [Display(Name = "XmlDocumentXPathSelector_AssociatedXmlDocument", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
