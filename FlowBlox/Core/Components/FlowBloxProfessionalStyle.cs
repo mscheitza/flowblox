@@ -2,9 +2,6 @@
 
 namespace FlowBlox.Core
 {
-    /// <summary>
-    /// Der Professional Stil des WebFlowIDE.
-    /// </summary>
     internal class FlowBloxProfessionalStyle : FlowBloxSyleBase
     {
         public FlowBloxProfessionalStyle() : base()

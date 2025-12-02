@@ -176,11 +176,11 @@ namespace FlowBlox.AppWindow
             // 
             // saveProjectDialog
             // 
-            saveProjectDialog.Filter = "*.dsprj (WebFlowIDE Project)|*.dsprj";
+            saveProjectDialog.Filter = "*.dsprj (FlowBlox Project)|*.dsprj";
             // 
             // openProjectDialog
             // 
-            openProjectDialog.Filter = "*.dsprj (WebFlowIDE Project)|*.dsprj";
+            openProjectDialog.Filter = "*.dsprj (FlowBlox Project)|*.dsprj";
             // 
             // menuStrip
             // 

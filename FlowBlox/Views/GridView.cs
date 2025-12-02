@@ -6,7 +6,7 @@ using FlowBlox.Core.Util.Controls;
 namespace FlowBlox.Views
 {
     /// <summary>
-    /// Fenster zur Einstellung der Höhe und Breite des WebFlowIDE.Grids.
+    /// Fenster zur Einstellung der Höhe und Breite des FlowBlox Grids.
     /// </summary>
     internal partial class GridView : Form
     {

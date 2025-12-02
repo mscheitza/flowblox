@@ -162,7 +162,7 @@
             cbValue.Name = "cbValue";
             cbValue.Size = new System.Drawing.Size(150, 17);
             cbValue.TabIndex = 25;
-            cbValue.Text = "WebFlowIDE.Option.Name";
+            cbValue.Text = "FlowBlox.Option.Name";
             cbValue.UseVisualStyleBackColor = true;
             cbValue.Visible = false;
             cbValue.CheckedChanged += cbValue_CheckedChanged;

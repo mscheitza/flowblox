@@ -2,7 +2,6 @@
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Models.FlowBlocks.WebBrowser;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Fields;
@@ -15,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowBlox.Core.Models.FlowBlocks
+namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 {
     public abstract class WebActionFlowblockBase : BaseSingleResultFlowBlock
     {

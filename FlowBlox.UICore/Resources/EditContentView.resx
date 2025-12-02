@@ -99,34 +99,35 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	<data name="Window_Title" xml:space="preserve">
-    <value>Inhalt bearbeiten</value>
-  </data>
+  <value>Edit content</value>
+</data>
 
 	<data name="Toolbar_ImportText" xml:space="preserve">
-    <value>Importieren (Text)</value>
-  </data>
+  <value>Import (text)</value>
+</data>
 	<data name="Toolbar_ImportText_Tooltip" xml:space="preserve">
-    <value>Datei als Text laden und in den Editor einfügen.</value>
-  </data>
+  <value>Load a file as text and insert it into the editor.</value>
+</data>
 
 	<data name="Toolbar_ImportBytes" xml:space="preserve">
-    <value>Importieren (Bytes zu Base64)</value>
-  </data>
+  <value>Import (bytes to Base64)</value>
+</data>
 	<data name="Toolbar_ImportBytes_Tooltip" xml:space="preserve">
-    <value>Binärdatei laden und als Base64-Text in den Editor einfügen.</value>
-  </data>
+  <value>Load a binary file and insert it as Base64 text into the editor.</value>
+</data>
 
 	<data name="Label_Syntax" xml:space="preserve">
-    <value>Syntax:</value>
-  </data>
+  <value>Syntax:</value>
+</data>
 	<data name="Combo_Syntax_Tooltip" xml:space="preserve">
-    <value>Syntax-Highlighting auswählen.</value>
-  </data>
+  <value>Select syntax highlighting.</value>
+</data>
 
 	<data name="Button_Back" xml:space="preserve">
-    <value>Zurück</value>
-  </data>
+  <value>Back</value>
+</data>
 	<data name="Button_Apply" xml:space="preserve">
-    <value>Übernehmen</value>
-  </data>
+  <value>Apply</value>
+</data>
+
 </root>

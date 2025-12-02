@@ -21,7 +21,7 @@
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DocumentationFile>bin\Release\WebFlowIDE.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\FlowBlox.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>

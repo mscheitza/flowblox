@@ -153,11 +153,6 @@ namespace FlowBlox.AppWindow.Contents
             mainPanel_DoScroll();
         }
 
-        private void itmLayout_Click(object sender, EventArgs e)
-        {
-            UF_LayoutGrid();
-        }
-
         private void mainPanel_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Copy;
@@ -631,9 +626,13 @@ namespace FlowBlox.AppWindow.Contents
                         RuntimeThread.Start();
                         UpdateUI();
                     }
-                    catch (Exception Exception)
+                    catch (Exception ex)
                     {
-                        FlowBloxMessageBox.Show(this, "Die Ausführung konnte nicht gestartet werden: " + Exception.Message, "WebFlowIDE.Execute", FlowBloxMessageBox.Buttons.OK, FlowBloxMessageBox.Icons.Info);
+                        FlowBloxMessageBox.Show(this, 
+                            "The execution could not be started: " + ex.Message, 
+                            "Runtime execution failed", 
+                            FlowBloxMessageBox.Buttons.OK, 
+                            FlowBloxMessageBox.Icons.Info);
                     }
                 }
             }
@@ -684,7 +683,15 @@ namespace FlowBlox.AppWindow.Contents
             {
                 var exception = (Exception)result;
                 if (!(exception is RuntimeCancellationException))
-                    FlowBloxMessageBox.Show(this, "Laufzeit Ausnahme: " + exception.Message, "WebFlowIDE.Runtime", FlowBloxMessageBox.Buttons.OK, FlowBloxMessageBox.Icons.Error);
+                {
+                    FlowBloxMessageBox.Show(this,
+                        "The runtime was aborted due to an unexpected error." + Environment.NewLine +
+                        "Runtime exception:" + Environment.NewLine +
+                        exception.ToString(),
+                        "Runtime aborted", 
+                        FlowBloxMessageBox.Buttons.OK, 
+                        FlowBloxMessageBox.Icons.Error);
+                }
             }
 
             this.Runtime = null;
@@ -734,14 +741,6 @@ namespace FlowBlox.AppWindow.Contents
                 _recentFlowBlock.UpdateFlags();
                 _recentFlowBlock.RefreshSize();
                 UpdateUI();
-            }
-        }
-
-        private void itmLayoutElement_Click(object sender, EventArgs e)
-        {
-            if (_recentFlowBlock != null)
-            {
-                UF_LayoutElement(_recentFlowBlock);
             }
         }
 

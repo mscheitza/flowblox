@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abbrechen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
         /// </summary>
         public static string Button_Cancel {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create ähnelt.
         /// </summary>
         public static string Button_Create {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Beschreibung sollte aus 1-2 Sätzen bestehen, die die Erweiterung zusammenfassen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The description should consist of 1–2 sentences summarizing the extension. ähnelt.
         /// </summary>
         public static string Hint_Description {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte verwenden Sie das Format: CompanyName.ProjectName.ExtensionName. Beispiel: Contoso.MyProject.MyExtension. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please use the format: CompanyName.ProjectName.ExtensionName. Example: Contoso.MyProject.MyExtension. ähnelt.
         /// </summary>
         public static string Hint_NameFormat {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beschreibung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
         public static string Label_Description {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterung Erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create extension ähnelt.
         /// </summary>
         public static string Title {
             get {

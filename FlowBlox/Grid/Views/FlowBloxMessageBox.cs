@@ -517,13 +517,12 @@ namespace FlowBlox.Views
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlowBloxMessageBox));
             this.SuspendLayout();
             // 
-            // WebFlowIDEMessageBox
+            // FlowBloxMessageBox
             // 
             this.ClientSize = new Size(284, 262);
             this.Icon = ((Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FlowBloxMessageBox";
             this.ResumeLayout(false);
-
         }
     }
 

@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abbrechen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
         /// </summary>
         public static string Button_Cancel {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create ähnelt.
         /// </summary>
         public static string Button_Create {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Geben Sie hier die Versionsnummer Ihrer Erweiterungsbibliothek im Format &apos;Major.Minor.Patch&apos; an. Beachten Sie, dass die eingegebene Versionsnummer mit der Versionsnummer der Assembly übereinstimmen muss. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enter the version number of your extension library here in the format &apos;Major.Minor.Patch&apos;. Note that the entered version number must match the version number of the assembly. ähnelt.
         /// </summary>
         public static string Hint_VersionFormat {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Versionsnummer: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Version number: ähnelt.
         /// </summary>
         public static string Label_Version {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterungsversion erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create extension version ähnelt.
         /// </summary>
         public static string Title {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Geben Sie die Versionsnummer im Format &apos;Major.Minor.Patch&apos; an. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enter the version number in the format &apos;Major.Minor.Patch&apos;. ähnelt.
         /// </summary>
         public static string ToolTip_Format {
             get {

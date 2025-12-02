@@ -22,8 +22,8 @@ using System.Windows.Forms;
 namespace FlowBlox.Views
 {
     /// <summary>
-    /// Ansicht des Feld-Monitors. Wird standardmäßig rechts von WebFlowIDE.Grid angezeigt.
-    /// </summary>
+    /// View of the field monitor. Displayed to the right of FlowBlox Grid by default.
+    // </summary>
     public partial class FieldView : UserControl
     {
         private readonly Dictionary<FieldElement, ListViewItem> _fieldMap = new Dictionary<FieldElement, ListViewItem>();

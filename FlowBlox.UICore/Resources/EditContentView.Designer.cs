@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Übernehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
         public static string Button_Apply {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
         public static string Button_Back {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Syntax-Highlighting auswählen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select syntax highlighting. ähnelt.
         /// </summary>
         public static string Combo_Syntax_Tooltip {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Importieren (Bytes zu Base64) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Import (bytes to Base64) ähnelt.
         /// </summary>
         public static string Toolbar_ImportBytes {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Binärdatei laden und als Base64-Text in den Editor einfügen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Load a binary file and insert it as Base64 text into the editor. ähnelt.
         /// </summary>
         public static string Toolbar_ImportBytes_Tooltip {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Importieren (Text) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Import (text) ähnelt.
         /// </summary>
         public static string Toolbar_ImportText {
             get {
@@ -124,7 +124,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Datei als Text laden und in den Editor einfügen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Load a file as text and insert it into the editor. ähnelt.
         /// </summary>
         public static string Toolbar_ImportText_Tooltip {
             get {
@@ -133,7 +133,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Inhalt bearbeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit content ähnelt.
         /// </summary>
         public static string Window_Title {
             get {
