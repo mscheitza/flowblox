@@ -90,17 +90,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
             }
         }
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            foreach (var a in Assignments)
-            {
-                a.XPath = FlowBloxFieldHelper.ReplaceFQName(a.XPath, oldFQFieldName, newFQFieldName);
-                a.Value = FlowBloxFieldHelper.ReplaceFQName(a.Value, oldFQFieldName, newFQFieldName);
-            }
-            XPath = FlowBloxFieldHelper.ReplaceFQName(XPath, oldFQFieldName, newFQFieldName);
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         [JsonIgnore]
         [DeepCopierIgnore]
         public XmlNode CreatedOrUpdatedNode { get; private set; }

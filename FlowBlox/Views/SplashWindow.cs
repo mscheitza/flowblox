@@ -32,7 +32,8 @@ namespace FlowBlox
 
         private void SplashWindow_Activated(object sender, EventArgs e)
         {
-            backgroundWorker.RunWorkerAsync();
+            if (!backgroundWorker.IsBusy)
+                backgroundWorker.RunWorkerAsync();
         }
     }
 }

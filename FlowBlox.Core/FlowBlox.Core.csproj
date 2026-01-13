@@ -27,6 +27,7 @@
     <None Remove="Models\FlowBlocks\WebBrowser\duplicate_tab_shortcut_1.5.1.0.crx" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CoreCLR-NCalc" Version="3.1.253" />
     <PackageReference Include="CsvHelper" Version="32.0.3" />
     <PackageReference Include="EPPlus" Version="8.0.5" />
     <PackageReference Include="log4net" Version="3.1.0" />
@@ -90,8 +91,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FlowBlox.SequenceDetection\FlowBlox.SequenceDetection.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Util\NewFolder\" />
   </ItemGroup>
 </Project>

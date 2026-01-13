@@ -1510,6 +1510,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Calculation ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_Calculation {
+            get {
+                return ResourceManager.GetString("FloxBloxCategory_Calculation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Control flow ähnelt.
         /// </summary>
         public static string FloxBloxCategory_ControlFlow {
@@ -2041,6 +2050,60 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Index context ähnelt.
+        /// </summary>
+        public static string IndexFlowBlock_Context {
+            get {
+                return ResourceManager.GetString("IndexFlowBlock_Context", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional context flow block. If set, the index is reset to the initial value whenever this flow block starts a new iteration. If no context is specified, the index continues across the entire runtime execution. ähnelt.
+        /// </summary>
+        public static string IndexFlowBlock_Context_Tooltip {
+            get {
+                return ResourceManager.GetString("IndexFlowBlock_Context_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generates a sequential index value. Optionally resets the index to the initial value when the linked context flow block starts a new iteration. ähnelt.
+        /// </summary>
+        public static string IndexFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("IndexFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Index ähnelt.
+        /// </summary>
+        public static string IndexFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("IndexFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Initial index ähnelt.
+        /// </summary>
+        public static string IndexFlowBlock_InitialIndex {
+            get {
+                return ResourceManager.GetString("IndexFlowBlock_InitialIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines the starting value of the index counter. The index begins with this value and is increased by one on each execution. ähnelt.
+        /// </summary>
+        public static string IndexFlowBlock_InitialIndex_Tooltip {
+            get {
+                return ResourceManager.GetString("IndexFlowBlock_InitialIndex_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Combine records ähnelt.
         /// </summary>
         public static string InputBehavior_Cross {
@@ -2446,6 +2509,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path used to navigate through the JSON document. Use &apos;/&apos; to separate nodes. Object properties are addressed by their property name, array elements by a numeric index (e.g. &apos;participants/addresses/0&apos;). ähnelt.
+        /// </summary>
+        public static string JsonPathSelectorFlowBlock_Path_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonPathSelectorFlowBlock_Path_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die JSON property assignment ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_DisplayName {
@@ -2587,6 +2659,42 @@ namespace FlowBlox.Core {
         public static string LlamaAiTokenizer_TokenizerModelPath_Tooltip {
             get {
                 return ResourceManager.GetString("LlamaAiTokenizer_TokenizerModelPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Performs mathematical calculations based on an expression syntax and supports referenced fields as parameters. ähnelt.
+        /// </summary>
+        public static string MathFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("MathFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Calculation ähnelt.
+        /// </summary>
+        public static string MathFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("MathFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Math expression ähnelt.
+        /// </summary>
+        public static string MathFlowBlock_Expression {
+            get {
+                return ResourceManager.GetString("MathFlowBlock_Expression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mathematical expression using supported operators (+, -, *, /, parentheses). Field references can be used directly in the expression, e.g. &quot;$Order::Quantity * 10&quot;. ähnelt.
+        /// </summary>
+        public static string MathFlowBlock_Expression_Tooltip {
+            get {
+                return ResourceManager.GetString("MathFlowBlock_Expression_Tooltip", resourceCulture);
             }
         }
         
@@ -3703,6 +3811,15 @@ namespace FlowBlox.Core {
         public static string TableSelectorMappingEntry_DisplayName {
             get {
                 return ResourceManager.GetString("TableSelectorMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die A column with the name &quot;{0}&quot; already exists. ähnelt.
+        /// </summary>
+        public static string TableWriterFlowBlock_ColumnAlreadyExists {
+            get {
+                return ResourceManager.GetString("TableWriterFlowBlock_ColumnAlreadyExists", resourceCulture);
             }
         }
         

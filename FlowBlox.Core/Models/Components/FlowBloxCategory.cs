@@ -90,6 +90,7 @@ namespace FlowBlox.Core.Models.Components
         public static readonly FlowBlockCategory IO = new(Get("FloxBloxCategory_IO"));
         public static readonly FlowBlockCategory Generation = new(Get("FloxBloxCategory_Generation"));
         public static readonly FlowBlockCategory ControlFlow = new(Get("FloxBloxCategory_ControlFlow"));
+        public static readonly FlowBlockCategory Calculation = new(Get("FloxBloxCategory_Calculation"));
         public static readonly FlowBlockCategory AI = new(Get("FloxBloxCategory_AI"));
         public static readonly FlowBlockCategory Extensions = new(Get("FloxBloxCategory_Extensions"));
 

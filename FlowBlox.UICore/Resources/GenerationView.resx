@@ -117,22 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Title" xml:space="preserve">
-    <value>Testausführung / Generierungsansicht</value>
-  </data>
-  <data name="ContextMenu_OpenInEditor" xml:space="preserve">
-    <value>Im Editor öffnen</value>
-  </data>
-  <data name="Column_Timestamp" xml:space="preserve">
-    <value>Zeitstempel</value>
-  </data>
-  <data name="Column_LogLevel" xml:space="preserve">
-    <value>Protokollstufe</value>
-  </data>
-  <data name="Column_Message" xml:space="preserve">
-    <value>Meldung</value>
-  </data>
-  <data name="Button_Close" xml:space="preserve">
-    <value>Schließen</value>
-  </data>
+	<data name="Title" xml:space="preserve">
+  <value>Test run / generation view</value>
+</data>
+
+	<data name="ContextMenu_OpenInEditor" xml:space="preserve">
+  <value>Open in editor</value>
+</data>
+
+	<data name="Column_Timestamp" xml:space="preserve">
+  <value>Timestamp</value>
+</data>
+	<data name="Column_LogLevel" xml:space="preserve">
+  <value>Log level</value>
+</data>
+	<data name="Column_Message" xml:space="preserve">
+  <value>Message</value>
+</data>
+
+	<data name="Button_Close" xml:space="preserve">
+  <value>Close</value>
+</data>
 </root>

@@ -21,6 +21,7 @@ namespace FlowBlox.AppWindow.Contents
             treeView_Library = new System.Windows.Forms.TreeView();
             imageList_Library_Icon = new System.Windows.Forms.ImageList(components);
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            tbFilter = new System.Windows.Forms.TextBox();
             toolStrip = new System.Windows.Forms.ToolStrip();
             btManageExtensions = new System.Windows.Forms.ToolStripButton();
             tableLayoutPanel1.SuspendLayout();
@@ -33,10 +34,10 @@ namespace FlowBlox.AppWindow.Contents
             treeView_Library.FullRowSelect = true;
             treeView_Library.ImageIndex = 0;
             treeView_Library.ImageList = imageList_Library_Icon;
-            treeView_Library.Location = new System.Drawing.Point(3, 28);
+            treeView_Library.Location = new System.Drawing.Point(3, 58);
             treeView_Library.Name = "treeView_Library";
             treeView_Library.SelectedImageIndex = 0;
-            treeView_Library.Size = new System.Drawing.Size(794, 394);
+            treeView_Library.Size = new System.Drawing.Size(794, 364);
             treeView_Library.TabIndex = 14;
             treeView_Library.ItemDrag += treeViewElements_ItemDrag;
             treeView_Library.DragEnter += treeViewElements_DragEnter;
@@ -51,16 +52,28 @@ namespace FlowBlox.AppWindow.Contents
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(treeView_Library, 0, 1);
+            tableLayoutPanel1.Controls.Add(tbFilter, 0, 1);
+            tableLayoutPanel1.Controls.Add(treeView_Library, 0, 2);
             tableLayoutPanel1.Controls.Add(toolStrip, 0, 0);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel1.Location = new System.Drawing.Point(0, 25);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new System.Drawing.Size(800, 425);
             tableLayoutPanel1.TabIndex = 15;
+            // 
+            // tbFilter
+            // 
+            tbFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            tbFilter.Location = new System.Drawing.Point(3, 28);
+            tbFilter.Name = "tbFilter";
+            tbFilter.Size = new System.Drawing.Size(794, 23);
+            tbFilter.TabIndex = 16;
+            tbFilter.TextChanged += tbFilter_TextChanged;
+            tbFilter.KeyDown += tbFilter_KeyDown;
             // 
             // toolStrip
             // 
@@ -76,7 +89,7 @@ namespace FlowBlox.AppWindow.Contents
             btManageExtensions.Image = FlowBloxMainUIImages.extension_16;
             btManageExtensions.ImageTransparentColor = System.Drawing.Color.Magenta;
             btManageExtensions.Name = "btManageExtensions";
-            btManageExtensions.Size = new System.Drawing.Size(163, 22);
+            btManageExtensions.Size = new System.Drawing.Size(162, 22);
             btManageExtensions.Text = "btManageExtensions_Text";
             btManageExtensions.Click += btManageExtensions_Click;
             // 
@@ -103,5 +116,6 @@ namespace FlowBlox.AppWindow.Contents
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton btManageExtensions;
+        private System.Windows.Forms.TextBox tbFilter;
     }
 }

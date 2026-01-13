@@ -390,26 +390,6 @@ namespace FlowBlox.Core.Models.FlowBlocks
             return webRequestInvocationResult;
         }
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            this.Url = FlowBloxFieldHelper.ReplaceFQName(this.Url, oldFQFieldName, newFQFieldName);
-            this.Payload = FlowBloxFieldHelper.ReplaceFQName(this.Payload, oldFQFieldName, newFQFieldName);
-
-            foreach (var headerParameter in HeaderParameters)
-            {
-                headerParameter.Key = FlowBloxFieldHelper.ReplaceFQName(headerParameter.Key, oldFQFieldName, newFQFieldName);
-                headerParameter.Value = FlowBloxFieldHelper.ReplaceFQName(headerParameter.Value, oldFQFieldName, newFQFieldName);
-            };
-
-            foreach (var postParameter in PostParameters)
-            {
-                postParameter.Key = FlowBloxFieldHelper.ReplaceFQName(postParameter.Key, oldFQFieldName, newFQFieldName);
-                postParameter.Value = FlowBloxFieldHelper.ReplaceFQName(postParameter.Value, oldFQFieldName, newFQFieldName);
-            };
-
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             _cache = new MemoryCache(new MemoryCacheOptions

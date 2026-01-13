@@ -57,6 +57,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         [Display(Name = "TableWriterFlowBlock_TableColumnDefinitions", ResourceType = typeof(FlowBloxTexts), GroupName = "TableWriterFlowBlock_Groups_Schema", Order = 0)]
         [CustomValidation(typeof(TableWriterFlowBlock), nameof(ValidateTableColumnDefinitions))]
         [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBlockDataGrid(IsMovable = true)]
         public ObservableCollection<TableColumnDefinition> TableColumnDefinitions
         {
             get
@@ -81,7 +82,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             if (duplicateNames.Any())
             {
                 var errorMessage = string.Format(
-                    FlowBloxResourceUtil.GetLocalizedString("FlowBloxComponent_Validation_NameAlreadyExists"), 
+                    FlowBloxResourceUtil.GetLocalizedString("TableWriterFlowBlock_ColumnAlreadyExists"), 
                     string.Join(", ", duplicateNames));
 
                 return new ValidationResult(errorMessage, [context.MemberName]);

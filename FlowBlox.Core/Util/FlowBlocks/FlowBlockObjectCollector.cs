@@ -7,6 +7,7 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.Fields;
 using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
+using Mysqlx.Session;
 using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections;
@@ -15,6 +16,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UglyToad.PdfPig.Graphics.Operations.SpecialGraphicsState;
 
 namespace FlowBlox.Core.Util.FlowBlocks
 {
@@ -205,6 +207,47 @@ namespace FlowBlox.Core.Util.FlowBlocks
                 {
                     result.AddRange(FlowBloxFieldHelper.GetFieldElementsFromString(strValue));
                 }
+            }
+        }
+
+        public static IEnumerable<(PropertyInfo Property, object Instance)> CollectStringPropertiesContainingFields(object root)
+        {
+            if (root == null)
+                throw new ArgumentNullException(nameof(root));
+
+            var matches = new HashSet<(PropertyInfo Property, object Instance)>();
+
+            _ = CollectObjects<FlowBloxReactiveObject>(
+                root,
+                new HashSet<object>(),
+                excludedTypes: [typeof(ManagedObject), typeof(BaseFlowBlock)],
+                customNavigator: (obj, props, _) => NavigateFieldSelectionStringProperties(obj, props, matches)
+            );
+
+            return matches;
+        }
+
+        private static void NavigateFieldSelectionStringProperties(
+            object obj,
+            IEnumerable<PropertyInfo> props,
+            HashSet<(PropertyInfo Property, object Instance)> matches)
+        {
+            foreach (var prop in props)
+            {
+                if (IsIgnored(obj, prop.Name))
+                    continue;
+
+                if (prop.PropertyType != typeof(string) || !prop.CanWrite)
+                    continue;
+
+                if (!prop.TryGetValue(obj, out var propValue) || propValue is not string strValue)
+                    continue;
+
+                var uiAttr = prop.GetCustomAttribute<FlowBlockUIAttribute>();
+                if (uiAttr == null || !uiAttr.UiOptions.HasFlag(UIOptions.EnableFieldSelection))
+                    continue;
+
+                matches.Add((prop, obj));
             }
         }
     }

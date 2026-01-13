@@ -42,15 +42,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
             return list;
         }
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            foreach (var uriPart in UriParts)
-            {
-                uriPart.Value = FlowBloxFieldHelper.ReplaceFQName(uriPart.Value, oldFQFieldName, newFQFieldName);
-            }
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         public override bool Execute(Runtime.BaseRuntime runtime, object data)
         {
             return base.Invoke(runtime, data, () =>

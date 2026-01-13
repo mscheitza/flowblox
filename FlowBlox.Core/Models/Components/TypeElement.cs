@@ -82,7 +82,7 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
-        private NumberFormatInfo CreateNumberFormat()
+        public NumberFormatInfo GetNumberFormat()
         {
             var referencedField = GetReferencedField();
             var fieldInfo = referencedField != null ? $" (for field '{referencedField}')" : string.Empty;
@@ -135,7 +135,7 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
-                var format = CreateNumberFormat();
+                var format = GetNumberFormat();
                 if (float.TryParse(fieldElement.StringValue, NumberStyles.Float | NumberStyles.AllowThousands, format, out float result))
                     return result;
 
@@ -150,7 +150,7 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
-                var format = CreateNumberFormat();
+                var format = GetNumberFormat();
                 if (double.TryParse(fieldElement.StringValue, NumberStyles.Float | NumberStyles.AllowThousands, format, out double result))
                     return result;
 

@@ -71,16 +71,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
             return properties;
         }
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            foreach (var a in Assignments)
-            {
-                a.PropertyName = FlowBloxFieldHelper.ReplaceFQName(a.PropertyName, oldFQFieldName, newFQFieldName);
-                a.Value = FlowBloxFieldHelper.ReplaceFQName(a.Value, oldFQFieldName, newFQFieldName);
-            }
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>

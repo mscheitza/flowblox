@@ -63,12 +63,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             QATokenizer.DisposeTokenizer();
             base.RuntimeStarted(runtime);
         }
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            this.Question = this.Question.Replace(oldFQFieldName, newFQFieldName);
-            this.Context = this.Context.Replace(oldFQFieldName, newFQFieldName);
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
 
         public override bool Execute(BaseRuntime runtime, object data)
         {

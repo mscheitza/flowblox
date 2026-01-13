@@ -11,6 +11,7 @@ namespace FlowBlox.Core.Services
         {
             return
             [
+                FlowBlockCategory.Calculation,
                 FlowBlockCategory.Logic,
                 FlowBlockCategory.Persistence,
                 FlowBlockCategory.TextOperations,

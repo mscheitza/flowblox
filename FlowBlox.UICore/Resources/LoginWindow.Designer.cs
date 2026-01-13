@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
         public static string Button_Back {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anmelden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Log in ähnelt.
         /// </summary>
         public static string Button_Login {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anmeldedaten speichern ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save credentials ähnelt.
         /// </summary>
         public static string CheckBox_SaveCredentials {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die E-Mail ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Email ähnelt.
         /// </summary>
         public static string Label_Email {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Passwort ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
         /// </summary>
         public static string Label_Password {
             get {

@@ -1738,4 +1738,43 @@ Use the "+" button to add entries to the table.</value>
   <data name="WebBrowserFlowBlock_RetryTimeunit_Tooltip" xml:space="preserve">
   <value>The delay in milliseconds between retry attempts.</value>
 </data>
+	<data name="IndexFlowBlock_DisplayName" xml:space="preserve">
+  <value>Index</value>
+</data>
+	<data name="IndexFlowBlock_Description" xml:space="preserve">
+  <value>Generates a sequential index value. Optionally resets the index to the initial value when the linked context flow block starts a new iteration.</value>
+</data>
+	<data name="IndexFlowBlock_InitialIndex" xml:space="preserve">
+  <value>Initial index</value>
+</data>
+	<data name="IndexFlowBlock_Context" xml:space="preserve">
+  <value>Index context</value>
+</data>
+	<data name="IndexFlowBlock_InitialIndex_Tooltip" xml:space="preserve">
+  <value>Defines the starting value of the index counter. The index begins with this value and is increased by one on each execution.</value>
+</data>
+	<data name="IndexFlowBlock_Context_Tooltip" xml:space="preserve">
+  <value>Optional context flow block. If set, the index is reset to the initial value whenever this flow block starts a new iteration. If no context is specified, the index continues across the entire runtime execution.</value>
+</data>
+	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
+  <value>Path used to navigate through the JSON document. Use '/' to separate nodes. Object properties are addressed by their property name, array elements by a numeric index (e.g. 'participants/addresses/0').</value>
+</data>
+	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
+  <value>Calculation</value>
+</data>
+	<data name="MathFlowBlock_Description" xml:space="preserve">
+  <value>Performs mathematical calculations based on an expression syntax and supports referenced fields as parameters.</value>
+</data>
+	<data name="MathFlowBlock_Expression" xml:space="preserve">
+  <value>Math expression</value>
+</data>
+	<data name="MathFlowBlock_Expression_Tooltip" xml:space="preserve">
+  <value>Mathematical expression using supported operators (+, -, *, /, parentheses). Field references can be used directly in the expression, e.g. "$Order::Quantity * 10".</value>
+</data>
+<data name="FloxBloxCategory_Calculation" xml:space="preserve">
+	<value>Calculation</value>
+</data>
+<data name="TableWriterFlowBlock_ColumnAlreadyExists" xml:space="preserve">
+  <value>A column with the name "{0}" already exists.</value>
+</data>
 </root>

@@ -18,13 +18,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     [Display(Name = "JsonPathSelectorFlowBlock_DisplayName", Description = "JsonPathSelectorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class JsonPathSelectorFlowBlock : BaseSingleResultFlowBlock
     {
-        [Display(Name = "JsonPathSelectorFlowBlock_JsonContent", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "JsonPathSelectorFlowBlock_JsonContent", Description = "JsonPathSelectorFlowBlock_JsonContent_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBlockTextBox(IsCodingMode = true, MultiLine = true, SyntaxHighlighting = "JSON")]
         [Required]
         public string JsonContent { get; set; }
 
-        [Display(Name = "JsonPathSelectorFlowBlock_Path", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "JsonPathSelectorFlowBlock_Path", Description = "JsonPathSelectorFlowBlock_Path_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [Required]
         public string Path { get; set; }
 
@@ -36,13 +36,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
         public override bool Execute(BaseRuntime runtime, object data)
         {
-            // TODO: Demo Projekt CsvToJson fertigstellen
-            //       "Öffnen (Bearbeitung möglich, Standard-App)"
-            //       "Öffnen (Bearbeitung möglich, Standardeditor)"   
-            //       JsonPath Example erstellen
-            //       XmlUpdaterFlowBlock entfernen ---- XmlDocumentNodeAppenderFlowBlock in XmlDocumentNodeWriterFlowBlock umbenennen mit CreateOrUpdate Logik analog zu Json
-            //       XmlAssignableBase entfernen (Leichtgewichtiger implementieren)
-
             return Invoke(runtime, data, () =>
             {
                 runtime.Focus(this);

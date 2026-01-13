@@ -25,11 +25,17 @@ namespace FlowBlox.Core.Models.Drawing
             To = to;
         }
 
-        public FlowBloxArrow(FlowBlockUIElement from, FlowBlockUIElement to) : this(
-            new PointF(from.Location.X + (from.Width / 2), from.Location.Y + (from.Height / 2)),
-            new PointF(to.Location.X + (to.Width / 2), to.Location.Y + (to.Height / 2)), from, to)
+        public FlowBloxArrow(FlowBlockUIElement from, FlowBlockUIElement to, float offset = 0f)
+            : this(
+                new PointF(
+                    from.Location.X + (from.Width / 2f) + offset,
+                    from.Location.Y + (from.Height / 2f) + offset),
+                new PointF(
+                    to.Location.X + (to.Width / 2f) + offset,
+                    to.Location.Y + (to.Height / 2f) + offset),
+                from,
+                to)
         {
-
         }
 
         public bool IntersectsWith(Point point)

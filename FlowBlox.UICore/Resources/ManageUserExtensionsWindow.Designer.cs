@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterung erstellen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create extension ähnelt.
         /// </summary>
         public static string Button_CreateExtension {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eine neue Erweiterung erstellen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create a new extension. ähnelt.
         /// </summary>
         public static string Button_CreateExtension_Tooltip {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Version anlegen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create version ähnelt.
         /// </summary>
         public static string Button_CreateVersion {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eine neue Version für die ausgewählte Erweiterung erstellen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create a new version for the selected extension. ähnelt.
         /// </summary>
         public static string Button_CreateVersion_Tooltip {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterung entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete extension ähnelt.
         /// </summary>
         public static string Button_DeleteExtension {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die ausgewählte Erweiterung löschen. Veröffentlichten Versionen können nicht gelöscht werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete the selected extension. Published versions cannot be deleted. ähnelt.
         /// </summary>
         public static string Button_DeleteExtension_Tooltip {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Version entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete version ähnelt.
         /// </summary>
         public static string Button_DeleteVersion {
             get {
@@ -124,7 +124,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die ausgewählte Version löschen, wenn sie nicht veröffentlicht wurde. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete the selected version if it has not been published. ähnelt.
         /// </summary>
         public static string Button_DeleteVersion_Tooltip {
             get {
@@ -133,7 +133,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Veröffentlichen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Publish ähnelt.
         /// </summary>
         public static string Button_PublishVersion {
             get {
@@ -142,7 +142,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eine Version kann erst veröffentlicht werden, wenn der Version ein gültiger Inhalt zugewiesen wurde. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die A version can only be published once valid content has been assigned to it. ähnelt.
         /// </summary>
         public static string Button_PublishVersion_Tooltip {
             get {
@@ -151,7 +151,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Änderungen speichern ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save changes ähnelt.
         /// </summary>
         public static string Button_SaveChanges {
             get {
@@ -160,7 +160,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hiermit werden die ausstehenden Änderungen auf der Erweiterungsplattform gespeichert. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This saves the pending changes on the extension platform. ähnelt.
         /// </summary>
         public static string Button_SaveChanges_Tooltip {
             get {
@@ -169,7 +169,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterung ist aktiv ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extension is active ähnelt.
         /// </summary>
         public static string CheckBox_Extension_Active {
             get {
@@ -178,7 +178,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Version ist aktiv ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Version is active ähnelt.
         /// </summary>
         public static string CheckBox_ExtensionVersion_Active {
             get {
@@ -187,7 +187,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abwärtskompatibel zur vorherigen Version ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Backward compatible with previous version ähnelt.
         /// </summary>
         public static string CheckBox_ExtensionVersion_BackwardsCompatible {
             get {
@@ -205,7 +205,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Guid ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die GUID ähnelt.
         /// </summary>
         public static string Column_Dependency_Guid {
             get {
@@ -223,7 +223,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Pfad zum Archiv (*.zip) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Archive path (*.zip) ähnelt.
         /// </summary>
         public static string Label_ArchivePath {
             get {
@@ -232,7 +232,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Änderungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Changes ähnelt.
         /// </summary>
         public static string Label_Changes {
             get {
@@ -241,7 +241,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beschreibung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
         public static string Label_Description {
             get {
@@ -250,7 +250,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Name der Erweiterung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extension name ähnelt.
         /// </summary>
         public static string Label_ExtensionName {
             get {
@@ -259,7 +259,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Guid ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die GUID ähnelt.
         /// </summary>
         public static string Label_Guid {
             get {
@@ -268,7 +268,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Laufzeit Version ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime version ähnelt.
         /// </summary>
         public static string Label_RuntimeVersion {
             get {
@@ -277,7 +277,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Versionsnummer ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Version number ähnelt.
         /// </summary>
         public static string Label_Version {
             get {
@@ -286,7 +286,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Erweiterung für die ausgewählte Version konnte nicht aufgelöst werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The extension for the selected version could not be resolved. ähnelt.
         /// </summary>
         public static string Message_ExtensionNotResolvable {
             get {
@@ -295,7 +295,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Änderungen wurden erfolgreich gespeichert. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The changes were saved successfully. ähnelt.
         /// </summary>
         public static string Message_SaveChangesSuccessful {
             get {
@@ -304,7 +304,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Es konnte keine Erweiterung mit dem Namen &quot;{0}&quot; gefunden werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No extension with the name &quot;{0}&quot; could be found. ähnelt.
         /// </summary>
         public static string Message_UnableToLocateExtension {
             get {
@@ -313,7 +313,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eigene Erweiterungen verwalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage own extensions ähnelt.
         /// </summary>
         public static string Title {
             get {
@@ -322,7 +322,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abhängigkeiten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Dependencies ähnelt.
         /// </summary>
         public static string VersionView_Expander_Header {
             get {
@@ -331,7 +331,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Was ist beim Hochladen einer Version zu beachten? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die What should be considered when uploading a version? ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Header {
             get {
@@ -340,7 +340,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Der Inhalt einer Version wird als *.zip Archiv gespeichert. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The content of a version is stored as a *.zip archive. ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Note1 {
             get {
@@ -349,7 +349,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Der Name der Erweiterung muss mit dem Dateinamen der *.DLL übereinstimmen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The extension name must match the file name of the *.dll. ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Note2 {
             get {
@@ -358,7 +358,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die *.DLL muss kompatibel mit .NET 6 sein. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The *.dll must be compatible with .NET 6. ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Note3 {
             get {
@@ -367,7 +367,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Es muss eine *.deps.json beiliegen, welche die Abhängigkeiten von der Extension enthält. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die A *.deps.json file must be included that contains the dependencies of the extension. ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Note4 {
             get {
@@ -376,7 +376,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Versionsnummer der DLL muss mit der Version der Extension übereinstimmen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The version number of the DLL must match the version of the extension. ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Note5 {
             get {
@@ -385,7 +385,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wurde eine hochgeladene Version veröffentlicht, kann die Version selbst nicht mehr entfernt oder der Inhalt verändert werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Once an uploaded version has been published, the version itself can no longer be removed or its content changed. ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Note6 {
             get {
@@ -394,7 +394,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte nutzen Sie das Aktiv-Kennzeichen, um die weitere Verbreitung der Version zu verhindern. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please use the active flag to prevent further distribution of the version. ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Note7 {
             get {

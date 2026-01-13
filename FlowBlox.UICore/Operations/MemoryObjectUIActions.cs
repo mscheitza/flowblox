@@ -188,8 +188,16 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
                     break;
                 }
 
-                await Task.Delay(PollingInterval, cancellationToken)
-                    .ConfigureAwait(false);
+                try
+                {
+                    await Task.Delay(PollingInterval, cancellationToken)
+                        .ConfigureAwait(false);
+                }
+                catch (TaskCanceledException)
+                {
+                    FlowBloxLogManager.Instance.GetLogger().Info("File monitoring task was cancelled. Polling loop terminated gracefully.");
+                    return;
+                }
             }
 
             CleanupMonitoring(memoryObject);

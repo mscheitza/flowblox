@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Schließen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
         public static string Button_Close {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Protokollstufe ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Log level ähnelt.
         /// </summary>
         public static string Column_LogLevel {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Meldung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Message ähnelt.
         /// </summary>
         public static string Column_Message {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zeitstempel ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timestamp ähnelt.
         /// </summary>
         public static string Column_Timestamp {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Im Editor öffnen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open in editor ähnelt.
         /// </summary>
         public static string ContextMenu_OpenInEditor {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Testausführung / Generierungsansicht ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test run / generation view ähnelt.
         /// </summary>
         public static string Title {
             get {

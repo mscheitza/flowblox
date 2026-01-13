@@ -50,12 +50,6 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.Persistence;
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            this.SQLStatement = this.SQLStatement.Replace(oldFQFieldName, newFQFieldName);
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         public int ExecuteSQL(DbTypes dbType, string sqlConnectionstring, string sqlStatement)
         {
             var dbConnection = DbConnectionProvider.Instance.GetOrCreateDbConnection(dbType, sqlConnectionstring);

@@ -95,12 +95,6 @@ namespace FlowBlox.Core.Models.FlowBlocks
             });
         }
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            this.RegularExpression = this.RegularExpression.Replace(oldFQFieldName, newFQFieldName);
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         public override List<Type> NotificationTypes
         {
             get

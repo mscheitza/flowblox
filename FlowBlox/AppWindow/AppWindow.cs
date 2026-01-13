@@ -84,6 +84,9 @@ namespace FlowBlox.AppWindow
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            if (_componentLibraryPanel?.ProcessCmdKey(ref msg, keyData) == true)
+                return true;
+
             if (_fieldViewPanel?.UserControl.ProcessCmdKey(ref msg, keyData) == true)
                 return true;
 
@@ -548,10 +551,13 @@ namespace FlowBlox.AppWindow
 
         private void itmCloseProject_Click(object sender, EventArgs e)
         {
+            if (FlowBloxProjectManager.Instance.ActiveProject == null)
+                return;
+
             DialogResult Result = FlowBloxMessageBox.Show
                 (
                     this,
-                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_CloseProjectConfirm_Message", typeof(FlowBloxMainUITexts)) + "\r\n" +
+                    string.Format(FlowBloxResourceUtil.GetLocalizedString("AppWindow_CloseProjectConfirm_Message", typeof(FlowBloxMainUITexts)), FlowBloxProjectManager.Instance.ActiveProject.ProjectName) + "\r\n" +
                     "\r\n" +
                     FlowBloxResourceUtil.GetLocalizedString("AppWindow_SaveReminder_Message", typeof(FlowBloxMainUITexts)),
                     FlowBloxResourceUtil.GetLocalizedString("AppWindow_CloseProjectConfirm_Title", typeof(FlowBloxMainUITexts)), FlowBloxMessageBox.Buttons.YesNo, FlowBloxMessageBox.Icons.Question
@@ -666,13 +672,13 @@ namespace FlowBlox.AppWindow
 
         private void itmEditProject_Click(object sender, EventArgs e)
         {
-            if (FlowBloxProjectManager.Instance.ActiveProject != null)
-            {
-                ProjectView ProjectView = new ProjectView(FlowBloxProjectManager.Instance.ActiveProject, ProjectViewMode.EditProject);
-                ProjectView.ShowDialog(this);
-                UpdateUI();
-                UpdateUI_ProjectName();
-            }
+            if (FlowBloxProjectManager.Instance.ActiveProject == null)
+                return;
+
+            ProjectView ProjectView = new ProjectView(FlowBloxProjectManager.Instance.ActiveProject, ProjectViewMode.EditProject);
+            ProjectView.ShowDialog(this);
+            UpdateUI();
+            UpdateUI_ProjectName();
         }
 
         private void AppWindow_Load(object sender, EventArgs e)

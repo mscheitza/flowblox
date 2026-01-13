@@ -4,14 +4,17 @@ using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Drawing;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Loader;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -22,9 +25,33 @@ namespace FlowBlox.AppWindow.Contents
     {
         private FlowBloxProject _project;
 
+        private static bool TypeMatchesFilter(Type type, string filter)
+        {
+            if (type == null) 
+                throw new ArgumentNullException(nameof(type));
+
+            if (string.IsNullOrWhiteSpace(filter))
+                return true;
+
+            if (type.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)
+                return true;
+
+            var displayAttribute = type.GetCustomAttribute<DisplayAttribute>();
+            if (displayAttribute == null)
+                return false;
+
+            var displayName = FlowBloxResourceUtil.GetDisplayName(displayAttribute, false);
+            if (!string.IsNullOrEmpty(displayName) &&
+                displayName.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)
+                return true;
+
+            return false;
+        }
+
         public ComponentLibraryPanel()
         {
             InitializeComponent();
+            ControlHelper.EnableDoubleBuffer(treeView_Library);
             InitializeProject();
             InitializeLibrary();
             FlowBloxUILocalizationUtil.Localize(this);
@@ -40,8 +67,11 @@ namespace FlowBlox.AppWindow.Contents
             if (_project == null)
                 return;
 
+            // Determine filter expression
+            string filterExpression = tbFilter.Text;
+
             // Group all FlowBlocks by category
-            var flowBlocksByCategory = _project.CreateInstances<BaseFlowBlock>()
+            var flowBlocksByCategory = _project.CreateInstances<BaseFlowBlock>(type => TypeMatchesFilter(type, filterExpression))
                 .GroupBy(fb => fb.GetCategory())
                 .ToDictionary(g => g.Key, g => g.ToList());
 
@@ -53,7 +83,8 @@ namespace FlowBlox.AppWindow.Contents
             foreach (var rootCategory in rootCategories)
             {
                 var categoryNode = BuildCategoryNodeRecursive(rootCategory, flowBlocksByCategory);
-                treeView_Library.Nodes.Add(categoryNode);
+                if (categoryNode != null)
+                    treeView_Library.Nodes.Add(categoryNode);
             }
             treeView_Library.ExpandAll();
         }
@@ -75,13 +106,20 @@ namespace FlowBlox.AppWindow.Contents
                 .Where(c => c.ParentCategory == category)
                 .OrderBy(c => c.DisplayName);
 
+            // If no child categories or flow blocks are present: Hide
+            List<BaseFlowBlock> blocks;
+            var hasFlowBlocks = flowBlocksByCategory.TryGetValue(category, out blocks);
+            if (!childCategories.Any() && !hasFlowBlocks)
+                return null;
+
             foreach (var childCategory in childCategories)
             {
                 var childNode = BuildCategoryNodeRecursive(childCategory, flowBlocksByCategory);
-                categoryNode.Nodes.Add(childNode);
+                if (childNode != null)
+                    categoryNode.Nodes.Add(childNode);
             }
 
-            if (flowBlocksByCategory.TryGetValue(category, out var blocks))
+            if (hasFlowBlocks)
             {
                 foreach (var block in blocks.OrderBy(b => FlowBloxComponentHelper.GetDisplayName(b)))
                 {
@@ -89,6 +127,10 @@ namespace FlowBlox.AppWindow.Contents
                     categoryNode.Nodes.Add(blockNode);
                 }
             }
+
+            // If no nodes are present: Hide
+            if (categoryNode.Nodes.Count == 0)
+                return null;
 
             return categoryNode;
         }
@@ -221,6 +263,30 @@ namespace FlowBlox.AppWindow.Contents
             var dialog = new ExtensionsWindow(project);
             var owner = ControlHelper.FindParentOfType<Form>(this, true);
             WindowsFormWPFHelper.ShowDialog(dialog, owner);
+        }
+
+        internal new bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.A) && tbFilter.Focused)
+            {
+                tbFilter.SelectAll();
+                return true;
+            }
+            return false;
+        }
+
+        private void tbFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.A)
+            {
+                tbFilter.SelectAll();
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void tbFilter_TextChanged(object sender, EventArgs e)
+        {
+            InitializeLibrary();
         }
 
         protected override void Dispose(bool disposing)

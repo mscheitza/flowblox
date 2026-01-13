@@ -63,6 +63,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        internal static byte[] calculator_variant {
+            get {
+                object obj = ResourceManager.GetObject("calculator_variant", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         internal static byte[] call_merge {
             get {
                 object obj = ResourceManager.GetObject("call_merge", resourceCulture);
@@ -216,6 +226,16 @@ namespace FlowBlox.Core {
         internal static byte[] format_list_bulleted {
             get {
                 object obj = ResourceManager.GetObject("format_list_bulleted", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        internal static byte[] identifier {
+            get {
+                object obj = ResourceManager.GetObject("identifier", resourceCulture);
                 return ((byte[])(obj));
             }
         }

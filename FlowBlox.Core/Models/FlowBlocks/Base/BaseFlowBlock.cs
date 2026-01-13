@@ -45,7 +45,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public delegate void FlowBlockNameChangeEventHandler(BaseFlowBlock flowBlock, string oldName, string newName);
         public delegate void PropertyChangeEventHandler(string propertyName);
 
-        public delegate void IterationStartHandler();
+        public delegate void IterationStartHandler(BaseRuntime runtime);
         public delegate void IterationEndHandler(BaseRuntime runtime);
 
         public delegate void OnBeforeInputProcessingEventHandler();
@@ -61,7 +61,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public event IterationEndHandler IterationEnd;
         public event OnBeforeInputProcessingEventHandler OnBeforeInputProcessing;
 
-        protected void RaiseIterationStart() => IterationStart?.Invoke();
+        protected void RaiseIterationStart(BaseRuntime runtime) => IterationStart?.Invoke(runtime);
         protected void RaiseIterationEnd(FlowBloxRuntime runtime) => IterationEnd?.Invoke(runtime);
 
         public void CreateNotification(BaseRuntime runtime, Enum notificationEnumValue, Exception e = null)
@@ -285,10 +285,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
             set
             {
-                if (!string.IsNullOrEmpty(_name) && _name != value)
-                    OnNameChanged?.Invoke(this, _name, value);
+                string oldName = _name;
+                string newName = value;
 
-                this._name = value;
+                if (oldName != newName)
+                {
+                    this._name = newName;
+                    OnNameChanged?.Invoke(this, oldName, newName);
+                }
             }
         }
 
@@ -572,8 +576,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public virtual List<BaseFlowBlock> GetPossibleInputReference()
         {
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-            return registry.GetFlowBlocks()
+            return FlowBloxRegistryProvider.GetRegistry().GetFlowBlocks()
                 .Where(x => x.Name != this.Name)
                 .ToList();
         }
@@ -648,7 +651,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             if (!runtime.ExecutionFlowEnabled)
                 return;
 
-            IterationStart?.Invoke();
+            IterationStart?.Invoke(runtime);
             foreach (var nextElement in this.GetNextFlowBlocks())
             {
                 nextElement.Execute(runtime, this);
@@ -842,7 +845,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
         }
 
-        private void InputReference_IterationStart()
+        private void InputReference_IterationStart(BaseRuntime runtime)
         {
             _passedResults.Clear();
         }

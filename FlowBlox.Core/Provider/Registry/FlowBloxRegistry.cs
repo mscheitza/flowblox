@@ -1,18 +1,20 @@
-﻿using FlowBlox.Core.Extensions;
+﻿using FlowBlox.Core.Constants;
+using FlowBlox.Core.Enums;
+using FlowBlox.Core.Events;
+using FlowBlox.Core.Extensions;
+using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.Components.Modifier;
-using FlowBlox.Core.Models.FlowBlocks.Base;
-using System.Data;
-using FlowBlox.Core.Interfaces;
-using FlowBlox.Core.Enums;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks;
-using FlowBlox.Core.Models.Base;
-using FlowBlox.Core.Events;
+using FlowBlox.Core.Models.FlowBlocks.Additions;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Util;
 using Microsoft.Win32;
-using static FlowBlox.Core.Models.Components.FieldElement;
-using FlowBlox.Core.Constants;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data;
+using static FlowBlox.Core.Models.Components.FieldElement;
 
 namespace FlowBlox.Core.Provider.Registry
 {
@@ -114,11 +116,11 @@ namespace FlowBlox.Core.Provider.Registry
             return GetNextName<T>(prefix?.ToString());
         }
 
-        public FieldElement CreateUserField(UserFieldTypes userFieldType, string fieldName = "")
+        public FieldElement CreateUserField(UserFieldTypes userFieldType, FieldTypes fieldType = FieldTypes.Text, string fieldName = "")
         {
             int numericNameSuffix = GetUserFields().Count;
 
-            var fieldElement = new FieldElement()
+            var fieldElement = new FieldElement(fieldType)
             {
                 UserField = true,
                 UserFieldType = userFieldType,
@@ -166,9 +168,12 @@ namespace FlowBlox.Core.Provider.Registry
             return GetFieldElements().FirstOrDefault(x => x.FullyQualifiedName == fullyQualifiedFieldName);
         }
 
-        public FieldElement CreateField(BaseResultFlowBlock source, FieldNameGenerationMode nameGenerationMode = FieldNameGenerationMode.UseFallbackIndexOnly)
+        public FieldElement CreateField(
+            BaseResultFlowBlock source, 
+            FieldNameGenerationMode nameGenerationMode = FieldNameGenerationMode.UseFallbackIndexOnly, 
+            FieldTypes fieldType = FieldTypes.Text)
         {
-            var field = new FieldElement(source, nameGenerationMode);
+            var field = new FieldElement(source, nameGenerationMode, fieldType);
             field.OnAfterCreate();
             field.OnAfterLoad();
             _managedObjects.Add(field);
@@ -211,19 +216,33 @@ namespace FlowBlox.Core.Provider.Registry
 
         private IEnumerable<FieldElement> GetFieldElementsRecursiveOrderedByExecutionFlow(BaseFlowBlock baseFlowBlock)
         {
+            HashSet<BaseFlowBlock> visited = new HashSet<BaseFlowBlock>();
+            return GetFieldElementsRecursiveOrderedByExecutionFlow(baseFlowBlock, visited);
+        }
+
+        private IEnumerable<FieldElement> GetFieldElementsRecursiveOrderedByExecutionFlow(BaseFlowBlock baseFlowBlock, HashSet<BaseFlowBlock> visited)
+        {
+            visited.AddIfNotExists(baseFlowBlock);
+
             if (baseFlowBlock is BaseResultFlowBlock resultFlowBlock)
             {
-                foreach(var field in resultFlowBlock.Fields)
-                {
+                foreach (var field in resultFlowBlock.Fields)
                     yield return field;
-                }
             }
 
             foreach (var nextFlowBlock in baseFlowBlock.GetNextFlowBlocks())
             {
-                foreach(var fieldElement in GetFieldElementsRecursiveOrderedByExecutionFlow(nextFlowBlock))
+                if (nextFlowBlock.ReferencedFlowBlocks.Count == 1)
                 {
-                    yield return fieldElement;
+                    foreach (var fieldElement in GetFieldElementsRecursiveOrderedByExecutionFlow(nextFlowBlock))
+                        yield return fieldElement;
+                }
+
+                if (nextFlowBlock.ReferencedFlowBlocks.Count > 1 && 
+                    nextFlowBlock.ReferencedFlowBlocks.All(x => visited.TryGetValue(x, out _)))
+                {
+                    foreach (var fieldElement in GetFieldElementsRecursiveOrderedByExecutionFlow(nextFlowBlock))
+                        yield return fieldElement;
                 }
             }
         }

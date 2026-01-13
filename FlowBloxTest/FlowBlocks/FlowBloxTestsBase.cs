@@ -29,7 +29,7 @@ namespace FlowBloxTest.FlowBlocks
             return createdFlowBlock;
         }
 
-        protected FieldElement CreateUserField(FlowBloxRegistry registry, string fieldName) => registry.CreateUserField(UserFieldTypes.Memory, fieldName);
+        protected FieldElement CreateUserField(FlowBloxRegistry registry, string fieldName) => registry.CreateUserField(UserFieldTypes.Memory, fieldName: fieldName);
 
         protected T CreateManagedObject<T>(FlowBloxRegistry registry) where T : ManagedObject
         {

@@ -4,17 +4,12 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.Runtime;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Interfaces;
-using FlowBlox.SequenceDetection.Util;
-using FlowBlox.Core.Util.Resources;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Provider;
-using Org.BouncyCastle.Pqc.Crypto.Lms;
 using FlowBlox.Core.Enums;
 using System.Collections.ObjectModel;
 
@@ -35,18 +30,30 @@ namespace FlowBlox.Core.Models.Components
         {
             this.Conditions = new ObservableCollection<Condition>();
             this.Modifiers = new ObservableCollection<ModifierBase>();
+        }
+
+        public FieldElement(FieldTypes fieldType) : this()
+        {
             this.FieldType = new TypeElement()
             {
-                FieldType = FieldTypes.Text
+                FieldType = fieldType
             };
         }
 
-        public FieldElement(BaseResultFlowBlock resultFlowBlock) : this()
+        public FieldElement(BaseResultFlowBlock resultFlowBlock, FieldTypes fieldType) : this(fieldType)
         {
             this.Source = resultFlowBlock;
         }
 
-        public FieldElement(BaseResultFlowBlock resultFlowBlock, FieldNameGenerationMode nameGenerationMode) : this(resultFlowBlock)
+        public FieldElement(BaseResultFlowBlock resultFlowBlock) : this(resultFlowBlock, FieldTypes.Text)
+        {
+
+        }
+
+        public FieldElement(
+            BaseResultFlowBlock resultFlowBlock, 
+            FieldNameGenerationMode nameGenerationMode, 
+            FieldTypes fieldType) : this(resultFlowBlock, fieldType)
         {
             this._nameGenerationMode = nameGenerationMode;
         }

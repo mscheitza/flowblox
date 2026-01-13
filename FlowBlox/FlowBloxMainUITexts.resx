@@ -709,4 +709,10 @@ The application will now restart to restore a clean environment.</value>
   <data name="AppWindow_itmResetDockablePanels_Text" xml:space="preserve">
     <value>&amp;Reset dockable dialogues</value>
   </data>
+  <data name="AppWindow_itmVisitOnline_Text" xml:space="preserve">
+    <value>Visit online</value>
+  </data>
+  <data name="AppWindow_itmGitHub_Text" xml:space="preserve">
+    <value>Visit us on GitHub</value>
+  </data>
 </root>

@@ -72,12 +72,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             base.RuntimeStarted(runtime);
         }
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            this.Prompt = this.Prompt.Replace(oldFQFieldName, newFQFieldName);
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>

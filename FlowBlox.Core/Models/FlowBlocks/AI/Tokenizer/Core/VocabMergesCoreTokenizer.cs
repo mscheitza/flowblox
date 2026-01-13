@@ -33,14 +33,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.Core
             ReadOnlyMethod = nameof(IsVocabAndMergesReadOnly))]
         public string MergesFile { get; set; }
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            this.VocabFile = this.VocabFile.Replace(oldFQFieldName, newFQFieldName);
-            this.MergesFile = this.MergesFile.Replace(oldFQFieldName, newFQFieldName);
-            this.TokenizerDirectory = this.TokenizerDirectory.Replace(oldFQFieldName, newFQFieldName);
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         public bool IsTokenizerDirectoryReadOnly()
         {
             return !string.IsNullOrWhiteSpace(VocabFile) ||

@@ -155,12 +155,6 @@ namespace FlowBlox.Core.Models.FlowBlocks
             return properties;
         }
 
-        protected override void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
-        {
-            this.Url = FlowBloxFieldHelper.ReplaceFQName(this.Url, oldFQFieldName, newFQFieldName);
-            base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
-        }
-
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return this.Invoke(runtime, data, () =>

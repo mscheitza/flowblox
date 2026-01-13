@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="calculator_variant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\calculator-variant.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="call_merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\call-merge.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -165,6 +168,9 @@
   </data>
   <data name="format_list_bulleted" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\format-list-bulleted.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="identifier" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\identifier.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lightning_bolt_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\lightning-bolt-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

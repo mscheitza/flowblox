@@ -197,14 +197,16 @@ namespace FlowBlox.Views
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new FieldElement.FieldElementNameChangedEventHandler(FieldElement_OnNameChange), new object[] { field, oldName, newName });
+                this.Invoke(new FieldElement.FieldElementNameChangedEventHandler(FieldElement_OnNameChange), [field, oldName, newName]);
                 return;
             }
 
             if (_fieldMap.TryGetValue(field, out var _listViewItem))
             {
                 _listViewItem.Name = field.Name;
-                _listViewItem.Text = field.Name;
+                _listViewItem.Text = field.FlowBlockName;
+                _listViewItem.SubItems[0].Tag = field.FlowBlockName;
+                _listViewItem.SubItems[1].Text = field.Name;
             }
         }
 
@@ -282,13 +284,13 @@ namespace FlowBlox.Views
 
         private void tbFilter_KeyDown(object sender, KeyEventArgs e)
         {
-            // Überprüfen, ob Strg + A gedrückt wird
+            // Check if Ctrl + A is pressed
             if (e.Control && e.KeyCode == Keys.A)
             {
-                // Markieren Sie den gesamten Text in der TextBox
+                // Select all text in the text box
                 tbFilter.SelectAll();
 
-                // Unterdrücken Sie die Weiterleitung des Ereignisses
+                // Suppress event forwarding
                 e.SuppressKeyPress = true;
             }
         }

@@ -3,8 +3,11 @@ using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.Base.DatasetSelection;
+using FlowBlox.Core.Models.FlowBlocks.Json;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
@@ -145,16 +148,41 @@ namespace FlowBlox.Core.Models.Base
         /// <summary>
         /// Called when a referenced field has been renamed.
         /// </summary>
-        /// <param name="field">The <see cref="FieldElement"/> instance representing the field whose name has changed.</param>
-        /// <param name="oldFQFieldName">The fully qualified old field name before the change.</param>
-        /// <param name="newFQFieldName">The fully qualified new field name after the change.</param>
+        /// <param name="field">
+        /// The <see cref="FieldElement"/> instance representing the field whose name has changed.
+        /// </param>
+        /// <param name="oldFQFieldName">
+        /// The fully qualified field name before the change.
+        /// </param>
+        /// <param name="newFQFieldName">
+        /// The fully qualified field name after the change.
+        /// </param>
         /// <remarks>
-        /// Override this method to implement custom logic for handling field name updates,  
-        /// for example, replacing occurrences of the old name with the new one.
+        /// This method is responsible for updating all string properties of this FlowBlock
+        /// that reference the renamed field via field selection expressions.
+        /// The default implementation automatically locates and updates all affected properties
+        /// using reflection-based field collectors.  
+        /// Override this method only if additional or specialized update logic is required.
         /// </remarks>
         protected virtual void OnReferencedFieldNameChanged(FieldElement field, string oldFQFieldName, string newFQFieldName)
         {
+            var reflectionData = FlowBlockObjectCollector.CollectStringPropertiesContainingFields(this);
+            foreach (var (property, instance) in reflectionData)
+            {
+                
+                var currentValue = (string)property.GetValue(instance);
+                if (string.IsNullOrWhiteSpace(currentValue))
+                    continue;
 
+                string replacedValue;
+                replacedValue = FlowBloxFieldHelper.ReplaceFQName(currentValue, oldFQFieldName, newFQFieldName);
+
+                // Only write back if something actually changed
+                if (string.Equals(currentValue, replacedValue, StringComparison.Ordinal))
+                    continue;
+
+                property.SetValue(instance, replacedValue);
+            }
         }
 
         /// <summary>

@@ -4,10 +4,12 @@ using FlowBlox.Core.CommandLine;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Fonts;
 using FlowBlox.UICore.Utilities;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,6 +24,7 @@ namespace FlowBlox
         static void Main(string[] args)
         {
             InstallFonts();
+            SetupCulture();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -38,6 +41,28 @@ namespace FlowBlox
 
             InitProjectFile(options);
             Application.Run(AppWindow.AppWindow.Instance);
+        }
+
+        private static void SetupCulture()
+        {
+            var uiCultureOption = FlowBloxOptions
+                .GetOptionInstance()
+                .GetOption("General.UICulture");
+
+            if (uiCultureOption == null || string.IsNullOrWhiteSpace(uiCultureOption.Value))
+                return;
+
+            try
+            {
+                var culture = CultureInfo.GetCultureInfo(uiCultureOption.Value);
+
+                CultureInfo.DefaultThreadCurrentCulture = culture;
+                CultureInfo.DefaultThreadCurrentUICulture = culture;
+            }
+            catch (CultureNotFoundException ex)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Error($"Invalid UI culture '{uiCultureOption.Value}'. Falling back to operating system culture.", e: ex);
+            }
         }
 
         private static Options ParseCommandLine(string[] args)

@@ -453,7 +453,7 @@ namespace FlowBlox.AppWindow.Contents
                     if (visibleUIElements.Contains(uiElement) ||
                         visibleUIElements.Contains(uiElementInputReference))
                     {
-                        FlowBloxLineUtil.PrintLine(graphics, visibleUIElements, new FlowBloxArrow(uiElement, uiElementInputReference), text: $"collecting data from \"{inputReference.Name}\"", dashed: true, lineColor: Color.LightSlateGray);
+                        FlowBloxLineUtil.PrintLine(graphics, visibleUIElements, new FlowBloxArrow(uiElement, uiElementInputReference, 10), text: $"collecting data from \"{inputReference.Name}\"", dashed: true, lineColor: Color.LightSlateGray);
                     }
                 }
 

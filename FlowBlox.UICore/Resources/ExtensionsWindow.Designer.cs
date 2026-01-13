@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinzufügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
         public static string Button_Add {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Anmelden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Log in ähnelt.
         /// </summary>
         public static string Button_Login {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Abmelden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Log out ähnelt.
         /// </summary>
         public static string Button_Logout {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Eigene Erweiterungen verwalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage own extensions ähnelt.
         /// </summary>
         public static string Button_ManageOwnExtensions {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Registrieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Register ähnelt.
         /// </summary>
         public static string Button_Register {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterungen erneut laden ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reload extensions ähnelt.
         /// </summary>
         public static string Button_ReloadExtensions {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
         public static string Button_Remove {
             get {
@@ -124,7 +124,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Übernehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
         public static string Button_Save {
             get {
@@ -133,7 +133,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Suchen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search ähnelt.
         /// </summary>
         public static string Button_Search {
             get {
@@ -142,7 +142,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dateipfad auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select file path ähnelt.
         /// </summary>
         public static string Button_SelectFilePath {
             get {
@@ -151,7 +151,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Deinstallieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uninstall ähnelt.
         /// </summary>
         public static string Button_Uninstall {
             get {
@@ -160,7 +160,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Aktualisieren ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update ähnelt.
         /// </summary>
         public static string Button_Update {
             get {
@@ -169,7 +169,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterungen verwalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage extensions ähnelt.
         /// </summary>
         public static string ExtensionsWindow_Title {
             get {
@@ -178,7 +178,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Debug-Modus ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Debug mode ähnelt.
         /// </summary>
         public static string Header_DebugMode {
             get {
@@ -187,7 +187,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beschreibung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
         public static string Header_Description {
             get {
@@ -196,7 +196,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dateipfad ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die File path ähnelt.
         /// </summary>
         public static string Header_FilePath {
             get {
@@ -205,7 +205,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Guid ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die GUID ähnelt.
         /// </summary>
         public static string Header_Guid {
             get {
@@ -214,7 +214,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Neueste Version ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Latest version ähnelt.
         /// </summary>
         public static string Header_LatestVersion {
             get {
@@ -250,7 +250,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Änderungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Changes ähnelt.
         /// </summary>
         public static string Label_Changes {
             get {
@@ -259,7 +259,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterungsbeschreibung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extension description ähnelt.
         /// </summary>
         public static string Label_ExtensionDescription {
             get {
@@ -268,7 +268,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erweiterungsname ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extension name ähnelt.
         /// </summary>
         public static string Label_ExtensionName {
             get {
@@ -277,7 +277,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Installierte Erweiterungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Installed extensions ähnelt.
         /// </summary>
         public static string Label_InstalledExtensions {
             get {
@@ -286,7 +286,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Lokale Erweiterungen verwalten ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage local extensions ähnelt.
         /// </summary>
         public static string Label_ManageLocalExtensions {
             get {
@@ -304,7 +304,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Erweiterung konnte nicht hinzugefügt werden. Bitte überprüfen Sie die Logfiles für weitere Informationen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The extension could not be added. Please check the log files for more information. ähnelt.
         /// </summary>
         public static string Message_AddExtension_Failed {
             get {
@@ -313,7 +313,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Das Projekt konnte nicht gespeichert werden unter: {0} Bitte überprüfen Sie die Logfiles für weitere Informationen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The project could not be saved to: {0}. Please check the log files for more information. ähnelt.
         /// </summary>
         public static string Message_ProjectSaveFailed {
             get {
@@ -322,7 +322,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Erweiterungen konnten nicht im Projekt aktualisiert werden. Bitte überprüfen Sie die Logfiles für weitere Informationen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The extensions could not be reloaded in the project. Please check the log files for more information. ähnelt.
         /// </summary>
         public static string Message_ReloadExtensions_Failed {
             get {
@@ -331,7 +331,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die folgenden Assemblies konnten nicht entladen werden: {0}. Es wird empfohlen, die Anwendung und das Projekt zu schließen und anschließend neu zu starten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The following assemblies could not be unloaded: {0}. It is recommended to close the application and the project and then restart them. ähnelt.
         /// </summary>
         public static string Message_RemainingAssemblies {
             get {
@@ -340,7 +340,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die folgenden Assemblies konnten nicht entladen werden: {0}. Soll das Projekt gespeichert und zusammen mit der Anwendung erneut geladen werden? (Empfohlen) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The following assemblies could not be unloaded: {0}. Do you want to save the project and reload it together with the application? (Recommended) ähnelt.
         /// </summary>
         public static string Message_RemainingAssemblies_RestartPrompt {
             get {
@@ -349,7 +349,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die folgenden Erweiterungen konnten nicht geladen werden: {0}. Bitte überprüfen Sie die Erweiterungen und versuchen Sie es erneut oder starten Sie die Anwendung und das Projekt neu. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The following extensions could not be loaded: {0}. Please check the extensions and try again, or restart the application and the project. ähnelt.
         /// </summary>
         public static string Message_UnloadableExtensions {
             get {
@@ -358,7 +358,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Die Erweiterung konnte nicht aktualisiert werden. Bitte überprüfen Sie die Logfiles für weitere Informationen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The extension could not be updated. Please check the log files for more information. ähnelt.
         /// </summary>
         public static string Message_UpdateExtension_Failed {
             get {
@@ -367,7 +367,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Installiert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Installed ähnelt.
         /// </summary>
         public static string Tab_Installed {
             get {

@@ -52,7 +52,6 @@ namespace FlowBlox.Core.Models.Components.IO
         {
             foreach (FieldElement fieldElement in FlowBloxFieldHelper.GetFieldElementsFromString(SQLStatement))
             {
-                fieldElement.OnNameChanged += new FieldElement.FieldElementNameChangedEventHandler(FieldElement_NameChange);
                 fieldElement.OnValueChanged += new FieldElement.FieldElementValueChangedEventHandler(FieldElement_ValueChange);
             }
 
@@ -67,11 +66,6 @@ namespace FlowBlox.Core.Models.Components.IO
         private void FieldElement_ValueChange(FieldElement field, string oldValue, string newValue)
         {
             _readableTableDataSourceChangedHandler.ForEach(x => x.Invoke());
-        }
-
-        private void FieldElement_NameChange(FieldElement field, string oldName, string newName)
-        {
-            this.SQLStatement = SQLStatement.Replace(oldName, newName);
         }
 
         public DataTable Read()

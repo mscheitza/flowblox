@@ -83,7 +83,8 @@ namespace FlowBlox.Core.Util
                 new OptionElement("Account.LicenseToken", "", "The encrypted license token for the user account. This option stores the license token securely using encryption.", OptionElement.OptionType.Text),
                 new OptionElement("General.EditorPath", GetDefaultEditorPath(), "Path to the default editor for directly editing or viewing data from FlowBlox. We recommend the free software Notepad++: https://notepad-plus-plus.org/", OptionElement.OptionType.Text),
                 new OptionElement("General.Style", "Professional", "Set your style here. Available styles by default: \"Default\", \"Professional\". To apply a new style, you must change this setting and restart FlowBlox.", OptionElement.OptionType.Text),
-                
+
+                new OptionElement("General.UICulture", "", "Specifies the UI culture used for localization (e.g. \"en-US\", \"de-DE\"). Leave empty to use the operating system culture.", OptionElement.OptionType.Text),
                 new OptionElement("General.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "The Toolbox directory is located by default in the local application data directory, but can be changed here.", OptionElement.OptionType.Text),
                 new OptionElement("General.ToolboxUserFile",@"%userprofile%\Documents\FlowBlox\toolbox\userToolbox.json","The Toolbox user file is located by default in the local application data directory within the toolbox folder, but can be changed here. This file contains user-specific toolbox elements.",OptionElement.OptionType.Text),
                 new OptionElement("General.ProjectDir", @"%userprofile%\Documents\FlowBlox\projects", "The Project directory is by default located in your Documents folder, but can be changed here. This location is more accessible and suitable for files that users might frequently manage.", OptionElement.OptionType.Text),

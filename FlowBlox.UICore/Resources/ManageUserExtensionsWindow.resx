@@ -117,118 +117,129 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Button_CreateExtension" xml:space="preserve">
-    <value>Erweiterung erstellen</value>
-  </data>
-  <data name="Button_CreateVersion" xml:space="preserve">
-    <value>Version anlegen</value>
-  </data>
-  <data name="Button_DeleteExtension" xml:space="preserve">
-    <value>Erweiterung entfernen</value>
-  </data>
-  <data name="Button_DeleteVersion" xml:space="preserve">
-    <value>Version entfernen</value>
-  </data>
-  <data name="Button_PublishVersion" xml:space="preserve">
-    <value>Veröffentlichen</value>
-  </data>
-  <data name="Button_SaveChanges" xml:space="preserve">
-    <value>Änderungen speichern</value>
-  </data>
-  <data name="CheckBox_ExtensionVersion_Active" xml:space="preserve">
-    <value>Version ist aktiv</value>
-  </data>
-  <data name="CheckBox_Extension_Active" xml:space="preserve">
-    <value>Erweiterung ist aktiv</value>
-  </data>
-  <data name="Column_Dependency_ExtensionName" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="Column_Dependency_Guid" xml:space="preserve">
-    <value>Guid</value>
-  </data>
-  <data name="Column_Dependency_Version" xml:space="preserve">
-    <value>Version</value>
-  </data>
-  <data name="Label_ArchivePath" xml:space="preserve">
-    <value>Pfad zum Archiv (*.zip)</value>
-  </data>
-  <data name="Label_Changes" xml:space="preserve">
-    <value>Änderungen</value>
-  </data>
-  <data name="Label_Description" xml:space="preserve">
-    <value>Beschreibung</value>
-  </data>
-  <data name="Label_ExtensionName" xml:space="preserve">
-    <value>Name der Erweiterung</value>
-  </data>
-  <data name="Label_Guid" xml:space="preserve">
-    <value>Guid</value>
-  </data>
-  <data name="Label_RuntimeVersion" xml:space="preserve">
-    <value>Laufzeit Version</value>
-  </data>
-  <data name="Label_Version" xml:space="preserve">
-    <value>Versionsnummer</value>
-  </data>
-  <data name="Message_ExtensionNotResolvable" xml:space="preserve">
-    <value>Die Erweiterung für die ausgewählte Version konnte nicht aufgelöst werden.</value>
-  </data>
-  <data name="Message_UnableToLocateExtension" xml:space="preserve">
-    <value>Es konnte keine Erweiterung mit dem Namen "{0}" gefunden werden.</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Eigene Erweiterungen verwalten</value>
-  </data>
-  <data name="VersionView_Expander_Header" xml:space="preserve">
-    <value>Abhängigkeiten</value>
-  </data>
-  <data name="Message_SaveChangesSuccessful" xml:space="preserve">
-    <value>Die Änderungen wurden erfolgreich gespeichert.</value>
-  </data>
-  <data name="Button_CreateExtension_Tooltip" xml:space="preserve">
-    <value>Eine neue Erweiterung erstellen.</value>
-  </data>
-  <data name="Button_DeleteExtension_Tooltip" xml:space="preserve">
-    <value>Die ausgewählte Erweiterung löschen. Veröffentlichten Versionen können nicht gelöscht werden.</value>
-  </data>
-  <data name="Button_CreateVersion_Tooltip" xml:space="preserve">
-    <value>Eine neue Version für die ausgewählte Erweiterung erstellen.</value>
-  </data>
-  <data name="Button_DeleteVersion_Tooltip" xml:space="preserve">
-    <value>Die ausgewählte Version löschen, wenn sie nicht veröffentlicht wurde.</value>
-  </data>
-  <data name="Button_PublishVersion_Tooltip" xml:space="preserve">
-    <value>Eine Version kann erst veröffentlicht werden, wenn der Version ein gültiger Inhalt zugewiesen wurde.</value>
-  </data>
-  <data name="Button_SaveChanges_Tooltip" xml:space="preserve">
-    <value>Hiermit werden die ausstehenden Änderungen auf der Erweiterungsplattform gespeichert.</value>
-  </data>
-  <data name="VersionView_Expander_Notes_Header" xml:space="preserve">
-    <value>Was ist beim Hochladen einer Version zu beachten?</value>
-  </data>
-  <data name="VersionView_Expander_Notes_Note1" xml:space="preserve">
-    <value>Der Inhalt einer Version wird als *.zip Archiv gespeichert.</value>
-  </data>
-  <data name="VersionView_Expander_Notes_Note2" xml:space="preserve">
-    <value>Der Name der Erweiterung muss mit dem Dateinamen der *.DLL übereinstimmen.</value>
-  </data>
-  <data name="VersionView_Expander_Notes_Note3" xml:space="preserve">
-    <value>Die *.DLL muss kompatibel mit .NET 6 sein.</value>
-  </data>
-  <data name="VersionView_Expander_Notes_Note4" xml:space="preserve">
-    <value>Es muss eine *.deps.json beiliegen, welche die Abhängigkeiten von der Extension enthält.</value>
-  </data>
-  <data name="VersionView_Expander_Notes_Note5" xml:space="preserve">
-    <value>Die Versionsnummer der DLL muss mit der Version der Extension übereinstimmen.</value>
-  </data>
-  <data name="VersionView_Expander_Notes_Note6" xml:space="preserve">
-    <value>Wurde eine hochgeladene Version veröffentlicht, kann die Version selbst nicht mehr entfernt oder der Inhalt verändert werden.</value>
-  </data>
-  <data name="VersionView_Expander_Notes_Note7" xml:space="preserve">
-    <value>Bitte nutzen Sie das Aktiv-Kennzeichen, um die weitere Verbreitung der Version zu verhindern.</value>
-  </data>
-  <data name="CheckBox_ExtensionVersion_BackwardsCompatible" xml:space="preserve">
-    <value>Abwärtskompatibel zur vorherigen Version</value>
-  </data>
+	<data name="Button_CreateExtension" xml:space="preserve">
+  <value>Create extension</value>
+</data>
+	<data name="Button_CreateVersion" xml:space="preserve">
+  <value>Create version</value>
+</data>
+	<data name="Button_DeleteExtension" xml:space="preserve">
+  <value>Delete extension</value>
+</data>
+	<data name="Button_DeleteVersion" xml:space="preserve">
+  <value>Delete version</value>
+</data>
+	<data name="Button_PublishVersion" xml:space="preserve">
+  <value>Publish</value>
+</data>
+	<data name="Button_SaveChanges" xml:space="preserve">
+  <value>Save changes</value>
+</data>
+
+	<data name="CheckBox_ExtensionVersion_Active" xml:space="preserve">
+  <value>Version is active</value>
+</data>
+	<data name="CheckBox_Extension_Active" xml:space="preserve">
+  <value>Extension is active</value>
+</data>
+
+	<data name="Column_Dependency_ExtensionName" xml:space="preserve">
+  <value>Name</value>
+</data>
+	<data name="Column_Dependency_Guid" xml:space="preserve">
+  <value>GUID</value>
+</data>
+	<data name="Column_Dependency_Version" xml:space="preserve">
+  <value>Version</value>
+</data>
+
+	<data name="Label_ArchivePath" xml:space="preserve">
+  <value>Archive path (*.zip)</value>
+</data>
+	<data name="Label_Changes" xml:space="preserve">
+  <value>Changes</value>
+</data>
+	<data name="Label_Description" xml:space="preserve">
+  <value>Description</value>
+</data>
+	<data name="Label_ExtensionName" xml:space="preserve">
+  <value>Extension name</value>
+</data>
+	<data name="Label_Guid" xml:space="preserve">
+  <value>GUID</value>
+</data>
+	<data name="Label_RuntimeVersion" xml:space="preserve">
+  <value>Runtime version</value>
+</data>
+	<data name="Label_Version" xml:space="preserve">
+  <value>Version number</value>
+</data>
+
+	<data name="Message_ExtensionNotResolvable" xml:space="preserve">
+  <value>The extension for the selected version could not be resolved.</value>
+</data>
+	<data name="Message_UnableToLocateExtension" xml:space="preserve">
+  <value>No extension with the name "{0}" could be found.</value>
+</data>
+
+	<data name="Title" xml:space="preserve">
+  <value>Manage own extensions</value>
+</data>
+
+	<data name="VersionView_Expander_Header" xml:space="preserve">
+  <value>Dependencies</value>
+</data>
+
+	<data name="Message_SaveChangesSuccessful" xml:space="preserve">
+  <value>The changes were saved successfully.</value>
+</data>
+
+	<data name="Button_CreateExtension_Tooltip" xml:space="preserve">
+  <value>Create a new extension.</value>
+</data>
+	<data name="Button_DeleteExtension_Tooltip" xml:space="preserve">
+  <value>Delete the selected extension. Published versions cannot be deleted.</value>
+</data>
+	<data name="Button_CreateVersion_Tooltip" xml:space="preserve">
+  <value>Create a new version for the selected extension.</value>
+</data>
+	<data name="Button_DeleteVersion_Tooltip" xml:space="preserve">
+  <value>Delete the selected version if it has not been published.</value>
+</data>
+	<data name="Button_PublishVersion_Tooltip" xml:space="preserve">
+  <value>A version can only be published once valid content has been assigned to it.</value>
+</data>
+	<data name="Button_SaveChanges_Tooltip" xml:space="preserve">
+  <value>This saves the pending changes on the extension platform.</value>
+</data>
+
+	<data name="VersionView_Expander_Notes_Header" xml:space="preserve">
+  <value>What should be considered when uploading a version?</value>
+</data>
+	<data name="VersionView_Expander_Notes_Note1" xml:space="preserve">
+  <value>The content of a version is stored as a *.zip archive.</value>
+</data>
+	<data name="VersionView_Expander_Notes_Note2" xml:space="preserve">
+  <value>The extension name must match the file name of the *.dll.</value>
+</data>
+	<data name="VersionView_Expander_Notes_Note3" xml:space="preserve">
+  <value>The *.dll must be compatible with .NET 6.</value>
+</data>
+	<data name="VersionView_Expander_Notes_Note4" xml:space="preserve">
+  <value>A *.deps.json file must be included that contains the dependencies of the extension.</value>
+</data>
+	<data name="VersionView_Expander_Notes_Note5" xml:space="preserve">
+  <value>The version number of the DLL must match the version of the extension.</value>
+</data>
+	<data name="VersionView_Expander_Notes_Note6" xml:space="preserve">
+  <value>Once an uploaded version has been published, the version itself can no longer be removed or its content changed.</value>
+</data>
+	<data name="VersionView_Expander_Notes_Note7" xml:space="preserve">
+  <value>Please use the active flag to prevent further distribution of the version.</value>
+</data>
+
+	<data name="CheckBox_ExtensionVersion_BackwardsCompatible" xml:space="preserve">
+  <value>Backward compatible with previous version</value>
+</data>
+
 </root>
