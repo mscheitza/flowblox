@@ -1,11 +1,8 @@
 ﻿using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.PropertyWindow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using SkiaSharp;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FlowBlox.UICore.Provider
 {
@@ -14,18 +11,17 @@ namespace FlowBlox.UICore.Provider
         private static readonly Regex RemoveAmpersandRegex = new Regex(@"&(?=\w)", RegexOptions.Compiled);
 
         private static string RemoveMnemonicAmpersand(string input)
-        {
-            return string.IsNullOrEmpty(input) ?
-                input :
-                RemoveAmpersandRegex.Replace(input, string.Empty);
-        }
+            => string.IsNullOrEmpty(input) ? input : RemoveAmpersandRegex.Replace(input, string.Empty);
 
-        protected override UIActionViewModel CreateItem(string displayName, EventHandler clickHandler, bool enabled)
+        protected override UIActionViewModel CreateItem(string displayName, EventHandler clickHandler, bool enabled, SKImage icon16)
         {
             return new UIActionViewModel
             {
                 DisplayName = RemoveMnemonicAmpersand(displayName),
                 IsEnabled = enabled,
+                Icon = icon16 != null ? 
+                    SkiaWpfImageHelper.ConvertToImageSource(icon16) : 
+                    WpfIconHelper.CreateMaterialIcon(MahApps.Metro.IconPacks.PackIconMaterialKind.CogOutline, 16),
                 Command = new RelayCommand(_ => clickHandler.Invoke(null, EventArgs.Empty), _ => enabled)
             };
         }

@@ -154,6 +154,12 @@
   <data name="download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\download.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="file_document_remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file-document-remove.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="file_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file-edit.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="file_export" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\file-export.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -162,6 +168,9 @@
   </data>
   <data name="file_pdf_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\file-pdf-box.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\folder-open.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="format_line_style" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\format-line-style.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

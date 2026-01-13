@@ -10,6 +10,8 @@ using FlowBlox.Core.Models.Components.IO;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.UICore.Enums;
+using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox.Grid.Elements.UI.CustomActions
 {
@@ -21,6 +23,8 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
         {
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
         }
+
+        public SKImage OpenIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_edit, 16, SKColors.DodgerBlue);
 
         public bool CanOpen()
         {
@@ -67,6 +71,8 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
             }
         }
 
+        public SKImage DeleteIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_document_remove, 16, SKColors.IndianRed);
+
         public bool CanDelete()
         {
             string filePath = Component.GetRuntimeFilePath();
@@ -107,6 +113,8 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
                 );
             }
         }
+
+        public SKImage OpenDirectoryIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.folder_open, 16, SKColors.DarkGoldenrod);
 
         public bool CanOpenDirectory()
         {

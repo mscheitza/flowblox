@@ -1,16 +1,10 @@
 ﻿using FlowBlox.Core;
-using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Components.IO;
-using FlowBlox.Core.Util;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
-using System;
-using System.Collections.Generic;
+using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.IO;
-using System.Windows.Forms;
 
 namespace FlowBlox.Grid.Elements.UI.CustomActions
 {
@@ -23,6 +17,8 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
             if (component.DataSource != null)
                 _dataSourceUiActions = UIActionHelper.GetComponentUIActionForType(component.DataSource.GetType(), component.DataSource);
         }
+
+        public SKImage OpenIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_edit, 16, SKColors.DodgerBlue);
 
         public bool CanOpen()
         {

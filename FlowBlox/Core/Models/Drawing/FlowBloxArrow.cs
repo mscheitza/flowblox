@@ -68,8 +68,10 @@ namespace FlowBlox.Core.Models.Drawing
         {
             if (obj is FlowBloxArrow arrow)
             {
-                return StartPoint == arrow.StartPoint && EndPoint == arrow.EndPoint &&
-                       From == arrow.From && To == arrow.To;
+                return StartPoint == arrow.StartPoint && 
+                       EndPoint == arrow.EndPoint &&
+                       From == arrow.From && 
+                       To == arrow.To;
             }
             return false;
         }

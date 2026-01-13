@@ -83,7 +83,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             HeaderTitle = FlowBloxComponentHelper.GetDisplayName(propertyWindowArgs.Target);
             HeaderDescription = FlowBloxComponentHelper.GetDescription(propertyWindowArgs.Target);
             var headerIcon = FlowBloxComponentHelper.GetIcon32(propertyWindowArgs.Target);
-            HeaderIcon = ConvertToImageSource(headerIcon);
+            HeaderIcon = SkiaWpfImageHelper.ConvertToImageSource(headerIcon);
             DisplaySaveButton = propertyWindowArgs.CanSave;
             _ = LoadUIActions(propertyWindowArgs.Target);
         }
@@ -128,24 +128,6 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             UIActions.Clear();
             foreach (var action in actions)
                 UIActions.Add(action);
-        }
-
-
-        public static BitmapImage ConvertToImageSource(SKImage image)
-        {
-            if (image == null)
-                return new BitmapImage();
-
-            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-            using var ms = new MemoryStream(data.ToArray());
-
-            var bitmapImage = new BitmapImage();
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = ms;
-            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-            bitmapImage.EndInit();
-            bitmapImage.Freeze();
-            return bitmapImage;
         }
 
         private async void Save()
