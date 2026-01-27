@@ -58,7 +58,6 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-	
 	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
 		<xsd:element name="root" msdata:IsDataSet="true">
 			<xsd:complexType>
@@ -66,20 +65,20 @@
 					<xsd:element name="data">
 						<xsd:complexType>
 							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
 							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
 						</xsd:complexType>
 					</xsd:element>
 					<xsd:element name="resheader">
 						<xsd:complexType>
 							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
 							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" />
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
 						</xsd:complexType>
 					</xsd:element>
 				</xsd:choice>
@@ -99,33 +98,33 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	<data name="Title" xml:space="preserve">
-    <value>Problemverfolgung</value>
-  </data>
+		<value>Issue tracking</value>
+	</data>
 	<data name="Label_Timestamp" xml:space="preserve">
-    <value>Zeitstempel:</value>
-  </data>
+		<value>Timestamp:</value>
+	</data>
 	<data name="Label_Name" xml:space="preserve">
-    <value>Name:</value>
-  </data>
+		<value>Name:</value>
+	</data>
 	<data name="Label_Criticality" xml:space="preserve">
-    <value>Kritikalität:</value>
-  </data>
+		<value>Criticality:</value>
+	</data>
 	<data name="Label_Message" xml:space="preserve">
-    <value>Meldung:</value>
-  </data>
+		<value>Message:</value>
+	</data>
 	<data name="Label_Exception" xml:space="preserve">
-    <value>Ausnahme:</value>
-  </data>
+		<value>Exception:</value>
+	</data>
 	<data name="Label_FieldValues" xml:space="preserve">
-    <value>Feldwerte:</value>
-  </data>
+		<value>Field values:</value>
+	</data>
 	<data name="Column_FullyQualifiedName" xml:space="preserve">
-    <value>Vollständiger Feldbezeichner</value>
-  </data>
+		<value>Fully qualified field name</value>
+	</data>
 	<data name="Column_Value" xml:space="preserve">
-    <value>Wert</value>
-  </data>
+		<value>Value</value>
+	</data>
 	<data name="Column_Details" xml:space="preserve">
-    <value>Details</value>
-  </data>
+		<value>Details</value>
+	</data>
 </root>

@@ -39,10 +39,20 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\CreateOrUpdatePSProjectWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CreateOrUpdatePSProjectWindow.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\EditContentView.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EditContentView.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\EditProjectMetadataWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EditProjectMetadataWindow.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\ExtensionsWindow.Designer.cs">
       <DependentUpon>ExtensionsWindow.resx</DependentUpon>
@@ -99,6 +109,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PropertyWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\PSProjectsWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PSProjectsWindow.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\RegistrationWindow.Designer.cs">
       <DependentUpon>RegistrationWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -127,9 +142,17 @@
       <LastGenOutput>CreateExtensionWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CreateOrUpdatePSProjectWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CreateOrUpdatePSProjectWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\EditContentView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditContentView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EditProjectMetadataWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditProjectMetadataWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ExtensionsWindow.resx">
       <LastGenOutput>ExtensionsWindow.Designer.cs</LastGenOutput>
@@ -174,6 +197,10 @@
     <EmbeddedResource Update="Resources\PropertyWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PropertyWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PSProjectsWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PSProjectsWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\RegistrationWindow.resx">
       <LastGenOutput>RegistrationWindow.Designer.cs</LastGenOutput>

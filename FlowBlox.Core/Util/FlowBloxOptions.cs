@@ -95,6 +95,7 @@ namespace FlowBlox.Core.Util
                 new OptionElement("General.DeepCopierProtocolDir", @"%localappdata%\FlowBlox\copy_protocols", "The Deep-Copier Protocol Directory is by default located in the local application data directory, but can be changed here. This location keeps protocols created by the internal deep copier.", OptionElement.OptionType.Text),
 
                 new OptionElement("General.ExtensionApiServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the extension management system.", OptionElement.OptionType.Text),
+                new OptionElement("General.ProjectApiServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the project space.", OptionElement.OptionType.Text),
 
                 new OptionElement("Runtime.AutoRestart", "false", "Should the runtime automatically restart once execution is completed?", OptionElement.OptionType.Boolean, "Auto Restart"),
                 new OptionElement("Runtime.AutoRestart.CacheMode", "Keep", "Should the cache be cleared or kept in case of an automatic restart? Possible values: \"Keep\" or \"Clear\" Note: This option can also be changed after runtime start.", OptionElement.OptionType.Text),

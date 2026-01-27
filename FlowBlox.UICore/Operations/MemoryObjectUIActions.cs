@@ -8,6 +8,7 @@ using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
+using SkiaSharp;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
@@ -40,6 +41,8 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
         }
+
+        public SKImage OpenIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_edit, 16, SKColors.DodgerBlue);
 
         public bool CanOpen()
         {
@@ -218,6 +221,8 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
             return sha.ComputeHash(data);
         }
 
+        public SKImage ExportIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_export, 16, SKColors.SteelBlue);
+
         public bool CanExport()
         {
             return Component.CanRead();
@@ -253,6 +258,8 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
                     FlowBloxMessageBoxTypes.Error);
             }
         }
+
+        public SKImage ImportIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_import, 16, SKColors.MediumSeaGreen);
 
         [Display(Name = "MemoryObjectUIActions_Import", ResourceType = typeof(FlowBloxTexts))]
         public void Import()

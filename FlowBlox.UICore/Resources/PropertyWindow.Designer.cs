@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
         public static string Back {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beim Ermitteln der verfügbaren Aktionen für die Komponente ist ein Fehler aufgetreten. Weitere Details finden Sie in den Anwendungsprotokollen. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die An error occurred while determining the available actions for the component. For more details, please refer to the application logs. ähnelt.
         /// </summary>
         public static string Message_ComponentActionsLoadingFailure {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
         public static string Save {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern ohne Überprüfung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save without verification ähnelt.
         /// </summary>
         public static string SaveWithoutVerification {
             get {

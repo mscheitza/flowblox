@@ -10,8 +10,10 @@
     xmlns:converters_exensions="clr-namespace:FlowBlox.UICore.Converters.Extensions"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    Title="{x:Static resources:ManageUserExtensionsWindow.Title}" Height="640" Width="1000"
-    mc:Ignorable="d">
+    Title="{x:Static resources:ManageUserExtensionsWindow.Title}"
+    Height="850"
+    Width="1000"
+    WindowStartupLocation="CenterOwner">
 
     <Window.DataContext>
         <viewModel:ManageUserExtensionsViewModel />
@@ -28,250 +30,284 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <DockPanel Margin="10">
 
-        <!-- Toolbar -->
-        <ToolBar Grid.Row="0">
-            <Button Command="{Binding CreateExtensionCommand}" ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_CreateExtension_Tooltip}">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="Plus" Margin="0,0,5,0"/>
-                        <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Button_CreateExtension}" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+        <!-- Header -->
+        <Border Background="#FFEEEEEE"
+                DockPanel.Dock="Top"
+                Height="50"
+                Padding="8">
+            <StackPanel Orientation="Horizontal">
+                <iconPacks:PackIconMaterial Kind="PuzzleOutline"
+                                            Width="32"
+                                            Height="32"
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="DarkSlateGray"/>
+                <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Header_Title}"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
 
-            <Button Command="{Binding DeleteExtensionCommand}" 
+        <!-- Description -->
+        <Border Background="#EDF3F9"
+                DockPanel.Dock="Top"
+                Padding="12"
+                CornerRadius="4"
+                Margin="0,8,0,12">
+            <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Header_Description}"
+                       FontWeight="UltraLight"
+                       Foreground="DarkSlateGray"
+                       TextWrapping="Wrap"/>
+        </Border>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Toolbar -->
+            <ToolBar Grid.Row="0">
+                <Button Command="{Binding CreateExtensionCommand}" ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_CreateExtension_Tooltip}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="Plus" Margin="0,0,5,0"/>
+                            <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Button_CreateExtension}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button Command="{Binding DeleteExtensionCommand}" 
                     Visibility="{Binding SelectedExtension, Converter={StaticResource NullToVisibilityConverter}}" 
                     ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_DeleteExtension_Tooltip}">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="Delete" Margin="0,0,5,0"/>
-                        <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Button_DeleteExtension}" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="Delete" Margin="0,0,5,0"/>
+                            <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Button_DeleteExtension}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
 
-            <Button Command="{Binding CreateVersionCommand}" 
+                <Button Command="{Binding CreateVersionCommand}" 
                     Visibility="{Binding SelectedExtension, Converter={StaticResource NullToVisibilityConverter}}" 
                     ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_CreateVersion_Tooltip}">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="PlusCircle" Margin="0,0,5,0"/>
-                        <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Button_CreateVersion}" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="PlusCircle" Margin="0,0,5,0"/>
+                            <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Button_CreateVersion}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
 
-            <Button Command="{Binding DeleteVersionCommand}" 
+                <Button Command="{Binding DeleteVersionCommand}" 
                     Visibility="{Binding SelectedVersion, Converter={StaticResource NullToVisibilityConverter}}" 
                     ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_DeleteVersion_Tooltip}">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="DeleteCircle" Margin="0,0,5,0"/>
-                        <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Button_DeleteVersion}" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </ToolBar>
-
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- TreeView for Extensions and Versions -->
-            <TreeView Grid.Column="0" ItemsSource="{Binding Extensions}" SelectedItemChanged="TreeView_SelectedItemChanged">
-                <TreeView.ItemTemplate>
-                    <!-- Display the extension name -->
-                    <HierarchicalDataTemplate ItemsSource="{Binding Versions}">
+                    <Button.Content>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                            <iconPacks:PackIconMaterial Kind="DeleteCircle" Margin="0,0,5,0"/>
+                            <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.Button_DeleteVersion}" />
                         </StackPanel>
+                    </Button.Content>
+                </Button>
+            </ToolBar>
 
-                        <!-- Template for Versions -->
-                        <HierarchicalDataTemplate.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconMaterial Margin="0,0,5,0">
-                                        <iconPacks:PackIconMaterial.Foreground>
-                                            <MultiBinding Converter="{StaticResource VersionStatusToColorConverter}">
-                                                <Binding Path="IsDirty" />
-                                                <Binding Path="Released" />
-                                            </MultiBinding>
-                                        </iconPacks:PackIconMaterial.Foreground>
-                                        <iconPacks:PackIconMaterial.Kind>
-                                            <MultiBinding Converter="{StaticResource VersionStatusToIconConverter}">
-                                                <Binding Path="IsDirty" />
-                                                <Binding Path="Released" />
-                                            </MultiBinding>
-                                        </iconPacks:PackIconMaterial.Kind>
-                                    </iconPacks:PackIconMaterial>
-                                    <TextBlock Text="{Binding Version}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </HierarchicalDataTemplate.ItemTemplate>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <!-- Detail Panel for Extension -->
-            <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10" Visibility="{Binding SelectedExtension, Converter={StaticResource NullToVisibilityConverter}}">
-                <!-- Extension Details -->
-                <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_ExtensionName}" FontWeight="Bold" />
-                <TextBox Text="{Binding SelectedExtension.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="16" IsReadOnly="True"/>
+                <!-- TreeView for Extensions and Versions -->
+                <TreeView Grid.Column="0" ItemsSource="{Binding Extensions}" SelectedItemChanged="TreeView_SelectedItemChanged">
+                    <TreeView.ItemTemplate>
+                        <!-- Display the extension name -->
+                        <HierarchicalDataTemplate ItemsSource="{Binding Versions}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                            </StackPanel>
 
-                <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Description}" Margin="0,10,0,0"/>
-                <TextBox Text="{Binding SelectedExtension.Description, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10"/>
+                            <!-- Template for Versions -->
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconMaterial Margin="0,0,5,0">
+                                            <iconPacks:PackIconMaterial.Foreground>
+                                                <MultiBinding Converter="{StaticResource VersionStatusToColorConverter}">
+                                                    <Binding Path="IsDirty" />
+                                                    <Binding Path="Released" />
+                                                </MultiBinding>
+                                            </iconPacks:PackIconMaterial.Foreground>
+                                            <iconPacks:PackIconMaterial.Kind>
+                                                <MultiBinding Converter="{StaticResource VersionStatusToIconConverter}">
+                                                    <Binding Path="IsDirty" />
+                                                    <Binding Path="Released" />
+                                                </MultiBinding>
+                                            </iconPacks:PackIconMaterial.Kind>
+                                        </iconPacks:PackIconMaterial>
+                                        <TextBlock Text="{Binding Version}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
 
-                <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Guid}" />
-                <TextBlock Text="{Binding SelectedExtension.Guid}" FontStyle="Italic" Margin="0,5,0,10"/>
+                <!-- Detail Panel for Extension -->
+                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10" Visibility="{Binding SelectedExtension, Converter={StaticResource NullToVisibilityConverter}}">
+                    <!-- Extension Details -->
+                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_ExtensionName}" FontWeight="Bold" />
+                    <TextBox Text="{Binding SelectedExtension.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="16" IsReadOnly="True"/>
 
-                <!-- Active Checkbox for Extension -->
-                <CheckBox Content="{x:Static resources:ManageUserExtensionsWindow.CheckBox_Extension_Active}"
+                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Description}" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding SelectedExtension.Description, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10"/>
+
+                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Guid}" />
+                    <TextBlock Text="{Binding SelectedExtension.Guid}" FontStyle="Italic" Margin="0,5,0,10"/>
+
+                    <!-- Active Checkbox for Extension -->
+                    <CheckBox Content="{x:Static resources:ManageUserExtensionsWindow.CheckBox_Extension_Active}"
                           IsChecked="{Binding SelectedExtension.Active, UpdateSourceTrigger=PropertyChanged}"
                           Margin="0,10,0,0"/>
 
-                <!-- Save Changes Button for Extension -->
-                <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges}"
+                    <!-- Save Changes Button for Extension -->
+                    <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges}"
                         Command="{Binding SaveChangesCommand}"
                         ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges_Tooltip}"
                         Margin="0,10,0,0" HorizontalAlignment="Right" />
-            </StackPanel>
+                </StackPanel>
 
-            <!-- Detail Panel for Version -->
-            <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10" Visibility="{Binding SelectedVersion, Converter={StaticResource NullToVisibilityConverter}}">
-                <!-- Version Details -->
-                <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Version}" />
-                <TextBlock Text="{Binding SelectedVersion.Version}" FontSize="16"/>
+                <!-- Detail Panel for Version -->
+                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10" Visibility="{Binding SelectedVersion, Converter={StaticResource NullToVisibilityConverter}}">
+                    <!-- Version Details -->
+                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Version}" />
+                    <TextBlock Text="{Binding SelectedVersion.Version}" FontSize="16"/>
 
-                <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Changes}" Margin="0,10,0,0"/>
-                <TextBox Text="{Binding SelectedVersion.Changes, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" AcceptsReturn="True" Height="50" VerticalScrollBarVisibility="Auto"/>
+                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Changes}" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding SelectedVersion.Changes, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" AcceptsReturn="True" Height="50" VerticalScrollBarVisibility="Auto"/>
 
-                <!-- File Path for Archive -->
-                <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_ArchivePath}" Margin="0,10,0,0"/>
-                <Grid Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                    <!-- File Path for Archive -->
+                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_ArchivePath}" Margin="0,10,0,0"/>
+                    <Grid Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0"
+                        <TextBox Grid.Column="0"
                          Text="{Binding SelectedVersion.ArchivePath, UpdateSourceTrigger=PropertyChanged}"
                          IsReadOnly="True"
                          VerticalAlignment="Center"
                          Margin="0,0,5,0" />
 
-                    <Button Grid.Column="1"
+                        <Button Grid.Column="1"
                         Content="..." 
                         Command="{Binding BrowseArchiveCommand}" 
                         Width="30" />
 
-                    <Button Grid.Column="2" Command="{Binding ClearVersionFileCommand}" Width="30" Margin="10,0,0,0">
-                        <Button.Content>
-                            <iconPacks:PackIconMaterial Kind="Delete"></iconPacks:PackIconMaterial>
-                        </Button.Content>
-                    </Button>
+                        <Button Grid.Column="2" Command="{Binding ClearVersionFileCommand}" Width="30" Margin="10,0,0,0">
+                            <Button.Content>
+                                <iconPacks:PackIconMaterial Kind="Delete"></iconPacks:PackIconMaterial>
+                            </Button.Content>
+                        </Button>
 
-                    <Button Grid.Column="3" Command="{Binding DownloadVersionFileCommand}" Width="30" Margin="10,0,0,0">
-                        <Button.Content>
-                            <iconPacks:PackIconMaterial Kind="Download"></iconPacks:PackIconMaterial>
-                        </Button.Content>
-                    </Button>
-                </Grid>
+                        <Button Grid.Column="3" Command="{Binding DownloadVersionFileCommand}" Width="30" Margin="10,0,0,0">
+                            <Button.Content>
+                                <iconPacks:PackIconMaterial Kind="Download"></iconPacks:PackIconMaterial>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
 
-                <!-- Expander for upload notes -->
-                <Expander Header="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Header}" Margin="0,10,0,0" IsExpanded="False" MaxHeight="300">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <!-- Critical notes first -->
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
-                                <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note1}" />
+                    <!-- Expander for upload notes -->
+                    <Expander Header="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Header}" Margin="0,10,0,0" IsExpanded="False" MaxHeight="300">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <!-- Critical notes first -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note1}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note2}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note3}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note4}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note5}" />
+                                </StackPanel>
+                                <!-- Less critical notes last -->
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <iconPacks:PackIconMaterial Kind="AlertCircleOutline" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note6}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                    <iconPacks:PackIconMaterial Kind="AlertCircleOutline" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note7}" />
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
-                                <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note2}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
-                                <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note3}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
-                                <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note4}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,5,0"/>
-                                <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note5}" />
-                            </StackPanel>
-                            <!-- Less critical notes last -->
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <iconPacks:PackIconMaterial Kind="AlertCircleOutline" Margin="0,0,5,0"/>
-                                <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note6}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <iconPacks:PackIconMaterial Kind="AlertCircleOutline" Margin="0,0,5,0"/>
-                                <TextBlock Text="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Notes_Note7}" />
-                            </StackPanel>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Expander>
+                        </ScrollViewer>
+                    </Expander>
 
-                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
 
-                    <!-- Active Checkbox -->
-                    <CheckBox Content="{x:Static resources:ManageUserExtensionsWindow.CheckBox_ExtensionVersion_Active}"
+                        <!-- Active Checkbox -->
+                        <CheckBox Content="{x:Static resources:ManageUserExtensionsWindow.CheckBox_ExtensionVersion_Active}"
                           IsChecked="{Binding SelectedVersion.Active, UpdateSourceTrigger=PropertyChanged}"
                           Margin="0,10,10,10" />
 
-                    <!-- BackwardsCompatible Checkbox -->
-                    <CheckBox Content="{x:Static resources:ManageUserExtensionsWindow.CheckBox_ExtensionVersion_BackwardsCompatible}"
+                        <!-- BackwardsCompatible Checkbox -->
+                        <CheckBox Content="{x:Static resources:ManageUserExtensionsWindow.CheckBox_ExtensionVersion_BackwardsCompatible}"
                           IsChecked="{Binding SelectedVersion.BackwardsCompatible, UpdateSourceTrigger=PropertyChanged}"
                           Margin="0,10,0,10" />
 
-                </StackPanel>
-
-                <Expander Header="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Header}" Margin="0,10,0,0" IsExpanded="True">
-                    <StackPanel>
-                        <!-- Label and TextBox for RuntimeVersion -->
-                        <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_RuntimeVersion}" FontWeight="Bold" />
-                        <TextBox Text="{Binding SelectedVersion.RuntimeVersion}" FontStyle="Italic" Margin="0,5,0,10" IsReadOnly="True" />
-
-                        <!-- Read-Only ListView for Dependencies -->
-                        <ListView ItemsSource="{Binding SelectedVersion.Dependencies}" Height="100">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="{x:Static resources:ManageUserExtensionsWindow.Column_Dependency_ExtensionName}" DisplayMemberBinding="{Binding ExtensionName}" />
-                                    <GridViewColumn Header="{x:Static resources:ManageUserExtensionsWindow.Column_Dependency_Guid}" DisplayMemberBinding="{Binding ExtensionGuid}" />
-                                    <GridViewColumn Header="{x:Static resources:ManageUserExtensionsWindow.Column_Dependency_Version}" DisplayMemberBinding="{Binding Version}" />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
                     </StackPanel>
-                </Expander>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <!-- Publish Version Button -->
-                    <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_PublishVersion}"
+                    <Expander Header="{x:Static resources:ManageUserExtensionsWindow.VersionView_Expander_Header}" Margin="0,10,0,0" IsExpanded="True">
+                        <StackPanel>
+                            <!-- Label and TextBox for RuntimeVersion -->
+                            <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_RuntimeVersion}" FontWeight="Bold" />
+                            <TextBox Text="{Binding SelectedVersion.RuntimeVersion}" FontStyle="Italic" Margin="0,5,0,10" IsReadOnly="True" />
+
+                            <!-- Read-Only ListView for Dependencies -->
+                            <ListView ItemsSource="{Binding SelectedVersion.Dependencies}" Height="100">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="{x:Static resources:ManageUserExtensionsWindow.Column_Dependency_ExtensionName}" DisplayMemberBinding="{Binding ExtensionName}" />
+                                        <GridViewColumn Header="{x:Static resources:ManageUserExtensionsWindow.Column_Dependency_Guid}" DisplayMemberBinding="{Binding ExtensionGuid}" />
+                                        <GridViewColumn Header="{x:Static resources:ManageUserExtensionsWindow.Column_Dependency_Version}" DisplayMemberBinding="{Binding Version}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </StackPanel>
+                    </Expander>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <!-- Publish Version Button -->
+                        <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_PublishVersion}"
                         Command="{Binding PublishVersionCommand}"
                         ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_PublishVersion_Tooltip}"
                         Margin="0,10,0,0" HorizontalAlignment="Right" />
 
-                    <!-- Save Changes Button for Version -->
-                    <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges}"
+                        <!-- Save Changes Button for Version -->
+                        <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges}"
                         Command="{Binding SaveChangesCommand}"
                         ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges_Tooltip}"
                         Margin="10,10,0,0" HorizontalAlignment="Right" />
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </Grid>
-    </Grid>
+    </DockPanel>
 </mah:MetroWindow>

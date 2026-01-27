@@ -117,129 +117,130 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-	<data name="Button_CreateExtension" xml:space="preserve">
+  <data name="Button_CreateExtension" xml:space="preserve">
   <value>Create extension</value>
 </data>
-	<data name="Button_CreateVersion" xml:space="preserve">
+  <data name="Button_CreateVersion" xml:space="preserve">
   <value>Create version</value>
 </data>
-	<data name="Button_DeleteExtension" xml:space="preserve">
+  <data name="Button_DeleteExtension" xml:space="preserve">
   <value>Delete extension</value>
 </data>
-	<data name="Button_DeleteVersion" xml:space="preserve">
+  <data name="Button_DeleteVersion" xml:space="preserve">
   <value>Delete version</value>
 </data>
-	<data name="Button_PublishVersion" xml:space="preserve">
+  <data name="Button_PublishVersion" xml:space="preserve">
   <value>Publish</value>
 </data>
-	<data name="Button_SaveChanges" xml:space="preserve">
+  <data name="Button_SaveChanges" xml:space="preserve">
   <value>Save changes</value>
 </data>
-
-	<data name="CheckBox_ExtensionVersion_Active" xml:space="preserve">
+  <data name="CheckBox_ExtensionVersion_Active" xml:space="preserve">
   <value>Version is active</value>
 </data>
-	<data name="CheckBox_Extension_Active" xml:space="preserve">
+  <data name="CheckBox_Extension_Active" xml:space="preserve">
   <value>Extension is active</value>
 </data>
-
-	<data name="Column_Dependency_ExtensionName" xml:space="preserve">
+  <data name="Column_Dependency_ExtensionName" xml:space="preserve">
   <value>Name</value>
 </data>
-	<data name="Column_Dependency_Guid" xml:space="preserve">
+  <data name="Column_Dependency_Guid" xml:space="preserve">
   <value>GUID</value>
 </data>
-	<data name="Column_Dependency_Version" xml:space="preserve">
+  <data name="Column_Dependency_Version" xml:space="preserve">
   <value>Version</value>
 </data>
-
-	<data name="Label_ArchivePath" xml:space="preserve">
+  <data name="Label_ArchivePath" xml:space="preserve">
   <value>Archive path (*.zip)</value>
 </data>
-	<data name="Label_Changes" xml:space="preserve">
+  <data name="Label_Changes" xml:space="preserve">
   <value>Changes</value>
 </data>
-	<data name="Label_Description" xml:space="preserve">
+  <data name="Label_Description" xml:space="preserve">
   <value>Description</value>
 </data>
-	<data name="Label_ExtensionName" xml:space="preserve">
+  <data name="Label_ExtensionName" xml:space="preserve">
   <value>Extension name</value>
 </data>
-	<data name="Label_Guid" xml:space="preserve">
+  <data name="Label_Guid" xml:space="preserve">
   <value>GUID</value>
 </data>
-	<data name="Label_RuntimeVersion" xml:space="preserve">
+  <data name="Label_RuntimeVersion" xml:space="preserve">
   <value>Runtime version</value>
 </data>
-	<data name="Label_Version" xml:space="preserve">
+  <data name="Label_Version" xml:space="preserve">
   <value>Version number</value>
 </data>
-
-	<data name="Message_ExtensionNotResolvable" xml:space="preserve">
+  <data name="Message_ExtensionNotResolvable" xml:space="preserve">
   <value>The extension for the selected version could not be resolved.</value>
 </data>
-	<data name="Message_UnableToLocateExtension" xml:space="preserve">
+  <data name="Message_UnableToLocateExtension" xml:space="preserve">
   <value>No extension with the name "{0}" could be found.</value>
 </data>
-
-	<data name="Title" xml:space="preserve">
+  <data name="Title" xml:space="preserve">
   <value>Manage own extensions</value>
 </data>
-
-	<data name="VersionView_Expander_Header" xml:space="preserve">
+  <data name="VersionView_Expander_Header" xml:space="preserve">
   <value>Dependencies</value>
 </data>
-
-	<data name="Message_SaveChangesSuccessful" xml:space="preserve">
+  <data name="Message_SaveChangesSuccessful" xml:space="preserve">
   <value>The changes were saved successfully.</value>
 </data>
-
-	<data name="Button_CreateExtension_Tooltip" xml:space="preserve">
+  <data name="Button_CreateExtension_Tooltip" xml:space="preserve">
   <value>Create a new extension.</value>
 </data>
-	<data name="Button_DeleteExtension_Tooltip" xml:space="preserve">
+  <data name="Button_DeleteExtension_Tooltip" xml:space="preserve">
   <value>Delete the selected extension. Published versions cannot be deleted.</value>
 </data>
-	<data name="Button_CreateVersion_Tooltip" xml:space="preserve">
+  <data name="Button_CreateVersion_Tooltip" xml:space="preserve">
   <value>Create a new version for the selected extension.</value>
 </data>
-	<data name="Button_DeleteVersion_Tooltip" xml:space="preserve">
+  <data name="Button_DeleteVersion_Tooltip" xml:space="preserve">
   <value>Delete the selected version if it has not been published.</value>
 </data>
-	<data name="Button_PublishVersion_Tooltip" xml:space="preserve">
+  <data name="Button_PublishVersion_Tooltip" xml:space="preserve">
   <value>A version can only be published once valid content has been assigned to it.</value>
 </data>
-	<data name="Button_SaveChanges_Tooltip" xml:space="preserve">
+  <data name="Button_SaveChanges_Tooltip" xml:space="preserve">
   <value>This saves the pending changes on the extension platform.</value>
 </data>
-
-	<data name="VersionView_Expander_Notes_Header" xml:space="preserve">
+  <data name="VersionView_Expander_Notes_Header" xml:space="preserve">
   <value>What should be considered when uploading a version?</value>
 </data>
-	<data name="VersionView_Expander_Notes_Note1" xml:space="preserve">
+  <data name="VersionView_Expander_Notes_Note1" xml:space="preserve">
   <value>The content of a version is stored as a *.zip archive.</value>
 </data>
-	<data name="VersionView_Expander_Notes_Note2" xml:space="preserve">
+  <data name="VersionView_Expander_Notes_Note2" xml:space="preserve">
   <value>The extension name must match the file name of the *.dll.</value>
 </data>
-	<data name="VersionView_Expander_Notes_Note3" xml:space="preserve">
+  <data name="VersionView_Expander_Notes_Note3" xml:space="preserve">
   <value>The *.dll must be compatible with .NET 6.</value>
 </data>
-	<data name="VersionView_Expander_Notes_Note4" xml:space="preserve">
+  <data name="VersionView_Expander_Notes_Note4" xml:space="preserve">
   <value>A *.deps.json file must be included that contains the dependencies of the extension.</value>
 </data>
-	<data name="VersionView_Expander_Notes_Note5" xml:space="preserve">
+  <data name="VersionView_Expander_Notes_Note5" xml:space="preserve">
   <value>The version number of the DLL must match the version of the extension.</value>
 </data>
-	<data name="VersionView_Expander_Notes_Note6" xml:space="preserve">
+  <data name="VersionView_Expander_Notes_Note6" xml:space="preserve">
   <value>Once an uploaded version has been published, the version itself can no longer be removed or its content changed.</value>
 </data>
-	<data name="VersionView_Expander_Notes_Note7" xml:space="preserve">
+  <data name="VersionView_Expander_Notes_Note7" xml:space="preserve">
   <value>Please use the active flag to prevent further distribution of the version.</value>
 </data>
-
-	<data name="CheckBox_ExtensionVersion_BackwardsCompatible" xml:space="preserve">
+  <data name="CheckBox_ExtensionVersion_BackwardsCompatible" xml:space="preserve">
   <value>Backward compatible with previous version</value>
 </data>
-
+  <data name="Header_Title" xml:space="preserve">
+  <value>Manage custom extensions</value>
+</data>
+  <data name="Header_Description" xml:space="preserve">
+  <value>
+Here you can manage your custom extensions (flow blocks).
+You can add, edit, disable, or remove extensions, as well as create and manage different versions of your extensions.
+  </value>
+</data>
+  <data name="Error_LoadExtensionsFailed" xml:space="preserve">
+    <value>The extensions could not be loaded from the server.</value>
+  </data>
 </root>

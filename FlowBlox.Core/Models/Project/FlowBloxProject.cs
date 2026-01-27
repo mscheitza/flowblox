@@ -2,6 +2,8 @@
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Extensions;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Factories;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
@@ -14,7 +16,11 @@ using FlowBlox.Core.Util.Json;
 using Google.Protobuf;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.IO.Compression;
+using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
+using System.Text;
+using static FlowBlox.Core.ExternalServices.FlowBloxWebApi.FlowBloxWebApiService;
 
 namespace FlowBlox.Core.Models.Project
 {
@@ -45,6 +51,9 @@ namespace FlowBlox.Core.Models.Project
 
         [JsonIgnore()]
         public List<FlowBloxProjectExtension> Extensions { get; set; }
+
+        [JsonIgnore()]
+        public string ProjectSpaceGuid { get; set; }
 
         private static readonly ILogger _logger = FlowBloxLogManager.Instance.GetLogger();
 
@@ -185,6 +194,7 @@ namespace FlowBlox.Core.Models.Project
             FlowBloxServiceLocator.Instance.RegisterServices(loadContext);
             FlowBlockCategory.InvokeRegistration();
             FlowBloxToolboxCategory.InvokeRegistration();
+            FlowBloxOptions.GetOptionInstance().InitDefaults(false);
         }
 
         public event EventHandler<AssemblyLoadContext> BeforeUnloadExtension;
@@ -286,38 +296,109 @@ namespace FlowBlox.Core.Models.Project
         }
 
         private const string ExtensionFileSuffix = ".extensions";
+        private const string ProjectSpaceMetadataSuffix = ".prjspace";
+
+        public static FlowBloxProject FromJsonContents(
+            string projectJson,
+            string extensionsJson,
+            string projectSpaceGuid = null,
+            string fileNameForAdjustments = null)
+        {
+            _logger.Info($"Loading project from JSON content (SpaceGuid='{projectSpaceGuid ?? ""}', File='{fileNameForAdjustments ?? ""}')");
+
+            try
+            {
+                // Extensions
+                Dictionary<string, AssemblyLoadContext> loadContexts = null;
+                List<FlowBloxProjectExtension> extensions = null;
+
+                if (!string.IsNullOrWhiteSpace(extensionsJson))
+                {
+                    extensions = JsonConvert.DeserializeObject<List<FlowBloxProjectExtension>>(extensionsJson);
+
+                    if (extensions != null && extensions.Count > 0)
+                    {
+                        loadContexts = LoadExtensions(extensions);
+                        _logger.Info($"Extensions loaded from JSON. Count={extensions.Count}");
+                    }
+                }
+
+                // Project JSON (same settings logic)
+                var settings = JsonSettings.ProjectImport(loadContexts);
+
+                var projectFileContent = projectJson ?? string.Empty;
+
+                if (!string.IsNullOrWhiteSpace(fileNameForAdjustments))
+                    AdjustFileContentBeforeDeserialization(fileNameForAdjustments, ref projectFileContent);
+
+                var project = JsonConvert.DeserializeObject<FlowBloxProject>(projectFileContent, settings);
+
+                if (project == null)
+                    throw new Exception("Failed to deserialize FlowBloxProject from JSON.");
+
+                if (extensions != null && extensions.Count > 0)
+                {
+                    project.Extensions.AddRange(extensions);
+
+                    if (loadContexts != null)
+                    {
+                        foreach (var lc in loadContexts)
+                            project._loadContexts.Add(lc.Key, lc.Value);
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(projectSpaceGuid))
+                    project.ProjectSpaceGuid = projectSpaceGuid;
+
+                _logger.Info("Project loaded successfully from JSON content.");
+                return project;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Failed to load project from JSON content.", ex);
+                throw;
+            }
+        }
 
         public static FlowBloxProject FromFile(string fileName)
         {
             _logger.Info($"Loading project from file: {fileName}");
             try
             {
+                // Extensions JSON
                 var extensionsFilePath = Path.Combine(
                     Path.GetDirectoryName(fileName),
                     Path.GetFileNameWithoutExtension(fileName) + ExtensionFileSuffix);
 
-                Dictionary<string, AssemblyLoadContext> loadContexts = null;
-                List<FlowBloxProjectExtension> extensions = null;
+                string extensionsJson = null;
                 if (File.Exists(extensionsFilePath))
                 {
-                    extensions = JsonHelper.DeserializeJsonFromFile<List<FlowBloxProjectExtension>>(extensionsFilePath);
-                    loadContexts = LoadExtensions(extensions);
-                    _logger.Info($"Extensions loaded from {extensionsFilePath}");
+                    extensionsJson = File.ReadAllText(extensionsFilePath);
+                    _logger.Info($"Extensions JSON loaded from {extensionsFilePath}");
                 }
-                var settings = JsonSettings.ProjectImport(loadContexts);
-                var projectFileContent = File.ReadAllText(fileName);
-                AdjustFileContentBeforeDeserialization(fileName, ref projectFileContent);
-                var project = JsonConvert.DeserializeObject<FlowBloxProject>(projectFileContent, settings);
 
-                if (extensions != null)
+                // Project Space metadata
+                var projectSpaceFilePath = Path.Combine(
+                    Path.GetDirectoryName(fileName),
+                    Path.GetFileNameWithoutExtension(fileName) + ProjectSpaceMetadataSuffix);
+
+                string projectSpaceGuid = null;
+                if (File.Exists(projectSpaceFilePath))
                 {
-                    project.Extensions.AddRange(extensions);
-
-                    foreach (var loadContext in loadContexts)
-                    {
-                        project._loadContexts.Add(loadContext.Key, loadContext.Value);
-                    }
+                    var metaJson = File.ReadAllText(projectSpaceFilePath);
+                    var metadata = JsonConvert.DeserializeObject<FlowBloxProjectSpaceMetadata>(metaJson);
+                    projectSpaceGuid = metadata?.ProjectGuid;
                 }
+
+                // Project JSON
+                var projectFileContent = File.ReadAllText(fileName);
+
+                // Central loading
+                var project = FromJsonContents(
+                    projectJson: projectFileContent,
+                    extensionsJson: extensionsJson,
+                    projectSpaceGuid: projectSpaceGuid,
+                    fileNameForAdjustments: fileName);
 
                 _logger.Info($"Project loaded successfully from {fileName}");
                 return project;
@@ -325,6 +406,71 @@ namespace FlowBlox.Core.Models.Project
             catch (Exception ex)
             {
                 _logger.Error($"Failed to load project from file: {fileName}", ex);
+                throw;
+            }
+        }
+
+        private static (string ProjectJson, string ExtensionsJson) ExtractProjectSpaceZip(byte[] zipBytes)
+        {
+            using (var ms = new MemoryStream(zipBytes))
+            using (var archive = new ZipArchive(ms, ZipArchiveMode.Read, leaveOpen: false))
+            {
+                var projectEntry = archive.GetEntry("project_file.json");
+                var extensionEntry = archive.GetEntry("extension_file.json");
+
+                if (projectEntry == null)
+                    throw new Exception("ZIP does not contain 'project_file.json'.");
+
+                string ReadEntry(ZipArchiveEntry e)
+                {
+                    using (var s = e.Open())
+                    using (var r = new StreamReader(s, Encoding.UTF8))
+                        return r.ReadToEnd();
+                }
+
+                var projectJson = ReadEntry(projectEntry);
+                var extensionsJson = extensionEntry != null ? ReadEntry(extensionEntry) : null;
+
+                return (projectJson, extensionsJson);
+            }
+        }
+
+        public static async Task<FlowBloxProject> FromProjectSpaceGuidAsync(string projectSpaceGuid, string userToken, FlowBloxWebApiService webApi)
+        {
+            _logger.Info($"Loading project from Project Space. Guid={projectSpaceGuid}");
+
+            if (string.IsNullOrWhiteSpace(projectSpaceGuid))
+                throw new ArgumentException("projectSpaceGuid is required.", nameof(projectSpaceGuid));
+
+            try
+            {
+                // Fetch project from API
+                var remoteResp = await webApi.GetProjectAsync(new FbProjectRequest { Guid = projectSpaceGuid }, userToken);
+                if (remoteResp.ResultObject == null)
+                    throw new InvalidOperationException("Project not found in Project Space.");
+
+                if (string.IsNullOrWhiteSpace(remoteResp.ResultObject.ContentBase64))
+                    throw new Exception("Project content is missing in Project Space response.");
+
+                var zipBytes = Convert.FromBase64String(remoteResp.ResultObject.ContentBase64);
+                var extracted = ExtractProjectSpaceZip(zipBytes);
+
+                // Load via central method. No file adjustments for ProjectSpace.
+                var project = FromJsonContents(
+                    projectJson: extracted.ProjectJson,
+                    extensionsJson: extracted.ExtensionsJson,
+                    projectSpaceGuid: projectSpaceGuid,
+                    fileNameForAdjustments: null);
+
+                // Ensure it is set (central already does it, but explicit is ok)
+                project.ProjectSpaceGuid = projectSpaceGuid;
+
+                _logger.Info($"Project loaded successfully from Project Space. Guid={projectSpaceGuid}");
+                return project;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to load project from Project Space. Guid={projectSpaceGuid}", ex);
                 throw;
             }
         }
@@ -403,31 +549,127 @@ namespace FlowBlox.Core.Models.Project
             json = json.Replace(directoryPath.Replace(@"\", @"\\"), ProjectDirectoryPlaceholder);
         }
 
+        private const string ProjectSpaceProjectFileName = "project_file.json";
+        private const string ProjectSpaceExtensionsFileName = "extension_file.json";
+
+        private string CreateProjectSpaceZipBase64()
+        {
+            // Collect current state before export
+            this.FlowBlocks = [.. this.FlowBloxRegistry.GetFlowBlocks()];
+            this.ManagedObjects = [.. this.FlowBloxRegistry.GetManagedObjects()];
+            this.UserFields = [.. this.FlowBloxRegistry.GetUserFields()];
+
+            // Serialize project + extensions
+            var projectFileContent = JsonConvert.SerializeObject(this, JsonSettings.ProjectExport());
+            var extensionsFileContent = JsonConvert.SerializeObject(
+                this.Extensions ?? new List<FlowBloxProjectExtension>());
+
+            using (var memoryStream = new MemoryStream())
+            {
+                // Create ZIP archive in memory
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, leaveOpen: true))
+                {
+                    // project_file.json
+                    var projectEntry = archive.CreateEntry(
+                        ProjectSpaceProjectFileName,
+                        CompressionLevel.Optimal);
+
+                    using (var entryStream = projectEntry.Open())
+                    using (var writer = new StreamWriter(entryStream, Encoding.UTF8))
+                    {
+                        writer.Write(projectFileContent);
+                    }
+
+                    // extension_file.json
+                    var extensionEntry = archive.CreateEntry(
+                        ProjectSpaceExtensionsFileName,
+                        CompressionLevel.Optimal);
+
+                    using (var entryStream = extensionEntry.Open())
+                    using (var writer = new StreamWriter(entryStream, Encoding.UTF8))
+                    {
+                        writer.Write(extensionsFileContent);
+                    }
+                }
+
+                // Convert ZIP bytes to Base64
+                var zipBytes = memoryStream.ToArray();
+                return Convert.ToBase64String(zipBytes);
+            }
+        }
+
+        public async Task<ApiResponse> SaveToProjectSpaceAsync(string projectGuid, string userToken, FlowBloxWebApiService webApi)
+        { 
+            if (string.IsNullOrWhiteSpace(projectGuid))
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    ErrorMessage = "ProjectGuid is missing."
+                };
+            }
+
+            try
+            {
+                // Create ZIP payload (project + extensions) and send as base64
+                var base64Zip = CreateProjectSpaceZipBase64();
+
+                var request = new FbProjectChangeRequest
+                {
+                    ProjectGuid = projectGuid,
+                    ContentBase64 = base64Zip
+                };
+
+                var result = await webApi.UpdateProjectAsync(userToken, request);
+                if (result?.Success == true)
+                    ProjectSpaceGuid = projectGuid;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
+                return new ApiResponse 
+                { 
+                    Success = false, 
+                    ErrorMessage = ex.Message 
+                };
+            }
+        }
+
         public void Save(string fileName)
         {
             _logger.Info($"Saving project to file: {fileName}");
             try
             {
-                var extensionsFilePath = Path.Combine(
-                    Path.GetDirectoryName(fileName),
-                    Path.GetFileNameWithoutExtension(fileName) + ExtensionFileSuffix);
-
-                this.FlowBlocks = new List<BaseFlowBlock>();
-                this.FlowBlocks.AddRange(this.FlowBloxRegistry.GetFlowBlocks());
-
-                this.ManagedObjects = new List<IManagedObject>();
-                this.ManagedObjects.AddRange(this.FlowBloxRegistry.GetManagedObjects());
-
-                this.UserFields = new List<FieldElement>();
-                this.UserFields.AddRange(this.FlowBloxRegistry.GetUserFields());
+                this.FlowBlocks = [.. this.FlowBloxRegistry.GetFlowBlocks()];
+                this.ManagedObjects = [.. this.FlowBloxRegistry.GetManagedObjects()];
+                this.UserFields = [.. this.FlowBloxRegistry.GetUserFields()];
 
                 var projectFileContent = JsonConvert.SerializeObject(this, JsonSettings.ProjectExport());
                 AdjustFileContentAfterSerialization(fileName, ref projectFileContent);
                 File.WriteAllText(fileName, projectFileContent);
 
-                JsonHelper.SerializeToFile(extensionsFilePath, Extensions != null ? 
-                    Extensions : 
+                var extensionsFilePath = Path.Combine(
+                    Path.GetDirectoryName(fileName),
+                    Path.GetFileNameWithoutExtension(fileName) + ExtensionFileSuffix);
+
+                JsonHelper.SerializeToFile(extensionsFilePath, Extensions != null ?
+                    Extensions :
                     new List<FlowBloxProjectExtension>());
+
+                var projectSpaceMetadataPath = Path.Combine(
+                    Path.GetDirectoryName(fileName),
+                    Path.GetFileNameWithoutExtension(fileName) + ProjectSpaceMetadataSuffix);
+
+                JsonHelper.SerializeToFile(extensionsFilePath, Extensions != null ?
+                   Extensions :
+                   new List<FlowBloxProjectExtension>());
+
+                JsonHelper.SerializeToFile(projectSpaceMetadataPath, new FlowBloxProjectSpaceMetadata()
+                {
+                    ProjectGuid = ProjectSpaceGuid
+                });
 
                 _logger.Info($"Project saved successfully to {fileName}");
             }

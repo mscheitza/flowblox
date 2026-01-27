@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Linq;
+using System.IO.Compression;
 
 namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
 {
@@ -21,30 +22,42 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
 
     public static class ExtensionContentMetadataExtractor
     {
-        public static ExtensionMetadata GetMetadataFromDepsJson(byte[] content)
+        public static ExtensionMetadata GetMetadataFromDepsJson(byte[] content, string extensionName)
         {
-            using (var memoryStream = new MemoryStream(content))
+            using var memoryStream = new MemoryStream(content);
+            using var archive = new System.IO.Compression.ZipArchive(
+                memoryStream,
+                System.IO.Compression.ZipArchiveMode.Read);
+
+            // Collect all .deps.json entries from the archive
+            var depsEntries = archive.Entries
+                .Where(e => e.FullName.EndsWith(".deps.json", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            // No deps.json found at all
+            if (depsEntries.Count == 0)
+                return null;
+
+            ZipArchiveEntry selectedEntry = null;
+
+            // If multiple deps.json files exist, try to select the one that matches the extension name (<extensionName>.deps.json)
+            if (depsEntries.Count > 1 && !string.IsNullOrWhiteSpace(extensionName))
             {
-                using (var archive = new System.IO.Compression.ZipArchive(memoryStream, System.IO.Compression.ZipArchiveMode.Read))
-                {
-                    foreach (var entry in archive.Entries)
-                    {
-                        if (entry.FullName.EndsWith(".deps.json", StringComparison.OrdinalIgnoreCase))
-                        {
-                            using (var stream = entry.Open())
-                            using (var reader = new StreamReader(stream))
-                            {
-                                var jsonContent = reader.ReadToEnd();
-                                var metadata = ParseDepsJson(jsonContent);
-                                return metadata;
-                            }
-                        }
-                    }
-                }
+                selectedEntry = depsEntries.FirstOrDefault(e => 
+                    string.Equals(Path.GetFileName(e.FullName), extensionName + ".deps.json", StringComparison.OrdinalIgnoreCase));
             }
 
-            return null;
+            // Fallback: if no specific match was found, use the first entry
+            selectedEntry ??= depsEntries.First();
+
+            // Read and parse the selected deps.json file
+            using var stream = selectedEntry.Open();
+            using var reader = new StreamReader(stream);
+
+            var jsonContent = reader.ReadToEnd();
+            return ParseDepsJson(jsonContent);
         }
+
 
         public static ExtensionMetadata ParseDepsJson(string jsonContent)
         {

@@ -2,12 +2,11 @@
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Util;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Text;
 
 namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
 {
-    public class FlowBloxWebApiService
+    public partial class FlowBloxWebApiService
     {
         protected string _baseUrl;
         protected HttpClient _httpClient;
@@ -18,20 +17,21 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
             _httpClient = new HttpClient();
         }
 
+        protected class ErrorDetails
+        {
+            public string Type { get; set; }
+            public string Message { get; set; }
+            public string File { get; set; }
+            public int? Line { get; set; }
+            public string Trace { get; set; }
+
+        }
         protected class ErrorResponse
         {
             public string Error { get; set; }
-
             public string ErrorCode { get; set; }
-        }
-
-        public class RegisterResult
-        {
-            public bool Success { get; set; }
-
-            public string ErrorMessage { get; set; }
-
-            public string ErrorCode { get; set; }
+            public string RequestId { get; set; }
+            public ErrorDetails Details { get; set; }
         }
 
         public class ApiResponse
@@ -39,9 +39,145 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
             public bool Success { get; set; }
 
             public string ErrorMessage { get; set; }
+
+            public string ErrorCode { get; set; }
         }
 
-        public async Task<RegisterResult> Register(FbRegistrationData registrationData)
+        public class ApiResponse<TResult> : ApiResponse
+        {
+            public TResult ResultObject { get; set; }
+        }
+
+        private ErrorResponse DeserializeOrLogErrorResponse(HttpResponseMessage response, string errorResponse)
+        {
+            var logger = FlowBloxLogManager.Instance.GetLogger();
+
+            ErrorResponse error = null;
+            try
+            {
+                error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Failed to deserialize ErrorResponse JSON. HTTP {(int)response.StatusCode}.", ex);
+                return null;
+            }
+            return error;
+        }
+
+
+        private async Task LogErrorApiResponse(HttpResponseMessage response)
+        {
+            var logger = FlowBloxLogManager.Instance.GetLogger();
+
+            string errorResponse = await response.Content.ReadAsStringAsync();
+            logger.Error($"API call failed. HTTP {(int)response.StatusCode} {response.ReasonPhrase}. Raw response: {errorResponse}");
+
+            var error = DeserializeOrLogErrorResponse(response, errorResponse);
+
+            if (error != null)
+            {
+                logger.Error($"API error received. Error='{error.Error}', ErrorCode='{error.ErrorCode}', RequestId='{error.RequestId}'");
+                if (error.Details != null)
+                {
+                    logger.Error($"API error details: Type='{error.Details.Type}', Message='{error.Details.Message}', File='{error.Details.File}', Line={error.Details.Line}");
+
+                    if (!string.IsNullOrWhiteSpace(error.Details.Trace))
+                        logger.Error($"API error stack trace:{Environment.NewLine}{error.Details.Trace}");
+                }
+            }
+        }
+
+        private async Task<ApiResponse> CreateErrorApiResponse(HttpResponseMessage response)
+        {
+            await LogErrorApiResponse(response);
+
+            string errorResponse = await response.Content.ReadAsStringAsync();
+            var error = DeserializeOrLogErrorResponse(response, errorResponse);
+
+            var userMessage = error?.Error;
+            if (string.IsNullOrWhiteSpace(userMessage))
+            {
+                userMessage = string.Join(" ",
+                [
+                    $"The server returned an error (HTTP {(int)response.StatusCode}).",
+                    "Please see application logs for details."
+                ]);
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(userMessage) &&
+                    !userMessage.EndsWith(".") &&
+                    !userMessage.EndsWith("!") &&
+                    !userMessage.EndsWith("?"))
+                {
+                    userMessage += ".";
+                }
+
+                userMessage = string.Join(" ",
+                [
+                    $"The server returned an error.",
+                    $"Message: {userMessage}",
+                    "Please see application logs for details."
+                ]);
+            }
+
+            return new ApiResponse
+            {
+                Success = false,
+                ErrorCode = error?.ErrorCode,
+                ErrorMessage = userMessage
+            };
+        }
+
+        private async Task<ApiResponse<TResult>> CreateErrorApiResponse<TResult>(HttpResponseMessage response)
+        {
+            var errorResponse = await CreateErrorApiResponse(response);
+
+            return new ApiResponse<TResult>
+            {
+                Success = false,
+                ErrorCode = errorResponse.ErrorCode,
+                ErrorMessage = errorResponse.ErrorMessage,
+                ResultObject = default
+            };
+        }
+
+        public async Task<ApiResponse<FbApiMetadata>> GetApiMetadataAsync()
+        {
+            string url = UriHelper.ConcatUri(_baseUrl, "apimetadata.php");
+
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonData = await response.Content.ReadAsStringAsync();
+                    var metadata = JsonConvert.DeserializeObject<FbApiMetadata>(jsonData);
+                    return new ApiResponse<FbApiMetadata>
+                    {
+                        Success = true,
+                        ResultObject = metadata
+                    };
+                }
+                else
+                {
+                    return await CreateErrorApiResponse<FbApiMetadata>(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
+                return new ApiResponse<FbApiMetadata>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
+
+        public async Task<ApiResponse> Register(FbRegistrationData registrationData)
         {
             string url = UriHelper.ConcatUri(_baseUrl, "register.php");
             try
@@ -52,26 +188,17 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 HttpResponseMessage response = await _httpClient.PostAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {
-                    string resp = await response.Content.ReadAsStringAsync();
-
-                    return new RegisterResult { Success = true };
+                    return new ApiResponse { Success = true };
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new RegisterResult
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error,
-                        ErrorCode = error?.ErrorCode
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                return new RegisterResult
+                return new ApiResponse
                 {
                     Success = false,
                     ErrorMessage = ex.Message
@@ -80,7 +207,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
         }
 
 
-        public async Task<FbCaptchaResponse> GetCaptchaAsync()
+        public async Task<ApiResponse<FbCaptchaResponse>> GetCaptchaAsync()
         {
             string url = UriHelper.ConcatUri(_baseUrl, "captcha.php");
             try
@@ -91,29 +218,41 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                     string jsonData = await response.Content.ReadAsStringAsync();
                     var captchaResult = JsonConvert.DeserializeObject<CaptchaResult>(jsonData);
 
-                    if (!string.IsNullOrEmpty(captchaResult.CaptchaImage))
+                    if (!string.IsNullOrEmpty(captchaResult?.CaptchaImage))
                     {
                         // Entferne den Prefix "data:image/png;base64," falls vorhanden
                         var base64Data = captchaResult.CaptchaImage.Split(',')[1];
 
-                        return new FbCaptchaResponse
+                        return new ApiResponse<FbCaptchaResponse>
                         {
-                            CaptchaId = captchaResult.CaptchaId,
-                            CaptchaImageBase64 = base64Data
+                            Success = true,
+                            ResultObject = new FbCaptchaResponse
+                            {
+                                CaptchaId = captchaResult.CaptchaId,
+                                CaptchaImageBase64 = base64Data
+                            }
                         };
                     }
 
-                    return null;
+                    return new ApiResponse<FbCaptchaResponse>
+                    {
+                        Success = true,
+                        ResultObject = null
+                    };
                 }
                 else
                 {
-                    return null;
+                    return await CreateErrorApiResponse<FbCaptchaResponse>(response);
                 }
             }
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                return null;
+                return new ApiResponse<FbCaptchaResponse>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
 
@@ -124,7 +263,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
         }
 
 
-        public async Task<string> LoginAsync(FbLoginData loginData)
+        public async Task<ApiResponse<string>> LoginAsync(FbLoginData loginData)
         {
             string url = UriHelper.ConcatUri(_baseUrl, "login.php");
             try
@@ -138,21 +277,29 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 if (response.IsSuccessStatusCode)
                 {
                     var tokenResponse = JsonConvert.DeserializeObject<FbTokenResponse>(responseData);
-                    return tokenResponse.Token;
+                    return new ApiResponse<string>
+                    {
+                        Success = true,
+                        ResultObject = tokenResponse?.Token
+                    };
                 }
                 else
                 {
-                    return null;
+                    return await CreateErrorApiResponse<string>(response);
                 }
             }
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                return null;
+                return new ApiResponse<string>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
 
-        public async Task<FbUserData> GetUserInfoAsync(string token)
+        public async Task<ApiResponse<FbUserData>> GetUserInfoAsync(string token)
         {
             string url = UriHelper.ConcatUri(_baseUrl, "userinfo.php?token=" + token);
             try
@@ -162,17 +309,25 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 {
                     string jsonData = await response.Content.ReadAsStringAsync();
                     var userInfo = JsonConvert.DeserializeObject<FbUserData>(jsonData);
-                    return userInfo;
+                    return new ApiResponse<FbUserData>
+                    {
+                        Success = true,
+                        ResultObject = userInfo
+                    };
                 }
                 else
                 {
-                    return null;
+                    return await CreateErrorApiResponse<FbUserData>(response);
                 }
             }
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                return null;
+                return new ApiResponse<FbUserData>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
 
@@ -191,13 +346,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
@@ -226,13 +375,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
@@ -246,7 +389,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
             }
         }
 
-        public async Task<FbExtensionResult> GetExtensionAsync(FbExtensionRequest request)
+        public async Task<ApiResponse<FbExtensionResult>> GetExtensionAsync(FbExtensionRequest request)
         {
             string query = string.IsNullOrEmpty(request.Name) ? $"guid={request.Guid}" : $"name={request.Name}";
             string url = UriHelper.ConcatUri(_baseUrl, $"extension.php?{query}");
@@ -254,42 +397,66 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-
-                string responseBody = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<FbExtensionResult>(responseBody);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    return new ApiResponse<FbExtensionResult>
+                    {
+                        Success = true,
+                        ResultObject = JsonConvert.DeserializeObject<FbExtensionResult>(responseBody)
+                    };
+                }
+                else
+                {
+                    return await CreateErrorApiResponse<FbExtensionResult>(response);
+                }
             }
             catch (HttpRequestException e)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(e);
-                return null;
+                return new ApiResponse<FbExtensionResult>
+                {
+                    Success = false,
+                    ErrorMessage = e.Message
+                };
             }
         }
 
-        public async Task<List<FbExtensionResult>> GetExtensionsAsync(string searchForName = "", string searchForUsername = "")
+        public async Task<ApiResponse<List<FbExtensionResult>>> GetExtensionsAsync(string userToken = "", string searchForName = "", string searchForUsername = "")
         {
             // Konstruiere die URL basierend auf den vorhandenen Parametern
             string url = string.IsNullOrEmpty(searchForUsername)
                 ? UriHelper.ConcatUri(_baseUrl, $"extensions.php?searchForName={searchForName}")
                 : UriHelper.ConcatUri(_baseUrl, $"extensions.php?searchForUsername={searchForUsername}");
 
+            if (!string.IsNullOrEmpty(userToken))
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", userToken);
+
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<List<FbExtensionResult>>(jsonResponse);
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    return new ApiResponse<List<FbExtensionResult>>
+                    {
+                        Success = true,
+                        ResultObject = JsonConvert.DeserializeObject<List<FbExtensionResult>>(responseBody)
+                    };
                 }
                 else
                 {
-                    return null;
+                    return await CreateErrorApiResponse<List<FbExtensionResult>>(response);
                 }
             }
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                return null;
+                return new ApiResponse<List<FbExtensionResult>>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
 
@@ -308,8 +475,6 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 {
                     string resp = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<FbCreateExtensionResult>(resp);
-
-                    // Erfolgsmeldung zurückgeben
                     return new ApiResponse
                     {
                         Success = true
@@ -317,13 +482,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
@@ -355,13 +514,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
@@ -392,13 +545,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
@@ -425,20 +572,14 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 HttpResponseMessage response = await _httpClient.PutAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {
-                    return new ApiResponse 
-                    { 
-                        Success = true 
+                    return new ApiResponse
+                    {
+                        Success = true
                     };
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
@@ -477,13 +618,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
@@ -522,13 +657,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
                 }
                 else
                 {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(errorResponse);
-                    return new ApiResponse
-                    {
-                        Success = false,
-                        ErrorMessage = error?.Error
-                    };
+                    return await CreateErrorApiResponse(response);
                 }
             }
             catch (Exception ex)
@@ -542,48 +671,70 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
             }
         }
 
-        public async Task<bool> HasVersionContentAsync(Guid extensionGuid, string version)
+        public async Task<ApiResponse<bool>> HasVersionContentAsync(Guid extensionGuid, string version)
         {
             string url = UriHelper.ConcatUri(_baseUrl, $"version_content.php?guid={extensionGuid}&version={version}&mode=hasContent");
 
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-
-                string jsonResponse = await response.Content.ReadAsStringAsync();
-                var hasContentResponse = JsonConvert.DeserializeObject<FbHasVersionContentResponse>(jsonResponse);
-
-                return hasContentResponse?.HasContent ?? false;
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var hasContentResponse = JsonConvert.DeserializeObject<FbHasVersionContentResponse>(jsonResponse);
+                    return new ApiResponse<bool>
+                    {
+                        Success = true,
+                        ResultObject = hasContentResponse?.HasContent ?? false
+                    };
+                }
+                else
+                {
+                    return await CreateErrorApiResponse<bool>(response);
+                }
             }
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                return false;
+                return new ApiResponse<bool>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
 
-        public async Task<string> GetVersionContentAsync(Guid extensionGuid, string version)
+        public async Task<ApiResponse<string>> GetVersionContentAsync(Guid extensionGuid, string version)
         {
             string url = UriHelper.ConcatUri(_baseUrl, $"version_content.php?guid={extensionGuid}&version={version}");
 
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-
-                string jsonResponse = await response.Content.ReadAsStringAsync();
-                var contentResponse = JsonConvert.DeserializeObject<FbGetVersionContentResponse>(jsonResponse);
-
-                return contentResponse?.Content;
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var contentResponse = JsonConvert.DeserializeObject<FbGetVersionContentResponse>(jsonResponse);
+                    return new ApiResponse<string>
+                    {
+                        Success = true,
+                        ResultObject = contentResponse?.Content
+                    };
+                }
+                else
+                {
+                    return await CreateErrorApiResponse<string>(response);
+                }
             }
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                return null;
+                return new ApiResponse<string>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
-
-        
     }
 }

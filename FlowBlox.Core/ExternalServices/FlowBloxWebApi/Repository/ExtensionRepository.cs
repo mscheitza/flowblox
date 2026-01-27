@@ -30,12 +30,16 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Repository
                 return extension;
 
             var request = new FbExtensionRequest { Name = name };
-            extension = await _webApiService.GetExtensionAsync(request);
+            var resp = await _webApiService.GetExtensionAsync(request);
 
-            if (extension != null)
-                _extensions[name] = extension;
+            if (!resp.Success || resp.ResultObject == null)
+                return null;
+
+            extension = resp.ResultObject;
+            _extensions[name] = extension;
 
             return extension;
         }
+
     }
 }

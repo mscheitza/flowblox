@@ -23,7 +23,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
             FbVersionResult selectedVersion,
             IEnumerable<FlowBloxProjectExtension> installedExtensions)
         {
-            // Überprüfen der Kompatibilität der zu installierenden Version mit den bestehenden Abhängigkeiten
+            // Checking the compatibility of the version to be installed with the existing dependencies
             foreach (var installedExtension in installedExtensions)
             {
                 foreach (var dependency in installedExtension.Dependencies)
@@ -40,7 +40,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
                 }
             }
 
-            // Überprüfen der Kompatibilität der Abhängigkeiten der zu installierenden Version mit den installierten Erweiterungen
+            // Checking the compatibility of the dependencies of the version to be installed with the installed extensions
             foreach (var dependency in selectedVersion.Dependencies)
             {
                 var installedDependency = installedExtensions.FirstOrDefault(e => e.ExtensionGuid == dependency.ExtensionGuid);
@@ -55,7 +55,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
                 }
             }
 
-            // Überprüfen der Kompatibilität der Abhängigkeiten der ausgewählten Version und installierten Versionen
+            // Checking the compatibility of dependencies between the selected version and installed versions
             foreach (var installedExtension in installedExtensions)
             {
                 foreach (var installedDependency in installedExtension.Dependencies)

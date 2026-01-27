@@ -169,6 +169,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The API metadata could not be retrieved. The service may be unavailable or does not provide metadata through this endpoint. ähnelt.
+        /// </summary>
+        public static string Error_LoadApiMetadataFailed {
+            get {
+                return ResourceManager.GetString("Error_LoadApiMetadataFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage extensions ähnelt.
         /// </summary>
         public static string ExtensionsWindow_Title {
@@ -390,6 +399,16 @@ namespace FlowBlox.UICore.Resources {
         public static string Tab_Online {
             get {
                 return ResourceManager.GetString("Tab_Online", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No results found.
+        ///Adjust the search criteria or try a different search term. ähnelt.
+        /// </summary>
+        public static string Text_NoSearchResults {
+            get {
+                return ResourceManager.GetString("Text_NoSearchResults", resourceCulture);
             }
         }
     }

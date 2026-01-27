@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beim Laden der Ansicht ist ein technisches Problem aufgetreten. Bitte schauen Sie in die Anwendungslogfiles, um weitere Informationen zu erhalten. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die A technical problem occurred while loading the view. Please check the application log files for more information. ähnelt.
         /// </summary>
         public static string ResolveTabsFailed_Message {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Fehler beim Laden der Ansicht ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error loading view ähnelt.
         /// </summary>
         public static string ResolveTabsFailed_Title {
             get {

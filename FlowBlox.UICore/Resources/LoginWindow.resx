@@ -117,26 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-	<data name="LoginWindow_Title" xml:space="preserve">
-  <value>Login</value>
+  <data name="LoginWindow_Title" xml:space="preserve">
+		<value>Login</value>
+	</data>
+  <data name="Label_Email" xml:space="preserve">
+		<value>Email</value>
+	</data>
+  <data name="Label_Password" xml:space="preserve">
+		<value>Password</value>
+	</data>
+  <data name="Button_Back" xml:space="preserve">
+		<value>Back</value>
+	</data>
+  <data name="Button_Login" xml:space="preserve">
+		<value>Log in</value>
+	</data>
+  <data name="CheckBox_SaveCredentials" xml:space="preserve">
+		<value>Save credentials</value>
+	</data>
+  <data name="Header_Title" xml:space="preserve">
+		<value>Sign in to FlowBlox</value>
+	</data>
+  <data name="Header_Description" xml:space="preserve">
+		<value>
+Before signing in, you need to register via email and confirm your account.
+After completing the registration, you can log in here using your credentials.
+  </value>
+	</data>
+  <data name="Link_ForgotPassword" xml:space="preserve">
+		<value>Forgot your password?</value>
+	</data>
+  <data name="Message_Login_NoApiUrlSelected" xml:space="preserve">
+  <value>Please select an API URL.</value>
 </data>
-
-	<data name="Label_Email" xml:space="preserve">
-  <value>Email</value>
+  <data name="Message_Login_InvalidCredentials" xml:space="preserve">
+  <value>Login failed. Please check your email and password.</value>
 </data>
-	<data name="Label_Password" xml:space="preserve">
-  <value>Password</value>
+  <data name="Message_Login_GetUserDataFailed" xml:space="preserve">
+  <value>Login failed. User data could not be retrieved.</value>
 </data>
-
-	<data name="Button_Back" xml:space="preserve">
-  <value>Back</value>
+  <data name="Message_Login_Failed" xml:space="preserve">
+  <value>An error occurred during login. Please check your connection and try again.</value>
 </data>
-	<data name="Button_Login" xml:space="preserve">
-  <value>Log in</value>
-</data>
-
-	<data name="CheckBox_SaveCredentials" xml:space="preserve">
-  <value>Save credentials</value>
-</data>
-
+  <data name="Label_ApiUrl" xml:space="preserve">
+    <value>Api-URL</value>
+  </data>
+  <data name="Error_LoadApiMetadataFailed" xml:space="preserve">
+    <value>The API metadata could not be retrieved. The service may be unavailable or does not provide metadata through this endpoint.</value>
+  </data>
 </root>

@@ -88,6 +88,45 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The API metadata could not be retrieved. The service may be unavailable or does not provide metadata through this endpoint. ähnelt.
+        /// </summary>
+        public static string Error_LoadApiMetadataFailed {
+            get {
+                return ResourceManager.GetString("Error_LoadApiMetadataFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 
+        ///Before signing in, you need to register via email and confirm your account.
+        ///After completing the registration, you can log in here using your credentials.
+        ///   ähnelt.
+        /// </summary>
+        public static string Header_Description {
+            get {
+                return ResourceManager.GetString("Header_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sign in to FlowBlox ähnelt.
+        /// </summary>
+        public static string Header_Title {
+            get {
+                return ResourceManager.GetString("Header_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Api-URL ähnelt.
+        /// </summary>
+        public static string Label_ApiUrl {
+            get {
+                return ResourceManager.GetString("Label_ApiUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Email ähnelt.
         /// </summary>
         public static string Label_Email {
@@ -106,11 +145,56 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Forgot your password? ähnelt.
+        /// </summary>
+        public static string Link_ForgotPassword {
+            get {
+                return ResourceManager.GetString("Link_ForgotPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Login ähnelt.
         /// </summary>
         public static string LoginWindow_Title {
             get {
                 return ResourceManager.GetString("LoginWindow_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die An error occurred during login. Please check your connection and try again. ähnelt.
+        /// </summary>
+        public static string Message_Login_Failed {
+            get {
+                return ResourceManager.GetString("Message_Login_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Login failed. User data could not be retrieved. ähnelt.
+        /// </summary>
+        public static string Message_Login_GetUserDataFailed {
+            get {
+                return ResourceManager.GetString("Message_Login_GetUserDataFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Login failed. Please check your email and password. ähnelt.
+        /// </summary>
+        public static string Message_Login_InvalidCredentials {
+            get {
+                return ResourceManager.GetString("Message_Login_InvalidCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please select an API URL. ähnelt.
+        /// </summary>
+        public static string Message_Login_NoApiUrlSelected {
+            get {
+                return ResourceManager.GetString("Message_Login_NoApiUrlSelected", resourceCulture);
             }
         }
     }

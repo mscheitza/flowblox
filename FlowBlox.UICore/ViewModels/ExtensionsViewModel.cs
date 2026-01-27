@@ -35,6 +35,8 @@ namespace FlowBlox.UICore.ViewModels
         private FlowBloxProject _project;
         private bool _hasExtensionChanged;
 
+        public bool HasProjectReference => _project != null;
+
         public string SearchText
         {
             get => _searchText;
@@ -106,23 +108,46 @@ namespace FlowBlox.UICore.ViewModels
 
         public FbUserData ActiveUser
         {
-            get => FlowBloxAccountManager.Instance.ActiveUser;
+            get => FlowBloxAccountManager.Instance.GetActiveUser(ApiUrl);
             set
             {
-                FlowBloxAccountManager.Instance.ActiveUser = value;
+                FlowBloxAccountManager.Instance.SetActiveUser(ApiUrl, value);
                 OnPropertyChanged(nameof(ActiveUser));
+                OnPropertyChanged(nameof(CanLogin));
+                OnPropertyChanged(nameof(CanLogout));
             }
         }
 
         public string UserToken
         {
-            get => FlowBloxAccountManager.Instance.UserToken;
+            get => FlowBloxAccountManager.Instance.GetUserToken(ApiUrl);
             set
             {
-                FlowBloxAccountManager.Instance.UserToken = value;
+                FlowBloxAccountManager.Instance.SetUserToken(ApiUrl, value);
                 OnPropertyChanged(nameof(UserToken));
             }
         }
+
+        private FbApiMetadata _apiMetadata;
+        public FbApiMetadata ApiMetadata
+        {
+            get => _apiMetadata;
+            private set
+            {
+                if (!ReferenceEquals(_apiMetadata, value))
+                {
+                    _apiMetadata = value;
+                    OnPropertyChanged(nameof(ApiMetadata));
+                    OnPropertyChanged(nameof(CanLogin));
+                    OnPropertyChanged(nameof(CanRegister));
+                    OnPropertyChanged(nameof(CanLogout));
+                }
+            }
+        }
+
+        public bool CanLogin => ApiMetadata?.Capabilities?.CanLogin == true && ActiveUser == null;
+        public bool CanRegister => ApiMetadata?.Capabilities?.CanRegister == true;
+        public bool CanLogout => ApiMetadata?.Capabilities?.CanLogin == true && ActiveUser != null;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -131,18 +156,33 @@ namespace FlowBlox.UICore.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ExtensionsViewModel(Window ownerWindow, FlowBloxProject project) : this()
+        public ExtensionsViewModel(Window ownerWindow, FlowBloxProject project = null) : this()
         {
             _ownerWindow = ownerWindow;
             _project = project;
+            OnPropertyChanged(nameof(HasProjectReference));
 
-            LoadExtensions(project);
+            if (_project != null)
+                LoadExtensions(project);
 
             InstalledExtensions.CollectionChanged += (s, e) =>
             {
                 _hasExtensionChanged = true;
-                CommandManager.InvalidateRequerySuggested(); // Aktualisiere Command CanExecute Status
+                CommandManager.InvalidateRequerySuggested();
             };
+
+            _ = LoadApiMetadataAsync();
+        }
+
+        private async Task LoadApiMetadataAsync()
+        {
+            ApiMetadata = await ApiMetadataHelper.LoadApiMetadataAsync(_flowBloxWebApiService.Value);
+
+            if (ApiMetadata == null)
+            {
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Error,
+                    FlowBloxResourceUtil.GetLocalizedString("Error_LoadApiMetadataFailed", typeof(Resources.ExtensionsWindow)));
+            }
         }
 
         public ExtensionsViewModel()
@@ -151,7 +191,7 @@ namespace FlowBlox.UICore.ViewModels
 
             RegisterCommand = new RelayCommand(() =>
             {
-                var registrationWindow = new RegistrationWindow
+                var registrationWindow = new RegistrationWindow(ApiUrl)
                 {
                     Owner = this._ownerWindow
                 };
@@ -188,8 +228,8 @@ namespace FlowBlox.UICore.ViewModels
         private void ManageOwnExtensions(object obj)
         {
             var manageUserExtensionsWindow = new ManageUserExtensionsWindow(
-                FlowBloxAccountManager.Instance.UserToken, 
-                FlowBloxAccountManager.Instance.ActiveUser)
+                FlowBloxAccountManager.Instance.GetUserToken(ApiUrl), 
+                FlowBloxAccountManager.Instance.GetActiveUser(ApiUrl))
             {
                 Owner = _ownerWindow,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
@@ -197,18 +237,21 @@ namespace FlowBlox.UICore.ViewModels
             manageUserExtensionsWindow.ShowDialog();
         }
 
+        private static string ApiUrl => FlowBloxOptions.GetOptionInstance()
+            .OptionCollection["General.ExtensionApiServiceBaseUrl"]
+            .Value;
+
         private Lazy<FlowBloxWebApiService> _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>
         {
-            var webApiServiceUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ExtensionApiServiceBaseUrl"].Value;
-            return new FlowBloxWebApiService(webApiServiceUrl);
+            return new FlowBloxWebApiService(ApiUrl);
         });
 
         private async void ExecuteSearch()
         {
-            var searchResults = await _flowBloxWebApiService.Value.GetExtensionsAsync(SearchText);
-            if (searchResults != null)
+            var searchResultsResp = await _flowBloxWebApiService.Value.GetExtensionsAsync(searchForName: SearchText);
+            if (searchResultsResp.Success && searchResultsResp.ResultObject != null)
             {
-                SearchResults = searchResults;
+                SearchResults = searchResultsResp.ResultObject;
                 OnPropertyChanged(nameof(SearchResults));
             }
         }
@@ -238,7 +281,7 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        private bool CanReloadExtensions() => _hasExtensionChanged;
+        private bool CanReloadExtensions() => HasProjectReference && _hasExtensionChanged;
 
         private async void ReloadExtensions()
         {
@@ -381,12 +424,12 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        private async Task<bool> ValidateExtensionDeletion()
+        private async Task<bool> ValidateExtensionDeletion(FlowBloxProjectExtension extension)
         {
             var registry = FlowBloxRegistryProvider.GetRegistry();
             var logger = FlowBloxLogManager.Instance.GetLogger();
             var validator = new ExtensionDeleteValidator(registry, logger);
-            var result = validator.Validate(SelectedExtension.Name);
+            var result = validator.Validate(extension.Name);
 
             if (result != ValidationResult.Success)
             {
@@ -403,7 +446,7 @@ namespace FlowBlox.UICore.ViewModels
         {
             if (parameter is FlowBloxProjectExtension extension)
             {
-                if (await ValidateExtensionDeletion())
+                if (await ValidateExtensionDeletion(extension))
                 {
                     InstalledExtensions.Remove(extension);
 
@@ -510,7 +553,7 @@ namespace FlowBlox.UICore.ViewModels
 
             if (extensionToRemove != null)
             {
-                if (await ValidateExtensionDeletion())
+                if (await ValidateExtensionDeletion(extensionToRemove))
                 {
                     InstalledExtensions.Remove(extensionToRemove);
                     _hasExtensionChanged = true;
@@ -535,11 +578,10 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     CreateExtensionRepositoryAsync();
 
-                    // Validierung der Kompatibilität
+                    // Compatibility validation
                     var validationResult = await _compatibilityValidator.ValidateAsync(SelectedExtension, SelectedVersion, InstalledExtensions);
                     if (validationResult != ValidationResult.Success)
                     {
-                        // Fehleranzeige mit MessageBoxHelper
                         await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Error, validationResult.ErrorMessage);
                         return;
                     }

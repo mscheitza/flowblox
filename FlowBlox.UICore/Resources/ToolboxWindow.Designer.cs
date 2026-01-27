@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
         public static string Button_Save {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswählen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select ähnelt.
         /// </summary>
         public static string Button_Select {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Typ ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type ähnelt.
         /// </summary>
         public static string GridView_Column_Type {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Inhalt: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content: ähnelt.
         /// </summary>
         public static string Label_Content {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Toolbox Typ: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Toolbox type: ähnelt.
         /// </summary>
         public static string Label_ToolboxType {
             get {
@@ -124,7 +124,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Keine Toolbox-Elemente vorhanden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No toolbox elements available. ähnelt.
         /// </summary>
         public static string Message_NoToolboxElementsFound {
             get {
@@ -133,7 +133,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Speichern erfolgreich ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Saved successfully. ähnelt.
         /// </summary>
         public static string Message_SaveSuccessful {
             get {
@@ -151,7 +151,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinzufügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
         public static string ToolTip_Add {
             get {
@@ -160,7 +160,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
         public static string ToolTip_Remove {
             get {

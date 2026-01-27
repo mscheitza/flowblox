@@ -19,7 +19,7 @@ using static FlowBlox.Core.Extensions.DotNetEncodingNamesExtension;
 
 namespace FlowBlox.Core.Models.Components.IO
 {
-    [Display(Name = "TypeNames_MemoryObject", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "MemoryObject_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class MemoryObject : DataObjectBase
     {
         public MemoryObject()
@@ -30,7 +30,7 @@ namespace FlowBlox.Core.Models.Components.IO
         private FieldElement _field;
 
         [Required()]
-        [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "Global_FieldElement", Description = "MemoryObject_Field_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
         public FieldElement Field 
@@ -40,7 +40,7 @@ namespace FlowBlox.Core.Models.Components.IO
         }
 
         [Required()]
-        [Display(Name = "PropertyNames_FileName", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [Display(Name = "PropertyNames_FileName", Description = "MemoryObject_FileName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         public string FileName { get; set; }
 
         [ActivationCondition(MemberName = nameof(Field), ActivationMethod = nameof(IsEncodingNameActive))]

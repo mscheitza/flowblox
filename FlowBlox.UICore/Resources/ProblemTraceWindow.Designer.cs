@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Vollständiger Feldbezeichner ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fully qualified field name ähnelt.
         /// </summary>
         public static string Column_FullyQualifiedName {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string Column_Value {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Kritikalität: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Criticality: ähnelt.
         /// </summary>
         public static string Label_Criticality {
             get {
@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausnahme: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Exception: ähnelt.
         /// </summary>
         public static string Label_Exception {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldwerte: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field values: ähnelt.
         /// </summary>
         public static string Label_FieldValues {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Meldung: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Message: ähnelt.
         /// </summary>
         public static string Label_Message {
             get {
@@ -133,7 +133,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zeitstempel: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timestamp: ähnelt.
         /// </summary>
         public static string Label_Timestamp {
             get {
@@ -142,7 +142,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Problemverfolgung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Issue tracking ähnelt.
         /// </summary>
         public static string Title {
             get {

@@ -202,34 +202,30 @@ namespace FlowBlox.Core.Models.Project
 
         private async Task DownloadVersionContentAsync(string targetDirectory)
         {
-            if (ExtensionGuid.HasValue)
+            if (!ExtensionGuid.HasValue)
+                return;
+
+            var resp = await _flowBloxWebApiService.Value.GetVersionContentAsync(ExtensionGuid.Value, Version);
+
+            if (!resp.Success)
+                throw new InvalidOperationException($"The version content of extension \"{Name}\" ({ExtensionGuid}) and version \"{Version}\" could not be retrieved from the server. {resp.ErrorMessage}");
+
+            string contentBase64 = resp.ResultObject;
+            if (!string.IsNullOrEmpty(contentBase64))
             {
-                string contentBase64;
-                try
-                {
-                    contentBase64 = await _flowBloxWebApiService.Value.GetVersionContentAsync(ExtensionGuid.Value, Version);
-                }
-                catch(Exception ex)
-                {
-                    throw new InvalidOperationException($"The version content of extension \"{Name}\" ({ExtensionGuid}) and version \"{Version}\" could not be retrieved from the server.", ex);
-                }
-                
-                if (!string.IsNullOrEmpty(contentBase64))
-                {
-                    byte[] fileContent = Convert.FromBase64String(contentBase64);
-                    string zipFilePath = Path.Combine(targetDirectory, $"{Name}_{Version}.zip");
+                byte[] fileContent = Convert.FromBase64String(contentBase64);
+                string zipFilePath = Path.Combine(targetDirectory, $"{Name}_{Version}.zip");
 
-                    File.WriteAllBytes(zipFilePath, fileContent);
+                File.WriteAllBytes(zipFilePath, fileContent);
 
-                    ZipFile.ExtractToDirectory(zipFilePath, targetDirectory);
-                    File.Delete(zipFilePath);
+                ZipFile.ExtractToDirectory(zipFilePath, targetDirectory);
+                File.Delete(zipFilePath);
 
-                    OnPropertyChanged(nameof(LocalExtensionDirectory));
-                }
-                else
-                {
-                    throw new InvalidOperationException($"The server returned empty version content for extension \"{Name}\" ({ExtensionGuid}) and version \"{Version}\".");
-                }
+                OnPropertyChanged(nameof(LocalExtensionDirectory));
+            }
+            else
+            {
+                throw new InvalidOperationException($"The server returned empty version content for extension \"{Name}\" ({ExtensionGuid}) and version \"{Version}\".");
             }
         }
 

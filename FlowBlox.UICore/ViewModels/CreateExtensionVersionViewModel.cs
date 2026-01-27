@@ -2,12 +2,10 @@
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Util;
 using FlowBlox.UICore.Commands;
-using FlowBlox.UICore.Utilities; // MessageBoxHelper namespace hinzufügen
-using MahApps.Metro.Controls; // Für MetroWindow
-using System;
+using FlowBlox.UICore.Utilities;
+using MahApps.Metro.Controls;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FlowBlox.UICore.ViewModels
@@ -50,7 +48,7 @@ namespace FlowBlox.UICore.ViewModels
         {
             this._userToken = userToken;
             this._extension = extension;
-            this._window = window; // Speichern des Fensters für spätere Verwendung
+            this._window = window;
         }
 
         private async Task CreateAsync()
@@ -68,7 +66,7 @@ namespace FlowBlox.UICore.ViewModels
             }
             else
             {
-                await MessageBoxHelper.ShowMessageBoxAsync(_window, MessageBoxType.Error, response.ErrorMessage);
+                await MessageBoxHelper.ShowMessageBoxAsync(_window, MessageBoxType.Error, ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
             }
         }
 

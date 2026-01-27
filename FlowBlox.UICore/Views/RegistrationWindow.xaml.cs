@@ -12,10 +12,10 @@ namespace FlowBlox.UICore.Views
     {
         private RegistrationViewModel _viewModel;
 
-        public RegistrationWindow()
+        public RegistrationWindow(string apiUrl)
         {
             InitializeComponent();
-            _viewModel = new RegistrationViewModel(this);
+            _viewModel = new RegistrationViewModel(this, apiUrl);
             DataContext = _viewModel;
         }
 

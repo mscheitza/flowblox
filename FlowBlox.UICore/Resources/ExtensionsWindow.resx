@@ -117,125 +117,122 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-	<data name="ExtensionsWindow_Title" xml:space="preserve">
-  <value>Manage extensions</value>
-</data>
-
-	<data name="Button_Login" xml:space="preserve">
-  <value>Log in</value>
-</data>
-	<data name="Button_Register" xml:space="preserve">
-  <value>Register</value>
-</data>
-	<data name="Button_Logout" xml:space="preserve">
-  <value>Log out</value>
-</data>
-	<data name="Button_Search" xml:space="preserve">
-  <value>Search</value>
-</data>
-
-	<data name="Header_Name" xml:space="preserve">
-  <value>Name</value>
-</data>
-	<data name="Header_Description" xml:space="preserve">
-  <value>Description</value>
-</data>
-	<data name="Header_LatestVersion" xml:space="preserve">
-  <value>Latest version</value>
-</data>
-
-	<data name="Label_ExtensionName" xml:space="preserve">
-  <value>Extension name</value>
-</data>
-	<data name="Label_ExtensionDescription" xml:space="preserve">
-  <value>Extension description</value>
-</data>
-	<data name="Label_Version" xml:space="preserve">
-  <value>Version</value>
-</data>
-
-	<data name="Button_Add" xml:space="preserve">
-  <value>Add</value>
-</data>
-	<data name="Button_Remove" xml:space="preserve">
-  <value>Remove</value>
-</data>
-	<data name="Button_Save" xml:space="preserve">
-  <value>Apply</value>
-</data>
-	<data name="Button_SelectFilePath" xml:space="preserve">
-  <value>Select file path</value>
-</data>
-	<data name="Button_Uninstall" xml:space="preserve">
-  <value>Uninstall</value>
-</data>
-
-	<data name="Header_DebugMode" xml:space="preserve">
-  <value>Debug mode</value>
-</data>
-	<data name="Header_FilePath" xml:space="preserve">
-  <value>File path</value>
-</data>
-	<data name="Header_Online" xml:space="preserve">
-  <value>Online</value>
-</data>
-	<data name="Header_Version" xml:space="preserve">
-  <value>Version</value>
-</data>
-	<data name="Header_Guid" xml:space="preserve">
-  <value>GUID</value>
-</data>
-
-	<data name="Label_InstalledExtensions" xml:space="preserve">
-  <value>Installed extensions</value>
-</data>
-	<data name="Label_ManageLocalExtensions" xml:space="preserve">
-  <value>Manage local extensions</value>
-</data>
-
-	<data name="Tab_Installed" xml:space="preserve">
-  <value>Installed</value>
-</data>
-	<data name="Tab_Offline" xml:space="preserve">
-  <value>Offline</value>
-</data>
-	<data name="Tab_Online" xml:space="preserve">
-  <value>Online</value>
-</data>
-
-	<data name="Button_ReloadExtensions" xml:space="preserve">
-  <value>Reload extensions</value>
-</data>
-	<data name="Button_ManageOwnExtensions" xml:space="preserve">
-  <value>Manage own extensions</value>
-</data>
-	<data name="Button_Update" xml:space="preserve">
-  <value>Update</value>
-</data>
-
-	<data name="Label_Changes" xml:space="preserve">
-  <value>Changes</value>
-</data>
-
-	<data name="Message_AddExtension_Failed" xml:space="preserve">
-  <value>The extension could not be added. Please check the log files for more information.</value>
-</data>
-	<data name="Message_ReloadExtensions_Failed" xml:space="preserve">
-  <value>The extensions could not be reloaded in the project. Please check the log files for more information.</value>
-</data>
-	<data name="Message_UpdateExtension_Failed" xml:space="preserve">
-  <value>The extension could not be updated. Please check the log files for more information.</value>
-</data>
-	<data name="Message_RemainingAssemblies" xml:space="preserve">
-  <value>The following assemblies could not be unloaded: {0}. It is recommended to close the application and the project and then restart them.</value>
-</data>
-	<data name="Message_UnloadableExtensions" xml:space="preserve">
-  <value>The following extensions could not be loaded: {0}. Please check the extensions and try again, or restart the application and the project.</value>
-</data>
-	<data name="Message_ProjectSaveFailed" xml:space="preserve">
-  <value>The project could not be saved to: {0}. Please check the log files for more information.</value>
-</data>
-	<data name="Message_RemainingAssemblies_RestartPrompt" xml:space="preserve">
-  <value>The following assemblies could not be unloaded: {0}. Do you want to save the project and reload it together with the application? (Recommended)</value>
-</data>
+  <data name="ExtensionsWindow_Title" xml:space="preserve">
+    <value>Manage extensions</value>
+  </data>
+  <data name="Button_Login" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="Button_Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Button_Logout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="Button_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Header_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Header_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Header_LatestVersion" xml:space="preserve">
+    <value>Latest version</value>
+  </data>
+  <data name="Label_ExtensionName" xml:space="preserve">
+    <value>Extension name</value>
+  </data>
+  <data name="Label_ExtensionDescription" xml:space="preserve">
+    <value>Extension description</value>
+  </data>
+  <data name="Label_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Button_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Button_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Button_Save" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Button_SelectFilePath" xml:space="preserve">
+    <value>Select file path</value>
+  </data>
+  <data name="Button_Uninstall" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+  <data name="Header_DebugMode" xml:space="preserve">
+    <value>Debug mode</value>
+  </data>
+  <data name="Header_FilePath" xml:space="preserve">
+    <value>File path</value>
+  </data>
+  <data name="Header_Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="Header_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Header_Guid" xml:space="preserve">
+    <value>GUID</value>
+  </data>
+  <data name="Label_InstalledExtensions" xml:space="preserve">
+    <value>Installed extensions</value>
+  </data>
+  <data name="Label_ManageLocalExtensions" xml:space="preserve">
+    <value>Manage local extensions</value>
+  </data>
+  <data name="Tab_Installed" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="Tab_Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Tab_Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="Button_ReloadExtensions" xml:space="preserve">
+    <value>Reload extensions</value>
+  </data>
+  <data name="Button_ManageOwnExtensions" xml:space="preserve">
+    <value>Manage own extensions</value>
+  </data>
+  <data name="Button_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Label_Changes" xml:space="preserve">
+    <value>Changes</value>
+  </data>
+  <data name="Message_AddExtension_Failed" xml:space="preserve">
+    <value>The extension could not be added. Please check the log files for more information.</value>
+  </data>
+  <data name="Message_ReloadExtensions_Failed" xml:space="preserve">
+    <value>The extensions could not be reloaded in the project. Please check the log files for more information.</value>
+  </data>
+  <data name="Message_UpdateExtension_Failed" xml:space="preserve">
+    <value>The extension could not be updated. Please check the log files for more information.</value>
+  </data>
+  <data name="Message_RemainingAssemblies" xml:space="preserve">
+    <value>The following assemblies could not be unloaded: {0}. It is recommended to close the application and the project and then restart them.</value>
+  </data>
+  <data name="Message_UnloadableExtensions" xml:space="preserve">
+    <value>The following extensions could not be loaded: {0}. Please check the extensions and try again, or restart the application and the project.</value>
+  </data>
+  <data name="Message_ProjectSaveFailed" xml:space="preserve">
+    <value>The project could not be saved to: {0}. Please check the log files for more information.</value>
+  </data>
+  <data name="Message_RemainingAssemblies_RestartPrompt" xml:space="preserve">
+    <value>The following assemblies could not be unloaded: {0}. Do you want to save the project and reload it together with the application? (Recommended)</value>
+  </data>
+  <data name="Text_NoSearchResults" xml:space="preserve">
+    <value>No results found.
+Adjust the search criteria or try a different search term.</value>
+  </data>
+  <data name="Error_LoadApiMetadataFailed" xml:space="preserve">
+    <value>The API metadata could not be retrieved. The service may be unavailable or does not provide metadata through this endpoint.</value>
+  </data>
 </root>

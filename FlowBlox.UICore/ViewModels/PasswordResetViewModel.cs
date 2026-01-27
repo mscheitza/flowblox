@@ -30,6 +30,9 @@ namespace FlowBlox.UICore.ViewModels
         private bool _canGenerateResetCode;
         private bool _canChangePassword;
         private bool _isResetCodeSent;
+        private string _apiUrl;
+        
+        private readonly Lazy<FlowBloxWebApiService> _flowBloxWebApiService;
 
         public string EmailOrUsername
         {
@@ -102,13 +105,18 @@ namespace FlowBlox.UICore.ViewModels
         {
             GenerateResetCodeCommand = new RelayCommand(GenerateResetCode, () => CanGenerateResetCode);
             ChangePasswordCommand = new RelayCommand(ChangePassword, () => CanChangePassword);
-            CloseCommand = new RelayCommand(() => _window.Close());
-            LoadCaptcha();
+            CloseCommand = new RelayCommand(() => _window?.Close());
         }
 
-        public PasswordResetViewModel(Window window) : this()
+        public PasswordResetViewModel(Window window, string apiUrl) : this()
         {
+            this._apiUrl = apiUrl;
+            this._flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>
+            {
+                return new FlowBloxWebApiService(_apiUrl);
+            });
             this._window = window;
+            LoadCaptcha();
         }
 
         private void OnPropertyChanged(string propertyName)
@@ -134,13 +142,27 @@ namespace FlowBlox.UICore.ViewModels
 
         private async void LoadCaptcha()
         {
-            var result = await _flowBloxWebApiService.Value.GetCaptchaAsync();
-            this.CaptchaResponse = new ConvertedCaptchaResponse()
+            var resp = await _flowBloxWebApiService.Value.GetCaptchaAsync();
+
+            if (!resp.Success || resp.ResultObject == null)
+            {
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
+                    ApiErrorMessageHelper.BuildErrorMessage(
+                        FlowBloxResourceUtil.GetLocalizedString("Error_LoadCaptchaFailed", typeof(Resources.PasswordResetWindow)),
+                        resp.ErrorMessage));
+
+                return;
+            }
+
+            var result = resp.ResultObject;
+
+            this.CaptchaResponse = new ConvertedCaptchaResponse
             {
                 CaptchaId = result.CaptchaId,
                 CaptchaImage = ConvertBase64ToBitmapImage(result.CaptchaImageBase64)
             };
         }
+
 
         private async void GenerateResetCode()
         {
@@ -197,11 +219,5 @@ namespace FlowBlox.UICore.ViewModels
                 return bitmapImage;
             }
         }
-
-        private Lazy<FlowBloxWebApiService> _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>
-        {
-            var webApiServiceUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ExtensionApiServiceBaseUrl"].Value;
-            return new FlowBloxWebApiService(webApiServiceUrl);
-        });
     }
 }

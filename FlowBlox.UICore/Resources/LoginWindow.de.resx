@@ -117,22 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-	<data name="LoginWindow_Title" xml:space="preserve">
+  <data name="LoginWindow_Title" xml:space="preserve">
     <value>Login</value>
   </data>
-	<data name="Label_Email" xml:space="preserve">
+  <data name="Label_Email" xml:space="preserve">
     <value>E-Mail</value>
   </data>
-	<data name="Label_Password" xml:space="preserve">
+  <data name="Label_Password" xml:space="preserve">
     <value>Passwort</value>
   </data>
-	<data name="Button_Back" xml:space="preserve">
+  <data name="Button_Back" xml:space="preserve">
     <value>Zurück</value>
   </data>
-	<data name="Button_Login" xml:space="preserve">
+  <data name="Button_Login" xml:space="preserve">
     <value>Anmelden</value>
   </data>
-	<data name="CheckBox_SaveCredentials" xml:space="preserve">
+  <data name="CheckBox_SaveCredentials" xml:space="preserve">
     <value>Anmeldedaten speichern</value>
+  </data>
+  <data name="Header_Title" xml:space="preserve">
+  <value>Anmeldung bei FlowBlox</value>
+</data>
+  <data name="Header_Description" xml:space="preserve">
+  <value>
+Um sich anzumelden, müssen Sie sich zuvor per E-Mail registrieren und Ihren Account bestätigen.
+Nach erfolgreicher Registrierung können Sie sich hier mit Ihren Zugangsdaten anmelden.
+  </value>
+</data>
+  <data name="Link_ForgotPassword" xml:space="preserve">
+  <value>Passwort vergessen?</value>
+</data>
+  <data name="Message_Login_NoApiUrlSelected" xml:space="preserve">
+  <value>Bitte wählen Sie eine API-URL aus.</value>
+</data>
+  <data name="Message_Login_InvalidCredentials" xml:space="preserve">
+  <value>Login fehlgeschlagen. Bitte prüfen Sie E-Mail und Passwort.</value>
+</data>
+  <data name="Message_Login_GetUserDataFailed" xml:space="preserve">
+  <value>Login fehlgeschlagen. Benutzerdaten konnten nicht abgerufen werden.</value>
+</data>
+  <data name="Message_Login_Failed" xml:space="preserve">
+  <value>Beim Login ist ein Fehler aufgetreten. Bitte prüfen Sie die Verbindung und versuchen Sie es erneut.</value>
+</data>
+  <data name="Label_ApiUrl" xml:space="preserve">
+    <value>Api-URL</value>
+  </data>
+  <data name="Error_LoadApiMetadataFailed" xml:space="preserve">
+    <value>Die API-Metadaten konnten nicht abgerufen werden. Der Dienst ist möglicherweise nicht verfügbar oder stellt in dieser Schnittstelle keine Metadaten bereit.</value>
   </data>
 </root>

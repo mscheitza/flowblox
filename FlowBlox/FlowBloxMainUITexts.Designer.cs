@@ -214,6 +214,33 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage extensions ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmFbExtensions_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmFbExtensions_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die View projects (Project-Space) ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmFbProjects_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmFbProjects_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Visit us on GitHub ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmGitHub_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmGitHub_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &amp;License ähnelt.
         /// </summary>
         internal static string AppWindow_itmLicense_Text {
@@ -241,15 +268,6 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manage licenses ähnelt.
-        /// </summary>
-        internal static string AppWindow_itmManageLicenses_Text {
-            get {
-                return ResourceManager.GetString("AppWindow_itmManageLicenses_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Monitoring ähnelt.
         /// </summary>
         internal static string AppWindow_itmMonitor_Text {
@@ -264,6 +282,15 @@ namespace FlowBlox {
         internal static string AppWindow_itmOpenApplicationLogDirectory_Text {
             get {
                 return ResourceManager.GetString("AppWindow_itmOpenApplicationLogDirectory_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open from Project-Space ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmOpenFromProjectSpace_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmOpenFromProjectSpace_Text", resourceCulture);
             }
         }
         
@@ -358,6 +385,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Reset dockable dialogues ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmResetDockablePanels_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmResetDockablePanels_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save project &amp;as ähnelt.
         /// </summary>
         internal static string AppWindow_itmSaveAs_Text {
@@ -372,6 +408,15 @@ namespace FlowBlox {
         internal static string AppWindow_itmSaveProject_Text {
             get {
                 return ResourceManager.GetString("AppWindow_itmSaveProject_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save to Project Space ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmSaveToProjectSpace_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmSaveToProjectSpace_Text", resourceCulture);
             }
         }
         
@@ -399,6 +444,15 @@ namespace FlowBlox {
         internal static string AppWindow_itmUserFields_Text {
             get {
                 return ResourceManager.GetString("AppWindow_itmUserFields_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Visit online ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmVisitOnline_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmVisitOnline_Text", resourceCulture);
             }
         }
         
@@ -1496,11 +1550,11 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manage suppressed &amp;messages ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage &amp;notifications ähnelt.
         /// </summary>
-        internal static string ProjectPanel_itmManageWarningSuppressions_Text {
+        internal static string ProjectPanel_itmManageNotifications_Text {
             get {
-                return ResourceManager.GetString("ProjectPanel_itmManageWarningSuppressions_Text", resourceCulture);
+                return ResourceManager.GetString("ProjectPanel_itmManageNotifications_Text", resourceCulture);
             }
         }
         

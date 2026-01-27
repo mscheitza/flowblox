@@ -38,7 +38,7 @@
             itmInsightInput = new System.Windows.Forms.ToolStripMenuItem();
             itmInsightOutput = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
-            itmManageWarningSuppressions = new System.Windows.Forms.ToolStripMenuItem();
+            itmManageNotifications = new System.Windows.Forms.ToolStripMenuItem();
             itmBreakPoint = new System.Windows.Forms.ToolStripMenuItem();
             itmIndex = new System.Windows.Forms.ToolStripMenuItem();
             itmDefineIndex = new System.Windows.Forms.ToolStripMenuItem();
@@ -115,7 +115,7 @@
             // 
             // contextMenuStrip
             // 
-            contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { itmEditElement, toolStripSeparator2, itmInsightInput, itmInsightOutput, toolStripSeparator14, itmManageWarningSuppressions, itmBreakPoint, itmIndex, toolStripSeparator7, itmRefresh, toolStripSeparator9, itmDeleteElement, itmDeleteConnection });
+            contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { itmEditElement, toolStripSeparator2, itmInsightInput, itmInsightOutput, toolStripSeparator14, itmManageNotifications, itmBreakPoint, itmIndex, toolStripSeparator7, itmRefresh, toolStripSeparator9, itmDeleteElement, itmDeleteConnection });
             contextMenuStrip.Name = "contextGridElement";
             contextMenuStrip.Size = new System.Drawing.Size(276, 248);
             // 
@@ -153,13 +153,13 @@
             toolStripSeparator14.Name = "toolStripSeparator14";
             toolStripSeparator14.Size = new System.Drawing.Size(272, 6);
             // 
-            // itmManageWarningSuppressions
+            // itmManageNotifications
             // 
-            itmManageWarningSuppressions.Image = (System.Drawing.Image)resources.GetObject("itmManageWarningSuppressions.Image");
-            itmManageWarningSuppressions.Name = "itmManageWarningSuppressions";
-            itmManageWarningSuppressions.Size = new System.Drawing.Size(275, 22);
-            itmManageWarningSuppressions.Text = "itmManageWarningSuppressions_Text";
-            itmManageWarningSuppressions.Click += itmManageWarningSuppressions_Click;
+            itmManageNotifications.Image = (System.Drawing.Image)resources.GetObject("itmManageNotifications.Image");
+            itmManageNotifications.Name = "itmManageNotifications";
+            itmManageNotifications.Size = new System.Drawing.Size(275, 22);
+            itmManageNotifications.Text = "itmManageNotifications_Text";
+            itmManageNotifications.Click += itmManageNotifications_Click;
             // 
             // itmBreakPoint
             // 
@@ -483,7 +483,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem itmEditElement;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
-        private System.Windows.Forms.ToolStripMenuItem itmManageWarningSuppressions;
+        private System.Windows.Forms.ToolStripMenuItem itmManageNotifications;
         private System.Windows.Forms.ToolStripMenuItem itmBreakPoint;
         private System.Windows.Forms.ToolStripMenuItem itmIndex;
         private System.Windows.Forms.ToolStripMenuItem itmDefineIndex;

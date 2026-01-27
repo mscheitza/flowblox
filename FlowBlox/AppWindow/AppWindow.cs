@@ -5,6 +5,7 @@ using FlowBlox.Core.Authentication;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Exceptions;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Interceptors;
 using FlowBlox.Core.Logging;
@@ -126,32 +127,31 @@ namespace FlowBlox.AppWindow
             if (_dockContentProjectPanel?.IsRuntimeActive == true)
                 isRuntimeActive = true;
 
+            var isProjectActive = project != null;
+
             dockPanel.Visible = project != null;
-            BackColor = project != null ?
+            BackColor = isProjectActive ?
                 Color.FromKnownColor(KnownColor.Control) :
                 Color.FromArgb(53, 53, 53);
 
             itmCreateProject.Enabled = !isRuntimeActive;
             itmOpenProject.Enabled = !isRuntimeActive;
-            itmCloseProject.Enabled = (project != null) && !isRuntimeActive;
-            itmUserFields.Enabled = (project != null) && !isRuntimeActive;
+            itmCloseProject.Enabled = isProjectActive && !isRuntimeActive;
+            itmUserFields.Enabled = isProjectActive && !isRuntimeActive;
 
-            itmEditProject.Enabled = (project != null) && (!isRuntimeActive);
-            itmSaveProject.Enabled = (project != null) && (!isRuntimeActive);
-            itmSaveAs.Enabled = (project != null) && (!isRuntimeActive);
+            itmEditProject.Enabled = isProjectActive && (!isRuntimeActive);
+            itmSaveProject.Enabled = isProjectActive && (!isRuntimeActive);
+            itmSaveAs.Enabled = isProjectActive && (!isRuntimeActive);
 
-            itmDockablePanels.Enabled = project != null;
-            itmResetDockablePanels.Enabled = project != null;
+            itmDockablePanels.Enabled = isProjectActive;
+            itmResetDockablePanels.Enabled = isProjectActive;
 
             itmOpenRuntimeLogDirectory.Enabled = !string.IsNullOrEmpty(RuntimeLogfilePath);
 
-            itmLogin.Enabled = !FlowBloxAccountManager.Instance.IsLoggedIn;
-            itmLogout.Enabled = FlowBloxAccountManager.Instance.IsLoggedIn;
+            itmSaveToProjectSpace.Enabled = isProjectActive;
 
             if (isRuntimeActive && !_runtimeViewPanel.IsHidden)
-            {
                 _runtimeViewPanel.Activate();
-            }
 
             var changelist = _componentProvider.GetCurrentChangelist();
             this.itmUndo.Enabled = (changelist != null) && (!isRuntimeActive) && (changelist.ChangeIndex > -1);
@@ -164,7 +164,7 @@ namespace FlowBlox.AppWindow
         private void InitializeDockPanel(bool exceptProjectPanel = false)
         {
             this.dockPanel.SuspendLayout();
-            
+
             this.dockPanel.Theme = new VS2015DarkTheme();
 
             foreach (var dockContent in dockPanel.Contents
@@ -318,8 +318,6 @@ namespace FlowBlox.AppWindow
                 Environment.Exit(0);
             }
         }
-
-
 
         private void CreateProject()
         {
@@ -884,40 +882,6 @@ namespace FlowBlox.AppWindow
                 this._dockContentProjectPanel.Copy();
         }
 
-        private void itmRegister_Click(object sender, EventArgs e)
-        {
-            var registrationWindow = new RegistrationWindow();
-            WindowsFormWPFHelper.ShowDialog(registrationWindow, this);
-        }
-
-        private void itmLogin_Click(object sender, EventArgs e)
-        {
-
-            var loginWindow = new LoginWindow();
-            if (WindowsFormWPFHelper.ShowDialog(loginWindow, this) == true)
-            {
-                if (loginWindow.Tag != null)
-                {
-                    var (token, userData) = ((string, FbUserData))loginWindow.Tag;
-                    FlowBloxAccountManager.Instance.ActiveUser = userData;
-                    FlowBloxAccountManager.Instance.UserToken = token;
-                    UpdateUI();
-                }
-                else
-                {
-                    FlowBloxAccountManager.Instance.ActiveUser = null;
-                    FlowBloxAccountManager.Instance.UserToken = null;
-                }
-            }
-        }
-
-        private void itmLogout_Click(object sender, EventArgs e)
-        {
-            FlowBloxAccountManager.Instance.ActiveUser = null;
-            FlowBloxAccountManager.Instance.UserToken = null;
-
-            UpdateUI();
-        }
 
         private void itmVisitOnline_Click(object sender, EventArgs e) => OpenUrl("https://www.flowblox.net/");
 
@@ -1081,6 +1045,51 @@ namespace FlowBlox.AppWindow
             FlowBloxOptions.GetOptionInstance().GetOption("MainPanel.DockSettings").Value = string.Empty;
             FlowBloxOptions.GetOptionInstance().Save();
             InitializeDockPanel(true);
+        }
+
+        private void itmSaveToProjectSpace_Click(object sender, EventArgs e)
+        {
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            var dialog = new CreateOrUpdatePSProjectWindow(project);
+            WindowsFormWPFHelper.ShowDialog(dialog, this);
+        }
+
+        private void itmOpenFromProjectSpace_Click(object sender, EventArgs e)
+        {
+            var dialog = new PSProjectsWindow();
+            WindowsFormWPFHelper.ShowDialog(dialog, this);
+
+            if (dialog.DialogResult != true)
+                return;
+
+            var projectGuid = dialog.Tag as string;
+            if (string.IsNullOrWhiteSpace(projectGuid))
+                return;
+
+            var baseUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectApiServiceBaseUrl"].Value;
+            var webApi = new FlowBloxWebApiService(baseUrl);
+            var token = FlowBloxAccountManager.Instance.GetUserToken(baseUrl);
+
+            FlowBloxProject project = Task.Run(async () => await FlowBloxProject.FromProjectSpaceGuidAsync(projectGuid, token, webApi))
+                .GetAwaiter()
+                .GetResult();
+
+            if (project == null)
+                return;
+
+            // TODO: Wie gehts weiter?
+        }
+
+        private void itmFbProjects_Click(object sender, EventArgs e)
+        {
+            var dialog = new PSProjectsWindow();
+            WindowsFormWPFHelper.ShowDialog(dialog, this);
+        }
+
+        private void itmFbExtensions_Click(object sender, EventArgs e)
+        {
+            var dialog = new ExtensionsWindow();
+            WindowsFormWPFHelper.ShowDialog(dialog, this);
         }
 
         internal T GetAccessibleComponent<T>() where T : System.Windows.Forms.Control

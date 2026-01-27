@@ -1,286 +1,396 @@
-﻿<mah:MetroWindow  
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    x:Class="FlowBlox.UICore.Views.ExtensionsWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModel="clr-namespace:FlowBlox.UICore.ViewModels"
-    xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
-    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    Title="{x:Static resources:ExtensionsWindow.ExtensionsWindow_Title}" 
-    Height="500" Width="900" Icon="/Icons/extension.ico"
-    mc:Ignorable="d">
-
-    <Window.DataContext>
-        <viewModel:ExtensionsViewModel />
-    </Window.DataContext>
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            <converters:NullOrEmptyToBoolConverter x:Key="NullOrEmptyToBoolConverter"/>
-            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
-        </ResourceDictionary>
-    </Window.Resources>
-
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <TabControl Grid.Row="0">
-            <!-- Tab "Online" -->
-            <TabItem Header="{x:Static resources:ExtensionsWindow.Tab_Online}">
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontSize="14" FontWeight="Normal" Padding="10,5"/>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- ToolBar -->
-                        <ToolBar VerticalAlignment="Center" Grid.ColumnSpan="2">
-                            <Button Command="{Binding LoginCommand}" Visibility="{Binding ActiveUser, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=invert}">
+﻿<mah:MetroWindow xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 x:Class="FlowBlox.UICore.Views.ExtensionsWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:viewModel="clr-namespace:FlowBlox.UICore.ViewModels"
+                 xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
+                 xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 Title="{x:Static resources:ExtensionsWindow.ExtensionsWindow_Title}"
+                 Height="500"
+                 Width="900"
+                 Icon="/Icons/extension.ico"
+                 mc:Ignorable="d">
+	<Window.DataContext>
+		<viewModel:ExtensionsViewModel/>
+	</Window.DataContext>
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+			<converters:NullOrEmptyToBoolConverter x:Key="NullOrEmptyToBoolConverter"/>
+			<converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+			<converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<TabControl Grid.Row="0">
+			<!-- Tab "Online" -->
+			<TabItem Header="{x:Static resources:ExtensionsWindow.Tab_Online}">
+				<TabItem.HeaderTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}"
+						           FontSize="14"
+						           FontWeight="Normal"
+						           Padding="10,5"/>
+					</DataTemplate>
+				</TabItem.HeaderTemplate>
+				<Grid>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+						<!-- ToolBar -->
+						<ToolBar VerticalAlignment="Center"
+						         Grid.ColumnSpan="2">
+                            
+                            <!-- Login -->
+                            <Button Command="{Binding LoginCommand}"
+            Visibility="{Binding CanLogin, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconMaterial Kind="Account" Margin="0,0,5,0"/>
+                                        <iconPacks:PackIconMaterial Kind="Account"
+                                            Margin="0,0,5,0"/>
                                         <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Login}"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
 
-                            <Button Command="{Binding RegisterCommand}">
+                            <!-- Register -->
+                            <Button Command="{Binding RegisterCommand}"
+									Visibility="{Binding CanRegister, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconMaterial Kind="AccountPlus" Margin="0,0,5,0"/>
+                                        <iconPacks:PackIconMaterial Kind="AccountPlus"
+                                            Margin="0,0,5,0"/>
                                         <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Register}"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-
-                            <Button Command="{Binding LogoutCommand}" Visibility="{Binding ActiveUser, Converter={StaticResource NullToVisibilityConverter}}">
+                            
+                            <!-- Logout -->
+                            <Button Command="{Binding LogoutCommand}"
+									Visibility="{Binding CanLogout, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconMaterial Kind="Logout" Margin="0,0,5,0"/>
+                                        <iconPacks:PackIconMaterial Kind="Logout"
+                                            Margin="0,0,5,0"/>
                                         <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Logout}"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-
-                            <Button Command="{Binding ManageOwnExtensionsCommand}" Visibility="{Binding ActiveUser, Converter={StaticResource NullToVisibilityConverter}}">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <iconPacks:PackIconMaterial Kind="FileCogOutline" Margin="0,0,5,0"/>
-                                        <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_ManageOwnExtensions}"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
-
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Visibility="{Binding ActiveUser, Converter={StaticResource NullToVisibilityConverter}}">
-                                <iconPacks:PackIconMaterial Kind="Account" Width="12" Height="12" VerticalAlignment="Center" Foreground="Dimgray" Margin="0,0,3,0" />
-                                <Label FontWeight="SemiBold" Content="{Binding ActiveUser.UserName}" VerticalAlignment="Center" />
-                            </StackPanel>
                             
-                        </ToolBar>
-
-                        <!-- Main Content -->
-                        <Grid Grid.Row="1" Grid.ColumnSpan="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Left Panel: Search and ListView -->
-                            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="10">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0,5,5,5">
-                                        <TextBox x:Name="SearchTextBox" Width="200" Margin="0,0,5,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" KeyDown="SearchTextBox_KeyDown" />
-                                        <Button x:Name="SearchButton" Command="{Binding SearchCommand}">
-                                            <Button.Content>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <iconPacks:PackIconMaterial Kind="Magnify" Margin="0,0,5,0"/>
-                                                    <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Search}"/>
-                                                </StackPanel>
-                                            </Button.Content>
-                                        </Button>
-                                    </StackPanel>
-
-                                    <ListView ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedExtension}" MinHeight="100">
-                                        <ListView.View>
-                                            <GridView>
-                                                <GridViewColumn Header="{x:Static resources:ExtensionsWindow.Header_Name}" DisplayMemberBinding="{Binding Name}"/>
-                                                <GridViewColumn Header="{x:Static resources:ExtensionsWindow.Header_Description}" DisplayMemberBinding="{Binding Description}"/>
-                                                <GridViewColumn Header="{x:Static resources:ExtensionsWindow.Header_LatestVersion}" DisplayMemberBinding="{Binding Versions[0].Version}"/>
-                                            </GridView>
-                                        </ListView.View>
-                                    </ListView>
-                                </StackPanel>
-                            </ScrollViewer>
-
-                            <!-- Right Panel: Detail View -->
-                            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="5">
-                                <StackPanel Visibility="{Binding IsExtensionSelected, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <!-- Detail view elements like Labels, TextBlocks, ComboBox, and Buttons -->
-                                    <!-- Extension Name -->
-                                    <Label Content="{x:Static resources:ExtensionsWindow.Label_ExtensionName}" FontWeight="DemiBold" Margin="0,0,0,5" />
-                                    <TextBlock Text="{Binding SelectedExtension.Name}" Margin="5,0,0,5" />
-
-                                    <!-- Extension Description -->
-                                    <Label Content="{x:Static resources:ExtensionsWindow.Label_ExtensionDescription}" FontWeight="DemiBold" Margin="0,5,0,5" />
-                                    <TextBlock Text="{Binding SelectedExtension.Description}" Margin="5,0,0,5" TextWrapping="Wrap" />
-
-                                    <!-- Extension Version -->
-                                    <Label Content="{x:Static resources:ExtensionsWindow.Label_Version}" FontWeight="DemiBold" Margin="0,5,0,5" />
-                                    <ComboBox ItemsSource="{Binding SelectedExtension.Versions}"
-                                              DisplayMemberPath="Version"
-                                              SelectedItem="{Binding SelectedVersion}"
-                                              Margin="5,0,0,5" />
-
-                                    <!-- Version Changes -->
-                                    <Label Content="{x:Static resources:ExtensionsWindow.Label_Changes}" FontWeight="DemiBold" Margin="0,5,0,5" />
-                                    <TextBlock Text="{Binding SelectedVersion.Changes}" TextWrapping="Wrap" Margin="5,0,0,5" />
-
-                                    <!-- Buttons -->
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0">
-                                        <Button Command="{Binding AddExtensionCommand}" Margin="0,0,5,0">
-                                            <Button.Content>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <iconPacks:PackIconMaterial Kind="Plus" Margin="0,0,5,0"/>
-                                                    <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Add}"/>
-                                                </StackPanel>
-                                            </Button.Content>
-                                        </Button>
-                                        <Button Command="{Binding UpdateExtensionCommand}" Margin="0,0,5,0">
-                                            <Button.Content>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <iconPacks:PackIconMaterial Kind="Refresh" Margin="0,0,5,0"/>
-                                                    <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Update}"/>
-                                                </StackPanel>
-                                            </Button.Content>
-                                        </Button>
-                                        <Button Command="{Binding RemoveExtensionCommand}" Margin="0,0,5,0">
-                                            <Button.Content>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <iconPacks:PackIconMaterial Kind="Minus" Margin="0,0,5,0"/>
-                                                    <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Remove}"/>
-                                                </StackPanel>
-                                            </Button.Content>
-                                        </Button>
-                                    </StackPanel>
-                                </StackPanel>
-                            </ScrollViewer>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </TabItem>
-
-            <!-- Tab "Offline" -->
-            <TabItem Header="{x:Static resources:ExtensionsWindow.Tab_Offline}">
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontSize="14" FontWeight="Normal" Padding="10,5"/>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Row="0" Content="{x:Static resources:ExtensionsWindow.Label_ManageLocalExtensions}" />
-                    <ToolBar Grid.Row="1">
-                        <Button Command="{Binding AddOfflineExtensionCommand}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconMaterial Kind="Plus" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Add}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Button Command="{Binding RemoveOfflineExtensionCommand}" CommandParameter="{Binding SelectedItem, ElementName=offlineDataGrid}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconMaterial Kind="Minus" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Remove}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Button Command="{Binding SelectFilePathCommand}" CommandParameter="{Binding SelectedItem, ElementName=offlineDataGrid}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconMaterial Kind="Folder" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_SelectFilePath}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                    </ToolBar>
-                    <DataGrid Grid.Row="2" x:Name="offlineDataGrid" ItemsSource="{Binding OfflineExtensions}" AutoGenerateColumns="False" CanUserAddRows="False" >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Name}" Binding="{Binding Name}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Version}" Binding="{Binding Version}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_FilePath}" Binding="{Binding OfflineExtensionPath}" />
-                            <DataGridCheckBoxColumn Header="{x:Static resources:ExtensionsWindow.Header_DebugMode}" Binding="{Binding DebugMode}" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <!-- Tab "Installed" -->
-            <TabItem Header="{x:Static resources:ExtensionsWindow.Tab_Installed}">
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontSize="14" FontWeight="Normal" Padding="10,5"/>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <StackPanel Margin="10">
-                    <Label Content="{x:Static resources:ExtensionsWindow.Label_InstalledExtensions}" />
-                    <ToolBar>
-                        <Button Command="{Binding UninstallExtensionCommand}" CommandParameter="{Binding SelectedItem, ElementName=installedDataGrid}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconMaterial Kind="Delete" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Uninstall}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                    </ToolBar>
-                    <DataGrid x:Name="installedDataGrid" ItemsSource="{Binding InstalledExtensions}" AutoGenerateColumns="False" CanUserAddRows="False">
-                        <DataGrid.Columns>
-                            <DataGridCheckBoxColumn Header="{x:Static resources:ExtensionsWindow.Header_Online}" Binding="{Binding Online, Mode=OneWay}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Guid}" Binding="{Binding ExtensionGuid}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Name}" Binding="{Binding Name}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Version}" Binding="{Binding Version}" IsReadOnly="True" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
-
-        <!-- Reload Button -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Command="{Binding ReloadExtensionsCommand}">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="ContentSave" Margin="0,0,5,0"/>
-                        <TextBlock Text="{x:Static resources:ExtensionsWindow.Button_ReloadExtensions}"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </StackPanel>
-    </Grid>
+                            <Button Command="{Binding ManageOwnExtensionsCommand}"
+							        Visibility="{Binding ActiveUser, Converter={StaticResource NullToVisibilityConverter}}">
+								<Button.Content>
+									<StackPanel Orientation="Horizontal">
+										<iconPacks:PackIconMaterial Kind="FileCogOutline"
+										                            Margin="0,0,5,0"/>
+										<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_ManageOwnExtensions}"/>
+									</StackPanel>
+								</Button.Content>
+							</Button>
+							<StackPanel Orientation="Horizontal"
+							            VerticalAlignment="Center"
+							            Visibility="{Binding ActiveUser, Converter={StaticResource NullToVisibilityConverter}}">
+								<iconPacks:PackIconMaterial Kind="Account"
+								                            Width="12"
+								                            Height="12"
+								                            VerticalAlignment="Center"
+								                            Foreground="Dimgray"
+								                            Margin="0,0,3,0"/>
+								<Label FontWeight="SemiBold"
+								       Content="{Binding ActiveUser.UserName}"
+								       VerticalAlignment="Center"/>
+							</StackPanel>
+						</ToolBar>
+						<!-- Main Content -->
+						<Grid Grid.Row="1"
+						      Grid.ColumnSpan="2">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="2*"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<!-- Left Panel: Search and ListView -->
+							<ScrollViewer Grid.Column="0"
+							              VerticalScrollBarVisibility="Auto"
+							              Margin="10">
+								<StackPanel>
+									<StackPanel Orientation="Horizontal"
+									            Margin="0,5,5,5">
+										<TextBox x:Name="SearchTextBox"
+										         Width="200"
+										         Margin="0,0,5,0"
+										         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+										         KeyDown="SearchTextBox_KeyDown"/>
+										<Button x:Name="SearchButton"
+										        Command="{Binding SearchCommand}">
+											<Button.Content>
+												<StackPanel Orientation="Horizontal">
+													<iconPacks:PackIconMaterial Kind="Magnify"
+													                            Margin="0,0,5,0"/>
+													<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Search}"/>
+												</StackPanel>
+											</Button.Content>
+										</Button>
+									</StackPanel>
+									<ListView ItemsSource="{Binding SearchResults}"
+									          SelectedItem="{Binding SelectedExtension}">
+										<ListView.View>
+											<GridView>
+												<GridViewColumn Header="{x:Static resources:ExtensionsWindow.Header_Name}"
+												                DisplayMemberBinding="{Binding Name}"/>
+												<GridViewColumn Header="{x:Static resources:ExtensionsWindow.Header_Description}"
+												                DisplayMemberBinding="{Binding Description}"/>
+												<GridViewColumn Header="{x:Static resources:ExtensionsWindow.Header_LatestVersion}"
+												                DisplayMemberBinding="{Binding Versions[0].Version}"/>
+											</GridView>
+										</ListView.View>
+									</ListView>
+									<Grid Margin="20"
+									      HorizontalAlignment="Stretch"
+									      VerticalAlignment="Center"
+									      Visibility="{Binding SearchResults.Count, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=Reverse}">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="*"/>
+										</Grid.ColumnDefinitions>
+										<iconPacks:PackIconMaterial Kind="AlertCircleOutline"
+										                            Width="16"
+										                            Height="16"
+										                            Foreground="Gray"
+										                            VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="1"
+										           Text="{x:Static resources:ExtensionsWindow.Text_NoSearchResults}"
+										           FontSize="14"
+										           Foreground="Gray"
+										           Margin="10,0,0,0"
+										           VerticalAlignment="Center"
+										           TextWrapping="Wrap"/>
+									</Grid>
+								</StackPanel>
+							</ScrollViewer>
+							<!-- Right Panel: Detail View -->
+							<ScrollViewer Grid.Column="1"
+							              VerticalScrollBarVisibility="Auto"
+							              HorizontalScrollBarVisibility="Auto"
+							              Margin="5">
+								<StackPanel Visibility="{Binding IsExtensionSelected, Converter={StaticResource BoolToVisibilityConverter}}">
+									<!-- Detail view elements like Labels, TextBlocks, ComboBox, and Buttons -->
+									<!-- Extension Name -->
+									<Label Content="{x:Static resources:ExtensionsWindow.Label_ExtensionName}"
+									       FontWeight="DemiBold"
+									       Margin="0,0,0,5"/>
+									<TextBlock Text="{Binding SelectedExtension.Name}"
+									           Margin="5,0,0,5"/>
+									<!-- Extension Description -->
+									<Label Content="{x:Static resources:ExtensionsWindow.Label_ExtensionDescription}"
+									       FontWeight="DemiBold"
+									       Margin="0,5,0,5"/>
+									<TextBlock Text="{Binding SelectedExtension.Description}"
+									           Margin="5,0,0,5"
+									           TextWrapping="Wrap"/>
+									<!-- Extension Version -->
+									<Label Content="{x:Static resources:ExtensionsWindow.Label_Version}"
+									       FontWeight="DemiBold"
+									       Margin="0,5,0,5"/>
+									<ComboBox ItemsSource="{Binding SelectedExtension.Versions}"
+									          DisplayMemberPath="Version"
+									          SelectedItem="{Binding SelectedVersion}"
+									          Margin="5,0,0,5"/>
+									<!-- Version Changes -->
+									<Label Content="{x:Static resources:ExtensionsWindow.Label_Changes}"
+									       FontWeight="DemiBold"
+									       Margin="0,5,0,5"/>
+									<TextBlock Text="{Binding SelectedVersion.Changes}"
+									           TextWrapping="Wrap"
+									           Margin="5,0,0,5"/>
+									<!-- Buttons -->
+									<StackPanel Orientation="Horizontal"
+									            HorizontalAlignment="Right"
+									            Margin="0,5,0,0"
+                                                Visibility="{Binding HasProjectReference, Converter={StaticResource BoolToVisibilityConverter}}">
+										<Button Command="{Binding AddExtensionCommand}"
+										        Margin="0,0,5,0">
+											<Button.Content>
+												<StackPanel Orientation="Horizontal">
+													<iconPacks:PackIconMaterial Kind="Plus"
+													                            Margin="0,0,5,0"/>
+													<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Add}"/>
+												</StackPanel>
+											</Button.Content>
+										</Button>
+										<Button Command="{Binding UpdateExtensionCommand}"
+										        Margin="0,0,5,0">
+											<Button.Content>
+												<StackPanel Orientation="Horizontal">
+													<iconPacks:PackIconMaterial Kind="Refresh"
+													                            Margin="0,0,5,0"/>
+													<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Update}"/>
+												</StackPanel>
+											</Button.Content>
+										</Button>
+										<Button Command="{Binding RemoveExtensionCommand}"
+										        Margin="0,0,5,0">
+											<Button.Content>
+												<StackPanel Orientation="Horizontal">
+													<iconPacks:PackIconMaterial Kind="Minus"
+													                            Margin="0,0,5,0"/>
+													<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Remove}"/>
+												</StackPanel>
+											</Button.Content>
+										</Button>
+									</StackPanel>
+								</StackPanel>
+							</ScrollViewer>
+						</Grid>
+					</Grid>
+				</Grid>
+			</TabItem>
+			<!-- Tab "Offline" -->
+            <TabItem Header="{x:Static resources:ExtensionsWindow.Tab_Offline}" 
+                     Visibility="{Binding HasProjectReference, Converter={StaticResource BoolToVisibilityConverter}}">
+				<TabItem.HeaderTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}"
+						           FontSize="14"
+						           FontWeight="Normal"
+						           Padding="10,5"/>
+					</DataTemplate>
+				</TabItem.HeaderTemplate>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<Label Grid.Row="0"
+					       Content="{x:Static resources:ExtensionsWindow.Label_ManageLocalExtensions}"/>
+					<ToolBar Grid.Row="1">
+						<Button Command="{Binding AddOfflineExtensionCommand}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<iconPacks:PackIconMaterial Kind="Plus"
+									                            Margin="0,0,5,0"/>
+									<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Add}"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+						<Button Command="{Binding RemoveOfflineExtensionCommand}"
+						        CommandParameter="{Binding SelectedItem, ElementName=offlineDataGrid}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<iconPacks:PackIconMaterial Kind="Minus"
+									                            Margin="0,0,5,0"/>
+									<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Remove}"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+						<Button Command="{Binding SelectFilePathCommand}"
+						        CommandParameter="{Binding SelectedItem, ElementName=offlineDataGrid}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<iconPacks:PackIconMaterial Kind="Folder"
+									                            Margin="0,0,5,0"/>
+									<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_SelectFilePath}"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+					</ToolBar>
+					<DataGrid Grid.Row="2"
+					          x:Name="offlineDataGrid"
+					          ItemsSource="{Binding OfflineExtensions}"
+					          AutoGenerateColumns="False"
+					          CanUserAddRows="False">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Name}"
+							                    Binding="{Binding Name}"
+							                    IsReadOnly="True"/>
+							<DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Version}"
+							                    Binding="{Binding Version}"
+							                    IsReadOnly="True"/>
+							<DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_FilePath}"
+							                    Binding="{Binding OfflineExtensionPath}"/>
+							<DataGridCheckBoxColumn Header="{x:Static resources:ExtensionsWindow.Header_DebugMode}"
+							                        Binding="{Binding DebugMode}"/>
+						</DataGrid.Columns>
+					</DataGrid>
+				</Grid>
+			</TabItem>
+			<!-- Tab "Installed" -->
+			<TabItem Header="{x:Static resources:ExtensionsWindow.Tab_Installed}"
+                     Visibility="{Binding HasProjectReference, Converter={StaticResource BoolToVisibilityConverter}}">
+				<TabItem.HeaderTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}"
+						           FontSize="14"
+						           FontWeight="Normal"
+						           Padding="10,5"/>
+					</DataTemplate>
+				</TabItem.HeaderTemplate>
+				<StackPanel Margin="10">
+					<Label Content="{x:Static resources:ExtensionsWindow.Label_InstalledExtensions}"/>
+					<ToolBar>
+						<Button Command="{Binding UninstallExtensionCommand}"
+						        CommandParameter="{Binding SelectedItem, ElementName=installedDataGrid}">
+							<Button.Content>
+								<StackPanel Orientation="Horizontal">
+									<iconPacks:PackIconMaterial Kind="Delete"
+									                            Margin="0,0,5,0"/>
+									<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_Uninstall}"/>
+								</StackPanel>
+							</Button.Content>
+						</Button>
+					</ToolBar>
+					<DataGrid x:Name="installedDataGrid"
+					          ItemsSource="{Binding InstalledExtensions}"
+					          AutoGenerateColumns="False"
+					          CanUserAddRows="False">
+						<DataGrid.Columns>
+							<DataGridCheckBoxColumn Header="{x:Static resources:ExtensionsWindow.Header_Online}"
+							                        Binding="{Binding Online, Mode=OneWay}"
+							                        IsReadOnly="True"/>
+							<DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Guid}"
+							                    Binding="{Binding ExtensionGuid}"
+							                    IsReadOnly="True"/>
+							<DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Name}"
+							                    Binding="{Binding Name}"
+							                    IsReadOnly="True"/>
+							<DataGridTextColumn Header="{x:Static resources:ExtensionsWindow.Header_Version}"
+							                    Binding="{Binding Version}"
+							                    IsReadOnly="True"/>
+						</DataGrid.Columns>
+					</DataGrid>
+				</StackPanel>
+			</TabItem>
+		</TabControl>
+		<!-- Reload Button -->
+		<StackPanel Grid.Row="1"
+		            Orientation="Horizontal"
+		            HorizontalAlignment="Right"
+		            Margin="10"
+                    Visibility="{Binding HasProjectReference, Converter={StaticResource BoolToVisibilityConverter}}">
+			<Button Command="{Binding ReloadExtensionsCommand}">
+				<Button.Content>
+					<StackPanel Orientation="Horizontal">
+						<iconPacks:PackIconMaterial Kind="ContentSave"
+						                            Margin="0,0,5,0"/>
+						<TextBlock Text="{x:Static resources:ExtensionsWindow.Button_ReloadExtensions}"/>
+					</StackPanel>
+				</Button.Content>
+			</Button>
+		</StackPanel>
+	</Grid>
 </mah:MetroWindow>

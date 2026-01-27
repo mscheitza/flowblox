@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Zurück ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
         public static string Button_Back {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausführen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execute ähnelt.
         /// </summary>
         public static string Button_Execute {
             get {
@@ -79,7 +79,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Übernehmen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
         public static string Button_Save {
             get {
@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erwartungsziel ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expectation target ähnelt.
         /// </summary>
         public static string Column_ExpectationTarget {
             get {
@@ -106,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Vergleichsoperator ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Comparison operator ähnelt.
         /// </summary>
         public static string Column_Operator {
             get {
@@ -115,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Wert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
         public static string Column_Value {
             get {
@@ -124,7 +124,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Log-Level ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Log level ähnelt.
         /// </summary>
         public static string GridViewColumn_LogLevel {
             get {
@@ -151,7 +151,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Diese Testfall-Konfiguration ist für die Ausführung erforderlich. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This test case configuration is required for execution. ähnelt.
         /// </summary>
         public static string Icon_RequiredForExecution_Tooltip {
             get {
@@ -169,7 +169,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Erforderlich für Laufzeit-Ausführung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required for runtime execution ähnelt.
         /// </summary>
         public static string Label_RequiredForExecution {
             get {
@@ -178,7 +178,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausgewählte Testkonfiguration ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selected test configuration ähnelt.
         /// </summary>
         public static string Label_SelectedConfiguration {
             get {
@@ -196,7 +196,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Für jedes Feld kann eine Testkonfiguration festgelegt werden. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die A test configuration can be defined for each field. ähnelt.
         /// </summary>
         public static string StackPanel_SelectedConfiguration_Tooltip {
             get {
@@ -205,7 +205,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Testerwartungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test expectations ähnelt.
         /// </summary>
         public static string TabItem_Expectations {
             get {
@@ -214,7 +214,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime Logs ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime logs ähnelt.
         /// </summary>
         public static string TabItem_RuntimeLogs {
             get {
@@ -223,7 +223,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Test Results ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test results ähnelt.
         /// </summary>
         public static string TabItem_TestResults {
             get {
@@ -232,7 +232,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Ausführen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execute ähnelt.
         /// </summary>
         public static string Text_Execute {
             get {
@@ -241,7 +241,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Feldbezeichnung ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field label ähnelt.
         /// </summary>
         public static string Text_FieldLabel {
             get {
@@ -250,7 +250,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlock ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow block ähnelt.
         /// </summary>
         public static string Text_FlowBlock {
             get {
@@ -259,7 +259,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Auswahlmodus ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selection mode ähnelt.
         /// </summary>
         public static string Text_SelectionMode {
             get {
@@ -268,7 +268,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte geben Sie den Index an... ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please enter the index... ähnelt.
         /// </summary>
         public static string Text_SelectionMode_Index_Watermark {
             get {
@@ -277,7 +277,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Testerwartungen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test expectations ähnelt.
         /// </summary>
         public static string Text_TestExpectations {
             get {
@@ -286,7 +286,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Benutzereingabe / Feldwert ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die User input / field value ähnelt.
         /// </summary>
         public static string Text_UserInputFieldValue {
             get {
@@ -295,7 +295,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Test Definition ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test definition ähnelt.
         /// </summary>
         public static string Title {
             get {
@@ -304,7 +304,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hinzufügen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
         public static string Toolbar_Add {
             get {
@@ -313,7 +313,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Entfernen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
         public static string Toolbar_Delete {
             get {

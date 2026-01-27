@@ -1015,6 +1015,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Open table ähnelt.
+        /// </summary>
+        public static string ExcelTableUIActions_Open {
+            get {
+                return ResourceManager.GetString("ExcelTableUIActions_Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Connection string ähnelt.
         /// </summary>
         public static string ExecuteSQLFlowBlock_ConnectionString {
@@ -2699,6 +2708,33 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Stored object ähnelt.
+        /// </summary>
+        public static string MemoryObject_DisplayName {
+            get {
+                return ResourceManager.GetString("MemoryObject_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Specifies a stored or runtime field from which the textual or binary content is read or to which it is written (depending on the data type). Application-wide fields can be created via Window → Custom Fields → Custom Memory Fields. The content is then read from or stored in this field. ähnelt.
+        /// </summary>
+        public static string MemoryObject_Field_Tooltip {
+            get {
+                return ResourceManager.GetString("MemoryObject_Field_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Specifies the filename used for temporary storage, for example to enable live editing or to open the file in the default application. ähnelt.
+        /// </summary>
+        public static string MemoryObject_Filename_Tooltip {
+            get {
+                return ResourceManager.GetString("MemoryObject_Filename_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Export ähnelt.
         /// </summary>
         public static string MemoryObjectUIActions_Export {
@@ -3374,7 +3410,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Detects predefined sequences within an input text. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Detects predefined sequences within an input text based on recurring structural patterns. Sequence detection is especially useful for structured content where the overall structure remains the same while the actual values change, for example HTML pages with identical layout but different content depending on the URL or page request. At least two test cases must be defined under &quot;Test cases&quot;, each specifying an expected value and an expected number of occurrences. Based on these expectations, a hierarchical  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         public static string SequenceDetectionFlowBlock_Description {
             get {
@@ -4090,15 +4126,6 @@ namespace FlowBlox.Core {
         public static string TypeNames_FileObject {
             get {
                 return ResourceManager.GetString("TypeNames_FileObject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Stored object ähnelt.
-        /// </summary>
-        public static string TypeNames_MemoryObject {
-            get {
-                return ResourceManager.GetString("TypeNames_MemoryObject", resourceCulture);
             }
         }
         

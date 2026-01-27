@@ -177,9 +177,6 @@
   <data name="AppWindow_itmLogout_Text" xml:space="preserve">
   <value>Sign &amp;out</value>
 </data>
-  <data name="AppWindow_itmManageLicenses_Text" xml:space="preserve">
-  <value>Manage licenses</value>
-</data>
   <data name="AppWindow_itmMonitor_Text" xml:space="preserve">
   <value>Monitoring</value>
 </data>
@@ -598,8 +595,8 @@ The application will now restart to restore a clean environment.</value>
   <data name="ProjectPanel_itmInsightOutput_Text" xml:space="preserve">
   <value>Inspect output records</value>
 </data>
-  <data name="ProjectPanel_itmManageWarningSuppressions_Text" xml:space="preserve">
-  <value>Manage suppressed &amp;messages</value>
+  <data name="ProjectPanel_itmManageNotifications_Text" xml:space="preserve">
+  <value>Manage &amp;notifications</value>
 </data>
   <data name="ProjectPanel_itmRefresh_Text" xml:space="preserve">
   <value>&amp;Refresh</value>
@@ -714,5 +711,17 @@ The application will now restart to restore a clean environment.</value>
   </data>
   <data name="AppWindow_itmGitHub_Text" xml:space="preserve">
     <value>Visit us on GitHub</value>
+  </data>
+  <data name="AppWindow_itmSaveToProjectSpace_Text" xml:space="preserve">
+    <value>Save to Project Space</value>
+  </data>
+  <data name="AppWindow_itmFbProjects_Text" xml:space="preserve">
+    <value>View projects (Project-Space)</value>
+  </data>
+  <data name="AppWindow_itmFbExtensions_Text" xml:space="preserve">
+    <value>Manage extensions</value>
+  </data>
+  <data name="AppWindow_itmOpenFromProjectSpace_Text" xml:space="preserve">
+    <value>Open from Project-Space</value>
   </data>
 </root>

@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Schließen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
         public static string Button_Close {
             get {
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Passwortänderung bestätigen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Confirm password change ähnelt.
         /// </summary>
         public static string Button_ConfirmPasswordChange {
             get {
@@ -79,11 +79,20 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Passwort zurücksetzen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset password ähnelt.
         /// </summary>
         public static string Button_ResetPassword {
             get {
                 return ResourceManager.GetString("Button_ResetPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The captcha could not be loaded. Please try again. ähnelt.
+        /// </summary>
+        public static string Error_LoadCaptchaFailed {
+            get {
+                return ResourceManager.GetString("Error_LoadCaptchaFailed", resourceCulture);
             }
         }
         
@@ -97,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Bitte geben Sie den Captcha-Code ein: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please enter the captcha code: ähnelt.
         /// </summary>
         public static string Label_CaptchaInstruction {
             get {
@@ -106,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die E-Mail oder Benutzername ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Email or username ähnelt.
         /// </summary>
         public static string Label_EmailOrUsername {
             get {
@@ -115,7 +124,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Neues Passwort ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die New password ähnelt.
         /// </summary>
         public static string Label_NewPassword {
             get {
@@ -124,7 +133,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Neues Passwort Wiederholen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Repeat new password ähnelt.
         /// </summary>
         public static string Label_NewPasswordRepeat {
             get {
@@ -133,7 +142,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reset-Code ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset code ähnelt.
         /// </summary>
         public static string Label_ResetCode {
             get {
@@ -142,7 +151,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Es wurde eine E-Mail gesendet. Bitte geben Sie den Code ein. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die An email has been sent. Please enter the code. ähnelt.
         /// </summary>
         public static string Message_EmailSent {
             get {
@@ -151,7 +160,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Passwort wurde erfolgreich geändert. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password was changed successfully. ähnelt.
         /// </summary>
         public static string Message_PasswordChanged {
             get {
@@ -160,7 +169,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Passwort zurücksetzen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset password ähnelt.
         /// </summary>
         public static string Window_Title {
             get {

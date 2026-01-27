@@ -102,15 +102,20 @@ namespace FlowBlox.UICore.ViewModels
 
         public ICommand CloseCommand { get; }
 
-        public RegistrationViewModel(Window window) : this()
-        {
-            this._window = window;
-        }
-
         public RegistrationViewModel()
         {
             RegisterCommand = new RelayCommand(Register, () => CanRegister);
             CloseCommand = new RelayCommand(Close, () => true);
+        }
+
+        public RegistrationViewModel(Window window, string apiUrl) : this()
+        {
+            this._window = window;
+            this._apiUrl = apiUrl;
+            this._flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>
+            {
+                return new FlowBloxWebApiService(_apiUrl);
+            });
             LoadCaptcha();
         }
 
@@ -120,10 +125,7 @@ namespace FlowBlox.UICore.ViewModels
         private void ValidateInput()
         {
             ErrorText = string.Empty;
-            CanRegister = !string.IsNullOrEmpty(FirstName) &&
-                          !string.IsNullOrEmpty(LastName) &&
-                          !string.IsNullOrEmpty(UserName) &&
-                          !string.IsNullOrEmpty(Email) &&
+            CanRegister = !string.IsNullOrEmpty(Email) &&
                           !string.IsNullOrEmpty(EmailRepeat) &&
                           !string.IsNullOrEmpty(Password) &&
                           !string.IsNullOrEmpty(PasswordRepeat) &&
@@ -159,20 +161,31 @@ namespace FlowBlox.UICore.ViewModels
 
         private async void LoadCaptcha()
         {
-            var result = await _flowBloxWebApiService.Value.GetCaptchaAsync();
-            this.CaptchaResponse = new ConvertedCaptchaResponse()
+            var resp = await _flowBloxWebApiService.Value.GetCaptchaAsync();
+
+            if (!resp.Success || resp.ResultObject == null)
+            {
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
+                    ApiErrorMessageHelper.BuildErrorMessage(
+                        FlowBloxResourceUtil.GetLocalizedString("Error_LoadCaptchaFailed", typeof(Resources.RegistrationWindow)),
+                        resp.ErrorMessage));
+
+                return;
+            }
+
+            var result = resp.ResultObject;
+
+            this.CaptchaResponse = new ConvertedCaptchaResponse
             {
                 CaptchaId = result.CaptchaId,
                 CaptchaImage = ConvertBase64ToBitmapImage(result.CaptchaImageBase64)
             };
         }
 
-        private Lazy<FlowBloxWebApiService> _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>
-        {
-            var webApiServiceUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ExtensionApiServiceBaseUrl"].Value;
-            return new FlowBloxWebApiService(webApiServiceUrl);
-        });
+
+        private Lazy<FlowBloxWebApiService> _flowBloxWebApiService;
         private Window _window;
+        private string _apiUrl;
 
         private void Close()
         {

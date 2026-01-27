@@ -82,7 +82,7 @@ namespace FlowBlox.UICore.ViewModels
             }
             else
             {
-                await MessageBoxHelper.ShowMessageBoxAsync(_window, MessageBoxType.Error, response.ErrorMessage);
+                await MessageBoxHelper.ShowMessageBoxAsync(_window, MessageBoxType.Error, ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
             }
         }
 

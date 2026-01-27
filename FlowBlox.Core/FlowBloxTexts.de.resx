@@ -1183,16 +1183,13 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Tokenizer-Konfiguration</value>
 	</data>
   <data name="SequenceDetectionFlowBlock_Description" xml:space="preserve">
-		<value>Erkennt vordefinierte Zeichenfolgen innerhalb eines Eingabetextes.</value>
+		<value>Erkennt vordefinierte Zeichenfolgen innerhalb eines Eingabetextes auf Basis wiederkehrender struktureller Muster. Die Sequenz-Erkennung eignet sich besonders für strukturierte Inhalte, deren Aufbau gleich bleibt, während sich die konkreten Werte ändern, z. B. HTML-Seiten mit identischer Struktur, aber unterschiedlichen Inhalten je nach URL oder Seitenaufruf. Unter "Testfälle" müssen mindestens zwei Tests definiert werden, jeweils mit einer erwarteten Zeichenfolge und einer erwarteten Anzahl von Treffern. Anhand dieser Informationen wird versucht, ein hierarchisches Muster zu ermitteln, das den gewünschten Wert zuverlässig extrahiert. Weitere Testfälle dienen zur Validierung, dass das ermittelte Muster auch bei anderen, strukturell identischen Inhalten korrekt funktioniert.</value>
 	</data>
   <data name="SequenceDetectionFlowBlock_DisplayName" xml:space="preserve">
 		<value>Sequenz-Erkennung</value>
 	</data>
   <data name="SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
 		<value>Maximale Laufzeit der Sequenz-Generierung (Sekunden)</value>
-	</data>
-  <data name="SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
-		<value>Die maximale Laufzeit der Sequenz-Generierung muss mindestens eine Sekunde betragen.</value>
 	</data>
   <data name="SpecialCharacter_CarriageReturn" xml:space="preserve">
 		<value>Wagenrücklauf</value>
@@ -1413,7 +1410,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="TypeNames_FileObject" xml:space="preserve">
 		<value>Datei-Objekt</value>
 	</data>
-  <data name="TypeNames_MemoryObject" xml:space="preserve">
+  <data name="MemoryObject_DisplayName" xml:space="preserve">
 		<value>Gespeichertes Objekt</value>
 	</data>
   <data name="TypeNames_SQLTable" xml:space="preserve">
@@ -1740,43 +1737,52 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="WebBrowserFlowBlock_RetryTimeunit_Tooltip" xml:space="preserve">
   <value>Zeitspanne in Millisekunden, die zwischen zwei Wiederholungsversuchen gewartet wird.</value>
 </data>
-	<data name="IndexFlowBlock_DisplayName" xml:space="preserve">
+  <data name="IndexFlowBlock_DisplayName" xml:space="preserve">
   <value>Index</value>
 </data>
-	<data name="IndexFlowBlock_Description" xml:space="preserve">
+  <data name="IndexFlowBlock_Description" xml:space="preserve">
   <value>Erzeugt einen fortlaufenden Indexwert. Optional wird der Index beim Iterationsstart eines verknüpften Kontext-FlowBlocks auf den Initialwert zurückgesetzt.</value>
 </data>
-	<data name="IndexFlowBlock_InitialIndex" xml:space="preserve">
+  <data name="IndexFlowBlock_InitialIndex" xml:space="preserve">
   <value>Initialer Index</value>
 </data>
-	<data name="IndexFlowBlock_Context" xml:space="preserve">
+  <data name="IndexFlowBlock_Context" xml:space="preserve">
   <value>Index-Kontext</value>
 </data>
-	<data name="IndexFlowBlock_InitialIndex_Tooltip" xml:space="preserve">
+  <data name="IndexFlowBlock_InitialIndex_Tooltip" xml:space="preserve">
   <value>Legt den Startwert des Indexzählers fest. Der Index beginnt mit diesem Wert und wird bei jedem Durchlauf um eins erhöht.</value>
 </data>
-	<data name="IndexFlowBlock_Context_Tooltip" xml:space="preserve">
+  <data name="IndexFlowBlock_Context_Tooltip" xml:space="preserve">
   <value>Optionaler Kontext-FlowBlock. Wenn gesetzt, wird der Index bei jedem Iterationsstart dieses FlowBlocks auf den initialen Index zurückgesetzt. Ist kein Kontext angegeben, läuft der Index über die gesamte Laufzeit kontinuierlich weiter.</value>
 </data>
-	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
+  <data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
   <value>Pfad zur Navigation im JSON-Dokument. Verwenden Sie '/' zur Trennung von Knoten. Objekt-Eigenschaften werden über ihren Property-Namen adressiert, Array-Elemente über einen numerischen Index (z. B. 'participants/addresses/0').</value>
 </data>
-	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
+  <data name="MathFlowBlock_DisplayName" xml:space="preserve">
   <value>Berechnung</value>
 </data>
-	<data name="MathFlowBlock_Description" xml:space="preserve">
+  <data name="MathFlowBlock_Description" xml:space="preserve">
   <value>Führt mathematische Berechnungen auf Basis einer Ausdruckssyntax aus und unterstützt referenzierte Felder als Parameter.</value>
 </data>
-	<data name="MathFlowBlock_Expression" xml:space="preserve">
+  <data name="MathFlowBlock_Expression" xml:space="preserve">
   <value>Mathematischer Ausdruck</value>
 </data>
-	<data name="MathFlowBlock_Expression_Tooltip" xml:space="preserve">
+  <data name="MathFlowBlock_Expression_Tooltip" xml:space="preserve">
   <value>Mathematischer Ausdruck mit unterstützten Operatoren (+, -, *, /, Klammern). Feldreferenzen können direkt im Ausdruck verwendet werden, z. B. "$Order::Quantity * 10".</value>
 </data>
-	<data name="FloxBloxCategory_Calculation" xml:space="preserve">
+  <data name="FloxBloxCategory_Calculation" xml:space="preserve">
 		<value>Berechnung</value>
 	</data>
-	<data name="TableWriterFlowBlock_ColumnAlreadyExists" xml:space="preserve">
+  <data name="TableWriterFlowBlock_ColumnAlreadyExists" xml:space="preserve">
   <value>Es existiert bereits eine Spalte mit dem Bezeichner "{0}".</value>
+</data>
+  <data name="ExcelTableUIActions_Open" xml:space="preserve">
+    <value>Tabelle &amp;öffnen</value>
+  </data>
+  <data name="MemoryObject_Field_Tooltip" xml:space="preserve">
+  <value>Hier kann ein gespeichertes oder Laufzeit-Feld angegeben werden, aus dem der textuelle oder binäre Inhalt gelesen bzw. in das er gespeichert wird (abhängig vom Datentyp). Um ein anwendungsweit verfügbares Feld zu verwenden, kann dieses über Fenster → Benutzerdefinierte Felder → Benutzerdefinierte Speicherfelder angelegt werden. Der Inhalt wird anschließend von hier gelesen bzw. hierhin gespeichert.</value>
+</data>
+  <data name="MemoryObject_Filename_Tooltip" xml:space="preserve">
+  <value>Gibt den Dateinamen an, der für die temporäre Speicherung verwendet wird, z. B. um den Inhalt live zu bearbeiten oder die Datei in der Standardanwendung zu öffnen.</value>
 </data>
 </root>

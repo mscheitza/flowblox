@@ -223,6 +223,36 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        /// </summary>
+        public static string Error_LoadExtensionsFailed {
+            get {
+                return ResourceManager.GetString("Error_LoadExtensionsFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 
+        ///Here you can manage your custom extensions (flow blocks).
+        ///You can add, edit, disable, or remove extensions, as well as create and manage different versions of your extensions.
+        ///   ähnelt.
+        /// </summary>
+        public static string Header_Description {
+            get {
+                return ResourceManager.GetString("Header_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage custom extensions ähnelt.
+        /// </summary>
+        public static string Header_Title {
+            get {
+                return ResourceManager.GetString("Header_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Archive path (*.zip) ähnelt.
         /// </summary>
         public static string Label_ArchivePath {

@@ -12,6 +12,7 @@ using System.Windows.Input;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Commands;
@@ -109,9 +110,48 @@ namespace FlowBlox.UICore.ViewModels
 
         public bool CanSaveChanges() => SelectedExtension?.IsDirty == true || SelectedVersion?.IsDirty == true;
 
+        private readonly Dictionary<(Guid ExtensionGuid, string Version), bool> _hasVersionContentCache = new Dictionary<(Guid ExtensionGuid, string Version), bool>();
         private bool HasVersionContent(Guid extensionGuid, string version)
         {
-            return Task.Run(async () => await _flowBloxWebApiService.Value.HasVersionContentAsync(extensionGuid, version)).GetAwaiter().GetResult();
+            var key = (extensionGuid, version ?? string.Empty);
+
+            if (_hasVersionContentCache.TryGetValue(key, out var cached))
+                return cached;
+
+            _hasVersionContentCache[key] = false;
+            _ = RefreshHasVersionContentAsync(key);
+            return false;
+        }
+
+        private readonly HashSet<(Guid ExtensionGuid, string Version)> _hasVersionContentRefreshing = new HashSet<(Guid ExtensionGuid, string Version)>();
+        private async Task RefreshHasVersionContentAsync((Guid ExtensionGuid, string Version) key)
+        {
+            if (_hasVersionContentRefreshing.Contains(key))
+                return;
+
+            _hasVersionContentRefreshing.Add(key);
+
+            try
+            {
+                var resp = await _flowBloxWebApiService.Value.HasVersionContentAsync(key.ExtensionGuid, key.Version);
+                if (resp.Success)
+                    _hasVersionContentCache[key] = resp.ResultObject;
+                else
+                {
+                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, ApiErrorMessageHelper.BuildErrorMessage(resp.ErrorMessage));
+                    _hasVersionContentCache[key] = false;
+                }
+            }
+            finally
+            {
+                _hasVersionContentRefreshing.Remove(key);
+            }
+        }
+
+        private void InvalidateHasVersionContentCache(Guid extensionGuid, string version)
+        {
+            var key = (extensionGuid, version);
+            _hasVersionContentCache.Remove(key);
         }
 
         public bool CanPublishVersion()
@@ -140,23 +180,39 @@ namespace FlowBlox.UICore.ViewModels
         private readonly Dictionary<FbVersionResult, FbExtensionResult> _versionToExtension = new Dictionary<FbVersionResult, FbExtensionResult>();
         private async void UpdateExtensionsAndVersions(string userName)
         {
-            var extensions = await _flowBloxWebApiService.Value.GetExtensionsAsync(searchForUsername: userName);
+            var resp = await _flowBloxWebApiService.Value.GetExtensionsAsync(_userToken, searchForUsername: userName);
+
             Extensions.Clear();
             _versionToExtension.Clear();
-            if (extensions != null)
+
+            if (!resp.Success)
             {
-                foreach (var extension in extensions)
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
+                    ApiErrorMessageHelper.BuildErrorMessage(
+                        FlowBloxResourceUtil.GetLocalizedString("Error_LoadExtensionsFailed", typeof(Resources.ManageUserExtensionsWindow)),
+                        resp.ErrorMessage));
+
+                return;
+            }
+
+
+            var extensions = resp.ResultObject;
+            if (extensions == null)
+                return;
+
+            foreach (var extension in extensions)
+            {
+                Extensions.Add(extension);
+                extension.IsDirty = false;
+
+                foreach (var version in extension.Versions)
                 {
-                    Extensions.Add(extension);
-                    extension.IsDirty = false;
-                    foreach (var version in extension.Versions)
-                    {
-                        _versionToExtension.TryAdd(version, extension);
-                        version.IsDirty = false;
-                    }
+                    _versionToExtension.TryAdd(version, extension);
+                    version.IsDirty = false;
                 }
             }
         }
+
 
         private void CreateExtension()
         {
@@ -182,14 +238,14 @@ namespace FlowBlox.UICore.ViewModels
                 };
 
                 var response = await _flowBloxWebApiService.Value.DeleteExtensionAsync(_userToken, request);
-
                 if (response.Success)
                 {
                     UpdateExtensionsAndVersions(_userName);
                 }
                 else
                 {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, response.ErrorMessage);
+                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
+                        ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
                 }
             }
         }
@@ -222,7 +278,8 @@ namespace FlowBlox.UICore.ViewModels
                 if (!_versionToExtension.TryGetValue(SelectedVersion, out var extension))
                 {
                     await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
-                        FlowBloxResourceUtil.GetLocalizedString("Message_ExtensionNotResolvable", typeof(Resources.ManageUserExtensionsWindow)));
+                        ApiErrorMessageHelper.BuildErrorMessage(
+                            FlowBloxResourceUtil.GetLocalizedString("Message_ExtensionNotResolvable", typeof(Resources.ManageUserExtensionsWindow))));
 
                     return;
                 }
@@ -240,7 +297,9 @@ namespace FlowBlox.UICore.ViewModels
                 }
                 else
                 {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, response.ErrorMessage);
+                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
+                        ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
+
                 }
             }
         }
@@ -286,7 +345,8 @@ namespace FlowBlox.UICore.ViewModels
                 }
                 else
                 {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, response.ErrorMessage);
+                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
+                        ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
                 }
             }
 
@@ -328,12 +388,15 @@ namespace FlowBlox.UICore.ViewModels
                     SelectedVersion.IsDirty = false;
                     SelectedVersion.ArchivePath = null;
 
+                    InvalidateHasVersionContentCache(extension.Guid, SelectedVersion.Version);
+
                     await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Notification, 
                         FlowBloxResourceUtil.GetLocalizedString("Message_SaveChangesSuccessful", typeof(Resources.ManageUserExtensionsWindow)));
                 }
                 else
                 {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, response.ErrorMessage);
+                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
+                        ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
                 }
             }
         }
@@ -352,7 +415,7 @@ namespace FlowBlox.UICore.ViewModels
 
             if (SelectedVersion != null)
             {
-                var metadata = ExtensionContentMetadataExtractor.GetMetadataFromDepsJson(SelectedVersion.ArchiveContent);
+                var metadata = ExtensionContentMetadataExtractor.GetMetadataFromDepsJson(SelectedVersion.ArchiveContent, extension.Name);
 
                 if (metadata == null)
                 {
@@ -362,17 +425,21 @@ namespace FlowBlox.UICore.ViewModels
 
                 SelectedVersion.RuntimeVersion = metadata.RuntimeVersion;
 
-                // Füge die Abhängigkeiten hinzu
+                // Add the dependencies
                 var versionDependencies = new List<FbVersionDependency>();
+
                 foreach (var resolvedDependency in metadata.Dependencies)
                 {
-                    var resolvedExtension = await _flowBloxWebApiService.Value.GetExtensionAsync(new FbExtensionRequest()
-                    {
-                        Name = resolvedDependency.Name
-                    });
+                    var extResp = await _flowBloxWebApiService.Value.GetExtensionAsync(
+                        new FbExtensionRequest
+                        {
+                            Name = resolvedDependency.Name
+                        });
 
-                    if (resolvedExtension != null)
+                    if (extResp.Success && extResp.ResultObject != null)
                     {
+                        var resolvedExtension = extResp.ResultObject;
+
                         versionDependencies.Add(new FbVersionDependency
                         {
                             ExtensionName = resolvedExtension.Name,
@@ -382,13 +449,19 @@ namespace FlowBlox.UICore.ViewModels
                     }
                     else
                     {
+                        var msg = string.Format(
+                            FlowBloxResourceUtil.GetLocalizedString("Message_UnableToLocateExtension", typeof(Resources.ManageUserExtensionsWindow)), 
+                            resolvedDependency.Name);
+
                         await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
-                            string.Format(FlowBloxResourceUtil.GetLocalizedString("Message_UnableToLocateExtension", typeof(Resources.ManageUserExtensionsWindow)), resolvedDependency.Name));
+                            ApiErrorMessageHelper.BuildErrorMessage(msg, extResp.ErrorMessage));
 
                         return false;
                     }
                 }
+
                 SelectedVersion.Dependencies = versionDependencies;
+
             }
 
             return true;
@@ -429,40 +502,65 @@ namespace FlowBlox.UICore.ViewModels
                 return;
             }
 
-            // Abrufen des Datei-Inhalts (Base64-kodiert) von der Web-API
-            var base64Content = await _flowBloxWebApiService.Value.GetVersionContentAsync(extension.Guid, SelectedVersion.Version);
+            // Retrieving the file content (Base64-encoded) from the web API
+            var contentResp = await _flowBloxWebApiService.Value.GetVersionContentAsync(extension.Guid, SelectedVersion.Version);
+            if (!contentResp.Success)
+            {
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
+                    ApiErrorMessageHelper.BuildErrorMessage(
+                        FlowBloxResourceUtil.GetLocalizedString("Error_DownloadVersionContentFailed", typeof(Resources.ManageUserExtensionsWindow)), 
+                        contentResp.ErrorMessage));
+
+                return;
+            }
+
+            var base64Content = contentResp.ResultObject;
             if (string.IsNullOrEmpty(base64Content))
             {
-                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, "Failed to retrieve the version file content.");
+                var msg = FlowBloxResourceUtil.GetLocalizedString(
+                    "Error_DownloadVersionContentEmpty",
+                    typeof(Resources.ManageUserExtensionsWindow));
+
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, msg);
                 return;
             }
 
             try
             {
-                // Base64-Dekodierung des Inhalts
+                // Base64 decoding of the content
                 byte[] fileContent = Convert.FromBase64String(base64Content);
 
-                // Speichern der Datei auf dem lokalen System
+                // Saving the file to the local system
                 var saveFileDialog = new Microsoft.Win32.SaveFileDialog
                 {
                     FileName = $"{extension.Name}_{SelectedVersion.Version}.zip",
                     Filter = "ZIP files (*.zip)|*.zip",
-                    Title = "Save Version File"
+                    Title = FlowBloxResourceUtil.GetLocalizedString(
+                        "Title_SaveVersionFile",
+                        typeof(Resources.ManageUserExtensionsWindow))
                 };
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
                     File.WriteAllBytes(saveFileDialog.FileName, fileContent);
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Notification, "Version file downloaded successfully.");
+
+                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Notification,
+                        FlowBloxResourceUtil.GetLocalizedString("Message_DownloadVersionFileSuccessful", typeof(Resources.ManageUserExtensionsWindow)));
                 }
             }
             catch (FormatException ex)
             {
-                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, $"Invalid Base64 content: {ex.Message}");
+                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
+
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
+                    FlowBloxResourceUtil.GetLocalizedString("Error_InvalidBase64Content", typeof(Resources.ManageUserExtensionsWindow)));
             }
             catch (Exception ex)
             {
-                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, $"Error saving file: {ex.Message}");
+                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
+
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
+                    FlowBloxResourceUtil.GetLocalizedString("Error_SaveFileFailed", typeof(Resources.ManageUserExtensionsWindow)));
             }
         }
 
@@ -495,7 +593,7 @@ namespace FlowBlox.UICore.ViewModels
             }
             else
             {
-                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, response.ErrorMessage);
+                await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
             }
         }
 

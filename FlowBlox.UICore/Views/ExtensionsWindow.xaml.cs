@@ -22,7 +22,7 @@ namespace FlowBlox.UICore.Views
     /// </summary>
     public partial class ExtensionsWindow : MetroWindow
     {
-        public ExtensionsWindow(FlowBloxProject project)
+        public ExtensionsWindow(FlowBloxProject project = null)
         {
             InitializeComponent();
             DataContext = new ExtensionsViewModel(this, project);

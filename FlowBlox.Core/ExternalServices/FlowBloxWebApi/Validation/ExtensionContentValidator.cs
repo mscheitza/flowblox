@@ -1,13 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.Data.SqlTypes;
 using System.Runtime.Loader;
-using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
 {
@@ -23,13 +24,13 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
                     var dllEntries = archive.Entries.Where(entry => entry.FullName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase)).ToList();
                     var depsJsonEntry = archive.Entries.FirstOrDefault(entry => entry.FullName.EndsWith(".deps.json", StringComparison.OrdinalIgnoreCase));
 
-                    // Überprüfen, ob es mindestens eine DLL-Datei gibt
+                    // Check if there is at least one DLL file
                     if (!dllEntries.Any())
                     {
                         return new ValidationResult("The ZIP archive does not contain any DLL files.");
                     }
 
-                    // Überprüfen, ob die Haupt-DLL vorhanden ist
+                    // Check if the main DLL is present
                     string mainAssemblyFullName = $"{extensionName}.dll";
                     var mainDllEntry = dllEntries.FirstOrDefault(entry => entry.Name.Equals(mainAssemblyFullName, StringComparison.OrdinalIgnoreCase));
                     if (mainDllEntry == null)
@@ -37,7 +38,7 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
                         return new ValidationResult($"The ZIP archive does not contain the main assembly '{mainAssemblyFullName}'.");
                     }
 
-                    // Überprüfen, ob die .deps.json-Datei vorhanden ist
+                    // Check if the .deps.json file exists
                     if (depsJsonEntry == null)
                     {
                         return new ValidationResult("The ZIP archive does not contain a .deps.json file.");
@@ -53,10 +54,9 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Validation
                             await dllStream.CopyToAsync(fileStream);
                         }
 
-                        // Produktversion der extrahierten DLL abrufen und vergleichen
+                        // Retrieve and compare the product version of the extracted DLL
                         var fileVersionInfo = FileVersionInfo.GetVersionInfo(tempDllPath);
-                        var productVersion = fileVersionInfo.ProductVersion;
-
+                        var productVersion = Regex.Replace(fileVersionInfo.ProductVersion, @"\+.*$", "");
                         if (!productVersion.Equals(expectedVersion, StringComparison.OrdinalIgnoreCase))
                         {
                             return new ValidationResult($"The main assembly product version '{productVersion}' does not match the expected version '{expectedVersion}'.");

@@ -117,91 +117,103 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Title" xml:space="preserve">
-    <value>Test Definition</value>
-  </data>
-  <data name="Label_Name" xml:space="preserve">
-    <value>Name:</value>
-  </data>
-  <data name="Label_RequiredForExecution" xml:space="preserve">
-    <value>Erforderlich für Laufzeit-Ausführung</value>
-  </data>
-  <data name="Text_FlowBlock" xml:space="preserve">
-    <value>FlowBlock</value>
-  </data>
-  <data name="Text_Execute" xml:space="preserve">
-    <value>Ausführen</value>
-  </data>
-  <data name="Text_FieldLabel" xml:space="preserve">
-    <value>Feldbezeichnung</value>
-  </data>
-  <data name="Text_SelectionMode" xml:space="preserve">
-    <value>Auswahlmodus</value>
-  </data>
-  <data name="Text_UserInputFieldValue" xml:space="preserve">
-    <value>Benutzereingabe / Feldwert</value>
-  </data>
-  <data name="Text_TestExpectations" xml:space="preserve">
-    <value>Testerwartungen</value>
-  </data>
-  <data name="TabItem_TestResults" xml:space="preserve">
-    <value>Test Results</value>
-  </data>
-  <data name="TabItem_RuntimeLogs" xml:space="preserve">
-    <value>Runtime Logs</value>
-  </data>
-  <data name="MenuItem_OpenInEditor" xml:space="preserve">
-    <value>Open in editor</value>
-  </data>
-  <data name="GridViewColumn_Timestamp" xml:space="preserve">
-    <value>Timestamp</value>
-  </data>
-  <data name="GridViewColumn_LogLevel" xml:space="preserve">
-    <value>Log-Level</value>
-  </data>
-  <data name="GridViewColumn_Message" xml:space="preserve">
-    <value>Message</value>
-  </data>
-  <data name="Button_Back" xml:space="preserve">
-    <value>Zurück</value>
-  </data>
-  <data name="Button_Save" xml:space="preserve">
-    <value>Übernehmen</value>
-  </data>
-  <data name="Button_Execute" xml:space="preserve">
-    <value>Ausführen</value>
-  </data>
-  <data name="Text_SelectionMode_Index_Watermark" xml:space="preserve">
-    <value>Bitte geben Sie den Index an...</value>
-  </data>
-  <data name="Column_ExpectationTarget" xml:space="preserve">
-    <value>Erwartungsziel</value>
-  </data>
-  <data name="Column_Index" xml:space="preserve">
-    <value>Index</value>
-  </data>
-  <data name="Column_Operator" xml:space="preserve">
-    <value>Vergleichsoperator</value>
-  </data>
-  <data name="Column_Value" xml:space="preserve">
-    <value>Wert</value>
-  </data>
-  <data name="Icon_RequiredForExecution_Tooltip" xml:space="preserve">
-    <value>Diese Testfall-Konfiguration ist für die Ausführung erforderlich.</value>
-  </data>
-  <data name="Label_SelectedConfiguration" xml:space="preserve">
-    <value>Ausgewählte Testkonfiguration</value>
-  </data>
-  <data name="StackPanel_SelectedConfiguration_Tooltip" xml:space="preserve">
-    <value>Für jedes Feld kann eine Testkonfiguration festgelegt werden.</value>
-  </data>
-  <data name="TabItem_Expectations" xml:space="preserve">
-    <value>Testerwartungen</value>
-  </data>
-  <data name="Toolbar_Add" xml:space="preserve">
-    <value>Hinzufügen</value>
-  </data>
-  <data name="Toolbar_Delete" xml:space="preserve">
-    <value>Entfernen</value>
-  </data>
+	<data name="Title" xml:space="preserve">
+  <value>Test definition</value>
+</data>
+
+	<data name="Label_Name" xml:space="preserve">
+  <value>Name:</value>
+</data>
+	<data name="Label_RequiredForExecution" xml:space="preserve">
+  <value>Required for runtime execution</value>
+</data>
+
+	<data name="Text_FlowBlock" xml:space="preserve">
+  <value>Flow block</value>
+</data>
+	<data name="Text_Execute" xml:space="preserve">
+  <value>Execute</value>
+</data>
+	<data name="Text_FieldLabel" xml:space="preserve">
+  <value>Field label</value>
+</data>
+	<data name="Text_SelectionMode" xml:space="preserve">
+  <value>Selection mode</value>
+</data>
+	<data name="Text_UserInputFieldValue" xml:space="preserve">
+  <value>User input / field value</value>
+</data>
+	<data name="Text_TestExpectations" xml:space="preserve">
+  <value>Test expectations</value>
+</data>
+
+	<data name="TabItem_TestResults" xml:space="preserve">
+  <value>Test results</value>
+</data>
+	<data name="TabItem_RuntimeLogs" xml:space="preserve">
+  <value>Runtime logs</value>
+</data>
+
+	<data name="MenuItem_OpenInEditor" xml:space="preserve">
+  <value>Open in editor</value>
+</data>
+
+	<data name="GridViewColumn_Timestamp" xml:space="preserve">
+  <value>Timestamp</value>
+</data>
+	<data name="GridViewColumn_LogLevel" xml:space="preserve">
+  <value>Log level</value>
+</data>
+	<data name="GridViewColumn_Message" xml:space="preserve">
+  <value>Message</value>
+</data>
+
+	<data name="Button_Back" xml:space="preserve">
+  <value>Back</value>
+</data>
+	<data name="Button_Save" xml:space="preserve">
+  <value>Apply</value>
+</data>
+	<data name="Button_Execute" xml:space="preserve">
+  <value>Execute</value>
+</data>
+
+	<data name="Text_SelectionMode_Index_Watermark" xml:space="preserve">
+  <value>Please enter the index...</value>
+</data>
+
+	<data name="Column_ExpectationTarget" xml:space="preserve">
+  <value>Expectation target</value>
+</data>
+	<data name="Column_Index" xml:space="preserve">
+  <value>Index</value>
+</data>
+	<data name="Column_Operator" xml:space="preserve">
+  <value>Comparison operator</value>
+</data>
+	<data name="Column_Value" xml:space="preserve">
+  <value>Value</value>
+</data>
+
+	<data name="Icon_RequiredForExecution_Tooltip" xml:space="preserve">
+  <value>This test case configuration is required for execution.</value>
+</data>
+
+	<data name="Label_SelectedConfiguration" xml:space="preserve">
+  <value>Selected test configuration</value>
+</data>
+	<data name="StackPanel_SelectedConfiguration_Tooltip" xml:space="preserve">
+  <value>A test configuration can be defined for each field.</value>
+</data>
+
+	<data name="TabItem_Expectations" xml:space="preserve">
+  <value>Test expectations</value>
+</data>
+
+	<data name="Toolbar_Add" xml:space="preserve">
+  <value>Add</value>
+</data>
+	<data name="Toolbar_Delete" xml:space="preserve">
+  <value>Remove</value>
+</data>
 </root>

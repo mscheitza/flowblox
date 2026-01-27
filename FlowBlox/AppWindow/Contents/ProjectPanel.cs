@@ -217,7 +217,7 @@ namespace FlowBlox.AppWindow.Contents
             itmBreakPoint.Text = breakPointText;
             itmBreakPoint.Enabled = _recentFlowBlock != null;
 
-            itmManageWarningSuppressions.Enabled = (_recentFlowBlock != null) && _recentFlowBlock.InternalFlowBlock.NotificationTypes?.Any() == true;
+            itmManageNotifications.Enabled = (_recentFlowBlock != null) && _recentFlowBlock.InternalFlowBlock.NotificationTypes?.Any() == true;
             itmInsightInput.Enabled = (_recentFlowBlock?.InternalFlowBlock as BaseFlowBlock)?.InputDataset_CurrentlyProcessing != null;
             itmInsightOutput.Enabled = (_recentFlowBlock?.InternalFlowBlock as BaseResultFlowBlock)?.OutputDataset_CurrentlyProcessing != null;
 
@@ -1034,7 +1034,7 @@ namespace FlowBlox.AppWindow.Contents
             WindowsFormWPFHelper.ShowDialog(new InsightWindow(results, currentResult), this.FindForm());
         }
 
-        private void itmManageWarningSuppressions_Click(object sender, EventArgs e)
+        private void itmManageNotifications_Click(object sender, EventArgs e)
         {
             if (_recentFlowBlock == null)
                 return;
