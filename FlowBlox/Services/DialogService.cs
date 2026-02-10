@@ -21,42 +21,6 @@ namespace FlowBlox.Services
             return WindowsFormWPFHelper.ShowDialog(window, owner);
         }
 
-        public FieldSelectionResult InvokeFieldSelection(object target, FlowBlockUIAttribute flowBlockUI, Window window)
-        {
-            return InvokeFieldSelection(target, flowBlockUI, null, window);
-        }
-
-        public FieldSelectionResult InvokeFieldSelection(object target, FlowBlockUIAttribute flowBlockUI, IList items, Window window)
-        {
-            var flowBlock = target as BaseFlowBlock;
-
-            var fieldSelectionWindow = new FieldSelectionWindow(flowBlock, items)
-            {
-                IsRequired = !flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionDefaultNotRequired),
-                HideRequired = flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionHideRequired)
-            };
-
-            var dialogResult = WindowsFormWPFHelper.ShowWinFormsDialog(fieldSelectionWindow, window);
-
-            if (dialogResult == DialogResult.OK)
-            {
-                var selectedFields = fieldSelectionWindow.SelectedFields;
-                var isRequired = fieldSelectionWindow.IsRequired;
-
-                var result = new FieldSelectionResult
-                {
-                    Success = true,
-                    Target = flowBlock,
-                    SelectedFields = selectedFields,
-                    IsRequired = isRequired
-                };
- 
-                return result;
-            }
-
-            return new FieldSelectionResult();
-        }
-
         public InsertTextOrFieldResult InvokeInsertTextOrField(BaseFlowBlock flowBlock, string parameterName, Window window)
         {
             var insertTextOrFieldDialog = new InsertTextOrField(flowBlock, parameterName, false);

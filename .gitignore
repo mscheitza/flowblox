@@ -8,3 +8,6 @@ Debug/
 [Pp]ackages/
 *.pfx
 AppPackages/
+FlowBloxResources/data/README.txt
+FlowBloxResources/data/onnxruntimes/
+FlowBloxResources/data/onnxruntimesgenai/

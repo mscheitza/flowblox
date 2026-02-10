@@ -9,6 +9,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:viewModel="clr-namespace:FlowBlox.UICore.ViewModels"
     xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
+    xmlns:localconverters="clr-namespace:FlowBlox.UICore.Converters.FieldSelection"
     Title="{x:Static resources:FieldSelectionWindow.Title}"
     Height="620"
     Width="980"
@@ -22,7 +23,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            <converters:FieldIconKindConverter x:Key="FieldIconKindConverter"/>
+            <localconverters:FieldIconKindConverter x:Key="FieldIconKindConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -60,34 +61,34 @@
 
             <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTabIndex}">
                 <!-- Project Fields -->
-                <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_ProjectFields}">
+                <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_ProjectFields}"
+             Visibility="{Binding CanSelectFields, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Grid>
                         <ListView x:Name="FieldsListView"
-                                  ItemsSource="{Binding FieldRows}"
-                                  SelectionMode="{Binding MultiSelect, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=SelectionMode}"
-                                  MouseDoubleClick="FieldsListView_MouseDoubleClick">
+                      ItemsSource="{Binding FieldRows}"
+                      MouseDoubleClick="FieldsListView_MouseDoubleClick">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Width="36">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <iconPacks:PackIconMaterial
-                                                    Kind="{Binding IconKey, Converter={StaticResource FieldIconKindConverter}}"
-                                                    Width="16"
-                                                    Height="16"
-                                                    VerticalAlignment="Center"
-                                                    HorizontalAlignment="Center"/>
+                                        Kind="{Binding IconKey, Converter={StaticResource FieldIconKindConverter}}"
+                                        Width="16"
+                                        Height="16"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
 
                                     <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_Source}"
-                                                    DisplayMemberBinding="{Binding SourceName}"
-                                                    Width="260"/>
+                                        DisplayMemberBinding="{Binding SourceName}"
+                                        Width="260"/>
 
                                     <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_Field}"
-                                                    DisplayMemberBinding="{Binding FieldName}"
-                                                    Width="520"/>
+                                        DisplayMemberBinding="{Binding FieldName}"
+                                        Width="520"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
@@ -95,25 +96,26 @@
                 </TabItem>
 
                 <!-- Options -->
-                <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_Options}">
+                <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_Options}"
+             Visibility="{Binding CanSelectOptions, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Grid>
                         <ListView x:Name="OptionsListView"
-                                  ItemsSource="{Binding OptionRows}"
-                                  MouseDoubleClick="OptionsListView_MouseDoubleClick">
+                      ItemsSource="{Binding OptionRows}"
+                      MouseDoubleClick="OptionsListView_MouseDoubleClick">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionName}"
-                                                    DisplayMemberBinding="{Binding Name}"
-                                                    Width="260"/>
+                                        DisplayMemberBinding="{Binding Name}"
+                                        Width="260"/>
                                     <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionType}"
-                                                    DisplayMemberBinding="{Binding Type}"
-                                                    Width="180"/>
+                                        DisplayMemberBinding="{Binding Type}"
+                                        Width="180"/>
                                     <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionDescription}"
-                                                    DisplayMemberBinding="{Binding Description}"
-                                                    Width="360"/>
+                                        DisplayMemberBinding="{Binding Description}"
+                                        Width="360"/>
                                     <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionValue}"
-                                                    DisplayMemberBinding="{Binding Value}"
-                                                    Width="160"/>
+                                        DisplayMemberBinding="{Binding Value}"
+                                        Width="160"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>

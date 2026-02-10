@@ -1,2 +1,0 @@
-MainPackage=C:\Projekte\VisualStudio\flowblox\FlowBlox.Packaging\bin\AnyCPU\Debug\FlowBlox.Packaging_1.0.3.0_AnyCPU_Debug.msix
-SymbolPackage=C:\Projekte\VisualStudio\flowblox\FlowBlox.Packaging\obj\Debug\Symbols\FlowBlox.Packaging_1.0.3.0_AnyCPU_Debug.appxsym

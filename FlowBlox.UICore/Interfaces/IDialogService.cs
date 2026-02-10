@@ -10,10 +10,6 @@ namespace FlowBlox.UICore.Interfaces
     {
         bool? ShowWPFDialog(Window window, bool isModal = true);
 
-        FieldSelectionResult InvokeFieldSelection(object target, FlowBlockUIAttribute flowBlockUI, Window window);
-
-        FieldSelectionResult InvokeFieldSelection(object target, FlowBlockUIAttribute flowBlockUI, IList items, Window window);
-
         InsertTextOrFieldResult InvokeInsertTextOrField(BaseFlowBlock flowBlock, string parameterName, Window window);
 
         EditValueResult InvokeEditValue(EditValueRequest editValueRequest, Window window);

@@ -14,7 +14,10 @@ namespace FlowBlox.UICore.Models
         // Controls which tab is initially active and which selection result is considered primary.
         public FieldSelectionMode SelectionMode { get; set; } = FieldSelectionMode.Fields;
 
-        // Applies to the active tab list selection behavior (Fields and Options).
+        // Controls which tabs are supported.
+        public FieldSelectionMode[] AllowedFieldSelectionModes { get; set; } = [FieldSelectionMode.Fields, FieldSelectionMode.Options];
+
+        // Applies to the active tab list selection behavior.
         public bool MultiSelect { get; set; } = true;
 
         // Only relevant for Fields tab: initial value for "Required".

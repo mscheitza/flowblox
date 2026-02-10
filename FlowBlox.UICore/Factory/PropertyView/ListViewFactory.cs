@@ -8,6 +8,7 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters;
+using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
@@ -259,8 +260,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             if (_listItemType == typeof(FieldElement))
             {
-                var fieldSelectionResult = _dialogService.InvokeFieldSelection(_target, _flowBlockUIAttribute, items, _window);
-                if (fieldSelectionResult.Success)
+                var fieldSelectionResult = DialogHelper.InvokeFieldSelectionWindow(_target, _flowBlockUIAttribute, items, _window, [FieldSelectionMode.Fields]);
+                if (fieldSelectionResult != null)
                 {
                     FlowBlockHelper.ApplyFieldSelectionRequiredOption((BaseFlowBlock)_target, fieldSelectionResult.SelectedFields, fieldSelectionResult.IsRequired);
                     var inst = fieldSelectionResult.SelectedFields.Single();

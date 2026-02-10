@@ -73,6 +73,14 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
+        public bool CanSelectFields =>
+            _args.AllowedFieldSelectionModes != null &&
+            _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.Fields);
+
+        public bool CanSelectOptions =>
+            _args.AllowedFieldSelectionModes != null &&
+            _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.Options);
+
         public List<FieldRowViewModel> FieldRows { get; private set; } = new List<FieldRowViewModel>();
         public List<OptionRowViewModel> OptionRows { get; private set; } = new List<OptionRowViewModel>();
 
@@ -85,6 +93,11 @@ namespace FlowBlox.UICore.ViewModels
             // Initialize state.
             IsRequired = _args.IsRequired;
             SelectedTabIndex = _args.SelectionMode == FieldSelectionMode.Fields ? 0 : 1;
+
+            if (SelectedTabIndex == 0 && !CanSelectFields && CanSelectOptions)
+                SelectedTabIndex = 1;
+            else if (SelectedTabIndex == 1 && !CanSelectOptions && CanSelectFields)
+                SelectedTabIndex = 0;
 
             OkCommand = new RelayCommand(() =>
             {

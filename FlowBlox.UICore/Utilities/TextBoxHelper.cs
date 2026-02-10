@@ -20,13 +20,12 @@ namespace FlowBlox.UICore.Utilities
             object target,
             FlowBlockUIAttribute flowBlockUI,
             ITextBoxLike textBox,
-            Window ownerWindow,
-            FieldSelectionMode mode)
+            Window ownerWindow)
         {
             var args = new FieldSelectionWindowArgs
             {
                 FlowBlock = target as BaseFlowBlock,
-                SelectionMode = mode,
+                SelectionMode = FieldSelectionMode.Fields,
                 IsRequired = !flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionDefaultNotRequired),
                 HideRequired = flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionHideRequired)
             };

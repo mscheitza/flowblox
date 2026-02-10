@@ -378,7 +378,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 if (sender is TextBox textBox && textBox.Tag is FlowBlockUIAttribute attrib)
                 {
                     var textBoxAdapter = new WpfTextBoxAdapter(textBox);
-                    Utilities.TextBoxHelper.ShowFieldSelectionDialog(_target, attrib, textBoxAdapter, _window);
+                    TextBoxHelper.ShowFieldSelectionDialog(_target, attrib, textBoxAdapter, _window);
                     e.Handled = true;
                 }
             }
