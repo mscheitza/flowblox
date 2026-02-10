@@ -3,6 +3,9 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Enums;
+using Microsoft.Extensions.Options;
+using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Provider.Project;
 
 namespace FlowBlox.Core.Util.Fields
 {
@@ -21,9 +24,7 @@ namespace FlowBlox.Core.Util.Fields
             {
                 FieldElement referencedField = FlowBloxRegistryProvider.GetRegistry().GetFieldElementOrNull(match_Field.Value);
                 if (referencedField != null)
-                {
                     referencedFields.Add(referencedField);
-                }
             }
             return referencedFields;
         }
@@ -40,11 +41,21 @@ namespace FlowBlox.Core.Util.Fields
             if (value == null)
                 return null;
 
-            foreach (FieldElement fieldElement in FlowBloxRegistryProvider.GetRegistry().GetFieldElements())
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+            foreach (FieldElement fieldElement in registry.GetFieldElements())
             {
                 if (value.Contains(fieldElement.FullyQualifiedName))
                     value = value.Replace(fieldElement.FullyQualifiedName, fieldElement.StringValue ?? "");
             }
+
+            var optionsInstance = FlowBloxOptions.GetOptionInstance();
+            foreach (var keyValueOption in optionsInstance.OptionCollection)
+            {
+                string optionPlaceholder = $"$Options::{keyValueOption.Key}";
+                if (value.Contains(optionPlaceholder))
+                    value = value.Replace(optionPlaceholder, keyValueOption.Value?.Value?.ToString() ?? "");
+            };
+
             return value;
         }
 

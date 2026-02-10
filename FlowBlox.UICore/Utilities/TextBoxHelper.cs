@@ -10,32 +10,68 @@ using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Models.DialogService;
 using FlowBlox.UICore.Enums;
 using FlowBlox.Core.Utilities;
+using FlowBlox.UICore.Models;
 
 namespace FlowBlox.UICore.Utilities
 {
     public static class TextBoxHelper
     {
-        public static void ShowFieldSelectionDialog(object target, FlowBlockUIAttribute flowBlockUI, ITextBoxLike textBox, Window window)
+        public static void ShowFieldSelectionDialog(
+            object target,
+            FlowBlockUIAttribute flowBlockUI,
+            ITextBoxLike textBox,
+            Window ownerWindow,
+            FieldSelectionMode mode)
         {
-            var dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
-            var fieldSelectionResult = dialogService.InvokeFieldSelection(target, flowBlockUI, window);
-            if (fieldSelectionResult.Success)
+            var args = new FieldSelectionWindowArgs
             {
-                // Apply field selection required option to target
-                FlowBlockHelper.ApplyFieldSelectionRequiredOption(fieldSelectionResult.Target, fieldSelectionResult.SelectedFields, fieldSelectionResult.IsRequired);
+                FlowBlock = target as BaseFlowBlock,
+                SelectionMode = mode,
+                IsRequired = !flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionDefaultNotRequired),
+                HideRequired = flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionHideRequired)
+            };
 
-                // Apply field selection to textbox
-                ApplyFieldToTextBox(fieldSelectionResult.SelectedFields, textBox);
+            var win = new FieldSelectionWindow(args)
+            {
+                Owner = ownerWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            if (win.ShowDialog() != true || win.Result == null)
+                return;
+
+            var result = win.Result;
+
+            if (result.SelectionMode == FieldSelectionMode.Fields)
+            {
+                FlowBlockHelper.ApplyFieldSelectionRequiredOption(target, result.SelectedFields, result.IsRequired);
+                ApplyFieldElementsToTextBox(result.SelectedFields, textBox);
+            }
+            else
+            {
+                ApplyOptionElementsToTextBox(result.SelectedOptions, textBox);
             }
         }
 
-        public static void ApplyFieldToTextBox(FieldElement fieldElement, ITextBoxLike textBox) => ApplyFieldToTextBox(new[] { fieldElement }, textBox);
-
-        public static void ApplyFieldToTextBox(IEnumerable<FieldElement> fieldElements, ITextBoxLike textBox)
+        public static void ApplyOptionElementsToTextBox(IEnumerable<OptionElement> optionElements, ITextBoxLike textBox)
         {
-            foreach (var fieldElement in fieldElements)
+            var defs = (optionElements ?? Enumerable.Empty<OptionElement>())
+                .Select(o => o.Name)
+                .Select(name => $"$Options::{name}");
+
+            ApplyFieldDefinitionsToTextBox(defs, textBox);
+        }
+
+        public static void ApplyFieldElementsToTextBox(IEnumerable<FieldElement> fieldElements, ITextBoxLike textBox)
+        {
+            var defs = fieldElements.Select(f => f.FullyQualifiedName);
+            ApplyFieldDefinitionsToTextBox(defs, textBox);
+        }
+
+        public static void ApplyFieldDefinitionsToTextBox(IEnumerable<string> fieldDefinitions, ITextBoxLike textBox)
+        {
+            foreach (var fieldDefinition in fieldDefinitions)
             {
-                string fieldDefinition = fieldElement.FullyQualifiedName;
                 var selectionStart = textBox.SelectionStart;
                 var selectionLength = textBox.SelectionLength;
 

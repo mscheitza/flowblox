@@ -64,6 +64,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\FieldSelectionWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FieldSelectionWindow.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\GenerationView.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -166,6 +171,10 @@
     <EmbeddedResource Update="Resources\ExtensionsWindow.resx">
       <LastGenOutput>ExtensionsWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldSelectionWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FieldSelectionWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\GenerationView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

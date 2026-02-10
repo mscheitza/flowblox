@@ -577,7 +577,7 @@ namespace FlowBlox.Views.PropertyView
                     button.Click += (sender, e) =>
                     {
                         var flowBlock = _target as BaseFlowBlock;
-                        FieldSelectionWindow fieldSelectionWindow = new FieldSelectionWindow(flowBlock) 
+                        var fieldSelectionWindow = new FieldSelectionWindow(flowBlock) 
                         { 
                             IsRequired = !flowBlockUIAttribute.UiOptions.HasFlag(Options.FieldSelectionDefaultNotRequired) 
                         };

@@ -52,9 +52,7 @@ namespace FlowBlox.Core.Models.Components.IO
             {
                 string outputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.OutputDir"].Value;
                 if (!Directory.Exists(outputDirectory))
-                {
                     Directory.CreateDirectory(outputDirectory);
-                }
                 filePath = filePath.Replace("${General.OutputDirectory}", outputDirectory);
             }
 

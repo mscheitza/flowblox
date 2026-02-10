@@ -1,0 +1,146 @@
+﻿<mah:MetroWindow
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    x:Class="FlowBlox.UICore.Views.FieldSelectionWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:viewModel="clr-namespace:FlowBlox.UICore.ViewModels"
+    xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
+    Title="{x:Static resources:FieldSelectionWindow.Title}"
+    Height="620"
+    Width="980"
+    mc:Ignorable="d"
+    WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:FieldIconKindConverter x:Key="FieldIconKindConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Header}"
+                       FontSize="20"
+                       FontWeight="SemiBold"/>
+            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Description}"
+                       Margin="0,4,0,0"
+                       Foreground="Gray"
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- Content -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Required checkbox (Fields only) -->
+            <CheckBox Grid.Row="0"
+                      Content="{x:Static resources:FieldSelectionWindow.Checkbox_Required}"
+                      IsChecked="{Binding IsRequired}"
+                      Visibility="{Binding ShowRequired, Converter={StaticResource BoolToVisibilityConverter}}"
+                      Margin="0,0,0,8"/>
+
+            <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTabIndex}">
+                <!-- Project Fields -->
+                <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_ProjectFields}">
+                    <Grid>
+                        <ListView x:Name="FieldsListView"
+                                  ItemsSource="{Binding FieldRows}"
+                                  SelectionMode="{Binding MultiSelect, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=SelectionMode}"
+                                  MouseDoubleClick="FieldsListView_MouseDoubleClick">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Width="36">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <iconPacks:PackIconMaterial
+                                                    Kind="{Binding IconKey, Converter={StaticResource FieldIconKindConverter}}"
+                                                    Width="16"
+                                                    Height="16"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_Source}"
+                                                    DisplayMemberBinding="{Binding SourceName}"
+                                                    Width="260"/>
+
+                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_Field}"
+                                                    DisplayMemberBinding="{Binding FieldName}"
+                                                    Width="520"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+
+                <!-- Options -->
+                <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_Options}">
+                    <Grid>
+                        <ListView x:Name="OptionsListView"
+                                  ItemsSource="{Binding OptionRows}"
+                                  MouseDoubleClick="OptionsListView_MouseDoubleClick">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionName}"
+                                                    DisplayMemberBinding="{Binding Name}"
+                                                    Width="260"/>
+                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionType}"
+                                                    DisplayMemberBinding="{Binding Type}"
+                                                    Width="180"/>
+                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionDescription}"
+                                                    DisplayMemberBinding="{Binding Description}"
+                                                    Width="360"/>
+                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionValue}"
+                                                    DisplayMemberBinding="{Binding Value}"
+                                                    Width="160"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+        <!-- Bottom buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Margin="0,0,6,0" Command="{Binding BackCommand}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial Kind="ArrowLeft" Margin="0,0,5,0"/>
+                        <TextBlock Text="{x:Static resources:FieldSelectionWindow.Button_Back}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <Button x:Name="OkButton" Command="{Binding OkCommand}" IsEnabled="False">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial Kind="Check" Margin="0,0,5,0"/>
+                        <TextBlock Text="{x:Static resources:FieldSelectionWindow.Button_Ok}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>
