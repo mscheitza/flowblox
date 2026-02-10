@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
+﻿namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 {
     public class WebBrowserFactory
     {

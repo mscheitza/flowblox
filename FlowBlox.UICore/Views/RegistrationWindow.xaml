@@ -60,102 +60,118 @@
             </Grid.RowDefinitions>
 
             <!-- Content -->
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.Row="0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Margin="0,0,0,6">
 
-                <!-- Left Column -->
-                <StackPanel Grid.Column="0" Margin="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <Label Content="{x:Static resources:RegistrationWindow.Label_FirstName}" HorizontalAlignment="Left" Margin="0,5,0,0" />
-                    <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
-                             mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Placeholder_FirstName}" />
+                    <!-- Left Column -->
+                    <StackPanel Grid.Column="0" Margin="10">
 
-                    <Label Content="{x:Static resources:RegistrationWindow.Label_LastName}" HorizontalAlignment="Left" Margin="0,5,0,0" />
-                    <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
-                             mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Placeholder_LastName}" />
+                        <Label Content="{x:Static resources:RegistrationWindow.Label_FirstName}"
+                               HorizontalAlignment="Left"
+                               Margin="0,5,0,0" />
+                        <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
+                                 mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Placeholder_FirstName}" />
 
-                    <Label Content="{x:Static resources:RegistrationWindow.Label_UserName}" HorizontalAlignment="Left" Margin="0,5,0,0" />
-                    <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
-                             mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Placeholder_UserName}"
-                             ToolTip="{x:Static resources:RegistrationWindow.Tooltip_UserName}" />
+                        <Label Content="{x:Static resources:RegistrationWindow.Label_LastName}"
+                               HorizontalAlignment="Left"
+                               Margin="0,5,0,0" />
+                        <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
+                                 mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Placeholder_LastName}" />
 
-                    <!-- Email (Required) -->
-                    <Label HorizontalAlignment="Left" Margin="0,5,0,0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static resources:RegistrationWindow.Label_Email}" />
-                            <iconPacks:PackIconMaterial Kind="Asterisk"
-                                                        Width="9"
-                                                        Height="9"
-                                                        Margin="6,1,0,0"
-                                                        Foreground="IndianRed"
-                                                        VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Label>
-                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
+                        <Label Content="{x:Static resources:RegistrationWindow.Label_UserName}"
+                               HorizontalAlignment="Left"
+                               Margin="0,5,0,0" />
+                        <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
+                                 mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Placeholder_UserName}"
+                                 ToolTip="{x:Static resources:RegistrationWindow.Tooltip_UserName}" />
 
-                    <Label HorizontalAlignment="Left" Margin="0,5,0,0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static resources:RegistrationWindow.Label_EmailRepeat}" />
-                            <iconPacks:PackIconMaterial Kind="Asterisk"
-                                        Width="9"
-                                        Height="9"
-                                        Margin="5,2,0,0"
-                                        Foreground="IndianRed"
-                                        VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Label>
-                    <TextBox Text="{Binding EmailRepeat, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
+                        <!-- Email (Required) -->
+                        <Label HorizontalAlignment="Left" Margin="0,5,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static resources:RegistrationWindow.Label_Email}" />
+                                <iconPacks:PackIconMaterial Kind="Asterisk"
+                                                            Width="9"
+                                                            Height="9"
+                                                            Margin="6,1,0,0"
+                                                            Foreground="IndianRed"
+                                                            VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Label>
+                        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
 
-                <!-- Right Column -->
-                <StackPanel Grid.Column="1" Margin="10">
+                        <Label HorizontalAlignment="Left" Margin="0,5,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static resources:RegistrationWindow.Label_EmailRepeat}" />
+                                <iconPacks:PackIconMaterial Kind="Asterisk"
+                                                            Width="9"
+                                                            Height="9"
+                                                            Margin="5,2,0,0"
+                                                            Foreground="IndianRed"
+                                                            VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Label>
+                        <TextBox Text="{Binding EmailRepeat, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
 
-                    <!-- Password (Required) -->
-                    <Label HorizontalAlignment="Left" Margin="0,5,0,0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static resources:RegistrationWindow.Label_Password}" />
-                            <iconPacks:PackIconMaterial Kind="Asterisk"
-                                                        Width="9"
-                                                        Height="9"
-                                                        Margin="6,1,0,0"
-                                                        Foreground="IndianRed"
-                                                        VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Label>
-                    <PasswordBox x:Name="passwordBox"
-                                 PasswordChanged="PasswordBox_PasswordChanged"
-                                 mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Label_Password}" />
+                    <!-- Right Column -->
+                    <StackPanel Grid.Column="1" Margin="10">
 
-                    <Label HorizontalAlignment="Left" Margin="0,5,0,0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static resources:RegistrationWindow.Label_PasswordRepeat}" />
-                            <iconPacks:PackIconMaterial Kind="Asterisk"
-                                        Width="9"
-                                        Height="9"
-                                        Margin="5,2,0,0"
-                                        Foreground="IndianRed"
-                                        VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Label>
-                    <PasswordBox x:Name="passwordRepeatBox"
-                                 PasswordChanged="PasswordRepeatBox_PasswordChanged"
-                                 mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Label_PasswordRepeat}" />
+                        <!-- Password (Required) -->
+                        <Label HorizontalAlignment="Left" Margin="0,5,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static resources:RegistrationWindow.Label_Password}" />
+                                <iconPacks:PackIconMaterial Kind="Asterisk"
+                                                            Width="9"
+                                                            Height="9"
+                                                            Margin="6,1,0,0"
+                                                            Foreground="IndianRed"
+                                                            VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Label>
+                        <PasswordBox x:Name="passwordBox"
+                                     PasswordChanged="PasswordBox_PasswordChanged"
+                                     mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Label_Password}" />
 
-                    <Label Content="{x:Static resources:RegistrationWindow.Label_Captcha}" HorizontalAlignment="Left" Margin="0,5,0,0" />
-                    <Image Source="{Binding CaptchaResponse.CaptchaImage}"
-                           Margin="0,5,0,0"
-                           Height="40"
-                           Width="140"
-                           HorizontalAlignment="Left"
-                           Stretch="None" />
+                        <Label HorizontalAlignment="Left" Margin="0,5,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static resources:RegistrationWindow.Label_PasswordRepeat}" />
+                                <iconPacks:PackIconMaterial Kind="Asterisk"
+                                                            Width="9"
+                                                            Height="9"
+                                                            Margin="5,2,0,0"
+                                                            Foreground="IndianRed"
+                                                            VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Label>
+                        <PasswordBox x:Name="passwordRepeatBox"
+                                     PasswordChanged="PasswordRepeatBox_PasswordChanged"
+                                     mah:TextBoxHelper.Watermark="{x:Static resources:RegistrationWindow.Label_PasswordRepeat}" />
 
-                    <Label Content="{x:Static resources:RegistrationWindow.Label_CaptchaCode}" HorizontalAlignment="Left" Margin="0,5,0,0" />
-                    <TextBox Text="{Binding CaptchaCode, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-            </Grid>
+                        <Label Content="{x:Static resources:RegistrationWindow.Label_Captcha}"
+                               HorizontalAlignment="Left"
+                               Margin="0,5,0,0" />
+                        <Image Source="{Binding CaptchaResponse.CaptchaImage}"
+                               Margin="0,5,0,0"
+                               Height="40"
+                               Width="140"
+                               HorizontalAlignment="Left"
+                               Stretch="None" />
+
+                        <Label Content="{x:Static resources:RegistrationWindow.Label_CaptchaCode}"
+                               HorizontalAlignment="Left"
+                               Margin="0,5,0,0" />
+                        <TextBox Text="{Binding CaptchaCode, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
 
             <!-- Error footer (between content and buttons, no layout-jump) -->
             <Border Grid.Row="1"
@@ -204,6 +220,3 @@
         </Grid>
     </DockPanel>
 </mah:MetroWindow>
-
-    <!-- TODO: Hier auch ScrollViewer aus ChatGPT anbinden + auch bei Reset Passwort (alle die mit Error-Text arbeiten) -->
-    <!-- Error Text aus CreateOrUpdateProjectView entfernen -->

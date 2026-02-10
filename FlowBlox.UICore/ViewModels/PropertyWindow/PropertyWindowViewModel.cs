@@ -8,12 +8,8 @@ using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.PropertyWindow;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
-using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 

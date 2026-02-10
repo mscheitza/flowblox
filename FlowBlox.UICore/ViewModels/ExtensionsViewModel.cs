@@ -283,6 +283,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private bool CanReloadExtensions() => HasProjectReference && _hasExtensionChanged;
 
+        
         private async void ReloadExtensions()
         {
             try
@@ -292,9 +293,8 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     if (reloadResult.RemainingAssemblies.Any())
                     {
-                        var projectPath = FlowBloxProjectManager.Instance.ActiveProjectPath;
-
-                        if (!string.IsNullOrEmpty(projectPath))
+                        var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
+                        if (activeProject != null)
                         {
                             var errorMessage = string.Format(
                                 FlowBloxResourceUtil.GetLocalizedString("Message_RemainingAssemblies_RestartPrompt", typeof(Resources.ExtensionsWindow)),
@@ -306,27 +306,61 @@ namespace FlowBlox.UICore.ViewModels
 
                             if (restartConfirmed == true)
                             {
+                                // If ActiveProjectPath is not set, the project is assumed to be managed via ProjectSpace.
+                                // In this case, the project must have a valid ProjectSpaceGuid and will be saved using
+                                // the ProjectSpace API instead of the local file system.
+                                var projectPath = FlowBloxProjectManager.Instance.ActiveProjectPath;
+                                bool saveToProjectSpace = string.IsNullOrWhiteSpace(projectPath);
                                 try
                                 {
-                                    
-                                    FlowBloxProjectManager.Instance.ActiveProject.Save(projectPath);
+                                    if (saveToProjectSpace)
+                                    {
+                                        if (activeProject.ProjectSpaceGuid == null)
+                                            throw new InvalidOperationException(
+                                                "Cannot save project to ProjectSpace because the ProjectSpaceGuid is missing. " +
+                                                "When ActiveProjectPath is not set, a valid ProjectSpaceGuid is required to perform a ProjectSpace save.");
+
+                                        await activeProject.SaveToProjectSpaceAsync(activeProject.ProjectSpaceGuid, UserToken, _flowBloxWebApiService.Value);
+                                    }
+                                    else
+                                    {
+                                        activeProject.Save(projectPath);
+                                    }
                                 }
                                 catch (Exception ex)
                                 {
+                                    var projectName = !string.IsNullOrWhiteSpace(activeProject.ProjectName) ? 
+                                        activeProject.ProjectName : 
+                                        "Unknown Project";
+
+                                    var target = saveToProjectSpace ? 
+                                        $"{projectName} - ProjectSpace: {activeProject.ProjectSpaceGuid}" : 
+                                        projectPath;
+
                                     var projectSaveFailedErrorMessage = string.Format(
                                         FlowBloxResourceUtil.GetLocalizedString("Message_ProjectSaveFailed", typeof(Resources.ExtensionsWindow)),
-                                        projectPath, ex.Message);
+                                        target, ex.Message);
 
                                     await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Error, projectSaveFailedErrorMessage);
+
                                     return;
                                 }
 
                                 string exePath = Environment.ProcessPath;
-                                string args = $"--project=\"{projectPath}\"";
-
-                                using var _ = Process.Start(exePath, args);
-                                Environment.Exit(0);
-                                return;
+                                if (!saveToProjectSpace)
+                                {
+                                    string args = $"--project=\"{projectPath}\"";
+                                    using var _ = Process.Start(exePath, args);
+                                    Environment.Exit(0);
+                                    return;
+                                }
+                                else
+                                {
+                                    string args = $"--projectSpaceGuid=\"{activeProject.ProjectSpaceGuid}\"";
+                                    using var _ = Process.Start(exePath, args);
+                                    Environment.Exit(0);
+                                    return;
+                                }
                             }
                         }
                         else

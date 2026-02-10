@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using System;
-using System.Net;
-using System.Xml;
 using Cookie = OpenQA.Selenium.Cookie;
 
 namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser

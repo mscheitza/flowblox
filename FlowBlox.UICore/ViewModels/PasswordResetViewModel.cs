@@ -2,7 +2,6 @@
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Utilities;
-using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
@@ -10,9 +9,6 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using MahApps.Metro.Controls;
 using FlowBlox.UICore.Models;
-using FlowBlox.Core.Util;
-using ZstdSharp.Unsafe;
-using FlowBlox.UICore.Views;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 
 namespace FlowBlox.UICore.ViewModels

@@ -4,23 +4,10 @@ using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Models.Components;
-using System;
-using System.IO;
-using System.Text;
-using FlowBlox.Core.Provider.Registry;
-using Microsoft.Identity.Client;
 using FlowBlox.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Interfaces;
-using FlowBlox.Core.Logging;
-using log4net;
-using FlowBlox.Core.Constants;
 using FlowBlox.Core.DependencyInjection;
-using FlowBlox.Core.Exceptions;
-using Google.Protobuf;
-using log4net.Repository.Hierarchy;
-using System.Collections.Concurrent;
-using System.Diagnostics;
 using FlowBlox.Core.Models.FlowBlocks;
 
 namespace FlowBlox.Core.Models.Runtime
@@ -364,6 +351,16 @@ namespace FlowBlox.Core.Models.Runtime
         public void Dispose()
         {
 
+        }
+
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+
+        /// <summary>
+        /// Returns a CancellationToken that can be used by FlowBlocks and external services.
+        /// </summary>
+        public virtual CancellationToken GetCancellationToken()
+        {
+            return _cancellationTokenSource.Token;
         }
     }
 }

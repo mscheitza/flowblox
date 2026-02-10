@@ -5,8 +5,6 @@ using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.UICore.Utilities;
-using log4net.Filter;
-using OfficeOpenXml.Export.HtmlExport;
 using System;
 using System.Diagnostics;
 using System.Drawing;

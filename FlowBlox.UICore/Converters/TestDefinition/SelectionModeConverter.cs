@@ -1,9 +1,6 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
-using FlowBlox.Core.Models.Testing;
 
 namespace FlowBlox.UICore.Converters.TestDefinition
 {

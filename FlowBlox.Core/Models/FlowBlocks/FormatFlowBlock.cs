@@ -1,16 +1,11 @@
-﻿using System.Drawing;
-using FlowBlox.Core.Models.Components;
+﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using System.Data;
-using System.ComponentModel;
 using FlowBlox.Core.Attributes;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
-using FlowBlox.Core.Models.FlowBlocks.TableWriter;
 using FlowBlox.Core.Models.FlowBlocks.Format;
 using System.Collections.ObjectModel;
 using SkiaSharp;

@@ -4,13 +4,7 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace FlowBlox.UICore.Factory.Base
 {

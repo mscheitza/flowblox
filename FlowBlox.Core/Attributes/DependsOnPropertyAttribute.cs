@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace FlowBlox.Core.Attributes
+﻿namespace FlowBlox.Core.Attributes
 {
     /// <summary>
     /// Marks this property as dependent on one or more other properties.

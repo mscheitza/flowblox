@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace FlowBlox.UICore.Resolver
 {
@@ -192,14 +193,19 @@ namespace FlowBlox.UICore.Resolver
                 {
                     ItemsSource = enumValues,
                     DisplayMemberPath = "DisplayName",
-                    SelectedValuePath = "EnumValue",
-                    IsReadOnly = readOnly
+                    SelectedValuePath = "EnumValue"
                 };
+
+                SetComboBoxReadOnly(comboBox, readOnly);
 
                 comboBox.SelectionChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
 
                 comboBox.SetBinding(ComboBox.SelectedValueProperty, binding);
-                return comboBox;
+                return new Border 
+                { 
+                    Child = comboBox,
+                    Background = Brushes.Transparent
+                };
             }
 
             // Selection-Filter
@@ -234,8 +240,15 @@ namespace FlowBlox.UICore.Resolver
                         ItemsSource = items,
                         DisplayMemberPath = flowBlockUI?.SelectionDisplayMember
                     };
+
+                    SetComboBoxReadOnly(comboBox, readOnly);
+
                     comboBox.SetBinding(ComboBox.SelectedValueProperty, binding);
-                    return comboBox;
+                    return new Border
+                    {
+                        Child = comboBox,
+                        Background = Brushes.Transparent
+                    };
                 }
             }
 
@@ -282,6 +295,13 @@ namespace FlowBlox.UICore.Resolver
             }
 
             return _textBoxWithOptionalButtonsCreator.CreateTextBoxWithOptionalButtons(property, target, displayName, flowBlockUI, binding, readOnly);
+        }
+
+        private void SetComboBoxReadOnly(ComboBox comboBox, bool readOnly)
+        {
+            comboBox.IsHitTestVisible = !readOnly;
+            comboBox.Focusable = !readOnly;
+            comboBox.IsTabStop = !readOnly;
         }
     }
 }

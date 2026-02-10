@@ -180,4 +180,16 @@
   <data name="Error_RefreshMetadataFailed" xml:space="preserve">
     <value>The project metadata could not be refreshed after saving.</value>
   </data>
+	<data name="Button_UpdateExistingProject" xml:space="preserve">
+  <value>Update existing project</value>
+</data>
+	<data name="Tooltip_UpdateExistingProject" xml:space="preserve">
+  <value>Uses the existing ProjectSpace GUID and updates the current ProjectSpace project.</value>
+</data>
+	<data name="Button_CreateNewProject" xml:space="preserve">
+  <value>Create new project</value>
+</data>
+	<data name="Tooltip_CreateNewProject" xml:space="preserve">
+  <value>Clears the current ProjectSpace GUID. On save, a new ProjectSpace project will be created with a new GUID.</value>
+</data>
 </root>

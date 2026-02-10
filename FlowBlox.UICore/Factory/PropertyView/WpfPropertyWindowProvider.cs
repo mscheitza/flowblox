@@ -1,11 +1,5 @@
-﻿using FlowBlox.Core.Constants;
-using FlowBlox.Core.DependencyInjection;
-using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Util;
-using FlowBlox.UICore.Factory;
+﻿using FlowBlox.Core.DependencyInjection;
 using FlowBlox.UICore.Views;
-using System;
-using System.Linq;
 using System.Windows;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Manager;

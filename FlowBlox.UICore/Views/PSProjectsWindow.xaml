@@ -75,10 +75,11 @@
                 </Button.Content>
             </Button>
 
-            <Separator/>
+            <Separator Visibility="{Binding CanToggleMyProjects, Converter={StaticResource BoolToVisibilityConverter}}" />
 
             <!-- Filter: My/Public -->
             <ToggleButton IsChecked="{Binding IsMine}"
+                          Visibility="{Binding CanToggleMyProjects, Converter={StaticResource BoolToVisibilityConverter}}"
                           ToolTip="{x:Static resources:PSProjectsWindow.Tooltip_FilterMine}">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="AccountBoxOutline" Margin="0,0,5,0"/>
@@ -89,10 +90,36 @@
             <Separator/>
 
             <!-- User display -->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
                         Visibility="{Binding ActiveUser, Converter={StaticResource NullToVisibilityConverter}}">
-                <iconPacks:PackIconMaterial Kind="Account" Width="12" Height="12" VerticalAlignment="Center" Foreground="Dimgray" Margin="0,0,3,0" />
-                <Label FontWeight="SemiBold" Content="{Binding ActiveUser.UserName}" VerticalAlignment="Center" />
+
+                <iconPacks:PackIconMaterial Kind="Account"
+                                Width="12"
+                                Height="12"
+                                VerticalAlignment="Center"
+                                Foreground="Dimgray"
+                                Margin="0,0,3,0" />
+
+                <Label FontWeight="SemiBold"
+                       Content="{Binding ActiveUser.UserName}"
+                       VerticalAlignment="Center"
+                       Margin="0,0,4,0" />
+
+                <!-- Edit user properties -->
+                <Button Command="{Binding EditUserPropertiesCommand}"                                          
+                                          Padding="2"
+                                          Margin="0,0,0,0"
+                                          VerticalAlignment="Center"
+                                          Background="Transparent"
+                                          BorderThickness="0">
+
+                    <iconPacks:PackIconMaterial Kind="PencilOutline"
+                                    Width="14"
+                                    Height="14"
+                                    Foreground="DimGray"
+                                    VerticalAlignment="Center" />
+                </Button>
             </StackPanel>
         </ToolBar>
 

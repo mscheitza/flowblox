@@ -10,12 +10,8 @@ using System.Collections;
 using FlowBlox.Core.Util.WPF;
 using System.Drawing;
 using FlowBlox.Core;
-using FlowBlox.Core.Constants;
-using FlowBlox.Core.Interfaces;
-using System.Collections.Generic;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Components;
-using FlowBlox.Grid.Elements.UI;
 
 namespace FlowBlox.Views.PropertyView
 {

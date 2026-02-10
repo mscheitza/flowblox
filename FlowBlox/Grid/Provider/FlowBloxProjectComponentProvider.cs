@@ -1,13 +1,7 @@
-﻿using FlowBlox.Core.Models.Project;
-using FlowBlox.Core.Provider.Project;
+﻿using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlowBlox.Grid.Provider
 {

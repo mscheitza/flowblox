@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Json
 {

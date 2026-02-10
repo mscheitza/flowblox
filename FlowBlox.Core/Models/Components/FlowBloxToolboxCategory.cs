@@ -19,6 +19,7 @@ namespace FlowBlox.Core.Models.Components
         public const string SQL = nameof(SQL);
         public const string Filter = nameof(Filter);
         public const string DBConnection = nameof(DBConnection);
+        public const string ChatTemplates = nameof(ChatTemplates);
 
         internal static void InvokeRegistration()
         {

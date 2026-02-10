@@ -1,9 +1,4 @@
-﻿using Newtonsoft.Json;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Support.UI;
-using System;
+﻿using OpenQA.Selenium.Firefox;
 using System.Drawing;
 
 namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser

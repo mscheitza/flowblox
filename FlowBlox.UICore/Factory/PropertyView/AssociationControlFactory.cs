@@ -1,6 +1,4 @@
-﻿using FlowBlox.Core;
-using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Constants;
+﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
@@ -13,7 +11,6 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.IconPacks;
 using System.ComponentModel;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;

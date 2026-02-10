@@ -4,9 +4,7 @@ using FlowBlox.Core.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Utilities;
 using MahApps.Metro.Controls;
-using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FlowBlox.UICore.ViewModels

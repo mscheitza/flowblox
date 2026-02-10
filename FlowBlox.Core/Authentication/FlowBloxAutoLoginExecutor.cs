@@ -3,10 +3,6 @@ using FlowBlox.Core.Util;
 using Newtonsoft.Json;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Authentication
 {

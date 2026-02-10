@@ -1,8 +1,5 @@
 ﻿using FlowBlox.Core.Models.FlowBlocks.Additions;
-using FlowBlox.Core.Util;
-using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
 
 namespace FlowBlox.UICore.Converters

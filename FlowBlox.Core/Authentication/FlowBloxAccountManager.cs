@@ -1,5 +1,4 @@
 ﻿using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
-using System;
 using System.Collections.Concurrent;
 
 namespace FlowBlox.Core.Authentication

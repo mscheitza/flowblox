@@ -6,17 +6,8 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.Fields;
-using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
-using Mysqlx.Session;
-using MySqlX.XDevAPI.Common;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using UglyToad.PdfPig.Graphics.Operations.SpecialGraphicsState;
 
 namespace FlowBlox.Core.Util.FlowBlocks
 {

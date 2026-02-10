@@ -1,7 +1,6 @@
 ﻿using FlowBlox.Core;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Attributes.FlowBlox.Core.Attributes;
-using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;

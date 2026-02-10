@@ -1,7 +1,4 @@
-﻿using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
-using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 
 namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Repository
 {

@@ -110,6 +110,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public string UserName { get; set; }
 
         [Display(Name = "WebRequestFlowBlock_Password", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Authentication", Order = 1)]
+        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBlockTextBox(PasswordChar = '*')]
         public string Password { get; set; }
 

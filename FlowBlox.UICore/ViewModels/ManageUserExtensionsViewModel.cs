@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
@@ -18,7 +14,6 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
-using Google.Protobuf;
 using MahApps.Metro.Controls;
 
 namespace FlowBlox.UICore.ViewModels

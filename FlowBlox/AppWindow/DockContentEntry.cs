@@ -1,5 +1,4 @@
 ﻿using FlowBlox.AppWindow.ContentFactories;
-using System;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;

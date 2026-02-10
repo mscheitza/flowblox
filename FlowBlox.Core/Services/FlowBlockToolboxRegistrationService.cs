@@ -8,15 +8,16 @@ namespace FlowBlox.Core.Services
         public override IEnumerable<string> GetAllToolboxCategoriesInModule()
         {
             return
-             [
-                 FlowBloxToolboxCategory.Regex,
-                 FlowBloxToolboxCategory.XPath,
-                 FlowBloxToolboxCategory.CounterFormat,
-                 FlowBloxToolboxCategory.Format,
-                 FlowBloxToolboxCategory.SQL,
-                 FlowBloxToolboxCategory.Filter,
-                 FlowBloxToolboxCategory.DBConnection
-             ];
+            [
+                FlowBloxToolboxCategory.Regex,
+                FlowBloxToolboxCategory.XPath,
+                FlowBloxToolboxCategory.CounterFormat,
+                FlowBloxToolboxCategory.Format,
+                FlowBloxToolboxCategory.SQL,
+                FlowBloxToolboxCategory.Filter,
+                FlowBloxToolboxCategory.DBConnection,
+                FlowBloxToolboxCategory.ChatTemplates
+            ];
         }
 
         public override IEnumerable<string> GetAllToolboxResourcesInModule()
@@ -31,7 +32,8 @@ namespace FlowBlox.Core.Services
                 "FlowBlox.Core.Files.globalToolbox_sql_mssql.json",
                 "FlowBlox.Core.Files.globalToolbox_sql_mysql.json",
                 "FlowBlox.Core.Files.globalToolbox_sql_oracle.json",
-                "FlowBlox.Core.Files.globalToolbox_xpath.json"
+                "FlowBlox.Core.Files.globalToolbox_xpath.json",
+                "FlowBlox.Core.Files.globalToolbox_chattemplates.json"
             ];
         }
     }

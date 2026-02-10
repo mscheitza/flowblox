@@ -70,11 +70,29 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create new project ähnelt.
+        /// </summary>
+        public static string Button_CreateNewProject {
+            get {
+                return ResourceManager.GetString("Button_CreateNewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
         public static string Button_Save {
             get {
                 return ResourceManager.GetString("Button_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update existing project ähnelt.
+        /// </summary>
+        public static string Button_UpdateExistingProject {
+            get {
+                return ResourceManager.GetString("Button_UpdateExistingProject", resourceCulture);
             }
         }
         
@@ -228,6 +246,24 @@ namespace FlowBlox.UICore.Resources {
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Clears the current ProjectSpace GUID. On save, a new ProjectSpace project will be created with a new GUID. ähnelt.
+        /// </summary>
+        public static string Tooltip_CreateNewProject {
+            get {
+                return ResourceManager.GetString("Tooltip_CreateNewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses the existing ProjectSpace GUID and updates the current ProjectSpace project. ähnelt.
+        /// </summary>
+        public static string Tooltip_UpdateExistingProject {
+            get {
+                return ResourceManager.GetString("Tooltip_UpdateExistingProject", resourceCulture);
             }
         }
         

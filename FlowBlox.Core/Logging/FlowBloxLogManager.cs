@@ -1,7 +1,4 @@
-﻿using FlowBlox.Core.Models.Runtime;
-using System;
-
-namespace FlowBlox.Core.Logging
+﻿namespace FlowBlox.Core.Logging
 {
     public class FlowBloxLogManager
     {

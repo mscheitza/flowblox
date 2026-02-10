@@ -1,7 +1,5 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
-using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using MahApps.Metro.IconPacks;
 
 namespace FlowBlox.UICore.Converters.Extensions

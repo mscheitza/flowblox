@@ -1,11 +1,4 @@
-﻿using FlowBlox.Core.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FlowBlox.Core.Attributes
+﻿namespace FlowBlox.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class FlowBlockTextBoxAttribute : Attribute

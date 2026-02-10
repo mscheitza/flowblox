@@ -1,11 +1,9 @@
 ﻿using FlowBlox.Core;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
-using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Provider;
 using FlowBlox.Grid.Views.Main;
 using System;
 using System.Collections.Generic;
@@ -14,14 +12,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Provider.Registry;
-using FlowBlox.Core.Interfaces;
-using FlowBlox.Core.DependencyInjection;
-using FlowBlox.Grid.Provider;
-using System.IO;
-using Microsoft.Win32;
-using ZstdSharp.Unsafe;
 using FlowBlox.UICore.Manager;
 
 namespace FlowBlox.Views.PropertyView

@@ -29,6 +29,7 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand LoginCommand { get; }
         public RelayCommand RegisterCommand { get; }
         public RelayCommand LogoutCommand { get; }
+        public RelayCommand EditUserPropertiesCommand { get; }
 
         public string SearchText
         {
@@ -79,6 +80,7 @@ namespace FlowBlox.UICore.ViewModels
                 OnPropertyChanged(nameof(ActiveUser));
                 OnPropertyChanged(nameof(CanLogin));
                 OnPropertyChanged(nameof(CanLogout));
+                OnPropertyChanged(nameof(CanToggleMyProjects));
             }
         }
 
@@ -105,6 +107,7 @@ namespace FlowBlox.UICore.ViewModels
                     OnPropertyChanged(nameof(CanLogin));
                     OnPropertyChanged(nameof(CanRegister));
                     OnPropertyChanged(nameof(CanLogout));
+                    OnPropertyChanged(nameof(CanToggleMyProjects));
                 }
             }
         }
@@ -112,7 +115,8 @@ namespace FlowBlox.UICore.ViewModels
         public bool CanLogin => ApiMetadata?.Capabilities?.CanLogin == true && ActiveUser == null;
         public bool CanRegister => ApiMetadata?.Capabilities?.CanRegister == true;
         public bool CanLogout => ApiMetadata?.Capabilities?.CanLogin == true && ActiveUser != null;
-
+        public bool CanToggleMyProjects => ApiMetadata?.Capabilities?.CanLogin == true && ActiveUser != null;
+        public bool CanEditUserProperties => ApiMetadata?.Capabilities?.CanLogin == true && ActiveUser != null && !string.IsNullOrWhiteSpace(UserToken);
 
         private static string ApiUrl => FlowBloxOptions.GetOptionInstance()
             .OptionCollection["General.ProjectApiServiceBaseUrl"]
@@ -151,6 +155,7 @@ namespace FlowBlox.UICore.ViewModels
                 else
                     ExecuteSearch();
             });
+            EditUserPropertiesCommand = new RelayCommand(_ => ExecuteEditUserProperties(), _ => CanEditUserProperties);
         }
 
         private void EditSelectedProject(object obj)
@@ -214,6 +219,20 @@ namespace FlowBlox.UICore.ViewModels
 
                 ExecuteSearch();
             }
+        }
+
+        private void ExecuteEditUserProperties()
+        {
+            if (!CanEditUserProperties || _ownerWindow == null)
+                return;
+
+            var editUserPropertiesWindow = new EditUserPropertiesWindow(_flowBloxWebApiService.Value, UserToken, ActiveUser)
+            {
+                Owner = _ownerWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            editUserPropertiesWindow.ShowDialog();
+            OnPropertyChanged(nameof(ActiveUser));
         }
 
         private async void ExecuteSearch()

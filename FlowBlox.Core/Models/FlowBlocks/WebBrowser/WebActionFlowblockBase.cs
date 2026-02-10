@@ -1,18 +1,11 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Fields;
-using OpenQA.Selenium.Internal;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 {

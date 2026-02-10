@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-
-namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models
+﻿namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models
 {
     public class FbExtensionVersionChangeRequest
     {

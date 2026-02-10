@@ -1,22 +1,15 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.SequenceDetection;
 using FlowBlox.Core.Models.Runtime;
-using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.SequenceDetection;
 using FlowBlox.SequenceDetection.Constants;
-using Google.Protobuf;
-using MySqlX.XDevAPI.Common;
 using Newtonsoft.Json;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using ZstdSharp.Unsafe;
 using static FlowBlox.Core.Models.FlowBlocks.RegexSelectorFlowBlock;
 
 namespace FlowBlox.Core.Models.FlowBlocks

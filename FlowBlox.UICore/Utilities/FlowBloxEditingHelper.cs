@@ -2,15 +2,8 @@
 using FlowBlox.Core.Util;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace FlowBlox.UICore.Utilities
 {

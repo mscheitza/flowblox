@@ -202,6 +202,9 @@
   <data name="repeat" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\repeat.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="robot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\robot.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="selection_ellipse_arrow_inside" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\selection-ellipse-arrow-inside.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

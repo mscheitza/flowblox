@@ -1,17 +1,8 @@
-﻿using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Models.Runtime;
+﻿using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Controls;
-using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.UICore.Views;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FlowBlox.Views

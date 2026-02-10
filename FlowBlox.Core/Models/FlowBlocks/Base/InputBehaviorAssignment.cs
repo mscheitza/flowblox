@@ -17,6 +17,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [FlowBlockUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
         public BaseFlowBlock FlowBlock { get; set; }
 
+
         [Display(Name = "InputBehaviorAssignment_Behavior", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         public InputBehavior Behavior { get; set; }
     }

@@ -104,6 +104,7 @@ namespace FlowBlox.UICore.ViewModels
 
             VisibilityValues = Enum.GetValues(typeof(FbProjectVisibility))
                 .Cast<FbProjectVisibility>()
+                .Except([FbProjectVisibility.Dedicated])
                 .ToList();
 
             Visibility = project.Visibility;

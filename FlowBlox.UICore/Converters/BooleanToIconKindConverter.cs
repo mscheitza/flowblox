@@ -1,5 +1,4 @@
 ﻿using MahApps.Metro.IconPacks;
-using System;
 using System.Globalization;
 using System.Windows.Data;
 

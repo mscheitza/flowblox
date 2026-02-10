@@ -97,49 +97,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="sddd" xml:space="preserve">
-    <value></value>
-  </data>
-	<data name="Title" xml:space="preserve">
+  <data name="Title" xml:space="preserve">
   <value>Edit Project</value>
 </data>
-	<data name="Header_Title" xml:space="preserve">
+  <data name="Header_Title" xml:space="preserve">
   <value>Edit project metadata</value>
 </data>
-	<data name="Header_Description" xml:space="preserve">
+  <data name="Header_Description" xml:space="preserve">
   <value>Update the name, description, and visibility of the project. The changes will be saved to the Project Space.</value>
 </data>
-
-	<data name="Label_ProjectName" xml:space="preserve">
+  <data name="Label_ProjectName" xml:space="preserve">
   <value>Name</value>
 </data>
-	<data name="Placeholder_ProjectName" xml:space="preserve">
+  <data name="Placeholder_ProjectName" xml:space="preserve">
   <value>Project name</value>
 </data>
-
-	<data name="Label_ProjectDescription" xml:space="preserve">
+  <data name="Label_ProjectDescription" xml:space="preserve">
   <value>Description</value>
 </data>
-	<data name="Placeholder_ProjectDescription" xml:space="preserve">
+  <data name="Placeholder_ProjectDescription" xml:space="preserve">
   <value>Optional description</value>
 </data>
-
-	<data name="Label_Visibility" xml:space="preserve">
+  <data name="Label_Visibility" xml:space="preserve">
   <value>Visibility</value>
 </data>
-
-	<data name="Button_Save" xml:space="preserve">
+  <data name="Button_Save" xml:space="preserve">
   <value>Save</value>
 </data>
-	<data name="Button_Cancel" xml:space="preserve">
+  <data name="Button_Cancel" xml:space="preserve">
   <value>Cancel</value>
 </data>
-
-	<data name="Error_EditProjectMetadata_SaveFailed" xml:space="preserve">
+  <data name="Error_EditProjectMetadata_SaveFailed" xml:space="preserve">
   <value>The project metadata could not be saved.</value>
 </data>
-	<data name="Error_EditProjectMetadata_NoProjectSelected" xml:space="preserve">
+  <data name="Error_EditProjectMetadata_NoProjectSelected" xml:space="preserve">
   <value>No project is selected.</value>
 </data>
-
 </root>

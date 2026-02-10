@@ -1,10 +1,6 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Grid.Elements.UserControls;
-using FlowBlox.Core.Provider;
-using System;
+﻿using FlowBlox.Grid.Elements.UserControls;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace FlowBlox.AppWindow.Handler

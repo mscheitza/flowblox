@@ -1,20 +1,12 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Grid.Views.Main;
-using System.Windows.Forms;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
+﻿using System.Windows.Forms;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.UICore.Views;
 using FlowBlox.Core.DependencyInjection;
-using FlowBlox.Grid.Provider;
-using System.Windows;
-using FlowBlox.UICore.Factory;
 using System;
 using System.Linq;
 using FlowBlox.Core.Util;
-using System.DirectoryServices.ActiveDirectory;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Util.Controls;
-using FlowBlox.Grid.Elements.UserControls;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Manager;
 

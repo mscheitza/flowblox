@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-
-namespace FlowBlox.Core.Provider
+﻿namespace FlowBlox.Core.Provider
 {
     public abstract class BaseThreadProvider<T> : IDisposable
     {

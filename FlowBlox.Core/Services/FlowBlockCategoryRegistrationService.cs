@@ -1,7 +1,5 @@
 ﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Services.Base;
-using FlowBlox.Core.Util.Resources;
-using System.Collections.Generic;
 
 namespace FlowBlox.Core.Services
 {

@@ -1,5 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.AI.Enums;
 using FlowBlox.Core.Models.FlowBlocks.AI.PositionSelector;
 using FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.QATokenizer;
 using FlowBlox.Core.Models.FlowBlocks.AI.TokenSelector;
@@ -74,13 +74,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
                 if (string.IsNullOrEmpty(ModelPath) || !File.Exists(ModelPath))
                 {
-                    CreateNotification(runtime, OnnxAiNotifications.ModelFileMissing);
+                    CreateNotification(runtime, OnnxNotifications.ModelFileMissing);
                     return;
                 }
 
                 if (QATokenizer == null)
                 {
-                    CreateNotification(runtime, OnnxAiNotifications.TokenizerMissing);
+                    CreateNotification(runtime, OnnxNotifications.TokenizerMissing);
                     return;
                 }
 
@@ -90,7 +90,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 }
                 catch (Exception ex)
                 {
-                    CreateNotification(runtime, OnnxAiNotifications.AITokenizerInitializationFailed, ex);
+                    CreateNotification(runtime, OnnxNotifications.AITokenizerInitializationFailed, ex);
                     return;
                 }
 
@@ -105,7 +105,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 }
                 catch (Exception ex)
                 {
-                    CreateNotification(runtime, OnnxAiNotifications.PromptExecutionFailed, ex);
+                    CreateNotification(runtime, OnnxNotifications.PromptExecutionFailed, ex);
                     return;
                 }
             });

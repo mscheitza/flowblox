@@ -1,24 +1,16 @@
 ﻿using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Provider;
-using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Factory.PropertyView.Colorizer;
-using Google.Protobuf.Reflection;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using Microsoft.Extensions.FileSystemGlobbing.Internal;
-using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml;
-using static ICSharpCode.AvalonEdit.Document.TextDocumentWeakEventManager;
 
 namespace FlowBlox.UICore.Factory.PropertyView
 {

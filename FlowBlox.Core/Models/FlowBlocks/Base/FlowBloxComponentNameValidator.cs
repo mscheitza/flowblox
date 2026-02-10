@@ -2,13 +2,7 @@
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Resources;
-using log4net.Config;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {

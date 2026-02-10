@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;

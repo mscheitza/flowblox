@@ -5,11 +5,6 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Provider.Project;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Xml;
 
 namespace FlowBlox.Core.Util
@@ -113,7 +108,9 @@ namespace FlowBlox.Core.Util
 
                 new OptionElement("Modifier.DefaultSeparator", ",", "If a modifier returns multiple result values, these values are separated by this delimiter.", OptionElement.OptionType.Text),
 
-                new OptionElement("PropertyView.UIFramework", "WPF", "Defines which UI framework should be used for rendering property views. Valid values are 'WPF' and 'WinForms'.", OptionElement.OptionType.Text)
+                new OptionElement("PropertyView.UIFramework", "WPF", "Defines which UI framework should be used for rendering property views. Valid values are 'WPF' and 'WinForms'.", OptionElement.OptionType.Text),
+
+                new OptionElement("AI.Onnx.Provider", "Default", "Global ONNX execution provider used by the application. Allowed values: Default (CPU), CUDA, DirectML, OpenVINO. Changing this requires restarting the application.", OptionElement.OptionType.Text)
 
             };
 

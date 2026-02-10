@@ -1,5 +1,4 @@
-﻿using ControlzEx.Standard;
-using FlowBlox.Core;
+﻿using FlowBlox.Core;
 using FlowBlox.Core.Util.Controls;
 using System;
 using System.Reflection;

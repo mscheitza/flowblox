@@ -2,15 +2,7 @@
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Util;
-using FlowBlox.Core.Util.Resources;
-using FlowBlox.UICore.Utilities;
-using MahApps.Metro.Controls;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels.Login

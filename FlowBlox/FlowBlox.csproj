@@ -200,9 +200,9 @@
     <Optimize>False</Optimize>
   </PropertyGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="start $(ProjectDir)prebuild.bat $(Configuration)" />
+    <Exec Command="&quot;$(ProjectDir)prebuild.bat&quot; $(Configuration)" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="start $(ProjectDir)postbuild.bat" />
+    <Exec Command="&quot;$(ProjectDir)postbuild.bat&quot; $(TargetDir)" />
   </Target>
 </Project>

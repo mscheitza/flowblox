@@ -1,15 +1,15 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.AI.Enums;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Models.FlowBlocks.Xml;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
-using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.DeepCopier;
 using Microsoft.ML.OnnxRuntime;
-using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
+using System.Text.Json.Serialization;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AI
 {
@@ -41,12 +41,32 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
         #region Tab: Extended settings
 
+        [JsonIgnore()]
+        [DeepCopierIgnore()]
         [Display(Name = "OnnxBaseFlowBlock_AiExecutionProvider",
+            Description = "OnnxBaseFlowBlock_AiExecutionProvider_Tooltip",
             GroupName = "OnnxBaseFlowBlock_Groups_ExtendedSettings",
             ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
         [Required]
-        public AiExecutionProviders AiExecutionProvider { get; set; }
+        public AiExecutionProviders AiExecutionProvider
+        {
+            get
+            {
+                var providerOption = FlowBloxOptions.GetOptionInstance().GetOption("AI.Onnx.Provider");
+                if (providerOption == null)
+                    return AiExecutionProviders.Default;
+
+                var providerName = providerOption.Value?.Trim();
+                if (string.IsNullOrWhiteSpace(providerName))
+                    return AiExecutionProviders.Default;
+
+                if (Enum.TryParse<AiExecutionProviders>(providerName, ignoreCase: true, out var parsed))
+                    return parsed;
+
+                return AiExecutionProviders.Default;
+            }
+        }
 
         #endregion
 
@@ -77,12 +97,20 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
             runtime.Report($"Loading ONNX model from file: {ModelPath}");
 
-            var sessionOptions = new SessionOptions();
-
             AiExecutionProviders aiExecutionProvider = this.AiExecutionProvider;
+
+
+            SessionOptions sessionOptions;
 
             try
             {
+                // Global provider override read from FlowBloxOptions
+                // Option key: "AI.Onnx.Provider"
+                // Expected values: Default, CUDA, DirectML, OpenVINO
+                FlowBloxOnnxRuntimeLoader.Instance.EnsureLoaded(aiExecutionProvider, runtime);
+
+                sessionOptions = new SessionOptions();
+
                 switch (aiExecutionProvider)
                 {
                     case AiExecutionProviders.OpenVINO:
@@ -116,9 +144,20 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
         public override void RuntimeFinished(BaseRuntime runtime)
         {
-            _session.Dispose();
+            if (_session != null)
+                _session.Dispose();
 
             base.RuntimeFinished(runtime);
+        }
+
+        public override List<Type> NotificationTypes
+        {
+            get
+            {
+                var notificationTypes = base.NotificationTypes;
+                notificationTypes.Add(typeof(OnnxNotifications));
+                return notificationTypes;
+            }
         }
     }
 }

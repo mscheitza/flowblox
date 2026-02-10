@@ -1,21 +1,14 @@
 ﻿using FlowBlox.Core.Util.WPF;
-using FlowBlox.Grid;
-using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Provider;
 using FlowBlox.UICore.Views;
 using FlowBlox.UICore.Utilities;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Interfaces;
-using FlowBlox.Core.Provider.Registry;
-using FlowBlox.Core.Constants;
 using System.Windows.Forms;
 using FlowBlox.UICore.Factory.Base;
 

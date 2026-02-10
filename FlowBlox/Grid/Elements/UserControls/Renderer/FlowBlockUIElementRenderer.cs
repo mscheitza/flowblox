@@ -1,5 +1,4 @@
-﻿using FlowBlox.Core;
-using FlowBlox.Core.Models.Components;
+﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Resources;
 using System;

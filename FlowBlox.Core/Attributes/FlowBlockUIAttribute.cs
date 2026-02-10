@@ -1,7 +1,4 @@
-﻿using FlowBlox.Core.Enums;
-using FlowBlox.Core.Models.Components;
-
-namespace FlowBlox.Core.Attributes
+﻿namespace FlowBlox.Core.Attributes
 {
     [Flags()]
     public enum UIOperations

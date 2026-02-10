@@ -1,5 +1,4 @@
-﻿using FlowBlox.Core.Extensions;
-using FlowBlox.Core.Util.FlowBlocks;
+﻿using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;

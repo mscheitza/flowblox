@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Windows.Controls;
 using System.Windows.Forms;
-using FlowBlox.Core;
-using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Provider;
 using FlowBlox.UICore.Utilities;
 using SkiaSharp;

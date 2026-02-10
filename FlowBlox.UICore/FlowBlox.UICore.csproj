@@ -54,6 +54,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>EditProjectMetadataWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\EditUserPropertiesWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EditUserPropertiesWindow.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\ExtensionsWindow.Designer.cs">
       <DependentUpon>ExtensionsWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -153,6 +158,10 @@
     <EmbeddedResource Update="Resources\EditProjectMetadataWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditProjectMetadataWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EditUserPropertiesWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditUserPropertiesWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ExtensionsWindow.resx">
       <LastGenOutput>ExtensionsWindow.Designer.cs</LastGenOutput>

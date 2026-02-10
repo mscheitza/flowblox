@@ -1,11 +1,8 @@
 ﻿using CommandLine;
-using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
-using System;
-using System.Collections.Generic;
 
 namespace FlowBlox.CLI
 {

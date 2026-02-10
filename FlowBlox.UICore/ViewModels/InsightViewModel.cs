@@ -1,7 +1,5 @@
 ﻿using FlowBlox.Core.Models.FlowBlocks.Additions;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace FlowBlox.UICore.ViewModels
 {

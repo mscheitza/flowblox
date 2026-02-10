@@ -88,6 +88,240 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Executes a prompt using a selected AI provider and returns the raw text response. ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Prompt ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_Groups_Output {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_Groups_Output", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Request ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_Groups_Request {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_Groups_Request", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max tokens ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_MaxTokens {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_MaxTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional limit for the generated output tokens. ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_MaxTokens_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_MaxTokens_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Model override ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_ModelOverride {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_ModelOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional model name to override the provider&apos;s default model. ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_ModelOverride_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_ModelOverride_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Prompt ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_PromptTemplate {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_PromptTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The prompt to send to the AI provider. You can use FlowBlox field placeholders (e.g., %%Input%%) which are resolved at runtime. ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_PromptTemplate_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_PromptTemplate_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Provider ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_Provider {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select the AI provider (e.g., OpenAI, Anthropic) used to execute the prompt. ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_Provider_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_Provider_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die System instruction ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_SystemInstruction {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_SystemInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional system instruction to guide the assistant&apos;s behavior (if supported by the provider). ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_SystemInstruction_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_SystemInstruction_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Temperature ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_Temperature {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_Temperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls randomness. Use 0 for deterministic results. ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_Temperature_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_Temperature_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout override (seconds) ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_TimeoutSecondsOverride {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_TimeoutSecondsOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional timeout override for this flow block execution. If empty, the provider default timeout is used. ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_TimeoutSecondsOverride_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPromptFlowBlock_TimeoutSecondsOverride_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die API key ähnelt.
+        /// </summary>
+        public static string AIProvider_ApiKey {
+            get {
+                return ResourceManager.GetString("AIProvider_ApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The API key used to authenticate with the AI provider. ähnelt.
+        /// </summary>
+        public static string AIProvider_ApiKey_Tooltip {
+            get {
+                return ResourceManager.GetString("AIProvider_ApiKey_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Base URL ähnelt.
+        /// </summary>
+        public static string AIProvider_BaseUrl {
+            get {
+                return ResourceManager.GetString("AIProvider_BaseUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional base URL override for the AI provider API (advanced). ähnelt.
+        /// </summary>
+        public static string AIProvider_BaseUrl_Tooltip {
+            get {
+                return ResourceManager.GetString("AIProvider_BaseUrl_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Default model ähnelt.
+        /// </summary>
+        public static string AIProvider_DefaultModel {
+            get {
+                return ResourceManager.GetString("AIProvider_DefaultModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The default model used when the request does not specify a model override. ähnelt.
+        /// </summary>
+        public static string AIProvider_DefaultModel_Tooltip {
+            get {
+                return ResourceManager.GetString("AIProvider_DefaultModel_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (seconds) ähnelt.
+        /// </summary>
+        public static string AIProvider_TimeoutSeconds {
+            get {
+                return ResourceManager.GetString("AIProvider_TimeoutSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Default timeout for AI requests in seconds. ähnelt.
+        /// </summary>
+        public static string AIProvider_TimeoutSeconds_Tooltip {
+            get {
+                return ResourceManager.GetString("AIProvider_TimeoutSeconds_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die EOS token ID ähnelt.
         /// </summary>
         public static string AiTokenizerBase_EOSToken {
@@ -102,6 +336,24 @@ namespace FlowBlox.Core {
         public static string AiTokenizerBase_EOSToken_Tooltip {
             get {
                 return ResourceManager.GetString("AiTokenizerBase_EOSToken_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die EOS tokens ähnelt.
+        /// </summary>
+        public static string AiTokenizerBase_EOSTokens {
+            get {
+                return ResourceManager.GetString("AiTokenizerBase_EOSTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional list of EOS token IDs (comma/whitespace separated). If set, this list is used to stop generation; otherwise EOSToken is used. Example: 32007,32001,32000 ähnelt.
+        /// </summary>
+        public static string AiTokenizerBase_EOSTokens_Tooltip {
+            get {
+                return ResourceManager.GetString("AiTokenizerBase_EOSTokens_Tooltip", resourceCulture);
             }
         }
         
@@ -2825,6 +3077,18 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects the ONNX execution provider for the entire application process.
+        ///The value is read from the global option AI.Onnx.Provider.
+        ///Supported values: Default (CPU), CUDA, DirectML, OpenVINO.
+        ///Note: Once a provider is loaded, switching providers within the same process is not supported. Restart the application after changing this option. ähnelt.
+        /// </summary>
+        public static string OnnxBaseFlowBlock_AiExecutionProvider_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxBaseFlowBlock_AiExecutionProvider_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Associated ONNX Flow Block (Inference Session) ähnelt.
         /// </summary>
         public static string OnnxBaseFlowBlock_AssociatedOnnxFlowBlock {
@@ -2848,6 +3112,69 @@ namespace FlowBlox.Core {
         public static string OnnxBaseFlowBlock_Groups_ExtendedSettings {
             get {
                 return ResourceManager.GetString("OnnxBaseFlowBlock_Groups_ExtendedSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI tokenizer ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_AiTokenizer {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_AiTokenizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text generation using ONNX Runtime GenAI (KV cache / past_key_values / present) with incremental decoding for improved performance. ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ONNX GenAI Text Generation ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max tokens ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_MaxTokens {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_MaxTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Prompt ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_Prompt {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Token selection strategy ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_TokenSelectionStrategy {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_TokenSelectionStrategy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls how the next token is selected from the logits (e.g., ArgMax, sampling). ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_TokenSelectionStrategy_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_TokenSelectionStrategy_Tooltip", resourceCulture);
             }
         }
         
@@ -2902,6 +3229,195 @@ namespace FlowBlox.Core {
         public static string OnnxQuestionAnsweringFlowBlock_Question {
             get {
                 return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Chat template ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_ChatTemplate {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_ChatTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Template for chat prompts. Uses placeholders {SystemPrompt} and {UserPrompt}. Can be populated via toolbox. ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_ChatTemplate_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_ChatTemplate_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runs text generation via ONNX Runtime GenAI (e.g., Phi-3.5) and supports chat templates. ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ONNX GenAI ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max new tokens ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_MaxNewTokens {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_MaxNewTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum number of new tokens to generate (in addition to the prompt). ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_MaxNewTokens_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_MaxNewTokens_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Model folder ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_ModelFolder {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_ModelFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Folder containing the GenAI model (including genai.config, *.onnx and tokenizer assets). ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Prompt ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_Prompt {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die System prompt ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_SystemPrompt {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_SystemPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die System instruction for the model (inserted into the chat template). ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_SystemPrompt_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_SystemPrompt_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Temperature ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_Temperature {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_Temperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sampling temperature. 0 means deterministic generation (no sampling). ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_Temperature_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_Temperature_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Token selection strategy ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls whether generation is deterministic or sampling-based (e.g., ArgMax vs. sampling). ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Top-K ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_TopK {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_TopK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Top-K sampling. Limits choices to the K most likely tokens. ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_TopK_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_TopK_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Top-P ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_TopP {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_TopP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Top-P (nucleus sampling). Range 0–1. ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_TopP_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_TopP_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use chat template ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_UseChatTemplate {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_UseChatTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, the prompt is built from SystemPrompt and UserPrompt using the chat template. ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_UseChatTemplate_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_UseChatTemplate_Tooltip", resourceCulture);
             }
         }
         
@@ -2974,6 +3490,60 @@ namespace FlowBlox.Core {
         public static string OnnxTextGenerationFlowBlock_TokenSelectionStrategy_Tooltip {
             get {
                 return ResourceManager.GetString("OnnxTextGenerationFlowBlock_TokenSelectionStrategy_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Organization ID ähnelt.
+        /// </summary>
+        public static string OpenAIProvider_OrganizationId {
+            get {
+                return ResourceManager.GetString("OpenAIProvider_OrganizationId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional OpenAI organization ID. Only needed for some account setups. ähnelt.
+        /// </summary>
+        public static string OpenAIProvider_OrganizationId_Tooltip {
+            get {
+                return ResourceManager.GetString("OpenAIProvider_OrganizationId_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project ID ähnelt.
+        /// </summary>
+        public static string OpenAIProvider_ProjectId {
+            get {
+                return ResourceManager.GetString("OpenAIProvider_ProjectId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional OpenAI project ID header used for project-scoped keys and usage attribution. ähnelt.
+        /// </summary>
+        public static string OpenAIProvider_ProjectId_Tooltip {
+            get {
+                return ResourceManager.GetString("OpenAIProvider_ProjectId_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Store responses ähnelt.
+        /// </summary>
+        public static string OpenAIProvider_StoreResponses {
+            get {
+                return ResourceManager.GetString("OpenAIProvider_StoreResponses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, the provider requests storing responses (if supported by the API/account). ähnelt.
+        /// </summary>
+        public static string OpenAIProvider_StoreResponses_Tooltip {
+            get {
+                return ResourceManager.GetString("OpenAIProvider_StoreResponses_Tooltip", resourceCulture);
             }
         }
         
@@ -3064,6 +3634,42 @@ namespace FlowBlox.Core {
         public static string Phi2AiTokenizer_TokenizerConfiguration_Tooltip {
             get {
                 return ResourceManager.GetString("Phi2AiTokenizer_TokenizerConfiguration_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer for Phi-3/Phi-3.5 (Llama/SentencePiece) based on tokenizer.model, including automatic resolution of special token IDs. ähnelt.
+        /// </summary>
+        public static string Phi3AiTokenizer_Description {
+            get {
+                return ResourceManager.GetString("Phi3AiTokenizer_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Phi-3 Tokenizer ähnelt.
+        /// </summary>
+        public static string Phi3AiTokenizer_DisplayName {
+            get {
+                return ResourceManager.GetString("Phi3AiTokenizer_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer model path ähnelt.
+        /// </summary>
+        public static string Phi3AiTokenizer_TokenizerModelPath {
+            get {
+                return ResourceManager.GetString("Phi3AiTokenizer_TokenizerModelPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path to the tokenizer.model (SentencePiece) file for the Phi-3/Phi-3.5 tokenizer. ähnelt.
+        /// </summary>
+        public static string Phi3AiTokenizer_TokenizerModelPath_Tooltip {
+            get {
+                return ResourceManager.GetString("Phi3AiTokenizer_TokenizerModelPath_Tooltip", resourceCulture);
             }
         }
         
@@ -4103,6 +4709,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Provider ähnelt.
+        /// </summary>
+        public static string TypeNames_AIProvider {
+            get {
+                return ResourceManager.GetString("TypeNames_AIProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die CSV table ähnelt.
         /// </summary>
         public static string TypeNames_CsvTable {
@@ -4126,6 +4741,15 @@ namespace FlowBlox.Core {
         public static string TypeNames_FileObject {
             get {
                 return ResourceManager.GetString("TypeNames_FileObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OpenAI Provider ähnelt.
+        /// </summary>
+        public static string TypeNames_OpenAIProvider {
+            get {
+                return ResourceManager.GetString("TypeNames_OpenAIProvider", resourceCulture);
             }
         }
         

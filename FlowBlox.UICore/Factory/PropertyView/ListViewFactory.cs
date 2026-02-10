@@ -8,28 +8,19 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters;
-using FlowBlox.UICore.Factory.PropertyView;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
 using MahApps.Metro.IconPacks;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace FlowBlox.UICore.Factory.PropertyView
 {

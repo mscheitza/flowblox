@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
+﻿namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 {
     /// <summary>
     /// Selenium settings specialized for Firefox (Gecko) browsers.

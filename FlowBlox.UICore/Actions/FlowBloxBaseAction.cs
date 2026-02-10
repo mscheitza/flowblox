@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace FlowBlox.UICore.Actions
+﻿namespace FlowBlox.UICore.Actions
 {
     public abstract class FlowBloxBaseAction
     {

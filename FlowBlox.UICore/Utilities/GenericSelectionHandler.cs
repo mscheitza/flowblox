@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace FlowBlox.UICore.Utilities
+﻿namespace FlowBlox.UICore.Utilities
 {
     public class DisplayItem
     {

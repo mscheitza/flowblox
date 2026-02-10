@@ -1,16 +1,13 @@
 ﻿using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
-using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Utilities;
 using MahApps.Metro.Controls;
-using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using Newtonsoft.Json;
-using FlowBlox.Core.Util;
 
 namespace FlowBlox.Core.Authentication
 {

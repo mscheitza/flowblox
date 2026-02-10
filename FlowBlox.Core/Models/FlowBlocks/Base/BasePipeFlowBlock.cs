@@ -3,8 +3,6 @@ using FlowBlox.Core.Attributes;
 using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Util.FlowBlocks;
-using FlowBlox.Core.Extensions;
-using FlowBlox.Core.Models.FlowBlocks.Format;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {

@@ -1,9 +1,7 @@
 ﻿using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Provider;
-using FlowBlox.Core.Util.Controls;
 using FlowBlox.Views.PropertyView;
 using System;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 

@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using FlowBlox.Core.Util;
-using FlowBlox.Grid.Views.Main;
 using FlowBlox.Views.PropertyView;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.Core.Interfaces;

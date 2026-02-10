@@ -1,0 +1,31 @@
+﻿{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "ChatTemplates",
+      "Name": "Phi-3(.5) Instruct",
+      "Content": "<|system|>\n{SystemPrompt}\n<|end|>\n<|user|>\n{UserPrompt}\n<|end|>\n<|assistant|>\n",
+      "Description": "Phi-3(.5) instruct schema (system / user / assistant)."
+    },
+
+    {
+      "ToolboxCategory": "ChatTemplates",
+      "Name": "LLaMA / Mistral Instruct",
+      "Content": "<s>[INST] <<SYS>>\n{SystemPrompt}\n<</SYS>>\n\n{UserPrompt} [/INST]",
+      "Description": "LLaMA / Mistral instruct-style schema."
+    },
+
+    {
+      "ToolboxCategory": "ChatTemplates",
+      "Name": "ChatML (OpenAI-style)",
+      "Content": "<|im_start|>system\n{SystemPrompt}<|im_end|>\n<|im_start|>user\n{UserPrompt}<|im_end|>\n<|im_start|>assistant\n",
+      "Description": "ChatML-compatible schema."
+    },
+
+    {
+      "ToolboxCategory": "ChatTemplates",
+      "Name": "Plain Prompt (No Chat)",
+      "Content": "{UserPrompt}",
+      "Description": "Plain prompt without chat structure."
+    }
+  ]
+}

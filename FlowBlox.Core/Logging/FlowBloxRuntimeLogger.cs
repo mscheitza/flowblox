@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FlowBlox.Core.Util;
+﻿using FlowBlox.Core.Util;
 using log4net;
-using log4net.Config;
-using log4net.Util;
 
 namespace FlowBlox.Core.Logging
 {

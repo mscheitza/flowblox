@@ -3,7 +3,6 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
 using System.Reflection;
 
 namespace FlowBlox.Grid.Elements.Util

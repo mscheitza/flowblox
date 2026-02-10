@@ -1,12 +1,6 @@
-﻿using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Util.Resources;
+﻿using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
-using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.PropertyView;
-using FlowBlox.UICore.Views;
-using System;
-using System.Collections;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;

@@ -81,6 +81,44 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
             }
         }
 
+        public async Task<ApiResponse<string>> GetProjectContentAsync(string userToken, Guid projectGuid)
+        {
+            string url = UriHelper.ConcatUri(_baseUrl, $"project_content.php?guid={projectGuid}");
+
+            if (!string.IsNullOrEmpty(userToken))
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", userToken);
+
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var contentResponse = JsonConvert.DeserializeObject<FbGetProjectContentResponse>(jsonResponse);
+
+                    return new ApiResponse<string>
+                    {
+                        Success = true,
+                        ResultObject = contentResponse?.Content
+                    };
+                }
+                else
+                {
+                    return await CreateErrorApiResponse<string>(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
+                return new ApiResponse<string>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
+
         public class CreateProjectApiResponse : ApiResponse
         {
             public string ProjectGuid { get; set; }

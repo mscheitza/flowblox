@@ -1,6 +1,4 @@
-﻿using FlowBlox.Core.Enums;
-using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Util.Resources;
+﻿using FlowBlox.Core.Util.Resources;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 

@@ -3,12 +3,8 @@ using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base.DatasetSelection;
 using FlowBloxTest.DatasetSelection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace FlowBloxTest.Components
 {

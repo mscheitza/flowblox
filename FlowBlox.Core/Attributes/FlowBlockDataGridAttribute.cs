@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FlowBlox.Core.Attributes
+﻿namespace FlowBlox.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class FlowBlockDataGridAttribute : Attribute

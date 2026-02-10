@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Globalization;
-using System.Windows;
+﻿using System.Globalization;
 using System.Windows.Data;
-using FlowBlox.UICore.ViewModels;
-using System.Collections.ObjectModel;
 using FlowBlox.Core.Enums;
 
 namespace FlowBlox.UICore.Converters.TestDefinition

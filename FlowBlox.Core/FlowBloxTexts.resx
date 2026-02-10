@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
 	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
 		<xsd:element name="root" msdata:IsDataSet="true">
 			<xsd:complexType>
 				<xsd:choice maxOccurs="unbounded">
 					<xsd:element name="metadata">
 						<xsd:complexType>
 							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
 							</xsd:sequence>
-							<xsd:attribute name="name" use="required" type="xsd:string" />
-							<xsd:attribute name="type" type="xsd:string" />
-							<xsd:attribute name="mimetype" type="xsd:string" />
-							<xsd:attribute ref="xml:space" />
+							<xsd:attribute name="name" use="required" type="xsd:string"/>
+							<xsd:attribute name="type" type="xsd:string"/>
+							<xsd:attribute name="mimetype" type="xsd:string"/>
+							<xsd:attribute ref="xml:space"/>
 						</xsd:complexType>
 					</xsd:element>
 					<xsd:element name="assembly">
 						<xsd:complexType>
-							<xsd:attribute name="alias" type="xsd:string" />
-							<xsd:attribute name="name" type="xsd:string" />
+							<xsd:attribute name="alias" type="xsd:string"/>
+							<xsd:attribute name="name" type="xsd:string"/>
 						</xsd:complexType>
 					</xsd:element>
 					<xsd:element name="data">
 						<xsd:complexType>
 							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
 							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-							<xsd:attribute ref="xml:space" />
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+							<xsd:attribute ref="xml:space"/>
 						</xsd:complexType>
 					</xsd:element>
 					<xsd:element name="resheader">
 						<xsd:complexType>
 							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
 							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" />
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
 						</xsd:complexType>
 					</xsd:element>
 				</xsd:choice>
@@ -1706,84 +1706,294 @@ Use the "+" button to add entries to the table.</value>
 		<value>XPath</value>
 	</data>
 	<data name="XmlDocumentXPathSelector_AssociatedXmlDocument" xml:space="preserve">
-    <value>XML document (Flow Block)</value>
-  </data>
+		<value>XML document (Flow Block)</value>
+	</data>
 	<data name="InputBehavior_RowWise" xml:space="preserve">
-    <value>Row upon row</value>
-  </data>
+		<value>Row upon row</value>
+	</data>
 	<data name="InputBehavior_RowWiseValid" xml:space="preserve">
-    <value>Row upon row - valid rows</value>
-  </data>
+		<value>Row upon row - valid rows</value>
+	</data>
 	<data name="StartEndPatternSelectorFlowBlock_IncludePatternInResult" xml:space="preserve">
-    <value>Include pattern in output value</value>
-  </data>
+		<value>Include pattern in output value</value>
+	</data>
 	<data name="StartEndPatternSelectorFlowBlock_ReturnOptions" xml:space="preserve">
-    <value>Return options</value>
-  </data>
+		<value>Return options</value>
+	</data>
 	<data name="WebBrowserFlowBlock_RetryLimit" xml:space="preserve">
-  <value>Maximum number of retry attempts</value>
-</data>
+		<value>Maximum number of retry attempts</value>
+	</data>
 	<data name="WebBrowserFlowBlock_RetryTimeunit" xml:space="preserve">
-  <value>Retry interval (in milliseconds)</value>
-</data>
+		<value>Retry interval (in milliseconds)</value>
+	</data>
 	<data name="WebBrowserFlowBlock_Timeout" xml:space="preserve">
-  <value>Timeout (in seconds)</value>
-</data>
+		<value>Timeout (in seconds)</value>
+	</data>
 	<data name="WebBrowserFlowBlock_Timeout_Tooltip" xml:space="preserve">
-  <value>Specifies the maximum number of seconds to wait for a browser operation before a timeout occurs.</value>
-</data>
+		<value>Specifies the maximum number of seconds to wait for a browser operation before a timeout occurs.</value>
+	</data>
 	<data name="WebBrowserFlowBlock_RetryLimit_Tooltip" xml:space="preserve">
-  <value>Defines how many times a failed browser action will be retried before an error is returned.</value>
-</data>
+		<value>Defines how many times a failed browser action will be retried before an error is returned.</value>
+	</data>
 	<data name="WebBrowserFlowBlock_RetryTimeunit_Tooltip" xml:space="preserve">
-  <value>The delay in milliseconds between retry attempts.</value>
-</data>
+		<value>The delay in milliseconds between retry attempts.</value>
+	</data>
 	<data name="IndexFlowBlock_DisplayName" xml:space="preserve">
-  <value>Index</value>
-</data>
+		<value>Index</value>
+	</data>
 	<data name="IndexFlowBlock_Description" xml:space="preserve">
-  <value>Generates a sequential index value. Optionally resets the index to the initial value when the linked context flow block starts a new iteration.</value>
-</data>
+		<value>Generates a sequential index value. Optionally resets the index to the initial value when the linked context flow block starts a new iteration.</value>
+	</data>
 	<data name="IndexFlowBlock_InitialIndex" xml:space="preserve">
-  <value>Initial index</value>
-</data>
+		<value>Initial index</value>
+	</data>
 	<data name="IndexFlowBlock_Context" xml:space="preserve">
-  <value>Index context</value>
-</data>
+		<value>Index context</value>
+	</data>
 	<data name="IndexFlowBlock_InitialIndex_Tooltip" xml:space="preserve">
-  <value>Defines the starting value of the index counter. The index begins with this value and is increased by one on each execution.</value>
-</data>
+		<value>Defines the starting value of the index counter. The index begins with this value and is increased by one on each execution.</value>
+	</data>
 	<data name="IndexFlowBlock_Context_Tooltip" xml:space="preserve">
-  <value>Optional context flow block. If set, the index is reset to the initial value whenever this flow block starts a new iteration. If no context is specified, the index continues across the entire runtime execution.</value>
-</data>
+		<value>Optional context flow block. If set, the index is reset to the initial value whenever this flow block starts a new iteration. If no context is specified, the index continues across the entire runtime execution.</value>
+	</data>
 	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
-  <value>Path used to navigate through the JSON document. Use '/' to separate nodes. Object properties are addressed by their property name, array elements by a numeric index (e.g. 'participants/addresses/0').</value>
-</data>
+		<value>Path used to navigate through the JSON document. Use '/' to separate nodes. Object properties are addressed by their property name, array elements by a numeric index (e.g. 'participants/addresses/0').</value>
+	</data>
 	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
-  <value>Calculation</value>
-</data>
+		<value>Calculation</value>
+	</data>
 	<data name="MathFlowBlock_Description" xml:space="preserve">
-  <value>Performs mathematical calculations based on an expression syntax and supports referenced fields as parameters.</value>
-</data>
+		<value>Performs mathematical calculations based on an expression syntax and supports referenced fields as parameters.</value>
+	</data>
 	<data name="MathFlowBlock_Expression" xml:space="preserve">
-  <value>Math expression</value>
-</data>
+		<value>Math expression</value>
+	</data>
 	<data name="MathFlowBlock_Expression_Tooltip" xml:space="preserve">
-  <value>Mathematical expression using supported operators (+, -, *, /, parentheses). Field references can be used directly in the expression, e.g. "$Order::Quantity * 10".</value>
-</data>
+		<value>Mathematical expression using supported operators (+, -, *, /, parentheses). Field references can be used directly in the expression, e.g. "$Order::Quantity * 10".</value>
+	</data>
 	<data name="FloxBloxCategory_Calculation" xml:space="preserve">
-	<value>Calculation</value>
-</data>
+		<value>Calculation</value>
+	</data>
 	<data name="TableWriterFlowBlock_ColumnAlreadyExists" xml:space="preserve">
-  <value>A column with the name "{0}" already exists.</value>
-</data>
+		<value>A column with the name "{0}" already exists.</value>
+	</data>
 	<data name="ExcelTableUIActions_Open" xml:space="preserve">
-    <value>&amp;Open table</value>
-  </data>
+		<value>&amp;Open table</value>
+	</data>
 	<data name="MemoryObject_Field_Tooltip" xml:space="preserve">
-  <value>Specifies a stored or runtime field from which the textual or binary content is read or to which it is written (depending on the data type). Application-wide fields can be created via Window → Custom Fields → Custom Memory Fields. The content is then read from or stored in this field.</value>
-</data>
+		<value>Specifies a stored or runtime field from which the textual or binary content is read or to which it is written (depending on the data type). Application-wide fields can be created via Window → Custom Fields → Custom Memory Fields. The content is then read from or stored in this field.</value>
+	</data>
 	<data name="MemoryObject_Filename_Tooltip" xml:space="preserve">
-  <value>Specifies the filename used for temporary storage, for example to enable live editing or to open the file in the default application.</value>
-</data>
+		<value>Specifies the filename used for temporary storage, for example to enable live editing or to open the file in the default application.</value>
+	</data>
+	<data name="OnnxBaseFlowBlock_AiExecutionProvider_Tooltip" xml:space="preserve">
+		<value>Selects the ONNX execution provider for the entire application process.
+The value is read from the global option AI.Onnx.Provider.
+Supported values: Default (CPU), CUDA, DirectML, OpenVINO.
+Note: Once a provider is loaded, switching providers within the same process is not supported. Restart the application after changing this option.</value>
+	</data>
+	<data name="AIPromptFlowBlock_DisplayName" xml:space="preserve">
+		<value>AI Prompt</value>
+	</data>
+	<data name="AIPromptFlowBlock_Description" xml:space="preserve">
+		<value>Executes a prompt using a selected AI provider and returns the raw text response.</value>
+	</data>
+	<data name="AIPromptFlowBlock_Groups_Request" xml:space="preserve">
+		<value>Request</value>
+	</data>
+	<data name="AIPromptFlowBlock_Groups_Output" xml:space="preserve">
+		<value>Output</value>
+	</data>
+	<data name="AIPromptFlowBlock_Provider" xml:space="preserve">
+		<value>AI Provider</value>
+	</data>
+	<data name="AIPromptFlowBlock_Provider_Tooltip" xml:space="preserve">
+		<value>Select the AI provider (e.g., OpenAI, Anthropic) used to execute the prompt.</value>
+	</data>
+	<data name="AIPromptFlowBlock_PromptTemplate" xml:space="preserve">
+		<value>Prompt</value>
+	</data>
+	<data name="AIPromptFlowBlock_PromptTemplate_Tooltip" xml:space="preserve">
+		<value>The prompt to send to the AI provider. You can use FlowBlox field placeholders (e.g., %%Input%%) which are resolved at runtime.</value>
+	</data>
+	<data name="AIPromptFlowBlock_SystemInstruction" xml:space="preserve">
+		<value>System instruction</value>
+	</data>
+	<data name="AIPromptFlowBlock_SystemInstruction_Tooltip" xml:space="preserve">
+		<value>Optional system instruction to guide the assistant's behavior (if supported by the provider).</value>
+	</data>
+	<data name="AIPromptFlowBlock_ModelOverride" xml:space="preserve">
+		<value>Model override</value>
+	</data>
+	<data name="AIPromptFlowBlock_ModelOverride_Tooltip" xml:space="preserve">
+		<value>Optional model name to override the provider's default model.</value>
+	</data>
+	<data name="AIPromptFlowBlock_Temperature" xml:space="preserve">
+		<value>Temperature</value>
+	</data>
+	<data name="AIPromptFlowBlock_Temperature_Tooltip" xml:space="preserve">
+		<value>Controls randomness. Use 0 for deterministic results.</value>
+	</data>
+	<data name="AIPromptFlowBlock_MaxTokens" xml:space="preserve">
+		<value>Max tokens</value>
+	</data>
+	<data name="AIPromptFlowBlock_MaxTokens_Tooltip" xml:space="preserve">
+		<value>Optional limit for the generated output tokens.</value>
+	</data>
+	<data name="AIPromptFlowBlock_TimeoutSecondsOverride" xml:space="preserve">
+		<value>Timeout override (seconds)</value>
+	</data>
+	<data name="AIPromptFlowBlock_TimeoutSecondsOverride_Tooltip" xml:space="preserve">
+		<value>Optional timeout override for this flow block execution. If empty, the provider default timeout is used.</value>
+	</data>
+	<data name="TypeNames_AIProvider" xml:space="preserve">
+		<value>AI Provider</value>
+	</data>
+	<data name="AIProvider_ApiKey" xml:space="preserve">
+		<value>API key</value>
+	</data>
+	<data name="AIProvider_ApiKey_Tooltip" xml:space="preserve">
+		<value>The API key used to authenticate with the AI provider.</value>
+	</data>
+	<data name="AIProvider_DefaultModel" xml:space="preserve">
+		<value>Default model</value>
+	</data>
+	<data name="AIProvider_DefaultModel_Tooltip" xml:space="preserve">
+		<value>The default model used when the request does not specify a model override.</value>
+	</data>
+	<data name="AIProvider_TimeoutSeconds" xml:space="preserve">
+		<value>Timeout (seconds)</value>
+	</data>
+	<data name="AIProvider_TimeoutSeconds_Tooltip" xml:space="preserve">
+		<value>Default timeout for AI requests in seconds.</value>
+	</data>
+	<data name="AIProvider_BaseUrl" xml:space="preserve">
+		<value>Base URL</value>
+	</data>
+	<data name="AIProvider_BaseUrl_Tooltip" xml:space="preserve">
+		<value>Optional base URL override for the AI provider API (advanced).</value>
+	</data>
+	<data name="TypeNames_OpenAIProvider" xml:space="preserve">
+		<value>OpenAI Provider</value>
+	</data>
+	<data name="OpenAIProvider_OrganizationId" xml:space="preserve">
+		<value>Organization ID</value>
+	</data>
+	<data name="OpenAIProvider_OrganizationId_Tooltip" xml:space="preserve">
+		<value>Optional OpenAI organization ID. Only needed for some account setups.</value>
+	</data>
+	<data name="OpenAIProvider_ProjectId" xml:space="preserve">
+		<value>Project ID</value>
+	</data>
+	<data name="OpenAIProvider_ProjectId_Tooltip" xml:space="preserve">
+		<value>Optional OpenAI project ID header used for project-scoped keys and usage attribution.</value>
+	</data>
+	<data name="OpenAIProvider_StoreResponses" xml:space="preserve">
+		<value>Store responses</value>
+	</data>
+	<data name="OpenAIProvider_StoreResponses_Tooltip" xml:space="preserve">
+		<value>If enabled, the provider requests storing responses (if supported by the API/account).</value>
+	</data>
+	<data name="Phi3AiTokenizer_DisplayName" xml:space="preserve">
+		<value>Phi-3 Tokenizer</value>
+	</data>
+	<data name="Phi3AiTokenizer_Description" xml:space="preserve">
+		<value>Tokenizer for Phi-3/Phi-3.5 (Llama/SentencePiece) based on tokenizer.model, including automatic resolution of special token IDs.</value>
+	</data>
+	<data name="Phi3AiTokenizer_TokenizerModelPath" xml:space="preserve">
+		<value>Tokenizer model path</value>
+	</data>
+	<data name="Phi3AiTokenizer_TokenizerModelPath_Tooltip" xml:space="preserve">
+		<value>Path to the tokenizer.model (SentencePiece) file for the Phi-3/Phi-3.5 tokenizer.</value>
+	</data>
+	<data name="OnnxGenAIFlowBlock_DisplayName" xml:space="preserve">
+		<value>ONNX GenAI Text Generation</value>
+	</data>
+	<data name="OnnxGenAIFlowBlock_Description" xml:space="preserve">
+		<value>Text generation using ONNX Runtime GenAI (KV cache / past_key_values / present) with incremental decoding for improved performance.</value>
+	</data>
+	<data name="OnnxGenAIFlowBlock_AiTokenizer" xml:space="preserve">
+		<value>AI tokenizer</value>
+	</data>
+	<data name="OnnxGenAIFlowBlock_Prompt" xml:space="preserve">
+		<value>Prompt</value>
+	</data>
+	<data name="OnnxGenAIFlowBlock_TokenSelectionStrategy" xml:space="preserve">
+		<value>Token selection strategy</value>
+	</data>
+	<data name="OnnxGenAIFlowBlock_TokenSelectionStrategy_Tooltip" xml:space="preserve">
+		<value>Controls how the next token is selected from the logits (e.g., ArgMax, sampling).</value>
+	</data>
+	<data name="OnnxGenAIFlowBlock_MaxTokens" xml:space="preserve">
+		<value>Max tokens</value>
+	</data>
+	<data name="AiTokenizerBase_EOSTokens" xml:space="preserve">
+		<value>EOS tokens</value>
+	</data>
+	<data name="AiTokenizerBase_EOSTokens_Tooltip" xml:space="preserve">
+		<value>Optional list of EOS token IDs (comma/whitespace separated). If set, this list is used to stop generation; otherwise EOSToken is used. Example: 32007,32001,32000</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_DisplayName" xml:space="preserve">
+		<value>ONNX GenAI</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_Description" xml:space="preserve">
+		<value>Runs text generation via ONNX Runtime GenAI (e.g., Phi-3.5) and supports chat templates.</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_ModelFolder" xml:space="preserve">
+		<value>Model folder</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip" xml:space="preserve">
+		<value>Folder containing the GenAI model (including genai.config, *.onnx and tokenizer assets).</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_Prompt" xml:space="preserve">
+		<value>Prompt</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy" xml:space="preserve">
+		<value>Token selection strategy</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy_Tooltip" xml:space="preserve">
+		<value>Controls whether generation is deterministic or sampling-based (e.g., ArgMax vs. sampling).</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_MaxNewTokens" xml:space="preserve">
+		<value>Max new tokens</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_MaxNewTokens_Tooltip" xml:space="preserve">
+		<value>Maximum number of new tokens to generate (in addition to the prompt).</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_Temperature" xml:space="preserve">
+		<value>Temperature</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_Temperature_Tooltip" xml:space="preserve">
+		<value>Sampling temperature. 0 means deterministic generation (no sampling).</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_TopP" xml:space="preserve">
+		<value>Top-P</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_TopP_Tooltip" xml:space="preserve">
+		<value>Top-P (nucleus sampling). Range 0–1.</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_TopK" xml:space="preserve">
+		<value>Top-K</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_TopK_Tooltip" xml:space="preserve">
+		<value>Top-K sampling. Limits choices to the K most likely tokens.</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_UseChatTemplate" xml:space="preserve">
+		<value>Use chat template</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_UseChatTemplate_Tooltip" xml:space="preserve">
+		<value>If enabled, the prompt is built from SystemPrompt and UserPrompt using the chat template.</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_SystemPrompt" xml:space="preserve">
+		<value>System prompt</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_SystemPrompt_Tooltip" xml:space="preserve">
+		<value>System instruction for the model (inserted into the chat template).</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_ChatTemplate" xml:space="preserve">
+		<value>Chat template</value>
+	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_ChatTemplate_Tooltip" xml:space="preserve">
+		<value>Template for chat prompts. Uses placeholders {SystemPrompt} and {UserPrompt}. Can be populated via toolbox.</value>
+	</data>
 </root>

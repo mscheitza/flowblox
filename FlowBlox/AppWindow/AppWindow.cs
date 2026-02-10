@@ -6,7 +6,6 @@ using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
-using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Interceptors;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.ObjectManager;
@@ -28,7 +27,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -65,6 +63,7 @@ namespace FlowBlox.AppWindow
         private ProjectPanel _dockContentProjectPanel;
 
         private string _recentProjectPath;
+        private string _recentProjectSpaceGuid;
         private ComponentLibraryPanel _componentLibraryPanel;
         private DockContentUserControlWrapper<FieldView> _fieldViewPanel;
         private DockContentUserControlWrapper<RuntimeView> _runtimeViewPanel;
@@ -249,16 +248,16 @@ namespace FlowBlox.AppWindow
 
             if (FlowBloxProjectManager.Instance.ActiveProject != null)
             {
-                DialogResult Result = FlowBloxMessageBox.Show
+                DialogResult result = FlowBloxMessageBox.Show
                     (
                         this,
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_NewProjectConfirm_Message", typeof(FlowBloxMainUITexts)) + "\r\n" +
+                        string.Format(FlowBloxResourceUtil.GetLocalizedString("AppWindow_NewProjectConfirm_Message", typeof(FlowBloxMainUITexts)), FlowBloxProjectManager.Instance.ActiveProject.ProjectName) + "\r\n" +
                         "\r\n" +
                         FlowBloxResourceUtil.GetLocalizedString("AppWindow_SaveReminder_Message", typeof(FlowBloxMainUITexts)),
                         FlowBloxResourceUtil.GetLocalizedString("AppWindow_NewProjectConfirm_Title", typeof(FlowBloxMainUITexts)), FlowBloxMessageBox.Buttons.YesNo, FlowBloxMessageBox.Icons.Question
                     );
 
-                if (Result == DialogResult.No)
+                if (result == DialogResult.No)
                 {
                     createProject = false;
                 }
@@ -365,48 +364,63 @@ namespace FlowBlox.AppWindow
             }
         }
 
-        private void rbOpenProject_Click(object sender, EventArgs e)
+        private void OpenProjectWithConfirmation(Action openProjectAction)
         {
-            bool openProject = true;
+            if (openProjectAction == null)
+                throw new ArgumentNullException(nameof(openProjectAction));
+
+            bool proceed = true;
 
             if (FlowBloxProjectManager.Instance.ActiveProject != null)
             {
-                DialogResult Result = FlowBloxMessageBox.Show
-                    (
-                        this,
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_OpenProjectConfirm_Message", typeof(FlowBloxMainUITexts)) + "\r\n" +
-                        "\r\n" +
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_SaveReminder_Message", typeof(FlowBloxMainUITexts)),
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_OpenProjectConfirm_Title", typeof(FlowBloxMainUITexts)), FlowBloxMessageBox.Buttons.YesNo, FlowBloxMessageBox.Icons.Question
-                    );
+                DialogResult result = FlowBloxMessageBox.Show(
+                    this,
+                    string.Format(FlowBloxResourceUtil.GetLocalizedString("AppWindow_OpenProjectConfirm_Message", typeof(FlowBloxMainUITexts)), FlowBloxProjectManager.Instance.ActiveProject.ProjectName) + "\r\n" +
+                    "\r\n" +
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_SaveReminder_Message", typeof(FlowBloxMainUITexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_OpenProjectConfirm_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.YesNo,
+                    FlowBloxMessageBox.Icons.Question
+                );
 
-                if (Result == DialogResult.No)
-                {
-                    openProject = false;
-                }
+                if (result == DialogResult.No)
+                    proceed = false;
             }
 
-            if (openProject)
+            if (proceed)
             {
-                openProjectDialog.InitialDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectDir"].Value;
-                if (!Directory.Exists(openProjectDialog.InitialDirectory))
-                {
-                    Directory.CreateDirectory(openProjectDialog.InitialDirectory);
-                }
-                if (openProjectDialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    this.CloseProject();
-
-                    this._recentProjectPath = openProjectDialog.FileName;
-
-                    UnloadProject();
-                    OpenProjectFromRecentProjectPath();
-                }
+                openProjectAction();
             }
             else
             {
                 UpdateUI();
             }
+        }
+
+        private void rbOpenProject_Click(object sender, EventArgs e)
+        {
+            OpenProjectWithConfirmation(() =>
+            {
+                openProjectDialog.InitialDirectory =
+                    FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectDir"].Value;
+
+                if (!Directory.Exists(openProjectDialog.InitialDirectory))
+                    Directory.CreateDirectory(openProjectDialog.InitialDirectory);
+
+                if (openProjectDialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    CloseProject();
+
+                    _recentProjectPath = openProjectDialog.FileName;
+
+                    UnloadProject();
+                    OpenProjectFromRecentProjectPath();
+                }
+                else
+                {
+                    UpdateUI();
+                }
+            });
         }
 
         private void rbSaveProject_Click(object sender, EventArgs e)
@@ -492,16 +506,16 @@ namespace FlowBlox.AppWindow
         {
             if (FlowBloxProjectManager.Instance.ActiveProject != null)
             {
-                DialogResult Result = FlowBloxMessageBox.Show
+                DialogResult result = FlowBloxMessageBox.Show
                     (
                         this,
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_SaveBeforeExit_Message", typeof(FlowBloxMainUITexts)) + FlowBloxProjectManager.Instance.ActiveProject.ProjectName + "\"?",
+                        string.Format(FlowBloxResourceUtil.GetLocalizedString("AppWindow_SaveBeforeExit_Message", typeof(FlowBloxMainUITexts)), FlowBloxProjectManager.Instance.ActiveProject.ProjectName),
                         FlowBloxResourceUtil.GetLocalizedString("AppWindow_SaveBeforeExit_Title", typeof(FlowBloxMainUITexts)),
                         FlowBloxMessageBox.Buttons.YesNo,
                         FlowBloxMessageBox.Icons.Question
                     );
 
-                if (Result == DialogResult.Yes)
+                if (result == DialogResult.Yes)
                 {
                     if (_recentProjectPath.Equals(string.Empty))
                     {
@@ -576,12 +590,29 @@ namespace FlowBlox.AppWindow
 
         private void OpenProjectFromRecentProjectPath()
         {
+            TryOpenProject(() =>
+            {
+                var project = FlowBloxProject.FromFile(_recentProjectPath);
+                FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
+                return project;
+            });
+        }
+
+        private bool TryOpenProject(Func<FlowBloxProject> projectLoader)
+        {
+            if (projectLoader == null)
+                throw new ArgumentNullException(nameof(projectLoader));
+
             FlowBloxProject project;
             try
             {
-                project = FlowBloxProject.FromFile(_recentProjectPath);
+                project = projectLoader();
+
+                if (project == null)
+                    return false;
+
                 FlowBloxProjectManager.Instance.ActiveProject = project;
-                FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
+
                 this.OnAfterUIRegistryInitialized();
                 this.OnAfterProjectOpened(project);
             }
@@ -590,43 +621,41 @@ namespace FlowBlox.AppWindow
                 var logger = FlowBloxLogManager.Instance.GetLogger();
                 logger.Exception(e);
 
-                FlowBloxMessageBox.Show
-                    (
-                        this,
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_ProjectLoadFailed_Message", typeof(FlowBloxMainUITexts)),
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_ProjectLoadFailed_Title", typeof(FlowBloxMainUITexts)),
-                        FlowBloxMessageBox.Buttons.OK,
-                        FlowBloxMessageBox.Icons.Warning
-                    );
+                FlowBloxMessageBox.Show(
+                    this,
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_ProjectLoadFailed_Message", typeof(FlowBloxMainUITexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_ProjectLoadFailed_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Warning
+                );
 
-                FlowBloxMessageBox.Show
-                    (
-                        this,
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_ErrorReport_Message", typeof(FlowBloxMainUITexts)) + "\r\n" +
-                        "\r\n" +
-                        "Exception:" + "\r\n" +
-                        e.ToString(),
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_ErrorReport_Title", typeof(FlowBloxMainUITexts)),
-                        FlowBloxMessageBox.Buttons.OK,
-                        FlowBloxMessageBox.Icons.Info
-                    );
+                FlowBloxMessageBox.Show(
+                    this,
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_ErrorReport_Message", typeof(FlowBloxMainUITexts)) + "\r\n" +
+                    "\r\n" +
+                    "Exception:" + "\r\n" +
+                    e.ToString(),
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_ErrorReport_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Info
+                );
 
-                return;
+                return false;
             }
 
             if (!project.Notice.Equals(string.Empty))
             {
-                FlowBloxMessageBox.Show
-                    (
-                        this,
-                        project.Notice,
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_ProjectNotice_Title", typeof(FlowBloxMainUITexts)),
-                        FlowBloxMessageBox.Buttons.OK,
-                        FlowBloxMessageBox.Icons.Info
-                    );
+                FlowBloxMessageBox.Show(
+                    this,
+                    project.Notice,
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_ProjectNotice_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Info
+                );
             }
 
             UpdateUI_ProjectName();
+            return true;
         }
 
         private void OnAfterProjectOpened(FlowBloxProject project)
@@ -682,16 +711,21 @@ namespace FlowBlox.AppWindow
         private void AppWindow_Load(object sender, EventArgs e)
         {
             InitVersion();
-            InitProjectFile();
+            InitPreconfiguredProject();
             Background_TrialInfo.RunWorkerAsync();
         }
 
         public void SetProjectFile(string projectFile) => _recentProjectPath = projectFile;
 
-        private void InitProjectFile()
+        public void SetProjectSpaceGuid(string projectSpaceGuid) => _recentProjectSpaceGuid = projectSpaceGuid;
+
+        private void InitPreconfiguredProject()
         {
             if (File.Exists(_recentProjectPath))
                 OpenProjectFromRecentProjectPath();
+
+            if (!string.IsNullOrEmpty(_recentProjectSpaceGuid))
+                OpenProjectFromProjectSpace(_recentProjectSpaceGuid);
         }
 
         private void itmOpenOutputDir_Click(object sender, EventArgs e)
@@ -1056,28 +1090,41 @@ namespace FlowBlox.AppWindow
 
         private void itmOpenFromProjectSpace_Click(object sender, EventArgs e)
         {
-            var dialog = new PSProjectsWindow();
-            WindowsFormWPFHelper.ShowDialog(dialog, this);
+            OpenProjectWithConfirmation(() =>
+            {
+                var dialog = new PSProjectsWindow();
+                WindowsFormWPFHelper.ShowDialog(dialog, this);
 
-            if (dialog.DialogResult != true)
-                return;
+                if (dialog.DialogResult != true)
+                    return;
 
-            var projectGuid = dialog.Tag as string;
-            if (string.IsNullOrWhiteSpace(projectGuid))
-                return;
+                var projectGuid = dialog.Tag as string;
+                if (string.IsNullOrWhiteSpace(projectGuid))
+                    return;
 
+                CloseProject();
+                UnloadProject();
+                OpenProjectFromProjectSpace(projectGuid);
+            });
+        }
+
+        private void OpenProjectFromProjectSpace(string projectGuid)
+        {
             var baseUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectApiServiceBaseUrl"].Value;
             var webApi = new FlowBloxWebApiService(baseUrl);
             var token = FlowBloxAccountManager.Instance.GetUserToken(baseUrl);
 
-            FlowBloxProject project = Task.Run(async () => await FlowBloxProject.FromProjectSpaceGuidAsync(projectGuid, token, webApi))
-                .GetAwaiter()
-                .GetResult();
+            FlowBloxProject loadedProject = null;
+            TryOpenProject(() =>
+            {
+                loadedProject = Task.Run(async () => await FlowBloxProject.FromProjectSpaceGuidAsync(projectGuid, token, webApi))
+                    .GetAwaiter()
+                    .GetResult();
 
-            if (project == null)
-                return;
+                FlowBloxProjectManager.Instance.ActiveProjectPath = null;
 
-            // TODO: Wie gehts weiter?
+                return loadedProject;
+            });
         }
 
         private void itmFbProjects_Click(object sender, EventArgs e)

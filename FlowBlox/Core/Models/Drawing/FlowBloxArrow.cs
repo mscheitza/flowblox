@@ -1,12 +1,6 @@
-﻿using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Util.Drawing;
-using FlowBlox.Grid.Elements.UserControls;
+﻿using FlowBlox.Grid.Elements.UserControls;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Models.Drawing
 {

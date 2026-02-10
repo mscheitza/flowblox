@@ -1,6 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.Components;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base

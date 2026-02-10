@@ -1,5 +1,4 @@
 ﻿using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.Components.Modifier

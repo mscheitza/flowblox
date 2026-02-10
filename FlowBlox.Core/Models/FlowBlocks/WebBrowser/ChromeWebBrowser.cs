@@ -1,8 +1,4 @@
-﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Newtonsoft.Json;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
+﻿using OpenQA.Selenium.Chrome;
 
 namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 {

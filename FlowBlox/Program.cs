@@ -1,18 +1,13 @@
 ﻿using CommandLine;
 using FlowBlox.Core.Authentication;
 using FlowBlox.Core.CommandLine;
-using FlowBlox.Core.DependencyInjection;
-using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Fonts;
-using FlowBlox.UICore.Utilities;
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -37,7 +32,9 @@ namespace FlowBlox
             var options = ParseCommandLine(args);
 
             var flowBloxAutoLoginExecutor = new FlowBloxAutoLoginExecutor();
-            Task.Run(async () => await flowBloxAutoLoginExecutor.TryAutoLoginAsync()).GetAwaiter().GetResult();
+            Task.Run(async () => await flowBloxAutoLoginExecutor.TryAutoLoginAsync())
+                .GetAwaiter()
+                .GetResult();
 
             InitProjectFile(options);
             Application.Run(AppWindow.AppWindow.Instance);
@@ -80,8 +77,10 @@ namespace FlowBlox
         {
             if (!string.IsNullOrEmpty(options?.ProjectFile))
                 AppWindow.AppWindow.Instance.SetProjectFile(options.ProjectFile);
-        }
 
+            if (!string.IsNullOrEmpty(options?.ProjectSpaceGuid))
+                AppWindow.AppWindow.Instance.SetProjectSpaceGuid(options.ProjectSpaceGuid);
+        }
 
         private static void InstallFonts()
         {

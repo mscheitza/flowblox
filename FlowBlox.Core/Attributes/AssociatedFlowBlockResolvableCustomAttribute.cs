@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FlowBlox.Core.Attributes
+﻿namespace FlowBlox.Core.Attributes
 {
     /// <summary>
     /// Indicates that a property referencing a flow block can be resolved via a custom member (property or parameterless method) on the same object, and optionally a display condition.

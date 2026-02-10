@@ -7,17 +7,14 @@ using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Factories;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
-using FlowBlox.Core.Migration;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Json;
-using Google.Protobuf;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO.Compression;
-using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 using System.Text;
 using static FlowBlox.Core.ExternalServices.FlowBloxWebApi.FlowBloxWebApiService;
@@ -444,15 +441,20 @@ namespace FlowBlox.Core.Models.Project
 
             try
             {
-                // Fetch project from API
+                // Fetch project metadata from API (no content anymore)
                 var remoteResp = await webApi.GetProjectAsync(new FbProjectRequest { Guid = projectSpaceGuid }, userToken);
-                if (remoteResp.ResultObject == null)
+                if (!remoteResp.Success || remoteResp.ResultObject == null)
                     throw new InvalidOperationException("Project not found in Project Space.");
 
-                if (string.IsNullOrWhiteSpace(remoteResp.ResultObject.ContentBase64))
+                // Fetch project content via separate endpoint
+                var contentResp = await webApi.GetProjectContentAsync(userToken, Guid.Parse(projectSpaceGuid));
+                if (!contentResp.Success)
+                    throw new InvalidOperationException($"Failed to retrieve project content from Project Space. {contentResp.ErrorMessage}");
+
+                if (string.IsNullOrWhiteSpace(contentResp.ResultObject))
                     throw new Exception("Project content is missing in Project Space response.");
 
-                var zipBytes = Convert.FromBase64String(remoteResp.ResultObject.ContentBase64);
+                var zipBytes = Convert.FromBase64String(contentResp.ResultObject);
                 var extracted = ExtractProjectSpaceZip(zipBytes);
 
                 // Load via central method. No file adjustments for ProjectSpace.
@@ -462,7 +464,6 @@ namespace FlowBlox.Core.Models.Project
                     projectSpaceGuid: projectSpaceGuid,
                     fileNameForAdjustments: null);
 
-                // Ensure it is set (central already does it, but explicit is ok)
                 project.ProjectSpaceGuid = projectSpaceGuid;
 
                 _logger.Info($"Project loaded successfully from Project Space. Guid={projectSpaceGuid}");

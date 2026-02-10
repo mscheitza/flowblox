@@ -331,6 +331,46 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
             }
         }
 
+        public async Task<ApiResponse<FbUserData>> UpdateUserInfoAsync(string userToken, FbUserChangeRequest request)
+        {
+            string url = UriHelper.ConcatUri(_baseUrl, "userinfo.php");
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", userToken);
+
+            try
+            {
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PutAsync(url, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonData = await response.Content.ReadAsStringAsync();
+                    var userInfo = JsonConvert.DeserializeObject<FbUserData>(jsonData);
+
+                    return new ApiResponse<FbUserData>
+                    {
+                        Success = true,
+                        ResultObject = userInfo
+                    };
+                }
+                else
+                {
+                    return await CreateErrorApiResponse<FbUserData>(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
+                return new ApiResponse<FbUserData>
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
+
         public async Task<ApiResponse> GeneratePasswordResetCodeAsync(FbPasswordResetRequest request)
         {
             string url = UriHelper.ConcatUri(_baseUrl, "generatePasswordResetCode.php");

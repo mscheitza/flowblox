@@ -2,7 +2,6 @@
 using FlowBlox.UICore.Interfaces;
 using FlowBloxSampleExtension.UI.Views;
 using System.ComponentModel.DataAnnotations;
-using System.Resources;
 
 namespace FlowBloxSampleExtension.UI.Operations
 {

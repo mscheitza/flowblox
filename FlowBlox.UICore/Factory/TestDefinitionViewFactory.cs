@@ -1,11 +1,6 @@
 ﻿using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.UICore.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using FlowBlox.UICore.Interfaces;
 

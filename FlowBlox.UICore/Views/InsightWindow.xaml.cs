@@ -1,9 +1,7 @@
 ﻿using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.UICore.Converters;
-using FlowBlox.UICore.Converters.Insight;
 using FlowBlox.UICore.ViewModels;
 using MahApps.Metro.Controls;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;

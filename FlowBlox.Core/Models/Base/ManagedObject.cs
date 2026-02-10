@@ -1,13 +1,7 @@
 ﻿using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
-using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Models.Base
 {
