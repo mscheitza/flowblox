@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
@@ -46,7 +47,7 @@ namespace FlowBlox.CLI
             var parameterToValue = ParseDynamicParameters(options.DynamicParameters);
 
             List<string> warnings = new List<string>();
-            foreach (var fieldElement in FlowBloxRegistryProvider.GetRegistry().GetUserFields())
+            foreach (var fieldElement in FlowBloxRegistryProvider.GetRegistry().GetUserFields(UserFieldTypes.Input))
             {
                 if (parameterToValue.TryGetValue(fieldElement.Name, out string parameterStringValue))
                 {
