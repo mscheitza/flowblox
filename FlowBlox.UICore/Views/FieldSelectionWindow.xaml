@@ -7,11 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:viewModel="clr-namespace:FlowBlox.UICore.ViewModels"
-    xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
     xmlns:localconverters="clr-namespace:FlowBlox.UICore.Converters.FieldSelection"
+    xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
     Title="{x:Static resources:FieldSelectionWindow.Title}"
-    Height="620"
+    Height="640"
     Width="980"
     mc:Ignorable="d"
     WindowStartupLocation="CenterOwner">
@@ -22,127 +21,208 @@
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-            <localconverters:FieldIconKindConverter x:Key="FieldIconKindConverter"/>
+            <localconverters:FieldIconKindConverter x:Key="FieldIconKindConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <DockPanel Margin="10">
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,10">
-            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Header}"
-                       FontSize="20"
-                       FontWeight="SemiBold"/>
-            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Description}"
-                       Margin="0,4,0,0"
-                       Foreground="Gray"
-                       TextWrapping="Wrap"/>
-        </StackPanel>
+        <Border Background="#FFEEEEEE" DockPanel.Dock="Top" Height="50" Padding="8">
+            <StackPanel Orientation="Horizontal">
+                <iconPacks:PackIconMaterial Kind="FormatListBulleted"
+                                            Width="28"
+                                            Height="28"
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="DarkSlateGray"/>
+                <TextBlock Text="{x:Static resources:FieldSelectionWindow.Header_Title}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           FontSize="16" />
+            </StackPanel>
+        </Border>
+
+        <!-- Description -->
+        <Border Background="#EDF3F9"
+                DockPanel.Dock="Top"
+                Padding="12"
+                CornerRadius="4"
+                Margin="0,8,0,8">
+            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Header_Description}"
+                       FontWeight="UltraLight"
+                       Foreground="DarkSlateGray"
+                       TextWrapping="Wrap" />
+        </Border>
 
         <!-- Content -->
-        <Grid Grid.Row="1">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Required checkbox (Fields only) -->
-            <CheckBox Grid.Row="0"
-                      Content="{x:Static resources:FieldSelectionWindow.Checkbox_Required}"
-                      IsChecked="{Binding IsRequired}"
-                      Visibility="{Binding ShowRequired, Converter={StaticResource BoolToVisibilityConverter}}"
-                      Margin="0,0,0,8"/>
+            <!-- Main (scrollable) -->
+            <ScrollViewer Grid.Row="0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          CanContentScroll="True">
 
-            <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTabIndex}">
-                <!-- Project Fields -->
-                <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_ProjectFields}"
-             Visibility="{Binding CanSelectFields, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Grid>
-                        <ListView x:Name="FieldsListView"
-                      ItemsSource="{Binding FieldRows}"
-                      MouseDoubleClick="FieldsListView_MouseDoubleClick">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Width="36">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <iconPacks:PackIconMaterial
-                                        Kind="{Binding IconKey, Converter={StaticResource FieldIconKindConverter}}"
-                                        Width="16"
-                                        Height="16"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
+                <Grid>
+                    <TabControl SelectedIndex="{Binding SelectedTabIndex}">
 
-                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_Source}"
-                                        DisplayMemberBinding="{Binding SourceName}"
-                                        Width="260"/>
+                        <!-- Project Fields -->
+                        <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_ProjectFields}"
+                                 Visibility="{Binding CanSelectFields, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TabItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"
+                                               FontSize="14"
+                                               FontWeight="Normal"
+                                               Padding="10,5"/>
+                                </DataTemplate>
+                            </TabItem.HeaderTemplate>
 
-                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_Field}"
-                                        DisplayMemberBinding="{Binding FieldName}"
-                                        Width="520"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </Grid>
-                </TabItem>
+                            <Grid>
+                                <ListView x:Name="FieldsListView"
+                                          ItemsSource="{Binding FieldRows}"
+                                          MouseDoubleClick="FieldsListView_MouseDoubleClick">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Width="32">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <iconPacks:PackIconMaterial
+                                                            Kind="{Binding IconKey, Converter={StaticResource FieldIconKindConverter}}"
+                                                            Width="14"
+                                                            Height="14"
+                                                            VerticalAlignment="Center"
+                                                            HorizontalAlignment="Center"
+                                                            Foreground="#3A6EA5"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
 
-                <!-- Options -->
-                <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_Options}"
-             Visibility="{Binding CanSelectOptions, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <Grid>
-                        <ListView x:Name="OptionsListView"
-                      ItemsSource="{Binding OptionRows}"
-                      MouseDoubleClick="OptionsListView_MouseDoubleClick">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionName}"
-                                        DisplayMemberBinding="{Binding Name}"
-                                        Width="260"/>
-                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionType}"
-                                        DisplayMemberBinding="{Binding Type}"
-                                        Width="180"/>
-                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionDescription}"
-                                        DisplayMemberBinding="{Binding Description}"
-                                        Width="360"/>
-                                    <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionValue}"
-                                        DisplayMemberBinding="{Binding Value}"
-                                        Width="160"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </Grid>
-                </TabItem>
-            </TabControl>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_Source}"
+                                                            DisplayMemberBinding="{Binding SourceName}"
+                                                            Width="260"/>
+
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_Field}"
+                                                            DisplayMemberBinding="{Binding FieldName}"
+                                                            Width="560"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- Options -->
+                        <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_Options}"
+                                 Visibility="{Binding CanSelectOptions, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TabItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"
+                                               FontSize="14"
+                                               FontWeight="Normal"
+                                               Padding="10,5"/>
+                                </DataTemplate>
+                            </TabItem.HeaderTemplate>
+
+                            <Grid>
+                                <ListView x:Name="OptionsListView"
+                                          ItemsSource="{Binding OptionRows}"
+                                          MouseDoubleClick="OptionsListView_MouseDoubleClick">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionName}"
+                                                            DisplayMemberBinding="{Binding Name}"
+                                                            Width="260"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionType}"
+                                                            DisplayMemberBinding="{Binding Type}"
+                                                            Width="180"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionDescription}"
+                                                            DisplayMemberBinding="{Binding Description}"
+                                                            Width="360"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_OptionValue}"
+                                                            DisplayMemberBinding="{Binding Value}"
+                                                            Width="160"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
+
+                    </TabControl>
+                </Grid>
+            </ScrollViewer>
+
+            <!-- Required (Fields only) -->
+            <Border Grid.Row="1"
+                    Background="#EDF3F9"
+                    Padding="10"
+                    CornerRadius="4"
+                    Margin="0,8,0,0"
+                    Visibility="{Binding ShowRequired, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                <StackPanel>
+                    <mah:ToggleSwitch IsOn="{Binding IsRequired}"
+                                      Header="{x:Static resources:FieldSelectionWindow.Required_ToggleHeader}"
+                                      OnContent="{x:Static resources:FieldSelectionWindow.Required_On}"
+                                      OffContent="{x:Static resources:FieldSelectionWindow.Required_Off}">
+                        <mah:ToggleSwitch.ToolTip>
+                            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Required_HintShort}"
+                                       TextWrapping="Wrap"
+                                       Width="420"/>
+                        </mah:ToggleSwitch.ToolTip>
+                    </mah:ToggleSwitch>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <iconPacks:PackIconMaterial Kind="InformationOutline"
+                                                    Width="16"
+                                                    Height="16"
+                                                    Margin="0,0,8,0"
+                                                    Foreground="#3A6EA5"
+                                                    VerticalAlignment="Top" />
+                        <TextBlock Text="{x:Static resources:FieldSelectionWindow.Required_InfoText}"
+                                   Foreground="DarkSlateGray"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Footer buttons -->
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,10,0,0">
+                <Button Margin="0,0,6,0" Command="{Binding BackCommand}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="ArrowLeft"
+                                                        Width="14"
+                                                        Height="14"
+                                                        Margin="0,0,6,0"
+                                                        Foreground="#555"/>
+                            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Button_Back}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button x:Name="OkButton" Command="{Binding OkCommand}" IsEnabled="False">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="Check"
+                                                        Width="14"
+                                                        Height="14"
+                                                        Margin="0,0,6,0"
+                                                        Foreground="#2E7D32"/>
+                            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Button_Ok}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
         </Grid>
-
-        <!-- Bottom buttons -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Margin="0,0,6,0" Command="{Binding BackCommand}">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="ArrowLeft" Margin="0,0,5,0"/>
-                        <TextBlock Text="{x:Static resources:FieldSelectionWindow.Button_Back}"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-
-            <Button x:Name="OkButton" Command="{Binding OkCommand}" IsEnabled="False">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="Check" Margin="0,0,5,0"/>
-                        <TextBlock Text="{x:Static resources:FieldSelectionWindow.Button_Ok}"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </StackPanel>
-    </Grid>
+    </DockPanel>
 </mah:MetroWindow>

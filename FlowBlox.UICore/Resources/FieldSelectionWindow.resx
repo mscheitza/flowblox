@@ -100,10 +100,10 @@
 	<data name="Title" xml:space="preserve">
 		<value>Field selection</value>
 	</data>
-	<data name="Header" xml:space="preserve">
+	<data name="Header_Title" xml:space="preserve">
 		<value>Select fields or options</value>
 	</data>
-	<data name="Description" xml:space="preserve">
+	<data name="Header_Description" xml:space="preserve">
 		<value>Select one or multiple entries and confirm with OK.</value>
 	</data>
 	<data name="Tab_ProjectFields" xml:space="preserve">
@@ -111,9 +111,6 @@
 	</data>
 	<data name="Tab_Options" xml:space="preserve">
 		<value>Options</value>
-	</data>
-	<data name="Checkbox_Required" xml:space="preserve">
-		<value>Required</value>
 	</data>
 	<data name="Col_Source" xml:space="preserve">
 		<value>Source</value>
@@ -138,5 +135,20 @@
 	</data>
 	<data name="Button_Ok" xml:space="preserve">
 		<value>OK</value>
+	</data>
+	<data name="Required_ToggleHeader" xml:space="preserve">
+		<value>Required</value>
+	</data>
+	<data name="Required_On" xml:space="preserve">
+		<value>Yes</value>
+	</data>
+	<data name="Required_Off" xml:space="preserve">
+		<value>No</value>
+	</data>
+	<data name="Required_HintShort" xml:space="preserve">
+		<value>When enabled, the flow block is executed only if the selected field has a valid value.</value>
+	</data>
+	<data name="Required_InfoText" xml:space="preserve">
+		<value>„Required“ binds this field to the parent managed object / flow block. The flow block is executed only when a valid value is present.</value>
 	</data>
 </root>

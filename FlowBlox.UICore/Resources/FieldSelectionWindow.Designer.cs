@@ -79,15 +79,6 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Required ähnelt.
-        /// </summary>
-        public static string Checkbox_Required {
-            get {
-                return ResourceManager.GetString("Checkbox_Required", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field ähnelt.
         /// </summary>
         public static string Col_Field {
@@ -144,18 +135,63 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select one or multiple entries and confirm with OK. ähnelt.
         /// </summary>
-        public static string Description {
+        public static string Header_Description {
             get {
-                return ResourceManager.GetString("Description", resourceCulture);
+                return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select fields or options ähnelt.
         /// </summary>
-        public static string Header {
+        public static string Header_Title {
             get {
-                return ResourceManager.GetString("Header", resourceCulture);
+                return ResourceManager.GetString("Header_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die When enabled, the flow block is executed only if the selected field has a valid value. ähnelt.
+        /// </summary>
+        public static string Required_HintShort {
+            get {
+                return ResourceManager.GetString("Required_HintShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die „Required“ binds this field to the parent managed object / flow block. The flow block is executed only when a valid value is present. ähnelt.
+        /// </summary>
+        public static string Required_InfoText {
+            get {
+                return ResourceManager.GetString("Required_InfoText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No ähnelt.
+        /// </summary>
+        public static string Required_Off {
+            get {
+                return ResourceManager.GetString("Required_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Yes ähnelt.
+        /// </summary>
+        public static string Required_On {
+            get {
+                return ResourceManager.GetString("Required_On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required ähnelt.
+        /// </summary>
+        public static string Required_ToggleHeader {
+            get {
+                return ResourceManager.GetString("Required_ToggleHeader", resourceCulture);
             }
         }
         
