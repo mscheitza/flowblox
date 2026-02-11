@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Models;
@@ -20,6 +21,7 @@ namespace FlowBlox.UICore.Utilities
             var args = new FieldSelectionWindowArgs
             {
                 FlowBlock = target as BaseFlowBlock,
+                FieldElements = items.OfType<FieldElement>(),
                 SelectionMode = FieldSelectionMode.Fields,
                 AllowedFieldSelectionModes = fieldSelectionModes,
                 IsRequired = !flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionDefaultNotRequired),
