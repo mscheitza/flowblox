@@ -21,6 +21,38 @@ namespace FlowBlox.Core.Migration.MigrationStrategies
             IterateThroughObjectsRecursive(json);
         }
 
+        private const string ActivationConditionsPropertyName = "ActivationConditions";
+
+        private const string FieldConditionTypeString =
+            "FlowBlox.Core.Models.FlowBlocks.Additions.FieldCondition, FlowBlox.Core";
+
+        private const string LogicalConditionTypeString =
+            "FlowBlox.Core.Models.FlowBlocks.Additions.LogicalCondition, FlowBlox.Core";
+
+        private static readonly Regex GenericArgRegex = new Regex(
+            @"(System\.Collections\.(?:Generic\.List|ObjectModel\.ObservableCollection)`1\[\[)(.*?)(\]\].*?)$",
+            RegexOptions.Compiled
+        );
+
+        private static string ReplaceFieldConditionWithLogicalCondition(string typeString)
+        {
+            if (string.IsNullOrWhiteSpace(typeString))
+                return typeString;
+
+            return GenericArgRegex.Replace(typeString, m =>
+            {
+                var prefix = m.Groups[1].Value;
+                var arg = m.Groups[2].Value;
+                var suffix = m.Groups[3].Value;
+
+                // Only rewrite FieldCondition -> LogicalCondition.
+                if (string.Equals(arg, FieldConditionTypeString, StringComparison.Ordinal))
+                    arg = LogicalConditionTypeString;
+
+                return prefix + arg + suffix;
+            });
+
+        }
         /// <summary>
         /// Property-level migration hook:
         /// - Rewrites List<T> type strings to ObservableCollection<T> when the target property is an ObservableCollection.
@@ -30,22 +62,30 @@ namespace FlowBlox.Core.Migration.MigrationStrategies
             if (property.Name == "$type" && property.Value.Type == JTokenType.String)
             {
                 string originalValue = property.Value.ToString();
+                string updatedValue = originalValue;
 
                 // Use the parent type and property name (if available) to decide whether a type replacement is required.
                 if (parentType != null && parentPropertyName != null)
                 {
                     if (ShouldReplaceType(parentType, parentPropertyName, originalValue))
                     {
-                        string updatedValue = ListToObservableCollectionRegex.Replace(
+                        updatedValue = ListToObservableCollectionRegex.Replace(
                             originalValue,
                             match => $"System.Collections.ObjectModel.ObservableCollection`1[[{match.Groups[1].Value}]], System.ObjectModel"
                         );
-
-                        if (originalValue != updatedValue)
-                        {
-                            property.Value = updatedValue;
-                        }
                     }
+
+                    // ObservableCollection<FieldCondition> -> ObservableCollection<LogicalCondition>
+                    // List<FieldCondition> (if present before list->obs) -> List<LogicalCondition> (safe)
+                    if (string.Equals(parentPropertyName, ActivationConditionsPropertyName, StringComparison.Ordinal))
+                    {
+                        updatedValue = ReplaceFieldConditionWithLogicalCondition(updatedValue);
+                    }
+                }
+
+                if (!string.Equals(originalValue, updatedValue, StringComparison.Ordinal))
+                {
+                    property.Value = updatedValue;
                 }
             }
         }

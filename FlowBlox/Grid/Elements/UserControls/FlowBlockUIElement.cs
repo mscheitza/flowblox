@@ -33,7 +33,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         public delegate void PropertyDoubleClickEventHandler(FlowBlockUIElement sender, string propertyName);
         public delegate void ResultFieldDoubleClickEventHandler(FlowBlockUIElement sender, FieldElement fieldElement);
         public delegate void RequiredFieldDoubleClickEventHandler(FlowBlockUIElement sender, FlowBloxComponent component, FieldElement fieldElement);
-        public delegate void ConditionDoubleClickEventHandler(FlowBlockUIElement sender, Condition fieldElement);
+        public delegate void ConditionDoubleClickEventHandler(FlowBlockUIElement sender, FlowBloxReactiveObject condition);
         public delegate void ModifierDoubleClickEventHandler(FlowBlockUIElement sender, ModifierBase modifier);
 
         public delegate void GridElementMovedEventHandler(FlowBlockUIElement flowBlockUIElement);
@@ -64,7 +64,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         public void RaisePropertyDoubleClick(string propertyName) => PropertyDoubleClick?.Invoke(this, propertyName);
         public void RaiseResultFieldDoubleClick(FieldElement fieldElement) => ResultFieldDoubleClick?.Invoke(this, fieldElement);
         public void RaiseRequiredFieldDoubleClick(FlowBloxComponent target, FieldElement fieldElement) => RequiredFieldDoubleClick?.Invoke(this, target, fieldElement);
-        public void RaiseConditionDoubleClick(Condition condition) => ConditionDoubleClick?.Invoke(this, condition);
+        public void RaiseConditionDoubleClick(FlowBloxReactiveObject condition) => ConditionDoubleClick?.Invoke(this, condition);
         public void RaiseModifierDoubleClick(ModifierBase modifier) => ModifierDoubleClick?.Invoke(this, modifier);
 
 

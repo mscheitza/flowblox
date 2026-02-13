@@ -4,9 +4,12 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.AI.TokenSelector;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using Microsoft.ML.OnnxRuntimeGenAI;
+using Newtonsoft.Json;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -34,6 +37,31 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         #endregion
 
         #region Tab: Extended settings
+
+        [JsonIgnore()]
+        [DeepCopierIgnore()]
+        [Display(Name = "OnnxRuntimeGenAIFlowBlock_AiExecutionProvider", Description = "OnnxRuntimeGenAIFlowBlock_AiExecutionProvider_Tooltip",
+            GroupName = "OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
+        [Required]
+        public AiExecutionProviders AiExecutionProvider
+        {
+            get
+            {
+                var providerOption = FlowBloxOptions.GetOptionInstance().GetOption("AI.Onnx.Provider");
+                if (providerOption == null)
+                    return AiExecutionProviders.Default;
+
+                var providerName = providerOption.Value?.Trim();
+                if (string.IsNullOrWhiteSpace(providerName))
+                    return AiExecutionProviders.Default;
+
+                if (Enum.TryParse<AiExecutionProviders>(providerName, ignoreCase: true, out var parsed))
+                    return parsed;
+
+                return AiExecutionProviders.Default;
+            }
+        }
 
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy", Description = "OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy_Tooltip",
             GroupName = "OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", ResourceType = typeof(FlowBloxTexts), Order = 1)]
@@ -66,13 +94,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         [FlowBlockTextBox(IsCodingMode = true, MultiLine = true)]
         [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public string SystemPrompt { get; set; }
-        
-        // TODO: Erforderlich, wenn UseChatTemplate = true
-        //       Gruppen-Label zieht nicht
-        //       Copy-Skripte erstellen um aus Nuget-Global Cache zu ziehen
-        //       Copy Skripte erw. damit auch genai kopiert wird
-        //       Neuen Provider erstellen
 
+        [ActivationCondition(MemberName = nameof(UseChatTemplate), Value = true)]
+        [ConditionallyRequired()]
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_ChatTemplate", Description = "OnnxRuntimeGenAIFlowBlock_ChatTemplate_Tooltip",
             GroupName = "OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", ResourceType = typeof(FlowBloxTexts), Order = 8)]
         [FlowBlockTextBox(IsCodingMode = true, MultiLine = true)]
@@ -154,6 +178,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             base.RuntimeStarted(runtime);
+
+            // Ensure ONNX runtime native binaries are loaded:
+            FlowBloxOnnxRuntimeLoader.Instance.EnsureLoaded(AiExecutionProvider, runtime);
+
+            // Ensure GenAI native binaries are loaded:
+            FlowBloxOnnxRuntimeGenAiLoader.Instance.EnsureLoaded(AiExecutionProvider, runtime);
 
             if (string.IsNullOrWhiteSpace(ModelFolder))
                 throw new InvalidOperationException("ONNX Runtime GenAI initialization failed: ModelFolder is null or empty.");

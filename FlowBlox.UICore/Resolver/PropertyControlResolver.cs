@@ -5,6 +5,7 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Factory.PropertyView;
 using FlowBlox.UICore.ViewModels.PropertyView;
+using MahApps.Metro.Controls;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
@@ -137,36 +138,28 @@ namespace FlowBlox.UICore.Resolver
                 ValidatesOnExceptions = true
             };
 
+            // TODO: Immer auch bei Boolean mit Header, Text dann weg.
+
             if (property.PropertyType == typeof(bool))
             {
-                var stackPanel = new StackPanel
-                {
-                    Orientation = Orientation.Horizontal
-                };
-
-                var checkBox = new CheckBox
+                var toggle = new ToggleSwitch
                 {
                     IsEnabled = !readOnly,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(0, 4, 0, 4),
+                    MinWidth = 80,
+                    OnContent = displayName,
+                    OffContent = displayName
                 };
 
-                checkBox.Checked += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
-                checkBox.Unchecked += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
+                toggle.SetBinding(ToggleSwitch.IsOnProperty, binding);
 
-                checkBox.SetBinding(CheckBox.IsCheckedProperty, binding);
+                toggle.Toggled += (s, e) =>
+                    FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
 
-                var label = new TextBlock
-                {
-                    Text = displayName,
-                    Margin = new Thickness(5, 0, 0, 0),
-                    VerticalAlignment = VerticalAlignment.Center
-                };
-
-                stackPanel.Children.Add(checkBox);
-                stackPanel.Children.Add(label);
-
-                return stackPanel;
+                return toggle;
             }
+
 
             if (property.PropertyType.IsEnum || Nullable.GetUnderlyingType(property.PropertyType)?.IsEnum == true)
             {
@@ -241,6 +234,8 @@ namespace FlowBlox.UICore.Resolver
                         DisplayMemberPath = flowBlockUI?.SelectionDisplayMember
                     };
 
+                    comboBox.SelectionChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
+
                     SetComboBoxReadOnly(comboBox, readOnly);
 
                     comboBox.SetBinding(ComboBox.SelectedValueProperty, binding);
@@ -295,6 +290,11 @@ namespace FlowBlox.UICore.Resolver
             }
 
             return _textBoxWithOptionalButtonsCreator.CreateTextBoxWithOptionalButtons(property, target, displayName, flowBlockUI, binding, readOnly);
+        }
+
+        private void Toggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void SetComboBoxReadOnly(ComboBox comboBox, bool readOnly)

@@ -763,6 +763,33 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Comparison condition ähnelt.
+        /// </summary>
+        public static string ComparisonCondition_DisplayName {
+            get {
+                return ResourceManager.GetString("ComparisonCondition_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Comparison operator ähnelt.
+        /// </summary>
+        public static string ComparisonCondition_Operator {
+            get {
+                return ResourceManager.GetString("ComparisonCondition_Operator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
+        /// </summary>
+        public static string ComparisonCondition_Value {
+            get {
+                return ResourceManager.GetString("ComparisonCondition_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die contains ähnelt.
         /// </summary>
         public static string ComparisonOperator_Contains {
@@ -930,24 +957,6 @@ namespace FlowBlox.Core {
         public static string Condition {
             get {
                 return ResourceManager.GetString("Condition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Comparison operator ähnelt.
-        /// </summary>
-        public static string Condition_Operator {
-            get {
-                return ResourceManager.GetString("Condition_Operator", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
-        /// </summary>
-        public static string Condition_Value {
-            get {
-                return ResourceManager.GetString("Condition_Value", resourceCulture);
             }
         }
         
@@ -1330,6 +1339,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Index ähnelt.
+        /// </summary>
+        public static string ExpectationCondition_Index {
+            get {
+                return ResourceManager.GetString("ExpectationCondition_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Any value ähnelt.
         /// </summary>
         public static string ExpectationConditionTarget_AnyValue {
@@ -1371,6 +1389,15 @@ namespace FlowBlox.Core {
         public static string ExpectationConditionTarget_ValueAtIndex {
             get {
                 return ResourceManager.GetString("ExpectationConditionTarget_ValueAtIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field condition ähnelt.
+        /// </summary>
+        public static string FieldComparisonCondition_DisplayName {
+            get {
+                return ResourceManager.GetString("FieldComparisonCondition_DisplayName", resourceCulture);
             }
         }
         
@@ -1461,6 +1488,15 @@ namespace FlowBlox.Core {
         public static string FieldElement_StringValue {
             get {
                 return ResourceManager.GetString("FieldElement_StringValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Logical field condition ähnelt.
+        /// </summary>
+        public static string FieldLogicalComparisonCondition_DisplayName {
+            get {
+                return ResourceManager.GetString("FieldLogicalComparisonCondition_DisplayName", resourceCulture);
             }
         }
         
@@ -2924,6 +2960,69 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Logical comparison condition ähnelt.
+        /// </summary>
+        public static string LogicalComparisonCondition_DisplayName {
+            get {
+                return ResourceManager.GetString("LogicalComparisonCondition_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Condition ähnelt.
+        /// </summary>
+        public static string LogicalCondition {
+            get {
+                return ResourceManager.GetString("LogicalCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Logical operator ähnelt.
+        /// </summary>
+        public static string LogicalCondition_LogicalOperator {
+            get {
+                return ResourceManager.GetString("LogicalCondition_LogicalOperator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Conditions ähnelt.
+        /// </summary>
+        public static string LogicalGroupCondition_Conditions {
+            get {
+                return ResourceManager.GetString("LogicalGroupCondition_Conditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Condition group ähnelt.
+        /// </summary>
+        public static string LogicalGroupCondition_DisplayName {
+            get {
+                return ResourceManager.GetString("LogicalGroupCondition_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AND ähnelt.
+        /// </summary>
+        public static string LogicalOperator_And {
+            get {
+                return ResourceManager.GetString("LogicalOperator_And", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OR ähnelt.
+        /// </summary>
+        public static string LogicalOperator_Or {
+            get {
+                return ResourceManager.GetString("LogicalOperator_Or", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Performs mathematical calculations based on an expression syntax and supports referenced fields as parameters. ähnelt.
         /// </summary>
         public static string MathFlowBlock_Description {
@@ -3229,6 +3328,27 @@ namespace FlowBlox.Core {
         public static string OnnxQuestionAnsweringFlowBlock_Question {
             get {
                 return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execution provider ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_AiExecutionProvider {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_AiExecutionProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects the ONNX execution provider for the entire application process.
+        ///The value is read from the global option AI.Onnx.Provider.
+        ///Supported values: Default (CPU), CUDA, DirectML, OpenVINO.
+        ///Note: Once a provider is loaded, switching providers within the same process is not supported. Restart the application after changing this option. ähnelt.
+        /// </summary>
+        public static string OnnxRuntimeGenAIFlowBlock_AiExecutionProvider_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxRuntimeGenAIFlowBlock_AiExecutionProvider_Tooltip", resourceCulture);
             }
         }
         

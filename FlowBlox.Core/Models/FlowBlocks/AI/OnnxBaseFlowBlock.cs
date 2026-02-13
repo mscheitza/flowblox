@@ -99,14 +99,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
             AiExecutionProviders aiExecutionProvider = this.AiExecutionProvider;
 
-
             SessionOptions sessionOptions;
 
             try
             {
-                // Global provider override read from FlowBloxOptions
-                // Option key: "AI.Onnx.Provider"
-                // Expected values: Default, CUDA, DirectML, OpenVINO
+                // Ensure ONNX runtime native binaries are loaded:
                 FlowBloxOnnxRuntimeLoader.Instance.EnsureLoaded(aiExecutionProvider, runtime);
 
                 sessionOptions = new SessionOptions();

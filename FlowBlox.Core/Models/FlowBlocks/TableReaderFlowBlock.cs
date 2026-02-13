@@ -39,7 +39,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
     }
 
-    public class TableSelectorColumnCondition : Condition
+    public class TableSelectorColumnCondition : ComparisonCondition
     {
         [Required()]
         [Display(Name = "TableSelectorColumnCondition_ColumnName", ResourceType = typeof(FlowBloxTexts), Order = 0)]
@@ -57,6 +57,13 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Display(Name = "TableReaderFlowBlock_DatasetColumnConditions", ResourceType = typeof(FlowBloxTexts), GroupName = "TableReaderFlowBlock_Groups_DatasetColumnConditions", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBlockDataGrid(
+            GridColumnMemberNames = new[]
+            {
+                nameof(TableSelectorColumnCondition.ColumnName),
+                nameof(TableSelectorColumnCondition.Operator),
+                nameof(TableSelectorColumnCondition.Value)
+            })]
         public ObservableCollection<TableSelectorColumnCondition> ColumnConditions { get; set; }
 
         [Display(Name = "TableReaderFlowBlock_ReferencedTable", ResourceType = typeof(FlowBloxTexts), Order = 3)]
@@ -139,7 +146,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
                     foreach(var condition in this.ColumnConditions)
                     {
                         var fieldValue = tableData.Rows[rowCounter][condition.ColumnName];
-                        if (!condition.Check(fieldValue))
+                        if (!condition.Compare(fieldValue))
                         {
                             requirementsMet = false;
                             break;

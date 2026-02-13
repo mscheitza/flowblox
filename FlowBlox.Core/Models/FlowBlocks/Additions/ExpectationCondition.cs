@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Additions
 {
-    public class ExpectationCondition : Condition
+    public class ExpectationCondition : ComparisonCondition
     {
         private ExpectationConditionTarget _expectationConditionTarget;
 
@@ -26,7 +26,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
 
         private int _index;
 
-        [Display(Name = "ExpectationCondition_ExpectationConditionTarget", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "ExpectationCondition_Index", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBlockUI(Factory = UIFactory.ComboBox)]
         public int Index
         {

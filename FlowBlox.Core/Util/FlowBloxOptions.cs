@@ -45,9 +45,7 @@ namespace FlowBlox.Core.Util
         public bool HasOption(string optionName)
         {
             if (OptionCollection.ContainsKey(optionName))
-            {
                 return true;
-            }
 
             return false;
         }
@@ -60,34 +58,33 @@ namespace FlowBlox.Core.Util
             {
                 string nppPath = Environment.ExpandEnvironmentVariables(programFiles + @"\Notepad++\notepad++.exe");
                 if (File.Exists(Environment.ExpandEnvironmentVariables(nppPath)))
-                {
                     editorPath = nppPath;
-                }
             }
 
-            editorPath = editorPath.Equals(string.Empty) ? @"C:\Windows\System32\notepad.exe" : editorPath;
+            editorPath = editorPath.Equals(string.Empty) ? 
+                @"C:\Windows\System32\notepad.exe" : 
+                editorPath;
 
             return editorPath;
         }
 
         public void InitDefaults(bool overwrite)
         {
-            List<OptionElement> defaultOptions = new List<OptionElement>
+            var defaultOptions = new List<OptionElement>
             {
                 new OptionElement("Account.LoginData", "", "The encrypted login data for the user account. This option stores the login token securely using encryption.", OptionElement.OptionType.Password),
                 new OptionElement("Account.LicenseToken", "", "The encrypted license token for the user account. This option stores the license token securely using encryption.", OptionElement.OptionType.Text),
                 new OptionElement("General.EditorPath", GetDefaultEditorPath(), "Path to the default editor for directly editing or viewing data from FlowBlox. We recommend the free software Notepad++: https://notepad-plus-plus.org/", OptionElement.OptionType.Text),
                 new OptionElement("General.Style", "Professional", "Set your style here. Available styles by default: \"Default\", \"Professional\". To apply a new style, you must change this setting and restart FlowBlox.", OptionElement.OptionType.Text),
 
-                new OptionElement("General.UICulture", "", "Specifies the UI culture used for localization (e.g. \"en-US\", \"de-DE\"). Leave empty to use the operating system culture.", OptionElement.OptionType.Text),
-                new OptionElement("General.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "The Toolbox directory is located by default in the local application data directory, but can be changed here.", OptionElement.OptionType.Text),
-                new OptionElement("General.ToolboxUserFile",@"%userprofile%\Documents\FlowBlox\toolbox\userToolbox.json","The Toolbox user file is located by default in the local application data directory within the toolbox folder, but can be changed here. This file contains user-specific toolbox elements.",OptionElement.OptionType.Text),
-                new OptionElement("General.ProjectDir", @"%userprofile%\Documents\FlowBlox\projects", "The Project directory is by default located in your Documents folder, but can be changed here. This location is more accessible and suitable for files that users might frequently manage.", OptionElement.OptionType.Text),
-                new OptionElement("General.OutputDir", @"%userprofile%\Documents\FlowBlox\output", "The Output directory is by default located in your Documents folder. This location is selected as the start directory in the \"Save File\" dialog, for example, for table output. This makes it easily accessible and suitable for managing output files.", OptionElement.OptionType.Text),
-                new OptionElement("General.ExtensionsDir", @"%localappdata%\FlowBlox\extensions", "The Extension directory is by default located in the local application data directory, but can be changed here. This location keeps extension files secure and separate from user documents.", OptionElement.OptionType.Text),
-                new OptionElement("General.ProblemTraceDir", @"%localappdata%\FlowBlox\logs\runtime\problems", "The Problem Trace Directory is by default located in the local application data directory, but can be changed here. This location keeps traces captured by the runtime.", OptionElement.OptionType.Text),
-                new OptionElement("General.RuntimeLogDir", @"%localappdata%\FlowBlox\logs\runtime", "The Log Directory is by default located in the local application data directory, but can be changed here. This location keeps logs created by the runtime.", OptionElement.OptionType.Text),
-                new OptionElement("General.DeepCopierProtocolDir", @"%localappdata%\FlowBlox\copy_protocols", "The Deep-Copier Protocol Directory is by default located in the local application data directory, but can be changed here. This location keeps protocols created by the internal deep copier.", OptionElement.OptionType.Text),
+                new OptionElement("General.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "Toolbox directory path.", OptionElement.OptionType.Text),
+                new OptionElement("General.ToolboxUserFile", @"%userprofile%\Documents\FlowBlox\toolbox\userToolbox.json", "Toolbox user file path.", OptionElement.OptionType.Text),
+                new OptionElement("General.ProjectDir", @"%userprofile%\Documents\FlowBlox\projects", "Project directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("General.OutputDir", @"%userprofile%\Documents\FlowBlox\output", "Output directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("General.ExtensionsDir", @"%localappdata%\FlowBlox\extensions", "Extensions directory path.", OptionElement.OptionType.Text),
+                new OptionElement("General.ProblemTraceDir", @"%localappdata%\FlowBlox\logs\runtime\problems", "Problem trace directory path.", OptionElement.OptionType.Text),
+                new OptionElement("General.RuntimeLogDir", @"%localappdata%\FlowBlox\logs\runtime", "Runtime log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("General.DeepCopierProtocolDir", @"%localappdata%\FlowBlox\copy_protocols", "Deep copier protocol directory.", OptionElement.OptionType.Text),
 
                 new OptionElement("General.ExtensionApiServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the extension management system.", OptionElement.OptionType.Text),
                 new OptionElement("General.ProjectApiServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the project space.", OptionElement.OptionType.Text),
@@ -106,12 +103,11 @@ namespace FlowBlox.Core.Util
                 new OptionElement("Grid.DefaultSize", "3000,1000", "When a new project is created, the grid size width, height is set to this value by default.", OptionElement.OptionType.Text),
                 new OptionElement("MainPanel.DockSettings", "", "Stores the layout and visibility settings of all dockable panels within the main application window. This includes the default docking positions, size dimensions (width, height), and display states (shown/hidden) of each panel.", OptionElement.OptionType.Text),
 
-                new OptionElement("Modifier.DefaultSeparator", ",", "If a modifier returns multiple result values, these values are separated by this delimiter.", OptionElement.OptionType.Text),
+                new OptionElement("Modifier.DefaultSeparator", ",", "If a modifier returns multiple result values, these values are separated by this delimiter.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
 
                 new OptionElement("PropertyView.UIFramework", "WPF", "Defines which UI framework should be used for rendering property views. Valid values are 'WPF' and 'WinForms'.", OptionElement.OptionType.Text),
 
                 new OptionElement("AI.Onnx.Provider", "Default", "Global ONNX execution provider used by the application. Allowed values: Default (CPU), CUDA, DirectML, OpenVINO. Changing this requires restarting the application.", OptionElement.OptionType.Text)
-
             };
 
             foreach(var optionsRegistration in FlowBloxServiceLocator.Instance.GetServices<IOptionsRegistration>())

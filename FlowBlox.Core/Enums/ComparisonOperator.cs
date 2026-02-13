@@ -4,17 +4,17 @@ namespace FlowBlox.Core.Enums
 {
     public enum ComparisonOperator
     {
-        [Display(Name = "ComparisonOperator_HasValue", ResourceType = typeof(FlowBloxTexts))]
-        HasValue,
-
-        [Display(Name = "ComparisonOperator_HasNoValue", ResourceType = typeof(FlowBloxTexts))]
-        HasNoValue,
-
         [Display(Name = "ComparisonOperator_Equals", ResourceType = typeof(FlowBloxTexts))]
         Equals,
 
         [Display(Name = "ComparisonOperator_NotEquals", ResourceType = typeof(FlowBloxTexts))]
         NotEquals,
+
+        [Display(Name = "ComparisonOperator_HasValue", ResourceType = typeof(FlowBloxTexts))]
+        HasValue,
+
+        [Display(Name = "ComparisonOperator_HasNoValue", ResourceType = typeof(FlowBloxTexts))]
+        HasNoValue,
 
         [Display(Name = "ComparisonOperator_Contains", ResourceType = typeof(FlowBloxTexts))]
         Contains,

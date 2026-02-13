@@ -147,9 +147,9 @@ namespace FlowBlox.UICore.ViewModels
                 => flowBlock?.ReferencedFlowBlocks?.Contains(fe.Source) == true;
 
             // Sorting requirement:
-            // 1) Connected fields first
-            // 2) Then disconnected
-            // 3) User fields at the end
+            // - Connected fields first
+            // - Then disconnected
+            // - User fields at the end
             // Within each bucket, use a stable alphabetical ordering for better UX.
             var sorted = fieldElements
                 .Select(fe => new
@@ -174,7 +174,9 @@ namespace FlowBlox.UICore.ViewModels
 
             // If no option elements were passed, load them from FlowBlockOptions.
             if (optionElements == null)
-                optionElements = FlowBloxOptions.GetOptionInstance().GetOptions() ?? Enumerable.Empty<OptionElement>();
+                optionElements = FlowBloxOptions.GetOptionInstance()
+                    .GetOptions()
+                    .Where(o => o.IsPlaceholderEnabled) ?? Enumerable.Empty<OptionElement>();
 
             // Sorting requirement: alphabetical by option name.
             OptionRows = (optionElements ?? Enumerable.Empty<OptionElement>())

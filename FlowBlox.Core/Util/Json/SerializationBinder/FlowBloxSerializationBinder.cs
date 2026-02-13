@@ -9,11 +9,41 @@ namespace FlowBlox.Core.Util.Json.SerializationBinder
     {
         private readonly Dictionary<string, AssemblyLoadContext> _loadContexts;
 
+        private static readonly Dictionary<string, string> _typeAliases = new(StringComparer.Ordinal)
+        {
+            {
+                "FlowBlox.Core.Models.FlowBlocks.Additions.Condition, FlowBlox.Core",
+                "FlowBlox.Core.Models.FlowBlocks.Additions.ComparisonCondition, FlowBlox.Core"
+            },
+            {
+                "FlowBlox.Core.Models.FlowBlocks.Additions.FieldCondition, FlowBlox.Core",
+                "FlowBlox.Core.Models.FlowBlocks.Additions.FieldComparisonCondition, FlowBlox.Core"
+            },
+            {
+                "FlowBlox.Core.Models.FlowBlocks.Additions.SummarizationCondition, FlowBlox.Core",
+                "FlowBlox.Core.Models.FlowBlocks.Additions.LogicalGroupCondition, FlowBlox.Core"
+            }
+        };
+
         private static readonly ILogger _logger = FlowBloxLogManager.Instance.GetLogger();
 
         public FlowBloxSerializationBinder(Dictionary<string, AssemblyLoadContext> loadContexts)
         {
             _loadContexts = loadContexts ?? new Dictionary<string, AssemblyLoadContext>();
+        }
+
+        private static string ApplyTypeAliases(string typeName)
+        {
+            if (string.IsNullOrWhiteSpace(typeName))
+                return typeName;
+
+            foreach (var kvp in _typeAliases)
+            {
+                if (typeName.Contains(kvp.Key, StringComparison.Ordinal))
+                    typeName = typeName.Replace(kvp.Key, kvp.Value, StringComparison.Ordinal);
+            }
+
+            return typeName;
         }
 
         public override Type BindToType(string assemblyName, string typeName)
@@ -35,6 +65,8 @@ namespace FlowBlox.Core.Util.Json.SerializationBinder
 
                 }
             }
+
+            typeName = ApplyTypeAliases(typeName);
 
             Type? resolved = null;
             try

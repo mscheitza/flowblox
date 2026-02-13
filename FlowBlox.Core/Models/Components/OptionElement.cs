@@ -19,6 +19,7 @@ namespace FlowBlox.Core.Models.Components
         public string Description { get; set; }
         public OptionType Type { get; set; }
         public bool SystemOption { get; internal set; }
+        public bool IsPlaceholderEnabled { get; set; } = true;
 
         public OptionElement()
         {
@@ -26,6 +27,7 @@ namespace FlowBlox.Core.Models.Components
         }
 
         private string _internalValue { get; set; }
+
         public string Value
         {
             get
@@ -40,8 +42,8 @@ namespace FlowBlox.Core.Models.Components
                     {
                         return FlowBloxSecureStorageManager.GetProtectedData(Name, _internalValue);
                     }
-
                 }
+
                 return (_internalValue != null) ? Environment.ExpandEnvironmentVariables(_internalValue) : string.Empty;
             }
             set
@@ -65,7 +67,7 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
-        public OptionElement(string name, string value, string description, OptionType type, string displayName = null)
+        public OptionElement(string name, string value, string description, OptionType type, string displayName = null, bool isPlaceholderEnabled = false)
         {
             this.Name = name;
             this.DisplayName = displayName;
@@ -73,6 +75,7 @@ namespace FlowBlox.Core.Models.Components
             this.Description = description;
             this.Type = type;
             this.SystemOption = true;
+            this.IsPlaceholderEnabled = isPlaceholderEnabled;
         }
 
         public void Validate()
@@ -95,44 +98,22 @@ namespace FlowBlox.Core.Models.Components
 
         public int GetValueInt()
         {
-            int value;
-            if (int.TryParse(Value, out value))
+            if (int.TryParse(Value, out var value))
             {
                 return value;
             }
+
             return 0;
         }
 
         public bool GetValueBoolean()
         {
-            bool value;
-            if (bool.TryParse(Value, out value))
+            if (bool.TryParse(Value, out var value))
             {
                 return value;
             }
+
             return false;
-        }
-
-        public List<string> GetValuestrings()
-        {
-            return Value.Split("#".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-        }
-
-        public Dictionary<string, string> GetValueMap()
-        {
-            Dictionary<string, string> Map = new Dictionary<string, string>();
-
-            foreach (string Value in GetValuestrings())
-            {
-                string[] astrValue = Value.Split('=');
-
-                string Key = astrValue[0];
-                string MapValue = (astrValue.Length > 1) ? astrValue[1] : string.Empty;
-
-                Map[Key] = MapValue;
-            }
-
-            return Map;
         }
 
         internal static OptionElement FromXml(XmlNode xmlNode)
@@ -143,14 +124,29 @@ namespace FlowBlox.Core.Models.Components
             string displayName = xmlNode.Attributes["displayName"].InnerText;
             string value = xmlNode.Attributes["value"].InnerText;
             string description = xmlNode.Attributes["desc"].InnerText;
-            OptionType Type = (OptionType)Enum.Parse(typeof(OptionType), xmlNode.Attributes["type"].InnerText);
+            OptionType type = (OptionType)Enum.Parse(typeof(OptionType), xmlNode.Attributes["type"].InnerText);
+
+            bool system = xmlNode.Attributes["system"].InnerText.Equals("True");
 
             optionElement.Name = name;
             optionElement.DisplayName = displayName;
             optionElement._internalValue = value;
             optionElement.Description = description;
-            optionElement.Type = Type;
-            optionElement.SystemOption = xmlNode.Attributes["system"].InnerText.Equals("True");
+            optionElement.Type = type;
+            optionElement.SystemOption = system;
+
+            // Backward-compatible default:
+            // - if attribute exists: honor it
+            // - if missing: default true for non-system options, false for system options
+            var showAttr = xmlNode.Attributes["isPlaceholderEnabled"];
+            if (showAttr != null && bool.TryParse(showAttr.InnerText, out var show))
+            {
+                optionElement.IsPlaceholderEnabled = show;
+            }
+            else
+            {
+                optionElement.IsPlaceholderEnabled = !system;
+            }
 
             return optionElement;
         }
@@ -166,6 +162,8 @@ namespace FlowBlox.Core.Models.Components
             XmlAttribute xaType = xmlDocument.CreateAttribute("type");
             XmlAttribute xaSystem = xmlDocument.CreateAttribute("system");
 
+            XmlAttribute xaShowInFieldSelectionDialog = xmlDocument.CreateAttribute("isPlaceholderEnabled");
+
             xaName.InnerText = Name;
             xaDisplayName.InnerText = DisplayName;
             xaValue.InnerText = _internalValue;
@@ -173,12 +171,15 @@ namespace FlowBlox.Core.Models.Components
             xaType.InnerText = Type.ToString();
             xaSystem.InnerText = SystemOption.ToString();
 
+            xaShowInFieldSelectionDialog.InnerText = IsPlaceholderEnabled.ToString();
+
             xnOptionElement.Attributes.Append(xaName);
             xnOptionElement.Attributes.Append(xaDisplayName);
             xnOptionElement.Attributes.Append(xaValue);
             xnOptionElement.Attributes.Append(xaDesc);
             xnOptionElement.Attributes.Append(xaType);
             xnOptionElement.Attributes.Append(xaSystem);
+            xnOptionElement.Attributes.Append(xaShowInFieldSelectionDialog);
 
             return xnOptionElement;
         }

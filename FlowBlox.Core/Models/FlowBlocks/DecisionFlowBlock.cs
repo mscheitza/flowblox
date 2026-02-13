@@ -19,9 +19,16 @@ namespace FlowBlox.Core.Models.FlowBlocks
         [Display(Name = "DecisionFlowBlock_Decisions", ResourceType = typeof(FlowBloxTexts), GroupName = "DecisionFlowBlock_Groups_Decisions", Order = 0)]
         [CustomValidation(typeof(DecisionFlowBlock), nameof(ValidateDecisions))]
         [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        public ObservableCollection<FieldCondition> Decisions { get; set; }
+        [FlowBlockDataGrid(
+            GridColumnMemberNames = new[]
+            {
+                nameof(FieldComparisonCondition.FieldElement),
+                nameof(FieldComparisonCondition.Operator),
+                nameof(FieldComparisonCondition.Value)
+            })]
+        public ObservableCollection<FieldComparisonCondition> Decisions { get; set; }
 
-        public static ValidationResult ValidateDecisions(List<FieldCondition> decisions, ValidationContext context)
+        public static ValidationResult ValidateDecisions(List<FieldComparisonCondition> decisions, ValidationContext context)
         {
             var duplicates = decisions
                 .GroupBy(x => x.FieldElement)
@@ -43,7 +50,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public DecisionFlowBlock()
         {
-            this.Decisions = new ObservableCollection<FieldCondition>();
+            this.Decisions = new ObservableCollection<FieldComparisonCondition>();
         }
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
@@ -67,7 +74,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 string result = null;
                 foreach(var decision in this.Decisions)
                 {
-                    if (decision.Check(decision.FieldElement.Value))
+                    if (decision.Compare())
                     {
                         result = decision.FieldElement.StringValue;
                         break;

@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Models.Components.Modifier
             string search = FlowBloxFieldHelper.ReplaceFieldsInString(this.Search);
             string replace = FlowBloxFieldHelper.ReplaceFieldsInString(this.Replace);
             Regex regex = new Regex(search);
-            var result = regex.Replace(value, replace);
+            var result = regex.Replace(value, replace ?? string.Empty);
             return result;
         }
 
@@ -29,7 +29,7 @@ namespace FlowBlox.Core.Models.Components.Modifier
 
             return string.Format(format,
                 !string.IsNullOrEmpty(this.Search) ? this.Search : "?",
-                !string.IsNullOrEmpty(this.Replace) ? this.Replace : "?");
+                !string.IsNullOrEmpty(this.Replace) ? this.Replace : string.Empty);
         }
     }
 }

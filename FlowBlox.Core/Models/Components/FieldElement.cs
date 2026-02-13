@@ -28,7 +28,7 @@ namespace FlowBlox.Core.Models.Components
 
         public FieldElement()
         {
-            this.Conditions = new ObservableCollection<Condition>();
+            this.Conditions = new ObservableCollection<ComparisonCondition>();
             this.Modifiers = new ObservableCollection<ModifierBase>();
         }
 
@@ -296,7 +296,13 @@ namespace FlowBlox.Core.Models.Components
         [ActivationCondition(ActivationMethod = nameof(IsRegularField))]
         [Display(Name = "FieldElement_Conditions", ResourceType = typeof(FlowBloxTexts), GroupName = "FieldElement_Groups_Conditions", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        public ObservableCollection<Condition> Conditions { get; set; }
+        [FlowBlockDataGrid(
+            GridColumnMemberNames = new[]
+            {
+                nameof(ComparisonCondition.Operator),
+                nameof(ComparisonCondition.Value)
+            })]
+        public ObservableCollection<ComparisonCondition> Conditions { get; set; }
 
         [ActivationCondition(ActivationMethod = nameof(IsRegularField))]
         [Display(Name = "FieldElement_Modifiers", ResourceType = typeof(FlowBloxTexts), GroupName = "FieldElement_Groups_Modifiers", Order = 0)]

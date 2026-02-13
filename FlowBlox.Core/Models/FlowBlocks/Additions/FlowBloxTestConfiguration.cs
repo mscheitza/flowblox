@@ -109,6 +109,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
 
         [Display(Name = "FlowBloxTestConfiguration_ExpectationConditions", ResourceType = typeof(FlowBloxTexts))]
         [FlowBlockUI(Factory = UIFactory.GridView)]
+        [FlowBlockDataGrid(
+            GridColumnMemberNames = new[]
+            {
+                nameof(ExpectationCondition.ExpectationConditionTarget),
+                nameof(ExpectationCondition.Index),
+                nameof(ExpectationCondition.Operator),
+                nameof(ExpectationCondition.Value)
+            })]
         public ObservableCollection<ExpectationCondition> ExpectationConditions
         {
             get => _expectationConditions;

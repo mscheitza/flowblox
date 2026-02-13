@@ -78,10 +78,18 @@
                                  Visibility="{Binding CanSelectFields, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TabItem.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding}"
-                                               FontSize="14"
-                                               FontWeight="Normal"
-                                               Padding="10,5"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                        <iconPacks:PackIconMaterial Kind="DatabaseOutline"
+                                            Width="16"
+                                            Height="16"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="#3A6EA5"/>
+                                        <TextBlock Text="{Binding}"
+                                               FontSize="15"
+                                               FontWeight="SemiBold"
+                                               Padding="0,5"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </TabItem.HeaderTemplate>
 
@@ -123,10 +131,18 @@
                                  Visibility="{Binding CanSelectOptions, Converter={StaticResource BoolToVisibilityConverter}}">
                             <TabItem.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding}"
-                                               FontSize="14"
-                                               FontWeight="Normal"
-                                               Padding="10,5"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                        <iconPacks:PackIconMaterial Kind="TuneVariant"
+                                        Width="16"
+                                        Height="16"
+                                        Margin="0,0,8,0"
+                                        VerticalAlignment="Center"
+                                        Foreground="#2E7D32"/>
+                                        <TextBlock Text="{Binding}"
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Padding="0,5"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </TabItem.HeaderTemplate>
 
@@ -197,7 +213,9 @@
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="0,10,0,0">
-                <Button Margin="0,0,6,0" Command="{Binding BackCommand}">
+                <Button Margin="0,0,6,0" 
+                        Command="{Binding BackCommand}"
+                        IsCancel="True">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial Kind="ArrowLeft"
@@ -210,7 +228,10 @@
                     </Button.Content>
                 </Button>
 
-                <Button x:Name="OkButton" Command="{Binding OkCommand}" IsEnabled="False">
+                <Button x:Name="OkButton" 
+                        Command="{Binding OkCommand}" 
+                        IsEnabled="False"
+                        IsDefault="True">
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial Kind="Check"

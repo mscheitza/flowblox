@@ -32,15 +32,17 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionView));
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             tbDescription = new System.Windows.Forms.RichTextBox();
-            cbType = new System.Windows.Forms.ComboBox();
-            labelValue = new System.Windows.Forms.Label();
-            labelType = new System.Windows.Forms.Label();
-            panel1 = new System.Windows.Forms.Panel();
-            cbValue = new System.Windows.Forms.CheckBox();
-            tbValue = new System.Windows.Forms.TextBox();
             labelDescription = new System.Windows.Forms.Label();
-            tbName = new System.Windows.Forms.TextBox();
             labelName = new System.Windows.Forms.Label();
+            tbName = new System.Windows.Forms.TextBox();
+            labelType = new System.Windows.Forms.Label();
+            cbType = new System.Windows.Forms.ComboBox();
+            labelIsPlaceholderEnabled = new System.Windows.Forms.Label();
+            cbIsPlaceholderEnabled = new System.Windows.Forms.ComboBox();
+            labelValue = new System.Windows.Forms.Label();
+            panel1 = new System.Windows.Forms.Panel();
+            cbBooleanValue = new System.Windows.Forms.ComboBox();
+            tbValue = new System.Windows.Forms.TextBox();
             flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             btApply = new System.Windows.Forms.Button();
             imageList = new System.Windows.Forms.ImageList(components);
@@ -59,14 +61,16 @@
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61F));
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(tbDescription, 1, 2);
-            tableLayoutPanel1.Controls.Add(cbType, 1, 6);
-            tableLayoutPanel1.Controls.Add(labelValue, 1, 7);
-            tableLayoutPanel1.Controls.Add(labelType, 1, 5);
-            tableLayoutPanel1.Controls.Add(panel1, 1, 8);
             tableLayoutPanel1.Controls.Add(labelDescription, 1, 1);
-            tableLayoutPanel1.Controls.Add(tbName, 1, 4);
             tableLayoutPanel1.Controls.Add(labelName, 1, 3);
-            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 1, 9);
+            tableLayoutPanel1.Controls.Add(tbName, 1, 4);
+            tableLayoutPanel1.Controls.Add(labelType, 1, 5);
+            tableLayoutPanel1.Controls.Add(cbType, 1, 6);
+            tableLayoutPanel1.Controls.Add(labelIsPlaceholderEnabled, 1, 7);
+            tableLayoutPanel1.Controls.Add(cbIsPlaceholderEnabled, 1, 8);
+            tableLayoutPanel1.Controls.Add(labelValue, 1, 9);
+            tableLayoutPanel1.Controls.Add(panel1, 1, 10);
+            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 1, 11);
             tableLayoutPanel1.Controls.Add(pictureBox1, 0, 0);
             tableLayoutPanel1.Controls.Add(labelTitleHeader, 1, 0);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -74,12 +78,14 @@
             tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 10;
+            tableLayoutPanel1.RowCount = 12;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
@@ -98,88 +104,10 @@
             tbDescription.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             tbDescription.Name = "tbDescription";
             tbDescription.ReadOnly = true;
-            tbDescription.Size = new System.Drawing.Size(535, 32);
+            tbDescription.Size = new System.Drawing.Size(535, 19);
             tbDescription.TabIndex = 26;
             tbDescription.Text = "";
             tbDescription.LinkClicked += tbDesc_LinkClicked;
-            // 
-            // cbType
-            // 
-            cbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            cbType.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            cbType.FormattingEnabled = true;
-            cbType.Location = new System.Drawing.Point(65, 201);
-            cbType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            cbType.Name = "cbType";
-            cbType.Size = new System.Drawing.Size(318, 22);
-            cbType.TabIndex = 23;
-            cbType.SelectedIndexChanged += cbType_SelectedIndexChanged;
-            // 
-            // labelValue
-            // 
-            labelValue.AutoSize = true;
-            labelValue.Dock = System.Windows.Forms.DockStyle.Fill;
-            labelValue.Location = new System.Drawing.Point(65, 225);
-            labelValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            labelValue.Name = "labelValue";
-            labelValue.Size = new System.Drawing.Size(535, 29);
-            labelValue.TabIndex = 14;
-            labelValue.Tag = "style_header";
-            labelValue.Text = "labelValue_Text";
-            labelValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            labelValue.Click += lblValue_Click;
-            // 
-            // labelType
-            // 
-            labelType.AutoSize = true;
-            labelType.Dock = System.Windows.Forms.DockStyle.Fill;
-            labelType.Location = new System.Drawing.Point(65, 173);
-            labelType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            labelType.Name = "labelType";
-            labelType.Size = new System.Drawing.Size(535, 25);
-            labelType.TabIndex = 24;
-            labelType.Tag = "style_header";
-            labelType.Text = "labelType_Text";
-            labelType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(cbValue);
-            panel1.Controls.Add(tbValue);
-            panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            panel1.Location = new System.Drawing.Point(65, 257);
-            panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(535, 108);
-            panel1.TabIndex = 3;
-            // 
-            // cbValue
-            // 
-            cbValue.AutoSize = true;
-            cbValue.Font = new System.Drawing.Font("Calibri", 8.25F);
-            cbValue.Location = new System.Drawing.Point(12, 226);
-            cbValue.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            cbValue.Name = "cbValue";
-            cbValue.Size = new System.Drawing.Size(150, 17);
-            cbValue.TabIndex = 25;
-            cbValue.Text = "FlowBlox.Option.Name";
-            cbValue.UseVisualStyleBackColor = true;
-            cbValue.Visible = false;
-            cbValue.CheckedChanged += cbValue_CheckedChanged;
-            // 
-            // tbValue
-            // 
-            tbValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            tbValue.Dock = System.Windows.Forms.DockStyle.Fill;
-            tbValue.Font = new System.Drawing.Font("Courier New", 8.25F);
-            tbValue.ForeColor = System.Drawing.Color.DarkSlateGray;
-            tbValue.Location = new System.Drawing.Point(0, 0);
-            tbValue.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            tbValue.Multiline = true;
-            tbValue.Name = "tbValue";
-            tbValue.Size = new System.Drawing.Size(535, 108);
-            tbValue.TabIndex = 15;
-            tbValue.TextChanged += tbValue_TextChanged;
             // 
             // labelDescription
             // 
@@ -194,6 +122,19 @@
             labelDescription.Text = "labelDescription_Text";
             labelDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // labelName
+            // 
+            labelName.AutoSize = true;
+            labelName.Dock = System.Windows.Forms.DockStyle.Fill;
+            labelName.Location = new System.Drawing.Point(65, 110);
+            labelName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            labelName.Name = "labelName";
+            labelName.Size = new System.Drawing.Size(535, 25);
+            labelName.TabIndex = 18;
+            labelName.Tag = "style_header";
+            labelName.Text = "labelName_Text";
+            labelName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // tbName
             // 
             tbName.BackColor = System.Drawing.Color.White;
@@ -201,7 +142,7 @@
             tbName.Dock = System.Windows.Forms.DockStyle.Fill;
             tbName.Font = new System.Drawing.Font("Courier New", 8.25F);
             tbName.ForeColor = System.Drawing.Color.DarkSlateGray;
-            tbName.Location = new System.Drawing.Point(65, 151);
+            tbName.Location = new System.Drawing.Point(65, 138);
             tbName.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             tbName.Multiline = true;
             tbName.Name = "tbName";
@@ -210,18 +151,107 @@
             tbName.TabIndex = 17;
             tbName.TextChanged += tbName_TextChanged;
             // 
-            // labelName
+            // labelType
             // 
-            labelName.AutoSize = true;
-            labelName.Dock = System.Windows.Forms.DockStyle.Fill;
-            labelName.Location = new System.Drawing.Point(65, 123);
-            labelName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            labelName.Name = "labelName";
-            labelName.Size = new System.Drawing.Size(535, 25);
-            labelName.TabIndex = 18;
-            labelName.Tag = "style_header";
-            labelName.Text = "labelName_Text";
-            labelName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            labelType.AutoSize = true;
+            labelType.Dock = System.Windows.Forms.DockStyle.Fill;
+            labelType.Location = new System.Drawing.Point(65, 160);
+            labelType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            labelType.Name = "labelType";
+            labelType.Size = new System.Drawing.Size(535, 25);
+            labelType.TabIndex = 24;
+            labelType.Tag = "style_header";
+            labelType.Text = "labelType_Text";
+            labelType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbType
+            // 
+            cbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cbType.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            cbType.FormattingEnabled = true;
+            cbType.Location = new System.Drawing.Point(65, 188);
+            cbType.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            cbType.Name = "cbType";
+            cbType.Size = new System.Drawing.Size(318, 22);
+            cbType.TabIndex = 23;
+            cbType.SelectedIndexChanged += cbType_SelectedIndexChanged;
+            // 
+            // labelIsPlaceholderEnabled
+            // 
+            labelIsPlaceholderEnabled.AutoSize = true;
+            labelIsPlaceholderEnabled.Dock = System.Windows.Forms.DockStyle.Fill;
+            labelIsPlaceholderEnabled.Location = new System.Drawing.Point(65, 212);
+            labelIsPlaceholderEnabled.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            labelIsPlaceholderEnabled.Name = "labelIsPlaceholderEnabled";
+            labelIsPlaceholderEnabled.Size = new System.Drawing.Size(535, 25);
+            labelIsPlaceholderEnabled.TabIndex = 30;
+            labelIsPlaceholderEnabled.Tag = "style_header";
+            labelIsPlaceholderEnabled.Text = "labelIsPlaceholderEnabled_Text";
+            labelIsPlaceholderEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbIsPlaceholderEnabled
+            // 
+            cbIsPlaceholderEnabled.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cbIsPlaceholderEnabled.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            cbIsPlaceholderEnabled.FormattingEnabled = true;
+            cbIsPlaceholderEnabled.Location = new System.Drawing.Point(65, 240);
+            cbIsPlaceholderEnabled.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            cbIsPlaceholderEnabled.Name = "cbIsPlaceholderEnabled";
+            cbIsPlaceholderEnabled.Size = new System.Drawing.Size(318, 22);
+            cbIsPlaceholderEnabled.TabIndex = 31;
+            cbIsPlaceholderEnabled.SelectedIndexChanged += cbShowInFieldSelection_SelectedIndexChanged;
+            // 
+            // labelValue
+            // 
+            labelValue.AutoSize = true;
+            labelValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            labelValue.Location = new System.Drawing.Point(65, 264);
+            labelValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            labelValue.Name = "labelValue";
+            labelValue.Size = new System.Drawing.Size(535, 29);
+            labelValue.TabIndex = 14;
+            labelValue.Tag = "style_header";
+            labelValue.Text = "labelValue_Text";
+            labelValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(cbBooleanValue);
+            panel1.Controls.Add(tbValue);
+            panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            panel1.Location = new System.Drawing.Point(65, 296);
+            panel1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new System.Drawing.Size(535, 69);
+            panel1.TabIndex = 3;
+            // 
+            // cbBooleanValue
+            // 
+            cbBooleanValue.Dock = System.Windows.Forms.DockStyle.Top;
+            cbBooleanValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            cbBooleanValue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            cbBooleanValue.FormattingEnabled = true;
+            cbBooleanValue.Location = new System.Drawing.Point(0, 0);
+            cbBooleanValue.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            cbBooleanValue.Name = "cbBooleanValue";
+            cbBooleanValue.Size = new System.Drawing.Size(535, 22);
+            cbBooleanValue.TabIndex = 32;
+            cbBooleanValue.Visible = false;
+            cbBooleanValue.SelectedIndexChanged += cbBooleanValue_SelectedIndexChanged;
+            // 
+            // tbValue
+            // 
+            tbValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            tbValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            tbValue.Font = new System.Drawing.Font("Courier New", 8.25F);
+            tbValue.ForeColor = System.Drawing.Color.DarkSlateGray;
+            tbValue.Location = new System.Drawing.Point(0, 0);
+            tbValue.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            tbValue.Multiline = true;
+            tbValue.Name = "tbValue";
+            tbValue.Size = new System.Drawing.Size(535, 69);
+            tbValue.TabIndex = 15;
+            tbValue.TextChanged += tbValue_TextChanged;
             // 
             // flowLayoutPanel1
             // 
@@ -311,13 +341,16 @@
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.TextBox tbValue;
+        private System.Windows.Forms.ComboBox cbBooleanValue;
         private System.Windows.Forms.Label labelValue;
         private System.Windows.Forms.OpenFileDialog openRegexDialog;
         private System.Windows.Forms.Label labelType;
         private System.Windows.Forms.ComboBox cbType;
         private System.Windows.Forms.Label labelDescription;
-        private System.Windows.Forms.CheckBox cbValue;
         private System.Windows.Forms.RichTextBox tbDescription;
         private System.Windows.Forms.ImageList imageList;
+
+        private System.Windows.Forms.Label labelIsPlaceholderEnabled;
+        private System.Windows.Forms.ComboBox cbIsPlaceholderEnabled;
     }
 }

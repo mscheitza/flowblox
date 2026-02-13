@@ -129,7 +129,7 @@ namespace FlowBlox.AppWindow.Contents
             return gridUIElement;
         }
 
-        private void baseGridElement_ConditionDoubleClick(FlowBlockUIElement sender, Condition condition) => EditReactiveObject(sender, condition);
+        private void baseGridElement_ConditionDoubleClick(FlowBlockUIElement sender, FlowBloxReactiveObject condition) => EditReactiveObject(sender, condition);
 
         private void baseGridElement_ModifierDoubleClick(FlowBlockUIElement sender, ModifierBase modifier) => EditReactiveObject(sender, modifier);
 

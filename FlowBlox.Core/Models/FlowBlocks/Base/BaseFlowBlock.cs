@@ -220,7 +220,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         {
             this.InputBehaviorAssignments = new ObservableCollection<InputBehaviorAssignment>();
             this.ReferencedFlowBlocks = new ObservableCollection<BaseFlowBlock>();
-            this.ActivationConditions = new ObservableCollection<FieldCondition>();
+            this.ActivationConditions = new ObservableCollection<LogicalCondition>();
             this.TestDefinitions = new ObservableCollection<FlowBloxTestDefinition>();
             this.GenerationStrategies = new ObservableCollection<FlowBloxGenerationStrategyBase>();
 
@@ -232,35 +232,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public override void OnAfterLoad()
         {
             base.OnAfterLoad();
-            CleanUpActivationConditions();
         }
-
-        // TODO: Nur temporär drin um bestehende Testprojekte zu laden! Muss herausgenommen werden.
-        private void CleanUpActivationConditions()
-        {
-            HashSet<string> alreadyProcessed = new HashSet<string>();
-            List<FieldCondition> conditionsToRemove = new List<FieldCondition>();
-
-            foreach (var activationCondition in this.ActivationConditions.OfType<FieldCondition>().ToList())
-            {
-                // Operator == HasValue nach RequiredFields verschieben
-                if (activationCondition.Operator == ComparisonOperator.HasValue)
-                {
-                    if (!this.RequiredFields.Contains(activationCondition.FieldElement))
-                    {
-                        this.RequiredFields.Add(activationCondition.FieldElement);
-                    }
-
-                    conditionsToRemove.Add(activationCondition);
-                }
-            }
-
-            foreach (var condition in conditionsToRemove)
-            {
-                this.ActivationConditions.Remove(condition);
-            }
-        }
-
 
         private string _name;
 
@@ -466,9 +438,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public bool InheritRequirementsNotMet { get; set; }
 
         [Display(Name = "BaseFlowBlock_ActivationConditions", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.GridView, UiOptions = UIOptions.EnableFieldSelection)]
-        public ObservableCollection<FieldCondition> ActivationConditions { get; set; }
-        
+        [FlowBlockUI(
+            Factory = UIFactory.GridView,
+            UiOptions = UIOptions.EnableFieldSelection,
+            CreatableTypes = new[] { 
+                typeof(FieldLogicalComparisonCondition), 
+                typeof(LogicalGroupCondition) })]
+        [FlowBlockDataGrid(GridColumnMemberNames = [
+            nameof(LogicalCondition.LogicalOperator),
+            nameof(LogicalCondition.DisplayName)
+            ])]
+        public ObservableCollection<LogicalCondition> ActivationConditions { get; set; } = new ObservableCollection<LogicalCondition>();
+
         [Display(Name = "BaseFlowBlock_TestDefinitions", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ListView, 
             Operations = UIOperations.Link | UIOperations.Unlink | UIOperations.Create | UIOperations.Edit | UIOperations.Delete,
@@ -727,28 +708,62 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             return result;
         }
 
-        protected virtual bool ValidateRequirements(List<string> messages)
+        private bool EvaluateActivationConditions()
         {
-            if (InheritRequirementsNotMet &&
-                this.ReferencedFlowBlocks.Any() &&
-                this.ReferencedFlowBlocks.All(x => x.CurrentFlags.HasFlag(FlowBlockFlags.RequirementsNotMet)))
-            {
-                messages.Add($"The activation conditions of the previous FlowBlocks were not met.");
-                return false;
-            }
+            if (ActivationConditions == null || ActivationConditions.Count == 0)
+                return true;
 
-            // Check ActivationConditions
-            foreach (var activationCondition in this.ActivationConditions)
+            bool? result = null;
+
+            foreach (var condition in ActivationConditions)
             {
-                if (!activationCondition.Check(activationCondition.FieldElement.Value))
+                bool current = condition.Check();
+                if (result == null)
                 {
-                    messages.Add($"Activation condition \"{activationCondition.FieldElement.Name} {activationCondition}\" was not met.");
-                    return false;
+                    result = current;
+                    continue;
+                }
+
+                switch (condition.LogicalOperator)
+                {
+                    case LogicalOperator.And:
+                        result = result.Value && current;
+                        break;
+
+                    case LogicalOperator.Or:
+                        result = result.Value || current;
+                        break;
+
+                    default:
+                        throw new NotSupportedException($"Unsupported logical operator: {condition.LogicalOperator}");
                 }
             }
 
+            return result ?? true;
+        }
+
+        protected virtual bool ValidateRequirements(List<string> messages)
+        {
+            if (InheritRequirementsNotMet &&
+                ReferencedFlowBlocks.Any() &&
+                ReferencedFlowBlocks.All(x => x.CurrentFlags.HasFlag(FlowBlockFlags.RequirementsNotMet)))
+            {
+                messages.Add("The activation conditions of the previous FlowBlocks were not met.");
+                return false;
+            }
+
+            if (!EvaluateActivationConditions())
+            {
+                var summary = string.Join(" ", ActivationConditions.Select((c, i) => i == 0 ?
+                    c.DisplayName :
+                    $"{(c.LogicalOperator == LogicalOperator.And ? "and" : "or")} {c.DisplayName}"));
+
+                messages.Add($"Activation conditions were not met: {summary}");
+                return false;
+            }
+
             // Check RequiredFields
-            var missingRequiredFields = this.GetRequiredFields()
+            var missingRequiredFields = GetRequiredFields()
                 .Where(field => field?.Value == null || (field.Value is string s && string.IsNullOrWhiteSpace(s)));
 
             foreach (var field in missingRequiredFields)

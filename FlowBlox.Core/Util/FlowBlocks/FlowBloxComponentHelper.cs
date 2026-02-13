@@ -78,6 +78,9 @@ namespace FlowBlox.Grid.Elements.Util
             if (inst is FlowBloxComponent component)
                 return component.Icon32;
 
+            if (inst is FlowBloxReactiveObject reactiveObject)
+                return reactiveObject.Icon32;
+
             return null;
         }
 
@@ -85,6 +88,9 @@ namespace FlowBlox.Grid.Elements.Util
         {
             if (inst is FlowBloxComponent component)
                 return component.Icon16;
+
+            if (inst is FlowBloxReactiveObject reactiveObject)
+                return reactiveObject.Icon16;
 
             return null;
         }

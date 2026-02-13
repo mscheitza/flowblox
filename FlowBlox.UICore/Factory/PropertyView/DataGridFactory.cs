@@ -49,6 +49,38 @@ namespace FlowBlox.UICore.Factory.PropertyView
             dataGrid.CellStyle = cellStyle;
         }
 
+        private IEnumerable<PropertyInfo> GetDataGridProperties(Type listItemType)
+        {
+            var all = listItemType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            if (_dataGridAttribute?.GridColumnMemberNames != null &&
+                _dataGridAttribute.GridColumnMemberNames.Length > 0)
+            {
+                var map = all.ToDictionary(p => p.Name, p => p);
+
+                foreach (var name in _dataGridAttribute.GridColumnMemberNames)
+                {
+                    if (string.IsNullOrWhiteSpace(name))
+                        continue;
+
+                    if (map.TryGetValue(name, out var prop))
+                        yield return prop;
+                }
+
+                yield break;
+            }
+
+            foreach (var p in all)
+                yield return p;
+        }
+
+        private bool IsPropertyReadOnly(PropertyInfo propertyInfo, FlowBlockUIAttribute flowBlockUIAttribute)
+        {
+            return _readOnly ||
+                   !propertyInfo.CanWrite ||
+                   flowBlockUIAttribute?.ReadOnly == true;
+        }
+
         public FrameworkElement Create()
         {
             // Property-Wert auslesen und Liste überprüfen
@@ -81,7 +113,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             // Spalten aus der Listenelement-Type erstellen
             Type listItemType = _property.PropertyType.GetGenericArguments()[0];
-            foreach (var childProperty in listItemType.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var childProperty in GetDataGridProperties(listItemType))
             {
                 var displayAttr = childProperty.GetCustomAttribute<DisplayAttribute>();
                 if (displayAttr == null)
@@ -89,8 +121,13 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
                 var flowBlockUIAttribute = childProperty.GetCustomAttribute<FlowBlockUIAttribute>();
 
-                if (flowBlockUIAttribute?.Visible == false)
-                    continue;
+                // Wenn die Grid-Columms automatisch ermittelt wurden, werden nicht sichtbare Member nicht als Spalten angezeigt:
+                if (_dataGridAttribute?.GridColumnMemberNames == null ||
+                    _dataGridAttribute.GridColumnMemberNames.Length == 0)
+                {
+                    if (flowBlockUIAttribute?.Visible == false)
+                        continue;
+                }
 
                 string headerText = FlowBloxResourceUtil.GetDisplayName(displayAttr);
 
@@ -114,11 +151,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         Header = headerText,
                         Binding = new Binding(childProperty.Name)
                         {
-                            Mode = _readOnly ? BindingMode.OneWay : BindingMode.TwoWay,
+                            Mode = IsPropertyReadOnly(childProperty, flowBlockUIAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
                             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                             TargetNullValue = string.Empty
                         },
-                        IsReadOnly = !childProperty.CanWrite || flowBlockUIAttribute?.ReadOnly == true
+                        IsReadOnly = IsPropertyReadOnly(childProperty, flowBlockUIAttribute)
                     };
                     ApplyCenteredTextColumnStyles(column);
                     dataGrid.Columns.Add(column);
@@ -224,10 +261,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         Header = headerText,
                         Binding = new Binding(childProperty.Name)
                         {
-                            Mode = _readOnly ? BindingMode.OneWay : BindingMode.TwoWay,
+                            Mode = IsPropertyReadOnly(childProperty, flowBlockUIAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
                             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                         },
-                        IsReadOnly = !childProperty.CanWrite || flowBlockUIAttribute?.ReadOnly == true
+                        IsReadOnly = IsPropertyReadOnly(childProperty, flowBlockUIAttribute)
                     };
                     dataGrid.Columns.Add(column);
                     columnAttributeMap[column] = flowBlockUIAttribute;
@@ -441,7 +478,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         private void AddNewItem(IList list, Type listItemType, DataGrid dataGrid)
         {
-            object newItem = Activator.CreateInstance(listItemType);
+            object newItem = CreateNewInstance(_window, listItemType);
             list.Add(newItem);
         }
 

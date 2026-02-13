@@ -209,24 +209,24 @@ namespace FlowBlox.Core.Models.Testing
                     case ExpectationConditionTarget.FirstValue:
                         {
                             string value = fieldValues.FirstOrDefault();
-                            conditionMet = expectationCondition.Check(value);
+                            conditionMet = expectationCondition.Compare(value);
                             break;
                         }
                     case ExpectationConditionTarget.AnyValue:
                         {
-                            conditionMet = fieldValues.Any(value => expectationCondition.Check(value));
+                            conditionMet = fieldValues.Any(value => expectationCondition.Compare(value));
                             break;
                         }
                     case ExpectationConditionTarget.LastValue:
                         {
                             string value = fieldValues.LastOrDefault();
-                            conditionMet = expectationCondition.Check(value);
+                            conditionMet = expectationCondition.Compare(value);
                             break;
                         }
                     case ExpectationConditionTarget.NumberOfDatasets:
                         {
                             int count = fieldValues.Count();
-                            conditionMet = expectationCondition.Check(count);
+                            conditionMet = expectationCondition.Compare(count);
                             break;
                         }
                 }

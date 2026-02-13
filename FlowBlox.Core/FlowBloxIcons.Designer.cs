@@ -123,6 +123,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] compare {
+            get {
+                object obj = ResourceManager.GetObject("compare", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] component {
             get {
                 object obj = ResourceManager.GetObject("component", resourceCulture);
@@ -136,6 +146,16 @@ namespace FlowBlox.Core {
         public static byte[] counter {
             get {
                 object obj = ResourceManager.GetObject("counter", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] cube_outline {
+            get {
+                object obj = ResourceManager.GetObject("cube_outline", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -363,6 +383,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] set_all {
+            get {
+                object obj = ResourceManager.GetObject("set_all", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] set_merge {
             get {
                 object obj = ResourceManager.GetObject("set_merge", resourceCulture);
@@ -416,6 +446,16 @@ namespace FlowBlox.Core {
         public static byte[] text_long {
             get {
                 object obj = ResourceManager.GetObject("text_long", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] vector_arrange_below {
+            get {
+                object obj = ResourceManager.GetObject("vector_arrange_below", resourceCulture);
                 return ((byte[])(obj));
             }
         }

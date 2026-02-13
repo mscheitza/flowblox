@@ -136,11 +136,17 @@
   <data name="comment_question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\comment-question.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="compare" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\compare.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="component" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\component.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="counter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\counter.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cube_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\cube-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="cube_send" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\cube-send.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -208,6 +214,9 @@
   <data name="selection_ellipse_arrow_inside" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\selection-ellipse-arrow-inside.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="set_all" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\set-all.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="set_merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\set-merge.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -225,6 +234,9 @@
   </data>
   <data name="text_long" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\text-long.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="vector_arrange_below" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\vector-arrange-below.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="web" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\web.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

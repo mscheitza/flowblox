@@ -1271,6 +1271,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Available as placeholder ähnelt.
+        /// </summary>
+        internal static string OptionView_labelIsPlaceholderEnabled_Text {
+            get {
+                return ResourceManager.GetString("OptionView_labelIsPlaceholderEnabled_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name: ähnelt.
         /// </summary>
         internal static string OptionView_labelName_Text {
@@ -1303,6 +1312,24 @@ namespace FlowBlox {
         internal static string OptionView_labelValue_Text {
             get {
                 return ResourceManager.GetString("OptionView_labelValue_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No ähnelt.
+        /// </summary>
+        internal static string OptionView_No {
+            get {
+                return ResourceManager.GetString("OptionView_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Yes ähnelt.
+        /// </summary>
+        internal static string OptionView_Yes {
+            get {
+                return ResourceManager.GetString("OptionView_Yes", resourceCulture);
             }
         }
         

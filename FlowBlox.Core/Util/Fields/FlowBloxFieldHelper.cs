@@ -49,11 +49,11 @@ namespace FlowBlox.Core.Util.Fields
             }
 
             var optionsInstance = FlowBloxOptions.GetOptionInstance();
-            foreach (var keyValueOption in optionsInstance.OptionCollection)
+            foreach (var optionElement in optionsInstance.GetOptions().Where(x => x.IsPlaceholderEnabled))
             {
-                string optionPlaceholder = $"$Options::{keyValueOption.Key}";
+                string optionPlaceholder = $"$Options::{optionElement.Name}";
                 if (value.Contains(optionPlaceholder))
-                    value = value.Replace(optionPlaceholder, keyValueOption.Value?.Value?.ToString() ?? "");
+                    value = value.Replace(optionPlaceholder, optionElement.Value?.ToString() ?? "");
             };
 
             return value;

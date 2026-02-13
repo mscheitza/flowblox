@@ -32,15 +32,32 @@ namespace FlowBlox.UICore.Factory.Base
             IList<Type> types;
             if (propertyType.IsInterface || propertyType.IsAbstract)
             {
-                types = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(a => a.GetTypes())
-                    .Where(t => propertyType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface)
-                    .Where(t =>
-                    {
-                        var attr = t.GetCustomAttribute<FlowBloxSupportedTypesAttribute>();
-                        return attr == null || attr.SupportedTypes.Contains(_target.GetType());
-                    })
-                    .ToList();
+                if (_flowBlockUIAttribute?.CreatableTypes != null && _flowBlockUIAttribute.CreatableTypes.Length > 0)
+                {
+                    types = _flowBlockUIAttribute.CreatableTypes
+                        .Where(t => t != null)
+                        .Where(t => propertyType.IsAssignableFrom(t))
+                        .Where(t => !t.IsAbstract && !t.IsInterface)
+                        .Where(t =>
+                        {
+                            var attr = t.GetCustomAttribute<FlowBloxSupportedTypesAttribute>();
+                            return attr == null || attr.SupportedTypes.Contains(_target.GetType());
+                        })
+                        .Distinct()
+                        .ToList();
+                }
+                else
+                {
+                    types = AppDomain.CurrentDomain.GetAssemblies()
+                        .SelectMany(a => a.GetTypes())
+                        .Where(t => propertyType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface)
+                        .Where(t =>
+                        {
+                            var attr = t.GetCustomAttribute<FlowBloxSupportedTypesAttribute>();
+                            return attr == null || attr.SupportedTypes.Contains(_target.GetType());
+                        })
+                        .ToList();
+                }   
             }
             else
             {

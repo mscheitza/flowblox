@@ -163,7 +163,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     }
 
                     // Process conditions
-                    var invalidDueToCondition = fieldElement.Conditions.FirstOrDefault(condition => !condition.Check(fieldValue));
+                    var invalidDueToCondition = fieldElement.Conditions.FirstOrDefault(condition => !condition.Compare(fieldValue));
                     if (invalidDueToCondition != null)
                     {
                         runtime.Report($"Validation failed for \"{fieldElement.ShortStringValue}\": does not meet \"{invalidDueToCondition.DisplayName}\" (at \"{fieldElement.FullyQualifiedName}\").");

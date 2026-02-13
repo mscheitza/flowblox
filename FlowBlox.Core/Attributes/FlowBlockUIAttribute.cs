@@ -40,6 +40,7 @@
             this.DisplayLabel = true;
             this.Operations = UIOperations.All;
             this.Visible = true;
+            this.CreatableTypes = Array.Empty<Type>();
         }
 
         public UIOperations Operations { get; set; }
@@ -64,5 +65,10 @@
         public int Height { get; set; }
         
         public bool ReadOnly { get; set; }
+
+        // <summary>
+        /// If set, only these concrete types may be created for abstract/interface property types.
+        /// </summary>
+        public Type[] CreatableTypes { get; set; }
     }
 }

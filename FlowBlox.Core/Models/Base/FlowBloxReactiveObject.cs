@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using FlowBlox.Core.Util.Resources;
+using Newtonsoft.Json;
+using SkiaSharp;
+using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
@@ -12,6 +15,12 @@ namespace FlowBlox.Core.Models.Base
     /// </summary>
     public class FlowBloxReactiveObject : INotifyPropertyChanged, INotifyDataErrorInfo
     {
+        [JsonIgnore]
+        public virtual SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.cube_outline, 16, new SKColor(84, 110, 122));
+
+        [JsonIgnore]
+        public virtual SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.cube_outline, 32, new SKColor(84, 110, 122));
+
         private readonly Dictionary<string, List<string>> _errors = new();
 
         public event PropertyChangedEventHandler PropertyChanged;
