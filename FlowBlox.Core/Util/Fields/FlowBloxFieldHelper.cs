@@ -3,9 +3,6 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Enums;
-using Microsoft.Extensions.Options;
-using FlowBlox.Core.Models.Project;
-using FlowBlox.Core.Provider.Project;
 
 namespace FlowBlox.Core.Util.Fields
 {

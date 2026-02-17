@@ -78,17 +78,19 @@ namespace FlowBlox.WorkerService
                         };
                     }
 
-                    // Optional: write response JSON
+                    // Write response JSON
                     if (!string.IsNullOrWhiteSpace(cfg.OutputFile))
                     {
                         try
                         {
-                            RunnerJson.WriteFile(cfg.OutputFile!, response);
-                            _logger.LogInformation("Runner response written to: {OutputFile}", cfg.OutputFile);
+                            var writtenTo = RunnerJson.WriteFileResolved(cfg.OutputFile!, response,
+                                new RunnerPathTemplateContext { ProjectName = response.ProjectName });
+
+                            _logger.LogInformation("Runner response written to: {OutputFile}", writtenTo);
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogError(ex, "Failed to write output file: {OutputFile}", cfg.OutputFile);
+                            _logger.LogError(ex, "Failed to write output file template: {OutputFile}", cfg.OutputFile);
                         }
                     }
 
@@ -120,14 +122,14 @@ namespace FlowBlox.WorkerService
 
         private static RunnerRequest BuildRunnerRequest(FlowBloxServiceOptions cfg)
         {
+            if (cfg.ProjectFile == null)
+                throw new InvalidOperationException("ProjectFile must be configured.");
+
             return new RunnerRequest
             {
-                ProjectFile = cfg.ProjectFile ?? throw new InvalidOperationException("ProjectFile must be configured."),
-                NoDesignerMode = cfg.NoDesignerMode,
+                ProjectFile = RunnerPathTemplateResolver.Resolve(cfg.ProjectFile),
 
-                // Service may allow restart, but ExecuteProjectFlowBlock may force false elsewhere.
                 AutoRestart = cfg.Restart,
-
                 AbortOnError = cfg.AbortOnError,
                 AbortOnWarning = cfg.AbortOnWarning,
 

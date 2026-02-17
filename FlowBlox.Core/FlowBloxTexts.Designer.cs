@@ -1447,6 +1447,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target Value ähnelt.
+        /// </summary>
+        public static string ExecuteProjectParameterMappingEntry_TargetValue {
+            get {
+                return ResourceManager.GetString("ExecuteProjectParameterMappingEntry_TargetValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Connection string ähnelt.
         /// </summary>
         public static string ExecuteSQLFlowBlock_ConnectionString {
@@ -4010,11 +4019,83 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Iterates an output group from the runner response JSON and maps output properties to fields to generate one result per dataset. ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Iterate Project Output ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mapping ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_Groups_Mapping {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_Groups_Mapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_Groups_Source {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_Groups_Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output mappings ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_OutputMappings {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_OutputMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output group ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_OutputName {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_OutputName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Response JSON ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_ResponseJson {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_ResponseJson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Output Mapping Entry ähnelt.
         /// </summary>
         public static string ProjectOutputMappingEntry_DisplayName {
             get {
                 return ResourceManager.GetString("ProjectOutputMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required ähnelt.
+        /// </summary>
+        public static string ProjectOutputMappingEntry_IsRequired {
+            get {
+                return ResourceManager.GetString("ProjectOutputMappingEntry_IsRequired", resourceCulture);
             }
         }
         

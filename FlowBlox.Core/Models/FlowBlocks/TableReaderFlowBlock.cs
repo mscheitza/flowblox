@@ -89,8 +89,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
             {
                 return this.MappingEntries
                     .Select(x => x.Field)
-                    .ExceptNull().
-                    ToList();
+                    .ExceptNull()
+                    .ToList();
             }
         }
 

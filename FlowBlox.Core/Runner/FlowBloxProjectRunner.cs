@@ -49,9 +49,8 @@ namespace FlowBlox.Core.Runner
 
                 response.ProjectName = project.ProjectName;
 
-                // Ensure options exist and apply overrides.
+                // Apply option overrides.
                 var flowBloxOptions = FlowBloxOptions.GetOptionInstance();
-                flowBloxOptions.InitDefaults(false);
                 ApplyOptionOverrides(flowBloxOptions, request.OptionOverrides);
 
                 // Apply user field overrides (inputs).
@@ -59,8 +58,8 @@ namespace FlowBlox.Core.Runner
 
                 runtime = new FlowBloxRuntime(project)
                 {
-                    IsNoDesignerMode = request.NoDesignerMode,
-                    AutoRestart = false
+                    IsNoDesignerMode = true,
+                    AutoRestart = request.AutoRestart
                 };
 
                 response.LogfilePath = runtime.GetLogfilePath();

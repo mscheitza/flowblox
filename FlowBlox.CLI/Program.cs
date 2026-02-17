@@ -27,10 +27,9 @@ namespace FlowBlox.CLI
         {
             var request = new RunnerRequest
             {
-                ProjectFile = options.ProjectFile,
-                AutoRestart = options.Restart,
-                NoDesignerMode = true,
+                ProjectFile = RunnerPathTemplateResolver.Resolve(options.ProjectFile),
 
+                AutoRestart = options.Restart,
                 AbortOnError = options.AbortOnError,
                 AbortOnWarning = options.AbortOnWarning,
 
@@ -54,8 +53,10 @@ namespace FlowBlox.CLI
 
                 if (!string.IsNullOrWhiteSpace(options.OutputFile))
                 {
-                    RunnerJson.WriteFile(options.OutputFile, response);
-                    WriteColored($"Runner response written to: {options.OutputFile}", ConsoleColor.DarkGray);
+                    var writtenTo = RunnerJson.WriteFileResolved(options.OutputFile, response,
+                        new RunnerPathTemplateContext { ProjectName = response.ProjectName });
+
+                    WriteColored($"Runner response written to: {writtenTo}", ConsoleColor.DarkGray);
                 }
 
                 if (!response.Success)

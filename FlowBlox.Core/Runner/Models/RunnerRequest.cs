@@ -7,15 +7,10 @@ namespace FlowBlox.Core.Runner.Contracts
         public string ProjectFile { get; set; }
 
         public Dictionary<string, string> UserFields { get; set; } = new(StringComparer.OrdinalIgnoreCase);
-
         public Dictionary<string, string> OptionOverrides { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
         public bool AutoRestart { get; set; } = false;
-        public bool NoDesignerMode { get; set; } = true;
-
         public bool AbortOnError { get; set; } = true;
         public bool AbortOnWarning { get; set; } = false;
-
-        public string WorkingDirectory { get; set; }
     }
 }

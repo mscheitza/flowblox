@@ -2119,4 +2119,31 @@ Hinweis: Sobald ein Anbieter geladen ist, kann der Anbieter innerhalb desselben 
 	<data name="ExecuteProjectOutputMappingEntry_OutputPropertyName" xml:space="preserve">
 		<value>Ausgabe-Property-Name</value>
 	</data>
+	<data name="ProjectOutputMappingEntry_IsRequired" xml:space="preserve">
+		<value>Erforderlich</value>
+	</data>
+	<data name="ExecuteProjectParameterMappingEntry_TargetValue" xml:space="preserve">
+		<value>Zielwert</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_DisplayName" xml:space="preserve">
+		<value>Projekt-Ausgabe iterieren</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_Description" xml:space="preserve">
+		<value>Iteriert eine Output-Gruppe aus dem Runner-Response-JSON und mappt Output-Properties auf Felder, um pro Dataset Ergebnisse zu erzeugen.</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_Groups_Source" xml:space="preserve">
+		<value>Quelle</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_Groups_Mapping" xml:space="preserve">
+		<value>Mapping</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_ResponseJson" xml:space="preserve">
+		<value>Response JSON</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_OutputName" xml:space="preserve">
+		<value>Output-Gruppe</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_OutputMappings" xml:space="preserve">
+		<value>Output-Mappings</value>
+	</data>
 </root>

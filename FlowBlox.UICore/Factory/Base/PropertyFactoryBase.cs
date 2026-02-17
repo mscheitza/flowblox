@@ -99,12 +99,11 @@ namespace FlowBlox.UICore.Factory.Base
 
         protected virtual object CreateNewInstance(Type type)
         {
-            ConstructorInfo constructor = type.GetConstructor(new[] { _target.GetType() });
+            ConstructorInfo constructor = type.GetConstructor([_target.GetType()]);
             object instance;
-
             if (constructor != null)
             {
-                instance = constructor.Invoke(new[] { _target });
+                instance = constructor.Invoke([_target]);
             }
             else
             {

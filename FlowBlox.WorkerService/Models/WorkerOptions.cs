@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FlowBlox.WorkerService.Models
+﻿namespace FlowBlox.WorkerService.Models
 {
     public sealed class FlowBloxServiceOptions
     {
@@ -15,8 +9,6 @@ namespace FlowBlox.WorkerService.Models
         public bool RunOnStart { get; set; } = true;
 
         public string? ProjectFile { get; set; }
-
-        public bool NoDesignerMode { get; set; } = true;
 
         public bool Restart { get; set; } = false;
         public int RestartDelaySeconds { get; set; } = 10;

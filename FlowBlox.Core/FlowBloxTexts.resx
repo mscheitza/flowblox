@@ -2117,4 +2117,31 @@ Note: Once a provider is loaded, switching providers within the same process is 
 	<data name="ExecuteProjectOutputMappingEntry_OutputPropertyName" xml:space="preserve">
 		<value>Output Property Name</value>
 	</data>
+	<data name="ProjectOutputMappingEntry_IsRequired" xml:space="preserve">
+		<value>Required</value>
+	</data>
+	<data name="ExecuteProjectParameterMappingEntry_TargetValue" xml:space="preserve">
+		<value>Target Value</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_DisplayName" xml:space="preserve">
+		<value>Iterate Project Output</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_Description" xml:space="preserve">
+		<value>Iterates an output group from the runner response JSON and maps output properties to fields to generate one result per dataset.</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_Groups_Source" xml:space="preserve">
+		<value>Source</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_Groups_Mapping" xml:space="preserve">
+		<value>Mapping</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_ResponseJson" xml:space="preserve">
+		<value>Response JSON</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_OutputName" xml:space="preserve">
+		<value>Output group</value>
+	</data>
+	<data name="ProjectOutputIteratorFlowBlock_OutputMappings" xml:space="preserve">
+		<value>Output mappings</value>
+	</data>
 </root>

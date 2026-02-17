@@ -39,9 +39,9 @@ namespace FlowBlox.Core.Util
             if (string.IsNullOrWhiteSpace(assemblyDir))
                 throw new InvalidOperationException("Unable to determine executing assembly directory.");
 
-            var exeWin = Path.Combine(assemblyDir, "FlowBlox.Core.RunnerHost.exe");
-            var exeUnix = Path.Combine(assemblyDir, "FlowBlox.Core.RunnerHost");
-            var dll = Path.Combine(assemblyDir, "FlowBlox.Core.RunnerHost.dll");
+            var exeWin = Path.Combine(assemblyDir, "FlowBlox.RunnerHost.exe");
+            var exeUnix = Path.Combine(assemblyDir, "FlowBlox.RunnerHost");
+            var dll = Path.Combine(assemblyDir, "FlowBlox.RunnerHost.dll");
 
             if (File.Exists(exeWin))
                 return new RunnerHostCommand(exeWin);

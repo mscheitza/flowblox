@@ -12,6 +12,7 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Enums;
 using System.Collections.ObjectModel;
+using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 
 namespace FlowBlox.Core.Models.Components
 {

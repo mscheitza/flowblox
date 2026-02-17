@@ -30,5 +30,28 @@ namespace FlowBlox.Core.Runner.Serialization
             var opts = new JsonSerializerOptions(Options) { WriteIndented = pretty };
             return JsonSerializer.Serialize(obj, opts);
         }
+
+        public static string WriteFileResolved<T>(string pathTemplate, T obj, RunnerPathTemplateContext ctx = null)
+        {
+            var json = JsonSerializer.Serialize(obj, Options);
+
+            ctx ??= new RunnerPathTemplateContext();
+            if (string.IsNullOrWhiteSpace(ctx.ContentForHash))
+                ctx = new RunnerPathTemplateContext
+                {
+                    ProjectName = ctx.ProjectName,
+                    UtcNow = ctx.UtcNow,
+                    ContentForHash = json
+                };
+
+            var resolvedPath = RunnerPathTemplateResolver.Resolve(pathTemplate, ctx);
+
+            var dir = Path.GetDirectoryName(resolvedPath);
+            if (!string.IsNullOrWhiteSpace(dir) && !Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            File.WriteAllText(resolvedPath, json);
+            return resolvedPath;
+        }
     }
 }
