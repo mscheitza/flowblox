@@ -10,7 +10,6 @@ using FlowBlox.Grid.Elements.UserControls.Renderer;
 using System.Drawing.Drawing2D;
 using FlowBlox.AppWindow.Contents;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Enums;
 using FlowBlox.Grid.Provider;
 using FlowBlox.Core.Provider.Project;
@@ -22,6 +21,7 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components.Modifier;
 using FlowBlox.Actions;
 using FlowBlox.UICore.Utilities;
+using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 
 namespace FlowBlox.Grid.Elements.UserControls
 {

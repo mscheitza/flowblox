@@ -79,15 +79,6 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
-        /// </summary>
-        public static string dssds {
-            get {
-                return ResourceManager.GetString("dssds", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No user was selected. ähnelt.
         /// </summary>
         public static string Error_EditUserProperties_NoUserSelected {

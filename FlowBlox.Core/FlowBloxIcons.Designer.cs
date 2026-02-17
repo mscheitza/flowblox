@@ -333,6 +333,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] play_box_outline {
+            get {
+                object obj = ResourceManager.GetObject("play_box_outline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] ray_start_arrow {
             get {
                 object obj = ResourceManager.GetObject("ray_start_arrow", resourceCulture);
@@ -453,9 +463,29 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] tray_arrow_up {
+            get {
+                object obj = ResourceManager.GetObject("tray_arrow_up", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] vector_arrange_below {
             get {
                 object obj = ResourceManager.GetObject("vector_arrange_below", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] vector_polyline {
+            get {
+                object obj = ResourceManager.GetObject("vector_polyline", resourceCulture);
                 return ((byte[])(obj));
             }
         }

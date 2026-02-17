@@ -13,7 +13,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
     // Beim Close manchmal eine Null-Reference Exception in Group-Viewn
     // Wenn man einfach 2 Elemente anlegt oder Field dann kommen Exceptions beim Speichern (Conditions ohne Field)
 
-    [Display(Name = "LogicalComparisonCondition", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "LogicalComparisonCondition_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public abstract class LogicalComparisonCondition : LogicalCondition
     {
         private ComparisonOperator _operator;

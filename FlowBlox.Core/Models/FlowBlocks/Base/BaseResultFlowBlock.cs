@@ -95,7 +95,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         [JsonIgnore()]
         [DeepCopierIgnore()]
-        public FlowBlockOutDataset OutputDataset_CurrentlyProcessing { get; private set; }
+        public FlowBlockOutDataset OutputDataset_CurrentlyProcessing { get; internal set; }
 
         public override List<FieldElement> GetPossibleFieldElements()
         {
@@ -235,7 +235,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             {
                 foreach (var result in this.GridElementResult.Results)
                 {
-                    var lastResult = this.GridElementResult.Results.Last();
                     foreach (var fieldValueMapping in result.FieldValueMappings)
                     {
                         fieldValueMapping.Field.SetValue(runtime, fieldValueMapping.Value);
@@ -249,16 +248,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
             else
             {
+                var items = new List<IRuntimeWorkItem>(this.GridElementResult.Results.Count);
                 foreach (var result in this.GridElementResult.Results)
                 {
-                    this.OutputDataset_CurrentlyProcessing = result;
-                    foreach (var fieldValueMapping in result.FieldValueMappings)
-                    {
-                        fieldValueMapping.Field.SetValue(runtime, fieldValueMapping.Value);
-                    }
-                    this.ExecuteNextFlowBlocks(runtime);
+                    items.Add(new Runtime.WorkItems.ApplyOutputDatasetAndScheduleNextWorkItem(this, result));
                 }
-                this.OutputDataset_CurrentlyProcessing = null;
+                runtime.TaskRunner.EnqueueBatchInExecutionOrder(items);
             }
         }
 

@@ -1,120 +1,143 @@
 ﻿using CommandLine;
-using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Models.Project;
-using FlowBlox.Core.Models.Runtime;
-using FlowBlox.Core.Provider;
-using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Runner;
+using FlowBlox.Core.Runner.Contracts;
+using FlowBlox.Core.Runner.Serialization;
 
 namespace FlowBlox.CLI
 {
-    internal class Program
+    internal partial class Program
     {
-        public class Options
+        static int Main(string[] args)
         {
-            [Option('p', "project", Required = true, HelpText = "Set path to project file.")]
-            public string ProjectFile { get; set; }
+            var exitCode = 1;
 
-            [Option('r', "restart", Required = false, HelpText = "Should the runtime restart automatically?")]
-            public bool Restart { get; set; }
-
-            // Dynamische Parameter werden als Dictionary erfasst
-            [Option('u', Separator = ' ', HelpText = "User field parameters defined in project.")]
-            public IEnumerable<string> DynamicParameters { get; set; }
-        }
-
-        static void Main(string[] args)
-        {
             Parser.Default.ParseArguments<Options>(args)
-                .WithParsed<Options>(opts => RunWithOptions(opts))
-                .WithNotParsed<Options>((errs) => HandleParseError(errs));
+                .WithParsed(opts => exitCode = RunWithOptions(opts))
+                .WithNotParsed(_ =>
+                {
+                    WriteColored("Error parsing arguments.", ConsoleColor.Red);
+                    exitCode = 1;
+                });
+
+            return exitCode;
         }
 
-        private static void HandleParseError(IEnumerable<Error> errs)
+        private static int RunWithOptions(Options options)
         {
-            Console.WriteLine("Error parsing arguments.");
-            Environment.Exit(1);
-        }
-
-        private static void RunWithOptions(Options options)
-        {
-            Console.WriteLine($"Loading project from '{options.ProjectFile}'...");
-            var project = FlowBloxProject.FromFile(options.ProjectFile);
-            FlowBloxProjectManager.Instance.ActiveProject = project;
-
-            var parameterToValue = ParseDynamicParameters(options.DynamicParameters);
-
-            List<string> warnings = new List<string>();
-            foreach (var fieldElement in FlowBloxRegistryProvider.GetRegistry().GetUserFields(UserFieldTypes.Input))
+            var request = new RunnerRequest
             {
-                if (parameterToValue.TryGetValue(fieldElement.Name, out string parameterStringValue))
-                {
-                    Console.WriteLine($"User field '{fieldElement.Name}' set to value '{parameterStringValue}'.");
-                    fieldElement.StringValue = parameterStringValue;
-                }
-                else if (string.IsNullOrEmpty(fieldElement.StringValue))
-                {
-                    if (!string.IsNullOrEmpty(fieldElement.StringValue))
-                        warnings.Add($"Warning: No value provided for '{fieldElement.Name}'.");
-                    else
-                        warnings.Add($"Warning: No value provided for '{fieldElement.Name}', current value '{fieldElement.StringValue}' will be used.");
-                }
-            }
+                ProjectFile = options.ProjectFile,
+                AutoRestart = options.Restart,
+                NoDesignerMode = true,
 
-            if (warnings.Count > 0)
-            {
-                Console.WriteLine("The following warnings were generated:");
-                warnings.ForEach(Console.WriteLine);
-                Console.WriteLine("Continue anyway? (y/n)");
-                if (Console.ReadKey().KeyChar != 'y')
-                    return;
-            }
+                AbortOnError = options.AbortOnError,
+                AbortOnWarning = options.AbortOnWarning,
 
-            if (options.Restart)
-                Console.WriteLine("AutoRestart is enabled.");
-
-            var runtime = new FlowBloxRuntime(project)
-            {
-                IsNoDesignerMode = true,
-                AutoRestart = options.Restart
+                UserFields = ParseKeyValueArgs(options.DynamicParameters),
+                OptionOverrides = ParseKeyValueArgs(options.OptionOverrides)
             };
 
-            Console.WriteLine("Logfile path: " + runtime.GetLogfilePath());
-
-            Task.Run(async () => await StartExecutionWithDynamicDisplay(runtime, project.ProjectName))
-                .GetAwaiter()
-                .GetResult();
-        }
-
-        private static async Task StartExecutionWithDynamicDisplay(FlowBloxRuntime runtime, string projectName)
-        {
-            Console.Write($"Execution of project '{projectName}' has started...");
-            var symbols = new string[] { "/", "-", "\\", "|" };
-            int index = 0;
-
-            var runTask = Task.Run(() => runtime.Execute());
-
-            while (!runTask.IsCompleted)
+            void OnRunnerLog(RunnerLogMessage msg)
             {
-                Console.Write($"\rExecution of project {projectName} has started... {symbols[index++ % symbols.Length]}");
-                await Task.Delay(500);
+                var color = GetColorForLogLevel(msg.LogLevel);
+                WriteColored($"[{msg.UtcTimestamp:HH:mm:ss}] {msg.LogLevel}: {msg.Message}", color);
             }
 
-            Console.WriteLine($"\rExecution of project {projectName} has completed. Press any key to exit.");
-            Console.ReadKey();
-        }
+            FlowBloxProjectRunner.LogMessageCreated += OnRunnerLog;
 
-        private static Dictionary<string, string> ParseDynamicParameters(IEnumerable<string> dynamicParameters)
-        {
-            var dict = new Dictionary<string, string>();
-            foreach (var param in dynamicParameters)
+            try
             {
-                var splitParam = param.Split(new char[] { '=' }, 2);
-                if (splitParam.Length == 2)
+                WriteColored($"Starting execution of project '{Path.GetFileName(options.ProjectFile)}'...", ConsoleColor.Gray);
+
+                var response = FlowBloxProjectRunner.Run(request);
+
+                if (!string.IsNullOrWhiteSpace(options.OutputFile))
                 {
-                    dict.Add(splitParam[0].Trim('\"'), splitParam[1].Trim('\"'));
+                    RunnerJson.WriteFile(options.OutputFile, response);
+                    WriteColored($"Runner response written to: {options.OutputFile}", ConsoleColor.DarkGray);
                 }
+
+                if (!response.Success)
+                {
+                    WriteColored($"Execution failed (ExitCode={response.ExitCode}).",
+                        ConsoleColor.Red);
+
+                    if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
+                        WriteColored(response.ErrorMessage, ConsoleColor.Red);
+
+                    if (!options.NonInteractive)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Press any key to exit.");
+                        Console.ReadKey();
+                    }
+
+                    return response.ExitCode;
+                }
+
+                WriteColored($"Execution completed successfully (ExitCode={response.ExitCode}).",
+                    ConsoleColor.Green);
+
+                if (!options.NonInteractive)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit.");
+                    Console.ReadKey();
+                }
+
+                return response.ExitCode;
             }
+            finally
+            {
+                FlowBloxProjectRunner.LogMessageCreated -= OnRunnerLog;
+            }
+        }
+
+        private static ConsoleColor GetColorForLogLevel(FlowBloxLogLevel level)
+        {
+            return level switch
+            {
+                FlowBloxLogLevel.Error => ConsoleColor.Red,
+                FlowBloxLogLevel.Warning => ConsoleColor.DarkYellow,
+                FlowBloxLogLevel.Info => ConsoleColor.Gray,
+                _ => ConsoleColor.White
+            };
+        }
+
+        private static void WriteColored(string message, ConsoleColor color)
+        {
+            var previous = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+            Console.WriteLine(message);
+            Console.ForegroundColor = previous;
+        }
+
+        private static Dictionary<string, string> ParseKeyValueArgs(IEnumerable<string> args)
+        {
+            var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            if (args == null)
+                return dict;
+
+            foreach (var arg in args)
+            {
+                if (string.IsNullOrWhiteSpace(arg))
+                    continue;
+
+                var split = arg.Split(new[] { '=' }, 2);
+                if (split.Length != 2)
+                    continue;
+
+                var key = split[0].Trim().Trim('\"');
+                var value = split[1].Trim().Trim('\"');
+
+                if (string.IsNullOrWhiteSpace(key))
+                    continue;
+
+                dict[key] = value;
+            }
+
             return dict;
         }
     }

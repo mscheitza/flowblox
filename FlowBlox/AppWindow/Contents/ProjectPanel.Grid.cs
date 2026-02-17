@@ -22,6 +22,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Components.Modifier;
+using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 
 namespace FlowBlox.AppWindow.Contents
 {

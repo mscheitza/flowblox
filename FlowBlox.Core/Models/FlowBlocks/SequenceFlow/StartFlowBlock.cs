@@ -5,7 +5,7 @@ using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
 
-namespace FlowBlox.Core.Models.FlowBlocks
+namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
 {
     [Display(Name = "StartFlowBlock_DisplayName", Description = "StartFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class StartFlowBlock : BaseFlowBlock
@@ -30,7 +30,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public override bool Execute(Runtime.BaseRuntime runtime, object Data)
         {
-            return this.Invoke(runtime, Data, () =>
+            return Invoke(runtime, Data, () =>
             {
                 runtime.Focus(this);
                 Wait(runtime);

@@ -5,6 +5,7 @@ using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using System.Collections.ObjectModel;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 
 namespace FlowBloxTest.FlowBlocks.Xml
 {

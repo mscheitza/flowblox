@@ -25,7 +25,8 @@ rem ==========================
 rem VS-friendly prechecks here
 rem ==========================
 
-set "SRC_BASE=%SCRIPT_DIR%FlowBloxResources\onnxruntimes"
+set "SRC_BASE=%SCRIPT_DIR%\..\FlowBloxResources\data\onnxruntimes"
+for %%I in ("%SCRIPT_DIR%\..\FlowBloxResources\data\onnxruntimes") do set "SRC_BASE=%%~fI"
 
 if not exist "%SRC_BASE%" (
   echo %~nx0(20^): error FB0100: Source folder not found: "%SRC_BASE%"
@@ -34,7 +35,9 @@ if not exist "%SRC_BASE%" (
   exit /b 1
 )
 
-set "SRC_BASE_GENAI=%SCRIPT_DIR%FlowBloxResources\onnxruntimesgenai"
+set "SRC_BASE_GENAI=%SCRIPT_DIR%\..\FlowBloxResources\data\onnxruntimesgenai"
+for %%I in ("%SCRIPT_DIR%\..\FlowBloxResources\data\onnxruntimesgenai") do set "SRC_BASE_GENAI=%%~fI"
+
 if not exist "%SRC_BASE_GENAI%" (
   echo %~nx0(30^): error FB0110: Source folder not found: "%SRC_BASE_GENAI%"
   echo %~nx0(31^): error FB0111: Please run "FlowBloxResources\Sync-OnnxRuntimes.ps1" before starting a build.

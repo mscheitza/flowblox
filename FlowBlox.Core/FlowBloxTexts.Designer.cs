@@ -1285,6 +1285,168 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Abort on Error ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_AbortOnError {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_AbortOnError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Abort on Warning ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_AbortOnWarning {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_AbortOnWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runs another FlowBlox project in an isolated RunnerHost process. You can map input fields to the child project&apos;s user fields and option overrides, and optionally import child outputs back into this runtime. ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execute Project ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_Groups_Output {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_Groups_Output", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Parameters ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_Groups_Parameters {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_Groups_Parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_Groups_Project {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_Groups_Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Import Child Outputs ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ImportChildOutputs {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ImportChildOutputs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Imported Output Prefix ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ImportedOutputPrefix {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ImportedOutputPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output Mapping ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_OutputMappings {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_OutputMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Parameter Mapping ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ParameterMappings {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ParameterMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project File ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ProjectFile {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ProjectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die RunnerHost Path ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_RunnerHostPath {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_RunnerHostPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output Mapping Entry ähnelt.
+        /// </summary>
+        public static string ExecuteProjectOutputMappingEntry_DisplayName {
+            get {
+                return ResourceManager.GetString("ExecuteProjectOutputMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output Property Name ähnelt.
+        /// </summary>
+        public static string ExecuteProjectOutputMappingEntry_OutputPropertyName {
+            get {
+                return ResourceManager.GetString("ExecuteProjectOutputMappingEntry_OutputPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Parameter Mapping Entry ähnelt.
+        /// </summary>
+        public static string ExecuteProjectParameterMappingEntry_DisplayName {
+            get {
+                return ResourceManager.GetString("ExecuteProjectParameterMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target Key ähnelt.
+        /// </summary>
+        public static string ExecuteProjectParameterMappingEntry_TargetKey {
+            get {
+                return ResourceManager.GetString("ExecuteProjectParameterMappingEntry_TargetKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target Type ähnelt.
+        /// </summary>
+        public static string ExecuteProjectParameterMappingEntry_TargetType {
+            get {
+                return ResourceManager.GetString("ExecuteProjectParameterMappingEntry_TargetType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Connection string ähnelt.
         /// </summary>
         public static string ExecuteSQLFlowBlock_ConnectionString {
@@ -3113,6 +3275,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Groups multiple incoming paths into a single execution point. Use it to structure your flow and apply shared activation conditions to all following blocks. ähnelt.
+        /// </summary>
+        public static string NodeFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("NodeFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Node ähnelt.
+        /// </summary>
+        public static string NodeFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("NodeFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Used to insert comments or notes into the flow diagram. ähnelt.
         /// </summary>
         public static string NoteFlowBlock_Description {
@@ -3790,6 +3970,60 @@ namespace FlowBlox.Core {
         public static string Phi3AiTokenizer_TokenizerModelPath_Tooltip {
             get {
                 return ResourceManager.GetString("Phi3AiTokenizer_TokenizerModelPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates project output datasets and stores them in the runtime. Each execution appends a new dataset under this block&apos;s name, using the configured field-to-property mapping. ähnelt.
+        /// </summary>
+        public static string ProjectOutputFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ProjectOutputFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project Output ähnelt.
+        /// </summary>
+        public static string ProjectOutputFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ProjectOutputFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field Mapping ähnelt.
+        /// </summary>
+        public static string ProjectOutputFlowBlock_Groups_Mapping {
+            get {
+                return ResourceManager.GetString("ProjectOutputFlowBlock_Groups_Mapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mapping ähnelt.
+        /// </summary>
+        public static string ProjectOutputFlowBlock_MappingEntries {
+            get {
+                return ResourceManager.GetString("ProjectOutputFlowBlock_MappingEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output Mapping Entry ähnelt.
+        /// </summary>
+        public static string ProjectOutputMappingEntry_DisplayName {
+            get {
+                return ResourceManager.GetString("ProjectOutputMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output Property Name ähnelt.
+        /// </summary>
+        public static string ProjectOutputMappingEntry_OutputPropertyName {
+            get {
+                return ResourceManager.GetString("ProjectOutputMappingEntry_OutputPropertyName", resourceCulture);
             }
         }
         

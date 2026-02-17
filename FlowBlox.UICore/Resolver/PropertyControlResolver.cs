@@ -108,16 +108,6 @@ namespace FlowBlox.UICore.Resolver
             if (!displayLabel)
                 return (false, string.Empty);
 
-            // Special handling for boolean properties (checkboxes)
-            if (property.PropertyType == typeof(bool))
-            {
-                var checkboxAttribute = property.GetCustomAttribute<FlowBlockCheckboxAttribute>();
-                if (string.IsNullOrWhiteSpace(checkboxAttribute?.HeaderLabel))
-                    return (false, string.Empty);
-
-                var resolvedLabel = FlowBloxResourceUtil.GetLocalizedString(checkboxAttribute.HeaderLabel, checkboxAttribute.ResourceType);
-                return (true, resolvedLabel);
-            }
             return (true, displayName);
         }
 
@@ -138,8 +128,6 @@ namespace FlowBlox.UICore.Resolver
                 ValidatesOnExceptions = true
             };
 
-            // TODO: Immer auch bei Boolean mit Header, Text dann weg.
-
             if (property.PropertyType == typeof(bool))
             {
                 var toggle = new ToggleSwitch
@@ -147,9 +135,7 @@ namespace FlowBlox.UICore.Resolver
                     IsEnabled = !readOnly,
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(0, 4, 0, 4),
-                    MinWidth = 80,
-                    OnContent = displayName,
-                    OffContent = displayName
+                    MinWidth = 80
                 };
 
                 toggle.SetBinding(ToggleSwitch.IsOnProperty, binding);

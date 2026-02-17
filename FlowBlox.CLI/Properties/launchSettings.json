@@ -2,7 +2,7 @@
   "profiles": {
     "FlowBlox.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "-p \"D:\\_ROOT\\XChange\\Windows XP Workstation\\FlowBlox\\Projekte\\TestV2.dsprj\" -u \"Branche.StartValue=Aerzte\""
+      "commandLineArgs": "-p \"D:\\_ROOT\\XChange\\Windows XP Workstation\\FlowBlox\\Projekte\\TestV2.fbprj\" -u \"Branche.StartValue=Aerzte\""
     }
   }
 }

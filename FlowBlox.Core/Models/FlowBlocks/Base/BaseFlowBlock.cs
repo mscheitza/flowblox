@@ -9,6 +9,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base.DatasetSelection;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Models.Runtime.WorkItems;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.DeepCopier;
@@ -54,8 +55,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public event IterationEndHandler IterationEnd;
         public event OnBeforeInputProcessingEventHandler OnBeforeInputProcessing;
 
-        protected void RaiseIterationStart(BaseRuntime runtime) => IterationStart?.Invoke(runtime);
-        protected void RaiseIterationEnd(FlowBloxRuntime runtime) => IterationEnd?.Invoke(runtime);
+        internal void RaiseIterationStart(BaseRuntime runtime) => IterationStart?.Invoke(runtime);
+        internal void RaiseIterationEnd(BaseRuntime runtime) => IterationEnd?.Invoke(runtime);
 
         public void CreateNotification(BaseRuntime runtime, Enum notificationEnumValue, Exception e = null)
         {
@@ -622,15 +623,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         /// <param name="runtime">The runtime instance managing the current flow execution context.</param>
         public virtual void ExecuteNextFlowBlocks(BaseRuntime runtime)
         {
-            if (!runtime.ExecutionFlowEnabled)
-                return;
-
-            IterationStart?.Invoke(runtime);
-            foreach (var nextElement in this.GetNextFlowBlocks())
-            {
-                nextElement.Execute(runtime, this);
-            }
-            IterationEnd?.Invoke(runtime);
+            runtime.TaskRunner.ScheduleNext(this);
         }
 
         public override void RuntimeStarted(BaseRuntime runtime)
@@ -892,14 +885,22 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
             foreach (var dataset in results)
             {
-                InputDataset_CurrentlyProcessing = dataset;
-                foreach (var fieldValueMapping in dataset.FieldValueMappings)
-                {
-                    fieldValueMapping.Field.SetValue(runtime, fieldValueMapping.Value);
-                    SetPrecedingFieldValues(runtime, this, fieldValueMapping.PrecedingFieldValues);
-                }
-                InvokeExecutor(runtime, _storedExecutor);
-                InputDatasets_CurrentIndex++;
+                runtime.TaskRunner.Enqueue(new InputDatasetWorkItem(
+                    block: this,
+                    dataset: dataset,
+                    applyDatasetAndExecute: (rt, blk, dataset) =>
+                    {
+                        blk.InputDataset_CurrentlyProcessing = dataset;
+
+                        foreach (var fieldValueMapping in dataset.FieldValueMappings)
+                        {
+                            fieldValueMapping.Field.SetValue(rt, fieldValueMapping.Value);
+                            SetPrecedingFieldValues(rt, blk, fieldValueMapping.PrecedingFieldValues);
+                        }
+                        blk.InvokeExecutor(rt, blk._storedExecutor);
+                        blk.InputDatasets_CurrentIndex++;
+                    }
+                ));
             }
 
             InputDataset_CurrentlyProcessing = null;

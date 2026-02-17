@@ -12,7 +12,7 @@ using FlowBlox.Core.Models.FlowBlocks;
 
 namespace FlowBlox.Core.Models.Runtime
 {
-    public abstract class BaseRuntime : IDisposable
+    public abstract partial class BaseRuntime : IDisposable
     {
         public delegate void LogMessageCreatedEventHandler(BaseRuntime runtime, string message, FlowBloxLogLevel logLevel);
         public delegate void FinishedEventHandler(object result);
@@ -64,6 +64,10 @@ namespace FlowBlox.Core.Models.Runtime
         }
 
         public BaseFlowBlock StartFlowBlock { get; protected set; }
+
+        private RuntimeTaskRunner _runner;
+
+        internal RuntimeTaskRunner TaskRunner => _runner ??= new RuntimeTaskRunner(this);
 
         protected BaseRuntime(FlowBloxProject project)
         {

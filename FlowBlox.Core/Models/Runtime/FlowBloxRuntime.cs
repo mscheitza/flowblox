@@ -189,7 +189,7 @@ namespace FlowBlox.Core.Models.Runtime
                     {
                         this.Report($"Execution has been restarted. Number of executions: {executionCounter + 1}");
                     }
-                    StartFlowBlock.Execute(this, null);
+                    this.TaskRunner.Run(StartFlowBlock);
                     executionCounter++;
                 }
                 while (!Aborted && AutoRestart);
