@@ -124,6 +124,42 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
+        /// </summary>
+        public static string Col_ProjectPropertyDescription {
+            get {
+                return ResourceManager.GetString("Col_ProjectPropertyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Key ähnelt.
+        /// </summary>
+        public static string Col_ProjectPropertyKey {
+            get {
+                return ResourceManager.GetString("Col_ProjectPropertyKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
+        /// </summary>
+        public static string Col_ProjectPropertyName {
+            get {
+                return ResourceManager.GetString("Col_ProjectPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
+        /// </summary>
+        public static string Col_ProjectPropertyValue {
+            get {
+                return ResourceManager.GetString("Col_ProjectPropertyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Source ähnelt.
         /// </summary>
         public static string Col_Source {
@@ -210,6 +246,15 @@ namespace FlowBlox.UICore.Resources {
         public static string Tab_ProjectFields {
             get {
                 return ResourceManager.GetString("Tab_ProjectFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project properties ähnelt.
+        /// </summary>
+        public static string Tab_ProjectProperties {
+            get {
+                return ResourceManager.GetString("Tab_ProjectProperties", resourceCulture);
             }
         }
         

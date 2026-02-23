@@ -18,9 +18,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
     [Display(Name = "XmlDocumentNodeWriterFlowBlock_DisplayName", Description = "XmlDocumentNodeWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class XmlDocumentNodeWriterFlowBlock : BaseFlowBlock
     {
-        [Display(Name = "XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument", Description = "XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip",
+            ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
             SelectionFilterMethod = nameof(GetPossibleXmlDocumentFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public XmlDocumentFlowBlock AssociatedXmlDocument { get; set; }
@@ -32,7 +33,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
                 .ToList();
         }
 
-        [Display(Name = "XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter", Description = "XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter_Tooltip",
+            ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
            SelectionFilterMethod = nameof(GetPossibleSourceNodes),
            SelectionDisplayMember = nameof(BaseFlowBlock.Name))]
@@ -45,17 +47,31 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
             return flowBlocks.ToList();
         }
 
-        [Display(Name = "XmlDocumentNodeWriterFlowBlock_XPath", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [Display(Name = "XmlDocumentNodeWriterFlowBlock_XPath", Description = "XmlDocumentNodeWriterFlowBlock_XPath_Tooltip",
+            ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string XPath { get; set; }
 
-        [Display(Name = "XmlDocumentNodeWriterFlowBlock_NodeName", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+
+        [Display(Name = "XmlDocumentNodeWriterFlowBlock_NodeName", Description = "XmlDocumentNodeWriterFlowBlock_NodeName_Tooltip",
+            ResourceType = typeof(FlowBloxTexts), Order = 3)]
         [Required()]
         public string NodeName { get; set; }
 
-        [Display(Name = "XmlDocumentNodeWriterFlowBlock_Assignments", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        [Display(Name = "XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_DisplayName", Description = "XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_Tooltip", 
+            ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        public bool UpdateExistingNode { get; set; }
+
+        [Display(Name = "XmlDocumentNodeWriterFlowBlock_Assignments", Description = "XmlDocumentNodeWriterFlowBlock_Assignments_Tooltip",
+            ResourceType = typeof(FlowBloxTexts), Order = 5)]
         [FlowBlockUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        public ObservableCollection<XmlAssignment> Assignments { get; set; } = new();
+        public ObservableCollection<XmlAssignment> Assignments { get; set; }
+
+        public XmlDocumentNodeWriterFlowBlock()
+        {
+            UpdateExistingNode = true;
+            Assignments = new ObservableCollection<XmlAssignment>();
+        }
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.code_tags, 16, SKColors.Sienna);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.code_tags, 32, SKColors.Sienna);
@@ -102,6 +118,24 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
             return properties;
         }
 
+        private static string ExtractSingleLevelNodeName(string nodeExpression)
+        {
+            if (string.IsNullOrWhiteSpace(nodeExpression))
+                throw new InvalidOperationException("NodeName must not be empty.");
+
+            // Disallow multi-level XPath
+            if (nodeExpression.Contains("/"))
+                throw new InvalidOperationException(
+                    $"Invalid NodeName '{nodeExpression}'. Only single-level node expressions are allowed.");
+
+            // Extract element name before attribute filter
+            var bracketIndex = nodeExpression.IndexOf("[");
+            if (bracketIndex > 0)
+                return nodeExpression.Substring(0, bracketIndex);
+
+            return nodeExpression;
+        }
+
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>
@@ -145,15 +179,23 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
                         throw new InvalidOperationException("The target node could not be found.");
                 }
 
+                XmlNode newOrUpdatedNode = null;
 
-                XmlNode newOrUpdatedNode = parent.SelectSingleNode(NodeName);
+                if (UpdateExistingNode)
+                    newOrUpdatedNode = parent.SelectSingleNode(NodeName);
+
                 if (newOrUpdatedNode == null)
                 {
                     var baseDoc = associatedXmlDocument.InternalXmlDocument;
-                    var newNode = baseDoc!.CreateElement(NodeName);
+                    var pureNodeName = ExtractSingleLevelNodeName(NodeName);
+                    var newNode = baseDoc!.CreateElement(pureNodeName);
                     parent.AppendChild(newNode);
                     newOrUpdatedNode = newNode;
                 }
+
+                CreatedOrUpdatedNode = newOrUpdatedNode;
+                ApplyAssignments(newOrUpdatedNode);
+                ExecuteNextFlowBlocks(runtime);
 
                 ApplyAssignments(newOrUpdatedNode);
                 ExecuteNextFlowBlocks(runtime);

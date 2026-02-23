@@ -42,11 +42,25 @@ namespace FlowBlox.Core.Attributes
             if (!string.IsNullOrEmpty(value?.ToString()))
                 return ValidationResult.Success;
 
-            var memberName = validationContext.DisplayName ?? validationContext.MemberName;
+            var memberName = TryGetDisplayName(validationContext) ?? validationContext.MemberName;
 
-            return new ValidationResult(
-                string.Format(FlowBloxResourceUtil.GetLocalizedString("ConditionallyRequiredAttribute_ValidationFailed_Message", typeof(FlowBloxTexts)), memberName),
-                [validationContext.MemberName]);
+            return new ValidationResult(string.Format(
+                    FlowBloxResourceUtil.GetLocalizedString(
+                        "ConditionallyRequiredAttribute_ValidationFailed_Message", typeof(FlowBloxTexts)), memberName), [validationContext.MemberName]);
+        }
+
+        private static string? TryGetDisplayName(ValidationContext validationContext)
+        {
+            try
+            {
+                return validationContext.DisplayName;
+            }
+            catch (InvalidOperationException)
+            {
+                // Happens when DisplayAttribute.ResourceType is set
+                // but the resource key does not exist.
+                return null;
+            }
         }
 
         private static bool IsDynamicallyReadOnly(object target, PropertyInfo property)

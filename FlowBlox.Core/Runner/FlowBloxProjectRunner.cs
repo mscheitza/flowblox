@@ -5,6 +5,8 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Runner.Contracts;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
+using FlowBlox.Core.Authentication;
 
 namespace FlowBlox.Core.Runner
 {
@@ -20,6 +22,39 @@ namespace FlowBlox.Core.Runner
                 LogLevel = level,
                 Message = message
             });
+        }
+
+        private static async Task<FlowBloxProject> OpenProjectFromProjectSpaceAsync(
+            string projectGuid,
+            int? projectVersion,
+            CancellationToken cancellationToken = default)
+        {
+            // Auto login
+            var flowBloxAutoLoginExecutor = new FlowBloxAutoLoginExecutor();
+            await flowBloxAutoLoginExecutor.TryAutoLoginAsync().ConfigureAwait(false);
+
+            // Build Web API client and token
+            var baseUrl = FlowBloxOptions.GetOptionInstance()
+                .OptionCollection["General.ProjectApiServiceBaseUrl"]
+                .Value;
+
+            var webApi = new FlowBloxWebApiService(baseUrl);
+            var token = FlowBloxAccountManager.Instance.GetUserToken(baseUrl);
+
+            // Load the project from ProjectSpace
+            return await FlowBloxProject.FromProjectSpaceGuidAsync(
+                    projectGuid,
+                    projectVersion,
+                    token,
+                    webApi)
+                .ConfigureAwait(false);
+        }
+
+        private static FlowBloxProject OpenProjectFromProjectSpace(string projectGuid, int? projectVersion)
+        {
+            return OpenProjectFromProjectSpaceAsync(projectGuid, projectVersion)
+                .GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -39,34 +74,58 @@ namespace FlowBlox.Core.Runner
                 if (request == null)
                     throw new ArgumentNullException(nameof(request));
 
-                if (string.IsNullOrWhiteSpace(request.ProjectFile))
-                    throw new ArgumentException("ProjectFile must not be empty.", nameof(request.ProjectFile));
+                var hasProjectSpace = !string.IsNullOrWhiteSpace(request.ProjectSpaceGuid);
+                var hasProjectFile = !string.IsNullOrWhiteSpace(request.ProjectFile);
 
-                Report($"Loading project from '{request.ProjectFile}'...");
+                if (!hasProjectSpace && !hasProjectFile)
+                    throw new ArgumentException("Either ProjectFile or ProjectSpaceGuid must be provided.", nameof(request));
 
-                var project = FlowBloxProject.FromFile(request.ProjectFile);
+                FlowBloxProject project;
+
+                if (hasProjectSpace)
+                {
+                    if (request.ProjectSpaceVersion.HasValue)
+                        Report($"Loading project from ProjectSpaceGuid '{request.ProjectSpaceGuid}' and Version {request.ProjectSpaceVersion}...");
+                    else
+                        Report($"Loading project from ProjectSpaceGuid '{request.ProjectSpaceGuid}'...");
+
+                    project = OpenProjectFromProjectSpace(request.ProjectSpaceGuid, request.ProjectSpaceVersion);
+                }
+                else
+                {
+                    Report($"Loading project from '{request.ProjectFile}'...");
+                    project = FlowBloxProject.FromFile(request.ProjectFile);
+                }
+
+                if (project == null)
+                    throw new InvalidOperationException("Project could not be loaded.");
+
                 FlowBloxProjectManager.Instance.ActiveProject = project;
-
                 response.ProjectName = project.ProjectName;
 
-                // Apply option overrides.
+                // Ensure options are initialized, then apply overrides.
                 var flowBloxOptions = FlowBloxOptions.GetOptionInstance();
+                flowBloxOptions.InitDefaults(false);
                 ApplyOptionOverrides(flowBloxOptions, request.OptionOverrides);
 
                 // Apply user field overrides (inputs).
                 ApplyUserFieldOverrides(request.UserFields);
 
+                // Create runtime.
                 runtime = new FlowBloxRuntime(project)
                 {
                     IsNoDesignerMode = true,
+
+                    // Note: ExecuteProjectFlowBlock/RunnerHost may force this to false before calling the runner.
                     AutoRestart = request.AutoRestart
                 };
 
                 response.LogfilePath = runtime.GetLogfilePath();
                 Report($"Logfile path: {response.LogfilePath}");
 
-                // Forward runtime logs before execution starts.
+                // Forward runtime logs and optionally abort on warnings/errors.
                 string abortReason = null;
+
                 runtime.LogMessageCreated += (rt, msg, level) =>
                 {
                     Report(msg, level);
@@ -92,7 +151,7 @@ namespace FlowBlox.Core.Runner
                 // Execute synchronously.
                 runtime.Execute();
 
-                // Check if the runtime was aborted and, if so, generate an error response:
+                // If aborted, return aborted response.
                 if (runtime.Aborted)
                 {
                     response.Success = false;
@@ -107,6 +166,7 @@ namespace FlowBlox.Core.Runner
                 foreach (var outputKvp in outputs)
                 {
                     var list = new List<ProjectOutputDatasetDto>();
+
                     foreach (var ds in outputKvp.Value)
                     {
                         list.Add(new ProjectOutputDatasetDto
@@ -116,11 +176,13 @@ namespace FlowBlox.Core.Runner
                             Values = ds.Values ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
                         });
                     }
+
                     response.Outputs[outputKvp.Key] = list;
                 }
 
                 response.Success = true;
                 response.ExitCode = RunnerExitCodes.Success;
+
                 Report($"Execution of project '{project.ProjectName}' finished.", FlowBloxLogLevel.Info);
                 return response;
             }
@@ -150,6 +212,7 @@ namespace FlowBlox.Core.Runner
                 response.FinishedUtc = DateTime.UtcNow;
             }
         }
+
 
         private static void ApplyOptionOverrides(FlowBloxOptions flowBloxOptions, Dictionary<string, string> overrides)
         {

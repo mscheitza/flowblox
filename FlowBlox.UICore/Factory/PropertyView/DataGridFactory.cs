@@ -479,7 +479,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private void AddNewItem(IList list, Type listItemType, DataGrid dataGrid)
         {
             object newItem = CreateNewInstance(_window, listItemType);
-            list.Add(newItem);
+            if (newItem != null)
+                list.Add(newItem);
         }
 
         private void MoveItem(IList list, DataGrid dataGrid, int direction)

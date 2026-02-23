@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="FlowBlox.UICore.Views.ProjectSpaceProjectFormControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
+
+    <Grid Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left -->
+        <StackPanel Grid.Column="0" Margin="10">
+
+            <Label Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_ProjectGuid}" Margin="0,5,0,0"/>
+            <TextBox Text="{Binding ProjectGuid}"
+                 IsReadOnly="True"
+                 mah:TextBoxHelper.Watermark="{x:Static resources:CreateOrUpdatePSProjectWindow.Placeholder_ProjectGuid}" />
+
+            <Label HorizontalAlignment="Left" Margin="0,5,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_ProjectName}" />
+                    <iconPacks:PackIconMaterial Kind="Asterisk"
+                                                Width="9"
+                                                Height="9"
+                                                Margin="6,1,0,0"
+                                                Foreground="IndianRed"
+                                                VerticalAlignment="Center"/>
+                </StackPanel>
+            </Label>
+            <TextBox Text="{Binding ProjectName, UpdateSourceTrigger=PropertyChanged}"
+                     mah:TextBoxHelper.Watermark="{x:Static resources:CreateOrUpdatePSProjectWindow.Placeholder_ProjectName}" />
+
+            <Label Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_Visibility}" Margin="0,5,0,0"/>
+            <ComboBox SelectedValue="{Binding Visibility}"
+                      SelectedValuePath="Tag">
+                <ComboBoxItem Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Visibility_Private}" Tag="Private" />
+                <ComboBoxItem Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Visibility_Public}" Tag="Public" />
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Right -->
+        <StackPanel Grid.Column="1" Margin="10">
+
+            <Label HorizontalAlignment="Left" Margin="0,5,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_ProjectDescription}" />
+                    <iconPacks:PackIconMaterial Kind="Asterisk"
+                                                Width="9"
+                                                Height="9"
+                                                Margin="6,1,0,0"
+                                                Foreground="IndianRed"
+                                                VerticalAlignment="Center"/>
+                </StackPanel>
+            </Label>
+            <TextBox Text="{Binding ProjectDescription, UpdateSourceTrigger=PropertyChanged}"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     Height="140"
+                     mah:TextBoxHelper.Watermark="{x:Static resources:CreateOrUpdatePSProjectWindow.Placeholder_ProjectDescription}" />
+
+            <Label Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_CreatedAt}" Margin="0,5,0,0"/>
+            <TextBox Text="{Binding CreatedAtText}" IsReadOnly="True" />
+
+            <Label Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_UpdatedAt}" Margin="0,5,0,0"/>
+            <TextBox Text="{Binding UpdatedAtText}" IsReadOnly="True" />
+        </StackPanel>
+    </Grid>
+</UserControl>

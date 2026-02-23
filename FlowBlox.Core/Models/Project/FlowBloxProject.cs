@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Constants;
+﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Extensions;
@@ -12,6 +13,7 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Json;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO.Compression;
@@ -21,7 +23,7 @@ using static FlowBlox.Core.ExternalServices.FlowBloxWebApi.FlowBloxWebApiService
 
 namespace FlowBlox.Core.Models.Project
 {
-    [Serializable()]
+    [Serializable]
     public class FlowBloxProject
     {
         public Guid ProjectGuid { get; set; }
@@ -32,7 +34,7 @@ namespace FlowBlox.Core.Models.Project
         public int GridSizeX { get; set; }
         public int GridSizeY { get; set; }
 
-        [JsonIgnore()]
+        [JsonIgnore]
         public FlowBloxRegistry FlowBloxRegistry { get; }
 
         public List<BaseFlowBlock> FlowBlocks { get; set; }
@@ -44,30 +46,126 @@ namespace FlowBlox.Core.Models.Project
         public List<IProjectDependendData> ProjectDependendDataObjects { get; set; }
 
         [JsonIgnore]
-        private Dictionary<string, AssemblyLoadContext> _loadContexts = new Dictionary<string, AssemblyLoadContext>();
+        private Dictionary<string, AssemblyLoadContext> _loadContexts = new Dictionary<string, AssemblyLoadContext>(StringComparer.OrdinalIgnoreCase);
 
-        [JsonIgnore()]
+        [JsonIgnore]
         public List<FlowBloxProjectExtension> Extensions { get; set; }
 
-        [JsonIgnore()]
+        /// <summary>
+        /// Project space identifier. Stored locally in *.fblocaldata (not in the project file).
+        /// </summary>
+        [JsonIgnore]
         public string ProjectSpaceGuid { get; set; }
+
+        /// <summary>
+        /// Project space version. Stored locally in *.fblocaldata (not in the project file).
+        /// </summary>
+        [JsonIgnore]
+        public int? ProjectSpaceVersion { get; set; }
 
         private static readonly ILogger _logger = FlowBloxLogManager.Instance.GetLogger();
 
+        /// <summary>
+        /// Gets the input directory derived from options + sanitized project name.
+        /// </summary>
+        [JsonIgnore]
+        public string ProjectInputDirectory => GetProjectInputDirectory(ProjectName);
+
+        /// <summary>
+        /// Gets the output directory derived from options + sanitized project name.
+        /// </summary>
+        [JsonIgnore]
+        public string ProjectOutputDirectory => GetProjectOutputDirectory(ProjectName);
+
+        /// <summary>
+        /// Builds the input directory path for the given project name.
+        /// </summary>
+        public string GetProjectInputDirectory(string projectName)
+        {
+            var baseDir = FlowBloxOptions.GetOptionInstance().GetOption("General.InputDir")?.Value;
+            return BuildProjectDir(baseDir, projectName);
+        }
+
+        /// <summary>
+        /// Builds the output directory path for the given project name.
+        /// </summary>
+        public string GetProjectOutputDirectory(string projectName)
+        {
+            var baseDir = FlowBloxOptions.GetOptionInstance().GetOption("General.OutputDir")?.Value;
+            return BuildProjectDir(baseDir, projectName);
+        }
+
+        private static string BuildProjectDir(string baseDir, string projectName)
+        {
+            if (string.IsNullOrWhiteSpace(baseDir))
+                return string.Empty;
+
+            var safeName = IOUtil.GetValidFileName(projectName ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(safeName))
+                return string.Empty;
+
+            return Path.Combine(baseDir, safeName);
+        }
+
         public FlowBloxProject()
         {
-            this.ProjectGuid = Guid.NewGuid();
-            this.GridSizeX = GlobalConstants.GridSizeX;
-            this.GridSizeX = GlobalConstants.GridSizeY;
-            this.FlowBloxRegistry = new FlowBloxRegistry();
-            this.Extensions = new List<FlowBloxProjectExtension>();
-            this.ProjectDependendDataObjects = new List<IProjectDependendData>();
+            ProjectGuid = Guid.NewGuid();
+            GridSizeX = GlobalConstants.GridSizeX;
+            GridSizeY = GlobalConstants.GridSizeY;
+            FlowBloxRegistry = new FlowBloxRegistry();
+            Extensions = new List<FlowBloxProjectExtension>();
+            ProjectDependendDataObjects = new List<IProjectDependendData>();
             _logger.Info("FlowBloxProject instance created.");
+        }
+
+        /// <summary>
+        /// Returns a static list of project properties that can be used as placeholders via $Project::{Key}.
+        /// </summary>
+        public IReadOnlyList<FlowBloxProjectPropertyElement> GetProjectPropertyElements()
+        {
+            return new List<FlowBloxProjectPropertyElement>
+            {
+                new FlowBloxProjectPropertyElement
+                {
+                    Key = "ProjectName",
+                    DisplayName = "Project Name",
+                    Description = "The name of the project.",
+                    Value = ProjectName ?? string.Empty
+                },
+                new FlowBloxProjectPropertyElement
+                {
+                    Key = "ProjectInputDirectory",
+                    DisplayName = "Project Input Directory",
+                    Description = "Resolved input directory for this project.",
+                    Value = ProjectInputDirectory ?? string.Empty
+                },
+                new FlowBloxProjectPropertyElement
+                {
+                    Key = "ProjectOutputDirectory",
+                    DisplayName = "Project Output Directory",
+                    Description = "Resolved output directory for this project.",
+                    Value = ProjectOutputDirectory ?? string.Empty
+                },
+                new FlowBloxProjectPropertyElement
+                {
+                    Key = "ProjectAuthor",
+                    DisplayName = "Project Author",
+                    Description = "Author of the project.",
+                    Value = Author ?? string.Empty
+                },
+                new FlowBloxProjectPropertyElement
+                {
+                    Key = "ProjectDescription",
+                    DisplayName = "Project Description",
+                    Description = "Description of the project.",
+                    Value = ProjectDescription ?? string.Empty
+                }
+            };
         }
 
         private static Dictionary<string, AssemblyLoadContext> LoadExtensions(IEnumerable<FlowBloxProjectExtension> extensions)
         {
-            var loadContexts = new Dictionary<string, AssemblyLoadContext>();
+            var loadContexts = new Dictionary<string, AssemblyLoadContext>(StringComparer.OrdinalIgnoreCase);
             foreach (var extension in extensions)
             {
                 LoadExtension(extension, loadContexts);
@@ -80,14 +178,14 @@ namespace FlowBlox.Core.Models.Project
         public FlowBloxProjectReloadResult ReloadExtensions()
         {
             var currentExtensionDirectories = new HashSet<string>(
-                this.Extensions.Select(e => e.LocalExtensionDirectory),
+                Extensions.Select(e => e.LocalExtensionDirectory),
                 StringComparer.OrdinalIgnoreCase);
 
             var directoriesToUnload = _loadContexts.Keys
                 .Where(key => !currentExtensionDirectories.Contains(key))
                 .ToList();
 
-            return ReloadExtensions(directoriesToUnload, this.Extensions);
+            return ReloadExtensions(directoriesToUnload, Extensions);
         }
 
         public FlowBloxProjectReloadResult ReloadExtensions(IEnumerable<string> directoriesToUnload)
@@ -99,9 +197,8 @@ namespace FlowBlox.Core.Models.Project
         public FlowBloxProjectReloadResult ReloadExtensions(IEnumerable<string> directoriesToUnload, List<FlowBloxProjectExtension> extensionsToLoad)
         {
             var reloadResult = new FlowBloxProjectReloadResult();
-
             _logger.Info("Reloading extensions...");
-            
+
             var weakReferences = new Dictionary<WeakReference, List<string>>();
 
             foreach (var directory in directoriesToUnload)
@@ -131,7 +228,6 @@ namespace FlowBlox.Core.Models.Project
                 }
             }
 
-
             foreach (var kvp in weakReferences)
             {
                 for (int i = 0; kvp.Key.IsAlive && (i < 10); i++)
@@ -148,27 +244,19 @@ namespace FlowBlox.Core.Models.Project
             }
 
             if (reloadResult.Success)
-            {
                 _logger.Info("Extensions reloaded successfully.");
-            }
             else
             {
                 if (reloadResult.RemainingAssemblies.Any())
-                {
                     _logger.Warn($"Extensions could not be reloaded successfully. Remaining assemblies: {string.Join(", ", reloadResult.RemainingAssemblies)}.");
-                }
 
                 if (reloadResult.UnloadableExtensions.Any())
-                {
                     _logger.Warn($"Failed to load the following extensions: {string.Join(", ", reloadResult.UnloadableExtensions)}.");
-                }
             }
 
             ExtensionsReloaded?.Invoke(this, EventArgs.Empty);
-
             return reloadResult;
         }
-
 
         private static AssemblyLoadContext LoadExtension(FlowBloxProjectExtension extension, Dictionary<string, AssemblyLoadContext> loadContexts)
         {
@@ -183,6 +271,7 @@ namespace FlowBlox.Core.Models.Project
                 _logger.Info($"Extension loaded successfully from {directoryPath}.");
                 return loadContext;
             }
+
             return null;
         }
 
@@ -207,7 +296,8 @@ namespace FlowBlox.Core.Models.Project
             _logger.Info($"Extension unloaded successfully from {directoryPath}.");
         }
 
-        public IEnumerable<T> CreateInstances<T>(Func<Type, bool> typeFilter = null) => AppDomainInstanceFactory.CreateInstances<T>(_loadContexts.Values, typeFilter);
+        public IEnumerable<T> CreateInstances<T>(Func<Type, bool> typeFilter = null) =>
+            AppDomainInstanceFactory.CreateInstances<T>(_loadContexts.Values, typeFilter);
 
         private void CreateProjectDependendDataObjectsIfNotExist()
         {
@@ -218,15 +308,31 @@ namespace FlowBlox.Core.Models.Project
 
             foreach (var dependendDataType in dependendDataTypes)
             {
-                if (!this.ProjectDependendDataObjects.Any(x => x.GetType() == dependendDataType))
+                if (!ProjectDependendDataObjects.Any(x => x.GetType() == dependendDataType))
                 {
                     var instance = (IProjectDependendData)Activator.CreateInstance(dependendDataType);
-                    this.ProjectDependendDataObjects.Add(instance);
+                    ProjectDependendDataObjects.Add(instance);
                     _logger.Info($"Created instance of {dependendDataType.FullName} as project dependend data.");
                 }
             }
         }
 
+        /// <summary>
+        /// <para>
+        /// Completes the in-memory initialization of the project after deserialization.
+        /// </para>
+        /// 
+        /// <para>
+        /// Important:<br/>
+        /// This method must only be called by FlowBloxProjectManager.<br/>
+        /// It must not be invoked inside FromFile(), FromJsonContents() or any constructor.
+        /// </para>
+        /// 
+        /// <para>
+        /// The project itself represents only the data model.
+        /// Lifecycle orchestration is handled by the manager.
+        /// </para>
+        /// </summary>
         internal void OnProjectLoaded()
         {
             _logger.Info("Loading project...");
@@ -234,44 +340,44 @@ namespace FlowBlox.Core.Models.Project
             var options = FlowBloxOptions.GetOptionInstance();
             options.InitDefaults(false);
 
-            // ProjectDependendData
+            // Project dependent data
             CreateProjectDependendDataObjectsIfNotExist();
 
             List<IFlowBloxComponent> loadedComponents = new List<IFlowBloxComponent>();
 
             // FlowBlocks
-            if (this.FlowBlocks != null)
+            if (FlowBlocks != null)
             {
-                foreach (var flowBlock in this.FlowBlocks.ExceptNull())
+                foreach (var flowBlock in FlowBlocks.ExceptNull())
                 {
-                    this.FlowBloxRegistry.RegisterFlowBlock(flowBlock);
+                    FlowBloxRegistry.RegisterFlowBlock(flowBlock);
                     loadedComponents.Add(flowBlock);
                 }
             }
 
             // ManagedObjects
-            if (this.ManagedObjects != null)
+            if (ManagedObjects != null)
             {
-                foreach (var managedObject in this.ManagedObjects
+                foreach (var managedObject in ManagedObjects
                     .ExceptNull()
                     .Where(x => x is not FieldElement))
                 {
-                    this.FlowBloxRegistry.Register(managedObject);
+                    FlowBloxRegistry.Register(managedObject);
                     loadedComponents.Add(managedObject);
                 }
             }
 
             // UserFields
-            if (this.UserFields != null)
+            if (UserFields != null)
             {
-                foreach (var userField in this.UserFields)
+                foreach (var userField in UserFields)
                 {
-                    this.FlowBloxRegistry.Register(userField);
+                    FlowBloxRegistry.Register(userField);
                     loadedComponents.Add(userField);
                 }
             }
 
-            // Process OnAfterLoad-Events
+            // Trigger OnAfterLoad hooks
             foreach (var loadedComponent in loadedComponents)
             {
                 loadedComponent.OnAfterLoad();
@@ -292,13 +398,28 @@ namespace FlowBlox.Core.Models.Project
             _logger.Info("Project closed successfully.");
         }
 
-        private const string ExtensionFileSuffix = ".extensions";
-        private const string ProjectSpaceMetadataSuffix = ".prjspace";
+        // ============================================================
+        // File layout
+        // *.fbprj       => project json
+        // *.fbdeps      => dependencies / extensions
+        // *.fblocaldata => local machine/user data (ProjectSpaceGuid, local user-field values)
+        // ============================================================
+
+        private const string DependenciesFileSuffix = ".fbdeps";
+        private const string LocalDataFileSuffix = ".fblocaldata";
+
+        private static string BuildSidecarPath(string projectFile, string suffix)
+        {
+            return Path.Combine(
+                Path.GetDirectoryName(projectFile),
+                Path.GetFileNameWithoutExtension(projectFile) + suffix);
+        }
 
         public static FlowBloxProject FromJsonContents(
             string projectJson,
             string extensionsJson,
             string projectSpaceGuid = null,
+            int? projectSpaceVersion = null,
             string fileNameForAdjustments = null)
         {
             _logger.Info($"Loading project from JSON content (SpaceGuid='{projectSpaceGuid ?? ""}', File='{fileNameForAdjustments ?? ""}')");
@@ -329,7 +450,6 @@ namespace FlowBlox.Core.Models.Project
                     AdjustFileContentBeforeDeserialization(fileNameForAdjustments, ref projectFileContent);
 
                 var project = JsonConvert.DeserializeObject<FlowBloxProject>(projectFileContent, settings);
-
                 if (project == null)
                     throw new Exception("Failed to deserialize FlowBloxProject from JSON.");
 
@@ -347,6 +467,9 @@ namespace FlowBlox.Core.Models.Project
                 if (!string.IsNullOrWhiteSpace(projectSpaceGuid))
                     project.ProjectSpaceGuid = projectSpaceGuid;
 
+                if (projectSpaceVersion.HasValue)
+                    project.ProjectSpaceVersion = projectSpaceVersion;
+
                 _logger.Info("Project loaded successfully from JSON content.");
                 return project;
             }
@@ -362,40 +485,33 @@ namespace FlowBlox.Core.Models.Project
             _logger.Info($"Loading project from file: {fileName}");
             try
             {
-                // Extensions JSON
-                var extensionsFilePath = Path.Combine(
-                    Path.GetDirectoryName(fileName),
-                    Path.GetFileNameWithoutExtension(fileName) + ExtensionFileSuffix);
+                // Dependencies / extensions JSON (*.fbdeps)
+                var depsPath = BuildSidecarPath(fileName, DependenciesFileSuffix);
+                string depsJson = File.Exists(depsPath) ? File.ReadAllText(depsPath) : null;
 
-                string extensionsJson = null;
-                if (File.Exists(extensionsFilePath))
+                // Local data (*.fblocaldata)
+                var localDataPath = BuildSidecarPath(fileName, LocalDataFileSuffix);
+                FlowBloxProjectLocalData localData = null;
+
+                if (File.Exists(localDataPath))
                 {
-                    extensionsJson = File.ReadAllText(extensionsFilePath);
-                    _logger.Info($"Extensions JSON loaded from {extensionsFilePath}");
+                    var localJson = File.ReadAllText(localDataPath);
+                    localData = JsonConvert.DeserializeObject<FlowBloxProjectLocalData>(localJson);
                 }
 
-                // Project Space metadata
-                var projectSpaceFilePath = Path.Combine(
-                    Path.GetDirectoryName(fileName),
-                    Path.GetFileNameWithoutExtension(fileName) + ProjectSpaceMetadataSuffix);
-
-                string projectSpaceGuid = null;
-                if (File.Exists(projectSpaceFilePath))
-                {
-                    var metaJson = File.ReadAllText(projectSpaceFilePath);
-                    var metadata = JsonConvert.DeserializeObject<FlowBloxProjectSpaceMetadata>(metaJson);
-                    projectSpaceGuid = metadata?.ProjectGuid;
-                }
-
-                // Project JSON
+                // Project JSON (*.fbprj)
                 var projectFileContent = File.ReadAllText(fileName);
 
                 // Central loading
                 var project = FromJsonContents(
                     projectJson: projectFileContent,
-                    extensionsJson: extensionsJson,
-                    projectSpaceGuid: projectSpaceGuid,
+                    extensionsJson: depsJson,
+                    projectSpaceGuid: localData?.ProjectSpaceGuid,
+                    projectSpaceVersion: localData?.ProjectSpaceVersion,
                     fileNameForAdjustments: fileName);
+
+                // Apply local user field values after registry is initialized
+                project.ApplyLocalUserFieldValues(localData);
 
                 _logger.Info($"Project loaded successfully from {fileName}");
                 return project;
@@ -407,72 +523,29 @@ namespace FlowBlox.Core.Models.Project
             }
         }
 
-        private static (string ProjectJson, string ExtensionsJson) ExtractProjectSpaceZip(byte[] zipBytes)
+        private void ApplyLocalUserFieldValues(FlowBloxProjectLocalData localData)
         {
-            using (var ms = new MemoryStream(zipBytes))
-            using (var archive = new ZipArchive(ms, ZipArchiveMode.Read, leaveOpen: false))
+            if (localData?.LocalUserFieldValues == null || localData.LocalUserFieldValues.Count == 0)
+                return;
+
+            foreach (var field in UserFields)
             {
-                var projectEntry = archive.GetEntry("project_file.json");
-                var extensionEntry = archive.GetEntry("extension_file.json");
+                if (field == null)
+                    continue;
 
-                if (projectEntry == null)
-                    throw new Exception("ZIP does not contain 'project_file.json'.");
+                if (field.UserField != true)
+                    continue;
 
-                string ReadEntry(ZipArchiveEntry e)
+                // Only apply values for fields that are configured to store locally.
+                // Note: This requires FieldElement.StoreValueLocally to exist as discussed.
+                if (field.StoreValueLocally != true)
+                    continue;
+
+                if (localData.LocalUserFieldValues.TryGetValue(field.Name, out var value))
                 {
-                    using (var s = e.Open())
-                    using (var r = new StreamReader(s, Encoding.UTF8))
-                        return r.ReadToEnd();
+                    // Set the persisted value (no runtime evaluation here).
+                    field.StringValue = value;
                 }
-
-                var projectJson = ReadEntry(projectEntry);
-                var extensionsJson = extensionEntry != null ? ReadEntry(extensionEntry) : null;
-
-                return (projectJson, extensionsJson);
-            }
-        }
-
-        public static async Task<FlowBloxProject> FromProjectSpaceGuidAsync(string projectSpaceGuid, string userToken, FlowBloxWebApiService webApi)
-        {
-            _logger.Info($"Loading project from Project Space. Guid={projectSpaceGuid}");
-
-            if (string.IsNullOrWhiteSpace(projectSpaceGuid))
-                throw new ArgumentException("projectSpaceGuid is required.", nameof(projectSpaceGuid));
-
-            try
-            {
-                // Fetch project metadata from API (no content anymore)
-                var remoteResp = await webApi.GetProjectAsync(new FbProjectRequest { Guid = projectSpaceGuid }, userToken);
-                if (!remoteResp.Success || remoteResp.ResultObject == null)
-                    throw new InvalidOperationException("Project not found in Project Space.");
-
-                // Fetch project content via separate endpoint
-                var contentResp = await webApi.GetProjectContentAsync(userToken, Guid.Parse(projectSpaceGuid));
-                if (!contentResp.Success)
-                    throw new InvalidOperationException($"Failed to retrieve project content from Project Space. {contentResp.ErrorMessage}");
-
-                if (string.IsNullOrWhiteSpace(contentResp.ResultObject))
-                    throw new Exception("Project content is missing in Project Space response.");
-
-                var zipBytes = Convert.FromBase64String(contentResp.ResultObject);
-                var extracted = ExtractProjectSpaceZip(zipBytes);
-
-                // Load via central method. No file adjustments for ProjectSpace.
-                var project = FromJsonContents(
-                    projectJson: extracted.ProjectJson,
-                    extensionsJson: extracted.ExtensionsJson,
-                    projectSpaceGuid: projectSpaceGuid,
-                    fileNameForAdjustments: null);
-
-                project.ProjectSpaceGuid = projectSpaceGuid;
-
-                _logger.Info($"Project loaded successfully from Project Space. Guid={projectSpaceGuid}");
-                return project;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Failed to load project from Project Space. Guid={projectSpaceGuid}", ex);
-                throw;
             }
         }
 
@@ -550,31 +623,129 @@ namespace FlowBlox.Core.Models.Project
             json = json.Replace(directoryPath.Replace(@"\", @"\\"), ProjectDirectoryPlaceholder);
         }
 
+        // ============================================================
+        // Project Space ZIP (still contains only project + extensions)
+        // LocalData must NOT be part of ProjectSpace uploads.
+        // ============================================================
+
         private const string ProjectSpaceProjectFileName = "project_file.json";
         private const string ProjectSpaceExtensionsFileName = "extension_file.json";
+
+        private static (string ProjectJson, string ExtensionsJson) ExtractProjectSpaceZip(byte[] zipBytes)
+        {
+            using (var ms = new MemoryStream(zipBytes))
+            using (var archive = new ZipArchive(ms, ZipArchiveMode.Read, leaveOpen: false))
+            {
+                var projectEntry = archive.GetEntry(ProjectSpaceProjectFileName);
+                var extensionEntry = archive.GetEntry(ProjectSpaceExtensionsFileName);
+
+                if (projectEntry == null)
+                    throw new Exception($"ZIP does not contain '{ProjectSpaceProjectFileName}'.");
+
+                string ReadEntry(ZipArchiveEntry e)
+                {
+                    using (var s = e.Open())
+                    using (var r = new StreamReader(s, Encoding.UTF8))
+                        return r.ReadToEnd();
+                }
+
+                var projectJson = ReadEntry(projectEntry);
+                var extensionsJson = extensionEntry != null ? ReadEntry(extensionEntry) : null;
+
+                return (projectJson, extensionsJson);
+            }
+        }
+
+        public static async Task<FlowBloxProject> FromProjectSpaceGuidAsync(string projectSpaceGuid, string userToken, FlowBloxWebApiService webApi)
+        {
+            return await FromProjectSpaceGuidAsync(projectSpaceGuid, null, userToken, webApi);
+        }
+
+        public static async Task<FlowBloxProject> FromProjectSpaceGuidAsync(
+            string projectSpaceGuid,
+            int? projectSpaceVersion,
+            string userToken,
+            FlowBloxWebApiService webApi)
+        {
+            var versionText = projectSpaceVersion.HasValue ? projectSpaceVersion.Value.ToString() : "latest";
+            _logger.Info($"Loading project from Project Space. Guid={projectSpaceGuid}, Version={versionText}");
+
+            if (string.IsNullOrWhiteSpace(projectSpaceGuid))
+                throw new ArgumentException("projectSpaceGuid is required.", nameof(projectSpaceGuid));
+
+            try
+            {
+                // Fetch metadata (usually still "project by guid"; ok for both latest and stable)
+                var remoteResp = await webApi.GetProjectAsync(new FbProjectRequest { Guid = projectSpaceGuid }, userToken);
+                if (!remoteResp.Success || remoteResp.ResultObject == null)
+                    throw new InvalidOperationException("Project not found in Project Space.");
+
+                // Fetch project content
+                ApiResponse<string> contentResp;
+
+                if (projectSpaceVersion.HasValue)
+                {
+                    // Version
+                    contentResp = await webApi.GetProjectVersionContentAsync(
+                        userToken,
+                        Guid.Parse(projectSpaceGuid),
+                        projectSpaceVersion.Value);
+                }
+                else
+                {
+                    // Latest
+                    contentResp = await webApi.GetProjectContentAsync(
+                        userToken,
+                        Guid.Parse(projectSpaceGuid));
+                }
+
+                if (contentResp == null || !contentResp.Success)
+                    throw new InvalidOperationException(
+                        $"Failed to retrieve project content from Project Space. Version={versionText}. {contentResp?.ErrorMessage}");
+
+                if (string.IsNullOrWhiteSpace(contentResp.ResultObject))
+                    throw new Exception($"Project content is missing in Project Space response. Version={versionText}.");
+
+                var zipBytes = Convert.FromBase64String(contentResp.ResultObject);
+                var extracted = ExtractProjectSpaceZip(zipBytes);
+
+                // Load project + extensions. No local data involved for ProjectSpace.
+                var project = FromJsonContents(
+                    projectJson: extracted.ProjectJson,
+                    extensionsJson: extracted.ExtensionsJson,
+                    projectSpaceGuid: projectSpaceGuid,
+                    projectSpaceVersion: projectSpaceVersion,
+                    fileNameForAdjustments: null);
+
+                project.ProjectSpaceGuid = projectSpaceGuid;
+
+                _logger.Info($"Project loaded successfully from Project Space. Guid={projectSpaceGuid}, Version={versionText}");
+                return project;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to load project from Project Space. Guid={projectSpaceGuid}, Version={versionText}", ex);
+                throw;
+            }
+        }
 
         private string CreateProjectSpaceZipBase64()
         {
             // Collect current state before export
-            this.FlowBlocks = [.. this.FlowBloxRegistry.GetFlowBlocks()];
-            this.ManagedObjects = [.. this.FlowBloxRegistry.GetManagedObjects()];
-            this.UserFields = [.. this.FlowBloxRegistry.GetUserFields()];
+            FlowBlocks = [.. FlowBloxRegistry.GetFlowBlocks()];
+            ManagedObjects = [.. FlowBloxRegistry.GetManagedObjects()];
+            UserFields = [.. FlowBloxRegistry.GetUserFields()];
 
             // Serialize project + extensions
             var projectFileContent = JsonConvert.SerializeObject(this, JsonSettings.ProjectExport());
-            var extensionsFileContent = JsonConvert.SerializeObject(
-                this.Extensions ?? new List<FlowBloxProjectExtension>());
+            var extensionsFileContent = JsonConvert.SerializeObject(Extensions ?? new List<FlowBloxProjectExtension>());
 
             using (var memoryStream = new MemoryStream())
             {
-                // Create ZIP archive in memory
                 using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, leaveOpen: true))
                 {
                     // project_file.json
-                    var projectEntry = archive.CreateEntry(
-                        ProjectSpaceProjectFileName,
-                        CompressionLevel.Optimal);
-
+                    var projectEntry = archive.CreateEntry(ProjectSpaceProjectFileName, CompressionLevel.Optimal);
                     using (var entryStream = projectEntry.Open())
                     using (var writer = new StreamWriter(entryStream, Encoding.UTF8))
                     {
@@ -582,10 +753,7 @@ namespace FlowBlox.Core.Models.Project
                     }
 
                     // extension_file.json
-                    var extensionEntry = archive.CreateEntry(
-                        ProjectSpaceExtensionsFileName,
-                        CompressionLevel.Optimal);
-
+                    var extensionEntry = archive.CreateEntry(ProjectSpaceExtensionsFileName, CompressionLevel.Optimal);
                     using (var entryStream = extensionEntry.Open())
                     using (var writer = new StreamWriter(entryStream, Encoding.UTF8))
                     {
@@ -593,14 +761,12 @@ namespace FlowBlox.Core.Models.Project
                     }
                 }
 
-                // Convert ZIP bytes to Base64
-                var zipBytes = memoryStream.ToArray();
-                return Convert.ToBase64String(zipBytes);
+                return Convert.ToBase64String(memoryStream.ToArray());
             }
         }
 
         public async Task<ApiResponse> SaveToProjectSpaceAsync(string projectGuid, string userToken, FlowBloxWebApiService webApi)
-        { 
+        {
             if (string.IsNullOrWhiteSpace(projectGuid))
             {
                 return new ApiResponse
@@ -612,7 +778,7 @@ namespace FlowBlox.Core.Models.Project
 
             try
             {
-                // Create ZIP payload (project + extensions) and send as base64
+                // Create ZIP payload (project + extensions only)
                 var base64Zip = CreateProjectSpaceZipBase64();
 
                 var request = new FbProjectChangeRequest
@@ -630,10 +796,10 @@ namespace FlowBlox.Core.Models.Project
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                return new ApiResponse 
-                { 
-                    Success = false, 
-                    ErrorMessage = ex.Message 
+                return new ApiResponse
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
                 };
             }
         }
@@ -643,34 +809,24 @@ namespace FlowBlox.Core.Models.Project
             _logger.Info($"Saving project to file: {fileName}");
             try
             {
-                this.FlowBlocks = [.. this.FlowBloxRegistry.GetFlowBlocks()];
-                this.ManagedObjects = [.. this.FlowBloxRegistry.GetManagedObjects()];
-                this.UserFields = [.. this.FlowBloxRegistry.GetUserFields()];
+                // Collect current registry state
+                FlowBlocks = [.. FlowBloxRegistry.GetFlowBlocks()];
+                ManagedObjects = [.. FlowBloxRegistry.GetManagedObjects()];
+                UserFields = [.. FlowBloxRegistry.GetUserFields()];
 
+                // Project file (*.fbprj)
                 var projectFileContent = JsonConvert.SerializeObject(this, JsonSettings.ProjectExport());
                 AdjustFileContentAfterSerialization(fileName, ref projectFileContent);
                 File.WriteAllText(fileName, projectFileContent);
 
-                var extensionsFilePath = Path.Combine(
-                    Path.GetDirectoryName(fileName),
-                    Path.GetFileNameWithoutExtension(fileName) + ExtensionFileSuffix);
+                // Dependencies (*.fbdeps)
+                var depsPath = BuildSidecarPath(fileName, DependenciesFileSuffix);
+                JsonHelper.SerializeToFile(depsPath, Extensions ?? new List<FlowBloxProjectExtension>());
 
-                JsonHelper.SerializeToFile(extensionsFilePath, Extensions != null ?
-                    Extensions :
-                    new List<FlowBloxProjectExtension>());
-
-                var projectSpaceMetadataPath = Path.Combine(
-                    Path.GetDirectoryName(fileName),
-                    Path.GetFileNameWithoutExtension(fileName) + ProjectSpaceMetadataSuffix);
-
-                JsonHelper.SerializeToFile(extensionsFilePath, Extensions != null ?
-                   Extensions :
-                   new List<FlowBloxProjectExtension>());
-
-                JsonHelper.SerializeToFile(projectSpaceMetadataPath, new FlowBloxProjectSpaceMetadata()
-                {
-                    ProjectGuid = ProjectSpaceGuid
-                });
+                // Local data (*.fblocaldata)
+                var localDataPath = BuildSidecarPath(fileName, LocalDataFileSuffix);
+                var localData = BuildLocalDataForSave();
+                JsonHelper.SerializeToFile(localDataPath, localData);
 
                 _logger.Info($"Project saved successfully to {fileName}");
             }
@@ -679,6 +835,34 @@ namespace FlowBlox.Core.Models.Project
                 _logger.Error($"Failed to save project to file: {fileName}", ex);
                 throw;
             }
+        }
+
+        private FlowBloxProjectLocalData BuildLocalDataForSave()
+        {
+            var localData = new FlowBloxProjectLocalData
+            {
+                ProjectSpaceGuid = ProjectSpaceGuid,
+                // ProjectSpaceVersion reserved for later.
+            };
+
+            // Persist only user field values that are configured to store locally.
+            // Note: This requires FieldElement.StoreValueLocally to exist.
+            var userFields = FlowBloxRegistry.GetUserFields();
+            foreach (var field in userFields)
+            {
+                if (field == null)
+                    continue;
+
+                if (field.UserField != true)
+                    continue;
+
+                if (field.StoreValueLocally != true)
+                    continue;
+
+                localData.LocalUserFieldValues[field.Name] = field.StringValue ?? string.Empty;
+            }
+
+            return localData;
         }
     }
 }

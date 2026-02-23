@@ -12,32 +12,35 @@ namespace FlowBloxTest.FlowBlocks.Xml
     [TestClass]
     public class XmlGenerationTests : FlowBloxTestsBase
     {
+        private FlowBloxProject _project;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _project = new FlowBloxProject();
+            FlowBloxProjectManager.Instance.ActiveProject = _project;
+        }
+
         [TestMethod]
         public void XmlGenerationTest()
         {
-            var project = new FlowBloxProject();
-            FlowBloxProjectManager.Instance.ActiveProject = project;
-            var registry = project.FlowBloxRegistry;
+            var registry = _project.FlowBloxRegistry;
 
-            var startFlowBlock = CreateFlowBlock<StartFlowBlock>(registry);
+            var startFlowBlock = CreateFlowBlock<StartFlowBlock>();
 
-            var xmlDocumentFlowBlock = CreateFlowBlock<XmlDocumentFlowBlock>(registry, startFlowBlock);
+            var xmlDocumentFlowBlock = CreateFlowBlock<XmlDocumentFlowBlock>(startFlowBlock);
             xmlDocumentFlowBlock.XmlContent = "<root><teilnehmer-liste/></root>";
 
-            var tableReader = CreateFlowBlock<TableReaderFlowBlock>(registry, xmlDocumentFlowBlock);
+            var tableReader = CreateFlowBlock<TableReaderFlowBlock>(xmlDocumentFlowBlock);
 
-            var userField = CreateUserField(registry, "TeilnehmerListe-CsvContent");
+            var userField = CreateUserField("TeilnehmerListe-CsvContent");
             userField.StringValue = "Vorname;Nachname;Sprache\nAnna;Becker;DE\nPaul;Smith;EN";
 
-            // TODO: Aktuell kann dem CsvTable kein Separator übergeben werden
-            //       Weiterhin können aktuell die FlowBloxOptions nicht manuell per Unit-Test Ausführung gesetzt werden.
-            // Bitte beides umsetzen.
-
-            var dataSource = CreateManagedObject<MemoryObject>(registry);
+            var dataSource = CreateManagedObject<MemoryObject>();
             dataSource.Field = userField;
             dataSource.FileName = Path.GetRandomFileName();
 
-            var csvTable = CreateManagedObject<CsvTable>(registry);
+            var csvTable = CreateManagedObject<CsvTable>();
             csvTable.FirstRowHeader = true;
             csvTable.DataSource = dataSource;
 
@@ -66,10 +69,11 @@ namespace FlowBloxTest.FlowBlocks.Xml
                 }
             };
 
-            var nodeAppenderFlowBlock = CreateFlowBlock<XmlDocumentNodeWriterFlowBlock>(registry, tableReader);
+            var nodeAppenderFlowBlock = CreateFlowBlock<XmlDocumentNodeWriterFlowBlock>(tableReader);
             nodeAppenderFlowBlock.XPath = "/root/teilnehmer-liste";
             nodeAppenderFlowBlock.NodeName = "teilnehmer";
             nodeAppenderFlowBlock.AssociatedXmlDocument = xmlDocumentFlowBlock;
+            nodeAppenderFlowBlock.UpdateExistingNode = false;
     
             nodeAppenderFlowBlock.Assignments = new ObservableCollection<XmlAssignment>()
             {
@@ -90,10 +94,10 @@ namespace FlowBloxTest.FlowBlocks.Xml
                 }
             };
 
-            var xmlWriterFlowBlock = CreateFlowBlock<XmlDocumentOutputFlowBlock>(registry, nodeAppenderFlowBlock);
+            var xmlWriterFlowBlock = CreateFlowBlock<XmlDocumentOutputFlowBlock>(nodeAppenderFlowBlock);
             xmlWriterFlowBlock.AssociatedXmlDocument = xmlDocumentFlowBlock;
 
-            CreateRuntimeAndExecute(project);
+            CreateRuntimeAndExecute(_project);
 
             var createdXml = xmlWriterFlowBlock.ResultField.StringValue;
             Assert.IsNotNull(createdXml);

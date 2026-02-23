@@ -1658,11 +1658,29 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project input directory ähnelt.
+        /// </summary>
+        internal static string ProjectView_lbInputDir_Text {
+            get {
+                return ResourceManager.GetString("ProjectView_lbInputDir_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Notice on open ähnelt.
         /// </summary>
         internal static string ProjectView_lbNoteOnOpening_Text {
             get {
                 return ResourceManager.GetString("ProjectView_lbNoteOnOpening_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project output directory ähnelt.
+        /// </summary>
+        internal static string ProjectView_lbOutputDir_Text {
+            get {
+                return ResourceManager.GetString("ProjectView_lbOutputDir_Text", resourceCulture);
             }
         }
         

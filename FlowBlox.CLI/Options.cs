@@ -7,6 +7,14 @@ namespace FlowBlox.CLI
         [Option('p', "project", Required = true, HelpText = "Path to the FlowBlox project file.")]
         public string ProjectFile { get; set; }
 
+        [Option("project-space-guid", Required = false,
+            HelpText = "Optional: Load project from Project Space by GUID instead of using the local project file content.")]
+        public string ProjectSpaceGuid { get; set; }
+
+        [Option("project-space-version", Required = false,
+            HelpText = "Optional: Stable Project Space version number. Requires --project-space-guid.")]
+        public int? ProjectSpaceVersion { get; set; }
+
         [Option('r', "restart", Required = false, HelpText = "Enable AutoRestart of the runtime.")]
         public bool Restart { get; set; }
 

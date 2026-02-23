@@ -97,6 +97,29 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die You are not logged in. Please log in first: Go to &quot;Extras&quot;, &quot;View projects&quot; and click &quot;Login&quot;. ähnelt.
+        /// </summary>
+        public static string CreateOrUpdatePSProjectWindow_Message_LoginRequired {
+            get {
+                return ResourceManager.GetString("CreateOrUpdatePSProjectWindow_Message_LoginRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Warning: Found {0} ExecuteProject flow blocks that reference other project files via a file path (ProjectFile). When uploading into Project Space, these references may break.
+        ///
+        ///Please ensure that all referenced projects are available in Project Space as well, and migrate these references to Project Space GUIDs.
+        ///
+        ///Examples (max {1}):
+        ///{2} ähnelt.
+        /// </summary>
+        public static string CreateOrUpdatePSProjectWindow_Warning_ExternalProjectReferences {
+            get {
+                return ResourceManager.GetString("CreateOrUpdatePSProjectWindow_Warning_ExternalProjectReferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to create the project in Project Space. ähnelt.
         /// </summary>
         public static string Error_CreateFailed {
@@ -232,11 +255,38 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        /// </summary>
+        public static string Placeholder_ProjectGuid {
+            get {
+                return ResourceManager.GetString("Placeholder_ProjectGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die e.g. Contoso.Demo.Flow ähnelt.
         /// </summary>
         public static string Placeholder_ProjectName {
             get {
                 return ResourceManager.GetString("Placeholder_ProjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create new project ähnelt.
+        /// </summary>
+        public static string Tab_CreateNewProject {
+            get {
+                return ResourceManager.GetString("Tab_CreateNewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update existing project ähnelt.
+        /// </summary>
+        public static string Tab_UpdateExistingProject {
+            get {
+                return ResourceManager.GetString("Tab_UpdateExistingProject", resourceCulture);
             }
         }
         
@@ -255,6 +305,24 @@ namespace FlowBlox.UICore.Resources {
         public static string Tooltip_CreateNewProject {
             get {
                 return ResourceManager.GetString("Tooltip_CreateNewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create a new Project Space project and upload its content afterwards. ähnelt.
+        /// </summary>
+        public static string Tooltip_Tab_CreateNewProject {
+            get {
+                return ResourceManager.GetString("Tooltip_Tab_CreateNewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update an existing Project Space project (requires a project GUID). ähnelt.
+        /// </summary>
+        public static string Tooltip_Tab_UpdateExistingProject {
+            get {
+                return ResourceManager.GetString("Tooltip_Tab_UpdateExistingProject", resourceCulture);
             }
         }
         

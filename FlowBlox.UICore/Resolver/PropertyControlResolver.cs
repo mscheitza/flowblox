@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Attributes;
+﻿using FlowBlox.Core;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
@@ -135,7 +136,9 @@ namespace FlowBlox.UICore.Resolver
                     IsEnabled = !readOnly,
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(0, 4, 0, 4),
-                    MinWidth = 80
+                    MinWidth = 80,
+                    OnContent = FlowBloxResourceUtil.GetLocalizedString("PropertyControlResolver_ToggleSwitch_OnContent", typeof(FlowBloxTexts)),
+                    OffContent = FlowBloxResourceUtil.GetLocalizedString("PropertyControlResolver_ToggleSwitch_OffContent", typeof(FlowBloxTexts))
                 };
 
                 toggle.SetBinding(ToggleSwitch.IsOnProperty, binding);

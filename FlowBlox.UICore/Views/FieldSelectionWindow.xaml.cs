@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.ViewModels;
 using FlowBlox.UICore.ViewModels.FieldSelection;
@@ -25,9 +26,11 @@ namespace FlowBlox.UICore.Views
 
             // Apply selection modes based on MultiSelect.
             FieldsListView.SelectionMode = _args.MultiSelect ? SelectionMode.Extended : SelectionMode.Single;
+            ProjectPropertiesListView.SelectionMode = _args.MultiSelect ? SelectionMode.Extended : SelectionMode.Single;
             OptionsListView.SelectionMode = _args.MultiSelect ? SelectionMode.Extended : SelectionMode.Single;
 
             FieldsListView.SelectionChanged += (_, __) => RefreshOkEnabled();
+            ProjectPropertiesListView.SelectionChanged += (_, __) => RefreshOkEnabled();
             OptionsListView.SelectionChanged += (_, __) => RefreshOkEnabled();
 
             RefreshOkEnabled();
@@ -37,15 +40,15 @@ namespace FlowBlox.UICore.Views
         {
             if (_vm.IsFieldsMode)
             {
-                OkButton.IsEnabled = 
-                    FieldsListView.SelectedItems != null && 
-                    FieldsListView.SelectedItems.Count > 0;
+                OkButton.IsEnabled = FieldsListView.SelectedItems != null && FieldsListView.SelectedItems.Count > 0;
+            }
+            else if (_vm.IsProjectPropertiesMode)
+            {
+                OkButton.IsEnabled = ProjectPropertiesListView.SelectedItems != null && ProjectPropertiesListView.SelectedItems.Count > 0;
             }
             else
             {
-                OkButton.IsEnabled = 
-                    OptionsListView.SelectedItems != null && 
-                    OptionsListView.SelectedItems.Count > 0;
+                OkButton.IsEnabled = OptionsListView.SelectedItems != null && OptionsListView.SelectedItems.Count > 0;
             }
         }
 
@@ -64,29 +67,40 @@ namespace FlowBlox.UICore.Views
 
             if (_vm.IsFieldsMode)
             {
-                // SelectedItems contains FieldRowViewModel objects.
                 var selected = FieldsListView.SelectedItems.Cast<object>()
                     .Select(x => x as FieldRowViewModel)
-                    .Where(x => x != null)
+                    .Where(x => x?.FieldElement != null)
                     .Select(x => x.FieldElement)
-                    .Where(x => x != null)
                     .ToList();
 
                 res.SelectedFields = selected;
                 res.SelectedOptions = new List<OptionElement>();
+                res.SelectedProjectProperties = new List<FlowBloxProjectPropertyElement>();
+            }
+            else if (_vm.IsProjectPropertiesMode)
+            {
+                var selected = ProjectPropertiesListView.SelectedItems.Cast<object>()
+                    .Select(x => x as ProjectPropertyRowViewModel)
+                    .Where(x => x?.ProjectPropertyElement != null)
+                    .Select(x => x.ProjectPropertyElement)
+                    .ToList();
+
+                res.SelectedProjectProperties = selected;
+                res.SelectedFields = new List<FieldElement>();
+                res.SelectedOptions = new List<OptionElement>();
+                res.IsRequired = false;
             }
             else
             {
-                // SelectedItems contains OptionRowViewModel objects.
                 var selected = OptionsListView.SelectedItems.Cast<object>()
                     .Select(x => x as OptionRowViewModel)
-                    .Where(x => x != null)
+                    .Where(x => x?.OptionElement != null)
                     .Select(x => x.OptionElement)
-                    .Where(x => x != null)
                     .ToList();
 
                 res.SelectedOptions = selected;
                 res.SelectedFields = new List<FieldElement>();
+                res.SelectedProjectProperties = new List<FlowBloxProjectPropertyElement>();
                 res.IsRequired = false;
             }
 
@@ -94,6 +108,12 @@ namespace FlowBlox.UICore.Views
         }
 
         private void FieldsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (OkButton.IsEnabled)
+                _vm.OkCommand.Execute(null);
+        }
+
+        private void ProjectPropertiesListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (OkButton.IsEnabled)
                 _vm.OkCommand.Execute(null);

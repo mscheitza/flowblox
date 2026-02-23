@@ -3,7 +3,7 @@ using FlowBlox.Core.Models.Runtime.WorkItems;
 
 namespace FlowBlox.Core.Models.Runtime
 {
-    internal sealed class RuntimeTaskRunner
+    public sealed class RuntimeTaskRunner
     {
         private readonly BaseRuntime _runtime;
         private readonly Stack<IRuntimeWorkItem> _stack = new();

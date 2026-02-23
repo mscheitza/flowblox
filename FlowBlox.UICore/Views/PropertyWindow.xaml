@@ -28,7 +28,7 @@
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <DockPanel>
 
         <!-- Header -->
@@ -132,7 +132,7 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-        
+
         <!-- PropertyView Embedding -->
         <views:PropertyView DataContext="{Binding PropertyViewModel}" />
 

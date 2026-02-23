@@ -70,11 +70,38 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create stable version ähnelt.
+        /// </summary>
+        public static string Button_CreateStableVersion {
+            get {
+                return ResourceManager.GetString("Button_CreateStableVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download ähnelt.
+        /// </summary>
+        public static string Button_DownloadVersion {
+            get {
+                return ResourceManager.GetString("Button_DownloadVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
         /// </summary>
         public static string Button_Edit {
             get {
                 return ResourceManager.GetString("Button_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit version metadata ähnelt.
+        /// </summary>
+        public static string Button_EditVersionMetadata {
+            get {
+                return ResourceManager.GetString("Button_EditVersionMetadata", resourceCulture);
             }
         }
         
@@ -106,11 +133,47 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open version ähnelt.
+        /// </summary>
+        public static string Button_OpenVersion {
+            get {
+                return ResourceManager.GetString("Button_OpenVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Refresh ähnelt.
+        /// </summary>
+        public static string Button_RefreshVersions {
+            get {
+                return ResourceManager.GetString("Button_RefreshVersions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Search ähnelt.
         /// </summary>
         public static string Button_Search {
             get {
                 return ResourceManager.GetString("Button_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to download the project version. ähnelt.
+        /// </summary>
+        public static string Error_DownloadProjectVersionFailed {
+            get {
+                return ResourceManager.GetString("Error_DownloadProjectVersionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to load project versions. ähnelt.
+        /// </summary>
+        public static string Error_LoadProjectVersionsFailed {
+            get {
+                return ResourceManager.GetString("Error_LoadProjectVersionsFailed", resourceCulture);
             }
         }
         
@@ -124,11 +187,38 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Comment ähnelt.
+        /// </summary>
+        public static string Header_Comment {
+            get {
+                return ResourceManager.GetString("Header_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Created at ähnelt.
+        /// </summary>
+        public static string Header_CreatedAt {
+            get {
+                return ResourceManager.GetString("Header_CreatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
         public static string Header_Description {
             get {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search and open FlowBlox projects. You can upload and open your own projects and create stable versions that can then be used in external projects. ähnelt.
+        /// </summary>
+        public static string Header_Description_Main {
+            get {
+                return ResourceManager.GetString("Header_Description_Main", resourceCulture);
             }
         }
         
@@ -142,11 +232,29 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox Projects ähnelt.
+        /// </summary>
+        public static string Header_Title_Main {
+            get {
+                return ResourceManager.GetString("Header_Title_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Last updated ähnelt.
         /// </summary>
         public static string Header_UpdatedAt {
             get {
                 return ResourceManager.GetString("Header_UpdatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Version ähnelt.
+        /// </summary>
+        public static string Header_Version {
+            get {
+                return ResourceManager.GetString("Header_Version", resourceCulture);
             }
         }
         
@@ -196,11 +304,74 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Comment ähnelt.
+        /// </summary>
+        public static string Label_VersionComment {
+            get {
+                return ResourceManager.GetString("Label_VersionComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Created at ähnelt.
+        /// </summary>
+        public static string Label_VersionCreatedAt {
+            get {
+                return ResourceManager.GetString("Label_VersionCreatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Version details ähnelt.
+        /// </summary>
+        public static string Label_VersionDetailsHeader {
+            get {
+                return ResourceManager.GetString("Label_VersionDetailsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Version number ähnelt.
+        /// </summary>
+        public static string Label_VersionNumber {
+            get {
+                return ResourceManager.GetString("Label_VersionNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Visibility ähnelt.
         /// </summary>
         public static string Label_Visibility {
             get {
                 return ResourceManager.GetString("Label_Visibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The project version was downloaded successfully. ähnelt.
+        /// </summary>
+        public static string Message_ProjectVersionDownloaded {
+            get {
+                return ResourceManager.GetString("Message_ProjectVersionDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Details ähnelt.
+        /// </summary>
+        public static string Tab_Details {
+            get {
+                return ResourceManager.GetString("Tab_Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage versions ähnelt.
+        /// </summary>
+        public static string Tab_ProjectVersions {
+            get {
+                return ResourceManager.GetString("Tab_ProjectVersions", resourceCulture);
             }
         }
         
@@ -232,11 +403,56 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        /// </summary>
+        public static string Tooltip_CopyToClipboard {
+            get {
+                return ResourceManager.GetString("Tooltip_CopyToClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create stable version ähnelt.
+        /// </summary>
+        public static string Tooltip_CreateStableVersion {
+            get {
+                return ResourceManager.GetString("Tooltip_CreateStableVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download version ähnelt.
+        /// </summary>
+        public static string Tooltip_DownloadVersion {
+            get {
+                return ResourceManager.GetString("Tooltip_DownloadVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit version details ähnelt.
+        /// </summary>
+        public static string Tooltip_EditVersionMetadata {
+            get {
+                return ResourceManager.GetString("Tooltip_EditVersionMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Shows only your own projects (login required). ähnelt.
         /// </summary>
         public static string Tooltip_FilterMine {
             get {
                 return ResourceManager.GetString("Tooltip_FilterMine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Refresh versions ähnelt.
+        /// </summary>
+        public static string Tooltip_RefreshVersions {
+            get {
+                return ResourceManager.GetString("Tooltip_RefreshVersions", resourceCulture);
             }
         }
     }

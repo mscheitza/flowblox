@@ -3,6 +3,7 @@
     public enum FieldSelectionMode
     {
         Fields,
+        ProjectProperties,
         Options
     }
 }

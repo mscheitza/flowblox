@@ -1,15 +1,17 @@
 ﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util;
+using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Models;
+using FlowBlox.UICore.ViewModels.FieldSelection;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using FlowBlox.UICore.Commands;
-using FlowBlox.UICore.Enums;
-using FlowBlox.UICore.ViewModels.FieldSelection;
-using FlowBlox.Core.Util;
 
 namespace FlowBlox.UICore.ViewModels
 {
@@ -32,8 +34,10 @@ namespace FlowBlox.UICore.ViewModels
             {
                 if (_args.SelectionMode == value) return;
                 _args.SelectionMode = value;
+
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsFieldsMode));
+                OnPropertyChanged(nameof(IsProjectPropertiesMode));
                 OnPropertyChanged(nameof(IsOptionsMode));
                 OnPropertyChanged(nameof(ShowRequired));
             }
@@ -53,7 +57,9 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public bool HideRequired => _args.HideRequired;
+
         public bool IsFieldsMode => SelectionMode == FieldSelectionMode.Fields;
+        public bool IsProjectPropertiesMode => SelectionMode == FieldSelectionMode.ProjectProperties;
         public bool IsOptionsMode => SelectionMode == FieldSelectionMode.Options;
 
         public bool ShowRequired => IsFieldsMode && !HideRequired;
@@ -67,8 +73,10 @@ namespace FlowBlox.UICore.ViewModels
                 _selectedTabIndex = value;
                 OnPropertyChanged();
 
-                SelectionMode = _selectedTabIndex == 0 ? 
-                    FieldSelectionMode.Fields : 
+                // Tab order: 0 = Fields, 1 = ProjectProperties, 2 = Options
+                SelectionMode =
+                    _selectedTabIndex == 0 ? FieldSelectionMode.Fields :
+                    _selectedTabIndex == 1 ? FieldSelectionMode.ProjectProperties :
                     FieldSelectionMode.Options;
             }
         }
@@ -77,11 +85,16 @@ namespace FlowBlox.UICore.ViewModels
             _args.AllowedFieldSelectionModes != null &&
             _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.Fields);
 
+        public bool CanSelectProjectProperties =>
+            _args.AllowedFieldSelectionModes != null &&
+            _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.ProjectProperties);
+
         public bool CanSelectOptions =>
             _args.AllowedFieldSelectionModes != null &&
             _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.Options);
 
         public List<FieldRowViewModel> FieldRows { get; private set; } = new List<FieldRowViewModel>();
+        public List<ProjectPropertyRowViewModel> ProjectPropertyRows { get; private set; } = new List<ProjectPropertyRowViewModel>();
         public List<OptionRowViewModel> OptionRows { get; private set; } = new List<OptionRowViewModel>();
 
         public FieldSelectionWindowViewModel(Window ownerWindow, FieldSelectionWindowArgs args)
@@ -92,12 +105,14 @@ namespace FlowBlox.UICore.ViewModels
 
             // Initialize state.
             IsRequired = _args.IsRequired;
-            SelectedTabIndex = _args.SelectionMode == FieldSelectionMode.Fields ? 0 : 1;
 
-            if (SelectedTabIndex == 0 && !CanSelectFields && CanSelectOptions)
-                SelectedTabIndex = 1;
-            else if (SelectedTabIndex == 1 && !CanSelectOptions && CanSelectFields)
-                SelectedTabIndex = 0;
+            SelectedTabIndex =
+                _args.SelectionMode == FieldSelectionMode.Fields ? 0 :
+                _args.SelectionMode == FieldSelectionMode.ProjectProperties ? 1 :
+                2;
+
+            // Normalize tab selection based on allowed modes.
+            NormalizeSelectedTabIndex();
 
             OkCommand = new RelayCommand(() =>
             {
@@ -114,9 +129,26 @@ namespace FlowBlox.UICore.ViewModels
             LoadRows();
         }
 
+        private void NormalizeSelectedTabIndex()
+        {
+            // Prefer current selection if allowed; otherwise choose the first allowed tab in display order.
+            bool tabAllowed =
+                (SelectedTabIndex == 0 && CanSelectFields) ||
+                (SelectedTabIndex == 1 && CanSelectProjectProperties) ||
+                (SelectedTabIndex == 2 && CanSelectOptions);
+
+            if (tabAllowed)
+                return;
+
+            if (CanSelectFields) SelectedTabIndex = 0;
+            else if (CanSelectProjectProperties) SelectedTabIndex = 1;
+            else if (CanSelectOptions) SelectedTabIndex = 2;
+        }
+
         private void LoadRows()
         {
             LoadFieldRows();
+            LoadProjectPropertyRows();
             LoadOptionRows();
         }
 
@@ -146,12 +178,12 @@ namespace FlowBlox.UICore.ViewModels
             bool IsConnected(FieldElement fe)
                 => flowBlock?.ReferencedFlowBlocks?.Contains(fe.Source) == true;
 
-            // Sorting requirement:
+            // Sorting:
             // - Connected fields first
             // - Then disconnected
             // - User fields at the end
-            // Within each bucket, use a stable alphabetical ordering for better UX.
-            var sorted = fieldElements
+            // Within each bucket: alphabetical by source and field name.
+            FieldRows = fieldElements
                 .Select(fe => new
                 {
                     Element = fe,
@@ -164,21 +196,40 @@ namespace FlowBlox.UICore.ViewModels
                 .Select(x => new FieldRowViewModel(x.Element, x.Connected))
                 .ToList();
 
-            FieldRows = sorted;
             OnPropertyChanged(nameof(FieldRows));
+        }
+
+        private void LoadProjectPropertyRows()
+        {
+            IEnumerable<FlowBloxProjectPropertyElement> elements = _args.ProjectPropertyElements;
+
+            if (elements == null)
+            {
+                var project = FlowBloxProjectManager.Instance.ActiveProject;
+                elements = project?.GetProjectPropertyElements() ?? Enumerable.Empty<FlowBloxProjectPropertyElement>();
+            }
+
+            // Sorting: alphabetical by display name (fallback to key).
+            ProjectPropertyRows = (elements ?? Enumerable.Empty<FlowBloxProjectPropertyElement>())
+                .OrderBy(p => p?.DisplayName ?? "")
+                .ThenBy(p => p?.Key ?? "")
+                .Select(p => new ProjectPropertyRowViewModel(p))
+                .ToList();
+
+            OnPropertyChanged(nameof(ProjectPropertyRows));
         }
 
         private void LoadOptionRows()
         {
             IEnumerable<OptionElement> optionElements = _args.OptionElements;
 
-            // If no option elements were passed, load them from FlowBlockOptions.
+            // If no option elements were passed, load them from FlowBloxOptions.
             if (optionElements == null)
                 optionElements = FlowBloxOptions.GetOptionInstance()
                     .GetOptions()
                     .Where(o => o.IsPlaceholderEnabled) ?? Enumerable.Empty<OptionElement>();
 
-            // Sorting requirement: alphabetical by option name.
+            // Sorting: alphabetical by option name.
             OptionRows = (optionElements ?? Enumerable.Empty<OptionElement>())
                 .OrderBy(o => o?.Name ?? "")
                 .Select(o => new OptionRowViewModel(o))

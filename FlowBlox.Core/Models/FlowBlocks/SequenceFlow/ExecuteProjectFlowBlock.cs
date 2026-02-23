@@ -22,21 +22,67 @@ namespace FlowBlox.Core.Models.FlowBlocks
     [Display(Name = "ExecuteProjectFlowBlock_DisplayName", Description = "ExecuteProjectFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class ExecuteProjectFlowBlock : BaseSingleResultFlowBlock
     {
-        [Required]
-        [Display(Name = "ExecuteProjectFlowBlock_ProjectFile", ResourceType = typeof(FlowBloxTexts), GroupName = "ExecuteProjectFlowBlock_Groups_Project", Order = 0)]
+        [ConditionallyRequired()]
+        [ActivationCondition(ActivationMethod = nameof(IsProjectFileVisible))]
+        [Display(
+            Name = "ExecuteProjectFlowBlock_ProjectFile",
+            Description = "ExecuteProjectFlowBlock_ProjectFile_Description",
+            ResourceType = typeof(FlowBloxTexts),
+            GroupName = "ExecuteProjectFlowBlock_Groups_Project",
+            Order = 0)]
         [FlowBlockUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection)]
         [FlowBlockUIFileSelection("FlowBlox project (*.fbprj)|*.fbprj|All files (*.*)|*.*")]
         public string ProjectFile { get; set; }
 
-        [Display(Name = "ExecuteProjectFlowBlock_AbortOnError", ResourceType = typeof(FlowBloxTexts), GroupName = "ExecuteProjectFlowBlock_Groups_Project", Order = 1)]
+        private bool IsProjectFileVisible() => string.IsNullOrWhiteSpace(ProjectSpaceGuid);
+
+        [ConditionallyRequired()]
+        [ActivationCondition(ActivationMethod = nameof(IsProjectSpaceGuidVisible))]
+        [Display(
+            Name = "ExecuteProjectFlowBlock_ProjectSpaceGuid",
+            Description = "ExecuteProjectFlowBlock_ProjectSpaceGuid_Description",
+            ResourceType = typeof(FlowBloxTexts),
+            GroupName = "ExecuteProjectFlowBlock_Groups_Project",
+            Order = 1)]
+        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        public string ProjectSpaceGuid { get; set; }
+
+        private bool IsProjectSpaceGuidVisible() => string.IsNullOrWhiteSpace(ProjectFile);
+
+        [ActivationCondition(ActivationMethod = nameof(IsProjectSpaceGuidVisible))]
+        [Display(
+            Name = "ExecuteProjectFlowBlock_ProjectSpaceVersion",
+            Description = "ExecuteProjectFlowBlock_ProjectSpaceVersion_Description",
+            ResourceType = typeof(FlowBloxTexts),
+            GroupName = "ExecuteProjectFlowBlock_Groups_Project",
+            Order = 2)]
+        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        public int? ProjectSpaceVersion { get; set; }
+
+        [Display(
+            Name = "ExecuteProjectFlowBlock_AbortOnError",
+            Description = "ExecuteProjectFlowBlock_AbortOnError_Description",
+            ResourceType = typeof(FlowBloxTexts),
+            GroupName = "ExecuteProjectFlowBlock_Groups_Project",
+            Order = 3)]
         [FlowBlockUI(Factory = UIFactory.Default)]
         public bool AbortOnError { get; set; } = true;
 
-        [Display(Name = "ExecuteProjectFlowBlock_AbortOnWarning", ResourceType = typeof(FlowBloxTexts), GroupName = "ExecuteProjectFlowBlock_Groups_Project", Order = 2)]
+        [Display(
+            Name = "ExecuteProjectFlowBlock_AbortOnWarning",
+            Description = "ExecuteProjectFlowBlock_AbortOnWarning_Description",
+            ResourceType = typeof(FlowBloxTexts),
+            GroupName = "ExecuteProjectFlowBlock_Groups_Project",
+            Order = 4)]
         [FlowBlockUI(Factory = UIFactory.Default)]
         public bool AbortOnWarning { get; set; } = false;
 
-        [Display(Name = "ExecuteProjectFlowBlock_ParameterMappings", ResourceType = typeof(FlowBloxTexts), GroupName = "ExecuteProjectFlowBlock_Groups_Parameters", Order = 0)]
+        [Display(
+            Name = "ExecuteProjectFlowBlock_ParameterMappings",
+            Description = "ExecuteProjectFlowBlock_ParameterMappings_Description",
+            ResourceType = typeof(FlowBloxTexts),
+            GroupName = "ExecuteProjectFlowBlock_Groups_Parameters",
+            Order = 0)]
         [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
         [FlowBlockDataGrid(IsMovable = true)]
         public ObservableCollection<ExecuteProjectParameterMappingEntry> ParameterMappings { get; set; } = new();
@@ -55,8 +101,12 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 Wait(runtime);
                 SetParentElement(data);
 
-                if (string.IsNullOrWhiteSpace(ProjectFile))
-                    throw new ValidationException("ProjectFile must not be empty.");
+                if (string.IsNullOrWhiteSpace(ProjectSpaceGuid) && string.IsNullOrWhiteSpace(ProjectFile))
+                    throw new ValidationException("Either the project file or a Project Space GUID must be specified.");
+
+                // If a version is provided, a ProjectSpaceGuid must also be set.
+                if (ProjectSpaceVersion.HasValue && string.IsNullOrWhiteSpace(ProjectSpaceGuid))
+                    throw new ValidationException("ProjectSpaceGuid must be set when ProjectSpaceVersion is provided.");
 
                 var cmd = RunnerHostResolver.Resolve();
 
@@ -93,6 +143,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
                     runtime.Aborted = true;
                     return;
                 }
+
                 GenerateResult(runtime, responseJson);
             });
         }
@@ -131,6 +182,14 @@ namespace FlowBlox.Core.Models.FlowBlocks
             return new FlowBlox.Core.Runner.Contracts.RunnerRequest
             {
                 ProjectFile = FlowBloxFieldHelper.ReplaceFieldsInString(ProjectFile),
+
+                // ProjectSpace support
+                ProjectSpaceGuid = string.IsNullOrWhiteSpace(ProjectSpaceGuid)
+                    ? null
+                    : FlowBloxFieldHelper.ReplaceFieldsInString(ProjectSpaceGuid),
+
+                ProjectSpaceVersion = ProjectSpaceVersion,
+
                 AutoRestart = false, // hard requirement
                 AbortOnError = AbortOnError,
                 AbortOnWarning = AbortOnWarning,

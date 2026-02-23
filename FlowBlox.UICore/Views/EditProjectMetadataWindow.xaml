@@ -163,11 +163,13 @@
 
                 <Button Content="{x:Static resources:EditProjectMetadataWindow.Button_Cancel}"
                         Margin="0,0,6,0"
-                        Command="{Binding CloseCommand}" />
+                        Command="{Binding CloseCommand}"
+                        IsCancel="True"/>
 
                 <Button Content="{x:Static resources:EditProjectMetadataWindow.Button_Save}"
                         Command="{Binding SaveCommand}"
-                        IsEnabled="{Binding CanSave}" />
+                        IsEnabled="{Binding CanSave}"
+                        IsDefault="True"/>
             </StackPanel>
 
         </Grid>

@@ -25,9 +25,17 @@ namespace FlowBlox.CLI
 
         private static int RunWithOptions(Options options)
         {
+            if (options.ProjectSpaceVersion.HasValue && string.IsNullOrWhiteSpace(options.ProjectSpaceGuid))
+            {
+                WriteColored("Error: --project-space-version requires --project-space-guid.", ConsoleColor.Red);
+                return 1;
+            }
+
             var request = new RunnerRequest
             {
                 ProjectFile = RunnerPathTemplateResolver.Resolve(options.ProjectFile),
+                ProjectSpaceGuid = string.IsNullOrWhiteSpace(options.ProjectSpaceGuid) ? null : options.ProjectSpaceGuid,
+                ProjectSpaceVersion = options.ProjectSpaceVersion,
 
                 AutoRestart = options.Restart,
                 AbortOnError = options.AbortOnError,
@@ -47,7 +55,11 @@ namespace FlowBlox.CLI
 
             try
             {
-                WriteColored($"Starting execution of project '{Path.GetFileName(options.ProjectFile)}'...", ConsoleColor.Gray);
+                var displayName = !string.IsNullOrWhiteSpace(options.ProjectSpaceGuid)
+                    ? $"{options.ProjectSpaceGuid}" + (options.ProjectSpaceVersion.HasValue ? $" (v{options.ProjectSpaceVersion.Value})" : "")
+                    : Path.GetFileName(options.ProjectFile);
+
+                WriteColored($"Starting execution of project '{displayName}'...", ConsoleColor.Gray);
 
                 var response = FlowBloxProjectRunner.Run(request);
 
@@ -61,8 +73,7 @@ namespace FlowBlox.CLI
 
                 if (!response.Success)
                 {
-                    WriteColored($"Execution failed (ExitCode={response.ExitCode}).",
-                        ConsoleColor.Red);
+                    WriteColored($"Execution failed (ExitCode={response.ExitCode}).", ConsoleColor.Red);
 
                     if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
                         WriteColored(response.ErrorMessage, ConsoleColor.Red);
@@ -77,8 +88,7 @@ namespace FlowBlox.CLI
                     return response.ExitCode;
                 }
 
-                WriteColored($"Execution completed successfully (ExitCode={response.ExitCode}).",
-                    ConsoleColor.Green);
+                WriteColored($"Execution completed successfully (ExitCode={response.ExitCode}).", ConsoleColor.Green);
 
                 if (!options.NonInteractive)
                 {

@@ -5,6 +5,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow.ExecuteProject;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
 using System.Collections.ObjectModel;
@@ -18,10 +19,18 @@ namespace FlowBlox.Core.Models.FlowBlocks
     [Display(Name = "ProjectOutputIteratorFlowBlock_DisplayName", Description = "ProjectOutputIteratorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class ProjectOutputIteratorFlowBlock : BaseResultFlowBlock
     {
-        [Required]
-        [Display(Name = "ProjectOutputIteratorFlowBlock_ResponseJson", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        public string ResponseJson { get; set; }
+        private FieldElement _inputField;
+
+        [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleFieldElements), SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
+        [Required()]
+        public FieldElement InputField
+        {
+            get => _inputField;
+            set => SetRequiredInputField(ref _inputField, value);
+        }
+
+        public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);
 
         [Required]
         [Display(Name = "ProjectOutputIteratorFlowBlock_OutputName", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 1)]
@@ -63,14 +72,15 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 Wait(runtime);
                 SetParentElement(data);
 
-                if (string.IsNullOrWhiteSpace(ResponseJson))
+                string responseJson = this.InputField.StringValue;
+                if (string.IsNullOrWhiteSpace(responseJson))
                     throw new ValidationException("ResponseJson must not be empty.");
 
                 if (string.IsNullOrWhiteSpace(OutputName))
                     throw new ValidationException("OutputName must not be empty.");
 
                 var response = JsonSerializer.Deserialize<Runner.Contracts.RunnerResponse>(
-                    ResponseJson,
+                    responseJson,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 if (response == null)

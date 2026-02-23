@@ -1,14 +1,15 @@
-﻿using System;
-using System.Windows.Forms;
-using FlowBlox.Core;
+﻿using FlowBlox.Core;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Util.Controls;
-using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.Drawing;
+using FlowBlox.Core.Util.Resources;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
 
 namespace FlowBlox.Views
 {
-    
     public enum ProjectViewMode
     {
         CreateProject,
@@ -36,6 +37,84 @@ namespace FlowBlox.Views
 
             ApplyMode();
         }
+
+        private void ProjectView_Load(object sender, EventArgs e)
+        {
+            UpdateUI();
+        }
+
+        private void tbProjectName_TextChanged(object sender, EventArgs e)
+        {
+            UpdateUI();
+        }
+
+        private void UpdateUI()
+        {
+            // Der Projektname im UI ist die Quelle für die Ableitung
+            var name = tbProjectName.Text;
+
+            var inputDir = _project.GetProjectInputDirectory(name);
+            var outputDir = _project.GetProjectOutputDirectory(name);
+
+            tbInputDir.Text = inputDir;
+            tbOutputDir.Text = outputDir;
+
+            var inputExists = !string.IsNullOrWhiteSpace(inputDir) && Directory.Exists(inputDir);
+            var outputExists = !string.IsNullOrWhiteSpace(outputDir) && Directory.Exists(outputDir);
+
+            btOpenInputDir.Enabled = inputExists;
+            btOpenOutputDir.Enabled = outputExists;
+
+            btCreateInputDir.Enabled = !string.IsNullOrWhiteSpace(inputDir) && !inputExists;
+            btCreateOutputDir.Enabled = !string.IsNullOrWhiteSpace(outputDir) && !outputExists;
+        }
+
+        private void btCreateInputDir_Click(object sender, EventArgs e)
+        {
+            var dir = tbInputDir.Text;
+            if (string.IsNullOrWhiteSpace(dir))
+                return;
+
+            Directory.CreateDirectory(dir);
+            UpdateUI();
+        }
+
+        private void btCreateOutputDir_Click(object sender, EventArgs e)
+        {
+            var dir = tbOutputDir.Text;
+            if (string.IsNullOrWhiteSpace(dir))
+                return;
+
+            Directory.CreateDirectory(dir);
+            UpdateUI();
+        }
+
+        private void btOpenInputDir_Click(object sender, EventArgs e)
+        {
+            var dir = tbInputDir.Text;
+            if (string.IsNullOrWhiteSpace(dir) || !Directory.Exists(dir))
+                return;
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = dir,
+                UseShellExecute = true
+            });
+        }
+
+        private void btOpenOutputDir_Click(object sender, EventArgs e)
+        {
+            var dir = tbOutputDir.Text;
+            if (string.IsNullOrWhiteSpace(dir) || !Directory.Exists(dir))
+                return;
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = dir,
+                UseShellExecute = true
+            });
+        }
+
 
         private void ApplyMode()
         {

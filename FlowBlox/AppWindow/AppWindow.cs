@@ -19,9 +19,11 @@ using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.Grid.Provider;
+using FlowBlox.UICore.ViewModels.PSProjects;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -232,14 +234,28 @@ namespace FlowBlox.AppWindow
         private void UpdateUI_ProjectName()
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;
-            if (!string.IsNullOrEmpty(project?.ProjectName))
+
+            var baseTitle = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Text", typeof(FlowBloxMainUITexts));
+            if (string.IsNullOrEmpty(project?.ProjectName))
             {
-                this.Text = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Text", typeof(FlowBloxMainUITexts)) + " \"" + project.ProjectName + "\"";
+                Text = baseTitle;
+                return;
             }
-            else
-            {
-                this.Text = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Text", typeof(FlowBloxMainUITexts));
-            }
+
+            // Build suffix:
+            var suffixParts = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(project.ProjectSpaceGuid))
+                suffixParts.Add($"Project-Space GUID: {project.ProjectSpaceGuid}");
+
+            if (project.ProjectSpaceVersion.HasValue)
+                suffixParts.Add($"Version: {project.ProjectSpaceVersion.Value}");
+
+            var suffix = suffixParts.Count > 0
+                ? $" ({string.Join(" ", suffixParts)})"
+                : string.Empty;
+
+            Text = $"{baseTitle} \"{project.ProjectName}\"{suffix}";
         }
 
         private void rbNewProject_Click(object sender, EventArgs e)
@@ -427,7 +443,7 @@ namespace FlowBlox.AppWindow
         {
             try
             {
-                if (_recentProjectPath.Equals(string.Empty))
+                if (string.IsNullOrWhiteSpace(_recentProjectPath))
                 {
                     saveProjectDialog.InitialDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectDir"].Value;
 
@@ -1098,17 +1114,20 @@ namespace FlowBlox.AppWindow
                 if (dialog.DialogResult != true)
                     return;
 
-                var projectGuid = dialog.Tag as string;
-                if (string.IsNullOrWhiteSpace(projectGuid))
+                var selection = dialog.Tag as PSProjectSelection;
+                if (selection?.Project == null || string.IsNullOrWhiteSpace(selection.Project.Guid))
                     return;
+
+                var projectGuid = selection.Project.Guid;
+                int? version = selection.Version?.VersionNumber;
 
                 CloseProject();
                 UnloadProject();
-                OpenProjectFromProjectSpace(projectGuid);
+                OpenProjectFromProjectSpace(projectGuid, version);
             });
         }
 
-        private void OpenProjectFromProjectSpace(string projectGuid)
+        private void OpenProjectFromProjectSpace(string projectGuid, int? projectSpaceVersion = null)
         {
             var baseUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectApiServiceBaseUrl"].Value;
             var webApi = new FlowBloxWebApiService(baseUrl);
@@ -1117,7 +1136,8 @@ namespace FlowBlox.AppWindow
             FlowBloxProject loadedProject = null;
             TryOpenProject(() =>
             {
-                loadedProject = Task.Run(async () => await FlowBloxProject.FromProjectSpaceGuidAsync(projectGuid, token, webApi))
+                loadedProject = Task.Run(async () =>
+                        await FlowBloxProject.FromProjectSpaceGuidAsync(projectGuid, projectSpaceVersion, token, webApi))
                     .GetAwaiter()
                     .GetResult();
 
@@ -1131,6 +1151,22 @@ namespace FlowBlox.AppWindow
         {
             var dialog = new PSProjectsWindow();
             WindowsFormWPFHelper.ShowDialog(dialog, this);
+            if (dialog.DialogResult != true)
+                return;
+
+            var selection = dialog.Tag as PSProjectSelection;
+            if (selection?.Project == null || string.IsNullOrWhiteSpace(selection.Project.Guid))
+                return;
+
+            var projectGuid = selection.Project.Guid;
+            int? version = selection.Version?.VersionNumber;
+
+            OpenProjectWithConfirmation(() =>
+            {
+                CloseProject();
+                UnloadProject();
+                OpenProjectFromProjectSpace(projectGuid, version);
+            });
         }
 
         private void itmFbExtensions_Click(object sender, EventArgs e)

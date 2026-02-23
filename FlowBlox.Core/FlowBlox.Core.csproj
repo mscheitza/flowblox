@@ -87,7 +87,7 @@
       <LastGenOutput>FlowBloxIcons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="FlowBloxTexts.de.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="FlowBloxTexts.resx">
       <SubType>Designer</SubType>

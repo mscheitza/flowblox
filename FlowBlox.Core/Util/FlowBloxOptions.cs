@@ -19,7 +19,6 @@ namespace FlowBlox.Core.Util
         {
             LoadOptions();
             InitDefaults(false);
-            Save();
         }
 
         private void LoadOptions()
@@ -80,6 +79,7 @@ namespace FlowBlox.Core.Util
                 new OptionElement("General.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "Toolbox directory path.", OptionElement.OptionType.Text),
                 new OptionElement("General.ToolboxUserFile", @"%userprofile%\Documents\FlowBlox\toolbox\userToolbox.json", "Toolbox user file path.", OptionElement.OptionType.Text),
                 new OptionElement("General.ProjectDir", @"%userprofile%\Documents\FlowBlox\projects", "Project directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("General.InputDir", @"%userprofile%\Documents\FlowBlox\input", "Input directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
                 new OptionElement("General.OutputDir", @"%userprofile%\Documents\FlowBlox\output", "Output directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
                 new OptionElement("General.ExtensionsDir", @"%localappdata%\FlowBlox\extensions", "Extensions directory path.", OptionElement.OptionType.Text),
                 new OptionElement("General.ProblemTraceDir", @"%localappdata%\FlowBlox\logs\runtime\problems", "Problem trace directory path.", OptionElement.OptionType.Text),

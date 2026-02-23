@@ -5,8 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:views="clr-namespace:FlowBlox.UICore.Views"
+    xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
     Title="{x:Static resources:CreateOrUpdatePSProjectWindow.Title}"
-    Height="520"
+    Height="570"
     Width="760"
     WindowStartupLocation="CenterOwner">
 
@@ -15,6 +17,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -48,155 +52,106 @@
                        TextWrapping="Wrap" />
         </Border>
 
-        <!-- Toolbar-->
-        <ToolBar DockPanel.Dock="Top"
-                 Margin="0,0,0,8">
-
-            <!-- Update existing -->
-            <ToggleButton IsChecked="{Binding IsUpdateExistingSelected, Mode=TwoWay}"
-                  Visibility="{Binding HasInitialProjectGuid, Converter={StaticResource BooleanToVisibilityConverter}}"
-                  Margin="0,0,8,0">
-                <ToggleButton.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="CloudUploadOutline"
-                                            Width="18"
-                                            Height="18"
-                                            Margin="0,0,6,0"/>
-                        <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Button_UpdateExistingProject}" />
-                    </StackPanel>
-                </ToggleButton.Content>
-                <ToggleButton.ToolTip>
-                    <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Tooltip_UpdateExistingProject}"
-                       TextWrapping="Wrap"
-                       Width="320"/>
-                </ToggleButton.ToolTip>
-            </ToggleButton>
-
-            <!-- Create new -->
-            <ToggleButton IsChecked="{Binding IsCreateNewSelected, Mode=TwoWay}">
-                <ToggleButton.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="PlusBoxOutline"
-                                            Width="18"
-                                            Height="18"
-                                            Margin="0,0,6,0"/>
-                        <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Button_CreateNewProject}" />
-                    </StackPanel>
-                </ToggleButton.Content>
-                <ToggleButton.ToolTip>
-                    <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Tooltip_CreateNewProject}"
-                       TextWrapping="Wrap"
-                       Width="320"/>
-                </ToggleButton.ToolTip>
-            </ToggleButton>
-        </ToolBar>
-
         <!-- Content -->
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- Scrollable form content -->
+            <!-- Main (scrollable) -->
             <ScrollViewer Grid.Row="0"
-                  Grid.ColumnSpan="2"
-                  VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Disabled"
-                  CanContentScroll="True">
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          CanContentScroll="True">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    <TabControl SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
 
-                    <!-- Left -->
-                    <StackPanel Grid.Column="0" Margin="10">
+                        <!-- Create new -->
+                        <TabItem Header="{x:Static resources:CreateOrUpdatePSProjectWindow.Tab_CreateNewProject}">
+                            <TabItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconMaterial Kind="PlusBoxOutline"
+                                                                    Width="16"
+                                                                    Height="16"
+                                                                    Margin="0,0,8,0"
+                                                                    VerticalAlignment="Center"
+                                                                    Foreground="#2E7D32"/>
+                                        <TextBlock Text="{Binding}"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Padding="0,5"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabItem.HeaderTemplate>
 
-                        <Label Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_ProjectGuid}" Margin="0,5,0,0"/>
-                        <TextBox Text="{Binding ProjectGuid}" IsReadOnly="True" />
+                            <TabItem.ToolTip>
+                                <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Tooltip_Tab_CreateNewProject}"
+                                           TextWrapping="Wrap"
+                                           Width="320"/>
+                            </TabItem.ToolTip>
 
-                        <Label HorizontalAlignment="Left" Margin="0,5,0,0">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_ProjectName}" />
-                                <iconPacks:PackIconMaterial Kind="Asterisk"
-                                                            Width="9"
-                                                            Height="9"
-                                                            Margin="6,1,0,0"
-                                                            Foreground="IndianRed"
-                                                            VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Label>
-                        <TextBox Text="{Binding ProjectName, UpdateSourceTrigger=PropertyChanged}"
-                                 mah:TextBoxHelper.Watermark="{x:Static resources:CreateOrUpdatePSProjectWindow.Placeholder_ProjectName}" />
+                            <views:ProjectSpaceProjectFormControl />
+                        </TabItem>
 
-                        <Label Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_Visibility}" Margin="0,5,0,0"/>
-                        <ComboBox SelectedValue="{Binding Visibility}"
-                                  SelectedValuePath="Tag">
-                            <ComboBoxItem Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Visibility_Private}" Tag="Private" />
-                            <ComboBoxItem Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Visibility_Public}" Tag="Public" />
-                        </ComboBox>
-                    </StackPanel>
+                        <!-- Update existing -->
+                        <TabItem Header="{x:Static resources:CreateOrUpdatePSProjectWindow.Tab_UpdateExistingProject}"
+                                 Visibility="{Binding ShowUpdateTab, Converter={StaticResource BoolToVisibilityConverter}}"
+                                 IsEnabled="{Binding CanSelectUpdateTab}">
+                            <TabItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconMaterial Kind="CloudUploadOutline"
+                                                                    Width="16"
+                                                                    Height="16"
+                                                                    Margin="0,0,8,0"
+                                                                    VerticalAlignment="Center"
+                                                                    Foreground="#3A6EA5"/>
+                                        <TextBlock Text="{Binding}"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Padding="0,5"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabItem.HeaderTemplate>
 
-                    <!-- Right -->
-                    <StackPanel Grid.Column="1" Margin="10">
+                            <TabItem.ToolTip>
+                                <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Tooltip_Tab_UpdateExistingProject}"
+                                           TextWrapping="Wrap"
+                                           Width="320"/>
+                            </TabItem.ToolTip>
 
-                        <Label HorizontalAlignment="Left" Margin="0,5,0,0">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_ProjectDescription}" />
-                                <iconPacks:PackIconMaterial Kind="Asterisk"
-                                                    Width="9"
-                                                    Height="9"
-                                                    Margin="6,1,0,0"
-                                                    Foreground="IndianRed"
-                                                    VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Label>
-                        <TextBox Text="{Binding ProjectDescription, UpdateSourceTrigger=PropertyChanged}"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 VerticalScrollBarVisibility="Auto"
-                                 Height="140"
-                                 mah:TextBoxHelper.Watermark="{x:Static resources:CreateOrUpdatePSProjectWindow.Placeholder_ProjectDescription}" />
+                            <views:ProjectSpaceProjectFormControl />
+                        </TabItem>
 
-                        <Label Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_CreatedAt}" Margin="0,5,0,0"/>
-                        <TextBox Text="{Binding CreatedAtText}" IsReadOnly="True" />
-
-                        <Label Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Label_UpdatedAt}" Margin="0,5,0,0"/>
-                        <TextBox Text="{Binding UpdatedAtText}" IsReadOnly="True" />
-                    </StackPanel>
+                    </TabControl>
                 </Grid>
             </ScrollViewer>
 
             <!-- Error message (always visible) -->
             <TextBlock Grid.Row="1"
-               Grid.ColumnSpan="2"
-               Text="{Binding ErrorText}"
-               Foreground="Red"
-               Margin="0,5,0,0"
-               TextWrapping="Wrap" />
+                       Text="{Binding ErrorText}"
+                       Foreground="Red"
+                       Margin="0,8,0,0"
+                       TextWrapping="Wrap" />
 
             <!-- Footer buttons (always visible) -->
             <StackPanel Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Orientation="Horizontal"
-                HorizontalAlignment="Right"
-                Margin="0,10,0,0">
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,10,0,0">
                 <Button Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Button_Cancel}"
-                Padding="5,0,5,0"
-                Margin="5,0,5,0"
-                Command="{Binding CloseCommand}" />
+                        Padding="5,0,5,0"
+                        Margin="5,0,5,0"
+                        Command="{Binding CloseCommand}"
+                        IsCancel="True"/>
                 <Button Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Button_Save}"
-                Padding="5,0,5,0"
-                Command="{Binding SaveCommand}"
-                IsEnabled="{Binding CanSave}" />
+                        Padding="5,0,5,0"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding CanSave}"
+                        IsDefault="True"/>
             </StackPanel>
         </Grid>
     </DockPanel>

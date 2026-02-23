@@ -151,4 +151,19 @@
 	<data name="Required_InfoText" xml:space="preserve">
 		<value>„Erforderlich“ bindet dieses Feld an das übergeordnete verwaltete Objekt bzw. den FlowBlock. Der FlowBlock wird nur dann ausgeführt, wenn ein gültiger Wert vorhanden ist.</value>
 	</data>
+	<data name="Tab_ProjectProperties" xml:space="preserve">
+		<value>Projekt-Eigenschaften</value>
+	</data>
+	<data name="Col_ProjectPropertyName" xml:space="preserve">
+		<value>Name</value>
+	</data>
+	<data name="Col_ProjectPropertyKey" xml:space="preserve">
+		<value>Schlüssel</value>
+	</data>
+	<data name="Col_ProjectPropertyDescription" xml:space="preserve">
+		<value>Beschreibung</value>
+	</data>
+	<data name="Col_ProjectPropertyValue" xml:space="preserve">
+		<value>Wert</value>
+	</data>
 </root>

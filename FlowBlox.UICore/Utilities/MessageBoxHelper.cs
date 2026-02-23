@@ -9,6 +9,7 @@ namespace FlowBlox.UICore.Utilities
     {
         Question,
         Notification,
+        Warning,
         Error
     }
 
@@ -40,6 +41,9 @@ namespace FlowBlox.UICore.Utilities
 
             if (messageBoxType == MessageBoxType.Notification)
                 await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Global_MessageBox_Notification_Title"), description);
+
+            if (messageBoxType == MessageBoxType.Warning)
+                await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Global_MessageBox_Warning_Title"), description);
 
             if (messageBoxType == MessageBoxType.Error)
                 await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Global_MessageBox_Error_Title"), description);

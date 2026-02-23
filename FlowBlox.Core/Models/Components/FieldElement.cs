@@ -1,18 +1,19 @@
-﻿using FlowBlox.Core.Util;
-using FlowBlox.Core.Models.Components.Modifier;
-using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Models.Runtime;
-using System.ComponentModel.DataAnnotations;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
-using FlowBlox.Core.Interfaces;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using FlowBlox.Core.Models.Base;
-using FlowBlox.Core.Provider;
+﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
-using System.Collections.ObjectModel;
+using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Components.Modifier;
+using FlowBlox.Core.Models.FlowBlocks.Additions;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
+using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util;
+using Newtonsoft.Json;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace FlowBlox.Core.Models.Components
 {
@@ -63,6 +64,14 @@ namespace FlowBlox.Core.Models.Components
 
         public override void OnAfterCreate()
         {
+            base.OnAfterCreate();
+
+            if (_storeValueLocally == null && UserField)
+            {
+                if (UserFieldType == UserFieldTypes.Input)
+                    StoreValueLocally = true;
+            }
+
             if (this.Source != null)
             {
                 if (_nameGenerationMode != null)
@@ -203,10 +212,20 @@ namespace FlowBlox.Core.Models.Components
 
         private string _stringValue;
 
-        public bool ShouldSerializeStringValue() => UserField;
+        public bool ShouldSerializeStringValue()
+        {
+            if (!UserField)
+                return false;
+
+            if (StoreValueLocally)
+                return false;
+
+            return true;
+        }
 
         [ActivationCondition(MemberName = nameof(UserFieldType), Values = [ UserFieldTypes.Input, UserFieldTypes.Memory])]
         [Display(Name = "FieldElement_StringValue", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [FlowBlockTextBox(MultiLine = true)]
         public string StringValue
         {
             get
@@ -228,6 +247,20 @@ namespace FlowBlox.Core.Models.Components
         public string ShortStringValue => GetShortStringValue(this.StringValue);
 
         public static string GetShortStringValue(string value) => TextHelper.ShortenString(value, 100, true);
+
+        private bool? _storeValueLocally;
+
+        [ActivationCondition(MemberName = nameof(UserField), Value = true)]
+        [Display(Name = "FieldElement_StoreValueLocally", Description = "FieldElement_StoreValueLocally_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        public bool StoreValueLocally
+        {
+            get => _storeValueLocally ?? false;
+            set
+            {
+                _storeValueLocally = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Type GetConfiguredType()
         {
@@ -272,7 +305,7 @@ namespace FlowBlox.Core.Models.Components
 
 
         [ActivationCondition(MemberName = nameof(UserFieldType), Value = UserFieldTypes.Input)]
-        [Display(Name = "FieldElement_ListOfValues", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [Display(Name = "FieldElement_ListOfValues", ResourceType = typeof(FlowBloxTexts), Order = 5)]
         [FlowBlockUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ValueItem> ListOfValues { get; set; }
 

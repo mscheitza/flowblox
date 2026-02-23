@@ -3,6 +3,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Provider.Project;
 
 namespace FlowBlox.Core.Util.Fields
 {
@@ -38,6 +39,7 @@ namespace FlowBlox.Core.Util.Fields
             if (value == null)
                 return null;
 
+            // Field elements
             var registry = FlowBloxRegistryProvider.GetRegistry();
             foreach (FieldElement fieldElement in registry.GetFieldElements())
             {
@@ -45,6 +47,20 @@ namespace FlowBlox.Core.Util.Fields
                     value = value.Replace(fieldElement.FullyQualifiedName, fieldElement.StringValue ?? "");
             }
 
+            // Project property elements
+            var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
+            if (activeProject != null)
+            {
+                var propertyElements = activeProject.GetProjectPropertyElements();
+                foreach (var prop in propertyElements)
+                {
+                    var placeholder = prop.Placeholder;
+                    if (value.Contains(placeholder))
+                        value = value.Replace(placeholder, prop.Value ?? "");
+                }
+            }
+
+            // Options elements
             var optionsInstance = FlowBloxOptions.GetOptionInstance();
             foreach (var optionElement in optionsInstance.GetOptions().Where(x => x.IsPlaceholderEnabled))
             {

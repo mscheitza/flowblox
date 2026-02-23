@@ -67,7 +67,7 @@ namespace FlowBlox.Core.Models.Runtime
 
         private RuntimeTaskRunner _runner;
 
-        internal RuntimeTaskRunner TaskRunner => _runner ??= new RuntimeTaskRunner(this);
+        public RuntimeTaskRunner TaskRunner => _runner ??= new RuntimeTaskRunner(this);
 
         protected BaseRuntime(FlowBloxProject project)
         {

@@ -2,6 +2,7 @@
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Logging;
+using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
@@ -18,12 +19,62 @@ namespace FlowBlox.UICore.ViewModels
     {
         private readonly Window _ownerWindow;
         private readonly FlowBloxProject _project;
+
         private readonly string _initialProjectGuid;
         private string _backupProjectGuid;
-        private bool _suppressToggleEffects;
+
+        private bool _suppressTabEffects;
 
         public RelayCommand CloseCommand { get; }
         public RelayCommand SaveCommand { get; }
+
+        private string _errorText;
+        public string ErrorText
+        {
+            get => _errorText;
+            set
+            {
+                if (_errorText == value)
+                    return;
+
+                _errorText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _selectedTabIndex;
+        public int SelectedTabIndex
+        {
+            get => _selectedTabIndex;
+            set
+            {
+                if (_selectedTabIndex == value)
+                    return;
+
+                _selectedTabIndex = value;
+                OnPropertyChanged();
+
+                if (_suppressTabEffects)
+                    return;
+
+                if (_selectedTabIndex == 0)
+                    ApplyCreateNewMode();
+                else
+                    ApplyUpdateExistingMode();
+            }
+        }
+
+        public bool HasInitialProjectGuid => !string.IsNullOrWhiteSpace(_initialProjectGuid);
+
+        /// <summary>
+        /// If a project already has a Project Space GUID, we show the Update tab.
+        /// If not, we are in Create-only mode and hide the Update tab completely.
+        /// </summary>
+        public bool ShowUpdateTab => HasInitialProjectGuid;
+
+        public bool HasProjectGuid => !string.IsNullOrWhiteSpace(ProjectGuid);
+
+        public bool CanSelectUpdateTab => HasProjectGuid || HasInitialProjectGuid;
 
         private string _projectGuid;
         public string ProjectGuid
@@ -37,12 +88,10 @@ namespace FlowBlox.UICore.ViewModels
                 _projectGuid = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasProjectGuid));
+                OnPropertyChanged(nameof(CanSelectUpdateTab));
+                OnPropertyChanged(nameof(ShowUpdateTab));
             }
         }
-
-        public bool HasProjectGuid => !string.IsNullOrWhiteSpace(ProjectGuid);
-
-        public bool HasInitialProjectGuid => !string.IsNullOrWhiteSpace(_initialProjectGuid);
 
         private string _projectName;
         public string ProjectName
@@ -116,53 +165,6 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        private bool _isUpdateExistingSelected;
-        public bool IsUpdateExistingSelected
-        {
-            get => _isUpdateExistingSelected;
-            set
-            {
-                if (_isUpdateExistingSelected == value)
-                    return;
-
-                _isUpdateExistingSelected = value;
-                OnPropertyChanged();
-
-                if (_suppressToggleEffects || !value)
-                    return;
-
-                _suppressToggleEffects = true;
-                IsCreateNewSelected = false;
-                _suppressToggleEffects = false;
-
-                ApplyUpdateExistingMode();
-            }
-        }
-
-        private bool _isCreateNewSelected;
-        public bool IsCreateNewSelected
-        {
-            get => _isCreateNewSelected;
-            set
-            {
-                if (_isCreateNewSelected == value)
-                    return;
-
-                _isCreateNewSelected = value;
-                OnPropertyChanged();
-
-                if (_suppressToggleEffects || !value)
-                    return;
-
-                _suppressToggleEffects = true;
-                IsUpdateExistingSelected = false;
-                _suppressToggleEffects = false;
-
-                ApplyCreateNewMode();
-            }
-        }
-
-
         public bool CanSave => ActiveUser != null
                                && !string.IsNullOrWhiteSpace(UserToken)
                                && !string.IsNullOrWhiteSpace(ProjectName)
@@ -178,6 +180,8 @@ namespace FlowBlox.UICore.ViewModels
                 OnPropertyChanged(nameof(CanSave));
             }
         }
+
+        private bool IsLoggedIn => ActiveUser != null && !string.IsNullOrWhiteSpace(UserToken);
 
         public string UserToken
         {
@@ -213,22 +217,52 @@ namespace FlowBlox.UICore.ViewModels
             _initialProjectGuid = project.ProjectSpaceGuid;
             ProjectGuid = _initialProjectGuid;
 
-            _suppressToggleEffects = true;
-            IsUpdateExistingSelected = HasInitialProjectGuid;
-            IsCreateNewSelected = !HasInitialProjectGuid;
-            _suppressToggleEffects = false;
+            // Auto-select tab: Update when GUID exists, otherwise Create.
+            _suppressTabEffects = true;
+            SelectedTabIndex = HasInitialProjectGuid ? 1 : 0;
+            _suppressTabEffects = false;
 
-            OnPropertyChanged(nameof(HasInitialProjectGuid));
+            OnPropertyChanged(nameof(ShowUpdateTab));
 
             InitializeFromLocalOrRemoteAsync();
+
+            _ = EvaluateLoggedInAsync();
         }
 
-        private async Task ShowErrorAsync(string message) => await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Error, message);
-        private async Task ShowNotificationAsync(string message) => await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Notification, message);
+        private async Task EvaluateLoggedInAsync()
+        {
+            if (IsLoggedIn)
+                return;
 
+            await ShowNotificationAsync(
+                FlowBloxResourceUtil.GetLocalizedString(
+                    "CreateOrUpdatePSProjectWindow_Message_LoginRequired",
+                    typeof(Resources.CreateOrUpdatePSProjectWindow)));
+
+            OnPropertyChanged(nameof(CanSave));
+        }
+
+        private async Task ShowErrorAsync(string message)
+        {
+            ErrorText = message;
+            await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Error, message);
+        }
+
+        private async Task ShowWarningAsync(string message)
+        {
+            await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Question, message);
+        }
+
+        private async Task ShowNotificationAsync(string message)
+        {
+            ErrorText = string.Empty;
+            await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Notification, message);
+        }
 
         private void ApplyCreateNewMode()
         {
+            ErrorText = string.Empty;
+
             if (!string.IsNullOrWhiteSpace(ProjectGuid))
                 _backupProjectGuid = ProjectGuid;
 
@@ -242,16 +276,17 @@ namespace FlowBlox.UICore.ViewModels
 
         private void ApplyUpdateExistingMode()
         {
+            ErrorText = string.Empty;
+
             var restoreGuid = !string.IsNullOrWhiteSpace(_initialProjectGuid)
                 ? _initialProjectGuid
                 : _backupProjectGuid;
 
             if (string.IsNullOrWhiteSpace(restoreGuid))
             {
-                _suppressToggleEffects = true;
-                IsCreateNewSelected = true;
-                IsUpdateExistingSelected = false;
-                _suppressToggleEffects = false;
+                _suppressTabEffects = true;
+                SelectedTabIndex = 0;
+                _suppressTabEffects = false;
 
                 ApplyCreateNewMode();
                 return;
@@ -265,6 +300,8 @@ namespace FlowBlox.UICore.ViewModels
 
         private async void InitializeFromLocalOrRemoteAsync()
         {
+            ErrorText = string.Empty;
+
             if (!string.IsNullOrWhiteSpace(ProjectGuid) && !string.IsNullOrWhiteSpace(UserToken))
             {
                 var remoteResp = await _flowBloxWebApiService.Value.GetProjectAsync(
@@ -297,14 +334,22 @@ namespace FlowBlox.UICore.ViewModels
 
         private async Task ExecuteSaveAsync()
         {
+            ErrorText = string.Empty;
+
             if (ActiveUser == null || string.IsNullOrWhiteSpace(UserToken))
             {
-                await ShowErrorAsync(FlowBloxResourceUtil.GetLocalizedString("Error_NotLoggedIn", typeof(Resources.CreateOrUpdatePSProjectWindow)));
+                await ShowErrorAsync(
+                    FlowBloxResourceUtil.GetLocalizedString(
+                        "Error_NotLoggedIn",
+                        typeof(Resources.CreateOrUpdatePSProjectWindow)));
+
                 return;
             }
 
             try
             {
+                await WarnIfExternalProjectReferencesExistAsync();
+
                 if (string.IsNullOrWhiteSpace(ProjectGuid))
                 {
                     // Create project metadata
@@ -318,9 +363,9 @@ namespace FlowBlox.UICore.ViewModels
                     if (create == null || !create.Success || string.IsNullOrWhiteSpace(create.ProjectGuid))
                     {
                         await ShowErrorAsync(
-                           ApiErrorMessageHelper.BuildErrorMessage(
-                               FlowBloxResourceUtil.GetLocalizedString("Error_CreateFailed", typeof(Resources.CreateOrUpdatePSProjectWindow)),
-                               create?.ErrorMessage));
+                            ApiErrorMessageHelper.BuildErrorMessage(
+                                FlowBloxResourceUtil.GetLocalizedString("Error_CreateFailed", typeof(Resources.CreateOrUpdatePSProjectWindow)),
+                                create?.ErrorMessage));
 
                         return;
                     }
@@ -342,9 +387,9 @@ namespace FlowBlox.UICore.ViewModels
                     if (updateMeta == null || !updateMeta.Success)
                     {
                         await ShowErrorAsync(
-                           ApiErrorMessageHelper.BuildErrorMessage(
-                               FlowBloxResourceUtil.GetLocalizedString("Error_UpdateFailed", typeof(Resources.CreateOrUpdatePSProjectWindow)),
-                               updateMeta?.ErrorMessage));
+                            ApiErrorMessageHelper.BuildErrorMessage(
+                                FlowBloxResourceUtil.GetLocalizedString("Error_UpdateFailed", typeof(Resources.CreateOrUpdatePSProjectWindow)),
+                                updateMeta?.ErrorMessage));
 
                         return;
                     }
@@ -374,7 +419,7 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     await ShowErrorAsync(ApiErrorMessageHelper.BuildErrorMessage(
                         FlowBloxResourceUtil.GetLocalizedString("Error_RefreshMetadataFailed", typeof(Resources.CreateOrUpdatePSProjectWindow)),
-                        saveContent?.ErrorMessage));
+                        remoteResp.ErrorMessage));
 
                     return;
                 }
@@ -390,6 +435,44 @@ namespace FlowBlox.UICore.ViewModels
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
                 await ShowErrorAsync(ex.Message);
             }
+        }
+
+        private async Task WarnIfExternalProjectReferencesExistAsync()
+        {
+            // We must warn before saving if ExecuteProjectFlowBlocks reference external project files.
+            // Reason: The upload goes into Project Space; file path references may break and must be migrated to Project Space GUID references.
+
+            var blocks = _project?.FlowBlocks?
+                .OfType<ExecuteProjectFlowBlock>()
+                .Where(x => !string.IsNullOrWhiteSpace(x.ProjectFile))
+                .ToList();
+
+            if (blocks == null || blocks.Count == 0)
+                return;
+
+            var maxExamples = 5;
+            var examples = blocks
+                .Take(maxExamples)
+                .Select(x => x.ProjectFile?.Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .ToList();
+
+            var exampleList = examples.Count > 0
+                ? string.Join(Environment.NewLine, examples.Select(e => $"- {e}"))
+                : "- (no example available)";
+
+            var message = FlowBloxResourceUtil.GetLocalizedString(
+                "CreateOrUpdatePSProjectWindow_Warning_ExternalProjectReferences",
+                typeof(Resources.CreateOrUpdatePSProjectWindow));
+
+            message = string.Format(
+                message,
+                blocks.Count,
+                maxExamples,
+                exampleList);
+
+            await ShowWarningAsync(message);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

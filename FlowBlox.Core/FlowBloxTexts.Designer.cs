@@ -1294,11 +1294,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Abort execution if the child project reports an error. ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_AbortOnError_Description {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_AbortOnError_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Abort on Warning ähnelt.
         /// </summary>
         public static string ExecuteProjectFlowBlock_AbortOnWarning {
             get {
                 return ResourceManager.GetString("ExecuteProjectFlowBlock_AbortOnWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Abort execution if the child project reports a warning. ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_AbortOnWarning_Description {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_AbortOnWarning_Description", resourceCulture);
             }
         }
         
@@ -1384,11 +1402,65 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maps values as user fields or option overrides for the child project. Field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ParameterMappings_Description {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ParameterMappings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project File ähnelt.
         /// </summary>
         public static string ExecuteProjectFlowBlock_ProjectFile {
             get {
                 return ResourceManager.GetString("ExecuteProjectFlowBlock_ProjectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select the FlowBlox project file to execute. Field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ProjectFile_Description {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ProjectFile_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project Space GUID ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ProjectSpaceGuid {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ProjectSpaceGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional. If set, the project is loaded from Project Space. Field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ProjectSpaceGuid_Description {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ProjectSpaceGuid_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project Space Version ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ProjectSpaceVersion {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ProjectSpaceVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional. Specifies the stable version number. If set, the Project Space GUID must also be provided. ähnelt.
+        /// </summary>
+        public static string ExecuteProjectFlowBlock_ProjectSpaceVersion_Description {
+            get {
+                return ResourceManager.GetString("ExecuteProjectFlowBlock_ProjectSpaceVersion_Description", resourceCulture);
             }
         }
         
@@ -1650,6 +1722,24 @@ namespace FlowBlox.Core {
         public static string FieldElement_PendingValue {
             get {
                 return ResourceManager.GetString("FieldElement_PendingValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Store value locally ähnelt.
+        /// </summary>
+        public static string FieldElement_StoreValueLocally {
+            get {
+                return ResourceManager.GetString("FieldElement_StoreValueLocally", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die When enabled, the field value is not stored in the project file. It is stored in the local *.fblocaldata file instead (e.g., for input fields or local user data). ähnelt.
+        /// </summary>
+        public static string FieldElement_StoreValueLocally_Tooltip {
+            get {
+                return ResourceManager.GetString("FieldElement_StoreValueLocally_Tooltip", resourceCulture);
             }
         }
         
@@ -2307,6 +2397,15 @@ namespace FlowBlox.Core {
         public static string Global_MessageBox_Notification_Title {
             get {
                 return ResourceManager.GetString("Global_MessageBox_Notification_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        /// </summary>
+        public static string Global_MessageBox_Warning_Title {
+            get {
+                return ResourceManager.GetString("Global_MessageBox_Warning_Title", resourceCulture);
             }
         }
         
@@ -4123,6 +4222,24 @@ namespace FlowBlox.Core {
         public static string ProjectPanel_AssignFlowBlockName_Title {
             get {
                 return ResourceManager.GetString("ProjectPanel_AssignFlowBlockName_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Off ähnelt.
+        /// </summary>
+        public static string PropertyControlResolver_ToggleSwitch_OffContent {
+            get {
+                return ResourceManager.GetString("PropertyControlResolver_ToggleSwitch_OffContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die On ähnelt.
+        /// </summary>
+        public static string PropertyControlResolver_ToggleSwitch_OnContent {
+            get {
+                return ResourceManager.GetString("PropertyControlResolver_ToggleSwitch_OnContent", resourceCulture);
             }
         }
         
@@ -5972,6 +6089,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die List of XPath assignments for attributes or child elements of the created node. Values can be static or resolved via field references. ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_Assignments_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_Assignments_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reference node (via &quot;Write XML node&quot; Flow Block) ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter {
@@ -5981,11 +6107,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die A linked XmlDocumentNodeWriter flow block. The most recently created or updated node of that block is used as the new root context, so XPath is evaluated relative to that node instead of the document root. ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Linked XML document (via XML document Flow Block) ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument {
             get {
                 return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The linked XML document (via an XmlDocument flow block). If not set, the previous XmlDocument in the flow is used. ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip", resourceCulture);
             }
         }
         
@@ -6008,11 +6152,49 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Name of the XML node to create or update, e.g. participant.
+        ///Optionally, a single-level XPath expression with attribute filter can be used, e.g. participant[@id=&apos;1&apos;].
+        ///Multi-level XPath expressions are not allowed here. ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_NodeName_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_NodeName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Update existing node ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_DisplayName {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, the first existing node with the specified name is updated. If disabled, a new node is always appended (useful for list entries). ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Target XPath ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_XPath {
             get {
                 return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_XPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression to determine the target node. Example: /root/participant-list. If a NodeWriter is linked, the XPath is evaluated relative to the last created node. ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_XPath_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_XPath_Tooltip", resourceCulture);
             }
         }
         

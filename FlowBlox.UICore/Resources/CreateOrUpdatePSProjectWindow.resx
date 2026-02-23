@@ -166,30 +166,56 @@
 		<value>You must be logged in to save to Project Space.</value>
 	</data>
   <data name="Error_CreateFailed" xml:space="preserve">
-	  <value>Failed to create the project in Project Space.</value>
+		<value>Failed to create the project in Project Space.</value>
 	</data>
   <data name="Error_UpdateFailed" xml:space="preserve">
-	  <value>Failed to update project metadata.</value>
+		<value>Failed to update project metadata.</value>
 	</data>
   <data name="Error_UploadFailed" xml:space="preserve">
-	  <value>Failed to upload project content.</value>
+		<value>Failed to upload project content.</value>
 	</data>
   <data name="Message_SaveSuccessful" xml:space="preserve">
-	  <value>Project was saved successfully to Project Space.</value>
+		<value>Project was saved successfully to Project Space.</value>
 	</data>
   <data name="Error_RefreshMetadataFailed" xml:space="preserve">
-    <value>The project metadata could not be refreshed after saving.</value>
+		<value>The project metadata could not be refreshed after saving.</value>
+	</data>
+  <data name="Button_UpdateExistingProject" xml:space="preserve">
+		<value>Update existing project</value>
+	</data>
+  <data name="Tooltip_UpdateExistingProject" xml:space="preserve">
+		<value>Uses the existing ProjectSpace GUID and updates the current ProjectSpace project.</value>
+	</data>
+  <data name="Button_CreateNewProject" xml:space="preserve">
+		<value>Create new project</value>
+	</data>
+  <data name="Tooltip_CreateNewProject" xml:space="preserve">
+		<value>Clears the current ProjectSpace GUID. On save, a new ProjectSpace project will be created with a new GUID.</value>
+	</data>
+  <data name="CreateOrUpdatePSProjectWindow_Message_LoginRequired" xml:space="preserve">
+		<value>You are not logged in. Please log in first: Go to "Extras", "View projects" and click "Login".</value>
+	</data>
+  <data name="Tab_CreateNewProject" xml:space="preserve">
+		<value>Create new project</value>
+	</data>
+  <data name="Tab_UpdateExistingProject" xml:space="preserve">
+		<value>Update existing project</value>
+	</data>
+  <data name="Tooltip_Tab_CreateNewProject" xml:space="preserve">
+		<value>Create a new Project Space project and upload its content afterwards.</value>
+	</data>
+  <data name="Tooltip_Tab_UpdateExistingProject" xml:space="preserve">
+		<value>Update an existing Project Space project (requires a project GUID).</value>
+	</data>
+  <data name="CreateOrUpdatePSProjectWindow_Warning_ExternalProjectReferences" xml:space="preserve">
+		<value>Warning: Found {0} ExecuteProject flow blocks that reference other project files via a file path (ProjectFile). When uploading into Project Space, these references may break.
+
+Please ensure that all referenced projects are available in Project Space as well, and migrate these references to Project Space GUIDs.
+
+Examples (max {1}):
+{2}</value>
+	</data>
+  <data name="Placeholder_ProjectGuid" xml:space="preserve">
+    <value>GUID will be assigned after saving</value>
   </data>
-	<data name="Button_UpdateExistingProject" xml:space="preserve">
-  <value>Update existing project</value>
-</data>
-	<data name="Tooltip_UpdateExistingProject" xml:space="preserve">
-  <value>Uses the existing ProjectSpace GUID and updates the current ProjectSpace project.</value>
-</data>
-	<data name="Button_CreateNewProject" xml:space="preserve">
-  <value>Create new project</value>
-</data>
-	<data name="Tooltip_CreateNewProject" xml:space="preserve">
-  <value>Clears the current ProjectSpace GUID. On save, a new ProjectSpace project will be created with a new GUID.</value>
-</data>
 </root>

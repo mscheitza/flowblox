@@ -144,11 +144,13 @@
                 <Button Content="{x:Static resources:EditUserPropertiesWindow.Button_Back}"
                         Padding="5,0,5,0"
                         Margin="0,0,6,0"
-                        Command="{Binding CloseCommand}" />
+                        Command="{Binding CloseCommand}"
+                        IsCancel="True"/>
                 <Button Content="{x:Static resources:EditUserPropertiesWindow.Button_Save}"
                         Padding="5,0,5,0"
                         Command="{Binding SaveCommand}"
-                        IsEnabled="{Binding CanSave}" />
+                        IsEnabled="{Binding CanSave}"
+                        IsDefault="True"/>
             </StackPanel>
         </Grid>
     </DockPanel>

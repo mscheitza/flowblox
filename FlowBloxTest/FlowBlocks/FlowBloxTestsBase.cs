@@ -4,6 +4,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Test.Runtime;
 using System.Diagnostics;
@@ -12,8 +13,23 @@ namespace FlowBloxTest.FlowBlocks
 {
     public class FlowBloxTestsBase
     {
-        protected T CreateFlowBlock<T>(FlowBloxRegistry registry, BaseFlowBlock referencedFlowBlock = null) where T : BaseFlowBlock
+        protected FlowBloxRegistry Registry
         {
+            get
+            {
+                var registry = FlowBloxRegistryProvider.GetRegistry();
+                if (registry == null)
+                    throw new InvalidOperationException(
+                        "No active FlowBloxRegistry available. Ensure ActiveProject is initialized.");
+                return registry;
+            }
+        }
+
+        protected T CreateFlowBlock<T>(BaseFlowBlock referencedFlowBlock = null)
+            where T : BaseFlowBlock
+        {
+            var registry = Registry;
+
             var createdFlowBlock = registry.CreateFlowBlockUnregistered<T>();
             registry.PostProcessFlowBlockCreated(createdFlowBlock);
             registry.Register(createdFlowBlock);
@@ -24,13 +40,19 @@ namespace FlowBloxTest.FlowBlocks
             return createdFlowBlock;
         }
 
-        protected FieldElement CreateUserField(FlowBloxRegistry registry, string fieldName) => registry.CreateUserField(UserFieldTypes.Memory, fieldName: fieldName);
-
-        protected T CreateManagedObject<T>(FlowBloxRegistry registry) where T : ManagedObject
+        protected FieldElement CreateUserField(string fieldName)
         {
+            return Registry.CreateUserField(UserFieldTypes.Memory, fieldName: fieldName);
+        }
+
+        protected T CreateManagedObject<T>() where T : ManagedObject
+        {
+            var registry = Registry;
+
             var managedObject = Activator.CreateInstance<T>();
             registry.PostProcessManagedObjectCreated(managedObject);
             registry.Register(managedObject);
+
             return managedObject;
         }
 

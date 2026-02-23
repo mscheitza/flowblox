@@ -125,9 +125,15 @@ namespace FlowBlox.WorkerService
             if (cfg.ProjectFile == null)
                 throw new InvalidOperationException("ProjectFile must be configured.");
 
+            // Validation: version requires guid
+            if (cfg.ProjectSpaceVersion.HasValue && string.IsNullOrWhiteSpace(cfg.ProjectSpaceGuid))
+                throw new InvalidOperationException("ProjectSpaceVersion requires ProjectSpaceGuid to be configured.");
+
             return new RunnerRequest
             {
                 ProjectFile = RunnerPathTemplateResolver.Resolve(cfg.ProjectFile),
+                ProjectSpaceGuid = string.IsNullOrWhiteSpace(cfg.ProjectSpaceGuid) ? null : cfg.ProjectSpaceGuid,
+                ProjectSpaceVersion = cfg.ProjectSpaceVersion,
 
                 AutoRestart = cfg.Restart,
                 AbortOnError = cfg.AbortOnError,
@@ -137,5 +143,6 @@ namespace FlowBlox.WorkerService
                 OptionOverrides = cfg.OptionOverrides ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             };
         }
+
     }
 }

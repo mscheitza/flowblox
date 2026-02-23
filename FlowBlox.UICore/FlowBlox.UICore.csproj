@@ -44,6 +44,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CreateOrUpdatePSProjectWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\CreateProjectVersionWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CreateProjectVersionWindow.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\EditContentView.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -53,6 +58,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EditProjectMetadataWindow.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\EditProjectVersionMetadataWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EditProjectVersionMetadataWindow.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\EditUserPropertiesWindow.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -156,6 +166,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CreateOrUpdatePSProjectWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CreateProjectVersionWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CreateProjectVersionWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\EditContentView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditContentView.Designer.cs</LastGenOutput>
@@ -163,6 +177,10 @@
     <EmbeddedResource Update="Resources\EditProjectMetadataWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditProjectMetadataWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EditProjectVersionMetadataWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditProjectVersionMetadataWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\EditUserPropertiesWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -232,5 +250,8 @@
       <LastGenOutput>ToolboxWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Project\" />
   </ItemGroup>
 </Project>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Models.Runtime
 {
-    internal interface IRuntimeWorkItem
+    public interface IRuntimeWorkItem
     {
         void Run(BaseRuntime runtime);
     }

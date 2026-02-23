@@ -733,4 +733,10 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
 	<data name="OptionView_No" xml:space="preserve">
 		<value>Nein</value>
 	</data>
+	<data name="ProjectView_lbInputDir_Text" xml:space="preserve">
+  <value>Projekt-Eingabeverzeichnis</value>
+</data>
+	<data name="ProjectView_lbOutputDir_Text" xml:space="preserve">
+  <value>Projekt-Ausgabeverzeichnis</value>
+</data>
 </root>

@@ -151,4 +151,19 @@
 	<data name="Required_InfoText" xml:space="preserve">
 		<value>„Required“ binds this field to the parent managed object / flow block. The flow block is executed only when a valid value is present.</value>
 	</data>
+	<data name="Tab_ProjectProperties" xml:space="preserve">
+		<value>Project properties</value>
+	</data>
+	<data name="Col_ProjectPropertyName" xml:space="preserve">
+		<value>Name</value>
+	</data>
+	<data name="Col_ProjectPropertyKey" xml:space="preserve">
+		<value>Key</value>
+	</data>
+	<data name="Col_ProjectPropertyDescription" xml:space="preserve">
+		<value>Description</value>
+	</data>
+	<data name="Col_ProjectPropertyValue" xml:space="preserve">
+		<value>Value</value>
+	</data>
 </root>

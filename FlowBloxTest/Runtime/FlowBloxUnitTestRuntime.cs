@@ -16,7 +16,7 @@ namespace FlowBlox.Test.Runtime
             this.OnBeforeRuntimeStarted();
             this.NotifyRuntimeStarted();
 
-            this.StartFlowBlock.Execute(this, null);
+            this.TaskRunner.Run(this.StartFlowBlock);
 
             this.Running = false;
             this.OnAfterRuntimeFinished();

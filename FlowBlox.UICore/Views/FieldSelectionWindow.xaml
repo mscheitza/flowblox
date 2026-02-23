@@ -126,6 +126,50 @@
                             </Grid>
                         </TabItem>
 
+                        <!-- Project Properties -->
+                        <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_ProjectProperties}"
+                                 Visibility="{Binding CanSelectProjectProperties, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TabItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                        <iconPacks:PackIconMaterial Kind="FolderTextOutline"
+                                            Width="16"
+                                            Height="16"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="#6A1B9A"/>
+                                        <TextBlock Text="{Binding}"
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Padding="0,5"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabItem.HeaderTemplate>
+
+                            <Grid>
+                                <ListView x:Name="ProjectPropertiesListView"
+                                          ItemsSource="{Binding ProjectPropertyRows}"
+                                          MouseDoubleClick="ProjectPropertiesListView_MouseDoubleClick">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyName}"
+                                    DisplayMemberBinding="{Binding Name}"
+                                    Width="260"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyKey}"
+                                    DisplayMemberBinding="{Binding Key}"
+                                    Width="220"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyDescription}"
+                                    DisplayMemberBinding="{Binding Description}"
+                                    Width="320"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyValue}"
+                                    DisplayMemberBinding="{Binding Value}"
+                                    Width="160"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
+
                         <!-- Options -->
                         <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_Options}"
                                  Visibility="{Binding CanSelectOptions, Converter={StaticResource BoolToVisibilityConverter}}">

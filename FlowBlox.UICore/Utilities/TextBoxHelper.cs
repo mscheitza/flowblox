@@ -10,7 +10,9 @@ using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Models.DialogService;
 using FlowBlox.UICore.Enums;
 using FlowBlox.Core.Utilities;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.UICore.Models;
+
 
 namespace FlowBlox.UICore.Utilities
 {
@@ -46,6 +48,10 @@ namespace FlowBlox.UICore.Utilities
                 FlowBlockHelper.ApplyFieldSelectionRequiredOption(target, result.SelectedFields, result.IsRequired);
                 ApplyFieldElementsToTextBox(result.SelectedFields, textBox);
             }
+            else if (result.SelectionMode == FieldSelectionMode.ProjectProperties)
+            {
+                ApplyProjectPropertyElementsToTextBox(result.SelectedProjectProperties, textBox);
+            }
             else
             {
                 ApplyOptionElementsToTextBox(result.SelectedOptions, textBox);
@@ -57,6 +63,16 @@ namespace FlowBlox.UICore.Utilities
             var defs = (optionElements ?? Enumerable.Empty<OptionElement>())
                 .Select(o => o.Name)
                 .Select(name => $"$Options::{name}");
+
+            ApplyFieldDefinitionsToTextBox(defs, textBox);
+        }
+
+        public static void ApplyProjectPropertyElementsToTextBox(IEnumerable<FlowBloxProjectPropertyElement> projectPropertyElements, ITextBoxLike textBox)
+        {
+            var defs = (projectPropertyElements ?? Enumerable.Empty<FlowBloxProjectPropertyElement>())
+                .Select(p => p?.Key)
+                .Where(key => !string.IsNullOrWhiteSpace(key))
+                .Select(key => $"$Project::{key}");
 
             ApplyFieldDefinitionsToTextBox(defs, textBox);
         }

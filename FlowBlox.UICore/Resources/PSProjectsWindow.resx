@@ -98,63 +98,135 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-  <value>Project Space</value>
-</data>
+		<value>Project Space</value>
+	</data>
   <data name="Button_Login" xml:space="preserve">
-  <value>Login</value>
-</data>
+		<value>Login</value>
+	</data>
   <data name="Button_Logout" xml:space="preserve">
-  <value>Logout</value>
-</data>
+		<value>Logout</value>
+	</data>
   <data name="Toggle_MyProjects" xml:space="preserve">
-  <value>My Projects</value>
-</data>
+		<value>My Projects</value>
+	</data>
   <data name="Tooltip_FilterMine" xml:space="preserve">
-  <value>Shows only your own projects (login required).</value>
-</data>
+		<value>Shows only your own projects (login required).</value>
+	</data>
   <data name="Button_Search" xml:space="preserve">
-  <value>Search</value>
-</data>
+		<value>Search</value>
+	</data>
   <data name="Header_Name" xml:space="preserve">
-  <value>Name</value>
-</data>
+		<value>Name</value>
+	</data>
   <data name="Header_Description" xml:space="preserve">
-  <value>Description</value>
-</data>
+		<value>Description</value>
+	</data>
   <data name="Header_UpdatedAt" xml:space="preserve">
-  <value>Last updated</value>
-</data>
+		<value>Last updated</value>
+	</data>
   <data name="Text_NoSearchResults" xml:space="preserve">
-  <value>No projects found.</value>
-</data>
+		<value>No projects found.</value>
+	</data>
   <data name="Label_ProjectName" xml:space="preserve">
-  <value>Project name</value>
-</data>
+		<value>Project name</value>
+	</data>
   <data name="Label_ProjectDescription" xml:space="preserve">
-  <value>Description</value>
-</data>
+		<value>Description</value>
+	</data>
   <data name="Label_ProjectGuid" xml:space="preserve">
-  <value>Project GUID</value>
-</data>
+		<value>Project GUID</value>
+	</data>
   <data name="Label_CreatedAt" xml:space="preserve">
-  <value>Created at</value>
-</data>
+		<value>Created at</value>
+	</data>
   <data name="Label_UpdatedAt" xml:space="preserve">
-  <value>Last updated</value>
-</data>
+		<value>Last updated</value>
+	</data>
   <data name="Label_Visibility" xml:space="preserve">
-  <value>Visibility</value>
-</data>
+		<value>Visibility</value>
+	</data>
   <data name="Button_Open" xml:space="preserve">
-  <value>Open</value>
-</data>
+		<value>Open</value>
+	</data>
   <data name="Button_Close" xml:space="preserve">
-  <value>Close</value>
-</data>
+		<value>Close</value>
+	</data>
   <data name="Error_SearchProjectsFailed" xml:space="preserve">
-    <value>The projects could not be loaded from the server.</value>
-  </data>
+		<value>The projects could not be loaded from the server.</value>
+	</data>
   <data name="Button_Edit" xml:space="preserve">
-    <value>Edit</value>
+		<value>Edit</value>
+	</data>
+  <data name="Tab_Details" xml:space="preserve">
+		<value>Details</value>
+	</data>
+  <data name="Tab_ProjectVersions" xml:space="preserve">
+		<value>Manage versions</value>
+	</data>
+  <data name="Button_CreateStableVersion" xml:space="preserve">
+		<value>Create stable version</value>
+	</data>
+  <data name="Button_EditVersionMetadata" xml:space="preserve">
+		<value>Edit version metadata</value>
+	</data>
+  <data name="Button_DownloadVersion" xml:space="preserve">
+		<value>Download</value>
+	</data>
+  <data name="Button_RefreshVersions" xml:space="preserve">
+		<value>Refresh</value>
+	</data>
+  <data name="Header_Version" xml:space="preserve">
+		<value>Version</value>
+	</data>
+  <data name="Header_CreatedAt" xml:space="preserve">
+		<value>Created at</value>
+	</data>
+  <data name="Header_Comment" xml:space="preserve">
+		<value>Comment</value>
+	</data>
+  <data name="Label_VersionNumber" xml:space="preserve">
+		<value>Version number</value>
+	</data>
+  <data name="Label_VersionCreatedAt" xml:space="preserve">
+		<value>Created at</value>
+	</data>
+  <data name="Label_VersionComment" xml:space="preserve">
+		<value>Comment</value>
+	</data>
+  <data name="Error_LoadProjectVersionsFailed" xml:space="preserve">
+		<value>Failed to load project versions.</value>
+	</data>
+  <data name="Error_DownloadProjectVersionFailed" xml:space="preserve">
+		<value>Failed to download the project version.</value>
+	</data>
+  <data name="Message_ProjectVersionDownloaded" xml:space="preserve">
+		<value>The project version was downloaded successfully.</value>
+	</data>
+  <data name="Header_Title_Main" xml:space="preserve">
+		<value>FlowBlox Projects</value>
+	</data>
+  <data name="Header_Description_Main" xml:space="preserve">
+		<value>Search and open FlowBlox projects. You can upload and open your own projects and create stable versions that can then be used in external projects.</value>
+	</data>
+  <data name="Label_VersionDetailsHeader" xml:space="preserve">
+		<value>Version details</value>
+	</data>
+  <data name="Tooltip_CreateStableVersion" xml:space="preserve">
+		<value>Create stable version</value>
+	</data>
+  <data name="Tooltip_EditVersionMetadata" xml:space="preserve">
+		<value>Edit version details</value>
+	</data>
+  <data name="Tooltip_DownloadVersion" xml:space="preserve">
+		<value>Download version</value>
+	</data>
+  <data name="Tooltip_RefreshVersions" xml:space="preserve">
+		<value>Refresh versions</value>
+	</data>
+  <data name="Button_OpenVersion" xml:space="preserve">
+		<value>Open version</value>
+	</data>
+  <data name="Tooltip_CopyToClipboard" xml:space="preserve">
+    <value>Copy to clipboard</value>
   </data>
 </root>
