@@ -745,4 +745,13 @@ The application will now restart to restore a clean environment.</value>
 	<data name="AppWindow_itmManageInputTemplates_Text" xml:space="preserve">
 		<value>Manage input file templates</value>
 	</data>
+	<data name="ProjectPanel_labelInvoke_Text" xml:space="preserve">
+		<value>Invoke</value>
+	</data>
+	<data name="ProjectPanel_labelRecursiveCall_Text" xml:space="preserve">
+		<value>Recursive Call</value>
+	</data>
+	<data name="ProjectPanel_labelIterationContext_Text" xml:space="preserve">
+		<value>Iteration Context</value>
+	</data>
 </root>

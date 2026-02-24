@@ -57,7 +57,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             base.OnAfterCreate();
         }
 
-        public override BaseFlowBlock InputReference
+        public override BaseFlowBlock IterationContext
         {
             get
             {
@@ -71,7 +71,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 }
                 else
                 {
-                    return base.InputReference;
+                    return base.IterationContext;
                 }
             }
         }

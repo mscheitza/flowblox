@@ -154,10 +154,13 @@
 		<value>Activation conditions</value>
 	</data>
 	<data name="BaseFlowBlock_AssociatedInputReference" xml:space="preserve">
-		<value>Reference (flow block)</value>
+		<value>Iteration Context</value>
 	</data>
 	<data name="BaseFlowBlock_AssociatedInputReference_Tooltip" xml:space="preserve">
-		<value>With at least two connected flow blocks, the reference is set automatically to the first common flow block across all paths and cannot be changed. With only one connected flow block, the reference can be set manually. The reference ensures that the actions of the current flow block are executed only after the referenced flow block has completed its iteration.</value>
+		<value>Defines the flow block whose iteration lifecycle controls this block. 
+		When multiple incoming paths exist, the iteration context is automatically set to the first common flow block across all paths and cannot be changed. 
+		If only one flow block is connected, the iteration context can be selected manually. 
+		All inputs are collected during the referenced block's iteration and this flow block executes once the iteration has completed.</value>
 	</data>
 	<data name="BaseFlowBlock_DefaultDescription" xml:space="preserve">
 		<value>In this area you can configure all required settings for the “{0}” flow block. Make the desired adjustments and then click “Apply” to save your changes.</value>

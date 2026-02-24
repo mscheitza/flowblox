@@ -396,7 +396,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         {
             get
             {
-                if (this.InputReference != null)
+                if (this.IterationContext != null)
                     return true;
 
                 return false;
@@ -410,12 +410,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, ReadOnlyMethod = nameof(GetInputReferenceReadonly), 
             SelectionFilterMethod = nameof(GetPossibleInputReference), 
             SelectionDisplayMember = nameof(Name))]
-        [AssociatedFlowBlockResolvableCustom(nameof(InputReference), nameof(CanDisplayAssociatedInputReferenceHint))]
+        [AssociatedFlowBlockResolvableCustom(nameof(IterationContext), nameof(CanDisplayAssociatedInputReferenceHint))]
         public BaseFlowBlock AssociatedInputReference { get; set; }
 
         public bool CanDisplayAssociatedInputReferenceHint() => this.ReferencedFlowBlocks.Count() > 1;
 
-        public virtual BaseFlowBlock InputReference
+        public virtual BaseFlowBlock IterationContext
         {
             get
             {
@@ -629,27 +629,27 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             if (this.HasInputReference)
-                runtime.Report($"FlowBlock \"{this.Name}\": Collecting all inputs until the completion of iteration by \"{InputReference.Name}\".");
+                runtime.Report($"FlowBlock \"{Name}\": Iteration context is \"{IterationContext.Name}\". Inputs will be collected until iteration end, then this block will execute.");
 
             OnUndoWarn?.Invoke(runtime);
             OnUndoError?.Invoke(runtime);
 
-            if (this.InputReference != null)
+            if (this.IterationContext != null)
             {
-                this.InputReference.IterationStart -= InputReference_IterationStart;
-                this.InputReference.IterationStart += InputReference_IterationStart;
+                this.IterationContext.IterationStart -= InputReference_IterationStart;
+                this.IterationContext.IterationStart += InputReference_IterationStart;
 
-                this.InputReference.IterationEnd -= InputReference_IterationEnd;
-                this.InputReference.IterationEnd += InputReference_IterationEnd;
+                this.IterationContext.IterationEnd -= InputReference_IterationEnd;
+                this.IterationContext.IterationEnd += InputReference_IterationEnd;
             }
         }
 
         public override void RuntimeFinished(BaseRuntime runtime)
         {
-            if (this.InputReference != null)
+            if (this.IterationContext != null)
             {
-                this.InputReference.IterationStart -= InputReference_IterationStart;
-                this.InputReference.IterationEnd -= InputReference_IterationEnd;
+                this.IterationContext.IterationStart -= InputReference_IterationStart;
+                this.IterationContext.IterationEnd -= InputReference_IterationEnd;
             }
         }
 
@@ -932,7 +932,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         {
             foreach(var referencedFlowBlock in baseFlowBlock.ReferencedFlowBlocks.OfType<BaseResultFlowBlock>())
             {
-                if (referencedFlowBlock == InputReference)
+                if (referencedFlowBlock == IterationContext)
                     break;
 
                 foreach(var field in referencedFlowBlock.Fields)

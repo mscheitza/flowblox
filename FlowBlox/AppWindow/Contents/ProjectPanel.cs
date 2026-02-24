@@ -36,6 +36,8 @@ using FlowBlox.Actions;
 using FlowBlox.UICore.Actions;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Utilities;
+using SkiaSharp;
 
 namespace FlowBlox.AppWindow.Contents
 {
@@ -111,6 +113,10 @@ namespace FlowBlox.AppWindow.Contents
 
         private void Initialize()
         {
+            pictureBoxInvoke.Image = CreateLegendArrowImage(FlowBloxArrowColors.InvokeArrow);
+            pictureBoxRecursiveCall.Image = CreateLegendArrowImage(FlowBloxArrowColors.RecursiveCallArrow);
+            pictureBoxIterationContext.Image = CreateLegendArrowImage(FlowBloxArrowColors.IterationContextArrow);
+            
             _shortcutManager = new ShortcutManager(toolStrip_Mode);
             _shortcutManager.RegisterShortcut(Keys.Control | Keys.Shift, btConnectionMode);
 
@@ -123,6 +129,13 @@ namespace FlowBlox.AppWindow.Contents
             ControlHelper.EnableDoubleBuffer(toolStrip_Runtime);
             ControlHelper.EnableOptimizedDoubleBuffer(toolStrip_Runtime);
             InitDoubleBuffer();
+        }
+
+        private static Image CreateLegendArrowImage(Color tintColor)
+        {
+            var sKColor = new SKColor(tintColor.R, tintColor.G, tintColor.B, tintColor.A);
+            var baseSkImage = FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.arrow_right_thin, 16, sKColor);
+            return SkiaToSystemDrawingHelper.ToSystemDrawingImage(baseSkImage);
         }
 
         private void mainPanel_DoScroll()

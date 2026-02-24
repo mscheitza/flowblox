@@ -47,6 +47,7 @@
             itmRefresh = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             itmDeleteElement = new System.Windows.Forms.ToolStripMenuItem();
+            itmDeleteConnection = new System.Windows.Forms.ToolStripMenuItem();
             toolStrip_Mode = new System.Windows.Forms.ToolStrip();
             btSelectionMode = new System.Windows.Forms.ToolStripButton();
             btConnectionMode = new System.Windows.Forms.ToolStripButton();
@@ -64,16 +65,26 @@
             btExecute = new System.Windows.Forms.ToolStripButton();
             toolStrip_Label0 = new System.Windows.Forms.ToolStripLabel();
             btGridSettings = new System.Windows.Forms.ToolStripButton();
+            legendPanel = new System.Windows.Forms.FlowLayoutPanel();
+            labelRecursiveCall = new System.Windows.Forms.Label();
+            pictureBoxRecursiveCall = new System.Windows.Forms.PictureBox();
+            labelIterationContext = new System.Windows.Forms.Label();
+            pictureBoxIterationContext = new System.Windows.Forms.PictureBox();
+            labelInvoke = new System.Windows.Forms.Label();
+            pictureBoxInvoke = new System.Windows.Forms.PictureBox();
             background_MoveFinished = new System.ComponentModel.BackgroundWorker();
             background_Scroll = new System.ComponentModel.BackgroundWorker();
             background_PrintGrid = new System.ComponentModel.BackgroundWorker();
             background_Align = new System.ComponentModel.BackgroundWorker();
             imageList_Grid = new System.Windows.Forms.ImageList(components);
-            itmDeleteConnection = new System.Windows.Forms.ToolStripMenuItem();
             tableLayoutPanel1.SuspendLayout();
             contextMenuStrip.SuspendLayout();
             toolStrip_Mode.SuspendLayout();
             toolStrip_Runtime.SuspendLayout();
+            legendPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxRecursiveCall).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxIterationContext).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxInvoke).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -83,13 +94,15 @@
             tableLayoutPanel1.Controls.Add(mainPanel, 0, 2);
             tableLayoutPanel1.Controls.Add(toolStrip_Mode, 0, 1);
             tableLayoutPanel1.Controls.Add(toolStrip_Runtime, 0, 0);
+            tableLayoutPanel1.Controls.Add(legendPanel, 0, 3);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel1.Location = new System.Drawing.Point(0, 25);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             tableLayoutPanel1.Size = new System.Drawing.Size(800, 453);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -101,7 +114,7 @@
             mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             mainPanel.Location = new System.Drawing.Point(3, 63);
             mainPanel.Name = "mainPanel";
-            mainPanel.Size = new System.Drawing.Size(794, 387);
+            mainPanel.Size = new System.Drawing.Size(794, 357);
             mainPanel.TabIndex = 11;
             mainPanel.Scroll += mainPanel_Scroll;
             mainPanel.Click += mainPanel_Click;
@@ -117,26 +130,26 @@
             // 
             contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { itmEditElement, toolStripSeparator2, itmInsightInput, itmInsightOutput, toolStripSeparator14, itmManageNotifications, itmBreakPoint, itmIndex, toolStripSeparator7, itmRefresh, toolStripSeparator9, itmDeleteElement, itmDeleteConnection });
             contextMenuStrip.Name = "contextGridElement";
-            contextMenuStrip.Size = new System.Drawing.Size(276, 248);
+            contextMenuStrip.Size = new System.Drawing.Size(242, 226);
             // 
             // itmEditElement
             // 
             itmEditElement.Image = (System.Drawing.Image)resources.GetObject("itmEditElement.Image");
             itmEditElement.Name = "itmEditElement";
-            itmEditElement.Size = new System.Drawing.Size(275, 22);
+            itmEditElement.Size = new System.Drawing.Size(241, 22);
             itmEditElement.Text = "itmEditElement_Text";
             itmEditElement.Click += itmEditElement_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new System.Drawing.Size(272, 6);
+            toolStripSeparator2.Size = new System.Drawing.Size(238, 6);
             // 
             // itmInsightInput
             // 
             itmInsightInput.Image = (System.Drawing.Image)resources.GetObject("itmInsightInput.Image");
             itmInsightInput.Name = "itmInsightInput";
-            itmInsightInput.Size = new System.Drawing.Size(275, 22);
+            itmInsightInput.Size = new System.Drawing.Size(241, 22);
             itmInsightInput.Text = "itmInsightInput_Text";
             itmInsightInput.Click += itmInsightInput_Click;
             // 
@@ -144,20 +157,20 @@
             // 
             itmInsightOutput.Image = (System.Drawing.Image)resources.GetObject("itmInsightOutput.Image");
             itmInsightOutput.Name = "itmInsightOutput";
-            itmInsightOutput.Size = new System.Drawing.Size(275, 22);
+            itmInsightOutput.Size = new System.Drawing.Size(241, 22);
             itmInsightOutput.Text = "itmInsightOutput_Text";
             itmInsightOutput.Click += itmInsightOutput_Click;
             // 
             // toolStripSeparator14
             // 
             toolStripSeparator14.Name = "toolStripSeparator14";
-            toolStripSeparator14.Size = new System.Drawing.Size(272, 6);
+            toolStripSeparator14.Size = new System.Drawing.Size(238, 6);
             // 
             // itmManageNotifications
             // 
             itmManageNotifications.Image = (System.Drawing.Image)resources.GetObject("itmManageNotifications.Image");
             itmManageNotifications.Name = "itmManageNotifications";
-            itmManageNotifications.Size = new System.Drawing.Size(275, 22);
+            itmManageNotifications.Size = new System.Drawing.Size(241, 22);
             itmManageNotifications.Text = "itmManageNotifications_Text";
             itmManageNotifications.Click += itmManageNotifications_Click;
             // 
@@ -165,7 +178,7 @@
             // 
             itmBreakPoint.Image = (System.Drawing.Image)resources.GetObject("itmBreakPoint.Image");
             itmBreakPoint.Name = "itmBreakPoint";
-            itmBreakPoint.Size = new System.Drawing.Size(275, 22);
+            itmBreakPoint.Size = new System.Drawing.Size(241, 22);
             itmBreakPoint.Text = "itmBreakPoint_Text";
             itmBreakPoint.Click += itmBreakPoint_Click;
             // 
@@ -174,7 +187,7 @@
             itmIndex.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmDefineIndex, itmRemoveIndex });
             itmIndex.Image = (System.Drawing.Image)resources.GetObject("itmIndex.Image");
             itmIndex.Name = "itmIndex";
-            itmIndex.Size = new System.Drawing.Size(275, 22);
+            itmIndex.Size = new System.Drawing.Size(241, 22);
             itmIndex.Text = "itmIndex_Text";
             // 
             // itmDefineIndex
@@ -196,7 +209,7 @@
             // toolStripSeparator7
             // 
             toolStripSeparator7.Name = "toolStripSeparator7";
-            toolStripSeparator7.Size = new System.Drawing.Size(272, 6);
+            toolStripSeparator7.Size = new System.Drawing.Size(238, 6);
             toolStripSeparator7.Visible = false;
             // 
             // itmRefresh
@@ -204,23 +217,32 @@
             itmRefresh.Image = (System.Drawing.Image)resources.GetObject("itmRefresh.Image");
             itmRefresh.Name = "itmRefresh";
             itmRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            itmRefresh.Size = new System.Drawing.Size(275, 22);
+            itmRefresh.Size = new System.Drawing.Size(241, 22);
             itmRefresh.Text = "itmRefresh_Text";
             itmRefresh.Click += itmRefresh_Click;
             // 
             // toolStripSeparator9
             // 
             toolStripSeparator9.Name = "toolStripSeparator9";
-            toolStripSeparator9.Size = new System.Drawing.Size(272, 6);
+            toolStripSeparator9.Size = new System.Drawing.Size(238, 6);
             // 
             // itmDeleteElement
             // 
             itmDeleteElement.Image = (System.Drawing.Image)resources.GetObject("itmDeleteElement.Image");
             itmDeleteElement.Name = "itmDeleteElement";
             itmDeleteElement.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            itmDeleteElement.Size = new System.Drawing.Size(275, 22);
+            itmDeleteElement.Size = new System.Drawing.Size(241, 22);
             itmDeleteElement.Text = "itmDeleteElement_Text";
             itmDeleteElement.Click += itmDeleteElement_Click;
+            // 
+            // itmDeleteConnection
+            // 
+            itmDeleteConnection.Image = (System.Drawing.Image)resources.GetObject("itmDeleteConnection.Image");
+            itmDeleteConnection.Name = "itmDeleteConnection";
+            itmDeleteConnection.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            itmDeleteConnection.Size = new System.Drawing.Size(241, 22);
+            itmDeleteConnection.Text = "itmDeleteConnection_Text";
+            itmDeleteConnection.Click += itmDeleteConnection_Click;
             // 
             // toolStrip_Mode
             // 
@@ -336,7 +358,7 @@
             // 
             // toolStrip_Label1
             // 
-            toolStrip_Label1.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            toolStrip_Label1.Font = new System.Drawing.Font("Calibri", 11.25F);
             toolStrip_Label1.ForeColor = System.Drawing.SystemColors.ControlLight;
             toolStrip_Label1.Name = "toolStrip_Label1";
             toolStrip_Label1.Size = new System.Drawing.Size(15, 18);
@@ -383,7 +405,7 @@
             // 
             // toolStrip_Label0
             // 
-            toolStrip_Label0.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            toolStrip_Label0.Font = new System.Drawing.Font("Calibri", 11.25F);
             toolStrip_Label0.ForeColor = System.Drawing.SystemColors.ControlLight;
             toolStrip_Label0.Name = "toolStrip_Label0";
             toolStrip_Label0.Size = new System.Drawing.Size(135, 18);
@@ -401,6 +423,89 @@
             btGridSettings.Text = "btGridSettings_Text";
             btGridSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             btGridSettings.Click += btGridSettings_Click;
+            // 
+            // legendPanel
+            // 
+            legendPanel.BackColor = System.Drawing.Color.FromArgb(70, 70, 70);
+            legendPanel.Controls.Add(labelRecursiveCall);
+            legendPanel.Controls.Add(pictureBoxRecursiveCall);
+            legendPanel.Controls.Add(labelIterationContext);
+            legendPanel.Controls.Add(pictureBoxIterationContext);
+            legendPanel.Controls.Add(labelInvoke);
+            legendPanel.Controls.Add(pictureBoxInvoke);
+            legendPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            legendPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            legendPanel.Location = new System.Drawing.Point(3, 426);
+            legendPanel.Name = "legendPanel";
+            legendPanel.Size = new System.Drawing.Size(794, 24);
+            legendPanel.TabIndex = 12;
+            legendPanel.Tag = "style_ignore";
+            // 
+            // labelRecursiveCall
+            // 
+            labelRecursiveCall.AutoSize = true;
+            labelRecursiveCall.Dock = System.Windows.Forms.DockStyle.Fill;
+            labelRecursiveCall.ForeColor = System.Drawing.SystemColors.ControlLight;
+            labelRecursiveCall.Location = new System.Drawing.Point(663, 0);
+            labelRecursiveCall.Name = "labelRecursiveCall";
+            labelRecursiveCall.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
+            labelRecursiveCall.Size = new System.Drawing.Size(128, 26);
+            labelRecursiveCall.TabIndex = 5;
+            labelRecursiveCall.Text = "labelRecursiveCall_Text";
+            labelRecursiveCall.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pictureBoxRecursiveCall
+            // 
+            pictureBoxRecursiveCall.Location = new System.Drawing.Point(637, 3);
+            pictureBoxRecursiveCall.Name = "pictureBoxRecursiveCall";
+            pictureBoxRecursiveCall.Size = new System.Drawing.Size(20, 20);
+            pictureBoxRecursiveCall.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            pictureBoxRecursiveCall.TabIndex = 4;
+            pictureBoxRecursiveCall.TabStop = false;
+            // 
+            // labelIterationContext
+            // 
+            labelIterationContext.AutoSize = true;
+            labelIterationContext.Dock = System.Windows.Forms.DockStyle.Fill;
+            labelIterationContext.ForeColor = System.Drawing.SystemColors.ControlLight;
+            labelIterationContext.Location = new System.Drawing.Point(487, 0);
+            labelIterationContext.Name = "labelIterationContext";
+            labelIterationContext.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
+            labelIterationContext.Size = new System.Drawing.Size(144, 26);
+            labelIterationContext.TabIndex = 3;
+            labelIterationContext.Text = "labelIterationContext_Text";
+            labelIterationContext.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pictureBoxIterationContext
+            // 
+            pictureBoxIterationContext.Location = new System.Drawing.Point(461, 3);
+            pictureBoxIterationContext.Name = "pictureBoxIterationContext";
+            pictureBoxIterationContext.Size = new System.Drawing.Size(20, 20);
+            pictureBoxIterationContext.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            pictureBoxIterationContext.TabIndex = 2;
+            pictureBoxIterationContext.TabStop = false;
+            // 
+            // labelInvoke
+            // 
+            labelInvoke.AutoSize = true;
+            labelInvoke.Dock = System.Windows.Forms.DockStyle.Fill;
+            labelInvoke.ForeColor = System.Drawing.SystemColors.ControlLight;
+            labelInvoke.Location = new System.Drawing.Point(362, 0);
+            labelInvoke.Name = "labelInvoke";
+            labelInvoke.Padding = new System.Windows.Forms.Padding(0, 0, 0, 1);
+            labelInvoke.Size = new System.Drawing.Size(93, 26);
+            labelInvoke.TabIndex = 1;
+            labelInvoke.Text = "labelInvoke_Text";
+            labelInvoke.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pictureBoxInvoke
+            // 
+            pictureBoxInvoke.Location = new System.Drawing.Point(336, 3);
+            pictureBoxInvoke.Name = "pictureBoxInvoke";
+            pictureBoxInvoke.Size = new System.Drawing.Size(20, 20);
+            pictureBoxInvoke.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            pictureBoxInvoke.TabIndex = 0;
+            pictureBoxInvoke.TabStop = false;
             // 
             // background_MoveFinished
             // 
@@ -430,15 +535,6 @@
             imageList_Grid.TransparentColor = System.Drawing.Color.Transparent;
             imageList_Grid.Images.SetKeyName(0, "CardinalityContainer");
             // 
-            // itmDeleteConnection
-            // 
-            itmDeleteConnection.Image = (System.Drawing.Image)resources.GetObject("itmDeleteConnection.Image");
-            itmDeleteConnection.Name = "itmDeleteConnection";
-            itmDeleteConnection.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            itmDeleteConnection.Size = new System.Drawing.Size(275, 22);
-            itmDeleteConnection.Text = "itmDeleteConnection_Text";
-            itmDeleteConnection.Click += itmDeleteConnection_Click;
-            // 
             // ProjectPanel
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -456,6 +552,11 @@
             toolStrip_Mode.PerformLayout();
             toolStrip_Runtime.ResumeLayout(false);
             toolStrip_Runtime.PerformLayout();
+            legendPanel.ResumeLayout(false);
+            legendPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxRecursiveCall).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxIterationContext).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxInvoke).EndInit();
             ResumeLayout(false);
         }
 
@@ -501,5 +602,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem itmInsightOutput;
         private System.Windows.Forms.ToolStripMenuItem itmDeleteConnection;
+        private System.Windows.Forms.FlowLayoutPanel legendPanel;
+        private System.Windows.Forms.Label labelInvoke;
+        private System.Windows.Forms.PictureBox pictureBoxInvoke;
+        private System.Windows.Forms.Label labelIterationContext;
+        private System.Windows.Forms.PictureBox pictureBoxIterationContext;
+        private System.Windows.Forms.PictureBox pictureBoxRecursiveCall;
+        private System.Windows.Forms.Label labelRecursiveCall;
     }
 }

@@ -23,6 +23,7 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Components.Modifier;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
+using FlowBlox.Core.Constants;
 
 namespace FlowBlox.AppWindow.Contents
 {
@@ -392,7 +393,7 @@ namespace FlowBlox.AppWindow.Contents
         {
             var references = FlowBloxUIRegistry.UIElements
                 .Where(x => x.ElementSelected)
-                .Select(x => x.InternalFlowBlock.InputReference)
+                .Select(x => x.InternalFlowBlock.IterationContext)
                 .Where(x => x != null)
                 .Select(x => FlowBloxUIRegistry.GetUIElementToGridElement(x));
 
@@ -422,7 +423,7 @@ namespace FlowBlox.AppWindow.Contents
             var visibleUIElements = FlowBloxUIRegistry.UIElements
                 .Where(x => IsGridElementVisible(x))
                 .ToHashSet();
-            
+
             foreach (var uiElement in FlowBloxUIRegistry.UIElements)
             {
                 foreach (var nextUIElement in uiElement.GetNextElementList())
@@ -431,22 +432,32 @@ namespace FlowBlox.AppWindow.Contents
                         visibleUIElements.Contains(nextUIElement))
                     {
                         var arrow = new FlowBloxArrow(uiElement, nextUIElement);
-
                         _drawnArrows.Add(arrow);
 
                         bool isSelected = _selectedArrows.Contains(arrow);
-                        FlowBloxLineUtil.PrintLine(graphics, visibleUIElements, arrow, lineColor: isSelected ? Color.SteelBlue : null);
+
+                        FlowBloxLineUtil.PrintLine(
+                            graphics,
+                            visibleUIElements,
+                            arrow,
+                            lineColor: isSelected ? FlowBloxArrowColors.SelectedArrow : FlowBloxArrowColors.InvokeArrow);
                     }
                 }
 
                 if (uiElement.InternalFlowBlock.HasInputReference)
                 {
-                    var inputReference = uiElement.InternalFlowBlock.InputReference;
+                    var inputReference = uiElement.InternalFlowBlock.IterationContext;
                     var uiElementInputReference = FlowBloxUIRegistry.GetUIElementToGridElement(inputReference);
+
                     if (visibleUIElements.Contains(uiElement) ||
                         visibleUIElements.Contains(uiElementInputReference))
                     {
-                        FlowBloxLineUtil.PrintLine(graphics, visibleUIElements, new FlowBloxArrow(uiElement, uiElementInputReference, 10), text: $"collecting data from \"{inputReference.Name}\"", dashed: true, lineColor: Color.LightSlateGray);
+                        FlowBloxLineUtil.PrintLine(
+                            graphics,
+                            visibleUIElements,
+                            new FlowBloxArrow(uiElement, uiElementInputReference, 10),
+                            dashed: true,
+                            lineColor: FlowBloxArrowColors.IterationContextArrow);
                     }
                 }
 
@@ -454,6 +465,7 @@ namespace FlowBlox.AppWindow.Contents
                 {
                     var invokerFlowBlock = (InvokerFlowBlock)uiElement.InternalFlowBlock;
                     var invocationTargetFlowBlock = invokerFlowBlock.TargetFlowBlock;
+
                     if (invocationTargetFlowBlock != null)
                     {
                         var invocationTargetUiElement = FlowBloxUIRegistry.GetUIElementToGridElement(invocationTargetFlowBlock);
@@ -461,7 +473,13 @@ namespace FlowBlox.AppWindow.Contents
                         if (visibleUIElements.Contains(uiElement) ||
                             visibleUIElements.Contains(invocationTargetUiElement))
                         {
-                            FlowBloxLineUtil.PrintLine(graphics, visibleUIElements, new FlowBloxArrow(uiElement, invocationTargetUiElement), text: $"is calling \"{invocationTargetUiElement.Name}\"", dashed: true, lineColor: Color.LightGoldenrodYellow);
+                            FlowBloxLineUtil.PrintLine(
+                                graphics,
+                                visibleUIElements,
+                                new FlowBloxArrow(uiElement, invocationTargetUiElement),
+                                text: $"recursive call",
+                                dashed: true,
+                                lineColor: FlowBloxArrowColors.RecursiveCallArrow);
                         }
                     }
                 }

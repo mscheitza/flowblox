@@ -63,6 +63,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] arrow_right_thin {
+            get {
+                object obj = ResourceManager.GetObject("arrow_right_thin", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] calculator_variant {
             get {
                 object obj = ResourceManager.GetObject("calculator_variant", resourceCulture);

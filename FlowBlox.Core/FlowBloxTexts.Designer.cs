@@ -421,7 +421,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reference (flow block) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Iteration Context ähnelt.
         /// </summary>
         public static string BaseFlowBlock_AssociatedInputReference {
             get {
@@ -430,7 +430,10 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die With at least two connected flow blocks, the reference is set automatically to the first common flow block across all paths and cannot be changed. With only one connected flow block, the reference can be set manually. The reference ensures that the actions of the current flow block are executed only after the referenced flow block has completed its iteration. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines the flow block whose iteration lifecycle controls this block. 
+        ///		When multiple incoming paths exist, the iteration context is automatically set to the first common flow block across all paths and cannot be changed. 
+        ///		If only one flow block is connected, the iteration context can be selected manually. 
+        ///		All inputs are collected during the referenced block&apos;s iteration and this flow block executes once the iteration has completed. ähnelt.
         /// </summary>
         public static string BaseFlowBlock_AssociatedInputReference_Tooltip {
             get {
