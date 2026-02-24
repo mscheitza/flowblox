@@ -734,9 +734,15 @@ The application will now restart to restore a clean environment.</value>
 		<value>No</value>
 	</data>
 	<data name="ProjectView_lbInputDir_Text" xml:space="preserve">
-  <value>Project input directory</value>
-</data>
+		<value>Project input directory</value>
+	</data>
 	<data name="ProjectView_lbOutputDir_Text" xml:space="preserve">
-  <value>Project output directory</value>
-</data>
+		<value>Project output directory</value>
+	</data>
+	<data name="AppWindow_itmOpenInputDir_Text" xml:space="preserve">
+		<value>Open input directory</value>
+	</data>
+	<data name="AppWindow_itmManageInputTemplates_Text" xml:space="preserve">
+		<value>Manage input file templates</value>
+	</data>
 </root>

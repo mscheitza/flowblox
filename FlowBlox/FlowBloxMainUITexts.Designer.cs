@@ -268,6 +268,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage input file templates ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmManageInputTemplates_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmManageInputTemplates_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Monitoring ähnelt.
         /// </summary>
         internal static string AppWindow_itmMonitor_Text {
@@ -291,6 +300,15 @@ namespace FlowBlox {
         internal static string AppWindow_itmOpenFromProjectSpace_Text {
             get {
                 return ResourceManager.GetString("AppWindow_itmOpenFromProjectSpace_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open input directory ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmOpenInputDir_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmOpenInputDir_Text", resourceCulture);
             }
         }
         

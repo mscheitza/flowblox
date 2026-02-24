@@ -734,9 +734,15 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
 		<value>Nein</value>
 	</data>
 	<data name="ProjectView_lbInputDir_Text" xml:space="preserve">
-  <value>Projekt-Eingabeverzeichnis</value>
-</data>
+		<value>Projekt-Eingabeverzeichnis</value>
+	</data>
 	<data name="ProjectView_lbOutputDir_Text" xml:space="preserve">
-  <value>Projekt-Ausgabeverzeichnis</value>
-</data>
+		<value>Projekt-Ausgabeverzeichnis</value>
+	</data>
+	<data name="AppWindow_itmOpenInputDir_Text" xml:space="preserve">
+		<value>Eingabeverzeichnis öffnen</value>
+	</data>
+	<data name="AppWindow_itmManageInputTemplates_Text" xml:space="preserve">
+		<value>Eingabe-Dateivorlagen verwalten</value>
+	</data>
 </root>

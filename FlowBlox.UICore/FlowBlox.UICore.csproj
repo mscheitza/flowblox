@@ -94,6 +94,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\ManageInputTemplatesWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ManageInputTemplatesWindow.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\ManageNotificationsWindow.Designer.cs">
       <DependentUpon>ManageNotificationsWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -205,6 +210,10 @@
     <EmbeddedResource Update="Resources\LoginWindow.resx">
       <LastGenOutput>LoginWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ManageInputTemplatesWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ManageInputTemplatesWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ManageNotificationsWindow.resx">
       <LastGenOutput>ManageNotificationsWindow.Designer.cs</LastGenOutput>

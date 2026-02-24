@@ -56,4 +56,31 @@
         </Style.Triggers>
     </Style>
 
+    <!-- ========================================================= -->
+    <!-- FlowBlox Toolbar Icon styling (PackIconMaterial)           -->
+    <!-- Ensures proper disabled rendering (greyed out)             -->
+    <!-- ========================================================= -->
+
+    <!-- Neutral disabled icon brush (professional grey) -->
+    <SolidColorBrush x:Key="FlowBlox.Icon.DisabledBrush" Color="#9AA3AF"/>
+
+    <!-- Base style: enabled color comes from the derived style, disabled forces DisabledBrush -->
+    <Style x:Key="FlowBlox.ToolbarIconBase"
+       TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="Opacity" Value="1"/>
+        <!-- Default enabled foreground (can be overridden by derived styles) -->
+        <Setter Property="Foreground" Value="#5C6B73"/>
+
+        <Style.Triggers>
+            <!-- IsEnabled is inherited from the parent Button -->
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource FlowBlox.Icon.DisabledBrush}"/>
+                <Setter Property="Opacity" Value="1"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
 </ResourceDictionary>

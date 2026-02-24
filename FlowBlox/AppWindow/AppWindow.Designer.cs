@@ -33,12 +33,16 @@ namespace FlowBlox.AppWindow
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AppWindow));
             mnItmMisc = new System.Windows.Forms.ToolStripMenuItem();
+            itmOpenInputDir = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenOutputDir = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenProjectDir = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
             itmOpenRuntimeLogDirectory = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenApplicationLogDirectory = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            itmFbProjects = new System.Windows.Forms.ToolStripMenuItem();
+            itmFbExtensions = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             itmOptions = new System.Windows.Forms.ToolStripMenuItem();
             itmCreateProject = new System.Windows.Forms.ToolStripMenuItem();
             toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,7 +69,9 @@ namespace FlowBlox.AppWindow
             itmCopy = new System.Windows.Forms.ToolStripMenuItem();
             itmPaste = new System.Windows.Forms.ToolStripMenuItem();
             mnItmWindows = new System.Windows.Forms.ToolStripMenuItem();
+            itmManageInputTemplates = new System.Windows.Forms.ToolStripMenuItem();
             itmUserFields = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             itmDockablePanels = new System.Windows.Forms.ToolStripMenuItem();
             itmResetDockablePanels = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -87,9 +93,6 @@ namespace FlowBlox.AppWindow
             WarningStrip = new System.Windows.Forms.StatusStrip();
             labelWarning = new System.Windows.Forms.ToolStripStatusLabel();
             dockPanel = new FlowBlox.AppWindow.Contents.BufferedDockPanel();
-            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            itmFbExtensions = new System.Windows.Forms.ToolStripMenuItem();
-            itmFbProjects = new System.Windows.Forms.ToolStripMenuItem();
             menuStrip.SuspendLayout();
             statusStrip.SuspendLayout();
             WarningStrip.SuspendLayout();
@@ -97,11 +100,20 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmMisc
             // 
-            mnItmMisc.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmOpenOutputDir, itmOpenProjectDir, toolStripSeparator20, itmOpenRuntimeLogDirectory, itmOpenApplicationLogDirectory, toolStripSeparator8, itmFbProjects, itmFbExtensions, toolStripSeparator1, itmOptions });
+            mnItmMisc.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmOpenInputDir, itmOpenOutputDir, itmOpenProjectDir, toolStripSeparator20, itmOpenRuntimeLogDirectory, itmOpenApplicationLogDirectory, toolStripSeparator8, itmFbProjects, itmFbExtensions, toolStripSeparator1, itmOptions });
             mnItmMisc.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmMisc.Name = "mnItmMisc";
             mnItmMisc.Size = new System.Drawing.Size(106, 19);
             mnItmMisc.Text = "mnItmMisc_Text";
+            // 
+            // itmOpenInputDir
+            // 
+            itmOpenInputDir.Image = (System.Drawing.Image)resources.GetObject("itmOpenInputDir.Image");
+            itmOpenInputDir.Name = "itmOpenInputDir";
+            itmOpenInputDir.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.O;
+            itmOpenInputDir.Size = new System.Drawing.Size(403, 22);
+            itmOpenInputDir.Text = "itmOpenInputDir_Text";
+            itmOpenInputDir.Click += itmOpenInputDir_Click;
             // 
             // itmOpenOutputDir
             // 
@@ -117,21 +129,21 @@ namespace FlowBlox.AppWindow
             itmOpenProjectDir.Image = (System.Drawing.Image)resources.GetObject("itmOpenProjectDir.Image");
             itmOpenProjectDir.Name = "itmOpenProjectDir";
             itmOpenProjectDir.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.P;
-            itmOpenProjectDir.Size = new System.Drawing.Size(401, 22);
+            itmOpenProjectDir.Size = new System.Drawing.Size(403, 22);
             itmOpenProjectDir.Text = "itmOpenProjectDir_Text";
             itmOpenProjectDir.Click += itmOpenProjectDir_Click;
             // 
             // toolStripSeparator20
             // 
             toolStripSeparator20.Name = "toolStripSeparator20";
-            toolStripSeparator20.Size = new System.Drawing.Size(398, 6);
+            toolStripSeparator20.Size = new System.Drawing.Size(400, 6);
             // 
             // itmOpenRuntimeLogDirectory
             // 
             itmOpenRuntimeLogDirectory.Image = (System.Drawing.Image)resources.GetObject("itmOpenRuntimeLogDirectory.Image");
             itmOpenRuntimeLogDirectory.Name = "itmOpenRuntimeLogDirectory";
             itmOpenRuntimeLogDirectory.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.L;
-            itmOpenRuntimeLogDirectory.Size = new System.Drawing.Size(401, 22);
+            itmOpenRuntimeLogDirectory.Size = new System.Drawing.Size(403, 22);
             itmOpenRuntimeLogDirectory.Text = "itmOpenRuntimeLogDirectory_Text";
             itmOpenRuntimeLogDirectory.Click += itmOpenRuntimeLogDirectory_Click;
             // 
@@ -147,13 +159,34 @@ namespace FlowBlox.AppWindow
             // toolStripSeparator8
             // 
             toolStripSeparator8.Name = "toolStripSeparator8";
-            toolStripSeparator8.Size = new System.Drawing.Size(398, 6);
+            toolStripSeparator8.Size = new System.Drawing.Size(400, 6);
+            // 
+            // itmFbProjects
+            // 
+            itmFbProjects.Image = (System.Drawing.Image)resources.GetObject("itmFbProjects.Image");
+            itmFbProjects.Name = "itmFbProjects";
+            itmFbProjects.Size = new System.Drawing.Size(403, 22);
+            itmFbProjects.Text = "itmFbProjects_Text";
+            itmFbProjects.Click += itmFbProjects_Click;
+            // 
+            // itmFbExtensions
+            // 
+            itmFbExtensions.Image = (System.Drawing.Image)resources.GetObject("itmFbExtensions.Image");
+            itmFbExtensions.Name = "itmFbExtensions";
+            itmFbExtensions.Size = new System.Drawing.Size(403, 22);
+            itmFbExtensions.Text = "itmFbExtensions_Text";
+            itmFbExtensions.Click += itmFbExtensions_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new System.Drawing.Size(400, 6);
             // 
             // itmOptions
             // 
             itmOptions.Image = (System.Drawing.Image)resources.GetObject("itmOptions.Image");
             itmOptions.Name = "itmOptions";
-            itmOptions.Size = new System.Drawing.Size(401, 22);
+            itmOptions.Size = new System.Drawing.Size(403, 22);
             itmOptions.Text = "itmOptions_Text";
             itmOptions.Click += itmOptions_Click;
             // 
@@ -337,46 +370,59 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmWindows
             // 
-            mnItmWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmUserFields, itmDockablePanels, itmResetDockablePanels, toolStripSeparator6, itmToolbox });
+            mnItmWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmManageInputTemplates, itmUserFields, toolStripSeparator5, itmDockablePanels, itmResetDockablePanels, toolStripSeparator6, itmToolbox });
             mnItmWindows.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmWindows.Name = "mnItmWindows";
             mnItmWindows.Size = new System.Drawing.Size(130, 19);
             mnItmWindows.Text = "mnItmWindows_Text";
+            // 
+            // itmManageInputTemplates
+            // 
+            itmManageInputTemplates.Image = (System.Drawing.Image)resources.GetObject("itmManageInputTemplates.Image");
+            itmManageInputTemplates.Name = "itmManageInputTemplates";
+            itmManageInputTemplates.Size = new System.Drawing.Size(243, 22);
+            itmManageInputTemplates.Text = "itmManageInputTemplates_Text";
+            itmManageInputTemplates.Click += itmManageInputTemplates_Click;
             // 
             // itmUserFields
             // 
             itmUserFields.Image = (System.Drawing.Image)resources.GetObject("itmUserFields.Image");
             itmUserFields.Name = "itmUserFields";
             itmUserFields.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U;
-            itmUserFields.Size = new System.Drawing.Size(229, 22);
+            itmUserFields.Size = new System.Drawing.Size(243, 22);
             itmUserFields.Text = "itmUserFields_Text";
             itmUserFields.Click += itmUserFields_Click;
+            // 
+            // toolStripSeparator5
+            // 
+            toolStripSeparator5.Name = "toolStripSeparator5";
+            toolStripSeparator5.Size = new System.Drawing.Size(240, 6);
             // 
             // itmDockablePanels
             // 
             itmDockablePanels.Name = "itmDockablePanels";
-            itmDockablePanels.Size = new System.Drawing.Size(229, 22);
+            itmDockablePanels.Size = new System.Drawing.Size(243, 22);
             itmDockablePanels.Text = "itmDockablePanels_Text";
             // 
             // itmResetDockablePanels
             // 
             itmResetDockablePanels.Image = (System.Drawing.Image)resources.GetObject("itmResetDockablePanels.Image");
             itmResetDockablePanels.Name = "itmResetDockablePanels";
-            itmResetDockablePanels.Size = new System.Drawing.Size(229, 22);
+            itmResetDockablePanels.Size = new System.Drawing.Size(243, 22);
             itmResetDockablePanels.Text = "itmResetDockablePanels_Text";
             itmResetDockablePanels.Click += itmResetDockablePanels_Click;
             // 
             // toolStripSeparator6
             // 
             toolStripSeparator6.Name = "toolStripSeparator6";
-            toolStripSeparator6.Size = new System.Drawing.Size(226, 6);
+            toolStripSeparator6.Size = new System.Drawing.Size(240, 6);
             // 
             // itmToolbox
             // 
             itmToolbox.Image = (System.Drawing.Image)resources.GetObject("itmToolbox.Image");
             itmToolbox.Name = "itmToolbox";
             itmToolbox.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T;
-            itmToolbox.Size = new System.Drawing.Size(229, 22);
+            itmToolbox.Size = new System.Drawing.Size(243, 22);
             itmToolbox.Text = "itmToolbox_Text";
             itmToolbox.Click += itmToolbox_Click;
             // 
@@ -518,27 +564,6 @@ namespace FlowBlox.AppWindow
             dockPanel.ContentAdded += DockPanel_ContentAdded;
             dockPanel.ContentRemoved += DockPanel_ContentRemoved;
             // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new System.Drawing.Size(398, 6);
-            // 
-            // itmFbExtensions
-            // 
-            itmFbExtensions.Image = (System.Drawing.Image)resources.GetObject("itmFbExtensions.Image");
-            itmFbExtensions.Name = "itmFbExtensions";
-            itmFbExtensions.Size = new System.Drawing.Size(403, 22);
-            itmFbExtensions.Text = "itmFbExtensions_Text";
-            itmFbExtensions.Click += itmFbExtensions_Click;
-            // 
-            // itmFbProjects
-            // 
-            itmFbProjects.Image = (System.Drawing.Image)resources.GetObject("itmFbProjects.Image");
-            itmFbProjects.Name = "itmFbProjects";
-            itmFbProjects.Size = new System.Drawing.Size(403, 22);
-            itmFbProjects.Text = "itmFbProjects_Text";
-            itmFbProjects.Click += itmFbProjects_Click;
-            // 
             // AppWindow
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -629,6 +654,9 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripMenuItem itmFbProjects;
         private System.Windows.Forms.ToolStripMenuItem itmFbExtensions;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem itmManageInputTemplates;
+        private System.Windows.Forms.ToolStripMenuItem itmOpenInputDir;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }
 

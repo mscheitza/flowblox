@@ -63,6 +63,12 @@ namespace FlowBlox.Core.Models.Project
         [JsonIgnore]
         public int? ProjectSpaceVersion { get; set; }
 
+        /// <summary>
+        /// Project space endpoint URI. Stored locally in *.fblocaldata (not in the project file).
+        /// </summary>
+        [JsonIgnore]
+        public string ProjectSpaceEndpointUri { get; set; }
+
         private static readonly ILogger _logger = FlowBloxLogManager.Instance.GetLogger();
 
         /// <summary>
@@ -107,6 +113,8 @@ namespace FlowBlox.Core.Models.Project
             return Path.Combine(baseDir, safeName);
         }
 
+        public List<FlowBloxInputFileTemplate> InputTemplates { get; set; }
+
         public FlowBloxProject()
         {
             ProjectGuid = Guid.NewGuid();
@@ -115,6 +123,7 @@ namespace FlowBlox.Core.Models.Project
             FlowBloxRegistry = new FlowBloxRegistry();
             Extensions = new List<FlowBloxProjectExtension>();
             ProjectDependendDataObjects = new List<IProjectDependendData>();
+            InputTemplates = new List<FlowBloxInputFileTemplate>();
             _logger.Info("FlowBloxProject instance created.");
         }
 
@@ -338,7 +347,6 @@ namespace FlowBlox.Core.Models.Project
             _logger.Info("Loading project...");
 
             var options = FlowBloxOptions.GetOptionInstance();
-            options.InitDefaults(false);
 
             // Project dependent data
             CreateProjectDependendDataObjectsIfNotExist();
@@ -383,6 +391,16 @@ namespace FlowBlox.Core.Models.Project
                 loadedComponent.OnAfterLoad();
             }
 
+            // Input templates -> materialize input files if missing
+            try
+            {
+                FlowBloxInputTemplateHelper.EnsureInputFilesExist(this);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Failed to materialize input templates.", ex);
+            }
+
             _logger.Info("Project loaded successfully.");
         }
 
@@ -420,9 +438,10 @@ namespace FlowBlox.Core.Models.Project
             string extensionsJson,
             string projectSpaceGuid = null,
             int? projectSpaceVersion = null,
+            string projectSpaceEndpointUri = null,
             string fileNameForAdjustments = null)
         {
-            _logger.Info($"Loading project from JSON content (SpaceGuid='{projectSpaceGuid ?? ""}', File='{fileNameForAdjustments ?? ""}')");
+            _logger.Info($"Loading project from JSON content (SpaceGuid='{projectSpaceGuid ?? ""}', Endpoint='{projectSpaceEndpointUri ?? ""}', File='{fileNameForAdjustments ?? ""}')");
 
             try
             {
@@ -470,6 +489,9 @@ namespace FlowBlox.Core.Models.Project
                 if (projectSpaceVersion.HasValue)
                     project.ProjectSpaceVersion = projectSpaceVersion;
 
+                if (!string.IsNullOrWhiteSpace(projectSpaceEndpointUri))
+                    project.ProjectSpaceEndpointUri = projectSpaceEndpointUri;
+
                 _logger.Info("Project loaded successfully from JSON content.");
                 return project;
             }
@@ -508,6 +530,7 @@ namespace FlowBlox.Core.Models.Project
                     extensionsJson: depsJson,
                     projectSpaceGuid: localData?.ProjectSpaceGuid,
                     projectSpaceVersion: localData?.ProjectSpaceVersion,
+                    projectSpaceEndpointUri: localData?.ProjectSpaceEndpointUri,
                     fileNameForAdjustments: fileName);
 
                 // Apply local user field values after registry is initialized
@@ -715,6 +738,7 @@ namespace FlowBlox.Core.Models.Project
                     extensionsJson: extracted.ExtensionsJson,
                     projectSpaceGuid: projectSpaceGuid,
                     projectSpaceVersion: projectSpaceVersion,
+                    projectSpaceEndpointUri: webApi.BaseUrl,
                     fileNameForAdjustments: null);
 
                 project.ProjectSpaceGuid = projectSpaceGuid;
@@ -789,7 +813,10 @@ namespace FlowBlox.Core.Models.Project
 
                 var result = await webApi.UpdateProjectAsync(userToken, request);
                 if (result?.Success == true)
+                {
                     ProjectSpaceGuid = projectGuid;
+                    ProjectSpaceEndpointUri = webApi.BaseUrl;
+                }
 
                 return result;
             }
@@ -842,7 +869,8 @@ namespace FlowBlox.Core.Models.Project
             var localData = new FlowBloxProjectLocalData
             {
                 ProjectSpaceGuid = ProjectSpaceGuid,
-                // ProjectSpaceVersion reserved for later.
+                ProjectSpaceVersion = ProjectSpaceVersion,
+                ProjectSpaceEndpointUri = ProjectSpaceEndpointUri
             };
 
             // Persist only user field values that are configured to store locally.

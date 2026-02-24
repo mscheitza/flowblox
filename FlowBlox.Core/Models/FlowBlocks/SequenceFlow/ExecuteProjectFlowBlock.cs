@@ -17,6 +17,8 @@ using static FlowBlox.Core.Util.RunnerHostResolver;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
+    // TODO: Auch bei den Extensions sollten wir die Endpoint Uri speichern! Einmal verifizieren!
+
     [FlowBlockUIGroup("ExecuteProjectFlowBlock_Groups_Project", 0)]
     [FlowBlockUIGroup("ExecuteProjectFlowBlock_Groups_Parameters", 1)]
     [Display(Name = "ExecuteProjectFlowBlock_DisplayName", Description = "ExecuteProjectFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]

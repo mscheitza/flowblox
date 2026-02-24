@@ -2401,7 +2401,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Warning ähnelt.
         /// </summary>
         public static string Global_MessageBox_Warning_Title {
             get {

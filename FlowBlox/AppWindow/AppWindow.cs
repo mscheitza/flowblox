@@ -1175,6 +1175,30 @@ namespace FlowBlox.AppWindow
             WindowsFormWPFHelper.ShowDialog(dialog, this);
         }
 
+        private void itmManageInputTemplates_Click(object sender, EventArgs e)
+        {
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            if (project == null)
+                return;
+
+            var dialog = new ManageInputTemplatesWindow(project);
+            WindowsFormWPFHelper.ShowDialog(dialog, this.FindForm());
+        }
+
+        private void itmOpenInputDir_Click(object sender, EventArgs e)
+        {
+            string inputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.InputDir"].Value;
+            if (!Directory.Exists(inputDirectory))
+                Directory.CreateDirectory(inputDirectory);
+
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = "explorer.exe",
+                Arguments = inputDirectory,
+                UseShellExecute = true
+            });
+        }
+
         internal T GetAccessibleComponent<T>() where T : System.Windows.Forms.Control
         {
             if (typeof(T) == typeof(ProjectPanel))

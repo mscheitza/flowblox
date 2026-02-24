@@ -214,8 +214,12 @@ namespace FlowBlox.UICore.ViewModels
             _ownerWindow = ownerWindow;
             _project = project;
 
-            _initialProjectGuid = project.ProjectSpaceGuid;
-            ProjectGuid = _initialProjectGuid;
+            // Only if the stored endpoint matches the current API environment, the existing ProjectSpaceGuid is considered valid for update.
+            if (string.Equals(_project.ProjectSpaceEndpointUri, ApiUrl, StringComparison.OrdinalIgnoreCase))
+            {
+                _initialProjectGuid = project.ProjectSpaceGuid;
+                ProjectGuid = _initialProjectGuid;
+            }
 
             // Auto-select tab: Update when GUID exists, otherwise Create.
             _suppressTabEffects = true;
@@ -225,7 +229,6 @@ namespace FlowBlox.UICore.ViewModels
             OnPropertyChanged(nameof(ShowUpdateTab));
 
             InitializeFromLocalOrRemoteAsync();
-
             _ = EvaluateLoggedInAsync();
         }
 

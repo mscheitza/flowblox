@@ -11,6 +11,11 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
         protected string _baseUrl;
         protected HttpClient _httpClient;
 
+        /// <summary>
+        /// Gets the configured base URL of the FlowBlox Web API.
+        /// </summary>
+        public string BaseUrl => _baseUrl;
+
         public FlowBloxWebApiService(string baseUrl)
         {
             _baseUrl = baseUrl;
