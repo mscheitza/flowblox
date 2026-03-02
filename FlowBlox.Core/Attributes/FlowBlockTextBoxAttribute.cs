@@ -8,6 +8,8 @@
         public char PasswordChar { get; set; }
 
         public bool IsCodingMode { get; set; }
+        public bool Suggestions { get; set; }
+        public string SuggestionMember { get; set; }
 
         /// <summary>
         /// Optional syntax highlighting definition used by the AvalonEdit code editor.
@@ -32,6 +34,7 @@
         {
             MultiLine = false;
             IsCodingMode = false;
+            Suggestions = false;
         }
     }
 }

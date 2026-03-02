@@ -301,7 +301,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private bool CanDeleteVersion() => IsVersionSelected && !SelectedVersion.Released;
 
-        private void BrowseArchive()
+        private async void BrowseArchive()
         {
             if (this.SelectedVersion != null)
             {
@@ -314,6 +314,7 @@ namespace FlowBlox.UICore.ViewModels
                 if (openFileDialog.ShowDialog() == true)
                 {
                     SelectedVersion.ArchivePath = openFileDialog.FileName;
+                    await TryUpdateSelectedVersionMetadataAsync();
                 }
             }
         }
@@ -362,6 +363,7 @@ namespace FlowBlox.UICore.ViewModels
                     Changes = SelectedVersion.Changes,
                     Content = SelectedVersion.ArchiveContent,
                     RuntimeVersion = SelectedVersion.RuntimeVersion,
+                    Dependencies = SelectedVersion.Dependencies?.ToList(),
                     Active = SelectedVersion.Active,
                     BackwardsCompatible = SelectedVersion.BackwardsCompatible
                 };
@@ -371,8 +373,6 @@ namespace FlowBlox.UICore.ViewModels
                     if (await IsExtensionContentValid(extension) == false)
                         return;
 
-                    changeRequest.RuntimeVersion = SelectedVersion.RuntimeVersion;
-                    changeRequest.Dependencies = SelectedVersion.Dependencies.ToList();
                     changeRequest.Content = SelectedVersion.ArchiveContent;
                 }
 
@@ -408,58 +408,44 @@ namespace FlowBlox.UICore.ViewModels
                 return false;
             }
 
-            if (SelectedVersion != null)
+            return true;
+        }
+
+        private async Task TryUpdateSelectedVersionMetadataAsync()
+        {
+            if (SelectedVersion == null || SelectedVersion.ArchiveContent == null)
+                return;
+
+            if (!_versionToExtension.TryGetValue(SelectedVersion, out var extension))
+                return;
+
+            var metadata = ExtensionContentMetadataExtractor.GetMetadataFromDepsJson(SelectedVersion.ArchiveContent, extension.Name);
+            if (metadata == null)
+                return;
+
+            var versionDependencies = new List<FbVersionDependency>();
+            foreach (var resolvedDependency in metadata.Dependencies)
             {
-                var metadata = ExtensionContentMetadataExtractor.GetMetadataFromDepsJson(SelectedVersion.ArchiveContent, extension.Name);
-
-                if (metadata == null)
-                {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, "Could not parse the metadata, please check if the *.deps.json is correct.");
-                    return false;
-                }
-
-                SelectedVersion.RuntimeVersion = metadata.RuntimeVersion;
-
-                // Add the dependencies
-                var versionDependencies = new List<FbVersionDependency>();
-
-                foreach (var resolvedDependency in metadata.Dependencies)
-                {
-                    var extResp = await _flowBloxWebApiService.Value.GetExtensionAsync(
-                        new FbExtensionRequest
-                        {
-                            Name = resolvedDependency.Name
-                        });
-
-                    if (extResp.Success && extResp.ResultObject != null)
+                var extResp = await _flowBloxWebApiService.Value.GetExtensionAsync(
+                    new FbExtensionRequest
                     {
-                        var resolvedExtension = extResp.ResultObject;
+                        Name = resolvedDependency.Name
+                    });
 
-                        versionDependencies.Add(new FbVersionDependency
-                        {
-                            ExtensionName = resolvedExtension.Name,
-                            ExtensionGuid = resolvedExtension.Guid,
-                            Version = resolvedDependency.Version
-                        });
-                    }
-                    else
-                    {
-                        var msg = string.Format(
-                            FlowBloxResourceUtil.GetLocalizedString("Message_UnableToLocateExtension", typeof(Resources.ManageUserExtensionsWindow)), 
-                            resolvedDependency.Name);
+                if (!extResp.Success || extResp.ResultObject == null)
+                    return;
 
-                        await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
-                            ApiErrorMessageHelper.BuildErrorMessage(msg, extResp.ErrorMessage));
-
-                        return false;
-                    }
-                }
-
-                SelectedVersion.Dependencies = versionDependencies;
-
+                var resolvedExtension = extResp.ResultObject;
+                versionDependencies.Add(new FbVersionDependency
+                {
+                    ExtensionName = resolvedExtension.Name,
+                    ExtensionGuid = resolvedExtension.Guid,
+                    Version = resolvedDependency.Version
+                });
             }
 
-            return true;
+            SelectedVersion.RuntimeVersion = metadata.RuntimeVersion;
+            SelectedVersion.Dependencies = versionDependencies;
         }
 
         private bool CanClearVersionFile() => !string.IsNullOrEmpty(SelectedVersion?.ArchivePath);
@@ -576,6 +562,8 @@ namespace FlowBlox.UICore.ViewModels
             {
                 Version = SelectedVersion.Version,
                 ExtensionGuid = extension.Guid.ToString(),
+                BackwardsCompatible = SelectedVersion.BackwardsCompatible,
+                Active = SelectedVersion.Active,
                 Released = true
             };
 

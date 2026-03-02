@@ -135,4 +135,40 @@
   <data name="Hint_VersionFormat" xml:space="preserve">
     <value>Enter the version number of your extension library here in the format 'Major.Minor.Patch'. Note that the entered version number must match the version number of the assembly.</value>
   </data>
+  <data name="Header_Title" xml:space="preserve">
+    <value>Create extension version</value>
+  </data>
+  <data name="Header_Description" xml:space="preserve">
+    <value>Select your extension DLL to detect metadata. The version is normalized to the required three-part format Major.Minor.Patch.</value>
+  </data>
+  <data name="Toolbar_ExtractMetadata" xml:space="preserve">
+    <value>Detect metadata from library</value>
+  </data>
+  <data name="Toolbar_ExtractMetadata_Tooltip" xml:space="preserve">
+    <value>Select a DLL file to detect assembly name, description and version.</value>
+  </data>
+  <data name="Hint_Metadata" xml:space="preserve">
+    <value>The detected version is mapped to Major.Minor.Patch and can be adjusted before creating the extension version.</value>
+  </data>
+  <data name="Label_AssemblyName" xml:space="preserve">
+    <value>Assembly name</value>
+  </data>
+  <data name="Label_AssemblyDescription" xml:space="preserve">
+    <value>Assembly description</value>
+  </data>
+  <data name="Label_LibraryPath" xml:space="preserve">
+    <value>Library path</value>
+  </data>
+  <data name="Error_ExtractMetadataFailed" xml:space="preserve">
+    <value>Metadata could not be extracted from the selected library.</value>
+  </data>
+  <data name="Watermark_Version" xml:space="preserve">
+    <value>e.g. 1.2.3</value>
+  </data>
+  <data name="Watermark_AssemblyName" xml:space="preserve">
+    <value>Automatically detected from selected DLL</value>
+  </data>
+  <data name="Watermark_Description" xml:space="preserve">
+    <value>Automatically detected from selected DLL metadata</value>
+  </data>
 </root>

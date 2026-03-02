@@ -15,7 +15,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
     public class RegexSelectorFlowBlock : BasePipeFlowBlock
     {
         [Display(Name = "RegexSelectorFlowBlock_RegularExpression", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = FlowBloxToolboxCategory.Regex)]
+        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.Regex))]
         [FlowBlockTextBox(IsCodingMode = true, SyntaxHighlighting = "FlowBlox.UICore.Resources.Highlighting.Regex.xshd")]
         public string RegularExpression { get; set; }
 

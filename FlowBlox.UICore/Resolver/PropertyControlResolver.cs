@@ -59,21 +59,6 @@ namespace FlowBlox.UICore.Resolver
 
             FrameworkElement control = CreateControl(property, target, displayName, flowBlockUI, readOnly, preselectedInstance);
 
-            if (!string.IsNullOrWhiteSpace(description))
-            {
-                ToolTipService.SetToolTip(control, new ToolTip
-                {
-                    Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse,
-                    MaxWidth = 1000,
-                    Content = new TextBlock
-                    {
-                        Text = description,
-                        TextWrapping = TextWrapping.Wrap,
-                        MaxWidth = 1000
-                    }
-                });
-            }
-
             bool isActive = true;
             var activationAttr = property.GetCustomAttribute<ActivationConditionAttribute>();
             if (activationAttr != null)
@@ -91,7 +76,8 @@ namespace FlowBlox.UICore.Resolver
                 ValueType = property.PropertyType,
                 IsEnabled = !FlowBlockUIAttributeHelper.IsDynamicallyReadOnly(target, flowBlockUI),
                 Control = control,
-                IsActive = isActive
+                IsActive = isActive,
+                TooltipText = description
             };
 
             bindingContext.Register(property, propertyControlViewModel);

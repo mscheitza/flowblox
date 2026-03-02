@@ -79,6 +79,33 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Metadata could not be extracted from the selected library. ähnelt.
+        /// </summary>
+        public static string Error_ExtractMetadataFailed {
+            get {
+                return ResourceManager.GetString("Error_ExtractMetadataFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create a new extension and keep name/description aligned with your DLL metadata. Use the toolbar action to detect metadata directly from a library file. ähnelt.
+        /// </summary>
+        public static string Header_Description {
+            get {
+                return ResourceManager.GetString("Header_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create extension ähnelt.
+        /// </summary>
+        public static string Header_Title {
+            get {
+                return ResourceManager.GetString("Header_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The description should consist of 1–2 sentences summarizing the extension. ähnelt.
         /// </summary>
         public static string Hint_Description {
@@ -88,7 +115,16 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Please use the format: CompanyName.ProjectName.ExtensionName. Example: Contoso.MyProject.MyExtension. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recommended workflow: select your extension DLL first, then verify or adjust metadata before creating the extension. ähnelt.
+        /// </summary>
+        public static string Hint_Metadata {
+            get {
+                return ResourceManager.GetString("Hint_Metadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please use the format CompanyName.ProjectName.ExtensionName. The ExtensionName must exactly match the assembly name (without file extension). ähnelt.
         /// </summary>
         public static string Hint_NameFormat {
             get {
@@ -102,6 +138,24 @@ namespace FlowBlox.UICore.Resources {
         public static string Label_Description {
             get {
                 return ResourceManager.GetString("Label_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Detected version ähnelt.
+        /// </summary>
+        public static string Label_DetectedVersion {
+            get {
+                return ResourceManager.GetString("Label_DetectedVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Library path ähnelt.
+        /// </summary>
+        public static string Label_LibraryPath {
+            get {
+                return ResourceManager.GetString("Label_LibraryPath", resourceCulture);
             }
         }
         
@@ -120,6 +174,42 @@ namespace FlowBlox.UICore.Resources {
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Detect metadata from library ähnelt.
+        /// </summary>
+        public static string Toolbar_ExtractMetadata {
+            get {
+                return ResourceManager.GetString("Toolbar_ExtractMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select a DLL file and fill name, description and detected version automatically. ähnelt.
+        /// </summary>
+        public static string Toolbar_ExtractMetadata_Tooltip {
+            get {
+                return ResourceManager.GetString("Toolbar_ExtractMetadata_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Short summary of what this extension provides... ähnelt.
+        /// </summary>
+        public static string Watermark_Description {
+            get {
+                return ResourceManager.GetString("Watermark_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die e.g. Contoso.SampleExtension ähnelt.
+        /// </summary>
+        public static string Watermark_Name {
+            get {
+                return ResourceManager.GetString("Watermark_Name", resourceCulture);
             }
         }
     }

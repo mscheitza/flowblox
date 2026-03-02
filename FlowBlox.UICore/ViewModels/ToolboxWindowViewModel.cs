@@ -21,7 +21,7 @@ namespace FlowBlox.UICore.ViewModels
         private ToolboxRepository _repository;
         private Visibility _noToolboxElementsFoundVisibility;
         private Visibility _detailViewVisibility;
-        private List<string> _toolboxTypes;
+        private List<FlowBloxToolboxCategoryItem> _toolboxTypes;
         private ToolboxScope _toolboxScope;
         private List<ToolboxScope> _toolboxScopes;
 
@@ -40,9 +40,9 @@ namespace FlowBlox.UICore.ViewModels
             _repository = new ToolboxRepository(FlowBloxOptions.GetOptionInstance());
 
             if (_passedToolboxType != null)
-                _toolboxTypes = new List<string>() { _passedToolboxType };
+                _toolboxTypes = new List<FlowBloxToolboxCategoryItem>() { FlowBloxToolboxCategory.GetCategoryOrDefault(_passedToolboxType) };
             else
-                _toolboxTypes = FlowBloxToolboxCategory.GetAll()
+                _toolboxTypes = FlowBloxToolboxCategory.GetAllCategories()
                     .ToList();
 
             _toolboxScopes = Enum.GetValues(typeof(ToolboxScope))
@@ -85,7 +85,7 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        public List<string> ToolboxTypes
+        public List<FlowBloxToolboxCategoryItem> ToolboxTypes
         {
             get => _toolboxTypes;
             set

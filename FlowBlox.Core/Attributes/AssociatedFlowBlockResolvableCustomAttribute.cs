@@ -4,11 +4,11 @@
     /// Indicates that a property referencing a flow block can be resolved via a custom member (property or parameterless method) on the same object, and optionally a display condition.
     /// <example>
     /// <code>
-    /// [CustomFlowBlockResolvable(nameof(InputReference), nameof(CanDisplayAssociatedInputReferenceHint))]
-    /// public BaseFlowBlock AssociatedInputReference { get; set; }
+    /// [CustomFlowBlockResolvable(nameof(InputReference), nameof(CanDisplayAssociatedIterationContextHint))]
+    /// public BaseFlowBlock AssociatedIterationContext { get; set; }
     ///
     /// public BaseFlowBlock InputReference => ... // returns a BaseFlowBlock
-    /// public bool CanDisplayAssociatedInputReferenceHint => ReferencedFlowBlocks.Count() > 1;
+    /// public bool CanDisplayAssociatedIterationContextHint => ReferencedFlowBlocks.Count() > 1;
     /// </code>
     /// </example>
     /// </summary>

@@ -403,17 +403,28 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
         }
 
-        [Display(Name = "BaseFlowBlock_AssociatedInputReference", 
-            Description = "BaseFlowBlock_AssociatedInputReference_Tooltip", 
+        [Display(Name = "BaseFlowBlock_AssociatedIterationContext", 
+            Description = "BaseFlowBlock_AssociatedIterationContext_Tooltip", 
             ResourceType = typeof(FlowBloxTexts), 
             GroupName = "BaseFlowBlock_Groups_Input", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, ReadOnlyMethod = nameof(GetInputReferenceReadonly), 
             SelectionFilterMethod = nameof(GetPossibleInputReference), 
             SelectionDisplayMember = nameof(Name))]
-        [AssociatedFlowBlockResolvableCustom(nameof(IterationContext), nameof(CanDisplayAssociatedInputReferenceHint))]
-        public BaseFlowBlock AssociatedInputReference { get; set; }
+        [AssociatedFlowBlockResolvableCustom(nameof(IterationContext), nameof(CanDisplayAssociatedIterationContextHint))]
+        [JsonProperty("AssociatedIterationContext")]
+        public BaseFlowBlock AssociatedIterationContext { get; set; }
 
-        public bool CanDisplayAssociatedInputReferenceHint() => this.ReferencedFlowBlocks.Count() > 1;
+        [JsonProperty("AssociatedInputReference")]
+        private BaseFlowBlock LegacyAssociatedInputReference
+        {
+            set
+            {
+                if (AssociatedIterationContext == null)
+                    AssociatedIterationContext = value;
+            }
+        }
+
+        public bool CanDisplayAssociatedIterationContextHint() => this.ReferencedFlowBlocks.Count() > 1;
 
         public virtual BaseFlowBlock IterationContext
         {
@@ -422,7 +433,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 if (this.ReferencedFlowBlocks.Count() > 1)
                     return CommonFlowBlockResolver.FindCommonFlowBlock(this);
 
-                return AssociatedInputReference;
+                return AssociatedIterationContext;
             }
         }
 
@@ -451,7 +462,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             ])]
         public ObservableCollection<LogicalCondition> ActivationConditions { get; set; } = new ObservableCollection<LogicalCondition>();
 
-        [Display(Name = "BaseFlowBlock_TestDefinitions", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 0)]
+        [Display(Name = "BaseFlowBlock_TestDefinitions", Description = "BaseFlowBlock_TestDefinitions_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ListView, 
             Operations = UIOperations.Link | UIOperations.Unlink | UIOperations.Create | UIOperations.Edit | UIOperations.Delete,
             SelectionFilterMethod = nameof(GetPossibleTestDefinitions),
@@ -459,7 +470,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FlowBloxTestDefinition.Name) })]
         public ObservableCollection<FlowBloxTestDefinition> TestDefinitions { get; set; }
 
-        [Display(Name = "BaseFlowBlock_GenerationStrategies", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 1)]
+        [Display(Name = "BaseFlowBlock_GenerationStrategies", Description = "BaseFlowBlock_GenerationStrategies_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 1)]
         [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FlowBloxGenerationStrategyBase.Name) })]
         [CustomValidation(typeof(BaseFlowBlock), nameof(ValidateGenerationStrategies))]

@@ -243,4 +243,10 @@ Sie können Erweiterungen hinzufügen, bearbeiten, deaktivieren oder entfernen s
   <data name="Error_LoadExtensionsFailed" xml:space="preserve">
     <value>Die Erweiterungen konnten nicht vom Server geladen werden.</value>
   </data>
+  <data name="Watermark_Changes" xml:space="preserve">
+    <value>Welche Änderung gab es in dieser zur letzten Version?</value>
+  </data>
+  <data name="Watermark_RuntimeVersion" xml:space="preserve">
+    <value>Automatisch ermittelt über Archiv-ZIP</value>
+  </data>
 </root>

@@ -16,7 +16,12 @@
     </UserControl.DataContext>
     
     <UserControl.Resources>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/PropertyViewStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <DockPanel>
@@ -95,11 +100,29 @@
                                                 Margin="0,0,0,5" 
                                                 CornerRadius="4"
                                                 Visibility="{Binding UseLabel, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                <TextBlock 
-                                                    Text="{Binding Label}" 
-                                                    FontWeight="SemiBold"
-                                                    Foreground="Black"
-                                                    VerticalAlignment="Center" />
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock 
+                                                        Text="{Binding Label}" 
+                                                        FontWeight="SemiBold"
+                                                        Foreground="Black"
+                                                        VerticalAlignment="Center" />
+                                                    <Border
+                                                        Style="{StaticResource PropertyView.HelpIconBorderStyle}"
+                                                        Visibility="{Binding HasTooltip, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                        <TextBlock
+                                                            Text="?"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="11"
+                                                            FontWeight="Bold"
+                                                            Foreground="White" />
+                                                        <Border.ToolTip>
+                                                            <ToolTip
+                                                                Style="{StaticResource PropertyView.HelpToolTipStyle}"
+                                                                Content="{Binding TooltipText}" />
+                                                        </Border.ToolTip>
+                                                    </Border>
+                                                </StackPanel>
                                             </Border>
                                             <ContentControl Content="{Binding Control}" />
                                         </StackPanel>

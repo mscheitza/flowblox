@@ -18,6 +18,9 @@ namespace FlowBlox.Core.ExternalServices.FlowBloxWebApi
 
         public FlowBloxWebApiService(string baseUrl)
         {
+            if (string.IsNullOrWhiteSpace(baseUrl))
+                throw new ArgumentException("The endpoint URI must not be null or empty.", nameof(baseUrl));
+
             _baseUrl = baseUrl;
             _httpClient = new HttpClient();
         }

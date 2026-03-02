@@ -41,7 +41,7 @@ namespace FlowBlox.UICore.Factory.Base
                         .Where(t =>
                         {
                             var attr = t.GetCustomAttribute<FlowBloxSupportedTypesAttribute>();
-                            return attr == null || attr.SupportedTypes.Contains(_target.GetType());
+                            return attr == null || attr.SupportedTypes.Any(x => x.IsAssignableFrom(_target.GetType()));
                         })
                         .Distinct()
                         .ToList();
@@ -54,7 +54,7 @@ namespace FlowBlox.UICore.Factory.Base
                         .Where(t =>
                         {
                             var attr = t.GetCustomAttribute<FlowBloxSupportedTypesAttribute>();
-                            return attr == null || attr.SupportedTypes.Contains(_target.GetType());
+                            return attr == null || attr.SupportedTypes.Any(x => x.IsAssignableFrom(_target.GetType()));
                         })
                         .ToList();
                 }   

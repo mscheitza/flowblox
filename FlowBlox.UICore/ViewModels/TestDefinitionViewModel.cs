@@ -12,6 +12,7 @@ using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,6 +41,7 @@ namespace FlowBlox.UICore.ViewModels
             SubscribeToPropertyChangeEvents(_testDefinition);
             _testExecutor = new FlowBloxTestExecutor();
             Configurations = new ObservableCollection<FlowBloxTestConfiguration>();
+            SortedEntries = new ObservableCollection<FlowBlockTestDataset>();
             RuntimeLogs = new ObservableCollection<RuntimeLog>();
             BindingOperations.EnableCollectionSynchronization(RuntimeLogs, new object());
             _testDefinitionUsages = new List<BaseFlowBlock>();
@@ -163,14 +165,44 @@ namespace FlowBlox.UICore.ViewModels
             {
                 if (_testDefinition != value)
                 {
+                    if (_testDefinition?.Entries != null)
+                        _testDefinition.Entries.CollectionChanged -= Entries_CollectionChanged;
+
                     _testDefinition = value;
                     _testDefinition.RecalculateRequiredFlagsAcrossDefinition();
                     SubscribeToPropertyChangeEvents(_testDefinition);
+
+                    if (_testDefinition?.Entries != null)
+                        _testDefinition.Entries.CollectionChanged += Entries_CollectionChanged;
+
+                    RefreshSortedEntries();
                     OnPropertyChanged(nameof(TestDefinition));
                     OnPropertyChanged(nameof(CanExecute));
                 }
             }
         }
+
+        private void Entries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RefreshSortedEntries();
+        }
+
+        private void RefreshSortedEntries()
+        {
+            SortedEntries.Clear();
+            if (_testDefinition?.Entries == null)
+                return;
+
+            foreach (var entry in _testDefinition.Entries.Where(x => x.FlowBlock == null))
+                SortedEntries.Add(entry);
+
+            foreach (var entry in _testDefinition.Entries.Where(x => x.FlowBlock != null))
+                SortedEntries.Add(entry);
+
+            OnPropertyChanged(nameof(SortedEntries));
+        }
+
+        public ObservableCollection<FlowBlockTestDataset> SortedEntries { get; }
 
         public BaseFlowBlock CurrentFlowBlock
         {
@@ -253,6 +285,20 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand AddExpectationCommand { get; }
         public RelayCommand DeleteExpectationCommand { get; }
 
+        private int _selectedResultTabIndex;
+        public int SelectedResultTabIndex
+        {
+            get => _selectedResultTabIndex;
+            set
+            {
+                if (_selectedResultTabIndex != value)
+                {
+                    _selectedResultTabIndex = value;
+                    OnPropertyChanged(nameof(SelectedResultTabIndex));
+                }
+            }
+        }
+
         public List<string> TestResultsColumnNames { get; private set; }
         public ObservableCollection<FlowBlockOutDataset> TestResults { get; private set; }
         public ObservableCollection<DataGridColumn> TestResultsColumns { get; private set; }
@@ -260,6 +306,7 @@ namespace FlowBlox.UICore.ViewModels
         private async void ExecuteTestAsync()
         {
             RuntimeLogs.Clear();
+            SelectedResultTabIndex = 1;
 
             _testExecutor.Initialize(_testDefinition, _currentFlowBlock);
             _testExecutor.GetRuntime().LogMessageCreated += TestDefinitionViewModel_LogMessageCreated;

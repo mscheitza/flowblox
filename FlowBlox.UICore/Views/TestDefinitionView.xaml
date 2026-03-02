@@ -86,7 +86,7 @@
                         <TextBlock Text="{x:Static resources:TestDefinitionView.Text_TestExpectations}" FontWeight="Bold" Grid.Column="5" Margin="0,0,5,0"/>
                     </Grid>
 
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding TestDefinition.Entries}">
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding SortedEntries}">
                         <ItemsControl.ItemContainerStyle>
                             <Style TargetType="ContentPresenter">
                                 <Setter Property="Visibility">
@@ -221,12 +221,20 @@
         </ScrollViewer>
 
         <!-- TabControl for Test Results and Runtime Logs -->
-        <TabControl Grid.Row="2" Margin="10">
+        <TabControl Grid.Row="2" Margin="10" SelectedIndex="{Binding SelectedResultTabIndex, Mode=TwoWay}">
 
             <TabItem Header="{x:Static resources:TestDefinitionView.TabItem_Expectations}">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" FontSize="16"/>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="ClipboardTextOutline"
+                                Width="16"
+                                Height="16"
+                                Margin="0,0,8,0"
+                                VerticalAlignment="Center"
+                                Foreground="#3A6EA5"/>
+                            <TextBlock Text="{Binding}" FontSize="15" FontWeight="SemiBold" Padding="0,5"/>
+                        </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
 
@@ -391,30 +399,18 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="{x:Static resources:TestDefinitionView.TabItem_TestResults}" Visibility="{Binding TestResults, Converter={StaticResource TestResultsToVisibilityConverter}}">
-                <TabItem.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontSize="16"/>
-                    </DataTemplate>
-                </TabItem.HeaderTemplate>
-                <DataGrid x:Name="testResultsDataGrid" ItemsSource="{Binding TestResults}" AutoGenerateColumns="False">
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="{x:Static resources:TestDefinitionView.MenuItem_OpenInEditor}" 
-                                      Command="{Binding OpenInEditorCommand, Source={StaticResource TestDefinitionViewModel}}" 
-                                      CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
-                                <MenuItem.Icon>
-                                    <iconPacks:PackIconModern Kind="Edit" Width="14" Height="14" Margin="5,0,5,0"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                </DataGrid>
-            </TabItem>
             <TabItem Header="{x:Static resources:TestDefinitionView.TabItem_RuntimeLogs}" Visibility="{Binding RuntimeLogs, Converter={StaticResource RuntimeLogsToVisibilityConverter}}">
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" FontSize="16"/>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="TextBoxSearchOutline"
+                                Width="16"
+                                Height="16"
+                                Margin="0,0,8,0"
+                                VerticalAlignment="Center"
+                                Foreground="#3A6EA5"/>
+                            <TextBlock Text="{Binding}" FontSize="15" FontWeight="SemiBold" Padding="0,5"/>
+                        </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
                 <ListView ItemsSource="{Binding RuntimeLogs}">
@@ -446,6 +442,35 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
+            </TabItem>
+
+            <TabItem Header="{x:Static resources:TestDefinitionView.TabItem_TestResults}" Visibility="{Binding TestResults, Converter={StaticResource TestResultsToVisibilityConverter}}">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="TableLarge"
+                                Width="16"
+                                Height="16"
+                                Margin="0,0,8,0"
+                                VerticalAlignment="Center"
+                                Foreground="#3A6EA5"/>
+                            <TextBlock Text="{Binding}" FontSize="15" FontWeight="SemiBold" Padding="0,5"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <DataGrid x:Name="testResultsDataGrid" ItemsSource="{Binding TestResults}" AutoGenerateColumns="False">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="{x:Static resources:TestDefinitionView.MenuItem_OpenInEditor}" 
+                                      Command="{Binding OpenInEditorCommand, Source={StaticResource TestDefinitionViewModel}}" 
+                                      CommandParameter="{Binding PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                                <MenuItem.Icon>
+                                    <iconPacks:PackIconModern Kind="Edit" Width="14" Height="14" Margin="5,0,5,0"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
             </TabItem>
         </TabControl>
 

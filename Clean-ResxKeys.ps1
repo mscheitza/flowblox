@@ -30,6 +30,12 @@ param(
 
   [int]$MaxGap = 250,
 
+  # 0 = unlimited. Limits how many TEXT keys are checked for usage (useful for quick tests).
+  [int]$MaxTextKeysToCheck = 0,
+
+  # If set, writes plain text lists of cached code file paths (one per cache group).
+  [string]$CacheReportPath = (Join-Path (Get-Location) "resx-cleanup-cache-files.txt"),
+
   [switch]$PreviewPerFile,
   [switch]$OnlyWithDesigner,
 
@@ -62,6 +68,53 @@ function Read-AllTextSafe([string]$path) {
     return [IO.File]::ReadAllText($path, [Text.Encoding]::UTF8)
   } catch {
     return Get-Content -Path $path -Raw -ErrorAction SilentlyContinue
+  }
+}
+
+function Normalize-FullPath([string]$p) {
+  if (-not $p) { return $null }
+  return ([IO.Path]::GetFullPath($p).TrimEnd('\','/'))
+}
+
+function StartsWithPath([string]$fullPath, [string]$prefixPath) {
+  if (-not $fullPath -or -not $prefixPath) { return $false }
+  $fp = Normalize-FullPath $fullPath
+  $pp = Normalize-FullPath $prefixPath
+  return $fp.StartsWith($pp, [StringComparison]::OrdinalIgnoreCase)
+}
+
+function Cache-CodeFiles([System.IO.FileInfo[]]$files) {
+  $cache = @{}
+  $notCached = New-Object System.Collections.Generic.List[string]
+
+  foreach ($cf in $files) {
+    $t = Read-AllTextSafe $cf.FullName
+    if ($t) { $cache[$cf.FullName] = $t }
+    else { $notCached.Add($cf.FullName) | Out-Null }
+  }
+
+  return [pscustomobject]@{
+    Cache = $cache
+    NotCached = $notCached
+  }
+}
+
+function Write-CacheReport([string]$path, [hashtable]$cache, [System.Collections.Generic.List[string]]$notCached) {
+  try {
+    $lines = New-Object System.Collections.Generic.List[string]
+    $lines.Add("CACHED FILES: $($cache.Count)") | Out-Null
+    $lines.Add("NOT CACHED (empty/unreadable): $($notCached.Count)") | Out-Null
+    $lines.Add("") | Out-Null
+    $lines.Add("=== CACHED ===") | Out-Null
+    foreach ($p in ($cache.Keys | Sort-Object)) { $lines.Add($p) | Out-Null }
+    $lines.Add("") | Out-Null
+    $lines.Add("=== NOT CACHED ===") | Out-Null
+    foreach ($p in ($notCached | Sort-Object)) { $lines.Add($p) | Out-Null }
+
+    $lines | Set-Content -Path $path -Encoding UTF8
+    Write-Host "Cache report written: $path"
+  } catch {
+    Write-Host "WARN: Could not write cache report: $($_.Exception.Message)"
   }
 }
 
@@ -111,7 +164,6 @@ function ContainsInvariant([string]$haystack, [string]$needle) {
   return ($haystack.IndexOf($needle, [StringComparison]::Ordinal) -ge 0)
 }
 
-# Prebuild per-key matchers to avoid re-compiling regex for every file
 function Build-KeyMatchers([string]$key, [int]$maxGap) {
   $kEsc = Escape-Regex $key
 
@@ -138,33 +190,16 @@ function Build-KeyMatchers([string]$key, [int]$maxGap) {
 function Is-KeyUsedInTextWithMatchers($m, [string]$text) {
   if (-not $text) { return $false }
 
-  # "Key"
   if (ContainsInvariant $text $m.QuotedDbl) { return $true }
-  # 'Key' (optional but cheap)
   if (ContainsInvariant $text $m.QuotedSgl) { return $true }
-
-  # Something.Key / prefix:Something.Key
   if ($m.RxProp.IsMatch($text)) { return $true }
-
-  # Split heuristic
   if ($null -ne $m.RxSplit -and $m.RxSplit.IsMatch($text)) { return $true }
-  
-  # --- WinForms
-  # If this file contains "partial class <ClassName>", then also consider
-  # quoted keys WITHOUT the "<ClassName>_" prefix.
-  #
-  # Example:
-  #   resx key: AppWindow_btSelect_Text
-  #   code file: partial class AppWindow
-  #   then we also match "btSelect_Text" in this file.
-  #
+
   $cm = [regex]::Match($text, '(?m)^\s*(public|internal|private|protected)?\s*(partial\s+)?class\s+(?<n>[A-Za-z_][A-Za-z0-9_]*)\b')
   if ($cm.Success) {
     $className = $cm.Groups['n'].Value
     if ($className) {
       $prefix = $className + "_"
-
-      # only if the resx key actually starts with "ClassName_"
       if ($m.Key.StartsWith($prefix, [StringComparison]::Ordinal)) {
         $alias = $m.Key.Substring($prefix.Length)
         $aliasQuotedDbl = '"' + $alias + '"'
@@ -176,6 +211,16 @@ function Is-KeyUsedInTextWithMatchers($m, [string]$text) {
     }
   }
 
+  return $false
+}
+
+function Is-StronglyTypedResxDesigner([string]$path) {
+  if (-not (Test-Path -LiteralPath $path)) { return $false }
+
+  $t = Read-AllTextSafe $path
+  if (-not $t) { return $false }
+
+  if ($t -match '\bResourceManager\b' -and $t -match '\bGetString\b') { return $true }
   return $false
 }
 
@@ -214,20 +259,21 @@ Write-Host "(Non-text resources like blobs/files/icons are ignored and will NOT 
 
 $codeFiles = Get-FilesFiltered -root $CodeRoot -include @("*.cs","*.xaml") -excludePatterns $ExcludeDirPatterns
 
-# Gate 1: no code files at all
 if (-not $codeFiles -or @($codeFiles).Count -eq 0) {
   throw "No .cs/.xaml files found under: $CodeRoot (after filtering)."
 }
 
 Write-Host "Code files found (before excluding resx designer files): $(@($codeFiles).Count)"
 
-# Exclude only the auto-generated resx designer files (computed from resx list)
+# Exclude only the auto-generated strongly typed resx designer files (computed from resx list)
 $designerPathsToExclude = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
 
 foreach ($rf in $resxFiles) {
   $p = Get-ResxDesignerPath $rf
   if ($p -and (Test-Path -LiteralPath $p)) {
-    [void]$designerPathsToExclude.Add([IO.Path]::GetFullPath($p))
+    if (Is-StronglyTypedResxDesigner $p) {
+      [void]$designerPathsToExclude.Add([IO.Path]::GetFullPath($p))
+    }
   }
 }
 
@@ -240,24 +286,40 @@ if ($designerPathsToExclude.Count -gt 0) {
 Write-Host "Excluded resx designer files from scan: $($designerPathsToExclude.Count)"
 Write-Host "Code files after exclusion: $(@($codeFiles).Count)"
 
-# Gate 2: everything got excluded
 if (-not $codeFiles -or @($codeFiles).Count -eq 0) {
   throw "No .cs/.xaml files left to scan after excluding resx designer files. Check CodeRoot/ResxRoot or exclusion logic."
 }
 
-Write-Host "Caching code files: $(@($codeFiles).Count)"
+Write-Host "Caching code files (grouped)..."
 
-$fileTextCache = @{}
-foreach ($cf in $codeFiles) {
-  $t = Read-AllTextSafe $cf.FullName
-  if ($t) { $fileTextCache[$cf.FullName] = $t }
-}
+$root = Normalize-FullPath $CodeRoot
 
-Write-Host "Cached texts: $($fileTextCache.Count)"
+$flowBloxRoot = Normalize-FullPath (Join-Path $root "FlowBlox")
+$uiCoreRoot   = Normalize-FullPath (Join-Path $root "FlowBlox.UICore")
+$uiCoreResx   = Normalize-FullPath (Join-Path $uiCoreRoot "Resources")
+
+$codeFilesFlowBlox = @($codeFiles | Where-Object { StartsWithPath $_.FullName $flowBloxRoot })
+$codeFilesUICore   = @($codeFiles | Where-Object { StartsWithPath $_.FullName $uiCoreRoot })
+$codeFilesGlobal   = $codeFiles
+
+Write-Host "Code files in FlowBlox:        $(@($codeFilesFlowBlox).Count)"
+Write-Host "Code files in FlowBlox.UICore: $(@($codeFilesUICore).Count)"
+Write-Host "Code files global:             $(@($codeFilesGlobal).Count)"
+
+$cacheFlowBlox = Cache-CodeFiles -files $codeFilesFlowBlox
+$cacheUICore   = Cache-CodeFiles -files $codeFilesUICore
+$cacheGlobal   = Cache-CodeFiles -files $codeFilesGlobal
+
+Write-Host "Cached texts (FlowBlox):        $($cacheFlowBlox.Cache.Count)"
+Write-Host "Cached texts (FlowBlox.UICore): $($cacheUICore.Cache.Count)"
+Write-Host "Cached texts (Global):          $($cacheGlobal.Cache.Count)"
+
+Write-CacheReport -path ($CacheReportPath -replace '\.txt$', '.FlowBlox.txt') -cache $cacheFlowBlox.Cache -notCached $cacheFlowBlox.NotCached
+Write-CacheReport -path ($CacheReportPath -replace '\.txt$', '.UICore.txt')   -cache $cacheUICore.Cache   -notCached $cacheUICore.NotCached
+Write-CacheReport -path ($CacheReportPath -replace '\.txt$', '.Global.txt')   -cache $cacheGlobal.Cache   -notCached $cacheGlobal.NotCached
 
 # ----------------- usage detection -----------------
 
-# Prebuild matchers once per key
 $keyMatchers = @{}
 foreach ($k in $allTextKeys) {
   $keyMatchers[$k] = Build-KeyMatchers -key $k -maxGap $MaxGap
@@ -265,10 +327,51 @@ foreach ($k in $allTextKeys) {
 
 $usedKeys = New-Object 'System.Collections.Generic.HashSet[string]'
 
-foreach ($k in $allTextKeys) {
+$keysToCheck = @($allTextKeys)
+if ($MaxTextKeysToCheck -gt 0 -and $keysToCheck.Count -gt $MaxTextKeysToCheck) {
+  $keysToCheck = @(
+    $keysToCheck |
+    Sort-Object |
+    Select-Object -First $MaxTextKeysToCheck
+  )
+  Write-Host "Limiting usage detection to first $MaxTextKeysToCheck TEXT keys (sorted) for quick testing."
+}
+
+$total = $keysToCheck.Count
+$current = 0
+
+foreach ($k in $keysToCheck) {
+  $current++
+  $percent = if ($total -gt 0) { [int](($current / $total) * 100) } else { 100 }
+
+  Write-Progress `
+    -Activity "Scanning TEXT resource keys" `
+    -Status "$current of $total ($percent%)" `
+    -PercentComplete $percent `
+    -CurrentOperation $k
+
   $m = $keyMatchers[$k]
 
-  foreach ($kv in $fileTextCache.GetEnumerator()) {
+  $filesForKey = @($resxKeyToFiles[$k] | Select-Object -Unique)
+  $useCache = $cacheGlobal.Cache
+
+  if ($filesForKey.Count -gt 0) {
+    $allInFlowBlox = $true
+    $allInUICoreResources = $true
+
+    foreach ($rfPath in $filesForKey) {
+      if (-not (StartsWithPath $rfPath $flowBloxRoot)) { $allInFlowBlox = $false }
+      if (-not (StartsWithPath $rfPath $uiCoreResx))   { $allInUICoreResources = $false }
+    }
+
+    if ($allInFlowBlox) {
+      $useCache = $cacheFlowBlox.Cache
+    } elseif ($allInUICoreResources) {
+      $useCache = $cacheUICore.Cache
+    }
+  }
+
+  foreach ($kv in $useCache.GetEnumerator()) {
     if (Is-KeyUsedInTextWithMatchers -m $m -text $kv.Value) {
       [void]$usedKeys.Add($k)
       break
@@ -276,14 +379,17 @@ foreach ($k in $allTextKeys) {
   }
 }
 
-$unusedCount = $allTextKeys.Count - $usedKeys.Count
-Write-Host "Used TEXT keys:   $($usedKeys.Count)"
-Write-Host "Unused TEXT keys: $unusedCount"
+Write-Progress -Activity "Scanning TEXT resource keys" -Completed
+
+$unusedCount = $keysToCheck.Count - $usedKeys.Count
+Write-Host "Checked TEXT keys: $($keysToCheck.Count)"
+Write-Host "Used TEXT keys:    $($usedKeys.Count)"
+Write-Host "Unused TEXT keys:  $unusedCount"
 
 # ----------------- report -----------------
 
 $report = New-Object System.Collections.Generic.List[object]
-foreach ($k in $allTextKeys) {
+foreach ($k in $keysToCheck) {
   $isUsed = $usedKeys.Contains($k)
   $files = ($resxKeyToFiles[$k] | Select-Object -Unique) -join ";"
   $report.Add([pscustomobject]@{
@@ -299,9 +405,14 @@ Write-Host "CSV report written: $ReportPath"
 # ----------------- preview per resx -----------------
 
 if ($PreviewPerFile) {
+  $unusedCheckedKeys = New-Object 'System.Collections.Generic.HashSet[string]'
+  foreach ($k in $keysToCheck) {
+    if (-not $usedKeys.Contains($k)) { [void]$unusedCheckedKeys.Add($k) }
+  }
+
   foreach ($rf in $resxFiles) {
     $keys = @($resxFileToTextKeys[$rf.FullName])
-    $toDelete = @($keys | Where-Object { -not $usedKeys.Contains($_) })
+    $toDelete = @($keys | Where-Object { $unusedCheckedKeys.Contains($_) })
 
     if ($toDelete.Count -gt 0) {
       Write-Host ""
@@ -318,6 +429,11 @@ if (-not $Apply) {
 
 # ----------------- apply cleanup (TEXT nodes only) -----------------
 
+$unusedCheckedKeysForApply = New-Object 'System.Collections.Generic.HashSet[string]'
+foreach ($k in $keysToCheck) {
+  if (-not $usedKeys.Contains($k)) { [void]$unusedCheckedKeysForApply.Add($k) }
+}
+
 foreach ($rf in $resxFiles) {
   [xml]$xml = Get-Content -Path $rf.FullName -Raw
   $dataNodes = @($xml.SelectNodes("//data[@name]"))
@@ -327,7 +443,7 @@ foreach ($rf in $resxFiles) {
     if (-not (Is-TextResxDataNode $n)) { continue }
 
     $name = $n.GetAttribute("name")
-    if ($name -and -not $usedKeys.Contains($name)) {
+    if ($name -and $unusedCheckedKeysForApply.Contains($name)) {
       [void]$n.ParentNode.RemoveChild($n)
       $removed++
     }
@@ -337,7 +453,14 @@ foreach ($rf in $resxFiles) {
     if ($Backup) {
       Copy-Item -Path $rf.FullName -Destination ($rf.FullName + ".bak") -Force
     }
-    $xml.Save($rf.FullName)
+    $settings = New-Object System.Xml.XmlWriterSettings
+	$settings.Indent = $true
+	$settings.Encoding = New-Object System.Text.UTF8Encoding($true)
+	$settings.NewLineHandling = [System.Xml.NewLineHandling]::Entitize
+
+	$writer = [System.Xml.XmlWriter]::Create($rf.FullName, $settings)
+	$xml.Save($writer)
+	$writer.Close()
     Write-Host "Updated $($rf.Name): removed $removed unused TEXT keys"
   }
 }

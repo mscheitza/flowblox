@@ -46,76 +46,95 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public async Task<bool> ExecuteGenerationAsync()
         {
             var testResults = new Dictionary<FlowBloxTestDefinition, FlowBloxTestResult>();
+            FlowBloxTestExecutor runtimeOwnerTestExecutor = null;
+            BaseRuntime generationRuntime = null;
 
             var success = true;
-            foreach (var testDefinition in _scope == TestScope.All ?
-                 _flowBlock.TestDefinitions :
-                 _flowBlock.TestDefinitions.Where(x => x.RequiredForExecution))
+            try
             {
-                var testExecutor = new FlowBloxTestExecutor();
-                testExecutor.Initialize(testDefinition, _flowBlock);
-                var runtime = testExecutor.GetRuntime();
-                runtime.LogMessageCreated += Runtime_LogMessageCreated;
-
-                var testResult = await testExecutor.ExecuteTestAsync();
-                if (!testResult.Success)
-                {
-                    OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" failed, so the generation strategies are executed.", FlowBloxLogLevel.Info));
-                    success = false;
-                }
-
-                testExecutor.Shutdown();
-
-                testResults[testDefinition] = testResult;
-            }
-
-            if (!success)
-            {
-                foreach (var flowBloxGenerationStrategy in _flowBlock.GenerationStrategies)
-                {
-                    object result;
-                    try
-                    {
-                        result = flowBloxGenerationStrategy.Execute(testResults);
-                    }
-                    catch(Exception e)
-                    {
-                        OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" failed unexpectedly.", FlowBloxLogLevel.Error));
-                        OnLogCreated(new LogCreatedEventArgs(e.ToString(), FlowBloxLogLevel.Error));
-                        return false;
-                    }
-
-                    if (result == null)
-                    {
-                        OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" failed. Please make sure all generation parameters are correct.", FlowBloxLogLevel.Error));
-                        return false;
-                    }
-                    else
-                    {
-                        OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" successful.", FlowBloxLogLevel.Success));
-                        flowBloxGenerationStrategy.Assign(result);
-                    }
-                }
-
-                foreach (var testDefinition in _flowBlock.TestDefinitions)
+                foreach (var testDefinition in _scope == TestScope.All ?
+                     _flowBlock.TestDefinitions :
+                     _flowBlock.TestDefinitions.Where(x => x.RequiredForExecution))
                 {
                     var testExecutor = new FlowBloxTestExecutor();
                     testExecutor.Initialize(testDefinition, _flowBlock);
+                    var runtime = testExecutor.GetRuntime();
+                    runtime.LogMessageCreated += Runtime_LogMessageCreated;
 
-                    var testResult1 = await testExecutor.ExecuteTestAsync();
-                    if (!testResult1.Success)
+                    var testResult = await testExecutor.ExecuteTestAsync();
+                    if (!testResult.Success)
                     {
-                        OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" failed after regeneration.", FlowBloxLogLevel.Error));
-                        return false;
+                        OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" failed, so the generation strategies are executed.", FlowBloxLogLevel.Info));
+                        success = false;
+                    }
+
+                    if (runtimeOwnerTestExecutor == null)
+                    {
+                        runtimeOwnerTestExecutor = testExecutor;
+                        generationRuntime = runtime;
                     }
                     else
                     {
-                        OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" successful after regeneration.", FlowBloxLogLevel.Success));
+                        testExecutor.Shutdown();
+                    }
+
+                    testResults[testDefinition] = testResult;
+                }
+
+                if (!success)
+                {
+                    foreach (var flowBloxGenerationStrategy in _flowBlock.GenerationStrategies)
+                    {
+                        object result;
+                        try
+                        {
+                            result = flowBloxGenerationStrategy.Execute(generationRuntime, testResults);
+                        }
+                        catch(Exception e)
+                        {
+                            OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" failed unexpectedly.", FlowBloxLogLevel.Error));
+                            OnLogCreated(new LogCreatedEventArgs(e.ToString(), FlowBloxLogLevel.Error));
+                            return false;
+                        }
+
+                        if (result == null)
+                        {
+                            OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" failed. Please make sure all generation parameters are correct.", FlowBloxLogLevel.Error));
+                            return false;
+                        }
+                        else
+                        {
+                            OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" successful.", FlowBloxLogLevel.Success));
+                            flowBloxGenerationStrategy.Assign(result);
+                        }
+                    }
+
+                    foreach (var testDefinition in _flowBlock.TestDefinitions)
+                    {
+                        var testExecutor = new FlowBloxTestExecutor();
+                        testExecutor.Initialize(testDefinition, _flowBlock);
+
+                        var testResult1 = await testExecutor.ExecuteTestAsync();
+                        testExecutor.Shutdown();
+
+                        if (!testResult1.Success)
+                        {
+                            OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" failed after regeneration.", FlowBloxLogLevel.Error));
+                            return false;
+                        }
+                        else
+                        {
+                            OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" successful after regeneration.", FlowBloxLogLevel.Success));
+                        }
                     }
                 }
-            }
 
-            return true;
+                return true;
+            }
+            finally
+            {
+                runtimeOwnerTestExecutor?.Shutdown();
+            }
         }
 
         private void Runtime_LogMessageCreated(BaseRuntime runtime, string message, FlowBloxLogLevel logLevel)

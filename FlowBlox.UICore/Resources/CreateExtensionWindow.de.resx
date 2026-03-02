@@ -138,4 +138,34 @@
   <data name="Title" xml:space="preserve">
     <value>Erweiterung Erstellen</value>
   </data>
+  <data name="Header_Title" xml:space="preserve">
+    <value>Erweiterung erstellen</value>
+  </data>
+  <data name="Header_Description" xml:space="preserve">
+    <value>Erstellen Sie eine neue Erweiterung und halten Sie Name/Beschreibung synchron zu den DLL-Metadaten. Nutzen Sie die Toolbar-Aktion, um Metadaten direkt aus einer Bibliothek zu ermitteln.</value>
+  </data>
+  <data name="Toolbar_ExtractMetadata" xml:space="preserve">
+    <value>Metadaten aus Bibliothek ermitteln</value>
+  </data>
+  <data name="Toolbar_ExtractMetadata_Tooltip" xml:space="preserve">
+    <value>Wählen Sie eine DLL-Datei aus und übernehmen Sie Name, Beschreibung und erkannte Version automatisch.</value>
+  </data>
+  <data name="Hint_Metadata" xml:space="preserve">
+    <value>Empfohlener Ablauf: zuerst die Erweiterungs-DLL auswählen, danach die Metadaten prüfen oder anpassen und anschließend die Erweiterung erstellen.</value>
+  </data>
+  <data name="Label_LibraryPath" xml:space="preserve">
+    <value>Bibliothekspfad</value>
+  </data>
+  <data name="Label_DetectedVersion" xml:space="preserve">
+    <value>Erkannte Version</value>
+  </data>
+  <data name="Error_ExtractMetadataFailed" xml:space="preserve">
+    <value>Metadaten konnten aus der ausgewählten Bibliothek nicht ermittelt werden.</value>
+  </data>
+  <data name="Watermark_Name" xml:space="preserve">
+    <value>z. B. Contoso.SampleExtension</value>
+  </data>
+  <data name="Watermark_Description" xml:space="preserve">
+    <value>Kurze Beschreibung, was diese Erweiterung bereitstellt...</value>
+  </data>
 </root>

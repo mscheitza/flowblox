@@ -5,7 +5,7 @@ namespace FlowBlox.Core.Services
 {
     public class FlowBlockToolboxRegistrationService : FlowBlockToolboxRegistrationServiceBase
     {
-        public override IEnumerable<string> GetAllToolboxCategoriesInModule()
+        public override IEnumerable<FlowBloxToolboxCategoryItem> GetAllToolboxCategoriesInModule()
         {
             return
             [
@@ -16,7 +16,8 @@ namespace FlowBlox.Core.Services
                 FlowBloxToolboxCategory.SQL,
                 FlowBloxToolboxCategory.Filter,
                 FlowBloxToolboxCategory.DBConnection,
-                FlowBloxToolboxCategory.ChatTemplates
+                FlowBloxToolboxCategory.ChatTemplates,
+                FlowBloxToolboxCategory.AIPropertyValueGenerationPrompts
             ];
         }
 
@@ -33,7 +34,8 @@ namespace FlowBlox.Core.Services
                 "FlowBlox.Core.Files.globalToolbox_sql_mysql.json",
                 "FlowBlox.Core.Files.globalToolbox_sql_oracle.json",
                 "FlowBlox.Core.Files.globalToolbox_xpath.json",
-                "FlowBlox.Core.Files.globalToolbox_chattemplates.json"
+                "FlowBlox.Core.Files.globalToolbox_chattemplates.json",
+                "FlowBlox.Core.Files.globalToolbox_aipropertyvaluegenerationprompts.json"
             ];
         }
     }

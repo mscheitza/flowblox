@@ -1,9 +1,13 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Attributes.FlowBlox.Core.Attributes;
+using FlowBlox.Core.Authentication;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow.ExecuteProject;
+using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Fields;
@@ -14,16 +18,19 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Text.Json;
 using static FlowBlox.Core.Util.RunnerHostResolver;
+using FlowBlox.Core.Logging;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    // TODO: Auch bei den Extensions sollten wir die Endpoint Uri speichern! Einmal verifizieren!
-
     [FlowBlockUIGroup("ExecuteProjectFlowBlock_Groups_Project", 0)]
     [FlowBlockUIGroup("ExecuteProjectFlowBlock_Groups_Parameters", 1)]
     [Display(Name = "ExecuteProjectFlowBlock_DisplayName", Description = "ExecuteProjectFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class ExecuteProjectFlowBlock : BaseSingleResultFlowBlock
     {
+        private readonly object _projectCacheLock = new();
+        private string _projectCacheKey;
+        private FlowBloxProject _projectCache;
+
         [ConditionallyRequired()]
         [ActivationCondition(ActivationMethod = nameof(IsProjectFileVisible))]
         [Display(
@@ -219,6 +226,121 @@ namespace FlowBlox.Core.Models.FlowBlocks
         {
             var json = JsonSerializer.Serialize(obj, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(path, json);
+        }
+
+        public IEnumerable<string> GetOutputNames()
+        {
+            try
+            {
+                var project = GetOrCacheProject();
+                return project?.FlowBlocks?
+                    .OfType<ProjectOutputFlowBlock>()
+                    .Select(x => x.Name)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                    .ToList() ?? [];
+            }
+            catch (Exception ex)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Error("No output names could be extracted from the project.", ex);
+                return [];
+            }
+        }
+
+        public IEnumerable<string> GetOutputPropertyNames(string outputName)
+        {
+            if (string.IsNullOrWhiteSpace(outputName))
+                return Enumerable.Empty<string>();
+
+            try
+            {
+                var project = GetOrCacheProject();
+                var outputFlowBlock = project?.FlowBlocks?
+                    .OfType<ProjectOutputFlowBlock>()
+                    .FirstOrDefault(x => string.Equals(x.Name, outputName, StringComparison.OrdinalIgnoreCase));
+
+                return outputFlowBlock?.MappingEntries?
+                    .Select(x => x?.OutputPropertyName)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Select(x => x!)
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                    .ToList() ?? [];
+            }
+            catch
+            {
+                return Enumerable.Empty<string>();
+            }
+        }
+
+        private FlowBloxProject GetOrCacheProject()
+        {
+            var cacheKey = BuildProjectCacheKey();
+            if (string.IsNullOrWhiteSpace(cacheKey))
+                return null;
+
+            lock (_projectCacheLock)
+            {
+                if (string.Equals(_projectCacheKey, cacheKey, StringComparison.OrdinalIgnoreCase))
+                    return _projectCache;
+            }
+
+            var project = LoadProjectForSuggestions();
+            if (project == null)
+                return null;
+
+            lock (_projectCacheLock)
+            {
+                _projectCacheKey = cacheKey;
+                _projectCache = project;
+            }
+
+            return project;
+        }
+
+        private string BuildProjectCacheKey()
+        {
+            var resolvedProjectFile = FlowBloxFieldHelper.ReplaceFieldsInString(ProjectFile);
+            var resolvedProjectSpaceGuid = FlowBloxFieldHelper.ReplaceFieldsInString(ProjectSpaceGuid);
+            var versionPart = ProjectSpaceVersion?.ToString();
+
+            if (!string.IsNullOrWhiteSpace(resolvedProjectFile))
+                return $"FILE|{resolvedProjectFile}";
+
+            if (!string.IsNullOrWhiteSpace(resolvedProjectSpaceGuid))
+                return $"SPACE|{resolvedProjectSpaceGuid}|{versionPart}";
+
+            return string.Empty;
+        }
+
+        private FlowBloxProject LoadProjectForSuggestions()
+        {
+            var resolvedProjectFile = FlowBloxFieldHelper.ReplaceFieldsInString(ProjectFile);
+            if (!string.IsNullOrWhiteSpace(resolvedProjectFile) && File.Exists(resolvedProjectFile))
+                return FlowBloxProject.FromFile(resolvedProjectFile);
+
+            var resolvedProjectSpaceGuid = FlowBloxFieldHelper.ReplaceFieldsInString(ProjectSpaceGuid);
+            if (!string.IsNullOrWhiteSpace(resolvedProjectSpaceGuid))
+            {
+                var baseUrl = FlowBloxOptions.GetOptionInstance()
+                    .OptionCollection["General.ProjectApiServiceBaseUrl"]
+                    .Value;
+
+                var webApi = new FlowBloxWebApiService(baseUrl);
+                var token = FlowBloxAccountManager.Instance.GetUserToken(baseUrl);
+
+                return Task.Run(async () => await FlowBloxProject
+                    .FromProjectSpaceGuidAsync(
+                        resolvedProjectSpaceGuid,
+                        ProjectSpaceVersion,
+                        token,
+                        webApi))
+                    .GetAwaiter()
+                    .GetResult();
+            }
+
+            return null;
         }
     }
 }

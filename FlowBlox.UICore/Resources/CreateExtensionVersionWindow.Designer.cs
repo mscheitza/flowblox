@@ -79,11 +79,74 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Metadata could not be extracted from the selected library. ähnelt.
+        /// </summary>
+        public static string Error_ExtractMetadataFailed {
+            get {
+                return ResourceManager.GetString("Error_ExtractMetadataFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select your extension DLL to detect metadata. The version is normalized to the required three-part format Major.Minor.Patch. ähnelt.
+        /// </summary>
+        public static string Header_Description {
+            get {
+                return ResourceManager.GetString("Header_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create extension version ähnelt.
+        /// </summary>
+        public static string Header_Title {
+            get {
+                return ResourceManager.GetString("Header_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The detected version is mapped to Major.Minor.Patch and can be adjusted before creating the extension version. ähnelt.
+        /// </summary>
+        public static string Hint_Metadata {
+            get {
+                return ResourceManager.GetString("Hint_Metadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enter the version number of your extension library here in the format &apos;Major.Minor.Patch&apos;. Note that the entered version number must match the version number of the assembly. ähnelt.
         /// </summary>
         public static string Hint_VersionFormat {
             get {
                 return ResourceManager.GetString("Hint_VersionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Assembly description ähnelt.
+        /// </summary>
+        public static string Label_AssemblyDescription {
+            get {
+                return ResourceManager.GetString("Label_AssemblyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Assembly name ähnelt.
+        /// </summary>
+        public static string Label_AssemblyName {
+            get {
+                return ResourceManager.GetString("Label_AssemblyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Library path ähnelt.
+        /// </summary>
+        public static string Label_LibraryPath {
+            get {
+                return ResourceManager.GetString("Label_LibraryPath", resourceCulture);
             }
         }
         
@@ -106,11 +169,56 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Detect metadata from library ähnelt.
+        /// </summary>
+        public static string Toolbar_ExtractMetadata {
+            get {
+                return ResourceManager.GetString("Toolbar_ExtractMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select a DLL file to detect assembly name, description and version. ähnelt.
+        /// </summary>
+        public static string Toolbar_ExtractMetadata_Tooltip {
+            get {
+                return ResourceManager.GetString("Toolbar_ExtractMetadata_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enter the version number in the format &apos;Major.Minor.Patch&apos;. ähnelt.
         /// </summary>
         public static string ToolTip_Format {
             get {
                 return ResourceManager.GetString("ToolTip_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatically detected from selected DLL ähnelt.
+        /// </summary>
+        public static string Watermark_AssemblyName {
+            get {
+                return ResourceManager.GetString("Watermark_AssemblyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatically detected from selected DLL metadata ähnelt.
+        /// </summary>
+        public static string Watermark_Description {
+            get {
+                return ResourceManager.GetString("Watermark_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die e.g. 1.2.3 ähnelt.
+        /// </summary>
+        public static string Watermark_Version {
+            get {
+                return ResourceManager.GetString("Watermark_Version", resourceCulture);
             }
         }
     }

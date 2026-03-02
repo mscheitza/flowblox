@@ -5,6 +5,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow.ExecuteProject;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
@@ -32,9 +33,25 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);
 
+        [Display(Name = "Execute project source", GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 1)]
+        [AssociatedFlowBlockResolvable()]
+        [FlowBlockUI(
+            Factory = UIFactory.Association,
+            Operations = UIOperations.Link | UIOperations.Unlink,
+            SelectionFilterMethod = nameof(GetPossibleExecuteProjectFlowBlocks),
+            SelectionDisplayMember = nameof(BaseFlowBlock.Name))]
+        public ExecuteProjectFlowBlock AssociatedExecuteProjectFlowBlock { get; set; }
+
+        public IEnumerable<ExecuteProjectFlowBlock> GetPossibleExecuteProjectFlowBlocks()
+        {
+            return FlowBloxRegistryProvider.GetRegistry()
+                .GetFlowBlocks<ExecuteProjectFlowBlock>();
+        }
+
         [Required]
-        [Display(Name = "ProjectOutputIteratorFlowBlock_OutputName", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 1)]
+        [Display(Name = "ProjectOutputIteratorFlowBlock_OutputName", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 2)]
         [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBlockTextBox(Suggestions = true, SuggestionMember = nameof(GetOutputNames))]
         public string OutputName { get; set; }
 
         [Display(Name = "ProjectOutputIteratorFlowBlock_OutputMappings", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Mapping", Order = 0)]
@@ -45,6 +62,18 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public ProjectOutputIteratorFlowBlock()
         {
             OutputMappings = new ObservableCollection<ExecuteProjectOutputMappingEntry>();
+        }
+
+        public IEnumerable<string> GetOutputNames()
+        {
+            var associatedExecuteProjectFb = this.AssociatedExecuteProjectFlowBlock ?? GetPreviousFlowBlockOnPath<ExecuteProjectFlowBlock>(this);
+            return associatedExecuteProjectFb?.GetOutputNames() ?? Enumerable.Empty<string>();
+        }
+
+        public IEnumerable<string> GetOutputPropertyNames()
+        {
+            var associatedExecuteProjectFb = this.AssociatedExecuteProjectFlowBlock ?? GetPreviousFlowBlockOnPath<ExecuteProjectFlowBlock>(this);
+            return associatedExecuteProjectFb?.GetOutputPropertyNames(OutputName) ?? Enumerable.Empty<string>();
         }
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.playlist_play, 16, SKColors.MediumPurple);

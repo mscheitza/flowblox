@@ -153,10 +153,10 @@
 	<data name="BaseFlowBlock_ActivationConditions" xml:space="preserve">
 		<value>Aktivierungsbedingungen</value>
 	</data>
-	<data name="BaseFlowBlock_AssociatedInputReference" xml:space="preserve">
+	<data name="BaseFlowBlock_AssociatedIterationContext" xml:space="preserve">
 		<value>Iterationskontext</value>
 	</data>
-	<data name="BaseFlowBlock_AssociatedInputReference_Tooltip" xml:space="preserve">
+	<data name="BaseFlowBlock_AssociatedIterationContext_Tooltip" xml:space="preserve">
 		<value>Definiert den Flow-Block, dessen Iterationszyklus diesen Block steuert. 
 Bei mehreren eingehenden Pfaden wird der Iterationskontext automatisch auf den ersten gemeinsamen Flow-Block aller Pfade gesetzt und kann nicht geändert werden. 
 Ist nur ein Flow-Block verbunden, kann der Iterationskontext manuell ausgewählt werden. 
@@ -170,6 +170,9 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	</data>
 	<data name="BaseFlowBlock_GenerationStrategies" xml:space="preserve">
 		<value>Generierungen</value>
+	</data>
+	<data name="BaseFlowBlock_GenerationStrategies_Tooltip" xml:space="preserve">
+		<value>Generierungsstrategien dienen dazu, Werte oder Einstellungen für diesen Flow-Block automatisiert abzuleiten. Sie arbeiten mit Testdatensätzen, erzeugen entlang der aktuellen Flow-Chain einen konkreten Input und gleichen das Ergebnis mit den definierten Testerwartungen ab.</value>
 	</data>
 	<data name="BaseFlowBlock_Groups_ActivationConditions" xml:space="preserve">
 		<value>Aktivierung</value>
@@ -200,6 +203,9 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	</data>
 	<data name="BaseFlowBlock_TestDefinitions" xml:space="preserve">
 		<value>Testfälle</value>
+	</data>
+	<data name="BaseFlowBlock_TestDefinitions_Tooltip" xml:space="preserve">
+		<value>Testdefinitionen beschreiben prüfbare Szenarien für diesen Flow-Block. Für erforderliche Felder können konstante Werte hinterlegt oder erwartete Werte aus der kompletten Flow-Chain abgeleitet werden. Die daraus entstehenden InputValues werden anschließend für die Testausführung im Sinne von Test-Driven Design verwendet.</value>
 	</data>
 	<data name="BaseResultFlowBlockUIActions_Generate" xml:space="preserve">
 		<value>Generieren</value>
@@ -560,6 +566,9 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	</data>
 	<data name="FlowBloxComponent_RequiredFields" xml:space="preserve">
 		<value>Erforderliche Felder</value>
+	</data>
+	<data name="FlowBloxComponentUIActions_ManageUserFields" xml:space="preserve">
+		<value>Benutzerfelder verwalten</value>
 	</data>
 	<data name="FlowBloxComponent_Validation_NameRequired" xml:space="preserve">
 		<value>Bitte legen Sie einen eindeutigen Namen fest.</value>
@@ -2210,5 +2219,44 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	</data>
 	<data name="Global_MessageBox_Warning_Title" xml:space="preserve">
 		<value>Warnung</value>
+	</data>
+	<data name="AIPropertyValueGenerationStrategy_DisplayName" xml:space="preserve">
+		<value>KI-Propertywert-Generierung</value>
+	</data>
+	<data name="AIPropertyValueGenerationStrategy_Description" xml:space="preserve">
+		<value>Erzeugt den Wert einer beschreibbaren String-Property (z. B. XPath, CSS-Selektor, Regex) per KI-Prompt anhand von Testfällen. Benötigt mindestens einen Testfall für den Ziel-FlowBlock mit Erwartungsankern (Expected Value) und erwarteter Ergebnisdatensatz-Anzahl.</value>
+	</data>
+	<data name="SequenceDetectionGenerationStrategy_DisplayName" xml:space="preserve">
+		<value>Sequenzerkennungs-Generierung</value>
+	</data>
+	<data name="SequenceDetectionGenerationStrategy_Description" xml:space="preserve">
+		<value>Erzeugt ein Sequenzerkennungsmuster aus Testdaten. Benötigt mindestens zwei Testfälle mit vergleichbaren Eingaben, erwarteten Werten und einer Erwartung zur Anzahl der Ergebnisdatensätze.</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_Regex" xml:space="preserve">
+		<value>Regex</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_XPath" xml:space="preserve">
+		<value>XPath</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_CounterFormat" xml:space="preserve">
+		<value>Zählerformat</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_Format" xml:space="preserve">
+		<value>Format</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_SQL" xml:space="preserve">
+		<value>SQL</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_Filter" xml:space="preserve">
+		<value>Filter</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_DBConnection" xml:space="preserve">
+		<value>Datenbankverbindung</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_ChatTemplates" xml:space="preserve">
+		<value>Chat-Templates</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
+		<value>KI-Propertywert-Prompts</value>
 	</data>
 </root>

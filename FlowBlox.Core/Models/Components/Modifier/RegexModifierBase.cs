@@ -7,7 +7,7 @@ namespace FlowBlox.Core.Models.Components.Modifier
     {
         [Required()]
         [Display(Name = "RegexMatchModifier_Search", Order = 0, ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(ToolboxCategory = FlowBloxToolboxCategory.Regex, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBlockUI(ToolboxCategory = nameof(FlowBloxToolboxCategory.Regex), UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBlockTextBox(IsCodingMode = true)]
         public string Search { get; set; }
     }

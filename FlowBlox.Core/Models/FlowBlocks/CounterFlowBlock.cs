@@ -24,7 +24,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public CounterTypes CounterType { get; set; }
 
         [Display(Name = "CounterFlowBlock_Format", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default, ToolboxCategory = FlowBloxToolboxCategory.CounterFormat)]
+        [FlowBlockUI(Factory = UIFactory.Default, ToolboxCategory = nameof(FlowBloxToolboxCategory.CounterFormat))]
         public string Format { get; set; }
 
         [Display(Name = "CounterFlowBlock_StartValue", ResourceType = typeof(FlowBloxTexts), Order = 2)]

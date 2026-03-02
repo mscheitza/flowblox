@@ -243,4 +243,10 @@ You can add, edit, disable, or remove extensions, as well as create and manage d
   <data name="Error_LoadExtensionsFailed" xml:space="preserve">
     <value>The extensions could not be loaded from the server.</value>
   </data>
+  <data name="Watermark_Changes" xml:space="preserve">
+    <value>What changed compared to the previous version?</value>
+  </data>
+  <data name="Watermark_RuntimeVersion" xml:space="preserve">
+    <value>Automatically detected from archive ZIP</value>
+  </data>
 </root>

@@ -44,6 +44,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         public FrameworkElement Control { get; set; }
 
         public bool UseLabel { get; set; }
+        public string TooltipText { get; set; }
+        public bool HasTooltip => !string.IsNullOrWhiteSpace(TooltipText);
 
         private bool _isActive;
         public bool IsActive

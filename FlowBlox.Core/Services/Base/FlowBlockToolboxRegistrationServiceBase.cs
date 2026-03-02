@@ -10,9 +10,9 @@ namespace FlowBlox.Core.Services.Base
     {
         public abstract IEnumerable<string> GetAllToolboxResourcesInModule();
 
-        public virtual IEnumerable<string> GetAllToolboxCategoriesInModule()
+        public virtual IEnumerable<FlowBloxToolboxCategoryItem> GetAllToolboxCategoriesInModule()
         {
-            return Enumerable.Empty<string>();
+            return Enumerable.Empty<FlowBloxToolboxCategoryItem>();
         }
 
         public void Register()

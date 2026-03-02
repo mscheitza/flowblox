@@ -1,0 +1,44 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="PropertyView.HelpToolTipStyle" TargetType="{x:Type ToolTip}">
+        <Setter Property="Placement" Value="Mouse"/>
+        <Setter Property="MaxWidth" Value="460"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HasDropShadow" Value="False"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToolTip}">
+                    <Border
+                        Background="#FFE9F3FD"
+                        BorderBrush="#FF7EAEDC"
+                        BorderThickness="2"
+                        CornerRadius="8"
+                        Padding="10">
+                        <TextBlock
+                            Text="{TemplateBinding Content}"
+                            TextWrapping="Wrap"
+                            Foreground="#FF305E86"
+                            FontSize="12"
+                            FontFamily="Segoe UI" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PropertyView.HelpIconBorderStyle" TargetType="{x:Type Border}">
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Background" Value="#FF8FBCDF"/>
+        <Setter Property="BorderBrush" Value="#FF6EA2CF"/>
+        <Setter Property="BorderThickness" Value="1.2"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="8,0,0,0"/>
+    </Style>
+</ResourceDictionary>

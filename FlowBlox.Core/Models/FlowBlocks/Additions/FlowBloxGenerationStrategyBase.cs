@@ -1,13 +1,15 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Additions
 {
-    public abstract class FlowBloxGenerationStrategyBase
+    public abstract class FlowBloxGenerationStrategyBase : FlowBloxReactiveObject
     {
         protected FlowBloxGenerationStrategyBase()
         {
@@ -92,8 +94,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             return this.Source.GetPossibleFieldElements();
         }
 
-        public abstract object Execute(Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults);
+        public abstract object Execute(BaseRuntime runtime, Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults);
 
         public abstract void Assign(object value);
     }
 }
+

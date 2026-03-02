@@ -138,4 +138,40 @@
   <data name="Label_Comment" xml:space="preserve">
     <value>Kommentar</value>
   </data>
+  <data name="Header_Title" xml:space="preserve">
+    <value>Erweiterungsversion erstellen</value>
+  </data>
+  <data name="Header_Description" xml:space="preserve">
+    <value>Wählen Sie Ihre Erweiterungs-DLL aus, um Metadaten zu ermitteln. Die Version wird auf das erforderliche dreiteilige Format Major.Minor.Patch normalisiert.</value>
+  </data>
+  <data name="Toolbar_ExtractMetadata" xml:space="preserve">
+    <value>Metadaten aus Bibliothek ermitteln</value>
+  </data>
+  <data name="Toolbar_ExtractMetadata_Tooltip" xml:space="preserve">
+    <value>Wählen Sie eine DLL-Datei aus, um Assembly-Name, Beschreibung und Version zu ermitteln.</value>
+  </data>
+  <data name="Hint_Metadata" xml:space="preserve">
+    <value>Die ermittelte Version wird auf Major.Minor.Patch abgebildet und kann vor dem Erstellen der Erweiterungsversion angepasst werden.</value>
+  </data>
+  <data name="Label_AssemblyName" xml:space="preserve">
+    <value>Assembly-Name</value>
+  </data>
+  <data name="Label_AssemblyDescription" xml:space="preserve">
+    <value>Assembly-Beschreibung</value>
+  </data>
+  <data name="Label_LibraryPath" xml:space="preserve">
+    <value>Bibliothekspfad</value>
+  </data>
+  <data name="Error_ExtractMetadataFailed" xml:space="preserve">
+    <value>Metadaten konnten aus der ausgewählten Bibliothek nicht ermittelt werden.</value>
+  </data>
+  <data name="Watermark_Version" xml:space="preserve">
+    <value>z. B. 1.2.3</value>
+  </data>
+  <data name="Watermark_AssemblyName" xml:space="preserve">
+    <value>Wird automatisch aus der ausgewählten DLL ermittelt</value>
+  </data>
+  <data name="Watermark_Description" xml:space="preserve">
+    <value>Wird automatisch aus den DLL-Metadaten ermittelt</value>
+  </data>
 </root>

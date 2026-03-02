@@ -138,4 +138,34 @@
   <data name="Title" xml:space="preserve">
   <value>Create extension</value>
 </data>
+  <data name="Header_Title" xml:space="preserve">
+    <value>Create extension</value>
+  </data>
+  <data name="Header_Description" xml:space="preserve">
+    <value>Create a new extension and keep name/description aligned with your DLL metadata. Use the toolbar action to detect metadata directly from a library file.</value>
+  </data>
+  <data name="Toolbar_ExtractMetadata" xml:space="preserve">
+    <value>Detect metadata from library</value>
+  </data>
+  <data name="Toolbar_ExtractMetadata_Tooltip" xml:space="preserve">
+    <value>Select a DLL file and fill name, description and detected version automatically.</value>
+  </data>
+  <data name="Hint_Metadata" xml:space="preserve">
+    <value>Recommended workflow: select your extension DLL first, then verify or adjust metadata before creating the extension.</value>
+  </data>
+  <data name="Label_LibraryPath" xml:space="preserve">
+    <value>Library path</value>
+  </data>
+  <data name="Label_DetectedVersion" xml:space="preserve">
+    <value>Detected version</value>
+  </data>
+  <data name="Error_ExtractMetadataFailed" xml:space="preserve">
+    <value>Metadata could not be extracted from the selected library.</value>
+  </data>
+  <data name="Watermark_Name" xml:space="preserve">
+    <value>e.g. Contoso.SampleExtension</value>
+  </data>
+  <data name="Watermark_Description" xml:space="preserve">
+    <value>Short summary of what this extension provides...</value>
+  </data>
 </root>

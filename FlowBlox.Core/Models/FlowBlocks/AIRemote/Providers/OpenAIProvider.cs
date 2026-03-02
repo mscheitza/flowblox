@@ -2,6 +2,7 @@
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -66,28 +67,43 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
         protected override async Task<AIResponse> ExecuteCoreAsync(AIRequest request, CancellationToken ct)
         {
-            var urlBase = string.IsNullOrWhiteSpace(BaseUrl) ? 
+            var resolvedApiKey = FlowBloxFieldHelper.ReplaceFieldsInString(ApiKey);
+            if (string.IsNullOrWhiteSpace(resolvedApiKey))
+            {
+                return new AIResponse
+                {
+                    Success = false,
+                    Error = "OpenAI API key is empty after field resolution."
+                };
+            }
+
+            var resolvedBaseUrl = FlowBloxFieldHelper.ReplaceFieldsInString(BaseUrl);
+            var resolvedOrganizationId = FlowBloxFieldHelper.ReplaceFieldsInString(OrganizationId);
+            var resolvedProjectId = FlowBloxFieldHelper.ReplaceFieldsInString(ProjectId);
+            var resolvedModel = FlowBloxFieldHelper.ReplaceFieldsInString(request.Model);
+
+            var urlBase = string.IsNullOrWhiteSpace(resolvedBaseUrl) ? 
                 "https://api.openai.com/v1" : 
-                BaseUrl.TrimEnd('/');
+                resolvedBaseUrl.TrimEnd('/');
 
             var url = $"{urlBase}/responses";
 
             using var msg = new HttpRequestMessage(HttpMethod.Post, url);
 
             // Auth: Authorization: Bearer
-            msg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", ApiKey);
+            msg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", resolvedApiKey);
 
             // Optional org/project headers
-            if (!string.IsNullOrWhiteSpace(OrganizationId))
-                msg.Headers.TryAddWithoutValidation("OpenAI-Organization", OrganizationId);
+            if (!string.IsNullOrWhiteSpace(resolvedOrganizationId))
+                msg.Headers.TryAddWithoutValidation("OpenAI-Organization", resolvedOrganizationId);
 
-            if (!string.IsNullOrWhiteSpace(ProjectId))
-                msg.Headers.TryAddWithoutValidation("OpenAI-Project", ProjectId);
+            if (!string.IsNullOrWhiteSpace(resolvedProjectId))
+                msg.Headers.TryAddWithoutValidation("OpenAI-Project", resolvedProjectId);
 
             // Build request body (Responses API)
             var body = new JObject
             {
-                ["model"] = request.Model,
+                ["model"] = resolvedModel,
                 ["input"] = request.Prompt,
                 ["store"] = StoreResponses
             };

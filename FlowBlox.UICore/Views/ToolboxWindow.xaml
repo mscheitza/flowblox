@@ -66,7 +66,7 @@
             </i:Interaction.Triggers>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="{x:Static resources:ToolboxWindow.GridView_Column_Type}" DisplayMemberBinding="{Binding ToolboxCategory}" Width="Auto" />
+                    <GridViewColumn Header="{x:Static resources:ToolboxWindow.GridView_Column_Type}" DisplayMemberBinding="{Binding ToolboxCategoryDisplayName}" Width="Auto" />
                     <GridViewColumn Header="{x:Static resources:ToolboxWindow.GridView_Column_Name}" DisplayMemberBinding="{Binding Name}" Width="Auto" />
                 </GridView>
             </ListView.View>
@@ -85,7 +85,12 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Text="{x:Static resources:ToolboxWindow.Label_ToolboxType}" Margin="5"/>
-            <ComboBox Grid.Row="1" ItemsSource="{Binding ToolboxTypes}" SelectedItem="{Binding SelectedToolboxElement.ToolboxCategory}" Margin="5"/>
+            <ComboBox Grid.Row="1"
+                      ItemsSource="{Binding ToolboxTypes}"
+                      DisplayMemberPath="DisplayName"
+                      SelectedValuePath="Name"
+                      SelectedValue="{Binding SelectedToolboxElement.ToolboxCategory}"
+                      Margin="5"/>
 
             <TextBlock Grid.Row="2" Text="{x:Static resources:ToolboxWindow.Label_Name}" Margin="5"/>
             <TextBox Grid.Row="3" Text="{Binding SelectedToolboxElement.Name, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>

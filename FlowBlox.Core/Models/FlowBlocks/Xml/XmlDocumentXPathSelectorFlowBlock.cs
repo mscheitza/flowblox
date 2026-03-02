@@ -30,7 +30,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         }
 
         [Display(Name = "XmlDocumentXPathSelector_XPath", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(ToolboxCategory = FlowBloxToolboxCategory.XPath)]
+        [FlowBlockUI(ToolboxCategory = nameof(FlowBloxToolboxCategory.XPath))]
         [Required]
         public string XPath { get; set; }
 

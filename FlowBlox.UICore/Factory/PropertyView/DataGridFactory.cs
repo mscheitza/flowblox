@@ -134,7 +134,36 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 // Standard-Datentypen (inklusive Nullable<int>, Nullable<long>, etc.)
                 var underlyingType = Nullable.GetUnderlyingType(childProperty.PropertyType);
                 var propertyType = underlyingType ?? childProperty.PropertyType;
-                
+                var textAttribute = childProperty.GetCustomAttribute<FlowBlockTextBoxAttribute>();
+
+                if (propertyType == typeof(string) &&
+                    textAttribute?.Suggestions == true &&
+                    !string.IsNullOrWhiteSpace(textAttribute.SuggestionMember))
+                {
+                    var suggestionItems = ResolveSuggestions(_target, textAttribute.SuggestionMember);
+
+                    var comboStyle = new Style(typeof(ComboBox));
+                    comboStyle.Setters.Add(new Setter(ComboBox.IsEditableProperty, true));
+                    comboStyle.Setters.Add(new Setter(ComboBox.IsTextSearchEnabledProperty, true));
+
+                    var column = new DataGridComboBoxColumn
+                    {
+                        Header = headerText,
+                        ItemsSource = suggestionItems,
+                        SelectedItemBinding = new Binding(childProperty.Name)
+                        {
+                            Mode = IsPropertyReadOnly(childProperty, flowBlockUIAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
+                            UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                            TargetNullValue = string.Empty
+                        },
+                        IsReadOnly = IsPropertyReadOnly(childProperty, flowBlockUIAttribute),
+                        EditingElementStyle = comboStyle
+                    };
+
+                    dataGrid.Columns.Add(column);
+                    continue;
+                }
+                 
                 if (propertyType == typeof(int) ||
                     propertyType == typeof(long) ||
                     propertyType == typeof(float) ||
@@ -406,6 +435,25 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var elementStyle = new Style(typeof(TextBlock));
             elementStyle.Setters.Add(new Setter(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center));
             column.ElementStyle = elementStyle;
+        }
+
+        private static IEnumerable<string> ResolveSuggestions(object target, string suggestionMember)
+        {
+            var method = target?.GetType().GetMethod(suggestionMember, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (method == null || method.GetParameters().Length != 0)
+                return Array.Empty<string>();
+
+            var result = method.Invoke(target, null);
+            if (result is not IEnumerable enumerable)
+                return Array.Empty<string>();
+
+            return enumerable
+                .Cast<object>()
+                .Select(x => x?.ToString())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x!)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         private void OnPreviewKeyDownForFieldSelection(object sender, KeyEventArgs e)

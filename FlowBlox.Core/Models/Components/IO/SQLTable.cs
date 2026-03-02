@@ -28,7 +28,7 @@ namespace FlowBlox.Core.Models.Components.IO
         [Display(Name = "SQLTable_SQLConnectionstring",
                  Description = "SQLTable_SQLConnectionstring_Tooltip",
                  ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = FlowBloxToolboxCategory.DBConnection)]
+        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.DBConnection))]
         [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
         public string SQLConnectionstring { get; set; }
 

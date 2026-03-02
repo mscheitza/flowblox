@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+using FlowBlox.Core.Models.Components;
+using Newtonsoft.Json;
 
 namespace FlowBlox.UICore.Models.Toolbox
 {
     [Serializable()]
     public class ToolboxElement
     {
-        public string ToolboxCategory { get; set; } 
+        public string ToolboxCategory { get; set; }
 
         public string Name { get; set; }
 
@@ -18,5 +19,8 @@ namespace FlowBlox.UICore.Models.Toolbox
 
         [JsonIgnore]
         public bool IsEditable { get; set; }
+
+        [JsonIgnore]
+        public string ToolboxCategoryDisplayName => FlowBloxToolboxCategory.GetDisplayName(ToolboxCategory);
     }
 }

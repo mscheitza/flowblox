@@ -155,38 +155,43 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
 
-                <!-- Detail Panel for Extension -->
-                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10" Visibility="{Binding SelectedExtension, Converter={StaticResource NullToVisibilityConverter}}">
-                    <!-- Extension Details -->
-                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_ExtensionName}" FontWeight="Bold" />
-                    <TextBox Text="{Binding SelectedExtension.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="16" IsReadOnly="True"/>
+                <ScrollViewer Grid.Column="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <Grid Margin="10">
+                        <!-- Detail Panel for Extension -->
+                        <StackPanel Orientation="Vertical" Visibility="{Binding SelectedExtension, Converter={StaticResource NullToVisibilityConverter}}">
+                            <!-- Extension Details -->
+                            <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_ExtensionName}" FontWeight="Bold" />
+                            <TextBox Text="{Binding SelectedExtension.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="16" IsReadOnly="True"/>
 
-                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Description}" Margin="0,10,0,0"/>
-                    <TextBox Text="{Binding SelectedExtension.Description, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10"/>
+                            <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Description}" Margin="0,10,0,0"/>
+                            <TextBox Text="{Binding SelectedExtension.Description, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10"/>
 
-                    <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Guid}" />
-                    <TextBlock Text="{Binding SelectedExtension.Guid}" FontStyle="Italic" Margin="0,5,0,10"/>
+                            <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Guid}" />
+                            <TextBlock Text="{Binding SelectedExtension.Guid}" FontStyle="Italic" Margin="0,5,0,10"/>
 
-                    <!-- Active Checkbox for Extension -->
-                    <CheckBox Content="{x:Static resources:ManageUserExtensionsWindow.CheckBox_Extension_Active}"
-                          IsChecked="{Binding SelectedExtension.Active, UpdateSourceTrigger=PropertyChanged}"
-                          Margin="0,10,0,0"/>
+                            <!-- Active Checkbox for Extension -->
+                            <CheckBox Content="{x:Static resources:ManageUserExtensionsWindow.CheckBox_Extension_Active}"
+                                  IsChecked="{Binding SelectedExtension.Active, UpdateSourceTrigger=PropertyChanged}"
+                                  Margin="0,10,0,0"/>
 
-                    <!-- Save Changes Button for Extension -->
-                    <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges}"
-                        Command="{Binding SaveChangesCommand}"
-                        ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges_Tooltip}"
-                        Margin="0,10,0,0" HorizontalAlignment="Right" />
-                </StackPanel>
+                            <!-- Save Changes Button for Extension -->
+                            <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges}"
+                                Command="{Binding SaveChangesCommand}"
+                                ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges_Tooltip}"
+                                Margin="0,10,0,0" HorizontalAlignment="Right" />
+                        </StackPanel>
 
-                <!-- Detail Panel for Version -->
-                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10" Visibility="{Binding SelectedVersion, Converter={StaticResource NullToVisibilityConverter}}">
+                        <!-- Detail Panel for Version -->
+                        <StackPanel Orientation="Vertical" Visibility="{Binding SelectedVersion, Converter={StaticResource NullToVisibilityConverter}}">
                     <!-- Version Details -->
                     <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Version}" />
                     <TextBlock Text="{Binding SelectedVersion.Version}" FontSize="16"/>
 
                     <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_Changes}" Margin="0,10,0,0"/>
-                    <TextBox Text="{Binding SelectedVersion.Changes, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" AcceptsReturn="True" Height="50" VerticalScrollBarVisibility="Auto"/>
+                    <TextBox Text="{Binding SelectedVersion.Changes, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,10" AcceptsReturn="True" Height="50" VerticalScrollBarVisibility="Auto"
+                             mah:TextBoxHelper.Watermark="{x:Static resources:ManageUserExtensionsWindow.Watermark_Changes}"/>
 
                     <!-- File Path for Archive -->
                     <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_ArchivePath}" Margin="0,10,0,0"/>
@@ -278,7 +283,8 @@
                         <StackPanel>
                             <!-- Label and TextBox for RuntimeVersion -->
                             <Label Content="{x:Static resources:ManageUserExtensionsWindow.Label_RuntimeVersion}" FontWeight="Bold" />
-                            <TextBox Text="{Binding SelectedVersion.RuntimeVersion}" FontStyle="Italic" Margin="0,5,0,10" IsReadOnly="True" />
+                            <TextBox Text="{Binding SelectedVersion.RuntimeVersion}" FontStyle="Italic" Margin="0,5,0,10" IsReadOnly="True"
+                                     mah:TextBoxHelper.Watermark="{x:Static resources:ManageUserExtensionsWindow.Watermark_RuntimeVersion}" />
 
                             <!-- Read-Only ListView for Dependencies -->
                             <ListView ItemsSource="{Binding SelectedVersion.Dependencies}" Height="100">
@@ -306,7 +312,9 @@
                         ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges_Tooltip}"
                         Margin="10,10,0,0" HorizontalAlignment="Right" />
                     </StackPanel>
-                </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
             </Grid>
         </Grid>
     </DockPanel>

@@ -63,9 +63,29 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] account_cog {
+            get {
+                object obj = ResourceManager.GetObject("account_cog", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] arrow_right_thin {
             get {
                 object obj = ResourceManager.GetObject("arrow_right_thin", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] auto_fix {
+            get {
+                object obj = ResourceManager.GetObject("auto_fix", resourceCulture);
                 return ((byte[])(obj));
             }
         }

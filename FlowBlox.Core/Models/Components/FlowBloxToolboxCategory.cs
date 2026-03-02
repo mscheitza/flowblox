@@ -1,7 +1,7 @@
-﻿using FlowBlox.Core.Constants;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
-using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox.Core.Models.Components
 {
@@ -12,14 +12,52 @@ namespace FlowBlox.Core.Models.Components
             InvokeRegistration();
         }
 
-        public const string Regex = nameof(Regex);
-        public const string XPath = nameof(XPath);
-        public const string CounterFormat = nameof(CounterFormat);
-        public const string Format = nameof(Format);
-        public const string SQL = nameof(SQL);
-        public const string Filter = nameof(Filter);
-        public const string DBConnection = nameof(DBConnection);
-        public const string ChatTemplates = nameof(ChatTemplates);
+        public static readonly FlowBloxToolboxCategoryItem Regex = new(
+            nameof(Regex),
+            "FlowBloxToolboxCategory_Regex",
+            typeof(FlowBloxTexts));
+
+        public static readonly FlowBloxToolboxCategoryItem XPath = new(
+            nameof(XPath),
+            "FlowBloxToolboxCategory_XPath",
+            typeof(FlowBloxTexts));
+
+        public static readonly FlowBloxToolboxCategoryItem CounterFormat = new(
+            nameof(CounterFormat),
+            "FlowBloxToolboxCategory_CounterFormat",
+            typeof(FlowBloxTexts));
+
+        public static readonly FlowBloxToolboxCategoryItem Format = new(
+            nameof(Format),
+            "FlowBloxToolboxCategory_Format",
+            typeof(FlowBloxTexts));
+
+        public static readonly FlowBloxToolboxCategoryItem SQL = new(
+            nameof(SQL),
+            "FlowBloxToolboxCategory_SQL",
+            typeof(FlowBloxTexts));
+
+        public static readonly FlowBloxToolboxCategoryItem Filter = new(
+            nameof(Filter),
+            "FlowBloxToolboxCategory_Filter",
+            typeof(FlowBloxTexts));
+
+        public static readonly FlowBloxToolboxCategoryItem DBConnection = new(
+            nameof(DBConnection),
+            "FlowBloxToolboxCategory_DBConnection",
+            typeof(FlowBloxTexts));
+
+        public static readonly FlowBloxToolboxCategoryItem ChatTemplates = new(
+            nameof(ChatTemplates),
+            "FlowBloxToolboxCategory_ChatTemplates",
+            typeof(FlowBloxTexts));
+
+        public static readonly FlowBloxToolboxCategoryItem AIPropertyValueGenerationPrompts = new(
+            nameof(AIPropertyValueGenerationPrompts),
+            "FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts",
+            typeof(FlowBloxTexts));
+
+        private static readonly Dictionary<string, FlowBloxToolboxCategoryItem> _registry = new(StringComparer.Ordinal);
 
         internal static void InvokeRegistration()
         {
@@ -32,13 +70,32 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
-        private static readonly HashSet<string> _registry = new HashSet<string>();
-
-        public static void Register(string toolboxCategory)
+        public static void Register(FlowBloxToolboxCategoryItem toolboxCategory)
         {
-            _registry.AddIfNotExists(toolboxCategory);
+            if (toolboxCategory == null)
+                throw new ArgumentNullException(nameof(toolboxCategory));
+
+            _registry[toolboxCategory.Name] = toolboxCategory;
         }
 
-        public static IReadOnlyCollection<string> GetAll() => _registry;
+        public static IReadOnlyCollection<FlowBloxToolboxCategoryItem> GetAllCategories()
+        {
+            return _registry.Values
+                .OrderBy(x => x.Name)
+                .ToList();
+        }
+
+        public static FlowBloxToolboxCategoryItem GetCategoryOrDefault(string categoryName)
+        {
+            if (!string.IsNullOrWhiteSpace(categoryName) && _registry.TryGetValue(categoryName, out var category))
+                return category;
+
+            return new FlowBloxToolboxCategoryItem(categoryName ?? string.Empty);
+        }
+
+        public static string GetDisplayName(string categoryName)
+        {
+            return GetCategoryOrDefault(categoryName).GetDisplayName();
+        }
     }
 }

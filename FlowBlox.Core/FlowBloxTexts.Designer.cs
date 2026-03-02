@@ -250,6 +250,168 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generates a writable string property value (for example XPath, CSS selector, regex) using an AI prompt and test-driven expectations. Requires at least one test case for the target flow block, including expected value anchors and expected dataset count. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_Description {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Property Value Generation ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_DisplayName {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max tokens ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_MaxTokens {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_MaxTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional limit for generated output tokens. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_MaxTokens_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_MaxTokens_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Model override ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_ModelOverride {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_ModelOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional model name to override the provider default for this strategy. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_ModelOverride_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_ModelOverride_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Prompt ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_PromptTemplate {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_PromptTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The prompt template used for generation. Placeholders are resolved from test context and available fields. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_PromptTemplate_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_PromptTemplate_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Provider ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_Provider {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select the AI provider (e.g., OpenAI, Anthropic) used to generate the target property value. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_Provider_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_Provider_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die System instruction ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_SystemInstruction {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_SystemInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional system instruction to guide the AI output for this generation strategy. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_SystemInstruction_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_SystemInstruction_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target property name ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_TargetPropertyName {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_TargetPropertyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Name of the writable string property on the flow block that should receive the generated value. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_TargetPropertyName_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_TargetPropertyName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Temperature ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_Temperature {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_Temperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls randomness of generated values. Use 0 for deterministic results. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_Temperature_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_Temperature_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout override (seconds) ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_TimeoutSecondsOverride {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_TimeoutSecondsOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional timeout override for this strategy execution. If empty, the provider default timeout is used. ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_TimeoutSecondsOverride_Tooltip {
+            get {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_TimeoutSecondsOverride_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die API key ähnelt.
         /// </summary>
         public static string AIProvider_ApiKey {
@@ -423,21 +585,21 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Iteration Context ähnelt.
         /// </summary>
-        public static string BaseFlowBlock_AssociatedInputReference {
+        public static string BaseFlowBlock_AssociatedIterationContext {
             get {
-                return ResourceManager.GetString("BaseFlowBlock_AssociatedInputReference", resourceCulture);
+                return ResourceManager.GetString("BaseFlowBlock_AssociatedIterationContext", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Defines the flow block whose iteration lifecycle controls this block. 
-        ///		When multiple incoming paths exist, the iteration context is automatically set to the first common flow block across all paths and cannot be changed. 
-        ///		If only one flow block is connected, the iteration context can be selected manually. 
-        ///		All inputs are collected during the referenced block&apos;s iteration and this flow block executes once the iteration has completed. ähnelt.
+        ///When multiple incoming paths exist, the iteration context is automatically set to the first common flow block across all paths and cannot be changed. 
+        ///If only one flow block is connected, the iteration context can be selected manually. 
+        ///All inputs are collected during the referenced block&apos;s iteration and this flow block executes once the iteration has completed. ähnelt.
         /// </summary>
-        public static string BaseFlowBlock_AssociatedInputReference_Tooltip {
+        public static string BaseFlowBlock_AssociatedIterationContext_Tooltip {
             get {
-                return ResourceManager.GetString("BaseFlowBlock_AssociatedInputReference_Tooltip", resourceCulture);
+                return ResourceManager.GetString("BaseFlowBlock_AssociatedIterationContext_Tooltip", resourceCulture);
             }
         }
         
@@ -465,6 +627,15 @@ namespace FlowBlox.Core {
         public static string BaseFlowBlock_GenerationStrategies {
             get {
                 return ResourceManager.GetString("BaseFlowBlock_GenerationStrategies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generation strategies automatically derive values or configuration settings for this flow block. They run on test datasets, build concrete input from the current flow chain, and validate the generated result against the defined test expectations. ähnelt.
+        /// </summary>
+        public static string BaseFlowBlock_GenerationStrategies_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseFlowBlock_GenerationStrategies_Tooltip", resourceCulture);
             }
         }
         
@@ -555,6 +726,15 @@ namespace FlowBlox.Core {
         public static string BaseFlowBlock_TestDefinitions {
             get {
                 return ResourceManager.GetString("BaseFlowBlock_TestDefinitions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test definitions describe verifiable scenarios for this flow block. For required fields, you can either set constant values or derive expected values from the complete flow chain. The resulting input values are then used to execute tests in a test-driven design workflow. ähnelt.
+        /// </summary>
+        public static string BaseFlowBlock_TestDefinitions_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseFlowBlock_TestDefinitions_Tooltip", resourceCulture);
             }
         }
         
@@ -1945,6 +2125,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage user fields ähnelt.
+        /// </summary>
+        public static string FlowBloxComponentUIActions_ManageUserFields {
+            get {
+                return ResourceManager.GetString("FlowBloxComponentUIActions_ManageUserFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test case configuration ähnelt.
         /// </summary>
         public static string FlowBloxTestConfiguration {
@@ -2049,6 +2238,87 @@ namespace FlowBlox.Core {
         public static string FlowBloxTestDefinition_RequiredForExecution {
             get {
                 return ResourceManager.GetString("FlowBloxTestDefinition_RequiredForExecution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Property Value Prompts ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Chat Templates ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_ChatTemplates {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_ChatTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Counter Format ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_CounterFormat {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_CounterFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Database Connection ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_DBConnection {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_DBConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Filter ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_Filter {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Format ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_Format {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Regex ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_Regex {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_Regex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SQL ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_SQL {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_SQL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_XPath {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_XPath", resourceCulture);
             }
         }
         
@@ -4603,6 +4873,24 @@ namespace FlowBlox.Core {
         public static string SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds {
             get {
                 return ResourceManager.GetString("SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generates a sequence detection pattern from test data. Requires at least two test cases with comparable input content, expected values, and an expectation for the number of result datasets. ähnelt.
+        /// </summary>
+        public static string SequenceDetectionGenerationStrategy_Description {
+            get {
+                return ResourceManager.GetString("SequenceDetectionGenerationStrategy_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sequence Detection Generation ähnelt.
+        /// </summary>
+        public static string SequenceDetectionGenerationStrategy_DisplayName {
+            get {
+                return ResourceManager.GetString("SequenceDetectionGenerationStrategy_DisplayName", resourceCulture);
             }
         }
         

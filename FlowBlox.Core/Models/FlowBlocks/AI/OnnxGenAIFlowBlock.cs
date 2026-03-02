@@ -100,7 +100,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_ChatTemplate", Description = "OnnxRuntimeGenAIFlowBlock_ChatTemplate_Tooltip",
             GroupName = "OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", ResourceType = typeof(FlowBloxTexts), Order = 8)]
         [FlowBlockTextBox(IsCodingMode = true, MultiLine = true)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = FlowBloxToolboxCategory.ChatTemplates)]
+        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.ChatTemplates))]
         public string ChatTemplate { get; set; }
 
         #endregion

@@ -1622,6 +1622,33 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Invoke ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_labelInvoke_Text {
+            get {
+                return ResourceManager.GetString("ProjectPanel_labelInvoke_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Iteration Context ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_labelIterationContext_Text {
+            get {
+                return ResourceManager.GetString("ProjectPanel_labelIterationContext_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recursive Call ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_labelRecursiveCall_Text {
+            get {
+                return ResourceManager.GetString("ProjectPanel_labelRecursiveCall_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Apply ähnelt.
         /// </summary>
         internal static string ProjectView_btApply_Text {

@@ -9,23 +9,27 @@ namespace FlowBlox.Core.Models.Project
     [Serializable()]
     public class FlowBloxProjectExtensionDependency
     {
+        public string EndpointUri { get; set; }
+
         public string ExtensionName { get; set; }
 
         public Guid ExtensionGuid { get; set; }
 
         public string Version { get; set; }
 
-        public FlowBloxProjectExtensionDependency(string extensionName, Guid extensionGuid, string version)
+        public FlowBloxProjectExtensionDependency(string extensionName, Guid extensionGuid, string version, string endpointUri)
         {
             ExtensionName = extensionName;
             ExtensionGuid = extensionGuid;
             Version = version;
+            EndpointUri = endpointUri;
         }
     }
 
     [Serializable()]
     public class FlowBloxProjectExtension : INotifyPropertyChanged
     {
+        private string _endpointUri;
         private string _name;
         private string _version;
         private string _offlineExtensionPath;
@@ -34,6 +38,20 @@ namespace FlowBlox.Core.Models.Project
         private List<FlowBloxProjectExtensionDependency> _dependencies;
 
         public bool Online => _guid != null;
+
+        public string EndpointUri
+        {
+            get => _endpointUri;
+            set
+            {
+                if (_endpointUri != value)
+                {
+                    _endpointUri = value;
+                    _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() => new FlowBloxWebApiService(_endpointUri));
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public string Name
         {
@@ -87,7 +105,6 @@ namespace FlowBlox.Core.Models.Project
             }
         }
 
-
         public string OfflineExtensionPath
         {
             get => _offlineExtensionPath;
@@ -125,7 +142,7 @@ namespace FlowBlox.Core.Models.Project
 
                 if (Online)
                 {
-                    if (!Directory.Exists(targetDirectory) || 
+                    if (!Directory.Exists(targetDirectory) ||
                         !Directory.GetFiles(targetDirectory).Any(x => !x.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)))
                     {
                         Directory.CreateDirectory(targetDirectory);
@@ -193,12 +210,12 @@ namespace FlowBlox.Core.Models.Project
             return true;
         }
 
+        private Lazy<FlowBloxWebApiService> _flowBloxWebApiService;
 
-        private Lazy<FlowBloxWebApiService> _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>
+        public FlowBloxProjectExtension()
         {
-            var webApiServiceUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ExtensionApiServiceBaseUrl"].Value;
-            return new FlowBloxWebApiService(webApiServiceUrl);
-        });
+            _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() => new FlowBloxWebApiService(_endpointUri));
+        }
 
         private async Task DownloadVersionContentAsync(string targetDirectory)
         {

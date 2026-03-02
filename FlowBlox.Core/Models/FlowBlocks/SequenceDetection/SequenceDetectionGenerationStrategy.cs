@@ -2,13 +2,16 @@
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.SequenceDetection;
 using FlowBlox.SequenceDetection.Model;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.SequenceDetection
 {
+    [Display(Name = "SequenceDetectionGenerationStrategy_DisplayName", Description = "SequenceDetectionGenerationStrategy_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSupportedTypes(typeof(SequenceDetectionFlowBlock))]
     public class SequenceDetectionGenerationStrategy : FlowBloxGenerationStrategyBase
     {
@@ -37,7 +40,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceDetection
             sequenceDetectionFlowBlock.SequenceDetectionPattern = JsonConvert.SerializeObject(value, _jsonSerializerSettings);
         }
 
-        public override object Execute(Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)
+        public override object Execute(BaseRuntime runtime, Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)
         {
             if (testResults.Count < 2)
                 throw new InvalidOperationException("There must be at least 2 automatically executed test cases.");

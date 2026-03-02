@@ -25,7 +25,7 @@ pause
 echo Step 2: APPLY cleanup (with backup)
 echo --------------------------------------------
 
-powershell -ExecutionPolicy Bypass -File "%SCRIPT%" -ResxRoot "%RESX_ROOT%" -CodeRoot "%CODE_ROOT%" -Apply -Backup
+powershell -ExecutionPolicy Bypass -File "%SCRIPT%" -ResxRoot "%RESX_ROOT%" -CodeRoot "%CODE_ROOT%" -Apply
 
 echo.
 pause

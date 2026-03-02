@@ -26,7 +26,7 @@ namespace FlowBlox.Core.Models.Components
         [ActivationCondition(MemberName = nameof(FieldType), Value = FieldTypes.DateTime)]
         [ConditionallyRequired()]
         [Display(Name = "TypeElement_DateFormat", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(ToolboxCategory = FlowBloxToolboxCategory.Format)]
+        [FlowBlockUI(ToolboxCategory = nameof(FlowBloxToolboxCategory.Format))]
         public string DateFormat { get; set; }
 
         [ActivationCondition(MemberName = nameof(FieldType), Values = new object[] { FieldTypes.Float, FieldTypes.Double })]

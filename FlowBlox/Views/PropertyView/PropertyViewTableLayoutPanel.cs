@@ -532,7 +532,7 @@ namespace FlowBlox.Views.PropertyView
                 };
                 panel.Controls.Add(button);
 
-                if (flowBlockUIAttribute.ToolboxCategory == FlowBloxToolboxCategory.Regex)
+                if (flowBlockUIAttribute.ToolboxCategory == nameof(FlowBloxToolboxCategory.Regex))
                     FieldUIUtil.RegisterRegexOnParameterSelectedAction(textBox);
                 else if (flowBlockUIAttribute.UiOptions.HasFlag(Options.EnableFieldSelection))
                     FieldUIUtil.RegisterOnParameterSelectedAction(_target as BaseFlowBlock, textBox);

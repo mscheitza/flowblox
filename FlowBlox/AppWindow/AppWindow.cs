@@ -139,6 +139,7 @@ namespace FlowBlox.AppWindow
             itmOpenProject.Enabled = !isRuntimeActive;
             itmCloseProject.Enabled = isProjectActive && !isRuntimeActive;
             itmUserFields.Enabled = isProjectActive && !isRuntimeActive;
+            itmManageInputTemplates.Enabled = isProjectActive && !isRuntimeActive;
 
             itmEditProject.Enabled = isProjectActive && (!isRuntimeActive);
             itmSaveProject.Enabled = isProjectActive && (!isRuntimeActive);
@@ -1171,7 +1172,8 @@ namespace FlowBlox.AppWindow
 
         private void itmFbExtensions_Click(object sender, EventArgs e)
         {
-            var dialog = new ExtensionsWindow();
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            var dialog = new ExtensionsWindow(project);
             WindowsFormWPFHelper.ShowDialog(dialog, this);
         }
 

@@ -104,6 +104,7 @@ namespace FlowBlox.UICore.ViewModels
         public ICommand LoginCommand { get; private set; }
         public RelayCommand ManageOwnExtensionsCommand { get; }
         public ICommand LogoutCommand { get; private set; }
+        public RelayCommand CloseCommand { get; }
         public RelayCommand ReloadExtensionsCommand { get; private set; }
 
         public FbUserData ActiveUser
@@ -171,6 +172,7 @@ namespace FlowBlox.UICore.ViewModels
                 CommandManager.InvalidateRequerySuggested();
             };
 
+            ExecuteSearch();
             _ = LoadApiMetadataAsync();
         }
 
@@ -206,6 +208,8 @@ namespace FlowBlox.UICore.ViewModels
                 ActiveUser = null;
                 UserToken = null;
             });
+
+            CloseCommand = new RelayCommand(() => _ownerWindow?.Close());
             
 
             // Initialisierung der ObservableCollections
@@ -498,6 +502,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private ExtensionRepository _extensionRepository;
         private ExtensionCompatibilityValidator _compatibilityValidator;
+        private ExtensionDependencyPresenceValidator _dependencyPresenceValidator;
         private void CreateExtensionRepositoryAsync()
         {
             _extensionRepository = new ExtensionRepository(_flowBloxWebApiService.Value);
@@ -505,28 +510,8 @@ namespace FlowBlox.UICore.ViewModels
                 _extensionRepository.AddExtension(SelectedExtension);
 
             _compatibilityValidator = new ExtensionCompatibilityValidator(_extensionRepository);
+            _dependencyPresenceValidator = new ExtensionDependencyPresenceValidator();
         }
-
-        bool IsUiAssembly(string assemblyPath)
-        {
-            try
-            {
-                var asmName = AssemblyName.GetAssemblyName(assemblyPath);
-                var assembly = Assembly.ReflectionOnlyLoadFrom(assemblyPath);
-                var referencedAssemblies = assembly.GetReferencedAssemblies();
-
-                return referencedAssemblies.Any(a =>
-                    a.Name == "PresentationFramework" ||
-                    a.Name == "PresentationCore" ||
-                    a.Name == "WindowsBase" ||
-                    a.Name.StartsWith("System.Windows"));
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
 
         private async void AddExtension(object parameter)
         {
@@ -535,6 +520,13 @@ namespace FlowBlox.UICore.ViewModels
                 try
                 {
                     CreateExtensionRepositoryAsync();
+
+                    var dependencyPresenceValidationResult = _dependencyPresenceValidator.Validate(SelectedExtension, SelectedVersion, InstalledExtensions);
+                    if (dependencyPresenceValidationResult != ValidationResult.Success)
+                    {
+                        await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Error, dependencyPresenceValidationResult.ErrorMessage);
+                        return;
+                    }
 
                     // Validierung der Kompatibilität
                     var validationResult = await _compatibilityValidator.ValidateAsync(SelectedExtension, SelectedVersion, InstalledExtensions);
@@ -548,6 +540,7 @@ namespace FlowBlox.UICore.ViewModels
                     // Mappe die Dependencies von SelectedVersion auf FlowBloxProjectExtensionDependency
                     var dependencies = SelectedVersion.Dependencies
                         .Select(dep => new FlowBloxProjectExtensionDependency(
+                            endpointUri: _flowBloxWebApiService.Value.BaseUrl,
                             extensionName: dep.ExtensionName,
                             extensionGuid: dep.ExtensionGuid,
                             version: dep.Version))
@@ -555,6 +548,7 @@ namespace FlowBlox.UICore.ViewModels
 
                     var newExtension = new FlowBloxProjectExtension
                     {
+                        EndpointUri = _flowBloxWebApiService.Value.BaseUrl,
                         ExtensionGuid = SelectedExtension.Guid,
                         Name = SelectedExtension.Name,
                         Version = SelectedVersion.Version,
@@ -612,6 +606,13 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     CreateExtensionRepositoryAsync();
 
+                    var dependencyPresenceValidationResult = _dependencyPresenceValidator.Validate(SelectedExtension, SelectedVersion, InstalledExtensions);
+                    if (dependencyPresenceValidationResult != ValidationResult.Success)
+                    {
+                        await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_ownerWindow, MessageBoxType.Error, dependencyPresenceValidationResult.ErrorMessage);
+                        return;
+                    }
+
                     // Compatibility validation
                     var validationResult = await _compatibilityValidator.ValidateAsync(SelectedExtension, SelectedVersion, InstalledExtensions);
                     if (validationResult != ValidationResult.Success)
@@ -628,6 +629,7 @@ namespace FlowBlox.UICore.ViewModels
                         extensionToUpdate.Version = SelectedVersion.Version;
                         extensionToUpdate.Dependencies = SelectedVersion.Dependencies
                             .Select(dep => new FlowBloxProjectExtensionDependency(
+                                endpointUri: _flowBloxWebApiService.Value.BaseUrl,
                                 extensionName: dep.ExtensionName,
                                 extensionGuid: dep.ExtensionGuid,
                                 version: dep.Version))

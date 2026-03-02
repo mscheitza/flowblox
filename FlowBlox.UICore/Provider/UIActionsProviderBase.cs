@@ -24,7 +24,13 @@ namespace FlowBlox.UICore.Provider
 
             foreach (var type in actionTypes)
             {
-                var constructor = type.GetConstructor([component.GetType()]);
+                var constructor = type.GetConstructors()
+                    .FirstOrDefault(c =>
+                    {
+                        var parameters = c.GetParameters();
+                        return parameters.Length == 1 &&
+                               parameters[0].ParameterType.IsAssignableFrom(componentType);
+                    });
                 if (constructor == null)
                     continue;
 

@@ -204,6 +204,9 @@
   <data name="Button_Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="Button_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
   <data name="Label_Changes" xml:space="preserve">
     <value>Changes</value>
   </data>

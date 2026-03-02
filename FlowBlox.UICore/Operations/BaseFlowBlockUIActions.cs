@@ -3,8 +3,11 @@ using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Views;
+using SkiaSharp;
+using Svg;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.UICore.Operations
@@ -28,6 +31,8 @@ namespace FlowBlox.UICore.Operations
 
             return true;
         }
+
+        public SKImage GenerateIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.auto_fix, 16,SKColors.SeaGreen);
 
         [Display(Name = "BaseResultFlowBlockUIActions_Generate", ResourceType = typeof(FlowBloxTexts))]
         public void Generate()

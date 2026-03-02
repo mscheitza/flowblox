@@ -223,7 +223,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The extensions could not be loaded from the server. ähnelt.
         /// </summary>
         public static string Error_LoadExtensionsFailed {
             get {
@@ -429,6 +429,24 @@ namespace FlowBlox.UICore.Resources {
         public static string VersionView_Expander_Notes_Note7 {
             get {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Note7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die What changed compared to the previous version? ähnelt.
+        /// </summary>
+        public static string Watermark_Changes {
+            get {
+                return ResourceManager.GetString("Watermark_Changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatically detected from archive ZIP ähnelt.
+        /// </summary>
+        public static string Watermark_RuntimeVersion {
+            get {
+                return ResourceManager.GetString("Watermark_RuntimeVersion", resourceCulture);
             }
         }
     }

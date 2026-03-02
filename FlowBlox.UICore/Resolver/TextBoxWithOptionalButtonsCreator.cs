@@ -8,6 +8,7 @@ using FlowBlox.UICore.Factory.Adapter;
 using FlowBlox.UICore.Factory.PropertyView;
 using FlowBlox.UICore.Interfaces;
 using MahApps.Metro.IconPacks;
+using System.Collections;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,6 +41,24 @@ namespace FlowBlox.UICore.Resolver
             {
                 var factory = new MultilineTextBoxFactory(property, target, readOnly);
                 baseTextBox = factory.Create();
+            }
+            else if (textAttribute?.Suggestions == true &&
+                     !string.IsNullOrWhiteSpace(textAttribute.SuggestionMember) &&
+                     property.PropertyType == typeof(string))
+            {
+                var comboBox = new ComboBox
+                {
+                    IsEditable = true,
+                    IsTextSearchEnabled = true,
+                    IsReadOnly = readOnly,
+                    IsEnabled = !readOnly
+                };
+
+                var suggestions = ResolveSuggestions(target, textAttribute.SuggestionMember);
+                comboBox.ItemsSource = suggestions;
+                comboBox.SetBinding(ComboBox.TextProperty, binding);
+                comboBox.SelectionChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
+                baseTextBox = comboBox;
             }
             else
             {
@@ -215,7 +234,7 @@ namespace FlowBlox.UICore.Resolver
 
                 if (!readOnly)
                 {
-                    if (flowBlockUI.ToolboxCategory == FlowBloxToolboxCategory.Regex)
+                    if (flowBlockUI.ToolboxCategory == nameof(FlowBloxToolboxCategory.Regex))
                     {
                         Utilities.TextBoxHelper.RegisterRegexOnParameterSelectedAction(textBoxControl, _window);
                     }
@@ -237,6 +256,9 @@ namespace FlowBlox.UICore.Resolver
         {
             if (frameworkElement is TextBox textBox)
                 return new WpfTextBoxAdapter(textBox);
+
+            if (frameworkElement is ComboBox comboBox)
+                return new ComboBoxAdapter(comboBox);
 
             if (frameworkElement is ICSharpCode.AvalonEdit.TextEditor editor)
                 return new AvalonEditAdapter(editor);
@@ -268,6 +290,25 @@ namespace FlowBlox.UICore.Resolver
             }
 
             throw new InvalidOperationException("TextBox-like element could not be found in the FrameworkElement.");
+        }
+
+        private static IEnumerable<string> ResolveSuggestions(object target, string suggestionMember)
+        {
+            var method = target.GetType().GetMethod(suggestionMember, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (method == null || method.GetParameters().Length != 0)
+                return Array.Empty<string>();
+
+            var result = method.Invoke(target, null);
+            if (result is not IEnumerable enumerable)
+                return Array.Empty<string>();
+
+            return enumerable
+                .Cast<object>()
+                .Select(x => x?.ToString())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x!)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
     }
 }
