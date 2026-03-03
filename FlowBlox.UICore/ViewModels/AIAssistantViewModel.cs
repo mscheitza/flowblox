@@ -5,23 +5,20 @@ using FlowBlox.Core.Logging;
 using FlowBlox.UICore.Commands;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels
 {
     public class AIAssistantViewModel : INotifyPropertyChanged
     {
         private readonly AiAssistantService _service;
-        private CancellationTokenSource _cts;
+        private CancellationTokenSource? _cts;
         private string _currentInput = string.Empty;
         private bool _isBusy;
-        private string _lastGeneratedProjectJson = string.Empty;
 
         public ObservableCollection<AssistantTranscriptLine> Transcript { get; } = new ObservableCollection<AssistantTranscriptLine>();
 
         public RelayCommand SubmitCommand { get; }
         public RelayCommand CancelCommand { get; }
-        public RelayCommand CopyJsonCommand { get; }
 
         public string CurrentInput
         {
@@ -49,26 +46,11 @@ namespace FlowBlox.UICore.ViewModels
                     OnPropertyChanged(nameof(CanEditInput));
                     SubmitCommand.Invalidate();
                     CancelCommand.Invalidate();
-                    CopyJsonCommand.Invalidate();
                 }
             }
         }
 
         public bool CanEditInput => !IsBusy;
-
-        public string LastGeneratedProjectJson
-        {
-            get => _lastGeneratedProjectJson;
-            private set
-            {
-                if (_lastGeneratedProjectJson != value)
-                {
-                    _lastGeneratedProjectJson = value;
-                    OnPropertyChanged(nameof(LastGeneratedProjectJson));
-                    CopyJsonCommand.Invalidate();
-                }
-            }
-        }
 
         public AIAssistantViewModel()
         {
@@ -80,17 +62,11 @@ namespace FlowBlox.UICore.ViewModels
 
             SubmitCommand = new RelayCommand(async () => await SubmitAsync(), CanSubmit);
             CancelCommand = new RelayCommand(Cancel, () => IsBusy);
-            CopyJsonCommand = new RelayCommand(CopyJson, CanCopyJson);
         }
 
         private bool CanSubmit()
         {
             return !IsBusy && !string.IsNullOrWhiteSpace(CurrentInput);
-        }
-
-        private bool CanCopyJson()
-        {
-            return !IsBusy && !string.IsNullOrWhiteSpace(LastGeneratedProjectJson);
         }
 
         private async Task SubmitAsync()
@@ -114,9 +90,6 @@ namespace FlowBlox.UICore.ViewModels
                 var result = await _service.GenerateProjectAsync(input, _cts.Token);
                 foreach (var line in result.TranscriptLines)
                     Transcript.Add(line);
-
-                if (result.Success)
-                    LastGeneratedProjectJson = result.ProjectJson;
             }
             catch (OperationCanceledException)
             {
@@ -153,15 +126,7 @@ namespace FlowBlox.UICore.ViewModels
             _cts?.Cancel();
         }
 
-        private void CopyJson()
-        {
-            if (string.IsNullOrWhiteSpace(LastGeneratedProjectJson))
-                return;
-
-            Clipboard.SetText(LastGeneratedProjectJson);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

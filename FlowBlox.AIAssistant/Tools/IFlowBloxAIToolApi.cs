@@ -5,5 +5,6 @@ namespace FlowBlox.AIAssistant.Tools
     public interface IFlowBloxAIToolApi
     {
         Task<ToolResponse> ExecuteAsync(ToolRequest request, CancellationToken ct);
+        IReadOnlyList<ToolDefinition> GetToolDefinitions();
     }
 }

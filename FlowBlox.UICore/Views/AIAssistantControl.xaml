@@ -46,11 +46,7 @@
                     Command="{Binding SubmitCommand}" />
             <Button Content="Cancel"
                     MinWidth="90"
-                    Margin="0,0,8,0"
                     Command="{Binding CancelCommand}" />
-            <Button Content="Copy JSON"
-                    MinWidth="100"
-                    Command="{Binding CopyJsonCommand}" />
         </StackPanel>
     </Grid>
 </UserControl>
