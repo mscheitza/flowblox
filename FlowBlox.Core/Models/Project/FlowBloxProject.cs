@@ -753,12 +753,18 @@ namespace FlowBlox.Core.Models.Project
             }
         }
 
+        private void RefreshOrderedTopLevelCollectionsForSerialization()
+        {
+            var ordered = ProjectSerializationOrdering.CreateOrderedTopLevelCollections(FlowBloxRegistry);
+            UserFields = ordered.UserFields;
+            ManagedObjects = ordered.ManagedObjects;
+            FlowBlocks = ordered.FlowBlocks;
+        }
+
         private string CreateProjectSpaceZipBase64()
         {
-            // Collect current state before export
-            FlowBlocks = [.. FlowBloxRegistry.GetFlowBlocks()];
-            ManagedObjects = [.. FlowBloxRegistry.GetManagedObjects()];
-            UserFields = [.. FlowBloxRegistry.GetUserFields()];
+            // Collect current state before export and order by dependency for clean top-level JSON references.
+            RefreshOrderedTopLevelCollectionsForSerialization();
 
             // Serialize project + extensions
             var projectFileContent = JsonConvert.SerializeObject(this, JsonSettings.ProjectExport());
@@ -836,10 +842,8 @@ namespace FlowBlox.Core.Models.Project
             _logger.Info($"Saving project to file: {fileName}");
             try
             {
-                // Collect current registry state
-                FlowBlocks = [.. FlowBloxRegistry.GetFlowBlocks()];
-                ManagedObjects = [.. FlowBloxRegistry.GetManagedObjects()];
-                UserFields = [.. FlowBloxRegistry.GetUserFields()];
+                // Collect current registry state and order by dependency for clean top-level JSON references.
+                RefreshOrderedTopLevelCollectionsForSerialization();
 
                 // Project file (*.fbprj)
                 var projectFileContent = JsonConvert.SerializeObject(this, JsonSettings.ProjectExport());
