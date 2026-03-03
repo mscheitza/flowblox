@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBlox.RunnerHost", "Flow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBlox.WorkerService", "FlowBlox.WorkerService\FlowBlox.WorkerService.csproj", "{46215950-534F-483F-BCE7-D5E68B4F1B00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBlox.AIAssistant", "FlowBlox.AIAssistant\FlowBlox.AIAssistant.csproj", "{484AD965-42E0-48CB-B304-FEDF8C141530}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -347,6 +349,30 @@ Global
 		{46215950-534F-483F-BCE7-D5E68B4F1B00}.Release|x64.Build.0 = Release|Any CPU
 		{46215950-534F-483F-BCE7-D5E68B4F1B00}.Release|x86.ActiveCfg = Release|Any CPU
 		{46215950-534F-483F-BCE7-D5E68B4F1B00}.Release|x86.Build.0 = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|ARM.Build.0 = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|x64.Build.0 = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Debug|x86.Build.0 = Debug|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|ARM.ActiveCfg = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|ARM.Build.0 = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|ARM64.Build.0 = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|x64.ActiveCfg = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|x64.Build.0 = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|x86.ActiveCfg = Release|Any CPU
+		{484AD965-42E0-48CB-B304-FEDF8C141530}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

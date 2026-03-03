@@ -26,6 +26,7 @@
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FlowBlox.AIAssistant\FlowBlox.AIAssistant.csproj" />
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

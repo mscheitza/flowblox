@@ -70,6 +70,7 @@ namespace FlowBlox.AppWindow
         private DockContentUserControlWrapper<FieldView> _fieldViewPanel;
         private DockContentUserControlWrapper<RuntimeView> _runtimeViewPanel;
         private DockContentUserControlWrapper<ProblemsView> _problemsViewPanel;
+        private AIAssistantView _aiAssistantViewPanel;
 
         private FlowBloxProjectComponentProvider _componentProvider;
 
@@ -187,6 +188,9 @@ namespace FlowBlox.AppWindow
 
             var fieldViewPanelFactory = new FieldViewPanelFactory(dockPanel);
             _fieldViewPanel = fieldViewPanelFactory.Create();
+
+            var aiAssistantPanelFactory = new AIAssistantViewPanelFactory(dockPanel);
+            _aiAssistantViewPanel = aiAssistantPanelFactory.Create();
 
             _objectManagerInitializer = new DockableObjectManagerInitializer(dockPanel);
             _objectManagerInitializer.InitializeAllObjectManager();
