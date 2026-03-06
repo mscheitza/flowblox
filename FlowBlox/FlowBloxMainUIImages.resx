@@ -205,4 +205,31 @@
   <data name="component_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\component_162.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="AIAssistantView_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AIAssistantView_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ComponentLibraryPanel_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ComponentLibraryPanel_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DataObjectManager_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\DataObjectManager_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DataTableManager_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\DataTableManager_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DockContent_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\DockContent_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FieldView_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\FieldView_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ProblemsView_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ProblemsView_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ProjectPanel_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ProjectPanel_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RuntimeView_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RuntimeView_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

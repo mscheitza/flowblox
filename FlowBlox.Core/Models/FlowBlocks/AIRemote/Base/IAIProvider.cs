@@ -11,6 +11,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
     {
         string ProviderType { get; }
 
+        Task<AIResponse> ExecuteAsync(AIRequest request, CancellationToken ct);
+
         Task<AIResponse> ExecuteAsync(BaseRuntime runtime, AIRequest request, CancellationToken ct);
     }
 }

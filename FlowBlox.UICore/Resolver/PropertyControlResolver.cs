@@ -4,6 +4,7 @@ using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
+using FlowBlox.UICore.Converters.PropertyView;
 using FlowBlox.UICore.Factory.PropertyView;
 using FlowBlox.UICore.ViewModels.PropertyView;
 using MahApps.Metro.Controls;
@@ -229,6 +230,8 @@ namespace FlowBlox.UICore.Resolver
                 property.PropertyType == typeof(double) ||
                 property.PropertyType == typeof(double?))
             {
+                binding.Converter = new NumericTextValueConverter(property.PropertyType);
+
                 var textBox = new TextBox
                 {
                     IsReadOnly = readOnly

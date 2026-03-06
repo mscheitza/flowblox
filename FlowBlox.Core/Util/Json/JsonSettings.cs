@@ -62,6 +62,15 @@ namespace FlowBlox.Core.Util.Json
             return jsonSettings;
         }
 
+        public static JsonSerializerSettings ProjectExportForAiAssistant()
+        {
+            JsonSerializerSettings jsonSettings = ProjectExport();
+            jsonSettings.Formatting = Formatting.None;
+            jsonSettings.NullValueHandling = NullValueHandling.Ignore;
+            jsonSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+            return jsonSettings;
+        }
+
         private JsonSettings() 
         {
             

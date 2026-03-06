@@ -8,6 +8,7 @@ namespace FlowBlox.AIAssistant.Services
         public string OutputText { get; set; } = string.Empty;
         public string Error { get; set; } = string.Empty;
         public string RawOutput { get; set; } = string.Empty;
+        public string ResponseId { get; set; } = string.Empty;
     }
 
     public interface IAiExecutor
@@ -16,6 +17,7 @@ namespace FlowBlox.AIAssistant.Services
             string systemPrompt,
             string userPrompt,
             AssistantConfiguration configuration,
+            string previousResponseId,
             CancellationToken ct);
     }
 }

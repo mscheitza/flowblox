@@ -403,6 +403,7 @@ namespace FlowBlox.AppWindow
             itmDockablePanels.Name = "itmDockablePanels";
             itmDockablePanels.Size = new System.Drawing.Size(243, 22);
             itmDockablePanels.Text = "itmDockablePanels_Text";
+            itmDockablePanels.Click += itmDockablePanels_Click;
             // 
             // itmResetDockablePanels
             // 

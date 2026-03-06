@@ -1,5 +1,6 @@
-﻿using FlowBlox.Core.Util;
+using FlowBlox.Core.Util;
 using Newtonsoft.Json;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -65,6 +66,7 @@ namespace FlowBlox.AppWindow.ContentFactories
         protected T Create(string key, T dockContent)
         {
             var settings = LoadSettings(key);
+            ApplyDockContentIcon(dockContent);
 
             if (settings.Width != null)
                 dockContent.Width = settings.Width.Value;
@@ -122,7 +124,20 @@ namespace FlowBlox.AppWindow.ContentFactories
 
             return dockContent;
         }
+        private static void ApplyDockContentIcon(DockContent dockContent)
+        {
+            if (dockContent == null)
+                return;
 
+            var image = DockContentIconResolver.Resolve(dockContent);
+            if (image == null)
+                return;
+
+            using var resized = new Bitmap(image, new Size(16, 16));
+            var iconHandle = resized.GetHicon();
+            using var icon = Icon.FromHandle(iconHandle);
+            dockContent.Icon = (Icon)icon.Clone();
+        }
         private void DockContent_FormClosing(object sender, FormClosingEventArgs e)
         {
             _closing = true;
@@ -136,3 +151,5 @@ namespace FlowBlox.AppWindow.ContentFactories
         public abstract DockContent Create();
     }
 }
+
+

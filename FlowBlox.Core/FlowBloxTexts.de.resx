@@ -2259,4 +2259,37 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
 		<value>KI-Propertywert-Prompts</value>
 	</data>
+	<data name="AssistantConfiguration_DisplayName" xml:space="preserve">
+		<value>KI-Assistent-Konfiguration</value>
+	</data>
+	<data name="AssistantConfiguration_Description" xml:space="preserve">
+		<value>Konfiguriert Provider und Standardwerte für Anfragen des KI-Assistenten.</value>
+	</data>
+	<data name="AssistantConfiguration_Groups_General" xml:space="preserve">
+		<value>Allgemein</value>
+	</data>
+	<data name="AssistantConfiguration_Provider" xml:space="preserve">
+		<value>Provider</value>
+	</data>
+	<data name="AssistantConfiguration_Provider_Tooltip" xml:space="preserve">
+		<value>Provider-Instanz für Anfragen des KI-Assistenten.</value>
+	</data>
+	<data name="AssistantConfiguration_Temperature" xml:space="preserve">
+		<value>Temperatur</value>
+	</data>
+	<data name="AssistantConfiguration_Temperature_Tooltip" xml:space="preserve">
+		<value>Sampling-Temperatur im Bereich 0-2. Niedrigere Werte erhöhen die Deterministik.</value>
+	</data>
+	<data name="AssistantConfiguration_MaxTokens" xml:space="preserve">
+		<value>Max. Tokens</value>
+	</data>
+	<data name="AssistantConfiguration_MaxTokens_Tooltip" xml:space="preserve">
+		<value>Optionale maximale Anzahl generierter Tokens je Modellanfrage.</value>
+	</data>
+	<data name="AssistantConfiguration_MaxToolRounds" xml:space="preserve">
+		<value>Max. Tool-Runden</value>
+	</data>
+	<data name="AssistantConfiguration_MaxToolRounds_Tooltip" xml:space="preserve">
+		<value>Obere Grenze der Tool-Call-Runden pro Prompt-Ausführung.</value>
+	</data>
 </root>

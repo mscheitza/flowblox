@@ -9,6 +9,7 @@ using FlowBlox.Core.Extensions;
 namespace FlowBlox.Core.Models.ObjectManager
 {
     [Display(Name = "DataTableManager_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [UIMetadataDefinitions(typeof(FlowBloxIcons), nameof(FlowBloxIcons.table_arrow_down), "#0D9488", 16)]
     [FlowBlockUIGroup(Name = "DataTableManager_Groups_CsvTables", ControlAlignment = ControlAlignment.Fill)]
     [FlowBlockUIGroup(Name = "DataTableManager_Groups_SqlTables", ControlAlignment = ControlAlignment.Fill)]
     [FlowBlockUIGroup(Name = "DataTableManager_Groups_ExcelTables", ControlAlignment = ControlAlignment.Fill)]

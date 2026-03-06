@@ -42,7 +42,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             TimeoutSeconds = 60;
         }
 
-        public override void RuntimeStarted(BaseRuntime runtime)
+        protected override void OnBeforeExecution()
         {
             _http?.Dispose();
 
@@ -53,16 +53,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
             _http.DefaultRequestHeaders.Accept.Clear();
             _http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            base.RuntimeStarted(runtime);
         }
 
-        public override void RuntimeFinished(BaseRuntime runtime)
+        protected override void OnAfterExecution()
         {
             _http?.Dispose();
             _http = null;
-
-            base.RuntimeFinished(runtime);
         }
 
         protected override async Task<AIResponse> ExecuteCoreAsync(AIRequest request, CancellationToken ct)
@@ -105,11 +101,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             {
                 ["model"] = resolvedModel,
                 ["input"] = request.Prompt,
-                ["store"] = StoreResponses
+                ["store"] = ShouldStoreResponses(request)
             };
 
             if (!string.IsNullOrWhiteSpace(request.SystemInstruction))
                 body["instructions"] = request.SystemInstruction;
+
+            if (!string.IsNullOrWhiteSpace(request.PreviousResponseId))
+                body["previous_response_id"] = request.PreviousResponseId;
 
             if (request.Temperature is >= 0 and <= 2)
                 body["temperature"] = request.Temperature;
@@ -145,12 +144,45 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             }
 
             var text = TryExtractOutputText(json);
+            var responseId = TryExtractResponseId(json);
 
             return new AIResponse
             {
                 Success = true,
-                Text = text ?? string.Empty
+                Text = text ?? string.Empty,
+                ResponseId = responseId
             };
+        }
+
+        private bool ShouldStoreResponses(AIRequest request)
+        {
+            if (StoreResponses)
+                return true;
+
+            if (!string.IsNullOrWhiteSpace(request?.PreviousResponseId))
+                return true;
+
+            if (request?.Meta == null)
+                return false;
+
+            if (!request.Meta.TryGetValue("RequireResponseStorage", out var value))
+                return false;
+
+            return value switch
+            {
+                bool b => b,
+                string s when bool.TryParse(s, out var parsed) => parsed,
+                _ => false
+            };
+        }
+
+        private static string TryExtractResponseId(string responseJson)
+        {
+            if (string.IsNullOrWhiteSpace(responseJson))
+                return null;
+
+            var root = JObject.Parse(responseJson);
+            return root["id"]?.Value<string>();
         }
 
         private static string TryExtractOutputText(string responseJson)

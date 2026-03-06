@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FlowBlox.AIAssistant
 {
-    internal class ServiceRegistration : IFlowBloxServiceRegistration
+    public class ServiceRegistration : IFlowBloxServiceRegistration
     {
         public void RegisterServices(IServiceCollection serviceCollection)
         {

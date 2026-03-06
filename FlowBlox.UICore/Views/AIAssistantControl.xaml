@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:viewModels="clr-namespace:FlowBlox.UICore.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -13,31 +14,133 @@
 
     <Grid Margin="8">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="0"
-                 ItemsSource="{Binding Transcript}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Border Grid.Row="0"
+                Background="#FFEEEEEE"
+                Height="48"
+                Padding="10,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="PromptTextBox"
-                 Grid.Row="1"
-                 Margin="0,8,0,8"
-                 MinHeight="80"
-                 AcceptsReturn="True"
-                 TextWrapping="Wrap"
-                 VerticalScrollBarVisibility="Auto"
-                 IsEnabled="{Binding CanEditInput}"
-                 Text="{Binding CurrentInput, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Column="0"
+                           Text="AI Assistant"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           FontSize="16" />
 
-        <StackPanel Grid.Row="2"
+                <Button x:Name="SettingsButton"
+                        Grid.Column="1"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="8,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="Configure AI Assistant"
+                        BorderThickness="0"
+                        Background="Transparent">
+                    <iconPacks:PackIconMaterial Kind="CogOutline"
+                                                Width="18"
+                                                Height="18"
+                                                Foreground="#FF5A5A5A" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1"
+                Background="#EDF3F9"
+                Padding="10"
+                CornerRadius="4"
+                Margin="0,8,0,8">
+            <TextBlock Text="Describe your target flow. The assistant will run tool calls and stream status lines below."
+                       Foreground="DarkSlateGray"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <Border Grid.Row="2"
+                Background="#FFFFFFFF"
+                BorderBrush="#FFD0D0D0"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="6">
+            <Grid>
+                <ListBox ItemsSource="{Binding Transcript}"
+                         BorderThickness="0"
+                         Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Text}"
+                                       TextWrapping="Wrap"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Copy"
+                                                  Command="{Binding PlacementTarget.Tag.CopyTranscriptEntryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="ContentCopy" Width="16" Height="16" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Open in Editor"
+                                                  Command="{Binding PlacementTarget.Tag.OpenTranscriptEntryInEditorCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="OpenInNew" Width="16" Height="16" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel IsHitTestVisible="False"
+                            Opacity="0.16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="RobotOutline"
+                                                Width="84"
+                                                Height="84"
+                                                Foreground="#FF666666"
+                                                HorizontalAlignment="Center" />
+                    <TextBlock Text="AI Tool Loop"
+                               Foreground="#FF666666"
+                               FontSize="14"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="3"
+                Margin="0,8,0,8"
+                Background="#FFFFFFFF"
+                BorderBrush="#FFD0D0D0"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="6">
+            <TextBox x:Name="PromptTextBox"
+                     Height="180"
+                     MinHeight="120"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     IsEnabled="{Binding CanEditInput}"
+                     Text="{Binding CurrentInput, UpdateSourceTrigger=PropertyChanged}" />
+        </Border>
+
+        <StackPanel Grid.Row="4"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
             <Button Content="Submit"

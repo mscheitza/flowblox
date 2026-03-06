@@ -11,6 +11,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         public string Prompt { get; set; }
         public string SystemInstruction { get; set; }
         public string Model { get; set; }
+        public string PreviousResponseId { get; set; }
         public double Temperature { get; set; } = 0.0;
         public int? MaxTokens { get; set; }
         public int? TimeoutSecondsOverride { get; set; }

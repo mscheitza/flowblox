@@ -1,4 +1,4 @@
-﻿using FlowBlox.AppWindow.ContentFactories;
+using FlowBlox.AppWindow.ContentFactories;
 using FlowBlox.AppWindow.Contents;
 using FlowBlox.Core;
 using FlowBlox.Core.Authentication;
@@ -213,6 +213,8 @@ namespace FlowBlox.AppWindow
                 Text = dockContent.Text
             };
 
+            toolstripMenuItem.Image = DockContentIconResolver.Resolve(dockContent);
+
             toolstripMenuItem.Click += (s, e2) =>
             {
                 dockContent.Show();
@@ -370,6 +372,7 @@ namespace FlowBlox.AppWindow
         {
             InitializeDockPanel();
             this._fieldViewPanel.UserControl.OnAfterUIRegistryInitialized();
+            this._aiAssistantViewPanel?.OnAfterUIRegistryInitialized();
             this._dockContentProjectPanel.OnAfterUIRegistryInitialized();
         }
 
@@ -1102,6 +1105,10 @@ namespace FlowBlox.AppWindow
             InitializeDockPanel(true);
         }
 
+        private void itmDockablePanels_Click(object sender, EventArgs e)
+        {
+        }
+
         private void itmSaveToProjectSpace_Click(object sender, EventArgs e)
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;
@@ -1214,3 +1221,4 @@ namespace FlowBlox.AppWindow
         }
     }
 }
+

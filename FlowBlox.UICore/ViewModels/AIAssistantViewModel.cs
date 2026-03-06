@@ -3,14 +3,18 @@ using FlowBlox.AIAssistant.Services;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Logging;
 using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Utilities;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
+using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels
 {
     public class AIAssistantViewModel : INotifyPropertyChanged
     {
         private readonly AiAssistantService _service;
+        private readonly SynchronizationContext? _uiContext;
         private CancellationTokenSource? _cts;
         private string _currentInput = string.Empty;
         private bool _isBusy;
@@ -19,6 +23,8 @@ namespace FlowBlox.UICore.ViewModels
 
         public RelayCommand SubmitCommand { get; }
         public RelayCommand CancelCommand { get; }
+        public RelayCommand CopyTranscriptEntryCommand { get; }
+        public RelayCommand OpenTranscriptEntryInEditorCommand { get; }
 
         public string CurrentInput
         {
@@ -52,16 +58,22 @@ namespace FlowBlox.UICore.ViewModels
 
         public bool CanEditInput => !IsBusy;
 
+        public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
+
         public AIAssistantViewModel()
         {
+            _uiContext = SynchronizationContext.Current;
             _service = new AiAssistantService(
                 new AiProviderExecutor(),
                 new DefaultToolApi(),
-                new DefaultOptionsProvider(),
                 FlowBloxLogManager.Instance.GetLogger());
+            _service.FlowBlocksChanged += Service_FlowBlocksChanged;
+            _service.TranscriptLineAdded += Service_TranscriptLineAdded;
 
             SubmitCommand = new RelayCommand(async () => await SubmitAsync(), CanSubmit);
             CancelCommand = new RelayCommand(Cancel, () => IsBusy);
+            CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
+            OpenTranscriptEntryInEditorCommand = new RelayCommand(OpenTranscriptEntryInEditor);
         }
 
         private bool CanSubmit()
@@ -75,7 +87,7 @@ namespace FlowBlox.UICore.ViewModels
             if (string.IsNullOrWhiteSpace(input) || IsBusy)
                 return;
 
-            Transcript.Add(new AssistantTranscriptLine
+            AddTranscriptLine(new AssistantTranscriptLine
             {
                 Kind = AssistantTranscriptKind.User,
                 Text = $"User: {input}",
@@ -87,13 +99,11 @@ namespace FlowBlox.UICore.ViewModels
 
             try
             {
-                var result = await _service.GenerateProjectAsync(input, _cts.Token);
-                foreach (var line in result.TranscriptLines)
-                    Transcript.Add(line);
+                await _service.GenerateProjectAsync(input, _cts.Token);
             }
             catch (OperationCanceledException)
             {
-                Transcript.Add(new AssistantTranscriptLine
+                AddTranscriptLine(new AssistantTranscriptLine
                 {
                     Kind = AssistantTranscriptKind.Status,
                     Text = "Assistant: Cancelled.",
@@ -102,7 +112,7 @@ namespace FlowBlox.UICore.ViewModels
             }
             catch (Exception ex)
             {
-                Transcript.Add(new AssistantTranscriptLine
+                AddTranscriptLine(new AssistantTranscriptLine
                 {
                     Kind = AssistantTranscriptKind.Error,
                     Text = $"Assistant: {ex.Message}",
@@ -125,6 +135,77 @@ namespace FlowBlox.UICore.ViewModels
 
             _cts?.Cancel();
         }
+
+        private void Service_FlowBlocksChanged(object? sender, FlowBlocksChangedEventArgs e)
+        {
+            FlowBlocksChanged?.Invoke(this, e);
+        }
+
+        private void Service_TranscriptLineAdded(object? sender, AssistantTranscriptLine line)
+        {
+            AddTranscriptLine(line);
+        }
+
+        private void CopyTranscriptEntry(object parameter)
+        {
+            if (parameter is not AssistantTranscriptLine line)
+                return;
+
+            var content = GetTranscriptContent(line);
+            if (string.IsNullOrWhiteSpace(content))
+                return;
+
+            Clipboard.SetText(content);
+        }
+
+        private void OpenTranscriptEntryInEditor(object parameter)
+        {
+            if (parameter is not AssistantTranscriptLine line)
+                return;
+
+            var content = GetTranscriptContent(line);
+            if (string.IsNullOrWhiteSpace(content))
+                return;
+
+            var subject = $"AIAssistant_{line.Timestamp:yyyyMMdd_HHmmss}_{line.Kind}";
+            FlowBloxEditingHelper.OpenUsingEditor(content, subject);
+        }
+
+        private static string GetTranscriptContent(AssistantTranscriptLine line)
+        {
+            if (!string.IsNullOrWhiteSpace(line.InternalContent))
+                return line.InternalContent;
+
+            return line.Text ?? string.Empty;
+        }
+
+        private void AddTranscriptLine(AssistantTranscriptLine line)
+        {
+            if (line == null)
+                return;
+
+            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
+            {
+                _uiContext.Post(_ => Transcript.Add(line), null);
+                return;
+            }
+
+            Transcript.Add(line);
+        }
+
+        public void ResetForProjectInitialization()
+        {
+            Cancel();
+            _service.ResetSession();
+            Transcript.Clear();
+            CurrentInput = string.Empty;
+            IsBusy = false;
+        }
+
+        public AssistantConfiguration GetConfiguration(out string error) => _service.GetConfiguration(out error);
+
+        public bool SaveConfiguration(AssistantConfiguration configuration, out string error) =>
+            _service.SaveConfiguration(configuration, out error);
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

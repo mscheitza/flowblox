@@ -1,15 +1,32 @@
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core;
+using FlowBlox.Core.Enums;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
+using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.AIAssistant.Models
 {
-    public class AssistantConfiguration
+    [Display(Name = "AssistantConfiguration_DisplayName", Description = "AssistantConfiguration_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBlockUIGroup("AssistantConfiguration_Groups_General", 0)]
+    public class AssistantConfiguration : FlowBloxReactiveObject
     {
         public const string OptionKey = "AI.AssistantConfiguration";
 
-        public AIProviderBase Provider { get; set; } = new OpenAIProvider();
+        [Required]
+        [Display(Name = "AssistantConfiguration_Provider", Description = "AssistantConfiguration_Provider_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        public AIProviderBase Provider { get; set; }
+
+        [Display(Name = "AssistantConfiguration_Temperature", Description = "AssistantConfiguration_Temperature_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         public double? Temperature { get; set; }
+
+        [Display(Name = "AssistantConfiguration_MaxTokens", Description = "AssistantConfiguration_MaxTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         public int? MaxTokens { get; set; }
-        public int MaxToolRounds { get; set; } = 8;
+
+        [Display(Name = "AssistantConfiguration_MaxToolRounds", Description = "AssistantConfiguration_MaxToolRounds_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        public int MaxToolRounds { get; set; } = 50;
+
     }
 }

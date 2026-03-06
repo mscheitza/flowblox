@@ -2305,4 +2305,37 @@ Multi-level XPath expressions are not allowed here.</value>
   <data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
 		<value>AI Property Value Prompts</value>
 	</data>
+  <data name="AssistantConfiguration_DisplayName" xml:space="preserve">
+		<value>AI Assistant Configuration</value>
+	</data>
+  <data name="AssistantConfiguration_Description" xml:space="preserve">
+		<value>Configure provider and request defaults for the AI Assistant.</value>
+	</data>
+  <data name="AssistantConfiguration_Groups_General" xml:space="preserve">
+		<value>General</value>
+	</data>
+  <data name="AssistantConfiguration_Provider" xml:space="preserve">
+		<value>Provider</value>
+	</data>
+  <data name="AssistantConfiguration_Provider_Tooltip" xml:space="preserve">
+		<value>Provider instance used for assistant requests.</value>
+	</data>
+  <data name="AssistantConfiguration_Temperature" xml:space="preserve">
+		<value>Temperature</value>
+	</data>
+  <data name="AssistantConfiguration_Temperature_Tooltip" xml:space="preserve">
+		<value>Sampling temperature in range 0-2. Lower values increase determinism.</value>
+	</data>
+  <data name="AssistantConfiguration_MaxTokens" xml:space="preserve">
+		<value>Max Tokens</value>
+	</data>
+  <data name="AssistantConfiguration_MaxTokens_Tooltip" xml:space="preserve">
+		<value>Optional max output token count for each model request.</value>
+	</data>
+  <data name="AssistantConfiguration_MaxToolRounds" xml:space="preserve">
+		<value>Max Tool Rounds</value>
+	</data>
+  <data name="AssistantConfiguration_MaxToolRounds_Tooltip" xml:space="preserve">
+		<value>Upper bound for tool-call rounds per prompt execution.</value>
+	</data>
 </root>

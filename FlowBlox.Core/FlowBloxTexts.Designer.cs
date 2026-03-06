@@ -520,6 +520,105 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Configure provider and request defaults for the AI Assistant. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_Description {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Assistant Configuration ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_DisplayName {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die General ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_Groups_General {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_Groups_General", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max Tokens ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxTokens {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional max output token count for each model request. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxTokens_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxTokens_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max Tool Rounds ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxToolRounds {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxToolRounds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upper bound for tool-call rounds per prompt execution. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxToolRounds_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxToolRounds_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Provider ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_Provider {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Provider instance used for assistant requests. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_Provider_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_Provider_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Temperature ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_Temperature {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_Temperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sampling temperature in range 0-2. Lower values increase determinism. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_Temperature_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_Temperature_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &quot;{0}&quot; must be set or a previous flow block of type &quot;{1}&quot; must exist in the flow. ähnelt.
         /// </summary>
         public static string AssociatedFlowBlockRequired_ValidationMessage {

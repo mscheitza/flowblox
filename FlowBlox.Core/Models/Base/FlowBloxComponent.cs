@@ -112,10 +112,10 @@ namespace FlowBlox.Core.Models.Base
         public string Version { get; set; }
 
         [JsonIgnore]
-        public virtual SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.component, 16);
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.component, 16);
 
         [JsonIgnore]
-        public virtual SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.component, 32);
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.component, 32);
 
         /// <summary>
         /// Indicates whether the component has finished loading.

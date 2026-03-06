@@ -64,11 +64,27 @@ namespace FlowBlox.AppWindow
 
         private void FlowBloxRegistry_OnManagedObjectAdded(Core.Events.ManagedObjectAddedEventArgs eventArgs)
         {
-            Reload();
+            ReloadOnUiThread();
         }
 
         private void FlowBloxRegistry_OnManagedObjectRemoved(Core.Events.ManagedObjectRemovedEventArgs eventArgs)
         {
+            ReloadOnUiThread();
+        }
+
+        private void ReloadOnUiThread()
+        {
+            if (_dockPanel == null || _dockPanel.IsDisposed || _dockPanel.Disposing)
+                return;
+
+            if (_dockPanel.InvokeRequired)
+            {
+                if (_dockPanel.IsHandleCreated)
+                    _dockPanel.BeginInvoke(new System.Windows.Forms.MethodInvoker(Reload));
+
+                return;
+            }
+
             Reload();
         }
 

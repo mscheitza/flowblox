@@ -1,7 +1,6 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
-using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider.Project;
 
 namespace FlowBlox.AIAssistant.Services
@@ -12,6 +11,7 @@ namespace FlowBlox.AIAssistant.Services
             string systemPrompt,
             string userPrompt,
             AssistantConfiguration configuration,
+            string previousResponseId,
             CancellationToken ct)
         {
             try
@@ -26,10 +26,9 @@ namespace FlowBlox.AIAssistant.Services
                     };
                 }
 
-                var runtime = new TransientRuntime(project);
                 var provider = configuration?.Provider ?? new OpenAIProvider();
 
-                provider.RuntimeStarted(runtime);
+                provider.PrepareExecution();
                 try
                 {
                     var request = new AIRequest
@@ -38,23 +37,26 @@ namespace FlowBlox.AIAssistant.Services
                         SystemInstruction = systemPrompt,
                         Model = provider.DefaultModel,
                         Temperature = configuration?.Temperature ?? 0.0,
-                        MaxTokens = configuration?.MaxTokens
+                        MaxTokens = configuration?.MaxTokens,
+                        PreviousResponseId = previousResponseId
                     };
 
                     request.Meta["Source"] = "FlowBloxAIAssistant";
+                    request.Meta["RequireResponseStorage"] = true;
 
-                    var response = await provider.ExecuteAsync(runtime, request, ct).ConfigureAwait(false);
+                    var response = await provider.ExecuteAsync(request, ct).ConfigureAwait(false);
                     return new AiExecutorResult
                     {
                         Success = response.Success,
                         OutputText = response.Text ?? string.Empty,
                         RawOutput = response.Text ?? string.Empty,
-                        Error = response.Error ?? string.Empty
+                        Error = response.Error ?? string.Empty,
+                        ResponseId = response.ResponseId ?? string.Empty
                     };
                 }
                 finally
                 {
-                    provider.RuntimeFinished(runtime);
+                    provider.CompleteExecution();
                 }
             }
             catch (Exception ex)

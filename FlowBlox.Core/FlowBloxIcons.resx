@@ -235,6 +235,9 @@
   <data name="set_merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\set-merge.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="shape_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\shape-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="source_branch" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\source-branch.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

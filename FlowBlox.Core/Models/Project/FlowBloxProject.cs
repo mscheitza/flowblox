@@ -753,7 +753,7 @@ namespace FlowBlox.Core.Models.Project
             }
         }
 
-        private void RefreshOrderedTopLevelCollectionsForSerialization()
+        public void RefreshOrderedTopLevelCollectionsForSerialization()
         {
             var ordered = ProjectSerializationOrdering.CreateOrderedTopLevelCollections(FlowBloxRegistry);
             UserFields = ordered.UserFields;

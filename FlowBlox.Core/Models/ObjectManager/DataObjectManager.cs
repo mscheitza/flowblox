@@ -9,6 +9,7 @@ using FlowBlox.Core.Extensions;
 namespace FlowBlox.Core.Models.ObjectManager
 {
     [Display(Name = "DataObjectManager_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [UIMetadataDefinitions(typeof(FlowBloxIcons), nameof(FlowBloxIcons.database_cog), "#7C3AED", 16)]
     [FlowBlockUIGroup(Name = "DataObjectManager_Groups_FileObjects", ControlAlignment = ControlAlignment.Fill)]
     [FlowBlockUIGroup(Name = "DataObjectManager_Groups_MemoryObjects", ControlAlignment = ControlAlignment.Fill)]
     public class DataObjectManager : IDockableObjectManager

@@ -41,11 +41,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             TimeoutSeconds = 60;
         }
 
+        public Task<AIResponse> ExecuteAsync(AIRequest request, CancellationToken ct)
+        {
+            return ExecuteAsyncInternal(runtime: null, request, ct);
+        }
+
         public async Task<AIResponse> ExecuteAsync(BaseRuntime runtime, AIRequest request, CancellationToken ct)
         {
-            if (runtime == null)
-                throw new ArgumentNullException(nameof(runtime));
+            return await ExecuteAsyncInternal(runtime, request, ct).ConfigureAwait(false);
+        }
 
+        private async Task<AIResponse> ExecuteAsyncInternal(BaseRuntime runtime, AIRequest request, CancellationToken ct)
+        {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
@@ -74,7 +81,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             }
             catch (TaskCanceledException ex)
             {
-                runtime.Report($"AI request cancelled or timed out.", FlowBloxLogLevel.Error, ex);
+                runtime?.Report($"AI request cancelled or timed out.", FlowBloxLogLevel.Error, ex);
 
                 if (ct.IsCancellationRequested)
                 {
@@ -95,7 +102,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             }
             catch (HttpRequestException ex)
             {
-                runtime.Report($"HTTP error during AI request.", FlowBloxLogLevel.Error, ex);
+                runtime?.Report($"HTTP error during AI request.", FlowBloxLogLevel.Error, ex);
 
                 return new AIResponse
                 {
@@ -105,7 +112,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             }
             catch (Exception ex)
             {
-                runtime.Report($"Unexpected error during AI request.", FlowBloxLogLevel.Error, ex);
+                runtime?.Report($"Unexpected error during AI request.", FlowBloxLogLevel.Error, ex);
 
                 return new AIResponse
                 {
@@ -113,6 +120,36 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
                     Error = ex.ToString()
                 };
             }
+        }
+
+        public override void RuntimeStarted(BaseRuntime runtime)
+        {
+            OnBeforeExecution();
+            base.RuntimeStarted(runtime);
+        }
+
+        public override void RuntimeFinished(BaseRuntime runtime)
+        {
+            OnAfterExecution();
+            base.RuntimeFinished(runtime);
+        }
+
+        public void PrepareExecution()
+        {
+            OnBeforeExecution();
+        }
+
+        public void CompleteExecution()
+        {
+            OnAfterExecution();
+        }
+
+        protected virtual void OnBeforeExecution()
+        {
+        }
+
+        protected virtual void OnAfterExecution()
+        {
         }
 
         protected abstract Task<AIResponse> ExecuteCoreAsync(AIRequest request, CancellationToken ct);
