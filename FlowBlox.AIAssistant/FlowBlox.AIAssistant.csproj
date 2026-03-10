@@ -10,8 +10,4 @@
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Tools\ToolHandlerUtilities\" />
-  </ItemGroup>
-
 </Project>
