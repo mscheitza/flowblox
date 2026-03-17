@@ -3376,7 +3376,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a new JSON object if needed, or updates the existing one with the property/value assignments ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a new JSON object if needed, or updates an existing one using JSON assignments. To add array elements, set Path to the array property and define element values via JSON assignments. ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_Description {
             get {
@@ -3394,6 +3394,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Is array ähnelt.
+        /// </summary>
+        public static string JsonObjectWriterFlowBlock_IsArray {
+            get {
+                return ResourceManager.GetString("JsonObjectWriterFlowBlock_IsArray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled and the path does not exist yet, an array is created at Path and a new object element is added to it. If disabled, a JSON object is created at Path. ähnelt.
+        /// </summary>
+        public static string JsonObjectWriterFlowBlock_IsArray_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonObjectWriterFlowBlock_IsArray_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die JSON assignments ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_JsonAssignments {
@@ -3403,11 +3421,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die List of property assignments applied to the target JSON object. Each row maps exactly one property name to one value (static or field-based). Do not paste a complete JSON document into a single value. ähnelt.
+        /// </summary>
+        public static string JsonObjectWriterFlowBlock_JsonAssignments_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonObjectWriterFlowBlock_JsonAssignments_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Path ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_Path {
             get {
                 return ResourceManager.GetString("JsonObjectWriterFlowBlock_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path to the target node where the object should be created or updated. Use &apos;/&apos; to separate segments; object properties by name, array entries by index (e.g. &apos;participants/0&apos;). For array appends, set Path to the array property (e.g. &apos;participants&apos;) and describe element properties with JSON assignments. Empty path targets the root object. ähnelt.
+        /// </summary>
+        public static string JsonObjectWriterFlowBlock_Path_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonObjectWriterFlowBlock_Path_Tooltip", resourceCulture);
             }
         }
         
@@ -3484,6 +3520,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Indicates whether the target JSON property should be treated as an array. If enabled, each evaluated assignment value is appended to that array instead of replacing the property. ähnelt.
+        /// </summary>
+        public static string JsonPropertyValueAssignment_IsArray_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonPropertyValueAssignment_IsArray_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Property name ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_PropertyName {
@@ -3507,6 +3552,15 @@ namespace FlowBlox.Core {
         public static string JsonPropertyValueAssignment_Value {
             get {
                 return ResourceManager.GetString("JsonPropertyValueAssignment_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value for the target property path (field placeholders supported). Direct JSON is not supported here: create one mapping entry per property assignment. Missing parent paths are created automatically. ähnelt.
+        /// </summary>
+        public static string JsonPropertyValueAssignment_Value_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonPropertyValueAssignment_Value_Tooltip", resourceCulture);
             }
         }
         

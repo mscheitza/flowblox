@@ -52,6 +52,11 @@ namespace FlowBlox.AIAssistant.Tools
                 }
             }
 
+            if (target is IFlowBloxComponent component)
+            {
+                component.OnAfterSave();
+            }
+
             return Ok(new JObject
             {
                 ["updated"] = true,
@@ -67,13 +72,17 @@ namespace FlowBlox.AIAssistant.Tools
             var updates = new List<UpdateOperation>();
 
             var singlePath = args.Value<string>("path");
-            if (!string.IsNullOrWhiteSpace(singlePath) && args["value"] != null)
+            if (!string.IsNullOrWhiteSpace(singlePath))
             {
-                updates.Add(new UpdateOperation
+                var singleValue = args["value"];
+                if (singleValue != null || IsUnaryOperationPath(singlePath))
                 {
-                    Path = singlePath,
-                    Value = args["value"]!
-                });
+                    updates.Add(new UpdateOperation
+                    {
+                        Path = singlePath,
+                        Value = singleValue ?? JValue.CreateNull()
+                    });
+                }
             }
 
             if (args["updates"] is JArray updatesArray)
@@ -81,7 +90,13 @@ namespace FlowBlox.AIAssistant.Tools
                 foreach (var updateItem in updatesArray.OfType<JObject>())
                 {
                     var updatePath = updateItem.Value<string>("path");
-                    if (string.IsNullOrWhiteSpace(updatePath) || updateItem["value"] == null)
+                    if (string.IsNullOrWhiteSpace(updatePath))
+                    {
+                        continue;
+                    }
+
+                    var updateValue = updateItem["value"];
+                    if (updateValue == null && !IsUnaryOperationPath(updatePath))
                     {
                         continue;
                     }
@@ -89,12 +104,22 @@ namespace FlowBlox.AIAssistant.Tools
                     updates.Add(new UpdateOperation
                     {
                         Path = updatePath,
-                        Value = updateItem["value"]!
+                        Value = updateValue ?? JValue.CreateNull()
                     });
                 }
             }
 
             return updates;
+        }
+
+        private static bool IsUnaryOperationPath(string path)
+        {
+            var segments = ParsePath(path);
+            if (segments.Count == 0)
+                return false;
+
+            var operation = ResolveTerminalOperation(segments);
+            return operation == TerminalOperation.Delete || operation == TerminalOperation.Unlink;
         }
 
         private static void SetByJsonPath(object root, string path, JToken value, FlowBloxRegistry registry)
@@ -103,6 +128,16 @@ namespace FlowBlox.AIAssistant.Tools
             if (pathSegments.Count == 0)
             {
                 throw new InvalidOperationException("Path is empty.");
+            }
+
+            var operation = ResolveTerminalOperation(pathSegments);
+            if (operation != TerminalOperation.Set)
+            {
+                pathSegments.RemoveAt(pathSegments.Count - 1);
+                if (pathSegments.Count == 0)
+                {
+                    throw new InvalidOperationException("Path must target a property or collection element before Link/Unlink/Delete.");
+                }
             }
 
             object current = root;
@@ -118,17 +153,16 @@ namespace FlowBlox.AIAssistant.Tools
 
                     var propertyType = property.PropertyType;
                     var propertyTargetType = GetElementType(propertyType) ?? propertyType;
-                    if (!isLast && typeof(IManagedObject).IsAssignableFrom(propertyTargetType))
+                    if (!isLast && IsReferenceComponentType(propertyTargetType))
                     {
                         throw new InvalidOperationException(
-                            $"Path segment '{segment.PropertyName}' targets a managed object. " +
-                            "Indirect updates are not allowed. Update that managed object directly with UpdateManagedObject.");
+                            $"Path segment '{segment.PropertyName}' targets a {GetReferenceComponentLabel(propertyTargetType)}. " +
+                            "Indirect updates are not allowed. Update the referenced component directly.");
                     }
 
                     if (isLast)
                     {
-                        EnsureNoDirectReactiveObjectJsonAssignment(property.PropertyType, value, path);
-                        property.SetValue(current, ConvertToken(value, property.PropertyType, registry));
+                        ApplyPropertyTerminalOperation(current, property, operation, value, registry, path);
                         return;
                     }
 
@@ -150,30 +184,38 @@ namespace FlowBlox.AIAssistant.Tools
 
                 var elementType = GetElementType(current.GetType())
                                   ?? throw new InvalidOperationException("Could not infer list element type.");
-                if (!isLast && typeof(IManagedObject).IsAssignableFrom(elementType))
+                if (!isLast && IsReferenceComponentType(elementType))
                 {
                     throw new InvalidOperationException(
-                        $"Path segment '[{segment.Index}]' targets a managed object. " +
-                        "Indirect updates are not allowed. Update that managed object directly with UpdateManagedObject.");
+                        $"Path segment '[{segment.Index}]' targets a {GetReferenceComponentLabel(elementType)}. " +
+                        "Indirect updates are not allowed. Update the referenced component directly.");
+                }
+
+                var explicitElementType = ResolveExplicitCollectionElementType(elementType, segment, path);
+
+                if (isLast)
+                {
+                    ApplyIndexedTerminalOperation(list, elementType, explicitElementType, segment.Index, operation, value, registry, path);
+                    return;
                 }
 
                 while (list.Count <= segment.Index)
                 {
-                    list.Add(CreateCollectionElementInstance(elementType));
-                }
-
-                if (isLast)
-                {
-                    EnsureNoDirectReactiveObjectJsonAssignment(elementType, value, path);
-                    list[segment.Index] = ConvertToken(value, elementType, registry);
-                    return;
+                    list.Add(CreateCollectionElementInstance(elementType, explicitElementType));
                 }
 
                 var indexedValue = list[segment.Index];
                 if (indexedValue == null)
                 {
-                    indexedValue = CreateInstance(elementType);
+                    indexedValue = CreateCollectionElementInstance(elementType, explicitElementType);
                     list[segment.Index] = indexedValue;
+                }
+
+                if (explicitElementType != null && indexedValue.GetType() != explicitElementType)
+                {
+                    throw new InvalidOperationException(
+                        $"Path segment '[{segment.Index}:{segment.ExplicitTypeFullName}]' resolved existing type '{indexedValue.GetType().FullName}', " +
+                        $"expected '{explicitElementType.FullName}'. Delete this element first, then create the desired type.");
                 }
 
                 current = indexedValue;
@@ -194,9 +236,14 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 foreach (var token in path.Split('/', StringSplitOptions.RemoveEmptyEntries))
                 {
-                    if (int.TryParse(token, out var index))
+                    if (TryParseSlashIndexToken(token, out var index, out var explicitTypeFullName))
                     {
-                        segments.Add(new PathSegment { IsProperty = false, Index = index });
+                        segments.Add(new PathSegment
+                        {
+                            IsProperty = false,
+                            Index = index,
+                            ExplicitTypeFullName = explicitTypeFullName
+                        });
                     }
                     else
                     {
@@ -249,6 +296,386 @@ namespace FlowBlox.AIAssistant.Tools
             }
 
             return segments;
+        }
+
+        private static bool TryParseSlashIndexToken(string token, out int index, out string? explicitTypeFullName)
+        {
+            index = -1;
+            explicitTypeFullName = null;
+            if (string.IsNullOrWhiteSpace(token))
+                return false;
+
+            var colonIndex = token.IndexOf(':');
+            var indexToken = colonIndex < 0 ? token : token.Substring(0, colonIndex);
+            if (!int.TryParse(indexToken, out index))
+                return false;
+
+            if (colonIndex < 0)
+                return true;
+
+            explicitTypeFullName = token.Substring(colonIndex + 1).Trim();
+            if (string.IsNullOrWhiteSpace(explicitTypeFullName))
+            {
+                throw new InvalidOperationException(
+                    $"Invalid typed index segment '{token}'. Expected format '/<index>:<FullTypeName>'.");
+            }
+
+            return true;
+        }
+
+        private static Type? ResolveExplicitCollectionElementType(Type elementType, PathSegment segment, string path)
+        {
+            if (string.IsNullOrWhiteSpace(segment.ExplicitTypeFullName))
+                return null;
+
+            var explicitType = ResolveType(segment.ExplicitTypeFullName);
+            if (explicitType == null)
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' contains unknown type '{segment.ExplicitTypeFullName}' in typed index segment.");
+            }
+
+            if (!elementType.IsAssignableFrom(explicitType))
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' typed index '{segment.Index}:{segment.ExplicitTypeFullName}' is invalid. " +
+                    $"Type '{explicitType.FullName}' is not assignable to '{elementType.FullName}'.");
+            }
+
+            if (explicitType.IsAbstract || explicitType.IsInterface)
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' typed index uses abstract/interface type '{explicitType.FullName}'. Use a concrete implementation type.");
+            }
+
+            return explicitType;
+        }
+
+        private static TerminalOperation ResolveTerminalOperation(IReadOnlyList<PathSegment> segments)
+        {
+            var last = segments.LastOrDefault();
+            if (last == null || !last.IsProperty || string.IsNullOrWhiteSpace(last.PropertyName))
+                return TerminalOperation.Set;
+
+            if (string.Equals(last.PropertyName, "Link", StringComparison.OrdinalIgnoreCase))
+                return TerminalOperation.Link;
+            if (string.Equals(last.PropertyName, "Unlink", StringComparison.OrdinalIgnoreCase))
+                return TerminalOperation.Unlink;
+            if (string.Equals(last.PropertyName, "Delete", StringComparison.OrdinalIgnoreCase))
+                return TerminalOperation.Delete;
+
+            return TerminalOperation.Set;
+        }
+
+        private static void ApplyPropertyTerminalOperation(
+            object current,
+            PropertyInfo property,
+            TerminalOperation operation,
+            JToken value,
+            FlowBloxRegistry registry,
+            string path)
+        {
+            if (operation == TerminalOperation.Set)
+            {
+                EnsureNoDirectReactiveObjectJsonAssignment(property.PropertyType, value, path);
+                property.SetValue(current, ConvertToken(value, property.PropertyType, registry));
+                return;
+            }
+
+            if (operation == TerminalOperation.Delete)
+            {
+                DeletePropertyValue(current, property, path);
+                return;
+            }
+
+            ApplyReferenceLinkOperationToProperty(current, property, operation, value, registry, path);
+        }
+
+        private static void ApplyIndexedTerminalOperation(
+            IList list,
+            Type elementType,
+            Type? explicitElementType,
+            int index,
+            TerminalOperation operation,
+            JToken value,
+            FlowBloxRegistry registry,
+            string path)
+        {
+            if (operation == TerminalOperation.Delete)
+            {
+                DeleteIndexedValue(list, elementType, index, path);
+                return;
+            }
+
+            if (operation == TerminalOperation.Unlink)
+            {
+                if (!IsReferenceComponentType(elementType))
+                {
+                    throw new InvalidOperationException(
+                        $"Path '{path}' unlink is only supported for FlowBlock/ManagedObject/FieldElement references. " +
+                        "For FlowBloxReactiveObject-only (non-reference component) values use '/.../Delete'.");
+                }
+
+                UnlinkIndexedValue(list, index);
+                return;
+            }
+
+            EnsureListCountForIndexAssignment(list, index, elementType);
+            var existingValue = list[index];
+            if (explicitElementType != null
+                && existingValue != null
+                && existingValue.GetType() != explicitElementType)
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' typed index '{index}:{explicitElementType.FullName}' resolved existing type '{existingValue.GetType().FullName}'. " +
+                    "Delete this index first via '/.../<index>/Delete', then create the desired type.");
+            }
+
+            if (operation == TerminalOperation.Link)
+            {
+                var resolvedReference = ResolveReferenceForTargetType(value, elementType, registry, path);
+                if (resolvedReference == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Path '{path}' link operation requires a resolvable reference value.");
+                }
+
+                list[index] = resolvedReference;
+                return;
+            }
+
+            EnsureNoDirectReactiveObjectJsonAssignment(elementType, value, path);
+            var convertedValue = ConvertToken(value, elementType, registry);
+            if (explicitElementType != null && convertedValue != null && convertedValue.GetType() != explicitElementType)
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' typed index expects '{explicitElementType.FullName}', but value resolved to '{convertedValue.GetType().FullName}'.");
+            }
+
+            list[index] = convertedValue;
+        }
+
+        private static void DeletePropertyValue(object current, PropertyInfo property, string path)
+        {
+            var nonNullableType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
+            var elementType = GetElementType(nonNullableType);
+            var actualType = elementType ?? nonNullableType;
+
+            if (elementType != null && property.GetValue(current) is IList listValue)
+            {
+                if (!IsNonComponentReactiveObjectType(actualType))
+                {
+                    throw new InvalidOperationException(
+                        $"Path '{path}' delete operation is only supported for FlowBloxReactiveObject-only (non-reference component) values. " +
+                        "Use /.../Unlink for ManagedObject/FieldElement/FlowBlock references.");
+                }
+
+                listValue.Clear();
+                return;
+            }
+
+            if (!IsNonComponentReactiveObjectType(actualType))
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' delete operation is only supported for FlowBloxReactiveObject-only (non-reference component) values. " +
+                    "Use DeleteFlowBlock/DeleteManagedObject for permanent component deletion or /.../Unlink for references.");
+            }
+
+            property.SetValue(current, null);
+        }
+
+        private static void DeleteIndexedValue(IList list, Type elementType, int index, string path)
+        {
+            if (!IsNonComponentReactiveObjectType(elementType))
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' delete operation targets '{elementType.FullName}'. " +
+                    "Only FlowBloxReactiveObject-only (non-reference component) list elements can be deleted here. " +
+                    "For references use /.../Unlink. For permanent deletion use DeleteFlowBlock/DeleteManagedObject.");
+            }
+
+            if (index >= 0 && index < list.Count)
+                list.RemoveAt(index);
+        }
+
+        private static void UnlinkIndexedValue(IList list, int index)
+        {
+            if (index >= 0 && index < list.Count)
+                list.RemoveAt(index);
+        }
+
+        private static void EnsureListCountForIndexAssignment(IList list, int index, Type elementType)
+        {
+            while (list.Count <= index)
+            {
+                list.Add(elementType.IsValueType ? Activator.CreateInstance(elementType) : null);
+            }
+        }
+
+        private static void ApplyReferenceLinkOperationToProperty(
+            object current,
+            PropertyInfo property,
+            TerminalOperation operation,
+            JToken value,
+            FlowBloxRegistry registry,
+            string path)
+        {
+            var propertyType = property.PropertyType;
+            var elementType = GetElementType(propertyType);
+            if (elementType != null)
+            {
+                if (!IsReferenceComponentType(elementType))
+                {
+                    throw new InvalidOperationException(
+                        $"Path '{path}' link/unlink is only supported for FlowBlock/ManagedObject/FieldElement reference collections.");
+                }
+
+                var collection = property.GetValue(current) as IList;
+                if (collection == null)
+                {
+                    collection = CreateInstance(propertyType) as IList
+                                 ?? throw new InvalidOperationException($"Path '{path}' targets non-list collection type '{propertyType.FullName}'.");
+                    property.SetValue(current, collection);
+                }
+
+                if (operation == TerminalOperation.Unlink)
+                {
+                    var toUnlink = ResolveReferenceForTargetType(value, elementType, registry, path, allowNull: true);
+                    if (toUnlink == null)
+                        return;
+
+                    for (var i = collection.Count - 1; i >= 0; i--)
+                    {
+                        if (ReferenceEquals(collection[i], toUnlink))
+                            collection.RemoveAt(i);
+                    }
+
+                    return;
+                }
+
+                if (operation == TerminalOperation.Link)
+                {
+                    var toLink = ResolveReferenceForTargetType(value, elementType, registry, path);
+                    if (toLink == null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Path '{path}' link operation requires a resolvable reference value.");
+                    }
+
+                    for (var i = 0; i < collection.Count; i++)
+                    {
+                        if (ReferenceEquals(collection[i], toLink))
+                            return;
+                    }
+
+                    collection.Add(toLink);
+                    return;
+                }
+
+                throw new InvalidOperationException(
+                    $"Path '{path}' supports only Link/Unlink operations for reference collections.");
+            }
+
+            var nonNullablePropertyType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
+            if (!IsReferenceComponentType(nonNullablePropertyType))
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' link/unlink is only supported for FlowBlock/ManagedObject/FieldElement references.");
+            }
+
+            if (operation == TerminalOperation.Unlink)
+            {
+                // Optional resolver-supported unlink for single references:
+                // - no value: unconditional unlink
+                // - with resolver: unlink only if current reference matches
+                if (value.Type != JTokenType.Null)
+                {
+                    var toUnlink = ResolveReferenceForTargetType(value, propertyType, registry, path, allowNull: true);
+                    if (toUnlink == null)
+                        return;
+
+                    var currentValue = property.GetValue(current);
+                    if (currentValue == null || !ReferenceEquals(currentValue, toUnlink))
+                        return;
+                }
+
+                property.SetValue(current, null);
+                return;
+            }
+
+            if (operation == TerminalOperation.Link)
+            {
+                var resolved = ResolveReferenceForTargetType(value, propertyType, registry, path);
+                if (resolved == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Path '{path}' link operation requires a resolvable reference value.");
+                }
+
+                property.SetValue(current, resolved);
+                return;
+            }
+
+            throw new InvalidOperationException($"Path '{path}' uses unsupported operation '{operation}'.");
+        }
+
+        private static object? ResolveReferenceForTargetType(
+            JToken token,
+            Type targetType,
+            FlowBloxRegistry registry,
+            string path,
+            bool allowNull = false)
+        {
+            var nonNullableTargetType = Nullable.GetUnderlyingType(targetType) ?? targetType;
+
+            if (typeof(BaseFlowBlock).IsAssignableFrom(nonNullableTargetType))
+            {
+                var resolvedFlowBlock = ResolveFlowBlockReference(token, registry);
+                if (resolvedFlowBlock == null && !allowNull)
+                {
+                    throw new InvalidOperationException(
+                        $"Path '{path}' expected flow block reference. Use \"FlowBlockName\" or {{\"resolveFlowBlockByName\":\"FlowBlockName\"}}.");
+                }
+
+                return resolvedFlowBlock;
+            }
+
+            if (typeof(IManagedObject).IsAssignableFrom(nonNullableTargetType))
+            {
+                var resolvedManagedObject = ResolveManagedObjectReference(token, registry);
+                if (resolvedManagedObject == null && !allowNull)
+                {
+                    throw new InvalidOperationException(
+                        $"Path '{path}' expected managed object reference. Use {{\"resolveManagedObjectByName\":\"...\"}} or {{\"resolveFieldElementByFQName\":\"$FlowBlock::FieldName\"}}.");
+                }
+
+                if (resolvedManagedObject != null && !nonNullableTargetType.IsAssignableFrom(resolvedManagedObject.GetType()))
+                {
+                    throw new InvalidOperationException(
+                        $"Path '{path}' resolved reference type '{resolvedManagedObject.GetType().FullName}' is not assignable to '{nonNullableTargetType.FullName}'.");
+                }
+
+                return resolvedManagedObject;
+            }
+
+            throw new InvalidOperationException(
+                $"Path '{path}' link/unlink is only supported for FlowBlock/ManagedObject/FieldElement references and their collections.");
+        }
+
+        private static bool IsReferenceComponentType(Type type)
+        {
+            return typeof(IManagedObject).IsAssignableFrom(type) || typeof(BaseFlowBlock).IsAssignableFrom(type);
+        }
+
+        private static string GetReferenceComponentLabel(Type type)
+        {
+            if (typeof(BaseFlowBlock).IsAssignableFrom(type))
+                return "flow block reference";
+
+            if (typeof(IManagedObject).IsAssignableFrom(type))
+                return "managed object reference";
+
+            return "component reference";
         }
 
         private static object? ConvertToken(JToken token, Type targetType, FlowBloxRegistry registry)
@@ -419,8 +846,25 @@ namespace FlowBlox.AIAssistant.Tools
                    ?? throw new InvalidOperationException($"Could not create instance of '{type.FullName}'.");
         }
 
-        private static object CreateCollectionElementInstance(Type elementType)
+        private static object CreateCollectionElementInstance(Type elementType, Type? explicitType = null)
         {
+            if (explicitType != null)
+            {
+                if (!elementType.IsAssignableFrom(explicitType))
+                {
+                    throw new InvalidOperationException(
+                        $"Explicit element type '{explicitType.FullName}' is not assignable to '{elementType.FullName}'.");
+                }
+
+                if (explicitType.IsAbstract || explicitType.IsInterface)
+                {
+                    throw new InvalidOperationException(
+                        $"Explicit element type '{explicitType.FullName}' cannot be abstract/interface.");
+                }
+
+                return CreateInstance(explicitType);
+            }
+
             if (!elementType.IsAbstract && !elementType.IsInterface)
             {
                 return CreateInstance(elementType);
@@ -471,5 +915,15 @@ namespace FlowBlox.AIAssistant.Tools
                 "e.g. '/MappingEntries/0/ColumnName' and '/MappingEntries/0/Field' with " +
                 "{\"resolveFieldElementByFQName\":\"$ReadExcelRows::Last Name\"}.");
         }
+
+        private enum TerminalOperation
+        {
+            Set,
+            Link,
+            Unlink,
+            Delete
+        }
     }
 }
+
+

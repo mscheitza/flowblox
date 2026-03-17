@@ -11,6 +11,17 @@ using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels
 {
+    public sealed class AIAssistantProjectStateSnapshot
+    {
+        public Guid ProjectGuid { get; init; }
+        public string ProjectName { get; init; }
+        public string ProjectJson { get; init; }
+        public string ExtensionsJson { get; init; }
+        public string ProjectSpaceGuid { get; init; }
+        public int? ProjectSpaceVersion { get; init; }
+        public string ProjectSpaceEndpointUri { get; init; }
+    }
+
     public class AIAssistantViewModel : INotifyPropertyChanged
     {
         private readonly AiAssistantService _service;
@@ -18,6 +29,11 @@ namespace FlowBlox.UICore.ViewModels
         private CancellationTokenSource? _cts;
         private string _currentInput = string.Empty;
         private bool _isBusy;
+        private Func<AIAssistantProjectStateSnapshot?>? _captureProjectState;
+        private Func<AIAssistantProjectStateSnapshot, bool>? _restoreProjectState;
+        private AIAssistantProjectStateSnapshot? _stateBeforeLastPrompt;
+        private AIAssistantProjectStateSnapshot? _stateAfterLastPrompt;
+        private bool _isPromptStateUndone;
 
         public ObservableCollection<AssistantTranscriptLine> Transcript { get; } = new ObservableCollection<AssistantTranscriptLine>();
 
@@ -25,6 +41,8 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand CancelCommand { get; }
         public RelayCommand CopyTranscriptEntryCommand { get; }
         public RelayCommand OpenTranscriptEntryInEditorCommand { get; }
+        public RelayCommand UndoProjectStateCommand { get; }
+        public RelayCommand RedoProjectStateCommand { get; }
 
         public string CurrentInput
         {
@@ -52,11 +70,23 @@ namespace FlowBlox.UICore.ViewModels
                     OnPropertyChanged(nameof(CanEditInput));
                     SubmitCommand.Invalidate();
                     CancelCommand.Invalidate();
+                    RefreshUndoRedoState();
                 }
             }
         }
 
         public bool CanEditInput => !IsBusy;
+        public bool CanUndoProjectState =>
+            !IsBusy &&
+            _stateBeforeLastPrompt != null &&
+            _stateAfterLastPrompt != null &&
+            !_isPromptStateUndone;
+
+        public bool CanRedoProjectState =>
+            !IsBusy &&
+            _stateBeforeLastPrompt != null &&
+            _stateAfterLastPrompt != null &&
+            _isPromptStateUndone;
 
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
 
@@ -74,6 +104,8 @@ namespace FlowBlox.UICore.ViewModels
             CancelCommand = new RelayCommand(Cancel, () => IsBusy);
             CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
             OpenTranscriptEntryInEditorCommand = new RelayCommand(OpenTranscriptEntryInEditor);
+            UndoProjectStateCommand = new RelayCommand(UndoProjectState, () => CanUndoProjectState);
+            RedoProjectStateCommand = new RelayCommand(RedoProjectState, () => CanRedoProjectState);
         }
 
         private bool CanSubmit()
@@ -86,6 +118,9 @@ namespace FlowBlox.UICore.ViewModels
             var input = CurrentInput?.Trim();
             if (string.IsNullOrWhiteSpace(input) || IsBusy)
                 return;
+
+            var stateBeforePrompt = _captureProjectState?.Invoke();
+            var promptCompleted = false;
 
             AddTranscriptLine(new AssistantTranscriptLine
             {
@@ -100,6 +135,7 @@ namespace FlowBlox.UICore.ViewModels
             try
             {
                 await _service.GenerateProjectAsync(input, _cts.Token);
+                promptCompleted = true;
             }
             catch (OperationCanceledException)
             {
@@ -121,6 +157,18 @@ namespace FlowBlox.UICore.ViewModels
             }
             finally
             {
+                if (promptCompleted && stateBeforePrompt != null)
+                {
+                    var stateAfterPrompt = _captureProjectState?.Invoke();
+                    if (stateAfterPrompt != null)
+                    {
+                        _stateBeforeLastPrompt = stateBeforePrompt;
+                        _stateAfterLastPrompt = stateAfterPrompt;
+                        _isPromptStateUndone = false;
+                        RefreshUndoRedoState();
+                    }
+                }
+
                 CurrentInput = string.Empty;
                 IsBusy = false;
                 _cts?.Dispose();
@@ -134,6 +182,30 @@ namespace FlowBlox.UICore.ViewModels
                 return;
 
             _cts?.Cancel();
+        }
+
+        private void UndoProjectState()
+        {
+            if (!CanUndoProjectState || _restoreProjectState == null || _stateBeforeLastPrompt == null)
+                return;
+
+            if (_restoreProjectState.Invoke(_stateBeforeLastPrompt))
+            {
+                _isPromptStateUndone = true;
+                RefreshUndoRedoState();
+            }
+        }
+
+        private void RedoProjectState()
+        {
+            if (!CanRedoProjectState || _restoreProjectState == null || _stateAfterLastPrompt == null)
+                return;
+
+            if (_restoreProjectState.Invoke(_stateAfterLastPrompt))
+            {
+                _isPromptStateUndone = false;
+                RefreshUndoRedoState();
+            }
         }
 
         private void Service_FlowBlocksChanged(object? sender, FlowBlocksChangedEventArgs e)
@@ -200,6 +272,19 @@ namespace FlowBlox.UICore.ViewModels
             Transcript.Clear();
             CurrentInput = string.Empty;
             IsBusy = false;
+            _stateBeforeLastPrompt = null;
+            _stateAfterLastPrompt = null;
+            _isPromptStateUndone = false;
+            RefreshUndoRedoState();
+        }
+
+        public void ConfigureProjectStateAccess(
+            Func<AIAssistantProjectStateSnapshot?> captureProjectState,
+            Func<AIAssistantProjectStateSnapshot, bool> restoreProjectState)
+        {
+            _captureProjectState = captureProjectState;
+            _restoreProjectState = restoreProjectState;
+            RefreshUndoRedoState();
         }
 
         public AssistantConfiguration GetConfiguration(out string error) => _service.GetConfiguration(out error);
@@ -211,6 +296,14 @@ namespace FlowBlox.UICore.ViewModels
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void RefreshUndoRedoState()
+        {
+            OnPropertyChanged(nameof(CanUndoProjectState));
+            OnPropertyChanged(nameof(CanRedoProjectState));
+            UndoProjectStateCommand.Invalidate();
+            RedoProjectStateCommand.Invalidate();
         }
     }
 }

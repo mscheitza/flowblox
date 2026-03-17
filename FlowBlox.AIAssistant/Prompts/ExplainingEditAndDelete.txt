@@ -1,0 +1,88 @@
+Editing and Deletion Guide (FlowBlox Update Tool API)
+
+Scope:
+- This guide explains how to edit links/references, update nested reactive values, and delete safely.
+- It applies to UpdateFlowBlock and UpdateManagedObject.
+
+Type classes:
+- Reference Components:
+  - FlowBlocks
+  - ManagedObjects (including FieldElements)
+- FlowBloxReactiveObject-only (non-reference component):
+  - Reactive objects that exist only inside their parent context.
+
+Core update model:
+- Use path-based updates (/Property/0/Nested).
+- For FlowBloxReactiveObject-only values, never assign direct JSON objects/arrays to the parent value.
+  - Set sub-properties via path entries.
+  - Missing parent paths are created automatically.
+
+Creation and assignment rule (important):
+- FlowBloxReactiveObject-only (non-reference component):
+  - Create/update via Update tool path method (GetOrCreate behavior).
+- ManagedObjects / FlowBlocks:
+  - Create via dedicated Tool API calls only (CreateManagedObject / CreateFlowBlock).
+  - Then set references/properties via UpdateFlowBlock / UpdateManagedObject.
+
+Typed GetOrCreate for FlowBloxReactiveObject-only collections:
+- You can force creation type per index:
+  - /Collection/<index>:<FullTypeName>/...
+- Type annotation is optional in common cases.
+  - Use typed index mainly for abstract/base types or polymorphic collections with multiple supported derived types.
+  - If the target type has specific derivations, inspect kind/supportedTypes first.
+- If that index already contains another type:
+  - Delete first via /Collection/<index>/Delete.
+  - Then create again with the required type.
+- For creating ManagedObjects or FlowBlocks, always use the dedicated Tool API calls (CreateManagedObject / CreateFlowBlock), not typed index GetOrCreate paths.
+
+Link / Unlink:
+- Only for Reference Components (FlowBlock/ManagedObject/FieldElement).
+- Resolver formats:
+  - FlowBlock: {"resolveFlowBlockByName":"FlowBlockName"}
+  - ManagedObject: {"resolveManagedObjectByName":"ManagedObjectName"}
+  - FieldElement: {"resolveFieldElementByFQName":"$FlowBlock::FieldName"}
+- Single reference:
+  - /Property/Link + resolver
+  - /Property/Unlink (+ optional resolver; no-op if mismatch/not found)
+- Reference collections:
+  - /Collection/Link + resolver (no duplicates)
+  - /Collection/Unlink + resolver (no-op if absent)
+  - /Collection/<index>/Link + resolver for explicit index swap/replace
+  - /Collection/<index>/Unlink for explicit index removal
+  - /Collection/<index> is also supported as direct set/swap shorthand.
+
+Important:
+- Do NOT use Unlink for FlowBloxReactiveObject-only values.
+  - They are parent-scoped only.
+  - Use Delete on the parent path instead.
+
+Delete semantics:
+- Context delete via Update path:
+  - /Path/Delete
+  - /Collection/<index>/Delete
+- Allowed for:
+  - FlowBloxReactiveObject-only values/entries.
+- Reference Components:
+  - You may remove references via Unlink in parent context.
+  - Permanent deletion uses:
+    - DeleteFlowBlock
+    - DeleteManagedObject
+
+Dependency and deletion order (critical):
+- Deletion fails while incoming references still exist.
+- Always delete in dependency order (leaf-to-root).
+
+Examples:
+- Managed object chain: Fb1 => Mo1 => Mo2
+  - Wrong: delete Mo1 first (Fb1 still references Mo1).
+  - Correct order: remove/delete Fb1 reference first, then Mo1, then Mo2.
+
+- Flow block chain: Fb1 => Fb2 => Fb3
+  - Wrong: delete Fb2 first (Fb3 references Fb2).
+  - Correct order: Fb3 first, then Fb2, then Fb1.
+
+Safety checklist before delete:
+- Inspect current project state (GetProjectJson).
+- Remove dependent references first (Unlink or delete dependent owners).
+- Then perform permanent delete (DeleteFlowBlock/DeleteManagedObject) if needed.
+

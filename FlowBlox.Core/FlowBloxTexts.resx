@@ -895,7 +895,7 @@ All inputs are collected during the referenced block's iteration and this flow b
 		<value>JSON object (via "Write JSON object" flow block)</value>
 	</data>
   <data name="JsonObjectWriterFlowBlock_Description" xml:space="preserve">
-		<value>Creates a new JSON object if needed, or updates the existing one with the property/value assignments</value>
+		<value>Creates a new JSON object if needed, or updates an existing one using JSON assignments. To add array elements, set Path to the array property and define element values via JSON assignments.</value>
 	</data>
   <data name="JsonObjectWriterFlowBlock_DisplayName" xml:space="preserve">
 		<value>Write JSON object</value>
@@ -903,8 +903,20 @@ All inputs are collected during the referenced block's iteration and this flow b
   <data name="JsonObjectWriterFlowBlock_JsonAssignments" xml:space="preserve">
 		<value>JSON assignments</value>
 	</data>
+  <data name="JsonObjectWriterFlowBlock_JsonAssignments_Tooltip" xml:space="preserve">
+		<value>List of property assignments applied to the target JSON object. Each row maps exactly one property name to one value (static or field-based). Do not paste a complete JSON document into a single value.</value>
+	</data>
   <data name="JsonObjectWriterFlowBlock_Path" xml:space="preserve">
 		<value>Path</value>
+	</data>
+  <data name="JsonObjectWriterFlowBlock_Path_Tooltip" xml:space="preserve">
+		<value>Path to the target node where the object should be created or updated. Use '/' to separate segments; object properties by name, array entries by index (e.g. 'participants/0'). For array appends, set Path to the array property (e.g. 'participants') and describe element properties with JSON assignments. Empty path targets the root object.</value>
+	</data>
+  <data name="JsonObjectWriterFlowBlock_IsArray" xml:space="preserve">
+		<value>Is array</value>
+	</data>
+  <data name="JsonObjectWriterFlowBlock_IsArray_Tooltip" xml:space="preserve">
+		<value>If enabled and the path does not exist yet, an array is created at Path and a new object element is added to it. If disabled, a JSON object is created at Path.</value>
 	</data>
   <data name="JsonPathSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Reads a JSON object and returns the value or values that match the specified JSON path.</value>
@@ -927,6 +939,9 @@ All inputs are collected during the referenced block's iteration and this flow b
   <data name="JsonPropertyValueAssignment_IsArray" xml:space="preserve">
 		<value>Is array</value>
 	</data>
+  <data name="JsonPropertyValueAssignment_IsArray_Tooltip" xml:space="preserve">
+		<value>Indicates whether the target JSON property should be treated as an array. If enabled, each evaluated assignment value is appended to that array instead of replacing the property.</value>
+	</data>
   <data name="JsonPropertyValueAssignment_PropertyName" xml:space="preserve">
 		<value>Property name</value>
 	</data>
@@ -935,6 +950,9 @@ All inputs are collected during the referenced block's iteration and this flow b
 	</data>
   <data name="JsonPropertyValueAssignment_Value" xml:space="preserve">
 		<value>Value</value>
+	</data>
+  <data name="JsonPropertyValueAssignment_Value_Tooltip" xml:space="preserve">
+		<value>Value for the target property path (field placeholders supported). Direct JSON is not supported here: create one mapping entry per property assignment. Missing parent paths are created automatically.</value>
 	</data>
   <data name="LineExtractorModifier" xml:space="preserve">
 		<value>Extract lines (Auto adjustment)</value>

@@ -1,15 +1,19 @@
 ﻿using FlowBlox.AppWindow;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Logging;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
+using FlowBlox.Core.Util.Json;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.Grid.Elements.UserControls;
 using FlowBlox.Grid.Provider;
 using FlowBlox.UICore.ViewModels;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -44,12 +48,57 @@ namespace FlowBlox.AppWindow.Contents
             if (_viewModel != null)
             {
                 _viewModel.FlowBlocksChanged += ViewModel_FlowBlocksChanged;
+                _viewModel.ConfigureProjectStateAccess(CaptureCurrentProjectState, RestoreProjectState);
             }
         }
 
         internal void OnAfterUIRegistryInitialized()
         {
             _viewModel?.ResetForProjectInitialization();
+        }
+
+        private AIAssistantProjectStateSnapshot? CaptureCurrentProjectState()
+        {
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            if (project == null)
+                return null;
+
+            project.RefreshOrderedTopLevelCollectionsForSerialization();
+
+            return new AIAssistantProjectStateSnapshot
+            {
+                ProjectGuid = project.ProjectGuid,
+                ProjectName = project.ProjectName ?? string.Empty,
+                ProjectJson = JsonConvert.SerializeObject(project, JsonSettings.ProjectExport()),
+                ExtensionsJson = JsonConvert.SerializeObject(project.Extensions ?? new()),
+                ProjectSpaceGuid = project.ProjectSpaceGuid ?? string.Empty,
+                ProjectSpaceVersion = project.ProjectSpaceVersion,
+                ProjectSpaceEndpointUri = project.ProjectSpaceEndpointUri ?? string.Empty
+            };
+        }
+
+        private bool RestoreProjectState(AIAssistantProjectStateSnapshot snapshot)
+        {
+            if (snapshot == null || string.IsNullOrWhiteSpace(snapshot.ProjectJson))
+                return false;
+
+            try
+            {
+                var restoredProject = FlowBloxProject.FromJsonContents(
+                    snapshot.ProjectJson,
+                    snapshot.ExtensionsJson,
+                    string.IsNullOrWhiteSpace(snapshot.ProjectSpaceGuid) ? null : snapshot.ProjectSpaceGuid,
+                    snapshot.ProjectSpaceVersion,
+                    string.IsNullOrWhiteSpace(snapshot.ProjectSpaceEndpointUri) ? null : snapshot.ProjectSpaceEndpointUri);
+
+                return AppWindow.Instance.RestoreProjectStateWithoutConfirmation(restoredProject);
+            }
+            catch (Exception ex)
+            {
+                var logger = FlowBloxLogManager.Instance.GetLogger();
+                logger.Exception(ex);
+                return false;
+            }
         }
 
         protected override void Dispose(bool disposing)

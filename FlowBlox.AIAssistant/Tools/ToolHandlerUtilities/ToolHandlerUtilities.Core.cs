@@ -184,6 +184,7 @@ namespace FlowBlox.AIAssistant.Tools
             public bool IsProperty { get; set; }
             public string? PropertyName { get; set; }
             public int Index { get; set; }
+            public string? ExplicitTypeFullName { get; set; }
         }
 
         private sealed class UpdateOperation

@@ -181,6 +181,15 @@ namespace FlowBlox.Grid.Elements.UserControls
 
         private void _baseGridElement_OnPropertyValuesChanged()
         {
+            if (IsDisposed || Disposing)
+                return;
+
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(_baseGridElement_OnPropertyValuesChanged));
+                return;
+            }
+
             this.UpdateContent(true);
         }
 

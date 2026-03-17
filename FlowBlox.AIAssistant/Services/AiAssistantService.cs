@@ -104,7 +104,7 @@ namespace FlowBlox.AIAssistant.Services
                 return result;
             }
 
-            var maxRounds = Math.Clamp(config.MaxToolRounds, 1, 20);
+            var maxRounds = config.MaxToolRounds;
             var session = GetOrCreateSession();
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = BuildSystemPrompt();
@@ -339,33 +339,18 @@ namespace FlowBlox.AIAssistant.Services
 
         private static string BuildSystemPrompt()
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("You are FlowBlox AI Assistant.");
-            sb.AppendLine("Do not output markdown. Output exactly one JSON object (single object, no duplicates, no trailing text) using this schema:");
-            sb.AppendLine("{");
-            sb.AppendLine("  \"assistantMessage\": \"short status or final answer\",");
-            sb.AppendLine("  \"final\": false,");
-            sb.AppendLine("  \"toolCalls\": [");
-            sb.AppendLine("    { \"toolName\": \"ToolName\", \"arguments\": { } }");
-            sb.AppendLine("  ]");
-            sb.AppendLine("}");
-            sb.AppendLine("Rules for final flag:");
-            sb.AppendLine("- final=true ends the complete prompt processing for this user request.");
-            sb.AppendLine("- Use final=true only when the user goal is completed or you can prove it is blocked.");
-            sb.AppendLine("- If more tool work is needed, final must be false.");
-            sb.AppendLine("- This is a single user-prompt session with iterative tool API conversation. Set final=true only after the complete requested task is fully done.");
-            sb.AppendLine("- Do not set final=true for intermediate status updates, partial progress, or missing verification steps.");
-            sb.AppendLine("When finished, set \"final\": true and return no toolCalls.");
-            return sb.ToString();
+            var prompt = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.SystemMessageKey);
+            if (string.IsNullOrWhiteSpace(prompt))
+            {
+                throw new InvalidOperationException(
+                    $"Required assistant system prompt '{AssistantPromptCatalog.SystemMessageKey}' is missing or empty.");
+            }
+
+            return prompt;
         }
 
         private static string BuildSessionBootstrapPrompt(IReadOnlyList<ToolDefinition> toolDefinitions)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("Session bootstrap context for FlowBlox project editing:");
-            sb.AppendLine("You can call tools to inspect and modify the active FlowBlox project directly (CRUD + connect/disconnect). Use batch calls to reduce request count.");
-            sb.AppendLine("Property paths for updates use JSON-path-like slash syntax: /Property/0/NestedProperty.");
-            sb.AppendLine("Use GetProjectJson for the current project snapshot before and after structural changes.");
             var rootCategories = FlowBlockCategory.GetAll()
                 .Where(x => x.ParentCategory == null)
                 .Select(x => x.DisplayName)
@@ -373,38 +358,23 @@ namespace FlowBlox.AIAssistant.Services
                 .Distinct(StringComparer.Ordinal)
                 .OrderBy(x => x, StringComparer.Ordinal)
                 .ToList();
-            sb.AppendLine($"Known root categories: {string.Join(", ", rootCategories)}");
-            sb.AppendLine("Rules for updates and references:");
-            sb.AppendLine("- Never update managed objects indirectly through parent objects. If a property is a managed object (including FieldElement), update that object directly with UpdateManagedObject.");
-            sb.AppendLine("- You may update simple properties and FlowBloxReactiveObject properties (and collections of them) via JSON path from the primary object.");
-            sb.AppendLine("- For flow block references, use flow block name strings or {\"resolveFlowBlockByName\":\"FlowBlockName\"}.");
-            sb.AppendLine("- For managed object references, resolve references explicitly with one of:");
-            sb.AppendLine("  - {\"resolveManagedObjectByName\":\"ManagedObjectName\"}");
-            sb.AppendLine("  - {\"resolveFieldElementByFQName\":\"$FlowBlock::FieldName\"}");
-            sb.AppendLine("- BaseSingleResultFlowBlock creates its default ResultField automatically. Do not create that default field manually.");
-            sb.AppendLine("- For multi-result flow blocks (BaseResultFlowBlock that are not BaseSingleResultFlowBlock), create extra fields with CreateField.");
-            sb.AppendLine("- After CreateField, set field references on reactive mapping objects via UpdateFlowBlock/UpdateManagedObject using resolver syntax.");
-            sb.AppendLine("- For string properties with EnableFieldSelection, field placeholders use the syntax $FlowBlock::FieldName.");
-            sb.AppendLine("- Snapshot rule: rely on GetProjectJson for state verification and use identifiers only (FlowBlock=Name, FieldElement=FullyQualifiedFieldName, ManagedObject=Name).");
-            sb.AppendLine("- Iteration context rule: connecting multiple predecessors to one flow block enables automatic combination logic.");
-            sb.AppendLine("- Combination default is cross-product of predecessor iteration datasets (Combine).");
-            sb.AppendLine("- InputBehavior can override per predecessor, e.g. First instead of Combine.");
-            sb.AppendLine("- Layout rule: flows are built from left to right and should follow a center line.");
-            sb.AppendLine("- FlowBlock default size is approximately 328x235 px; keep horizontal spacing accordingly.");
-            sb.AppendLine("- Always set Location when creating a flow block.");
-            sb.AppendLine("- Start by creating StartFlowBlock with typeFullName \"FlowBlox.Core.Models.FlowBlocks.SequenceFlow.StartFlowBlock\" at location x=50, y=400.");
-            sb.AppendLine("- Keep primary stacks symmetric around the center line to maintain a clean design.");
-            sb.AppendLine("- For interface/abstract FlowBloxReactiveObject property types (FlowBlocks, ManagedObjects, nested ReactiveObjects), call GetSupportedTypes first, then inspect chosen type with kind info before creation/linking.");
-            sb.AppendLine("- ActivationConditions can be used on every flow block to control whether it should execute.");
-            sb.AppendLine("- Use FieldLogicalComparisonCondition (with logical operator) or LogicalGroupCondition (group of logical conditions) in ActivationConditions.");
-            sb.AppendLine("- If a flow block is not activated, it produces an empty result and forwards it to downstream blocks (follow-up chain is effectively cleared).");
-            sb.AppendLine("- Always call kind info tools before writing updates: inspect inheritance, UI metadata, enum members, nullability, supported types, and property semantics. Prefer GetTypeKindsInfo.");
-            sb.AppendLine("- BaseFlowBlock members are excluded by default when describing derived flow blocks. Query GetTypeKindsInfo explicitly for typeFullName \"FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock\" when needed.");
-            sb.AppendLine("- Do not assume category names, paths, types, or objects.");
-            sb.AppendLine("- Use only data returned by tools; especially for BatchExecuteToolRequests, every request must be based on known values.");
-            sb.AppendLine("- Do not query GetCategoryChildren for guessed paths. Use root categories and returned child paths exactly.");
-            sb.AppendLine("Available tools:");
+            var template = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.SessionBootstrapKey);
+            if (string.IsNullOrWhiteSpace(template))
+            {
+                throw new InvalidOperationException(
+                    $"Required assistant bootstrap prompt '{AssistantPromptCatalog.SessionBootstrapKey}' is missing or empty.");
+            }
 
+            return template
+                .Replace("{{ROOT_CATEGORIES}}", string.Join(", ", rootCategories), StringComparison.Ordinal)
+                .Replace("{{CENTRAL_GUIDELINES}}", BuildCentralGuidelinesText(), StringComparison.Ordinal)
+                .Replace("{{EXPLANATION_MANIFEST}}", BuildExplanationManifestText(), StringComparison.Ordinal)
+                .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal);
+        }
+
+        private static string BuildToolDefinitionsText(IReadOnlyList<ToolDefinition> toolDefinitions)
+        {
+            var sb = new StringBuilder();
             foreach (var tool in toolDefinitions)
             {
                 sb.Append("- ");
@@ -420,7 +390,40 @@ namespace FlowBlox.AIAssistant.Services
                 sb.AppendLine();
             }
 
-            return sb.ToString();
+            return sb.ToString().TrimEnd();
+        }
+
+        private static string BuildExplanationManifestText()
+        {
+            var explanations = AssistantPromptCatalog.GetAllEntries();
+            if (explanations.Count == 0)
+                return "[]";
+
+            return string.Join(
+                ", ",
+                explanations.Select(x => $"{x.Key}:{x.ContentHash}"));
+        }
+
+        private static string BuildCentralGuidelinesText()
+        {
+            var sections = new List<string>();
+
+            var iteration = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.IterationContextKey);
+            if (!string.IsNullOrWhiteSpace(iteration))
+            {
+                sections.Add("Topic: IterationContext / Flow\n" + iteration.Trim());
+            }
+
+            var editDelete = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.EditAndDeleteKey);
+            if (!string.IsNullOrWhiteSpace(editDelete))
+            {
+                sections.Add("Topic: Update / Delete Handling\n" + editDelete.Trim());
+            }
+
+            if (sections.Count == 0)
+                return "No central guidelines available.";
+
+            return string.Join("\n\n", sections);
         }
 
         private static string BuildRoundPrompt(

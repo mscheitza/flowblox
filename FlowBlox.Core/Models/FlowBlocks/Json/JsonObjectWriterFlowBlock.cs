@@ -44,13 +44,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
             return registry.GetFlowBlocks<JsonObjectWriterFlowBlock>().ToList();
         }
 
-        [Display(Name = "JsonObjectWriterFlowBlock_JsonAssignments", ResourceType = typeof(FlowBloxTexts), Order = 10)]
+        [Display(Name = "JsonObjectWriterFlowBlock_JsonAssignments", Description = "JsonObjectWriterFlowBlock_JsonAssignments_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 10)]
         [FlowBlockUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public ObservableCollection<JsonPropertyValueAssignment> Assignments { get; set; } = new();
 
 
-        [Display(Name = "JsonObjectWriterFlowBlock_Path", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [Display(Name = "JsonObjectWriterFlowBlock_Path", Description = "JsonObjectWriterFlowBlock_Path_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         public string Path { get; set; }
+
+        [Display(Name = "JsonObjectWriterFlowBlock_IsArray", Description = "JsonObjectWriterFlowBlock_IsArray_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        public bool IsArray { get; set; }
 
         [JsonIgnore]
         [DeepCopierIgnore]
@@ -67,6 +70,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
             properties.Add(nameof(AssociatedJsonObject));
             properties.Add(nameof(AssociatedJsonObjectWriter));
             properties.Add(nameof(Path));
+            properties.Add(nameof(IsArray));
             properties.Add(nameof(Assignments));
             return properties;
         }
@@ -99,18 +103,34 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                 var current = JsonPathSelector.GetJToken(root, effectivePath, out JToken parent, out string propertyName);
 
                 JObject createdOrUpdatedObject;
-                if (current is JArray parr)
+                if (current is JArray targetArray)
                 {
                     createdOrUpdatedObject = new JObject();
-                    parr.Add(createdOrUpdatedObject);
+                    targetArray.Add(createdOrUpdatedObject);
                 }
                 else if (current is null)
                 {
-                    createdOrUpdatedObject = new JObject();
-                    parent[propertyName] = createdOrUpdatedObject;
+                    if (parent is not JObject parentObject || string.IsNullOrWhiteSpace(propertyName))
+                        throw new InvalidOperationException("The target path cannot be created at this location.");
+
+                    if (IsArray)
+                    {
+                        var newArray = new JArray();
+                        createdOrUpdatedObject = new JObject();
+                        newArray.Add(createdOrUpdatedObject);
+                        parentObject[propertyName] = newArray;
+                    }
+                    else
+                    {
+                        createdOrUpdatedObject = new JObject();
+                        parentObject[propertyName] = createdOrUpdatedObject;
+                    }
                 }
                 else if (current is JObject jObject)
                 {
+                    if (IsArray)
+                        throw new InvalidOperationException("The target path resolves to an object. For array mode, provide a path to an array property.");
+
                     createdOrUpdatedObject = jObject;
                 }
                 else

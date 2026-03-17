@@ -164,80 +164,6 @@ namespace FlowBlox.AppWindow
             this._componentLibraryPanel?.UpdateUI();
         }
 
-        private void InitializeDockPanel(bool exceptProjectPanel = false)
-        {
-            this.dockPanel.SuspendLayout();
-
-            this.dockPanel.Theme = new VS2015DarkTheme();
-
-            foreach (var dockContent in dockPanel.Contents
-                .OfType<DockContent>()
-                .Where(x => !exceptProjectPanel || x is not ProjectPanel).ToList())
-            {
-                dockContent.Close();
-            }
-
-            if (!exceptProjectPanel)
-            {
-                var projectPanelFactory = new ProjectPanelFactory(dockPanel);
-                _dockContentProjectPanel = projectPanelFactory.Create();
-            }
-
-            var componentLibraryPanelFactory = new ComponentLibraryPanelFactory(dockPanel);
-            _componentLibraryPanel = componentLibraryPanelFactory.Create();
-
-            var fieldViewPanelFactory = new FieldViewPanelFactory(dockPanel);
-            _fieldViewPanel = fieldViewPanelFactory.Create();
-
-            var aiAssistantPanelFactory = new AIAssistantViewPanelFactory(dockPanel);
-            _aiAssistantViewPanel = aiAssistantPanelFactory.Create();
-
-            _objectManagerInitializer = new DockableObjectManagerInitializer(dockPanel);
-            _objectManagerInitializer.InitializeAllObjectManager();
-
-            var problemsViewPanelFactory = new ProblemsViewPanelFactory(dockPanel);
-            _problemsViewPanel = problemsViewPanelFactory.Create();
-
-            var runtimeViewPanelFactory = new RuntimeViewPanelFactory(dockPanel);
-            _runtimeViewPanel = runtimeViewPanelFactory.Create();
-
-            this.dockPanel.ResumeLayout();
-        }
-
-        private void DockPanel_ContentAdded(object sender, DockContentEventArgs e)
-        {
-            var dockContent = ((DockContent)e.Content);
-
-            var toolstripMenuItem = new ToolStripMenuItem()
-            {
-                Text = dockContent.Text
-            };
-
-            toolstripMenuItem.Image = DockContentIconResolver.Resolve(dockContent);
-
-            toolstripMenuItem.Click += (s, e2) =>
-            {
-                dockContent.Show();
-            };
-
-            itmDockablePanels.DropDownItems.Add(toolstripMenuItem);
-
-            FlowBloxStyle.ApplyStyle(this.menuStrip);
-        }
-
-        private void DockPanel_ContentRemoved(object sender, DockContentEventArgs e)
-        {
-            var removedContent = (DockContent)e.Content;
-            foreach (ToolStripItem item in itmDockablePanels.DropDownItems)
-            {
-                if (item is ToolStripMenuItem menuItem && menuItem.Text == removedContent.Name)
-                {
-                    itmDockablePanels.DropDownItems.Remove(item);
-                    break;
-                }
-            }
-        }
-
         private void UpdateUI_ProjectName()
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;
@@ -368,11 +294,12 @@ namespace FlowBlox.AppWindow
             this.UpdateUI();
         }
 
-        private void OnAfterUIRegistryInitialized()
+        private void OnAfterUIRegistryInitialized(bool exceptAiAssistantView = false)
         {
-            InitializeDockPanel();
+            InitializeDockPanel(exceptAiAssistantView: exceptAiAssistantView);
             this._fieldViewPanel.UserControl.OnAfterUIRegistryInitialized();
-            this._aiAssistantViewPanel?.OnAfterUIRegistryInitialized();
+            if (!exceptAiAssistantView)
+                this._aiAssistantViewPanel?.OnAfterUIRegistryInitialized();
             this._dockContentProjectPanel.OnAfterUIRegistryInitialized();
         }
 
@@ -686,6 +613,32 @@ namespace FlowBlox.AppWindow
         {
             this._dockContentProjectPanel.OnAfterProjectOpened(project);
             this.UpdateUI();
+        }
+
+        internal bool RestoreProjectStateWithoutConfirmation(FlowBloxProject project)
+        {
+            if (project == null)
+                return false;
+
+            try
+            {
+                UnloadProject();
+                FlowBloxProjectManager.Instance.ActiveProjectPath = null;
+                FlowBloxProjectManager.Instance.ActiveProject = project;
+
+                OnAfterUIRegistryInitialized(exceptAiAssistantView: true);
+                _dockContentProjectPanel?.OnAfterProjectOpened(project);
+
+                UpdateUI_ProjectName();
+                UpdateUI();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var logger = FlowBloxLogManager.Instance.GetLogger();
+                logger.Exception(ex);
+                return false;
+            }
         }
 
         private void AppWindow_FormClosing(object sender, FormClosingEventArgs e)

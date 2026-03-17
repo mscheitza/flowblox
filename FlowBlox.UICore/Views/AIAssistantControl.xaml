@@ -29,6 +29,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
@@ -37,12 +39,44 @@
                            VerticalAlignment="Center"
                            FontSize="16" />
 
-                <Button x:Name="SettingsButton"
-                        Grid.Column="1"
+                <Button Grid.Column="1"
                         Width="32"
                         Height="32"
                         Padding="0"
                         Margin="8,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="Undo last AI project state change"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{Binding UndoProjectStateCommand}">
+                    <iconPacks:PackIconMaterial Kind="Undo"
+                                                Width="18"
+                                                Height="18"
+                                                Foreground="#FF5A5A5A" />
+                </Button>
+
+                <Button Grid.Column="2"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="4,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="Redo last AI project state change"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{Binding RedoProjectStateCommand}">
+                    <iconPacks:PackIconMaterial Kind="Redo"
+                                                Width="18"
+                                                Height="18"
+                                                Foreground="#FF5A5A5A" />
+                </Button>
+
+                <Button x:Name="SettingsButton"
+                        Grid.Column="3"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="4,0,0,0"
                         HorizontalAlignment="Right"
                         ToolTip="Configure AI Assistant"
                         BorderThickness="0"

@@ -166,12 +166,11 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 result["rules"] = new JObject
                 {
-                    ["managedObjectUpdateRule"] = "Never update managed objects indirectly through parent update paths. Update managed objects or field elements directly via UpdateManagedObject.",
-                    ["managedObjectReferenceResolver"] = "Use value resolvers: {\"resolveManagedObjectByName\":\"...\"} or {\"resolveFieldElementByFQName\":\"$FlowBlock::FieldName\"}.",
-                    ["flowBlockReferenceResolver"] = "Use value resolver: {\"resolveFlowBlockByName\":\"FlowBlockName\"}.",
                     ["associatedFlowBlockResolvableRule"] = "Properties marked as AssociatedFlowBlockResolvable can stay null: runtime resolves the required previous flow block on path automatically (first matching instance wins), but explicit user override is allowed.",
                     ["fieldPlaceholderSyntax"] = "$FlowBlock::FieldName",
-                    ["baseFlowBlockHint"] = "BaseFlowBlock members are excluded by default for derived flow blocks. Query BaseFlowBlock directly to inspect those members."
+                    ["baseFlowBlockHint"] = "BaseFlowBlock members are excluded by default for derived flow blocks. Query BaseFlowBlock directly to inspect those members.",
+                    ["referenceComponentKinds"] = "FlowBlock, ManagedObject (including FieldElement).",
+                    ["reactiveObjectOnlyKind"] = "FlowBloxReactiveObject-only (non-reference component) values exist only in their parent context."
                 };
             }
 
@@ -607,3 +606,5 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
+

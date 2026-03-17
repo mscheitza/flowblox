@@ -31,7 +31,7 @@ namespace FlowBlox.Views
         private FlowBloxProjectComponentProvider _componentProvider;
         private readonly Font _smallFont;
         private FlowBloxRegistry _registry;
-        private readonly FlowBloxUIRegistry _uiRegistry;
+        private FlowBloxUIRegistry _uiRegistry;
 
         public FieldView()
         {
@@ -50,8 +50,7 @@ namespace FlowBlox.Views
             checkBoxShowFlowBlock.CheckedChanged += CheckBoxShowFlowBlock_CheckedChanged;
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
             _registry = FlowBloxRegistryProvider.GetRegistry();
-            _uiRegistry = _componentProvider.GetCurrentUIRegistry();
-            _uiRegistry.FlowBlockUIElementRegistered += _uiRegistry_FlowBlockUIElementRegistered;
+            RebindUiRegistry();
             UpdateUI();
         }
 
@@ -138,7 +137,7 @@ namespace FlowBlox.Views
             fieldElement.OnValueChanged -= FieldElement_OnValueChange;
             fieldElement.OnValueChanged += FieldElement_OnValueChange;
 
-            if (fieldElement.IsRegularField())
+            if (fieldElement.IsRegularField() && _uiRegistry != null)
             {
                 var uiElement = _uiRegistry.GetUIElementToGridElement(fieldElement.Source);
                 RegisterElementSelectedChangedByUser(uiElement);
@@ -156,6 +155,9 @@ namespace FlowBlox.Views
 
         private void UiElement_ElementSelectedChangedByUser(FlowBlockUIElement sender, bool selected)
         {
+            if (_uiRegistry == null)
+                return;
+
             var resultFlowBlock = sender.InternalFlowBlock as BaseResultFlowBlock;
             if (resultFlowBlock == null)
                 return;
@@ -258,7 +260,22 @@ namespace FlowBlox.Views
 
         private void tbFilter_TextChanged(object sender, EventArgs e) => InitializeFields();
 
-        internal void OnAfterUIRegistryInitialized() => InitializeFields();
+        internal void OnAfterUIRegistryInitialized()
+        {
+            _registry = FlowBloxRegistryProvider.GetRegistry();
+            RebindUiRegistry();
+            InitializeFields();
+        }
+
+        private void RebindUiRegistry()
+        {
+            if (_uiRegistry != null)
+                _uiRegistry.FlowBlockUIElementRegistered -= _uiRegistry_FlowBlockUIElementRegistered;
+
+            _uiRegistry = _componentProvider.GetCurrentUIRegistry();
+            if (_uiRegistry != null)
+                _uiRegistry.FlowBlockUIElementRegistered += _uiRegistry_FlowBlockUIElementRegistered;
+        }
 
         private IEnumerable<FieldElement> GetFieldsWithFilter(string filter)
         {

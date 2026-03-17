@@ -16,7 +16,8 @@ namespace FlowBlox.AIAssistant.Tools
                 ["path"] = "string?",
                 ["value"] = "any?",
                 ["updates"] = "[{path,value}]?",
-                ["reactiveObjectUpdateHint"] = "For FlowBloxReactiveObject-only nested types, do not send full JSON object/array as value. Use path syntax per property/index (Get-or-Create), e.g. /MappingEntries/0/ColumnName and /MappingEntries/0/Field.",
+                ["contractHint"] = "Path-based updates with Link/Unlink/Delete terminals. Typed index '/Collection/<index>:<FullTypeName>/...' is optional and mainly needed for abstract/base or polymorphic FlowBloxReactiveObject-only collections (see kind/supportedTypes). Create ManagedObjects/FlowBlocks via CreateManagedObject/CreateFlowBlock, then assign via Update.",
+                ["explanationHint"] = "For full update/delete semantics and dependency-order rules use GetExplanationContent('explaining_edit_and_delete').",
                 ["resolverExamples"] = new JArray
                 {
                     new JObject { ["resolveFlowBlockByName"] = "FlowBlockName" },
@@ -43,3 +44,5 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
+

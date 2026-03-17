@@ -10,4 +10,8 @@
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Prompts\*.txt" />
+  </ItemGroup>
+
 </Project>

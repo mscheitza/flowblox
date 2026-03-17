@@ -12,7 +12,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         [Display(Name = "JsonPropertyValueAssignment_PropertyName", ResourceType = typeof(FlowBloxTexts))]
         public string PropertyName { get; set; }
 
-        [Display(Name = "JsonPropertyValueAssignment_Value", ResourceType = typeof(FlowBloxTexts))]
+        [Display(Name = "JsonPropertyValueAssignment_Value", Description = "JsonPropertyValueAssignment_Value_Tooltip", ResourceType = typeof(FlowBloxTexts))]
         [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public string Value { get; set; }
 
@@ -21,7 +21,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
             SelectionFilterMethod = nameof(BaseFlowBlock.GetPossibleFieldElements))]
         public FieldElement FieldValue { get; set; }
 
-        [Display(Name = "JsonPropertyValueAssignment_IsArray", ResourceType = typeof(FlowBloxTexts))]
+        [Display(Name = "JsonPropertyValueAssignment_IsArray", Description = "JsonPropertyValueAssignment_IsArray_Tooltip", ResourceType = typeof(FlowBloxTexts))]
         public bool IsArray { get; set; }
     }
 }
