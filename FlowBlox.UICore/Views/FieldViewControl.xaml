@@ -1,0 +1,192 @@
+<UserControl x:Class="FlowBlox.UICore.Views.FieldViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+             xmlns:viewModels="clr-namespace:FlowBlox.UICore.ViewModels"
+             xmlns:fieldViewModels="clr-namespace:FlowBlox.UICore.ViewModels.FieldView"
+             xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="450">
+    <UserControl.DataContext>
+        <viewModels:FieldViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,8">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <ToggleButton IsChecked="{Binding ShowFlowBlock, Mode=TwoWay}"
+                              ToolTip="{x:Static resources:FieldView.Tooltip_ToggleFlowBlockColumn}"
+                              Width="30"
+                              Height="30"
+                              Margin="8,0,0,0"
+                              Checked="FlowBlockToggle_CheckedChanged"
+                              Unchecked="FlowBlockToggle_CheckedChanged">
+                    <iconPacks:PackIconMaterial Kind="CubeOutline"
+                                                Width="16"
+                                                Height="16"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                </ToggleButton>
+            </StackPanel>
+
+            <DockPanel LastChildFill="True">
+                <iconPacks:PackIconMaterial Kind="Magnify"
+                                            Width="16"
+                                            Height="16"
+                                            Margin="0,0,6,0"
+                                            VerticalAlignment="Center" />
+                <TextBox x:Name="FilterTextBox"
+                         Height="30"
+                         MinHeight="30"
+                         VerticalContentAlignment="Center"
+                         Padding="8,0,8,0"
+                         VerticalAlignment="Center"
+                         Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+            </DockPanel>
+        </DockPanel>
+
+        <Grid Grid.Row="1">
+            <ListView x:Name="FieldListView"
+                      ItemsSource="{Binding Fields}"
+                      SelectionMode="Extended"
+                      Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext}">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="Padding" Value="8,0,0,0" />
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="IsSelected" Value="{Binding IsAutoSelected, Mode=TwoWay}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static resources:FieldView.ContextMenu_OpenFieldValue}"
+                                  Command="{Binding PlacementTarget.Tag.OpenFieldValueCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="OpenInNew" Width="16" Height="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static resources:FieldView.ContextMenu_Copy}"
+                                  Command="{Binding PlacementTarget.Tag.CopyCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="ContentCopy" Width="16" Height="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="{x:Static resources:FieldView.ContextMenu_Refresh}"
+                                  Command="{Binding PlacementTarget.Tag.RefreshCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="Refresh" Width="16" Height="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+
+                <ListView.InputBindings>
+                    <KeyBinding Key="C" Modifiers="Control" Command="{Binding CopyCommand}" />
+                    <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+                    <KeyBinding Key="Enter" Command="{Binding OpenFieldValueCommand}" />
+                </ListView.InputBindings>
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="32">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate DataType="{x:Type fieldViewModels:FieldEntryViewModel}">
+                                    <Image Source="{Binding IconSource}"
+                                           Width="14"
+                                           Height="14"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="28">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate DataType="{x:Type fieldViewModels:FieldEntryViewModel}">
+                                    <iconPacks:PackIconMaterial Kind="ArrowRightBoldCircleOutline"
+                                                                Width="14"
+                                                                Height="14"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalAlignment="Center"
+                                                                Foreground="#2E7D32"
+                                                                Visibility="{Binding IsFlowBlockSelected, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn x:Name="FlowBlockColumn"
+                                        Header="{x:Static resources:FieldView.Col_FlowBlock}"
+                                        Width="180"
+                                        DisplayMemberBinding="{Binding SourceName}" />
+
+                        <GridViewColumn Header="{x:Static resources:FieldView.Col_Field}"
+                                        Width="220"
+                                        DisplayMemberBinding="{Binding FieldName}" />
+
+                        <GridViewColumn Header="{x:Static resources:FieldView.Col_Value}"
+                                        Width="420"
+                                        DisplayMemberBinding="{Binding FieldValue}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <Border IsHitTestVisible="False"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Margin="18,56,18,0">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasFields}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <iconPacks:PackIconMaterial Kind="InformationOutline"
+                                                Margin="0,0,8,0"
+                                                VerticalAlignment="Top"
+                                                Style="{StaticResource FlowBlox.EmptyStateIconStyle}" />
+                    <TextBlock Grid.Column="1"
+                                TextAlignment="Left"
+                                Text="{x:Static resources:FieldView.EmptyState_NoFields}"
+                                Style="{StaticResource FlowBlox.EmptyStateTextStyle}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

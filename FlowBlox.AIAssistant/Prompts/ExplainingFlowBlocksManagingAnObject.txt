@@ -1,0 +1,13 @@
+Explaining "FlowBlock manages object":
+
+- Some flow blocks create/manage a runtime object (for example JSON object, XML document, browser session).
+- Downstream blocks on the same path operate on that managed object (writers, selectors, outputs).
+
+Lifecycle rule:
+- Object creation position defines scope.
+- If object-managing block is before an iterator (for example TableReader with N rows): one object can accumulate data from all rows.
+- If object-managing block is after an iterator: a new object is created per dataset/row.
+
+Design patterns:
+- Aggregated output (all rows in one object/file): Start -> ObjectManager -> Iterator -> ObjectWriter -> Output/FileWriter
+- Per-row output (one object/file per row): Start -> Iterator -> ObjectManager -> ObjectWriter -> Output/FileWriter (usually with field placeholders in file name)

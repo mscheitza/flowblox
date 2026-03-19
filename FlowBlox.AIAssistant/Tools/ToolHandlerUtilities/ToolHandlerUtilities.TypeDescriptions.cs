@@ -168,6 +168,7 @@ namespace FlowBlox.AIAssistant.Tools
                 {
                     ["associatedFlowBlockResolvableRule"] = "Properties marked as AssociatedFlowBlockResolvable can stay null: runtime resolves the required previous flow block on path automatically (first matching instance wins), but explicit user override is allowed.",
                     ["fieldPlaceholderSyntax"] = "$FlowBlock::FieldName",
+                    ["placeholderLookupTool"] = "GetPlaceholders",
                     ["baseFlowBlockHint"] = "BaseFlowBlock members are excluded by default for derived flow blocks. Query BaseFlowBlock directly to inspect those members.",
                     ["referenceComponentKinds"] = "FlowBlock, ManagedObject (including FieldElement).",
                     ["reactiveObjectOnlyKind"] = "FlowBloxReactiveObject-only (non-reference component) values exist only in their parent context."
@@ -276,6 +277,8 @@ namespace FlowBlox.AIAssistant.Tools
                 && flowBlockUi?.UiOptions.HasFlag(UIOptions.EnableFieldSelection) == true)
             {
                 propertyInfo["fieldPlaceholderSyntax"] = "$FlowBlock::FieldName";
+                propertyInfo["placeholderLookupTool"] = "GetPlaceholders";
+                propertyInfo["placeholderKinds"] = new JArray("Field", "Project", "Options");
             }
 
             if (isManagedObject)

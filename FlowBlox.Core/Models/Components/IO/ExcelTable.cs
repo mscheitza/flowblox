@@ -6,7 +6,7 @@ using System.Data;
 
 namespace FlowBlox.Core.Models.Components.IO
 {
-    [Display(Name = "TypeNames_ExcelTable", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "ExcelTable_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class ExcelTable : DataTableBase
     {
         public ExcelTable() : base() 
@@ -134,3 +134,4 @@ namespace FlowBlox.Core.Models.Components.IO
         }
     }
 }
+

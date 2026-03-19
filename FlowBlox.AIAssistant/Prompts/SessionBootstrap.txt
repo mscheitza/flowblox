@@ -10,6 +10,7 @@ Rules for updates and references:
 - For multi-result flow blocks (BaseResultFlowBlock that are not BaseSingleResultFlowBlock), create extra fields with CreateField.
 - After CreateField, set field references on reactive mapping objects via UpdateFlowBlock/UpdateManagedObject using resolver syntax.
 - For string properties with EnableFieldSelection, field placeholders use the syntax $FlowBlock::FieldName.
+- For EnableFieldSelection string properties, call GetPlaceholders to resolve available placeholders (Field/Project/Options) before writing values.
 - Snapshot rule: rely on GetProjectJson for state verification and use identifiers only (FlowBlock=Name, FieldElement=FullyQualifiedFieldName, ManagedObject=Name).
 - Layout rule: flows are built from left to right and should follow a center line.
 - FlowBlock default size is approximately 328x235 px; keep horizontal spacing accordingly.
@@ -28,5 +29,7 @@ Rules for updates and references:
 Explanation content (versioned by hash): {{EXPLANATION_MANIFEST}}
 If you need detailed behavior guidance, call GetExplanationContent with key + knownHash and only pull content when hash differs.
 For update and delete behavior, prefer explanation key: explaining_edit_and_delete.
+For object lifecycle and aggregation/per-row behavior, prefer explanation key: explaining_flow_blocks_managing_an_object.
 Available tools:
 {{AVAILABLE_TOOLS}}
+

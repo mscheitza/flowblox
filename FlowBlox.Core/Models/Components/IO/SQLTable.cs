@@ -12,7 +12,7 @@ using System.Data;
 namespace FlowBlox.Core.Models.Components.IO
 {
     [Serializable()]
-    [Display(Name = "TypeNames_SQLTable", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "SQLTable_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class SQLTable : ManagedObject, IReadableTable
     {
         private List<Action> _readableTableDataSourceChangedHandler = new List<Action>();
@@ -101,3 +101,4 @@ namespace FlowBlox.Core.Models.Components.IO
         }
     }
 }
+

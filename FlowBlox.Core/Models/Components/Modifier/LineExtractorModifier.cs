@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.Components.Modifier
 {
-    [Display(Name = "LineExtractorModifier", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "LineExtractorModifier_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class LineExtractorModifier : ModifierBase
     {
         [Required]
@@ -34,3 +34,4 @@ namespace FlowBlox.Core.Models.Components.Modifier
         }
     }
 }
+

@@ -1,23 +1,23 @@
-﻿using FlowBlox.AppWindow.Contents;
-using FlowBlox.Views;
+using FlowBlox.AppWindow.Contents;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace FlowBlox.AppWindow.ContentFactories
 {
-    public class FieldViewPanelFactory : DockContentFactoryBase<DockContentUserControlWrapper<FieldView>>
+    public class FieldViewPanelFactory : DockContentFactoryBase<FieldView>
     {
         public FieldViewPanelFactory(DockPanel dockPanel) : base(dockPanel)
         {
         }
 
-        public override DockContentUserControlWrapper<FieldView> Create()
+        public override FieldView Create()
         {
-            var dockContent = new DockContentUserControlWrapper<FieldView>
+            var dockContent = new FieldView
             {
                 Dock = DockStyle.Fill,
                 DockAreas = DockAreas.DockLeft | DockAreas.DockRight | DockAreas.DockBottom
             };
+
             var key = typeof(FieldView).FullName;
             return Create(key, dockContent);
         }

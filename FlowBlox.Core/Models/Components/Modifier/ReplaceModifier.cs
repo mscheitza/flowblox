@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.Components.Modifier
 {
-    [Display(Name = "ReplaceModifier", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "ReplaceModifier_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class ReplaceModifier : ModifierBase
     {
         [Required()]
@@ -37,3 +37,4 @@ namespace FlowBlox.Core.Models.Components.Modifier
         }
     }
 }
+

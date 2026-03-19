@@ -144,7 +144,7 @@
   <data name="AssociationTextBox_Empty" xml:space="preserve">
 		<value>Please select...</value>
 	</data>
-  <data name="Base64ToTextModifier" xml:space="preserve">
+  <data name="Base64ToTextModifier_DisplayName" xml:space="preserve">
 		<value>Decode base64-encoded text</value>
 	</data>
   <data name="Base64ToTextModifier_ObjectDisplayName" xml:space="preserve">
@@ -480,7 +480,7 @@ All inputs are collected during the referenced block's iteration and this flow b
   <data name="FieldCondition_DisplayName" xml:space="preserve">
 		<value>Field condition</value>
 	</data>
-  <data name="FieldElement" xml:space="preserve">
+  <data name="FieldElement_DisplayName" xml:space="preserve">
 		<value>Field element</value>
 	</data>
   <data name="FieldElement_Conditions" xml:space="preserve">
@@ -777,7 +777,7 @@ All inputs are collected during the referenced block's iteration and this flow b
   <data name="HoldConditionManager_HoldConditions" xml:space="preserve">
 		<value>Hold conditions</value>
 	</data>
-  <data name="HttpEncodeDecodeModifier" xml:space="preserve">
+  <data name="HttpEncodeDecodeModifier_DisplayName" xml:space="preserve">
 		<value>HTTP encoding/decoding (automatic adjustment)</value>
 	</data>
   <data name="HttpEncodeDecodeModifier_Direction" xml:space="preserve">
@@ -954,7 +954,7 @@ All inputs are collected during the referenced block's iteration and this flow b
   <data name="JsonPropertyValueAssignment_Value_Tooltip" xml:space="preserve">
 		<value>Value for the target property path (field placeholders supported). Direct JSON is not supported here: create one mapping entry per property assignment. Missing parent paths are created automatically.</value>
 	</data>
-  <data name="LineExtractorModifier" xml:space="preserve">
+  <data name="LineExtractorModifier_DisplayName" xml:space="preserve">
 		<value>Extract lines (Auto adjustment)</value>
 	</data>
   <data name="LineExtractorModifier_LineCount" xml:space="preserve">
@@ -1135,7 +1135,7 @@ Use the "+" button to add entries to the table.</value>
   <data name="PropertyWindo_ApplyFailed_Message" xml:space="preserve">
 		<value>Saving could not be completed due to a technical error. Please check the log files for more information.</value>
 	</data>
-  <data name="RegexMatchModifier" xml:space="preserve">
+  <data name="RegexMatchModifier_DisplayName" xml:space="preserve">
 		<value>Regular expression match (auto adjustment)</value>
 	</data>
   <data name="RegexMatchModifierBehavior_All" xml:space="preserve">
@@ -1162,7 +1162,7 @@ Use the "+" button to add entries to the table.</value>
   <data name="RegexMatchModifier_Separator" xml:space="preserve">
 		<value>Separator</value>
 	</data>
-  <data name="RegexReplaceModifier" xml:space="preserve">
+  <data name="RegexReplaceModifier_DisplayName" xml:space="preserve">
 		<value>Replace using regular expression (auto adjustment)</value>
 	</data>
   <data name="RegexReplaceModifier_ObjectDisplayName" xml:space="preserve">
@@ -1186,7 +1186,7 @@ Use the "+" button to add entries to the table.</value>
   <data name="RegexSelectorFlowBlock_RegularExpression" xml:space="preserve">
 		<value>Regular expression</value>
 	</data>
-  <data name="ReplaceModifier" xml:space="preserve">
+  <data name="ReplaceModifier_DisplayName" xml:space="preserve">
 		<value>Replace (auto adjustment)</value>
 	</data>
   <data name="ReplaceModifier_ObjectDisplayName" xml:space="preserve">
@@ -1294,7 +1294,7 @@ Use the "+" button to add entries to the table.</value>
   <data name="StartFlowBlock_DisplayName" xml:space="preserve">
 		<value>Start</value>
 	</data>
-  <data name="SubstringModifier" xml:space="preserve">
+  <data name="SubstringModifier_DisplayName" xml:space="preserve">
 		<value>Extract text segment (auto adjustment)</value>
 	</data>
   <data name="SubstringModifier_Index" xml:space="preserve">
@@ -1414,7 +1414,7 @@ Use the "+" button to add entries to the table.</value>
   <data name="TokenTranslation_SpecialCharacter" xml:space="preserve">
 		<value>Special character</value>
 	</data>
-  <data name="TypeElement" xml:space="preserve">
+  <data name="TypeElement_DisplayName" xml:space="preserve">
 		<value>Type element</value>
 	</data>
   <data name="TypeElement_DateFormat" xml:space="preserve">
@@ -1432,19 +1432,19 @@ Use the "+" button to add entries to the table.</value>
   <data name="TypeElement_IsNullable" xml:space="preserve">
 		<value>May contain NULL values</value>
 	</data>
-  <data name="TypeNames_CsvTable" xml:space="preserve">
+  <data name="CsvTable_DisplayName" xml:space="preserve">
 		<value>CSV table</value>
 	</data>
-  <data name="TypeNames_ExcelTable" xml:space="preserve">
+  <data name="ExcelTable_DisplayName" xml:space="preserve">
 		<value>Excel table</value>
 	</data>
-  <data name="TypeNames_FileObject" xml:space="preserve">
+  <data name="FileObject_DisplayName" xml:space="preserve">
 		<value>File object</value>
 	</data>
   <data name="MemoryObject_DisplayName" xml:space="preserve">
 		<value>Stored object</value>
 	</data>
-  <data name="TypeNames_SQLTable" xml:space="preserve">
+  <data name="SQLTable_DisplayName" xml:space="preserve">
 		<value>SQL table</value>
 	</data>
   <data name="UserFieldObjectManager_Description" xml:space="preserve">
@@ -1468,10 +1468,10 @@ Use the "+" button to add entries to the table.</value>
   <data name="UserFieldTypes_None" xml:space="preserve">
 		<value>No selection</value>
 	</data>
-  <data name="ValueItem" xml:space="preserve">
+  <data name="ValueItem_DisplayName" xml:space="preserve">
 		<value>Value item</value>
 	</data>
-  <data name="ValueItem_DisplayName" xml:space="preserve">
+  <data name="ValueItem_DisplayNameProperty" xml:space="preserve">
 		<value>Display name</value>
 	</data>
   <data name="ValueItem_Value" xml:space="preserve">
@@ -2366,3 +2366,5 @@ Multi-level XPath expressions are not allowed here.</value>
 		<value>Writes a formatted communication protocol file with AI outputs and Tool API calls for each assistant execution.</value>
 	</data>
 </root>
+
+

@@ -5,7 +5,9 @@ namespace FlowBlox.AIAssistant.Models
         User,
         Assistant,
         Error,
-        Status
+        Status,
+        ToolSuccess,
+        ToolError
     }
 
     public class AssistantTranscriptLine

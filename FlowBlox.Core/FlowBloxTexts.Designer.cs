@@ -675,9 +675,9 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Decode base64-encoded text ähnelt.
         /// </summary>
-        public static string Base64ToTextModifier {
+        public static string Base64ToTextModifier_DisplayName {
             get {
-                return ResourceManager.GetString("Base64ToTextModifier", resourceCulture);
+                return ResourceManager.GetString("Base64ToTextModifier_DisplayName", resourceCulture);
             }
         }
         
@@ -1333,6 +1333,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die CSV table ähnelt.
+        /// </summary>
+        public static string CsvTable_DisplayName {
+            get {
+                return ResourceManager.GetString("CsvTable_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Separator ähnelt.
         /// </summary>
         public static string CsvTable_Separator {
@@ -1572,6 +1581,15 @@ namespace FlowBlox.Core {
         public static string EnumerationFlowBlock_Parameters_Tooltip {
             get {
                 return ResourceManager.GetString("EnumerationFlowBlock_Parameters_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Excel table ähnelt.
+        /// </summary>
+        public static string ExcelTable_DisplayName {
+            get {
+                return ResourceManager.GetString("ExcelTable_DisplayName", resourceCulture);
             }
         }
         
@@ -1954,20 +1972,20 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Field element ähnelt.
-        /// </summary>
-        public static string FieldElement {
-            get {
-                return ResourceManager.GetString("FieldElement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Conditions ähnelt.
         /// </summary>
         public static string FieldElement_Conditions {
             get {
                 return ResourceManager.GetString("FieldElement_Conditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field element ähnelt.
+        /// </summary>
+        public static string FieldElement_DisplayName {
+            get {
+                return ResourceManager.GetString("FieldElement_DisplayName", resourceCulture);
             }
         }
         
@@ -2058,6 +2076,15 @@ namespace FlowBlox.Core {
         public static string FieldLogicalComparisonCondition_DisplayName {
             get {
                 return ResourceManager.GetString("FieldLogicalComparisonCondition_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die File object ähnelt.
+        /// </summary>
+        public static string FileObject_DisplayName {
+            get {
+                return ResourceManager.GetString("FileObject_DisplayName", resourceCulture);
             }
         }
         
@@ -2971,20 +2998,20 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP encoding/decoding (automatic adjustment) ähnelt.
-        /// </summary>
-        public static string HttpEncodeDecodeModifier {
-            get {
-                return ResourceManager.GetString("HttpEncodeDecodeModifier", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Direction ähnelt.
         /// </summary>
         public static string HttpEncodeDecodeModifier_Direction {
             get {
                 return ResourceManager.GetString("HttpEncodeDecodeModifier_Direction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP encoding/decoding (automatic adjustment) ähnelt.
+        /// </summary>
+        public static string HttpEncodeDecodeModifier_DisplayName {
+            get {
+                return ResourceManager.GetString("HttpEncodeDecodeModifier_DisplayName", resourceCulture);
             }
         }
         
@@ -3585,9 +3612,9 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Extract lines (Auto adjustment) ähnelt.
         /// </summary>
-        public static string LineExtractorModifier {
+        public static string LineExtractorModifier_DisplayName {
             get {
-                return ResourceManager.GetString("LineExtractorModifier", resourceCulture);
+                return ResourceManager.GetString("LineExtractorModifier_DisplayName", resourceCulture);
             }
         }
         
@@ -4787,20 +4814,20 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Regular expression match (auto adjustment) ähnelt.
-        /// </summary>
-        public static string RegexMatchModifier {
-            get {
-                return ResourceManager.GetString("RegexMatchModifier", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Behavior ähnelt.
         /// </summary>
         public static string RegexMatchModifier_Behavior {
             get {
                 return ResourceManager.GetString("RegexMatchModifier_Behavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Regular expression match (auto adjustment) ähnelt.
+        /// </summary>
+        public static string RegexMatchModifier_DisplayName {
+            get {
+                return ResourceManager.GetString("RegexMatchModifier_DisplayName", resourceCulture);
             }
         }
         
@@ -4870,9 +4897,9 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Replace using regular expression (auto adjustment) ähnelt.
         /// </summary>
-        public static string RegexReplaceModifier {
+        public static string RegexReplaceModifier_DisplayName {
             get {
-                return ResourceManager.GetString("RegexReplaceModifier", resourceCulture);
+                return ResourceManager.GetString("RegexReplaceModifier_DisplayName", resourceCulture);
             }
         }
         
@@ -4942,9 +4969,9 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Replace (auto adjustment) ähnelt.
         /// </summary>
-        public static string ReplaceModifier {
+        public static string ReplaceModifier_DisplayName {
             get {
-                return ResourceManager.GetString("ReplaceModifier", resourceCulture);
+                return ResourceManager.GetString("ReplaceModifier_DisplayName", resourceCulture);
             }
         }
         
@@ -5174,6 +5201,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SQL table ähnelt.
+        /// </summary>
+        public static string SQLTable_DisplayName {
+            get {
+                return ResourceManager.GetString("SQLTable_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Connection string ähnelt.
         /// </summary>
         public static string SQLTable_SQLConnectionstring {
@@ -5302,9 +5338,9 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Extract text segment (auto adjustment) ähnelt.
         /// </summary>
-        public static string SubstringModifier {
+        public static string SubstringModifier_DisplayName {
             get {
-                return ResourceManager.GetString("SubstringModifier", resourceCulture);
+                return ResourceManager.GetString("SubstringModifier_DisplayName", resourceCulture);
             }
         }
         
@@ -5669,15 +5705,6 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Type element ähnelt.
-        /// </summary>
-        public static string TypeElement {
-            get {
-                return ResourceManager.GetString("TypeElement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Date format ähnelt.
         /// </summary>
         public static string TypeElement_DateFormat {
@@ -5692,6 +5719,15 @@ namespace FlowBlox.Core {
         public static string TypeElement_DecimalSeparator {
             get {
                 return ResourceManager.GetString("TypeElement_DecimalSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type element ähnelt.
+        /// </summary>
+        public static string TypeElement_DisplayName {
+            get {
+                return ResourceManager.GetString("TypeElement_DisplayName", resourceCulture);
             }
         }
         
@@ -5732,33 +5768,6 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die CSV table ähnelt.
-        /// </summary>
-        public static string TypeNames_CsvTable {
-            get {
-                return ResourceManager.GetString("TypeNames_CsvTable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Excel table ähnelt.
-        /// </summary>
-        public static string TypeNames_ExcelTable {
-            get {
-                return ResourceManager.GetString("TypeNames_ExcelTable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die File object ähnelt.
-        /// </summary>
-        public static string TypeNames_FileObject {
-            get {
-                return ResourceManager.GetString("TypeNames_FileObject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Gemini Provider ähnelt.
         /// </summary>
         public static string TypeNames_GeminiAIProvider {
@@ -5773,15 +5782,6 @@ namespace FlowBlox.Core {
         public static string TypeNames_OpenAIProvider {
             get {
                 return ResourceManager.GetString("TypeNames_OpenAIProvider", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die SQL table ähnelt.
-        /// </summary>
-        public static string TypeNames_SQLTable {
-            get {
-                return ResourceManager.GetString("TypeNames_SQLTable", resourceCulture);
             }
         }
         
@@ -5851,18 +5851,18 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Value item ähnelt.
         /// </summary>
-        public static string ValueItem {
+        public static string ValueItem_DisplayName {
             get {
-                return ResourceManager.GetString("ValueItem", resourceCulture);
+                return ResourceManager.GetString("ValueItem_DisplayName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Display name ähnelt.
         /// </summary>
-        public static string ValueItem_DisplayName {
+        public static string ValueItem_DisplayNameProperty {
             get {
-                return ResourceManager.GetString("ValueItem_DisplayName", resourceCulture);
+                return ResourceManager.GetString("ValueItem_DisplayNameProperty", resourceCulture);
             }
         }
         

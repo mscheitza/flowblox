@@ -4,7 +4,7 @@ using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox.Core.Models.Components.Modifier
 {
-    [Display(Name = "SubstringModifier", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "SubstringModifier_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class SubstringModifier : ModifierBase
     {
         [Required()]
@@ -27,3 +27,4 @@ namespace FlowBlox.Core.Models.Components.Modifier
         }
     }
 }
+

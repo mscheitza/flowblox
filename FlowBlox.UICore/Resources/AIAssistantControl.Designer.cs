@@ -97,7 +97,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Describe your target flow. The assistant will run tool calls and stream status lines below. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The AI Assistant can help you adjust the current flow or create a complete flow from a description. ähnelt.
         /// </summary>
         public static string Header_Description {
             get {
@@ -158,6 +158,15 @@ namespace FlowBlox.UICore.Resources {
                 return ResourceManager.GetString("Message_ResetCommunicationState_Question", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please configure your AI provider first. API key required. ähnelt.
+        /// </summary>
+        public static string Warning_MissingProvider {
+            get {
+                return ResourceManager.GetString("Warning_MissingProvider", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Configure AI Assistant ähnelt.
@@ -205,7 +214,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die AI Tool Loop ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox AI-Assistant ähnelt.
         /// </summary>
         public static string Watermark_Title {
             get {

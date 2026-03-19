@@ -7,7 +7,7 @@ using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox.Core.Models.Components.Modifier
 {
-    [Display(Name = "RegexReplaceModifier", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "RegexReplaceModifier_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class RegexReplaceModifier : RegexModifierBase
     {
         [Display(Name = "RegexMatchModifier_Replace", Order = 1, ResourceType = typeof(FlowBloxTexts))]
@@ -33,3 +33,4 @@ namespace FlowBlox.Core.Models.Components.Modifier
         }
     }
 }
+

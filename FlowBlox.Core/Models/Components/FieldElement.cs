@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 
 namespace FlowBlox.Core.Models.Components
 {
-    [Display(Name = "FieldElement", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "FieldElement_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     [FlowBlockUIGroup("Global_Groups_Default", 0, ControlAlignment.Top)]
     [FlowBlockUIGroup("FieldElement_Groups_Conditions", 10, ControlAlignment.Fill)]
     [FlowBlockUIGroup("FieldElement_Groups_Modifiers", 20, ControlAlignment.Fill)]
@@ -426,3 +426,4 @@ namespace FlowBlox.Core.Models.Components
         public override string ToString() => this.FullyQualifiedName;
     }
 }
+

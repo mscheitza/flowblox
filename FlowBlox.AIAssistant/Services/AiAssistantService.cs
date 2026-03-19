@@ -84,14 +84,14 @@ namespace FlowBlox.AIAssistant.Services
         public async Task<AssistantResult> GenerateProjectAsync(string userPrompt, CancellationToken ct)
         {
             var result = new AssistantResult();
-            AddTranscript(result, AssistantTranscriptKind.Status, "Assistant: Running...");
+            AddTranscript(result, AssistantTranscriptKind.Status, "Running...");
 
             if (string.IsNullOrWhiteSpace(userPrompt))
             {
                 result.Success = false;
                 var message = "Prompt is empty.";
                 result.Errors.Add(message);
-                AddTranscript(result, AssistantTranscriptKind.Error, $"Assistant: {message}");
+                AddTranscript(result, AssistantTranscriptKind.Error, message);
                 return result;
             }
 
@@ -100,7 +100,7 @@ namespace FlowBlox.AIAssistant.Services
             {
                 result.Success = false;
                 result.Errors.Add(configurationError);
-                AddTranscript(result, AssistantTranscriptKind.Error, $"Assistant: {configurationError}");
+                AddTranscript(result, AssistantTranscriptKind.Error, configurationError);
                 return result;
             }
 
@@ -117,7 +117,7 @@ namespace FlowBlox.AIAssistant.Services
             protocolWriter?.AppendAiAssistantServiceText("System prompt prepared", systemPrompt);
             protocolWriter?.AppendAiAssistantServiceText("Session bootstrap prompt prepared", sessionBootstrapPrompt);
 
-            AddTranscript(result, AssistantTranscriptKind.Status, "Assistant: Starting tool loop...");
+            AddTranscript(result, AssistantTranscriptKind.Status, "Thinking...");
 
             try
             {
@@ -150,7 +150,7 @@ namespace FlowBlox.AIAssistant.Services
                         result.Success = false;
                         var error = string.IsNullOrWhiteSpace(exec.Error) ? "AI request failed." : exec.Error;
                         result.Errors.Add(error);
-                        AddTranscript(result, AssistantTranscriptKind.Error, $"Assistant: {error}");
+                        AddTranscript(result, AssistantTranscriptKind.Error, error);
                         _logger?.Warn($"AI Assistant execution failed: {error}");
                         return result;
                     }
@@ -163,7 +163,7 @@ namespace FlowBlox.AIAssistant.Services
                         AddTranscript(
                             result,
                             AssistantTranscriptKind.Assistant,
-                            $"Assistant (round {round}): {assistantOutput}",
+                            assistantOutput,
                             assistantOutput);
 
                         if (!formatRetryIssued)
@@ -176,7 +176,7 @@ namespace FlowBlox.AIAssistant.Services
                                 "Set \"final\" to true only for the final answer. Do not output additional text outside this JSON object.";
 
                             AddTranscript(result, AssistantTranscriptKind.Status,
-                                "Assistant: Response format invalid. Sent one correction hint and retrying.");
+                                "Response format invalid. Retrying once.");
                             result.Warnings.Add("Assistant response format invalid; retrying once with explicit format guidance.");
                             protocolWriter?.AppendAiAssistantServiceText("Format validation guidance issued", formatGuidance);
 
@@ -191,7 +191,7 @@ namespace FlowBlox.AIAssistant.Services
                         result.Success = false;
                         result.Errors.Add("Assistant returned an invalid response format twice. Aborting execution.");
                         AddTranscript(result, AssistantTranscriptKind.Error,
-                            "Assistant: Invalid response format repeated after correction. Aborting.");
+                            "Invalid response format repeated after correction. Aborting.");
                         AppendSessionTurn(session, userPrompt, assistantOutput);
                         return result;
                     }
@@ -200,8 +200,8 @@ namespace FlowBlox.AIAssistant.Services
                     protocolWriter?.AppendAiJson(round, TryParseFirstJsonObject(assistantOutput));
 
                     var assistantRoundMessage = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
-                        ? $"Assistant (round {round}): [no assistantMessage]"
-                        : $"Assistant (round {round}): {instruction.AssistantMessage}";
+                        ? "[no assistantMessage]"
+                        : instruction.AssistantMessage;
                     AddTranscript(
                         result,
                         AssistantTranscriptKind.Assistant,
@@ -221,8 +221,9 @@ namespace FlowBlox.AIAssistant.Services
                         return result;
                     }
 
-                    AddTranscript(result, AssistantTranscriptKind.Status, $"Assistant: Executing {instruction.ToolCalls.Count} tool call(s)...");
                     var roundToolTranscript = new List<string>();
+                    var toolExecutionFailed = false;
+                    var failedToolNames = new List<string>();
 
                     foreach (var toolCall in instruction.ToolCalls)
                     {
@@ -238,9 +239,6 @@ namespace FlowBlox.AIAssistant.Services
                         var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
                         protocolWriter?.AppendToolCall(round, request, response);
 
-                        AddTranscript(result, response.Ok ? AssistantTranscriptKind.Status : AssistantTranscriptKind.Error,
-                            $"Tool {request.ToolName}: {(response.Ok ? "OK" : response.Error)}");
-
                         roundToolTranscript.Add(JsonConvert.SerializeObject(new
                         {
                             tool = request.ToolName,
@@ -250,6 +248,8 @@ namespace FlowBlox.AIAssistant.Services
 
                         if (!response.Ok)
                         {
+                            toolExecutionFailed = true;
+                            failedToolNames.Add(request.ToolName);
                             result.Warnings.Add($"Tool '{request.ToolName}' failed: {response.Error}");
                             _logger?.Warn($"Assistant tool call failed. Tool={request.ToolName}, Error={response.Error}");
                         }
@@ -261,12 +261,23 @@ namespace FlowBlox.AIAssistant.Services
                         latestToolTranscript = roundToolTranscript;
                     else
                         latestToolTranscript.AddRange(roundToolTranscript);
+
+                    var internalStatus = toolExecutionFailed
+                        ? $"Failed operations: {string.Join(", ", failedToolNames.Distinct(StringComparer.OrdinalIgnoreCase))}"
+                        : $"Executed operations: {instruction.ToolCalls.Count}";
+                    AddTranscript(
+                        result,
+                        toolExecutionFailed ? AssistantTranscriptKind.ToolError : AssistantTranscriptKind.ToolSuccess,
+                        toolExecutionFailed
+                            ? "Requested operations could not be executed successfully."
+                            : "Requested operations were executed successfully.",
+                        internalStatus);
                 }
 
                 result.Success = false;
                 result.Errors.Add($"Assistant reached max tool rounds ({maxRounds}) without a final response.");
                 AddTranscript(result, AssistantTranscriptKind.Error,
-                    $"Assistant: Reached max tool rounds ({maxRounds}) without a final response.");
+                    $"Reached max tool rounds ({maxRounds}) without a final response.");
                 AppendSessionTurn(session, userPrompt, $"No final response after {maxRounds} rounds.");
                 return result;
             }
@@ -487,15 +498,19 @@ namespace FlowBlox.AIAssistant.Services
 
             var iteration = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.IterationContextKey);
             if (!string.IsNullOrWhiteSpace(iteration))
-            {
                 sections.Add("Topic: IterationContext / Flow\n" + iteration.Trim());
-            }
+
+            var objectManagingFlowBlocks = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.FlowBlocksManagingObjectKey);
+            if (!string.IsNullOrWhiteSpace(objectManagingFlowBlocks))
+                sections.Add("Topic: FlowBlocks Managing an Object\n" + objectManagingFlowBlocks.Trim());
 
             var editDelete = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.EditAndDeleteKey);
             if (!string.IsNullOrWhiteSpace(editDelete))
-            {
                 sections.Add("Topic: Update / Delete Handling\n" + editDelete.Trim());
-            }
+
+            var namingConventions = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.NamingConventionsKey);
+            if (!string.IsNullOrWhiteSpace(namingConventions))
+                sections.Add("Topic: Naming Conventions\n" + namingConventions.Trim());
 
             if (sections.Count == 0)
                 return "No central guidelines available.";

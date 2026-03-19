@@ -7,7 +7,7 @@ using FlowBlox.Core.Extensions;
 
 namespace FlowBlox.Core.Models.Components.IO
 {
-    [Display(Name = "TypeNames_CsvTable", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "CsvTable_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class CsvTable : DataTableBase
     {
         [Required()]
@@ -67,3 +67,4 @@ namespace FlowBlox.Core.Models.Components.IO
         }
     }
 }
+

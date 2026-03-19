@@ -21,14 +21,14 @@ namespace FlowBlox.AppWindow
         {
             [typeof(ProjectPanel)] = nameof(FlowBloxMainUIImages.ProjectPanel_16),
             [typeof(ComponentLibraryPanel)] = nameof(FlowBloxMainUIImages.ComponentLibraryPanel_16),
+            [typeof(FieldView)] = nameof(FlowBloxMainUIImages.FieldView_16),
             [typeof(AIAssistantView)] = nameof(FlowBloxMainUIImages.AIAssistantView_16)
         };
 
         private static readonly Dictionary<Type, string> _resourceKeysByWrappedViewType = new()
         {
-            [typeof(FieldView)] = nameof(FlowBloxMainUIImages.FieldView_16),
-            [typeof(RuntimeView)] = nameof(FlowBloxMainUIImages.RuntimeView_16),
-            [typeof(ProblemsView)] = nameof(FlowBloxMainUIImages.ProblemsView_16)
+            [typeof(FlowBlox.Views.RuntimeView)] = nameof(FlowBloxMainUIImages.RuntimeView_16),
+            [typeof(FlowBlox.Views.ProblemsView)] = nameof(FlowBloxMainUIImages.ProblemsView_16)
         };
 
         private static readonly Dictionary<Type, string> _resourceKeysByObjectManagerType = new()

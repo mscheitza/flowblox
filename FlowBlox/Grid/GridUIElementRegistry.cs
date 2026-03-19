@@ -1,21 +1,26 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Grid.Elements.UserControls;
 using FlowBlox.Grid.Events;
+using FlowBlox.UICore.Interfaces;
+using FlowBlox.UICore.Models;
 using System;
 using System.Collections.Generic;
 
 namespace FlowBlox.Grid
 {
-    public class FlowBloxUIRegistry
+    public class FlowBloxUIRegistry : IFlowBloxUIRegistry
     {
         private readonly Dictionary<BaseFlowBlock, FlowBlockUIElement> _gridElementToUIElement;
 
         public IEnumerable<FlowBlockUIElement> UIElements => _gridElementToUIElement.Values;
+        IEnumerable<IFlowBloxUIElement> IFlowBloxUIRegistry.UIElements => _gridElementToUIElement.Values;
 
         /// <summary>
         /// Triggered after a new FlowBlockUIElement is registered.
         /// </summary>
         public event EventHandler<FlowBlockUIElementRegisteredEventArgs> FlowBlockUIElementRegistered;
+
+        public event EventHandler<FlowBloxUIElementRegisteredEventArgs> UIElementRegistered;
 
         public FlowBloxUIRegistry()
         {
@@ -49,6 +54,9 @@ namespace FlowBlox.Grid
             return null;
         }
 
+        IFlowBloxUIElement IFlowBloxUIRegistry.GetUIElementToGridElement(BaseFlowBlock gridElement)
+            => GetUIElementToGridElement(gridElement);
+
         internal void RemoveUIElement(FlowBlockUIElement recentElement)
         {
             if (recentElement == null)
@@ -63,6 +71,10 @@ namespace FlowBlox.Grid
             FlowBlockUIElementRegistered?.Invoke(
                 this,
                 new FlowBlockUIElementRegisteredEventArgs(uiElement));
+
+            UIElementRegistered?.Invoke(
+                this,
+                new FlowBloxUIElementRegisteredEventArgs(uiElement));
         }
     }
 }

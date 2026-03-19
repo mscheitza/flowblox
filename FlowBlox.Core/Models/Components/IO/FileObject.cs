@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.Components.IO
 {
-    [Display(Name = "TypeNames_FileObject", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "FileObject_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class FileObject : DataObjectBase
     {
         [Required()]
@@ -89,3 +89,4 @@ namespace FlowBlox.Core.Models.Components.IO
         }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Models;
@@ -34,6 +34,9 @@ namespace FlowBlox.Grid.Provider
         }
 
         public FlowBloxUIRegistry GetCurrentUIRegistry() => _currentUIRegistry;
+        
+        IFlowBloxUIRegistry IFlowBloxProjectComponentProvider.GetCurrentUIRegistry() => _currentUIRegistry;
+
         public ProjectChangelist GetCurrentChangelist() => _currentChangelist;
         public FlowBloxRegistry GetCurrentRegistry() => _currentRegistry;
     }

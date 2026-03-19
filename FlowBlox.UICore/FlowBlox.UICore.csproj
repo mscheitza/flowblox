@@ -80,6 +80,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\FieldView.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FieldView.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\FieldSelectionWindow.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -205,6 +210,10 @@
       <LastGenOutput>ExtensionsWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FieldView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FieldView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\FieldSelectionWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>FieldSelectionWindow.Designer.cs</LastGenOutput>
@@ -269,8 +278,5 @@
       <LastGenOutput>ToolboxWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Project\" />
   </ItemGroup>
 </Project>

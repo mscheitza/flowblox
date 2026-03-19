@@ -52,6 +52,41 @@ namespace FlowBlox.AppWindow
             _runtimeViewPanel = runtimeViewPanelFactory.Create();
 
             this.dockPanel.ResumeLayout();
+            ApplyDefaultFieldViewActivationOnce();
+        }
+
+        private void ActivateFieldView()
+        {
+            if (_defaultFieldViewActivationApplied || _fieldViewPanel == null || _fieldViewPanel.IsDisposed)
+                return;
+
+            if (_fieldViewPanel.IsHidden ||
+                _fieldViewPanel.DockState == DockState.Hidden ||
+                _fieldViewPanel.DockState == DockState.Unknown)
+            {
+                return;
+            }
+
+            _fieldViewPanel.Activate();
+            _defaultFieldViewActivationApplied = true;
+        }
+
+        private void ApplyDefaultFieldViewActivationOnce()
+        {
+            if (_defaultFieldViewActivationApplied || _fieldViewPanel == null)
+                return;
+
+            if (_fieldViewPanel.IsHidden ||
+                _fieldViewPanel.DockState == DockState.Hidden ||
+                _fieldViewPanel.DockState == DockState.Unknown)
+            {
+                return;
+            }
+
+            if (IsHandleCreated)
+                BeginInvoke(new MethodInvoker(ActivateFieldView));
+            else
+                ActivateFieldView();
         }
 
         private void DockPanel_ContentAdded(object sender, DockContentEventArgs e)

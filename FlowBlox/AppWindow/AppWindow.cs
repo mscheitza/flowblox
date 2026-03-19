@@ -67,10 +67,11 @@ namespace FlowBlox.AppWindow
         private string _recentProjectPath;
         private string _recentProjectSpaceGuid;
         private ComponentLibraryPanel _componentLibraryPanel;
-        private DockContentUserControlWrapper<FieldView> _fieldViewPanel;
+        private FieldView _fieldViewPanel;
         private DockContentUserControlWrapper<RuntimeView> _runtimeViewPanel;
         private DockContentUserControlWrapper<ProblemsView> _problemsViewPanel;
         private AIAssistantView _aiAssistantViewPanel;
+        private bool _defaultFieldViewActivationApplied;
 
         private FlowBloxProjectComponentProvider _componentProvider;
 
@@ -88,9 +89,6 @@ namespace FlowBlox.AppWindow
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (_componentLibraryPanel?.ProcessCmdKey(ref msg, keyData) == true)
-                return true;
-
-            if (_fieldViewPanel?.UserControl.ProcessCmdKey(ref msg, keyData) == true)
                 return true;
 
             if (_dockContentProjectPanel?.ProcessCmdKey(ref msg, keyData) == true)
@@ -297,7 +295,7 @@ namespace FlowBlox.AppWindow
         private void OnAfterUIRegistryInitialized(bool exceptAiAssistantView = false)
         {
             InitializeDockPanel(exceptAiAssistantView: exceptAiAssistantView);
-            this._fieldViewPanel.UserControl.OnAfterUIRegistryInitialized();
+            this._fieldViewPanel.OnAfterUIRegistryInitialized();
             if (!exceptAiAssistantView)
                 this._aiAssistantViewPanel?.OnAfterUIRegistryInitialized();
             this._dockContentProjectPanel.OnAfterUIRegistryInitialized();

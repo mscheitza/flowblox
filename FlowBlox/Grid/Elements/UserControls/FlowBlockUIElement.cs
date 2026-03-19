@@ -20,12 +20,13 @@ using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components.Modifier;
 using FlowBlox.Actions;
+using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 
 namespace FlowBlox.Grid.Elements.UserControls
 {
-    public partial class FlowBlockUIElement : UserControl
+    public partial class FlowBlockUIElement : UserControl, IFlowBloxUIElement
     {
         private readonly Color backColorDefault = Color.DimGray;
         private readonly Color backColorNotExecuted = Color.Red;
@@ -60,6 +61,8 @@ namespace FlowBlox.Grid.Elements.UserControls
         public event ConditionDoubleClickEventHandler ConditionDoubleClick;
         public event ModifierDoubleClickEventHandler ModifierDoubleClick;
         public event ElementSelectedChangedEventHandler ElementSelectedChangedByUser;
+
+        private readonly Dictionary<EventHandler, ElementSelectedChangedEventHandler> _uiElementSelectionChangedByUserHandlerMap = new();
 
         public void RaisePropertyDoubleClick(string propertyName) => PropertyDoubleClick?.Invoke(this, propertyName);
         public void RaiseResultFieldDoubleClick(FieldElement fieldElement) => ResultFieldDoubleClick?.Invoke(this, fieldElement);
@@ -734,5 +737,29 @@ namespace FlowBlox.Grid.Elements.UserControls
         }
 
         public Size? AnchorSize { get; set; }
+
+        event EventHandler IFlowBloxUIElement.ElementSelectedChangedByUser
+        {
+            add
+            {
+                if (value == null || _uiElementSelectionChangedByUserHandlerMap.ContainsKey(value))
+                    return;
+
+                ElementSelectedChangedEventHandler wrapped = (sender, selected) => value(sender, EventArgs.Empty);
+                _uiElementSelectionChangedByUserHandlerMap[value] = wrapped;
+                ElementSelectedChangedByUser += wrapped;
+            }
+            remove
+            {
+                if (value == null)
+                    return;
+
+                if (_uiElementSelectionChangedByUserHandlerMap.TryGetValue(value, out var wrapped))
+                {
+                    ElementSelectedChangedByUser -= wrapped;
+                    _uiElementSelectionChangedByUserHandlerMap.Remove(value);
+                }
+            }
+        }
     }
 }

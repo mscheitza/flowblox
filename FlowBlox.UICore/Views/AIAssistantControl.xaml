@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:aiModels="clr-namespace:FlowBlox.AIAssistant.Models;assembly=FlowBlox.AIAssistant"
              xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
              xmlns:viewModels="clr-namespace:FlowBlox.UICore.ViewModels"
              mc:Ignorable="d"
@@ -17,12 +18,87 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+            <Style x:Key="AIAssistantTranscriptItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0,0,0,8" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="AIAssistantTranscriptBubbleStyle" TargetType="{x:Type Border}">
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Padding" Value="8,6" />
+                <Setter Property="Background" Value="#FFF3F4F6" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="MaxWidth" Value="560" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.User}">
+                        <Setter Property="Background" Value="#FFE8F3FF" />
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Status}">
+                        <Setter Property="Background" Value="#FFFFF7DB" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Error}">
+                        <Setter Property="Background" Value="#FFFDECEC" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolSuccess}">
+                        <Setter Property="Background" Value="#FFEAF8EE" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolError}">
+                        <Setter Property="Background" Value="#FFFDECEC" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="AIAssistantTranscriptIconStyle" TargetType="{x:Type iconPacks:PackIconMaterial}">
+                <Setter Property="Kind" Value="MessageTextOutline" />
+                <Setter Property="Foreground" Value="#FF4B5563" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.User}">
+                        <Setter Property="Kind" Value="AccountCircleOutline" />
+                        <Setter Property="Foreground" Value="#FF1565C0" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Assistant}">
+                        <Setter Property="Kind" Value="RobotOutline" />
+                        <Setter Property="Foreground" Value="#FF374151" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Status}">
+                        <Setter Property="Kind" Value="InformationOutline" />
+                        <Setter Property="Foreground" Value="#FF8A6D1F" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Error}">
+                        <Setter Property="Kind" Value="AlertCircleOutline" />
+                        <Setter Property="Foreground" Value="#FFB71C1C" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolSuccess}">
+                        <Setter Property="Kind" Value="CheckCircleOutline" />
+                        <Setter Property="Foreground" Value="#FF2E7D32" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolError}">
+                        <Setter Property="Kind" Value="CloseCircleOutline" />
+                        <Setter Property="Foreground" Value="#FFC62828" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Margin="8">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -136,28 +212,41 @@
                 Background="#EDF3F9"
                 Padding="10"
                 CornerRadius="4"
-                Margin="0,8,0,8">
+                Margin="0,8,0,6">
             <TextBlock Text="{x:Static resources:AIAssistantControl.Header_Description}"
                        Foreground="DarkSlateGray"
                        TextWrapping="Wrap" />
         </Border>
 
         <Border Grid.Row="2"
+                Background="#FFF6E27A"
+                Padding="10"
+                CornerRadius="4"
+                Margin="0,0,0,8"
+                Visibility="{Binding ShowProviderConfigurationWarning, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="{x:Static resources:AIAssistantControl.Warning_MissingProvider}"
+                       Foreground="#FF5E4A00"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <Border Grid.Row="3"
                 Background="#FFFFFFFF"
                 BorderBrush="#FFD0D0D0"
                 BorderThickness="1"
                 CornerRadius="10"
                 Padding="6">
             <Grid>
-                <ListBox ItemsSource="{Binding Transcript}"
+                <ListBox x:Name="TranscriptListBox"
+                         ItemsSource="{Binding Transcript}"
                          BorderThickness="0"
-                         Background="Transparent">
+                         Background="Transparent"
+                         HorizontalContentAlignment="Stretch"
+                         ItemContainerStyle="{StaticResource AIAssistantTranscriptItemContainerStyle}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Text}"
-                                       TextWrapping="Wrap"
-                                       Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
-                                <TextBlock.ContextMenu>
+                            <Border Style="{StaticResource AIAssistantTranscriptBubbleStyle}"
+                                    Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+                                <Border.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="{x:Static resources:AIAssistantControl.ContextMenu_Copy}"
                                                   Command="{Binding PlacementTarget.Tag.CopyTranscriptEntryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
@@ -174,8 +263,25 @@
                                             </MenuItem.Icon>
                                         </MenuItem>
                                     </ContextMenu>
-                                </TextBlock.ContextMenu>
-                            </TextBlock>
+                                </Border.ContextMenu>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconMaterial Grid.Column="0"
+                                                                Width="16"
+                                                                Height="16"
+                                                                Margin="0,1,8,0"
+                                                                VerticalAlignment="Top"
+                                                                Style="{StaticResource AIAssistantTranscriptIconStyle}" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Text}"
+                                               TextWrapping="Wrap"
+                                               VerticalAlignment="Top"
+                                               Foreground="#FF1F2937" />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -184,6 +290,16 @@
                             Opacity="0.16"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=TranscriptListBox, Path=HasItems}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
                     <iconPacks:PackIconMaterial Kind="RobotOutline"
                                                 Width="84"
                                                 Height="84"
@@ -198,7 +314,7 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="3"
+        <Border Grid.Row="4"
                 Margin="0,8,0,8"
                 Background="#FFFFFFFF"
                 BorderBrush="#FFD0D0D0"
@@ -217,15 +333,17 @@
                      Text="{Binding CurrentInput, UpdateSourceTrigger=PropertyChanged}" />
         </Border>
 
-        <StackPanel Grid.Row="4"
+        <StackPanel Grid.Row="5"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
             <Button Content="{x:Static resources:AIAssistantControl.Button_Submit}"
                     MinWidth="90"
+                    Style="{StaticResource FlowBlox.RoundedActionButtonStyle}"
                     Margin="0,0,8,0"
                     Command="{Binding SubmitCommand}" />
             <Button Content="{x:Static resources:AIAssistantControl.Button_Cancel}"
                     MinWidth="90"
+                    Style="{StaticResource FlowBlox.RoundedActionButtonStyle}"
                     Command="{Binding CancelCommand}" />
         </StackPanel>
     </Grid>

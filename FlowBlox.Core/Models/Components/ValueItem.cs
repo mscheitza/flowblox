@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.Components
 {
-    [Display(Name = "ValueItem", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+    [Display(Name = "ValueItem_DisplayName", ResourceType = typeof(FlowBloxTexts), Order = 0)]
     public class ValueItem : FlowBloxReactiveObject
     {
-        [Display(Name = "ValueItem_DisplayName", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "ValueItem_DisplayNameProperty", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         public string DisplayName { get; set; }
 
         [Required()]
@@ -14,3 +14,4 @@ namespace FlowBlox.Core.Models.Components
         public string Value { get; set; }
     }
 }
+

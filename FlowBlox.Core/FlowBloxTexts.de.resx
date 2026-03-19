@@ -144,7 +144,7 @@
 	<data name="AssociationTextBox_Empty" xml:space="preserve">
 		<value>Bitte wählen...</value>
 	</data>
-	<data name="Base64ToTextModifier" xml:space="preserve">
+	<data name="Base64ToTextModifier_DisplayName" xml:space="preserve">
 		<value>Base64-codierten Text entschlüsseln</value>
 	</data>
 	<data name="Base64ToTextModifier_ObjectDisplayName" xml:space="preserve">
@@ -483,7 +483,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	<data name="FieldCondition_DisplayName" xml:space="preserve">
 		<value>Feld-Bedingung</value>
 	</data>
-	<data name="FieldElement" xml:space="preserve">
+	<data name="FieldElement_DisplayName" xml:space="preserve">
 		<value>Feld-Element</value>
 	</data>
 	<data name="FieldElement_Conditions" xml:space="preserve">
@@ -782,7 +782,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	<data name="HoldConditionManager_HoldConditions" xml:space="preserve">
 		<value>Haltebedingungen</value>
 	</data>
-	<data name="HttpEncodeDecodeModifier" xml:space="preserve">
+	<data name="HttpEncodeDecodeModifier_DisplayName" xml:space="preserve">
 		<value>HTTP Enkodierung/Dekodierung (Automatische Anpassung)</value>
 	</data>
 	<data name="HttpEncodeDecodeModifier_Direction" xml:space="preserve">
@@ -959,7 +959,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	<data name="JsonPropertyValueAssignment_Value_Tooltip" xml:space="preserve">
 		<value>Wert für den angegebenen Property-Pfad. Direktes JSON wird hier nicht unterstützt: pro Property-Set einen eigenen Mapping-Eintrag anlegen. Nicht vorhandene Parent-Pfade werden automatisch erzeugt.</value>
 	</data>
-	<data name="LineExtractorModifier" xml:space="preserve">
+	<data name="LineExtractorModifier_DisplayName" xml:space="preserve">
 		<value>Zeilenweise extrahieren (Automatische Anpassung)</value>
 	</data>
 	<data name="LineExtractorModifier_LineCount" xml:space="preserve">
@@ -1140,7 +1140,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="PropertyWindo_ApplyFailed_Message" xml:space="preserve">
 		<value>Speichern konnte aufgrund eines technisches Fehler nicht durchgeführt werden. Bitte überprüfen Sie die Logfiles für weitere Informationen.</value>
 	</data>
-	<data name="RegexMatchModifier" xml:space="preserve">
+	<data name="RegexMatchModifier_DisplayName" xml:space="preserve">
 		<value>Regulärer Ausdruck trifft zu (Automatische Anpassung)</value>
 	</data>
 	<data name="RegexMatchModifierBehavior_All" xml:space="preserve">
@@ -1167,7 +1167,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="RegexMatchModifier_Separator" xml:space="preserve">
 		<value>Trennzeichen</value>
 	</data>
-	<data name="RegexReplaceModifier" xml:space="preserve">
+	<data name="RegexReplaceModifier_DisplayName" xml:space="preserve">
 		<value>Ersetzen durch regulären Ausdruck (Automatische Anpassung)</value>
 	</data>
 	<data name="RegexReplaceModifier_ObjectDisplayName" xml:space="preserve">
@@ -1191,7 +1191,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="RegexSelectorFlowBlock_RegularExpression" xml:space="preserve">
 		<value>Regulärer Ausdruck</value>
 	</data>
-	<data name="ReplaceModifier" xml:space="preserve">
+	<data name="ReplaceModifier_DisplayName" xml:space="preserve">
 		<value>Ersetzen (Automatische Anpassung)</value>
 	</data>
 	<data name="ReplaceModifier_ObjectDisplayName" xml:space="preserve">
@@ -1296,7 +1296,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="StartFlowBlock_DisplayName" xml:space="preserve">
 		<value>Start</value>
 	</data>
-	<data name="SubstringModifier" xml:space="preserve">
+	<data name="SubstringModifier_DisplayName" xml:space="preserve">
 		<value>Textabschnitt extrahieren (Automatische Anpassung)</value>
 	</data>
 	<data name="SubstringModifier_Index" xml:space="preserve">
@@ -1416,7 +1416,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="TokenTranslation_SpecialCharacter" xml:space="preserve">
 		<value>Sonderzeichen</value>
 	</data>
-	<data name="TypeElement" xml:space="preserve">
+	<data name="TypeElement_DisplayName" xml:space="preserve">
 		<value>Typ-Element</value>
 	</data>
 	<data name="TypeElement_DateFormat" xml:space="preserve">
@@ -1434,19 +1434,19 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="TypeElement_IsNullable" xml:space="preserve">
 		<value>Darf NULL-Werte enthalten</value>
 	</data>
-	<data name="TypeNames_CsvTable" xml:space="preserve">
+	<data name="CsvTable_DisplayName" xml:space="preserve">
 		<value>CSV-Tabelle</value>
 	</data>
-	<data name="TypeNames_ExcelTable" xml:space="preserve">
+	<data name="ExcelTable_DisplayName" xml:space="preserve">
 		<value>Excel-Tabelle</value>
 	</data>
-	<data name="TypeNames_FileObject" xml:space="preserve">
+	<data name="FileObject_DisplayName" xml:space="preserve">
 		<value>Datei-Objekt</value>
 	</data>
 	<data name="MemoryObject_DisplayName" xml:space="preserve">
 		<value>Gespeichertes Objekt</value>
 	</data>
-	<data name="TypeNames_SQLTable" xml:space="preserve">
+	<data name="SQLTable_DisplayName" xml:space="preserve">
 		<value>SQL-Tabelle</value>
 	</data>
 	<data name="UserFieldObjectManager_Description" xml:space="preserve">
@@ -1470,10 +1470,10 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="UserFieldTypes_None" xml:space="preserve">
 		<value>Keine Auswahl</value>
 	</data>
-	<data name="ValueItem" xml:space="preserve">
+	<data name="ValueItem_DisplayName" xml:space="preserve">
 		<value>Wertelement</value>
 	</data>
-	<data name="ValueItem_DisplayName" xml:space="preserve">
+	<data name="ValueItem_DisplayNameProperty" xml:space="preserve">
 		<value>Anzeigename</value>
 	</data>
 	<data name="ValueItem_Value" xml:space="preserve">
@@ -2320,4 +2320,6 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 		<value>Schreibt pro Assistenten-Ausführung eine formatierte Protokolldatei mit KI-Ausgaben und Tool-API-Aufrufen.</value>
 	</data>
 </root>
+
+
 

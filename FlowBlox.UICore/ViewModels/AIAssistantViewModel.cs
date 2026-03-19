@@ -88,6 +88,7 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public bool CanEditInput => !IsBusy;
+        public bool ShowProviderConfigurationWarning => !_isProviderConfigured;
         public bool CanUndoProjectState =>
             !IsBusy &&
             _stateBeforeLastPrompt != null &&
@@ -101,6 +102,7 @@ namespace FlowBlox.UICore.ViewModels
             _isPromptStateUndone;
 
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
+        private bool _isProviderConfigured;
 
         public AIAssistantViewModel()
         {
@@ -121,6 +123,8 @@ namespace FlowBlox.UICore.ViewModels
             ResetCommunicationStateCommand = new RelayCommand(ResetCommunicationState, () => !IsBusy);
             UndoProjectStateCommand = new RelayCommand(UndoProjectState, () => CanUndoProjectState);
             RedoProjectStateCommand = new RelayCommand(RedoProjectState, () => CanRedoProjectState);
+
+            RefreshProviderConfigurationState();
         }
 
         private bool CanSubmit()
@@ -140,7 +144,7 @@ namespace FlowBlox.UICore.ViewModels
             AddTranscriptLine(new AssistantTranscriptLine
             {
                 Kind = AssistantTranscriptKind.User,
-                Text = $"User: {input}",
+                Text = input,
                 Timestamp = DateTime.Now
             });
 
@@ -157,7 +161,7 @@ namespace FlowBlox.UICore.ViewModels
                 AddTranscriptLine(new AssistantTranscriptLine
                 {
                     Kind = AssistantTranscriptKind.Status,
-                    Text = "Assistant: Cancelled.",
+                    Text = "Cancelled.",
                     Timestamp = DateTime.Now
                 });
             }
@@ -166,7 +170,7 @@ namespace FlowBlox.UICore.ViewModels
                 AddTranscriptLine(new AssistantTranscriptLine
                 {
                     Kind = AssistantTranscriptKind.Error,
-                    Text = $"Assistant: {ex.Message}",
+                    Text = ex.Message,
                     Timestamp = DateTime.Now
                 });
             }
@@ -353,6 +357,7 @@ namespace FlowBlox.UICore.ViewModels
             _stateBeforeLastPrompt = null;
             _stateAfterLastPrompt = null;
             _isPromptStateUndone = false;
+            RefreshProviderConfigurationState();
             RefreshUndoRedoState();
         }
 
@@ -368,7 +373,7 @@ namespace FlowBlox.UICore.ViewModels
         public AssistantConfiguration GetConfiguration(out string error) => _service.GetConfiguration(out error);
 
         public bool SaveConfiguration(AssistantConfiguration configuration, out string error) =>
-            _service.SaveConfiguration(configuration, out error);
+            SaveConfigurationInternal(configuration, out error);
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
@@ -382,6 +387,27 @@ namespace FlowBlox.UICore.ViewModels
             OnPropertyChanged(nameof(CanRedoProjectState));
             UndoProjectStateCommand.Invalidate();
             RedoProjectStateCommand.Invalidate();
+        }
+
+        public void RefreshProviderConfigurationState()
+        {
+            var configuration = _service.GetConfiguration(out _);
+            var isConfigured = configuration?.Provider != null;
+
+            if (_isProviderConfigured == isConfigured)
+                return;
+
+            _isProviderConfigured = isConfigured;
+            OnPropertyChanged(nameof(ShowProviderConfigurationWarning));
+        }
+
+        private bool SaveConfigurationInternal(AssistantConfiguration configuration, out string error)
+        {
+            var success = _service.SaveConfiguration(configuration, out error);
+            if (success)
+                RefreshProviderConfigurationState();
+
+            return success;
         }
     }
 }

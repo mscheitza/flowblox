@@ -26,7 +26,7 @@ namespace FlowBlox.Core.Models.Components.Modifier
         Decode
     }
 
-    [Display(Name = "HttpEncodeDecodeModifier", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "HttpEncodeDecodeModifier_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class HttpEncodeDecodeModifier : ModifierBase
     {
         [Required]
@@ -88,3 +88,4 @@ namespace FlowBlox.Core.Models.Components.Modifier
         }
     }
 }
+

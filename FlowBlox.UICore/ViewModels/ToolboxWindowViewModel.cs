@@ -7,9 +7,9 @@ using FlowBlox.UICore.Repositories;
 using FlowBlox.UICore.Commands;
 using FlowBlox.Core.Util;
 using System.Windows;
-using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Resources;
 using FlowBlox.UICore.Models.Toolbox;
+using FlowBlox.UICore.Models;
 
 namespace FlowBlox.UICore.ViewModels
 {

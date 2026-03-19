@@ -9,7 +9,7 @@ using FlowBlox.Core.Util.Fields;
 
 namespace FlowBlox.Core.Models.Components.Modifier
 {
-    [Display(Name = "RegexMatchModifier", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "RegexMatchModifier_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class RegexMatchModifier : RegexModifierBase
     {
         [Display(Name = "RegexMatchModifier_Behavior", Order = 1, ResourceType = typeof(FlowBloxTexts))]
@@ -61,3 +61,4 @@ namespace FlowBlox.Core.Models.Components.Modifier
         }
     }
 }
+

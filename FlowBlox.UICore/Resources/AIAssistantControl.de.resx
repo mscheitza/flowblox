@@ -121,7 +121,10 @@
     <value>KI-Assistent</value>
   </data>
   <data name="Header_Description" xml:space="preserve">
-    <value>Beschreiben Sie Ihren Zielflow. Der Assistent führt Tool-Calls aus und protokolliert den Status unten.</value>
+    <value>Der KI-Assistent kann genutzt werden, um den aktuellen Flow anzupassen oder einen kompletten Flow auf Basis einer Beschreibung zu erstellen.</value>
+  </data>
+  <data name="Warning_MissingProvider" xml:space="preserve">
+    <value>Bitte konfigurieren Sie zuerst Ihren AI-Provider. API-Key erforderlich.</value>
   </data>
   <data name="Tooltip_Undo" xml:space="preserve">
     <value>Letzte KI-Projektzustandsänderung rückgängig machen</value>
@@ -145,7 +148,7 @@
     <value>Im Editor öffnen</value>
   </data>
   <data name="Watermark_Title" xml:space="preserve">
-    <value>KI-Tool-Schleife</value>
+    <value>FlowBlox AI-Assistant</value>
   </data>
   <data name="Button_Submit" xml:space="preserve">
     <value>Senden</value>

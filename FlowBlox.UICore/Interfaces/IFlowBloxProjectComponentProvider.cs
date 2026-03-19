@@ -5,6 +5,8 @@ namespace FlowBlox.UICore.Interfaces
 {
     public interface IFlowBloxProjectComponentProvider
     {
+        IFlowBloxUIRegistry GetCurrentUIRegistry();
+
         ProjectChangelist GetCurrentChangelist();
 
         FlowBloxRegistry GetCurrentRegistry();

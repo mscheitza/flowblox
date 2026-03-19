@@ -1,0 +1,16 @@
+FlowBlox naming conventions for AI-generated changes:
+
+1) FlowBlock names
+- Prefer: <TypeNameWithoutSuffix>_<Descriptor>
+- Example: TableReaderFlowBlock -> TableReader_Input
+- Keep descriptors short, domain-specific, and stable.
+
+2) BaseSingleResultFlowBlock naming
+- For BaseSingleResultFlowBlock descendants, prefer descriptors that naturally map to the auto-created result field name.
+- Example intent: JsonPathSelector_FirstName should lead to a result field descriptor like FirstName.
+- Placeholder pattern for result fields always follows $<FlowBlockName>::<FieldName>.
+
+3) Placeholder-aware updates
+- If type metadata marks a string property with EnableFieldSelection, placeholders are allowed.
+- Use GetPlaceholders to discover currently available placeholders before writing values.
+- Never invent placeholder names that are not present in GetPlaceholders results.

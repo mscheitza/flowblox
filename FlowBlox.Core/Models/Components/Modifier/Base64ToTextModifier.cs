@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.Components.Modifier
 {
-    [Display(Name = "Base64ToTextModifier", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "Base64ToTextModifier_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class Base64ToTextModifier : ModifierBase
     {
         [Required]
@@ -46,3 +46,4 @@ namespace FlowBlox.Core.Models.Components.Modifier
         }
     }
 }
+

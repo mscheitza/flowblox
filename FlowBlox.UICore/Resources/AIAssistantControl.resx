@@ -101,7 +101,10 @@
     <value>AI Assistant</value>
   </data>
   <data name="Header_Description">
-    <value>Describe your target flow. The assistant will run tool calls and stream status lines below.</value>
+    <value>The AI Assistant can help you adjust the current flow or create a complete flow from a description.</value>
+  </data>
+  <data name="Warning_MissingProvider">
+    <value>Please configure your AI provider first. API key required.</value>
   </data>
   <data name="Tooltip_Undo">
     <value>Undo last AI project state change</value>
@@ -125,7 +128,7 @@
     <value>Open in Editor</value>
   </data>
   <data name="Watermark_Title">
-    <value>AI Tool Loop</value>
+    <value>FlowBlox AI-Assistant</value>
   </data>
   <data name="Button_Submit">
     <value>Submit</value>

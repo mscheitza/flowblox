@@ -9,7 +9,9 @@ namespace FlowBlox.AIAssistant.Services
         public const string SystemMessageKey = "system_message";
         public const string SessionBootstrapKey = "session_bootstrap";
         public const string IterationContextKey = "explaining_iteration_context";
+        public const string FlowBlocksManagingObjectKey = "explaining_flow_blocks_managing_an_object";
         public const string EditAndDeleteKey = "explaining_edit_and_delete";
+        public const string NamingConventionsKey = "naming_conventions";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
             new Dictionary<string, PromptEntryDefinition>(StringComparer.OrdinalIgnoreCase)
@@ -29,15 +31,24 @@ namespace FlowBlox.AIAssistant.Services
                     "Explaining IterationContext",
                     "FlowBlox.AIAssistant.Prompts.ExplainingIterationContext.txt",
                     "Important for understanding FlowBlox flow execution logic."),
+                [FlowBlocksManagingObjectKey] = new PromptEntryDefinition(
+                    FlowBlocksManagingObjectKey,
+                    "Explaining FlowBlocks Managing an Object",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingFlowBlocksManagingAnObject.txt",
+                    "How object-managing flow blocks define object lifecycle per dataset or per run."),
                 [EditAndDeleteKey] = new PromptEntryDefinition(
                     EditAndDeleteKey,
                     "Explaining Edit and Delete",
                     "FlowBlox.AIAssistant.Prompts.ExplainingEditAndDelete.txt",
-                    "How to update, link/unlink, and delete safely (including dependency order).")
+                    "How to update, link/unlink, and delete safely (including dependency order)."),
+                [NamingConventionsKey] = new PromptEntryDefinition(
+                    NamingConventionsKey,
+                    "Naming Conventions",
+                    "FlowBlox.AIAssistant.Prompts.NamingConventions.txt",
+                    "Consistent naming rules for FlowBlocks and result-field descriptors.")
             };
 
-        private static readonly Lazy<IReadOnlyDictionary<string, PromptEntry>> Entries =
-            new(LoadEntries, isThreadSafe: true);
+        private static readonly Lazy<IReadOnlyDictionary<string, PromptEntry>> Entries = new(LoadEntries, isThreadSafe: true);
 
         public static string? GetPromptContentOrNull(string key)
         {

@@ -170,6 +170,7 @@ namespace FlowBlox.Core.Provider.Registry
             field.OnAfterCreate();
             field.OnAfterLoad();
             _managedObjects.Add(field);
+            OnManagedObjectAdded?.Invoke(new ManagedObjectAddedEventArgs(field));
             return field;
         }
 

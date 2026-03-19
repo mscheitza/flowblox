@@ -8,7 +8,7 @@ using FlowBlox.Core.Extensions;
 
 namespace FlowBlox.Core.Models.Components
 {
-    [Display(Name = "TypeElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+    [Display(Name = "TypeElement_DisplayName", ResourceType = typeof(FlowBloxTexts), Order = 0)]
     public class TypeElement : FlowBloxReactiveObject
     {
         public TypeElement()
@@ -230,3 +230,4 @@ namespace FlowBlox.Core.Models.Components
         }
     }
 }
+
