@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Util;
+using FlowBlox.Core.Util;
 using log4net;
 
 namespace FlowBlox.Core.Logging
@@ -14,7 +14,7 @@ namespace FlowBlox.Core.Logging
                 throw new ArgumentNullException(nameof(runtimeLogFileName));
 
             _runtimeLogFileName = runtimeLogFileName;
-            _runtimeLogDirectory = FlowBloxOptions.GetOptionInstance().GetOption("General.RuntimeLogDir").Value;
+            _runtimeLogDirectory = FlowBloxOptions.GetOptionInstance().GetOption("Paths.RuntimeLogDir").Value;
 
             GlobalContext.Properties["runtimeLogFileName"] = _runtimeLogFileName;
             GlobalContext.Properties["runtimeLogDirectory"] = _runtimeLogDirectory;

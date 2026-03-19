@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
@@ -301,9 +302,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         private bool CanCreate() => ! _readOnly;
 
-        private bool CanLink() => !_readOnly;
+        private bool CanLink() => !_readOnly && !FlowBloxRegistryProvider.IsCurrentlyDetached;
 
-        private bool CanUnlink() => _property.GetValue(_target) != null && !_readOnly;
+        private bool CanUnlink() =>
+            _property.GetValue(_target) != null &&
+            !_readOnly &&
+            !FlowBloxRegistryProvider.IsCurrentlyDetached;
 
         private bool CanDelete() => _property.GetValue(_target) != null && !_readOnly;
 

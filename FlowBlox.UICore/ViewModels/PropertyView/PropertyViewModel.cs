@@ -23,6 +23,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
     {
         private PropertyViewTransactionManager _transactionManager;
         private bool _deepCopy;
+        private bool _detached;
         private bool _readOnly;
         private bool _hasChanges;
         private object _target;
@@ -60,12 +61,19 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             _window = window;
         }
 
-        public void Open(object target, bool deepCopy, bool readOnly, string preselectedProperty = "", object preselectedInstance = null)
+        public void Open(
+            object target,
+            bool deepCopy,
+            bool readOnly,
+            string preselectedProperty = "",
+            object preselectedInstance = null,
+            bool detached = false)
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
 
             _deepCopy = deepCopy;
+            _detached = detached;
             _readOnly = readOnly;
             _target = target;
             _preselectedProperty = preselectedProperty;
@@ -169,7 +177,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         {
             if (_deepCopy)
             {
-                var result = _transactionManager.Open(_target);
+                var result = _transactionManager.Open(_target, _detached);
                 _transientTarget = result.TransientTarget;
             }
             else
@@ -218,6 +226,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
                 _readOnly = false;
                 _deepCopy = false;
+                _detached = false;
                 _target = null;
             }
         }

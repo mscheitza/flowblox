@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Models.Project;
@@ -121,7 +121,7 @@ namespace FlowBlox.Core.Models.Runtime
 
                     lock (_logfileLock)
                     {
-                        var runtimeLogDirectory = FlowBloxOptions.GetOptionInstance().GetOption("General.RuntimeLogDir").Value;
+                        var runtimeLogDirectory = FlowBloxOptions.GetOptionInstance().GetOption("Paths.RuntimeLogDir").Value;
                         if (_alreadyCreatedLogfileNames.Contains(_runtimeLogFileName) ||
                             File.Exists(Path.Combine(runtimeLogDirectory, _runtimeLogFileName)))
                         {

@@ -44,7 +44,7 @@ namespace FlowBlox
         {
             var uiCultureOption = FlowBloxOptions
                 .GetOptionInstance()
-                .GetOption("General.UICulture");
+                .GetOption("UI.Culture");
 
             if (uiCultureOption == null || string.IsNullOrWhiteSpace(uiCultureOption.Value))
                 return;

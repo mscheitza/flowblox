@@ -33,7 +33,7 @@ namespace FlowBlox.AIAssistant.Services
             {
                 return new AssistantConfigurationParseResult
                 {
-                    Error = $"Invalid JSON in option '{AssistantConfiguration.OptionKey}': {ex.Message}"
+                    Error = $"Invalid JSON in option 'AI.AssistantConfiguration': {ex.Message}"
                 };
             }
         }

@@ -538,6 +538,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Write Communication Protocol ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_EnableCommunicationProtocol {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_EnableCommunicationProtocol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Writes a formatted communication protocol file with AI outputs and Tool API calls for each assistant execution. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_EnableCommunicationProtocol_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_EnableCommunicationProtocol_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die General ähnelt.
         /// </summary>
         public static string AssistantConfiguration_Groups_General {
@@ -5737,6 +5755,15 @@ namespace FlowBlox.Core {
         public static string TypeNames_FileObject {
             get {
                 return ResourceManager.GetString("TypeNames_FileObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Gemini Provider ähnelt.
+        /// </summary>
+        public static string TypeNames_GeminiAIProvider {
+            get {
+                return ResourceManager.GetString("TypeNames_GeminiAIProvider", resourceCulture);
             }
         }
         

@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Exceptions;
@@ -88,7 +88,7 @@ namespace FlowBlox.Core.Models.Project
         /// </summary>
         public string GetProjectInputDirectory(string projectName)
         {
-            var baseDir = FlowBloxOptions.GetOptionInstance().GetOption("General.InputDir")?.Value;
+            var baseDir = FlowBloxOptions.GetOptionInstance().GetOption("Paths.InputDir")?.Value;
             return BuildProjectDir(baseDir, projectName);
         }
 
@@ -97,7 +97,7 @@ namespace FlowBlox.Core.Models.Project
         /// </summary>
         public string GetProjectOutputDirectory(string projectName)
         {
-            var baseDir = FlowBloxOptions.GetOptionInstance().GetOption("General.OutputDir")?.Value;
+            var baseDir = FlowBloxOptions.GetOptionInstance().GetOption("Paths.OutputDir")?.Value;
             return BuildProjectDir(baseDir, projectName);
         }
 

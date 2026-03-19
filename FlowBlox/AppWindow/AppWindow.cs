@@ -353,7 +353,7 @@ namespace FlowBlox.AppWindow
             OpenProjectWithConfirmation(() =>
             {
                 openProjectDialog.InitialDirectory =
-                    FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectDir"].Value;
+                    FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.ProjectDir"].Value;
 
                 if (!Directory.Exists(openProjectDialog.InitialDirectory))
                     Directory.CreateDirectory(openProjectDialog.InitialDirectory);
@@ -380,7 +380,7 @@ namespace FlowBlox.AppWindow
             {
                 if (string.IsNullOrWhiteSpace(_recentProjectPath))
                 {
-                    saveProjectDialog.InitialDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectDir"].Value;
+                    saveProjectDialog.InitialDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.ProjectDir"].Value;
 
                     if (!Directory.Exists(saveProjectDialog.InitialDirectory))
                         Directory.CreateDirectory(saveProjectDialog.InitialDirectory);
@@ -422,7 +422,7 @@ namespace FlowBlox.AppWindow
         {
             try
             {
-                saveProjectDialog.InitialDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectDir"].Value;
+                saveProjectDialog.InitialDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.ProjectDir"].Value;
 
                 if (!Directory.Exists(saveProjectDialog.InitialDirectory))
                 {
@@ -707,7 +707,7 @@ namespace FlowBlox.AppWindow
 
         private void itmOpenOutputDir_Click(object sender, EventArgs e)
         {
-            string outputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.OutputDir"].Value;
+            string outputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.OutputDir"].Value;
             if (!Directory.Exists(outputDirectory))
                 Directory.CreateDirectory(outputDirectory);
 
@@ -750,7 +750,7 @@ namespace FlowBlox.AppWindow
         {
             try
             {
-                string OutputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.OutputDir"].Value;
+                string OutputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.OutputDir"].Value;
                 saveFileDialog_GridImage.InitialDirectory = OutputDirectory;
                 if (!Directory.Exists(OutputDirectory))
                 {
@@ -818,7 +818,7 @@ namespace FlowBlox.AppWindow
 
         private void itmOpenProjectDir_Click(object sender, EventArgs e)
         {
-            string projectDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectDir"].Value;
+            string projectDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.ProjectDir"].Value;
             if (!Directory.Exists(projectDirectory))
                 Directory.CreateDirectory(projectDirectory);
 
@@ -1094,7 +1094,7 @@ namespace FlowBlox.AppWindow
 
         private void OpenProjectFromProjectSpace(string projectGuid, int? projectSpaceVersion = null)
         {
-            var baseUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ProjectApiServiceBaseUrl"].Value;
+            var baseUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["Api.ProjectServiceBaseUrl"].Value;
             var webApi = new FlowBloxWebApiService(baseUrl);
             var token = FlowBloxAccountManager.Instance.GetUserToken(baseUrl);
 
@@ -1153,7 +1153,7 @@ namespace FlowBlox.AppWindow
 
         private void itmOpenInputDir_Click(object sender, EventArgs e)
         {
-            string inputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.InputDir"].Value;
+            string inputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.InputDir"].Value;
             if (!Directory.Exists(inputDirectory))
                 Directory.CreateDirectory(inputDirectory);
 

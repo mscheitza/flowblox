@@ -45,7 +45,7 @@ namespace FlowBlox.AIAssistant.Services
         public AssistantConfiguration GetConfiguration(out string error)
         {
             error = string.Empty;
-            var rawConfig = FlowBloxOptions.GetOptionInstance().GetOption(AssistantConfiguration.OptionKey)?.Value ?? string.Empty;
+            var rawConfig = FlowBloxOptions.GetOptionInstance().GetOption("AI.AssistantConfiguration")?.Value ?? string.Empty;
             var parseResult = AssistantConfigurationJson.Parse(rawConfig);
             if (parseResult.HasError)
             {
@@ -63,10 +63,10 @@ namespace FlowBlox.AIAssistant.Services
             {
                 var serialized = AssistantConfigurationJson.Serialize(configuration ?? new AssistantConfiguration());
                 var options = FlowBloxOptions.GetOptionInstance();
-                var option = options.GetOption(AssistantConfiguration.OptionKey);
+                var option = options.GetOption("AI.AssistantConfiguration");
                 if (option == null)
                 {
-                    error = $"Option '{AssistantConfiguration.OptionKey}' not found.";
+                    error = $"Option 'AI.AssistantConfiguration' not found.";
                     return false;
                 }
 
@@ -104,129 +104,206 @@ namespace FlowBlox.AIAssistant.Services
                 return result;
             }
 
-            var maxRounds = config.MaxToolRounds;
+            var maxRounds = Math.Clamp(config.MaxToolRounds, 1, 200);
+            var useNativeContinuation = config.Provider?.SupportsNativeResponseContinuation == true;
             var session = GetOrCreateSession();
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = BuildSystemPrompt();
             var sessionBootstrapPrompt = BuildSessionBootstrapPrompt(toolDefinitions);
             var latestToolTranscript = new List<string>();
             var knownFlowBlocksByName = CaptureFlowBlocksByName();
+            var protocolWriter = TryCreateCommunicationProtocolWriter(config, userPrompt, session.SessionId);
+            var formatRetryIssued = false;
+            protocolWriter?.AppendAiAssistantServiceText("System prompt prepared", systemPrompt);
+            protocolWriter?.AppendAiAssistantServiceText("Session bootstrap prompt prepared", sessionBootstrapPrompt);
 
             AddTranscript(result, AssistantTranscriptKind.Status, "Assistant: Starting tool loop...");
 
-            for (var round = 1; round <= maxRounds; round++)
+            try
             {
-                ct.ThrowIfCancellationRequested();
-
-                var roundPrompt = BuildRoundPrompt(
-                    session,
-                    sessionBootstrapPrompt,
-                    userPrompt,
-                    round == 1 ? GetCurrentProjectJson() : null,
-                    latestToolTranscript,
-                    round,
-                    maxRounds);
-
-                var exec = await _executor.ExecutePromptAsync(
-                    systemPrompt,
-                    roundPrompt,
-                    config,
-                    session.LastResponseId,
-                    ct).ConfigureAwait(false);
-                result.RawModelOutput = exec.RawOutput ?? exec.OutputText ?? string.Empty;
-                UpdateSessionResponseId(session, exec.ResponseId);
-
-                if (!exec.Success)
-                {
-                    result.Success = false;
-                    var error = string.IsNullOrWhiteSpace(exec.Error) ? "AI request failed." : exec.Error;
-                    result.Errors.Add(error);
-                    AddTranscript(result, AssistantTranscriptKind.Error, $"Assistant: {error}");
-                    _logger?.Warn($"AI Assistant execution failed: {error}");
-                    return result;
-                }
-
-                var assistantOutput = exec.OutputText ?? string.Empty;
-                if (!TryParseAssistantInstruction(assistantOutput, out var instruction))
-                {
-                    AddTranscript(
-                        result,
-                        AssistantTranscriptKind.Assistant,
-                        $"Assistant (round {round}): {assistantOutput}",
-                        assistantOutput);
-                    result.Success = true;
-                    result.AssistantText = assistantOutput;
-                    result.Summary = "Assistant response generated without tool calls.";
-                    AppendSessionTurn(session, userPrompt, assistantOutput);
-                    return result;
-                }
-
-                var assistantRoundMessage = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
-                    ? $"Assistant (round {round}): [no assistantMessage]"
-                    : $"Assistant (round {round}): {instruction.AssistantMessage}";
-                AddTranscript(
-                    result,
-                    AssistantTranscriptKind.Assistant,
-                    assistantRoundMessage,
-                    instruction.InternalContent);
-
-                if (instruction.ToolCalls.Count == 0 || instruction.Final)
-                {
-                    result.Success = true;
-                    result.AssistantText = instruction.AssistantMessage;
-                    result.Summary = "Assistant response generated.";
-
-                    var finalText = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
-                        ? assistantOutput
-                        : instruction.AssistantMessage;
-                    AppendSessionTurn(session, userPrompt, finalText);
-                    return result;
-                }
-
-                AddTranscript(result, AssistantTranscriptKind.Status, $"Assistant: Executing {instruction.ToolCalls.Count} tool call(s)...");
-                var roundToolTranscript = new List<string>();
-
-                foreach (var toolCall in instruction.ToolCalls)
+                for (var round = 1; round <= maxRounds; round++)
                 {
                     ct.ThrowIfCancellationRequested();
 
-                    var request = new ToolRequest
+                    var roundPrompt = BuildRoundPrompt(
+                        session,
+                        sessionBootstrapPrompt,
+                        userPrompt,
+                        (round == 1 || !useNativeContinuation) ? GetCurrentProjectJson() : null,
+                        latestToolTranscript,
+                        round,
+                        maxRounds,
+                        includeFullContext: !useNativeContinuation);
+                    protocolWriter?.AppendAiAssistantServiceText($"Round {round} prompt prepared", roundPrompt);
+
+                    var exec = await _executor.ExecutePromptAsync(
+                        systemPrompt,
+                        roundPrompt,
+                        config,
+                        session.LastResponseId,
+                        ct).ConfigureAwait(false);
+                    result.RawModelOutput = exec.RawOutput ?? exec.OutputText ?? string.Empty;
+                    UpdateSessionResponseId(session, exec.ResponseId);
+
+                    if (!exec.Success)
                     {
-                        ToolName = toolCall.ToolName,
-                        Arguments = toolCall.Arguments,
-                        CorrelationId = Guid.NewGuid().ToString("N")
-                    };
-
-                    var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
-
-                    AddTranscript(result, response.Ok ? AssistantTranscriptKind.Status : AssistantTranscriptKind.Error,
-                        $"Tool {request.ToolName}: {(response.Ok ? "OK" : response.Error)}");
-
-                    roundToolTranscript.Add(JsonConvert.SerializeObject(new
-                    {
-                        tool = request.ToolName,
-                        arguments = request.Arguments,
-                        response
-                    }, Formatting.None));
-
-                    if (!response.Ok)
-                    {
-                        result.Warnings.Add($"Tool '{request.ToolName}' failed: {response.Error}");
-                        _logger?.Warn($"Assistant tool call failed. Tool={request.ToolName}, Error={response.Error}");
+                        result.Success = false;
+                        var error = string.IsNullOrWhiteSpace(exec.Error) ? "AI request failed." : exec.Error;
+                        result.Errors.Add(error);
+                        AddTranscript(result, AssistantTranscriptKind.Error, $"Assistant: {error}");
+                        _logger?.Warn($"AI Assistant execution failed: {error}");
+                        return result;
                     }
 
-                    knownFlowBlocksByName = NotifyFlowBlockChanges(knownFlowBlocksByName);
+                    var assistantOutput = exec.OutputText ?? string.Empty;
+
+                    if (!TryParseAssistantInstruction(assistantOutput, out var instruction))
+                    {
+                        protocolWriter?.AppendAiText(round, assistantOutput);
+                        AddTranscript(
+                            result,
+                            AssistantTranscriptKind.Assistant,
+                            $"Assistant (round {round}): {assistantOutput}",
+                            assistantOutput);
+
+                        if (!formatRetryIssued)
+                        {
+                            formatRetryIssued = true;
+                            const string formatGuidance =
+                                "FORMAT_VALIDATION: Your previous response did not follow the required JSON schema. " +
+                                "For the next response, return exactly one JSON object in this format: " +
+                                "{\"assistantMessage\":\"short status or final answer\",\"final\":false,\"toolCalls\":[{\"toolName\":\"ToolName\",\"arguments\":{}}]} " +
+                                "Set \"final\" to true only for the final answer. Do not output additional text outside this JSON object.";
+
+                            AddTranscript(result, AssistantTranscriptKind.Status,
+                                "Assistant: Response format invalid. Sent one correction hint and retrying.");
+                            result.Warnings.Add("Assistant response format invalid; retrying once with explicit format guidance.");
+                            protocolWriter?.AppendAiAssistantServiceText("Format validation guidance issued", formatGuidance);
+
+                            if (useNativeContinuation)
+                                latestToolTranscript = [formatGuidance];
+                            else
+                                latestToolTranscript.Add(formatGuidance);
+
+                            continue;
+                        }
+
+                        result.Success = false;
+                        result.Errors.Add("Assistant returned an invalid response format twice. Aborting execution.");
+                        AddTranscript(result, AssistantTranscriptKind.Error,
+                            "Assistant: Invalid response format repeated after correction. Aborting.");
+                        AppendSessionTurn(session, userPrompt, assistantOutput);
+                        return result;
+                    }
+
+
+                    protocolWriter?.AppendAiJson(round, TryParseFirstJsonObject(assistantOutput));
+
+                    var assistantRoundMessage = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
+                        ? $"Assistant (round {round}): [no assistantMessage]"
+                        : $"Assistant (round {round}): {instruction.AssistantMessage}";
+                    AddTranscript(
+                        result,
+                        AssistantTranscriptKind.Assistant,
+                        assistantRoundMessage,
+                        instruction.InternalContent);
+
+                    if (instruction.ToolCalls.Count == 0 || instruction.Final)
+                    {
+                        result.Success = true;
+                        result.AssistantText = instruction.AssistantMessage;
+                        result.Summary = "Assistant response generated.";
+
+                        var finalText = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
+                            ? assistantOutput
+                            : instruction.AssistantMessage;
+                        AppendSessionTurn(session, userPrompt, finalText);
+                        return result;
+                    }
+
+                    AddTranscript(result, AssistantTranscriptKind.Status, $"Assistant: Executing {instruction.ToolCalls.Count} tool call(s)...");
+                    var roundToolTranscript = new List<string>();
+
+                    foreach (var toolCall in instruction.ToolCalls)
+                    {
+                        ct.ThrowIfCancellationRequested();
+
+                        var request = new ToolRequest
+                        {
+                            ToolName = toolCall.ToolName,
+                            Arguments = toolCall.Arguments,
+                            CorrelationId = Guid.NewGuid().ToString("N")
+                        };
+
+                        var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
+                        protocolWriter?.AppendToolCall(round, request, response);
+
+                        AddTranscript(result, response.Ok ? AssistantTranscriptKind.Status : AssistantTranscriptKind.Error,
+                            $"Tool {request.ToolName}: {(response.Ok ? "OK" : response.Error)}");
+
+                        roundToolTranscript.Add(JsonConvert.SerializeObject(new
+                        {
+                            tool = request.ToolName,
+                            arguments = request.Arguments,
+                            response
+                        }, Formatting.None));
+
+                        if (!response.Ok)
+                        {
+                            result.Warnings.Add($"Tool '{request.ToolName}' failed: {response.Error}");
+                            _logger?.Warn($"Assistant tool call failed. Tool={request.ToolName}, Error={response.Error}");
+                        }
+
+                        knownFlowBlocksByName = NotifyFlowBlockChanges(knownFlowBlocksByName);
+                    }
+
+                    if (useNativeContinuation)
+                        latestToolTranscript = roundToolTranscript;
+                    else
+                        latestToolTranscript.AddRange(roundToolTranscript);
                 }
 
-                latestToolTranscript = roundToolTranscript;
+                result.Success = false;
+                result.Errors.Add($"Assistant reached max tool rounds ({maxRounds}) without a final response.");
+                AddTranscript(result, AssistantTranscriptKind.Error,
+                    $"Assistant: Reached max tool rounds ({maxRounds}) without a final response.");
+                AppendSessionTurn(session, userPrompt, $"No final response after {maxRounds} rounds.");
+                return result;
             }
+            finally
+            {
+                protocolWriter?.TryWrite(_logger);
+            }
+        }
 
-            result.Success = false;
-            result.Errors.Add($"Assistant reached max tool rounds ({maxRounds}) without a final response.");
-            AddTranscript(result, AssistantTranscriptKind.Error,
-                $"Assistant: Reached max tool rounds ({maxRounds}) without a final response.");
-            AppendSessionTurn(session, userPrompt, $"No final response after {maxRounds} rounds.");
-            return result;
+        private AiCommunicationProtocolWriter? TryCreateCommunicationProtocolWriter(AssistantConfiguration config, string userPrompt, string sessionId)
+        {
+            if (config?.EnableCommunicationProtocol != true)
+                return null;
+
+            try
+            {
+                var options = FlowBloxOptions.GetOptionInstance();
+                var directory = options
+                    .GetOption("AI.CommuncationProtocolDir")?
+                    .Value;
+
+                if (string.IsNullOrWhiteSpace(directory))
+                {
+                    directory = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "FlowBlox",
+                        "logs",
+                        "ai_assistant_protocol");
+                }
+
+                return new AiCommunicationProtocolWriter(directory, sessionId, userPrompt);
+            }
+            catch (Exception ex)
+            {
+                _logger?.Warn($"Could not initialize communication protocol writer: {ex.Message}");
+                return null;
+            }
         }
 
         private AssistantSessionState GetOrCreateSession()
@@ -433,18 +510,19 @@ namespace FlowBlox.AIAssistant.Services
             string? projectJson,
             List<string> toolTranscript,
             int round,
-            int maxRounds)
+            int maxRounds,
+            bool includeFullContext)
         {
             var sb = new StringBuilder();
             sb.AppendLine($"Round: {round}/{maxRounds}");
 
-            if (session != null && string.IsNullOrWhiteSpace(session.LastResponseId))
+            if (session != null && (string.IsNullOrWhiteSpace(session.LastResponseId) || includeFullContext))
             {
                 sb.AppendLine(sessionBootstrapPrompt);
                 sb.AppendLine();
             }
 
-            if (round == 1)
+            if (round == 1 || includeFullContext)
             {
                 sb.AppendLine("User prompt:");
                 sb.AppendLine(userPrompt);
@@ -582,5 +660,6 @@ namespace FlowBlox.AIAssistant.Services
             public string Role { get; set; } = string.Empty;
             public string Content { get; set; } = string.Empty;
         }
+
     }
 }

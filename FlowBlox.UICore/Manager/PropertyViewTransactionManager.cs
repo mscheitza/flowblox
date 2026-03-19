@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Util.DeepCopier;
+using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
@@ -52,9 +52,9 @@ namespace FlowBlox.UICore.Manager
 			public FlowBloxRegistry Registry { get; set; }
 		}
 
-		public OpenResult Open(object target)
+		public OpenResult Open(object target, bool detached = false)
 		{
-			_registry = FlowBloxRegistryProvider.OpenTransaction();
+			_registry = FlowBloxRegistryProvider.OpenTransaction(detached);
 			_deepCopier.PropertyActions = FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(target);
 			var transientTarget = _deepCopier.Copy(target);
 			var protocol = _deepCopier.GetProtocol();
@@ -103,7 +103,7 @@ namespace FlowBlox.UICore.Manager
 
 		private void StoreProtocol(object target, string protocol, bool recopy = false)
 		{
-			var protocolDirectory = FlowBloxOptions.GetOptionInstance().GetOption("General.DeepCopierProtocolDir").Value;
+			var protocolDirectory = FlowBloxOptions.GetOptionInstance().GetOption("Paths.DeepCopierProtocolDir").Value;
 
 			if (!Directory.Exists(protocolDirectory))
 				Directory.CreateDirectory(protocolDirectory);

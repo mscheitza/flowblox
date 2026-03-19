@@ -1902,6 +1902,9 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="TypeNames_OpenAIProvider" xml:space="preserve">
 		<value>OpenAI-Provider</value>
 	</data>
+	<data name="TypeNames_GeminiAIProvider" xml:space="preserve">
+		<value>Gemini-Provider</value>
+	</data>
 	<data name="OpenAIProvider_OrganizationId" xml:space="preserve">
 		<value>Organisations-ID</value>
 	</data>
@@ -2309,6 +2312,12 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	</data>
 	<data name="AssistantConfiguration_MaxToolRounds_Tooltip" xml:space="preserve">
 		<value>Obere Grenze der Tool-Call-Runden pro Prompt-Ausführung.</value>
+	</data>
+	<data name="AssistantConfiguration_EnableCommunicationProtocol" xml:space="preserve">
+		<value>Kommunikationsprotokoll schreiben</value>
+	</data>
+	<data name="AssistantConfiguration_EnableCommunicationProtocol_Tooltip" xml:space="preserve">
+		<value>Schreibt pro Assistenten-Ausführung eine formatierte Protokolldatei mit KI-Ausgaben und Tool-API-Aufrufen.</value>
 	</data>
 </root>
 

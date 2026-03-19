@@ -10,6 +10,16 @@ function Ensure-Directory([string]$path) {
     if (-not (Test-Path $path)) { New-Item -ItemType Directory -Path $path -Force | Out-Null }
 }
 
+function Test-FileUpToDate([string]$sourceFile, [string]$destFile) {
+    if (-not (Test-Path -LiteralPath $destFile)) { return $false }
+
+    $src = Get-Item -LiteralPath $sourceFile -ErrorAction Stop
+    $dst = Get-Item -LiteralPath $destFile -ErrorAction Stop
+
+    if ($src.Length -ne $dst.Length) { return $false }
+    return ($src.LastWriteTimeUtc -eq $dst.LastWriteTimeUtc)
+}
+
 function Get-RepositoryRootPaths {
     # Script runs in FlowBloxResources
     $root = Resolve-Path -LiteralPath $PSScriptRoot
@@ -134,17 +144,44 @@ function Copy-RuntimeNative([string]$nugetRoot, [string]$packageId, [string]$ver
 
     Ensure-Directory $destDir
 
-    # Enumerate source items explicitly (works reliably; no wildcard + LiteralPath pitfalls)
-	$items = @(Get-ChildItem -LiteralPath $src -Force -ErrorAction Stop)
-	if ($items.Length -eq 0) {
-		Write-Warn "Source folder is empty: $src"
-		return $false
-	}
+    # Incremental file copy: only copy changed/missing files.
+    $srcRoot = [System.IO.Path]::GetFullPath($src)
+    $destRoot = [System.IO.Path]::GetFullPath($destDir)
+    $srcFiles = @(Get-ChildItem -LiteralPath $srcRoot -Recurse -File -Force -ErrorAction Stop)
 
-	Write-Info "Copy: $packageId $version [$rid] -> $destDir"
-	foreach ($it in $items) {
-		Copy-Item -LiteralPath $it.FullName -Destination $destDir -Force -Recurse -ErrorAction Stop
-	}
+    if ($srcFiles.Length -eq 0) {
+        Write-Warn "Source folder is empty: $src"
+        return $false
+    }
+
+    $filesToCopy = @()
+    foreach ($file in $srcFiles) {
+        $srcFile = $file.FullName
+        $relPath = $srcFile.Substring($srcRoot.Length).TrimStart('\','/')
+        $dstFile = Join-Path $destRoot $relPath
+
+        if (-not (Test-FileUpToDate $srcFile $dstFile)) {
+            $filesToCopy += [PSCustomObject]@{
+                Source = $srcFile
+                Destination = $dstFile
+            }
+        }
+    }
+
+    if ($filesToCopy.Count -eq 0) {
+        Write-Info "Up-to-date: $packageId $version [$rid] -> $destDir"
+        return $true
+    }
+
+    Write-Info "Copy: $packageId $version [$rid] -> $destDir (files: $($filesToCopy.Count))"
+    foreach ($entry in $filesToCopy) {
+        $parent = Split-Path -Parent $entry.Destination
+        Ensure-Directory $parent
+        Copy-Item -LiteralPath $entry.Source -Destination $entry.Destination -Force -ErrorAction Stop
+
+        $srcInfo = Get-Item -LiteralPath $entry.Source -ErrorAction Stop
+        (Get-Item -LiteralPath $entry.Destination -ErrorAction Stop).LastWriteTimeUtc = $srcInfo.LastWriteTimeUtc
+    }
 
     return $true
 }

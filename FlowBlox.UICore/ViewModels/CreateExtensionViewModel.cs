@@ -22,7 +22,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private readonly Lazy<FlowBloxWebApiService> _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>
         {
-            var webApiServiceUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ExtensionApiServiceBaseUrl"].Value;
+            var webApiServiceUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["Api.ExtensionServiceBaseUrl"].Value;
             return new FlowBloxWebApiService(webApiServiceUrl);
         });
 

@@ -1,8 +1,7 @@
-﻿using System.IO;
+using System.IO;
 using System.Text.Json;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Util;
-using FlowBlox.Core.Constants;
 using FlowBlox.UICore.Models.Toolbox;
 
 namespace FlowBlox.UICore.Repositories
@@ -11,17 +10,22 @@ namespace FlowBlox.UICore.Repositories
     {
         private readonly string _toolboxUserFile;
         private readonly string _toolboxDirectory;
+        private readonly string _toolboxCacheDirectory;
 
         public ToolboxRepository(FlowBloxOptions options)
         {
-            _toolboxUserFile = options.GetOption("General.ToolboxUserFile")?.Value;
-            _toolboxDirectory = options.GetOption("General.ToolboxDir")?.Value;
+            _toolboxUserFile = options.GetOption("Paths.ToolboxUserFile")?.Value;
+            _toolboxDirectory = options.GetOption("Paths.ToolboxDir")?.Value;
+            _toolboxCacheDirectory = options.GetOption("Paths.ToolboxCacheDir")?.Value;
 
             if (string.IsNullOrWhiteSpace(_toolboxUserFile))
                 throw new InvalidOperationException("Toolbox user file is not set.");
 
             if (string.IsNullOrWhiteSpace(_toolboxDirectory))
                 throw new InvalidOperationException("Toolbox directory is not set.");
+
+            if (string.IsNullOrWhiteSpace(_toolboxCacheDirectory))
+                throw new InvalidOperationException("Toolbox cache directory option 'Paths.ToolboxCacheDir' is not set.");
         }
 
         public IEnumerable<ToolboxElement> Query(string? toolboxCategory = null, string toolboxFile = null, ToolboxScope? toolboxScope = null)
@@ -33,7 +37,7 @@ namespace FlowBlox.UICore.Repositories
             if (!files.Contains(_toolboxUserFile))
                 files.Add(_toolboxUserFile);
 
-            var globalFiles = Directory.GetFiles(GlobalPaths.GlobalToolboxDirectory, "*.json");
+            var globalFiles = Directory.GetFiles(_toolboxCacheDirectory, "*.json");
             files.AddRange(globalFiles);
 
             IEnumerable<string> filteredFiles = files;

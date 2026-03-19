@@ -11,6 +11,7 @@ namespace FlowBlox.UICore.Views
         public bool ReadOnly { get; set; }
         public bool DeepCopy { get; set; }
         public bool CanSave { get; set; }
+        public bool Detached { get; set; }
 
         public string PreselectedProperty { get; set; }
         public FlowBloxReactiveObject PreselectedInstance { get; set; }
@@ -20,6 +21,7 @@ namespace FlowBlox.UICore.Views
             ReadOnly = false;
             DeepCopy = true;
             CanSave = true;
+            Detached = false;
         }
 
         public PropertyWindowArgs(
@@ -28,7 +30,8 @@ namespace FlowBlox.UICore.Views
             bool deepCopy = true, 
             bool canSave = true, 
             string preselectedProperty = null, 
-            FlowBloxReactiveObject preselectedInstance = null)
+            FlowBloxReactiveObject preselectedInstance = null,
+            bool detached = false)
         {
             Target = target;
             ReadOnly = readOnly;
@@ -36,6 +39,7 @@ namespace FlowBlox.UICore.Views
             CanSave = canSave;
             PreselectedProperty = preselectedProperty;
             PreselectedInstance = preselectedInstance;
+            Detached = detached;
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Authentication;
+using FlowBlox.Core.Authentication;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi.Models;
 using FlowBlox.Core.Util;
@@ -190,7 +190,7 @@ namespace FlowBlox.UICore.ViewModels
         public bool CanEditProject(object arg) => IsProjectSelected && IsMine;
 
         private static string ApiUrl => FlowBloxOptions.GetOptionInstance()
-            .OptionCollection["General.ProjectApiServiceBaseUrl"]
+            .OptionCollection["Api.ProjectServiceBaseUrl"]
             .Value;
 
         private readonly Lazy<FlowBloxWebApiService> _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>

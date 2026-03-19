@@ -1,6 +1,6 @@
-using FlowBlox.Core.Constants;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox.Core.Models.Components
@@ -61,8 +61,12 @@ namespace FlowBlox.Core.Models.Components
 
         internal static void InvokeRegistration()
         {
-            if (Directory.Exists(GlobalPaths.GlobalToolboxDirectory))
-                Directory.Delete(GlobalPaths.GlobalToolboxDirectory, true);
+            var toolboxCacheDirectory = FlowBloxOptions.GetOptionInstance().GetOption("Paths.ToolboxCacheDir")?.Value;
+            if (string.IsNullOrWhiteSpace(toolboxCacheDirectory))
+                throw new InvalidOperationException("Required option 'Paths.ToolboxCacheDir' is missing.");
+
+            if (Directory.Exists(toolboxCacheDirectory))
+                Directory.Delete(toolboxCacheDirectory, true);
 
             foreach (var service in FlowBloxServiceLocator.Instance.GetServices<IFlowBlockToolboxRegistrationService>())
             {

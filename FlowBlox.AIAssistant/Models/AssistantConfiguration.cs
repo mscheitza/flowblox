@@ -12,8 +12,6 @@ namespace FlowBlox.AIAssistant.Models
     [FlowBlockUIGroup("AssistantConfiguration_Groups_General", 0)]
     public class AssistantConfiguration : FlowBloxReactiveObject
     {
-        public const string OptionKey = "AI.AssistantConfiguration";
-
         [Required]
         [Display(Name = "AssistantConfiguration_Provider", Description = "AssistantConfiguration_Provider_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
@@ -27,6 +25,9 @@ namespace FlowBlox.AIAssistant.Models
 
         [Display(Name = "AssistantConfiguration_MaxToolRounds", Description = "AssistantConfiguration_MaxToolRounds_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         public int MaxToolRounds { get; set; } = 50;
+
+        [Display(Name = "AssistantConfiguration_EnableCommunicationProtocol", Description = "AssistantConfiguration_EnableCommunicationProtocol_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        public bool EnableCommunicationProtocol { get; set; }
 
     }
 }

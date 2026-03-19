@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core;
+using FlowBlox.Core;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Runtime;
@@ -252,7 +252,7 @@ namespace FlowBlox.Views
 
         private void itmExportDir_Click(object sender, EventArgs e)
         {
-            string OutputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.OutputDir"].Value;
+            string OutputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.OutputDir"].Value;
             if (!Directory.Exists(OutputDirectory))
             {
                 Directory.CreateDirectory(OutputDirectory);

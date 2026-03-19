@@ -7,6 +7,7 @@ namespace FlowBlox.Core.Provider
     public static class FlowBloxRegistryProvider
     {
         private static List<FlowBloxRegistry> _registryChain = new List<FlowBloxRegistry>();
+        public static bool IsCurrentlyDetached => _registryChain.Any(x => x is FlowBloxDetachedRegistry);
 
         public static FlowBloxRegistry GetRegistry()
         {
@@ -23,22 +24,23 @@ namespace FlowBlox.Core.Provider
             return registry;
         }
 
-        public static FlowBloxRegistry OpenTransaction()
+        public static FlowBloxRegistry OpenTransaction(bool detached = false)
         {
             if (!_registryChain.Any())
                 _registryChain.Add(GetRegistry());
 
-            _registryChain.Add(new FlowBloxTransientRegistry(_registryChain.Last()));
+            _registryChain.Add(detached
+                ? new FlowBloxDetachedRegistry(_registryChain.Last())
+                : new FlowBloxTransientRegistry(_registryChain.Last()));
             return _registryChain.Last();
         }
 
         public static void CommitTransaction()
         {
             var currentRegistry = _registryChain.Last();
-            if (!(currentRegistry is FlowBloxTransientRegistry))
-                throw new InvalidOperationException($"The current registry is not from type \"{nameof(FlowBloxTransientRegistry)}\".");
+            if (currentRegistry is FlowBloxTransientRegistry transientRegistry)
+                transientRegistry.Commit();
 
-            ((FlowBloxTransientRegistry)currentRegistry).Commit();
             RemoveFromChain(currentRegistry);
         }
 

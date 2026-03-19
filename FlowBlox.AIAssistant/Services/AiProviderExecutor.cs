@@ -38,7 +38,7 @@ namespace FlowBlox.AIAssistant.Services
                         Model = provider.DefaultModel,
                         Temperature = configuration?.Temperature ?? 0.0,
                         MaxTokens = configuration?.MaxTokens,
-                        PreviousResponseId = previousResponseId
+                        PreviousResponseId = provider.SupportsNativeResponseContinuation ? previousResponseId : string.Empty
                     };
 
                     request.Meta["Source"] = "FlowBloxAIAssistant";

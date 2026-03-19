@@ -1,37 +1,20 @@
-Explaining IterationContext and flow execution:
+Explaining IterationContext and flow execution (compact):
 
-1) Base flow:
-- A flow block calls the next connected flow block.
-- If the block is a BaseResultFlowBlock, the next block is called N times, where N is the dataset count.
+- Normal flow: each flow block invokes the next connected flow block.
+- BaseResultFlowBlock fans out: downstream execution runs N times (N = result dataset count).
 
-2) Multiple inputs into one target flow block:
-- When multiple predecessor flow blocks are connected to one target, combination logic is used.
-- IterationContext is auto-derived as the first common flow block across all predecessor paths.
-- On iteration start of IterationContext: target input datasets are cleared and incoming datasets are collected.
-- On iteration end of IterationContext: collected datasets are combined based on InputBehavior assignments.
-- Default combination behavior is Combine (cross-product). InputBehavior can override per predecessor (for example First).
-- The target flow block is then executed once per resulting combined dataset.
+Multiple predecessors into one target:
+- IterationContext is auto-derived as the first common flow block across predecessor paths.
+- During IterationContext:
+  - start: clear target inputs and collect incoming datasets
+  - finish: combine collected datasets by InputBehavior
+- Default InputBehavior is Combine (cross-product). Per predecessor override is possible (for example First).
+- Target executes once per resulting combined dataset.
 
-3) Manual IterationContext control:
-- IterationContext can be set manually to control the aggregation window.
-- Think of IterationContext as: "Within which iteration scope should datasets be collected before target execution?"
+Manual IterationContext:
+- Use it to define the aggregation boundary: "within which iteration scope should this target collect datasets?"
+- Start-level IterationContext is valid if you want full-project aggregation.
 
-4) Practical scenario:
-Start -> ObjectManager(JSON/XML) -> TableReader(N rows) -> ObjectWriter(JSON/XML node writer) -> ObjectOutput -> FileWriter
-
-Question: What should be written to output?
-
-- If one final output should contain all TableReader rows:
-  Set ObjectWriter IterationContext to a parent before TableReader (at least ObjectManager), so writes happen after aggregation.
-
-- If no manual IterationContext is set:
-  Writer may run per row and the same object can grow incrementally from row 1 to row N (often not intended).
-
-- If one object/file per row is needed:
-  Ensure object creation happens after TableReader in the path, so each row has its own object context.
-  Use fully qualified field placeholders in file names (for example ID or name fields) to create per-row files.
-
-5) Summary:
-- Normal flow is "next call".
-- IterationContext is a dataset collector boundary.
-- Start-level IterationContext is valid for "collect everything" behavior.
+Practical rule of thumb:
+- If output should contain all rows from a reader: set writer IterationContext to a parent before the reader.
+- If you want one object/file per row: place object creation after the row reader and use field placeholders in file naming.

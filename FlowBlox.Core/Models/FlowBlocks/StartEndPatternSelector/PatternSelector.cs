@@ -35,59 +35,5 @@ namespace FlowBlox.Core.Models.FlowBlocks.StartEndPatternSelector
 
             return selectionAlgorithm.Select(content, startPattern, endPattern, enableMultiline);
         }
-
-        private static string DecodeEncodedNonAsciiCharacters(string value)
-        {
-            return Regex.Replace(
-                value,
-                @"\\u(?<Value>[a-zA-Z0-9]{4})",
-                m =>
-                {
-                    return ((char)int.Parse(m.Groups["Value"].Value, System.Globalization.NumberStyles.HexNumber)).ToString();
-                });
-        }
-
-        /// <summary>
-        /// Gibt aus einem PatternSelection Match einen gültigen Wert zurück. Es können Html-Codes aufgelöst und
-        /// Html-/Xml-Tags ausgeblendet werden. Wird ein NullValue angegeben, wird im Falle eines leeren Wertes dieser
-        /// NullValue zurückgegeben.
-        /// </summary>
-        /// <param name="selectionMatch">Der aus der <c>SelectPatternFromContext</c> Methode zurückgegebene Match.</param>
-        /// <param name="nullValue">Geben Sie hier einen <c>string</c> an oder <c>null</c>.</param>
-        /// <param name="hideHtmlXml">Sollen HTML/XML Tags ausgeblendet werden?</param>
-        /// <param name="replaceHtmlCodes">Sollen HTML/UTF8 Codes aufgelöst werden?</param>
-        /// <returns></returns>
-        public static string GetValidMatch
-            (
-                string selectionMatch,
-                bool hideHtmlXml,
-                bool replaceHtmlCodes
-            )
-        {
-            if (replaceHtmlCodes)
-            {
-                selectionMatch = System.Web.HttpUtility.HtmlDecode(selectionMatch);
-
-                if (selectionMatch.Contains("\\u"))
-                {
-                    selectionMatch = DecodeEncodedNonAsciiCharacters(selectionMatch);
-                }
-
-                string CellSeparator = FlowBloxOptions.GetOptionInstance().OptionCollection["General.CellSeparator"].Value;
-                string ReplaceCellSeparatorBy = FlowBloxOptions.GetOptionInstance().OptionCollection["General.ReplaceCellSeparatorBy"].Value;
-
-                if (!CellSeparator.Equals(ReplaceCellSeparatorBy))
-                {
-                    selectionMatch = selectionMatch.Replace(CellSeparator, ReplaceCellSeparatorBy);
-                }
-            }
-
-            selectionMatch = selectionMatch.Replace("\r", string.Empty);
-            selectionMatch = selectionMatch.Replace("\n", string.Empty);
-            selectionMatch = selectionMatch.Replace("\t", string.Empty);
-
-            selectionMatch = selectionMatch.Trim();
-            return selectionMatch;
-        }
     }
 }

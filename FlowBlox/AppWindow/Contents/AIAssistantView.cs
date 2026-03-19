@@ -150,8 +150,8 @@ namespace FlowBlox.AppWindow.Contents
             var propertyWindow = new FlowBlox.UICore.Views.PropertyWindow(new PropertyWindowArgs(
                 configuration,
                 readOnly: false,
-                deepCopy: false,
-                canSave: true))
+                canSave: true,
+                detached: true))
             {
                 Title = "AI Assistant Configuration",
                 Height = 760,

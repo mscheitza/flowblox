@@ -57,6 +57,26 @@ function Test-DirectoryHasContent([string] $Path) {
   return ($null -ne $item)
 }
 
+function Test-FileUpToDate {
+  param(
+    [Parameter(Mandatory=$true)][string] $SourceFile,
+    [Parameter(Mandatory=$true)][string] $DestFile
+  )
+
+  if (-not (Test-Path -LiteralPath $DestFile)) {
+    return $false
+  }
+
+  $srcInfo = Get-Item -LiteralPath $SourceFile -ErrorAction Stop
+  $dstInfo = Get-Item -LiteralPath $DestFile -ErrorAction Stop
+
+  if ($srcInfo.Length -ne $dstInfo.Length) {
+    return $false
+  }
+
+  return ($srcInfo.LastWriteTimeUtc -eq $dstInfo.LastWriteTimeUtc)
+}
+
 function Copy-DirectoryContentIncremental {
   param(
     [Parameter(Mandatory=$true)][string] $SourceDir,
@@ -75,32 +95,41 @@ function Copy-DirectoryContentIncremental {
     return
   }
 
+  $filesToCopy = @()
+  $allSourceFiles = Get-ChildItem -LiteralPath $SourceDir -Recurse -File -Force
+  foreach ($file in $allSourceFiles) {
+    $srcFile = $file.FullName
+    $relPath = $srcFile.Substring($SourceDir.Length).TrimStart('\','/')
+    $dstFile = Join-Path $DestDir $relPath
+
+    if (-not (Test-FileUpToDate -SourceFile $srcFile -DestFile $dstFile)) {
+      $filesToCopy += [PSCustomObject]@{
+        Source = $srcFile
+        Destination = $dstFile
+      }
+    }
+  }
+
+  if ($filesToCopy.Count -eq 0) {
+    Write-Info ("[FlowBlox] Provider '{0}' RID={1} is up-to-date (no copy)." -f $ProviderName, $Rid)
+    return
+  }
+
   Ensure-Directory $DestDir
 
   Write-Info ""
   Write-Info ("[FlowBlox] Copy provider '{0}' RID={1}" -f $ProviderName, $Rid)
   Write-Info ("          from {0}" -f $SourceDir)
   Write-Info ("            to {0}" -f $DestDir)
+  Write-Info ("          files {0}" -f $filesToCopy.Count)
 
-  # Copy only newer files (similar to xcopy /D behavior).
-  Get-ChildItem -LiteralPath $SourceDir -Recurse -File -Force | ForEach-Object {
-    $srcFile = $_.FullName
-    $relPath = $srcFile.Substring($SourceDir.Length).TrimStart('\','/')
-    $dstFile = Join-Path $DestDir $relPath
-
-    $dstParent = Split-Path $dstFile -Parent
+  foreach ($entry in $filesToCopy) {
+    $dstParent = Split-Path $entry.Destination -Parent
     Ensure-Directory $dstParent
+    Copy-Item -LiteralPath $entry.Source -Destination $entry.Destination -Force
 
-    $copy = $true
-    if (Test-Path -LiteralPath $dstFile) {
-      $srcTime = (Get-Item -LiteralPath $srcFile).LastWriteTimeUtc
-      $dstTime = (Get-Item -LiteralPath $dstFile).LastWriteTimeUtc
-      if ($dstTime -ge $srcTime) { $copy = $false }
-    }
-
-    if ($copy) {
-      Copy-Item -LiteralPath $srcFile -Destination $dstFile -Force
-    }
+    $srcInfo = Get-Item -LiteralPath $entry.Source -ErrorAction Stop
+    (Get-Item -LiteralPath $entry.Destination -ErrorAction Stop).LastWriteTimeUtc = $srcInfo.LastWriteTimeUtc
   }
 }
 

@@ -26,6 +26,54 @@
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <Style x:Key="FlowBlox.CopyIconButton"
+                   TargetType="{x:Type Button}">
+
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="MinWidth" Value="24"/>
+                <Setter Property="MinHeight" Value="24"/>
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="FlowBlox.CopyIcon"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}">
+                <Setter Property="Opacity" Value="0.65"/>
+                <Setter Property="Foreground" Value="DimGray"/>
+
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}"
+                                 Value="True">
+                        <Setter Property="Opacity" Value="1.0"/>
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding IsPressed, RelativeSource={RelativeSource AncestorType=Button}}"
+                                 Value="True">
+                        <Setter Property="Opacity" Value="0.75"/>
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=Button}}"
+                                 Value="False">
+                        <Setter Property="Opacity" Value="0.35"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
             <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>

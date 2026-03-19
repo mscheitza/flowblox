@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Enums;
+using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
@@ -35,7 +35,7 @@ namespace FlowBlox.Core.Runner
 
             // Build Web API client and token
             var baseUrl = FlowBloxOptions.GetOptionInstance()
-                .OptionCollection["General.ProjectApiServiceBaseUrl"]
+                .OptionCollection["Api.ProjectServiceBaseUrl"]
                 .Value;
 
             var webApi = new FlowBloxWebApiService(baseUrl);

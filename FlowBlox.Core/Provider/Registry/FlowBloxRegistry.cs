@@ -254,7 +254,7 @@ namespace FlowBlox.Core.Provider.Registry
             }
         }
 
-        public void RegisterFlowBlock(BaseFlowBlock flowBlock)  
+        public virtual void RegisterFlowBlock(BaseFlowBlock flowBlock)  
         {
             if (_flowBlocks.Contains(flowBlock))
                 return;
@@ -302,7 +302,7 @@ namespace FlowBlox.Core.Provider.Registry
                 
         }
 
-        public void RemoveFlowBlock(BaseFlowBlock flowBlock)
+        public virtual void RemoveFlowBlock(BaseFlowBlock flowBlock)
         {
             _flowBlocks.Remove(flowBlock);
 

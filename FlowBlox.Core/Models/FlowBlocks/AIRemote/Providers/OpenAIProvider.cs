@@ -32,6 +32,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         public bool StoreResponses { get; set; } = false;
 
         public override string ProviderType => "OpenAI";
+        public override bool SupportsNativeResponseContinuation => true;
 
         private HttpClient _http;
 

@@ -3,6 +3,7 @@ using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
@@ -126,12 +127,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
             stackPanel.Children.Add(toolBar);
             stackPanel.Children.Add(container);
 
-            // RelayCommands mit Enable-Logik
-            var addCommand = new RelayCommand(ExecuteCreate, () => !_readOnly);
-            var editCommand = new RelayCommand(() => ExecuteEdit(listView.SelectedItem), () => listView.SelectedItem != null);
-            var deleteCommand = new RelayCommand(() => ExecuteDelete(listView.SelectedItem), () => listView.SelectedItem != null && !_readOnly);
-            var unlinkCommand = new RelayCommand(() => ExecuteUnlink(listView.SelectedItem), () => listView.SelectedItem != null && !_readOnly);
-            var linkCommand = new RelayCommand(async () => await ExecuteLink(), () => !_readOnly);
+            // RelayCommands with central enable logic
+            var addCommand = new RelayCommand(ExecuteCreate, CanAdd);
+            var editCommand = new RelayCommand(() => ExecuteEdit(listView.SelectedItem), () => CanEdit(listView.SelectedItem));
+            var deleteCommand = new RelayCommand(() => ExecuteDelete(listView.SelectedItem), () => CanRemove(listView.SelectedItem));
+            var unlinkCommand = new RelayCommand(() => ExecuteUnlink(listView.SelectedItem), () => CanUnlink(listView.SelectedItem));
+            var linkCommand = new RelayCommand(async () => await ExecuteLink(), CanLink);
 
             if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Create) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.Plus, FlowBloxResourceUtil.GetLocalizedString("Buttons_Add"), addCommand, Brushes.Green));
@@ -148,8 +149,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
             if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Unlink) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.LinkOff, FlowBloxResourceUtil.GetLocalizedString("Buttons_Unlink"), unlinkCommand, Brushes.DarkRed));
 
-            var moveUpCommand = new RelayCommand(() => MoveItem(listView, -1), () => listView.SelectedIndex > 0 && !_readOnly);
-            var moveDownCommand = new RelayCommand(() => MoveItem(listView, 1), () => listView.SelectedIndex >= 0 && listView.SelectedIndex < _list.Count - 1 && !_readOnly);
+            var moveUpCommand = new RelayCommand(() => MoveItem(listView, -1), () => CanMoveUp(listView.SelectedIndex));
+            var moveDownCommand = new RelayCommand(() => MoveItem(listView, 1), () => CanMoveDown(listView.SelectedIndex));
 
             if (_listViewAttribute?.IsMovable == true)
             {
@@ -163,6 +164,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 editCommand.Invalidate();
                 deleteCommand.Invalidate();
                 unlinkCommand.Invalidate();
+                moveUpCommand.Invalidate();
+                moveDownCommand.Invalidate();
             };
 
             UpdateEmptyMessageVisibilityOnCollectionChanged(_emptyMessage, _list);
@@ -175,6 +178,26 @@ namespace FlowBlox.UICore.Factory.PropertyView
         {
             return stackPanel;
         }
+
+        protected virtual bool CanAdd() => !_readOnly;
+
+        protected virtual bool CanEdit(object selectedItem) => selectedItem != null;
+
+        protected virtual bool CanRemove(object selectedItem) => selectedItem != null && !_readOnly;
+
+        protected virtual bool CanLink() => !_readOnly && !FlowBloxRegistryProvider.IsCurrentlyDetached;
+
+        protected virtual bool CanUnlink(object selectedItem) =>
+            selectedItem != null &&
+            !_readOnly &&
+            !FlowBloxRegistryProvider.IsCurrentlyDetached;
+
+        protected virtual bool CanMoveUp(int selectedIndex) => selectedIndex > 0 && !_readOnly;
+
+        protected virtual bool CanMoveDown(int selectedIndex) =>
+            selectedIndex >= 0 &&
+            selectedIndex < _list.Count - 1 &&
+            !_readOnly;
 
         private Button CreateButton(PackIconMaterialKind iconKind, string tooltip, RelayCommand command, Brush activeColor)
         {

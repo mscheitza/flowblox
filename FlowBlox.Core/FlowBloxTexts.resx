@@ -1966,6 +1966,9 @@ Note: Once a provider is loaded, switching providers within the same process is 
   <data name="TypeNames_OpenAIProvider" xml:space="preserve">
 		<value>OpenAI Provider</value>
 	</data>
+  <data name="TypeNames_GeminiAIProvider" xml:space="preserve">
+		<value>Gemini Provider</value>
+	</data>
   <data name="OpenAIProvider_OrganizationId" xml:space="preserve">
 		<value>Organization ID</value>
 	</data>
@@ -2355,5 +2358,11 @@ Multi-level XPath expressions are not allowed here.</value>
 	</data>
   <data name="AssistantConfiguration_MaxToolRounds_Tooltip" xml:space="preserve">
 		<value>Upper bound for tool-call rounds per prompt execution.</value>
+	</data>
+  <data name="AssistantConfiguration_EnableCommunicationProtocol" xml:space="preserve">
+		<value>Write Communication Protocol</value>
+	</data>
+  <data name="AssistantConfiguration_EnableCommunicationProtocol_Tooltip" xml:space="preserve">
+		<value>Writes a formatted communication protocol file with AI outputs and Tool API calls for each assistant execution.</value>
 	</data>
 </root>

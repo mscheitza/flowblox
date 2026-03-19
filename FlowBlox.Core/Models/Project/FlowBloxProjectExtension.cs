@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.Util;
 using System.ComponentModel;
 using System.IO.Compression;
@@ -136,7 +136,7 @@ namespace FlowBlox.Core.Models.Project
         {
             get
             {
-                var extensionsDirOption = FlowBloxOptions.GetOptionInstance().GetOption("General.ExtensionsDir");
+                var extensionsDirOption = FlowBloxOptions.GetOptionInstance().GetOption("Paths.ExtensionsDir");
                 var extensionsDir = extensionsDirOption.Value;
                 var targetDirectory = Path.Combine(extensionsDir, Name, Version);
 

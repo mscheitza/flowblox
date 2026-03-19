@@ -70,7 +70,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 propertyWindowArgs.DeepCopy, 
                 propertyWindowArgs.ReadOnly, 
                 propertyWindowArgs.PreselectedProperty,
-                propertyWindowArgs.PreselectedInstance);
+                propertyWindowArgs.PreselectedInstance,
+                propertyWindowArgs.Detached);
 
             this.PropertyViewModel = propertyViewModel;
 

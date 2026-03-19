@@ -35,6 +35,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         public string BaseUrl { get; set; }
 
         public abstract string ProviderType { get; }
+        public virtual bool SupportsNativeResponseContinuation => false;
 
         protected AIProviderBase()
         {

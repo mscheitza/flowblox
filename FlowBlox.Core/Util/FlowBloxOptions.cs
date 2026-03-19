@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Constants;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Factories;
 using FlowBlox.Core.Interfaces;
@@ -69,25 +69,43 @@ namespace FlowBlox.Core.Util
 
         public void InitDefaults(bool overwrite)
         {
+            // Migrate legacy option keys to the current category structure.
+            if (OptionCollection.TryGetValue("General.UICulture", out var legacyUiCultureOption) &&
+                !OptionCollection.ContainsKey("UI.Culture"))
+            {
+                OptionCollection["UI.Culture"] = new OptionElement(
+                    "UI.Culture",
+                    legacyUiCultureOption.Value,
+                    legacyUiCultureOption.Description,
+                    legacyUiCultureOption.Type,
+                    legacyUiCultureOption.DisplayName,
+                    legacyUiCultureOption.IsPlaceholderEnabled);
+            }
+
+            OptionCollection.Remove("General.UICulture");
+
             var defaultOptions = new List<OptionElement>
             {
                 new OptionElement("Account.LoginData", "", "The encrypted login data for the user account. This option stores the login token securely using encryption.", OptionElement.OptionType.Password),
                 new OptionElement("Account.LicenseToken", "", "The encrypted license token for the user account. This option stores the license token securely using encryption.", OptionElement.OptionType.Text),
-                new OptionElement("General.EditorPath", GetDefaultEditorPath(), "Path to the default editor for directly editing or viewing data from FlowBlox. We recommend the free software Notepad++: https://notepad-plus-plus.org/", OptionElement.OptionType.Text),
-                new OptionElement("General.Style", "Professional", "Set your style here. Available styles by default: \"Default\", \"Professional\". To apply a new style, you must change this setting and restart FlowBlox.", OptionElement.OptionType.Text),
+                new OptionElement("Editor.DefaultPath", GetDefaultEditorPath(), "Path to the default editor for directly editing or viewing data from FlowBlox. We recommend the free software Notepad++: https://notepad-plus-plus.org/", OptionElement.OptionType.Text),
+                new OptionElement("UI.Style", "Professional", "Set your style here. Available styles by default: \"Default\", \"Professional\". To apply a new style, you must change this setting and restart FlowBlox.", OptionElement.OptionType.Text),
+                new OptionElement("UI.Culture", "", "Optional UI culture to force language/formatting, for example 'de-DE' or 'en-US'. Leave empty to use the operating system culture.", OptionElement.OptionType.Text),
 
-                new OptionElement("General.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "Toolbox directory path.", OptionElement.OptionType.Text),
-                new OptionElement("General.ToolboxUserFile", @"%userprofile%\Documents\FlowBlox\toolbox\userToolbox.json", "Toolbox user file path.", OptionElement.OptionType.Text),
-                new OptionElement("General.ProjectDir", @"%userprofile%\Documents\FlowBlox\projects", "Project directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("General.InputDir", @"%userprofile%\Documents\FlowBlox\input", "Input directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("General.OutputDir", @"%userprofile%\Documents\FlowBlox\output", "Output directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("General.ExtensionsDir", @"%localappdata%\FlowBlox\extensions", "Extensions directory path.", OptionElement.OptionType.Text),
-                new OptionElement("General.ProblemTraceDir", @"%localappdata%\FlowBlox\logs\runtime\problems", "Problem trace directory path.", OptionElement.OptionType.Text),
-                new OptionElement("General.RuntimeLogDir", @"%localappdata%\FlowBlox\logs\runtime", "Runtime log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("General.DeepCopierProtocolDir", @"%localappdata%\FlowBlox\copy_protocols", "Deep copier protocol directory.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "Toolbox directory path.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.ToolboxUserFile", @"%userprofile%\Documents\FlowBlox\toolbox\userToolbox.json", "Toolbox user file path.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.ProjectDir", @"%userprofile%\Documents\FlowBlox\projects", "Project directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.InputDir", @"%userprofile%\Documents\FlowBlox\input", "Input directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.OutputDir", @"%userprofile%\Documents\FlowBlox\output", "Output directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.ExtensionsDir", @"%localappdata%\FlowBlox\extensions", "Extensions directory path.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.ProblemTraceDir", @"%localappdata%\FlowBlox\logs\runtime\problems", "Problem trace directory path.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.RuntimeLogDir", @"%localappdata%\FlowBlox\logs\runtime", "Runtime log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.ApplicationLogDir", @"%localappdata%\FlowBlox\logs\application", "Application log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.DeepCopierProtocolDir", @"%localappdata%\FlowBlox\copy_protocols", "Deep copier protocol directory.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.ToolboxCacheDir", @"%localappdata%\FlowBlox\toolbox", "Global toolbox cache directory path.", OptionElement.OptionType.Text),
 
-                new OptionElement("General.ExtensionApiServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the extension management system.", OptionElement.OptionType.Text),
-                new OptionElement("General.ProjectApiServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the project space.", OptionElement.OptionType.Text),
+                new OptionElement("Api.ExtensionServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the extension management system.", OptionElement.OptionType.Text),
+                new OptionElement("Api.ProjectServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the project space.", OptionElement.OptionType.Text),
 
                 new OptionElement("Runtime.AutoRestart", "false", "Should the runtime automatically restart once execution is completed?", OptionElement.OptionType.Boolean, "Auto Restart"),
                 new OptionElement("Runtime.AutoRestart.CacheMode", "Keep", "Should the cache be cleared or kept in case of an automatic restart? Possible values: \"Keep\" or \"Clear\" Note: This option can also be changed after runtime start.", OptionElement.OptionType.Text),

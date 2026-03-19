@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +9,7 @@ using FlowBlox.Grid.Elements.UserControls;
 namespace FlowBlox.Core
 {
     /// <summary>
-    /// The application's style class. The current style can be defined in the "General.Style" option.
+    /// The application's style class. The current style can be defined in the "UI.Style" option.
     /// In this version, styles cannot yet be defined manually.
     /// </summary>
     public class FlowBloxStyle
@@ -115,7 +115,7 @@ namespace FlowBlox.Core
         /// </summary>
         private static FlowBloxSyleBase GetStyleFromOptions()
         {
-            string selectedStyle = FlowBloxOptions.GetOptionInstance().OptionCollection["General.Style"].Value;
+            string selectedStyle = FlowBloxOptions.GetOptionInstance().OptionCollection["UI.Style"].Value;
             if (selectedStyle.Equals("Professional"))
                 return new FlowBloxProfessionalStyle();
 

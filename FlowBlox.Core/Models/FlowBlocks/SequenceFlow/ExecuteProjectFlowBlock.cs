@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Attributes.FlowBlox.Core.Attributes;
 using FlowBlox.Core.Authentication;
 using FlowBlox.Core.Enums;
@@ -324,7 +324,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             if (!string.IsNullOrWhiteSpace(resolvedProjectSpaceGuid))
             {
                 var baseUrl = FlowBloxOptions.GetOptionInstance()
-                    .OptionCollection["General.ProjectApiServiceBaseUrl"]
+                    .OptionCollection["Api.ProjectServiceBaseUrl"]
                     .Value;
 
                 var webApi = new FlowBloxWebApiService(baseUrl);

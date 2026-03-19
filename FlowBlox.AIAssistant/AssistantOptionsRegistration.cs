@@ -11,9 +11,15 @@ namespace FlowBlox.AIAssistant
         {
             var defaultConfiguration = new AssistantConfiguration();
             defaults.Add(new OptionElement(
-                AssistantConfiguration.OptionKey,
+                "AI.AssistantConfiguration",
                 AssistantConfigurationJson.Serialize(defaultConfiguration),
                 "JSON configuration for FlowBlox AI Assistant.",
+                OptionElement.OptionType.Text));
+
+            defaults.Add(new OptionElement(
+                "AI.CommuncationProtocolDir",
+                @"%localappdata%\FlowBlox\logs\ai_assistant_protocol",
+                "Directory path for AI assistant communication protocol files.",
                 OptionElement.OptionType.Text));
         }
     }

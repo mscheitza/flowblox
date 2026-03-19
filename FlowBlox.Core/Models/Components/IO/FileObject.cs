@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Attributes.FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.DeepCopier;
@@ -48,12 +48,12 @@ namespace FlowBlox.Core.Models.Components.IO
         private string ReplaceRuntimeVariables(string filePath)
         {
             if (!string.IsNullOrEmpty(filePath) && 
-                filePath.Contains("${General.OutputDirectory}"))
+                filePath.Contains("${Paths.OutputDirectory}"))
             {
-                string outputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["General.OutputDir"].Value;
+                string outputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.OutputDir"].Value;
                 if (!Directory.Exists(outputDirectory))
                     Directory.CreateDirectory(outputDirectory);
-                filePath = filePath.Replace("${General.OutputDirectory}", outputDirectory);
+                filePath = filePath.Replace("${Paths.OutputDirectory}", outputDirectory);
             }
 
             return FlowBloxFieldHelper.ReplaceFieldsInString(filePath);
