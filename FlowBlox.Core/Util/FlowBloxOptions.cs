@@ -176,7 +176,8 @@ namespace FlowBlox.Core.Util
             {
                 XmlDocument xmlDocument = new XmlDocument();
                 XmlNode xnOptions = xmlDocument.CreateElement("option_elements");
-                foreach (OptionElement optionElement in OptionCollection.Values)
+                var optionElements = OptionCollection.Values.ToList();
+                foreach (OptionElement optionElement in optionElements)
                 {
                     xnOptions.AppendChild(optionElement.SaveXml(xmlDocument));
                 }
