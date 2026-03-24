@@ -45,4 +45,8 @@
   <data name="EmptyState_NoFields" xml:space="preserve">
     <value>Bisher wurden noch keine Felder angelegt. Sobald benutzerdefinierte Felder oder Felder aus erzeugten Ergebnis-Flow-Blocks vorhanden sind, werden sie hier angezeigt.</value>
   </data>
+  <data name="Tooltip_ToggleSingleLineFieldValues" xml:space="preserve">
+    <value>Einzeilige Feldwerte</value>
+  </data>
 </root>
+

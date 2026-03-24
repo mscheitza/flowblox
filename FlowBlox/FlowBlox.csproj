@@ -73,11 +73,6 @@
 		<None Remove="Icons\extension.ico" />
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="Ionic.Zip">
-			<HintPath>References\Ionic.Zip.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	<ItemGroup>
 		<Compile Update="Core\Components\NumericTextBox.cs" />
 		<Compile Update="FlowBloxMainUIImages.Designer.cs">
 			<DesignTime>True</DesignTime>

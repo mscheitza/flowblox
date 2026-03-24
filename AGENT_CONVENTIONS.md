@@ -64,8 +64,29 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Generation strategies and FlowBlock test/runtime integration must use existing runtime pipeline, not parallel ad-hoc execution paths.
 - Prefer passing/using existing runtime context from executors instead of creating duplicate runtime instances.
 
+## FlowBlock Notifications
+- For concise, flow-block-local error/warning messages shown directly in the FlowBlock UI, use the Notifications model.
+- Define a block-specific enum with `FlowBlockNotificationAttribute` on each entry.
+- Register it via `NotificationTypes` override in the FlowBlock.
+- Trigger it with `CreateNotification(runtime, ...)`.
+- Keep notification display texts short and action-oriented.
+
 ## Practical Agent Rules
 - Reuse existing infrastructure before introducing new patterns.
 - Keep changes consistent with annotation-driven UI architecture.
 - Do not introduce user-visible strings without localization keys.
 - For new UI-facing properties: label keys are required. Tooltip keys are strongly recommended for explanatory/complex properties (e.g., XPath/CSS selectors) and should include concise examples when useful.
+
+## FlowBlock Execute Contract
+- Keep notifications scoped to the concrete operation/context of the flow block.
+- Do not rely on `BaseFlowBlock` generic unexpected-error notification for expected domain failures.
+- In `Execute(...)`, always leave via exactly one flow contract action:
+  - non-result blocks: `ExecuteNextFlowBlocks(runtime)`
+  - result blocks: `GenerateResult(...)`
+- On handled failures, keep the same contract action (continue with next block or emit empty/default result), paired with a scoped notification.
+- For iterator-like blocks, consider a dedicated warning notification when no items are found (empty but valid result set).
+
+## ManagedObject UI Operations
+- For ManagedObject associations, default to allowing all UI operations unless the domain context requires restrictions.
+- In practice this means: if no explicit `UIOperations` are set, treat it as fully enabled (`Link`, `Unlink`, `Create`, `Edit`, `Delete`).
+- Only constrain operations when there is a clear functional or security reason in the specific business context.

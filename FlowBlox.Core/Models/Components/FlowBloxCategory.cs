@@ -93,6 +93,7 @@ namespace FlowBlox.Core.Models.Components
         public static readonly FlowBlockCategory Calculation = new(Get("FloxBloxCategory_Calculation"));
         public static readonly FlowBlockCategory AI = new(Get("FloxBloxCategory_AI"));
         public static readonly FlowBlockCategory Extensions = new(Get("FloxBloxCategory_Extensions"));
+        public static readonly FlowBlockCategory Compression = new(Get("FloxBloxCategory_Compression"));
 
         // Serialization
         public static readonly FlowBlockCategory Serialization = new(Get("FloxBloxCategory_Serialization"));

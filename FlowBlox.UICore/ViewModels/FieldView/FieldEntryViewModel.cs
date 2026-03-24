@@ -4,17 +4,25 @@ using FlowBlox.UICore.Utilities;
 using MahApps.Metro.IconPacks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows.Media;
 
 namespace FlowBlox.UICore.ViewModels.FieldView
 {
     public sealed class FieldEntryViewModel : INotifyPropertyChanged
     {
+        private const int DefaultShortenedTextLength = 4000;
+
         private string _sourceName;
         private string _fieldName;
         private string _fieldValue;
+        private string _shortenedText;
+        private string _rawFieldValue;
+        private bool _isPendingValue;
+        private bool _singleLineFieldValues;
         private bool _isFlowBlockSelected;
         private bool _isAutoSelected;
+        private int _maxDisplayLength = DefaultShortenedTextLength;
 
         public FieldElement FieldElement { get; }
 
@@ -55,6 +63,20 @@ namespace FlowBlox.UICore.ViewModels.FieldView
                     return;
 
                 _fieldValue = value;
+                OnPropertyChanged();
+                ShortenedText = GetShortenedText(_fieldValue, _maxDisplayLength);
+            }
+        }
+
+        public string ShortenedText
+        {
+            get => _shortenedText;
+            private set
+            {
+                if (_shortenedText == value)
+                    return;
+
+                _shortenedText = value;
                 OnPropertyChanged();
             }
         }
@@ -98,9 +120,10 @@ namespace FlowBlox.UICore.ViewModels.FieldView
             FieldElement = fieldElement;
             _sourceName = fieldElement?.FlowBlockName ?? string.Empty;
             _fieldName = fieldElement?.Name ?? string.Empty;
-            _fieldValue = fieldElement?.Pending == true
-                ? FlowBloxTexts.FieldElement_PendingValue
-                : fieldElement?.StringValue ?? string.Empty;
+            _rawFieldValue = fieldElement?.StringValue ?? string.Empty;
+            _isPendingValue = fieldElement?.Pending == true;
+            _fieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues);
+            _shortenedText = GetShortenedText(_fieldValue, _maxDisplayLength);
 
             if (IsUserField)
             {
@@ -123,7 +146,53 @@ namespace FlowBlox.UICore.ViewModels.FieldView
 
         public void UpdateValue(string value, bool pending)
         {
-            FieldValue = pending ? FlowBloxTexts.FieldElement_PendingValue : value ?? string.Empty;
+            _rawFieldValue = value ?? string.Empty;
+            _isPendingValue = pending;
+            FieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues);
+        }
+
+        public void SetSingleLineFieldValues(bool enabled)
+        {
+            if (_singleLineFieldValues == enabled)
+                return;
+
+            _singleLineFieldValues = enabled;
+            FieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues);
+        }
+
+        public void SetMaxDisplayLength(int maxDisplayLength)
+        {
+            if (maxDisplayLength <= 0)
+                maxDisplayLength = DefaultShortenedTextLength;
+
+            if (_maxDisplayLength == maxDisplayLength)
+                return;
+
+            _maxDisplayLength = maxDisplayLength;
+            ShortenedText = GetShortenedText(_fieldValue, _maxDisplayLength);
+        }
+
+        private static string GetDisplayFieldValue(string value, bool pending, bool singleLine)
+        {
+            if (pending)
+                return FlowBloxTexts.FieldElement_PendingValue;
+
+            if (!singleLine)
+                return value ?? string.Empty;
+
+            var input = value ?? string.Empty;
+            var normalized = Regex.Replace(input, @"\s*[\r\n]+\s*", " ");
+            normalized = Regex.Replace(normalized, @"[ ]{2,}", " ").Trim();
+            return normalized;
+        }
+
+        private static string GetShortenedText(string value, int maxDisplayLength)
+        {
+            var text = value ?? string.Empty;
+            if (text.Length <= maxDisplayLength)
+                return text;
+
+            return text.Substring(0, maxDisplayLength) + "...";
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

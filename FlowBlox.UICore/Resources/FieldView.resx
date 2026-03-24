@@ -45,4 +45,8 @@
   <data name="EmptyState_NoFields">
     <value>No fields have been created yet. As soon as user-defined fields or fields from generated result flow blocks are available, they will appear here.</value>
   </data>
+  <data name="Tooltip_ToggleSingleLineFieldValues">
+    <value>Single-line field values</value>
+  </data>
 </root>
+

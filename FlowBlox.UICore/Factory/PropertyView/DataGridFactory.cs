@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Extensions;
+using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
@@ -313,6 +314,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 {
                     if (await IsDeletableAsync(item, _window))
                     {
+                        DeleteNestedManagedObjects(item);
                         list.Remove(item);
                         FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
                     }
@@ -531,6 +533,60 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 list.Add(newItem);
         }
 
+        private void DeleteNestedManagedObjects(object rowItem)
+        {
+            if (rowItem == null)
+                return;
+
+            var deleted = new HashSet<IManagedObject>();
+            foreach (var managedObject in GetRowManagedObjectsDefinedByRow(rowItem))
+            {
+                if (managedObject == null || !deleted.Add(managedObject))
+                    continue;
+
+                if (!IsDeletable(managedObject, _window, rowItem))
+                    continue;
+
+                DeleteInstance(managedObject);
+            }
+        }
+
+        private static IEnumerable<IManagedObject> GetRowManagedObjectsDefinedByRow(object rowItem)
+        {
+            var rowType = rowItem.GetType();
+            var properties = rowType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var property in properties)
+            {
+                var flowBlockUIAttribute = property.GetCustomAttribute<FlowBlockUIAttribute>();
+                if (flowBlockUIAttribute?.Factory != UIFactory.Association)
+                    continue;
+
+                if (!IsRowManagedAssociation(flowBlockUIAttribute))
+                    continue;
+
+                if (!typeof(IManagedObject).IsAssignableFrom(property.PropertyType))
+                    continue;
+
+                if (property.GetValue(rowItem) is IManagedObject managedObject)
+                    yield return managedObject;
+            }
+        }
+
+        private static bool IsRowManagedAssociation(FlowBlockUIAttribute flowBlockUIAttribute)
+        {
+            if (flowBlockUIAttribute == null)
+                return false;
+
+            var operations = flowBlockUIAttribute.Operations;
+            var supportsCreate = operations.HasFlag(UIOperations.Create);
+            var supportsDelete = operations.HasFlag(UIOperations.Delete);
+            var supportsLink = operations.HasFlag(UIOperations.Link);
+            var supportsUnlink = operations.HasFlag(UIOperations.Unlink);
+
+            return supportsCreate && supportsDelete && !supportsLink && !supportsUnlink;
+        }
+
         private void MoveItem(IList list, DataGrid dataGrid, int direction)
         {
             int index = dataGrid.SelectedIndex;
@@ -542,3 +598,4 @@ namespace FlowBlox.UICore.Factory.PropertyView
         }
     }
 }
+

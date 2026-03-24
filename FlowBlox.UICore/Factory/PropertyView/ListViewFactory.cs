@@ -253,6 +253,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     _property.SetValue(_target, _list);
                     FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
                 }
+                else
+                {
+                    DeleteInstance(newInstance);
+                }
             }
         }
 

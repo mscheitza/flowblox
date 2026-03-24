@@ -1,11 +1,9 @@
-﻿namespace FlowBlox.Core.Attributes
+namespace FlowBlox.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class FlowBlockTextBoxAttribute : Attribute
     {
         public bool MultiLine { get; set; }
-
-        public char PasswordChar { get; set; }
 
         public bool IsCodingMode { get; set; }
         public bool Suggestions { get; set; }

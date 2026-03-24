@@ -20,6 +20,7 @@ namespace FlowBlox.Core.Services
                 FlowBlockCategory.Generation,
                 FlowBlockCategory.ControlFlow,
                 FlowBlockCategory.AI,
+                FlowBlockCategory.Compression,
                 FlowBlockCategory.Serialization,
                 FlowBlockCategory.Xml,
                 FlowBlockCategory.Json,

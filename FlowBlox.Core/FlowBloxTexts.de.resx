@@ -2319,7 +2319,165 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="AssistantConfiguration_EnableCommunicationProtocol_Tooltip" xml:space="preserve">
 		<value>Schreibt pro Assistenten-Ausführung eine formatierte Protokolldatei mit KI-Ausgaben und Tool-API-Aufrufen.</value>
 	</data>
+	<data name="FloxBloxCategory_Compression" xml:space="preserve">
+		<value>Komprimierung</value>
+	</data>
+	<data name="ZipArchiveFlowBlock_DisplayName" xml:space="preserve">
+		<value>ZIP-Archiv</value>
+	</data>
+	<data name="ZipArchiveFlowBlock_Description" xml:space="preserve">
+		<value>Erstellt ein neues ZIP-Archiv oder lädt ein vorhandenes Archiv aus einer Datenquelle.</value>
+	</data>
+	<data name="ZipArchiveFlowBlock_UseExistingArchive" xml:space="preserve">
+		<value>Vorhandenes ZIP-Archiv verwenden</value>
+	</data>
+	<data name="ZipArchiveFileIteratorFlowBlock_DisplayName" xml:space="preserve">
+		<value>ZIP-Datei-Iterator</value>
+	</data>
+	<data name="ZipArchiveFileIteratorFlowBlock_Description" xml:space="preserve">
+		<value>Iteriert rekursiv über alle Dateien im ZIP-Archiv und gibt Dateipfad sowie Inhalt aus.</value>
+	</data>
+	<data name="ZipArchiveFileIteratorFlowBlock_AssociatedZipArchive" xml:space="preserve">
+		<value>Zugeordnetes ZIP-Archiv</value>
+	</data>
+	<data name="ZipArchiveFileIteratorFlowBlock_ResultFields" xml:space="preserve">
+		<value>Ergebnisfelder</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_DisplayName" xml:space="preserve">
+		<value>ZIP-Datei-Appender</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_Description" xml:space="preserve">
+		<value>Schreibt eine Datei in ein ZIP-Archiv an einen absoluten Archivpfad.</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_AssociatedZipArchive" xml:space="preserve">
+		<value>Zugeordnetes ZIP-Archiv</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_ArchivePath" xml:space="preserve">
+		<value>Archivpfad</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_ArchivePath_Tooltip" xml:space="preserve">
+		<value>Absoluter Pfad im ZIP-Archiv, z. B. "/docs/reports".</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_FileName" xml:space="preserve">
+		<value>Dateiname</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_FileName_Tooltip" xml:space="preserve">
+		<value>Name der Datei, die im ZIP-Archiv erstellt oder ersetzt wird.</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_ContentField" xml:space="preserve">
+		<value>Inhaltsfeld</value>
+	</data>
+	<data name="ZipArchiveOutputFlowBlock_DisplayName" xml:space="preserve">
+		<value>ZIP-Archiv-Ausgabe</value>
+	</data>
+	<data name="ZipArchiveOutputFlowBlock_Description" xml:space="preserve">
+		<value>Gibt das ZIP-Archiv als Byte-Array aus.</value>
+	</data>
+	<data name="ZipArchiveOutputFlowBlock_AssociatedZipArchive" xml:space="preserve">
+		<value>Zugeordnetes ZIP-Archiv</value>
+	</data>
+	<data name="ZipArchiveFlowBlock_AccessMode" xml:space="preserve">
+		<value>Zugriffsmodus</value>
+	</data>
+	<data name="ZipArchiveAccessMode_ReadAccess" xml:space="preserve">
+		<value>Lesezugriff</value>
+	</data>
+	<data name="ZipArchiveAccessMode_WriteAccess" xml:space="preserve">
+		<value>Schreibzugriff</value>
+	</data>
+	<data name="FSDirectoryIteratorFlowBlock_DisplayName" xml:space="preserve">
+		<value>Dateisystem-Verzeichnis-Iterator</value>
+	</data>
+	<data name="FSDirectoryIteratorFlowBlock_Description" xml:space="preserve">
+		<value>Listet Dateien aus einem Verzeichnis auf und gibt für jede Datei Metadatenfelder aus.</value>
+	</data>
+	<data name="FSDirectoryIteratorFlowBlock_DirectoryPath" xml:space="preserve">
+		<value>Verzeichnispfad</value>
+	</data>
+	<data name="FSDirectoryIteratorFlowBlock_Recursive" xml:space="preserve">
+		<value>Rekursiv</value>
+	</data>
+	<data name="FSDirectoryIteratorFlowBlock_FilterExpression" xml:space="preserve">
+		<value>Filterausdruck</value>
+	</data>
+	<data name="FSDirectoryIteratorFlowBlock_FilterExpression_Tooltip" xml:space="preserve">
+		<value>Verwenden Sie ';' getrennte Wildcard-Muster mit '*' und '?'. Ein Muster mit '!' am Anfang schließt Treffer aus. Der Abgleich erfolgt gegen Dateiname und relativen Pfad. Beispiel: *.txt;logs/*.log;!archive/*</value>
+	</data>
+	<data name="FSDirectoryIteratorFlowBlock_ResultFields" xml:space="preserve">
+		<value>Ergebnisfelder</value>
+	</data>
+	<data name="FSDirectoryIteratorDestinations_FullPath" xml:space="preserve">
+		<value>Vollständiger Pfad</value>
+	</data>
+	<data name="FSDirectoryIteratorDestinations_RelativePath" xml:space="preserve">
+		<value>Relativer Pfad</value>
+	</data>
+	<data name="FSDirectoryIteratorDestinations_FileName" xml:space="preserve">
+		<value>Dateiname</value>
+	</data>
+	<data name="FSDirectoryIteratorDestinations_Size" xml:space="preserve">
+		<value>Größe</value>
+	</data>
+	<data name="FSDirectoryIteratorDestinations_LastModified" xml:space="preserve">
+		<value>Zuletzt geändert</value>
+	</data>
+	<data name="FSDirectoryIteratorDestinations_CreationDate" xml:space="preserve">
+		<value>Erstelldatum</value>
+	</data>
+	<data name="BaseSingleResultFlowBlock_ResultFieldFieldType" xml:space="preserve">
+		<value>Ergebnisfeld-Typ</value>
+	</data>
+	<data name="ZipArchiveObject_DisplayName" xml:space="preserve">
+		<value>ZIP-Archiv</value>
+	</data>
+	<data name="ZipArchiveCreatorFlowBlock_DisplayName" xml:space="preserve">
+		<value>ZIP-Archiv-Ersteller</value>
+	</data>
+	<data name="ZipArchiveCreatorFlowBlock_Description" xml:space="preserve">
+		<value>Erstellt ein neues In-Memory-ZIP-Archiv im ausgewählten ZIP-Archiv-ManagedObject.</value>
+	</data>
+	<data name="ZipArchiveCreatorFlowBlock_ZipArchiveObject" xml:space="preserve">
+		<value>ZIP-Archiv-Objekt</value>
+	</data>
+	<data name="ZipArchiveCreatorFlowBlock_CompressionStrength" xml:space="preserve">
+		<value>Komprimierungsstärke</value>
+	</data>
+	<data name="ZipArchiveCreatorFlowBlock_Password" xml:space="preserve">
+		<value>Passwort</value>
+	</data>
+	<data name="ZipCompressionStrength_None" xml:space="preserve">
+		<value>Keine Komprimierung (nur speichern)</value>
+	</data>
+	<data name="ZipCompressionStrength_Low" xml:space="preserve">
+		<value>Niedrig</value>
+	</data>
+	<data name="ZipCompressionStrength_Medium" xml:space="preserve">
+		<value>Mittel</value>
+	</data>
+	<data name="ZipCompressionStrength_High" xml:space="preserve">
+		<value>Hoch</value>
+	</data>
+	<data name="ZipCompressionStrength_VeryHigh" xml:space="preserve">
+		<value>Sehr hoch</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_ZipArchiveObject" xml:space="preserve">
+		<value>ZIP-Archiv-Objekt</value>
+	</data>
+	<data name="ZipArchiveFileAppenderFlowBlock_Password" xml:space="preserve">
+		<value>Passwort</value>
+	</data>
+	<data name="ZipArchiveFileIteratorFlowBlock_ZipArchiveObject" xml:space="preserve">
+		<value>ZIP-Archiv-Objekt</value>
+	</data>
+	<data name="ZipArchiveFileIteratorFlowBlock_Password" xml:space="preserve">
+		<value>Passwort</value>
+	</data>
 </root>
+
+
+
+
+
 
 
 

@@ -31,10 +31,45 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
         }
 
+        private FieldElement _resultField;
+
         [Display(Name = "Global_ResultField", ResourceType = typeof(FlowBloxTexts), Order = 100)]
         [FlowBlockUI(Factory = UIFactory.Association, SelectionDisplayMember = nameof(Name), Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         [Required()]
-        public FieldElement ResultField { get; set; }
+        public FieldElement ResultField
+        {
+            get => _resultField;
+            set
+            {
+                _resultField = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ResultFieldFieldType));
+            }
+        }
+
+        [Display(Name = "BaseSingleResultFlowBlock_ResultFieldFieldType", ResourceType = typeof(FlowBloxTexts), Order = 101)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        public FieldTypes ResultFieldFieldType
+        {
+            get => ResultField?.FieldType?.FieldType ?? DefaultResultFieldType;
+            set
+            {
+                if (ResultField == null)
+                    return;
+
+                if (ResultField.FieldType?.FieldType == value)
+                    return;
+
+                ResultField.FieldType = new TypeElement
+                {
+                    FieldType = value
+                };
+
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ResultField));
+                OnPropertyChanged(nameof(ResultFieldFieldType));
+            }
+        }
 
         public override List<FieldElement> Fields
         {

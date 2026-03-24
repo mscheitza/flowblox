@@ -22,6 +22,43 @@
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+            <Style x:Key="FieldView.ToolbarToggleIconStyle"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#FF4E7FB3" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                                 Value="True">
+                        <Setter Property="Foreground" Value="#FFFFFFFF" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="FieldView.ToolbarToggleTextStyle"
+                   TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="#FF1E8A7A" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                                 Value="True">
+                        <Setter Property="Foreground" Value="#FFFFFFFF" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="FieldView.ToolbarToggleButtonStyle"
+                   TargetType="{x:Type ToggleButton}">
+                <Setter Property="Background" Value="#FFF3F6FA" />
+                <Setter Property="BorderBrush" Value="#FFD1D9E2" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Self}}"
+                                 Value="True">
+                        <Setter Property="Background" Value="#FF2F6FAF" />
+                        <Setter Property="BorderBrush" Value="#FF255A8E" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -33,8 +70,22 @@
 
         <DockPanel Grid.Row="0" Margin="0,0,0,8">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <ToggleButton IsChecked="{Binding IsSingleLineFieldValues, Mode=TwoWay}"
+                              ToolTip="{x:Static resources:FieldView.Tooltip_ToggleSingleLineFieldValues}"
+                              Style="{StaticResource FieldView.ToolbarToggleButtonStyle}"
+                              Width="36"
+                              Height="30"
+                              Margin="8,0,0,0">
+                    <TextBlock Text="1L"
+                               FontWeight="SemiBold"
+                               Style="{StaticResource FieldView.ToolbarToggleTextStyle}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
+                </ToggleButton>
+
                 <ToggleButton IsChecked="{Binding ShowFlowBlock, Mode=TwoWay}"
                               ToolTip="{x:Static resources:FieldView.Tooltip_ToggleFlowBlockColumn}"
+                              Style="{StaticResource FieldView.ToolbarToggleButtonStyle}"
                               Width="30"
                               Height="30"
                               Margin="8,0,0,0"
@@ -45,7 +96,7 @@
                                                 Height="16"
                                                 VerticalAlignment="Center"
                                                 HorizontalAlignment="Center"
-                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                                                Style="{StaticResource FieldView.ToolbarToggleIconStyle}" />
                 </ToggleButton>
             </StackPanel>
 
@@ -152,7 +203,7 @@
 
                         <GridViewColumn Header="{x:Static resources:FieldView.Col_Value}"
                                         Width="420"
-                                        DisplayMemberBinding="{Binding FieldValue}" />
+                                        DisplayMemberBinding="{Binding ShortenedText}" />
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -190,3 +241,4 @@
         </Grid>
     </Grid>
 </UserControl>
+

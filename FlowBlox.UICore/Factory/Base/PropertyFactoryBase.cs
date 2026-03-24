@@ -122,14 +122,14 @@ namespace FlowBlox.UICore.Factory.Base
             _registry.Unregister(instance);
         }
 
-        public bool IsDeletable(object instance, TOwner owner)
+        public bool IsDeletable(object instance, TOwner owner, object excludeTarget = null)
         {
-            return Task.Run(async () => await IsDeletableAsync(instance, owner))
+            return Task.Run(async () => await IsDeletableAsync(instance, owner, excludeTarget))
                 .GetAwaiter()
                 .GetResult();
         }
 
-        public async Task<bool> IsDeletableAsync(object instance, TOwner owner)
+        public async Task<bool> IsDeletableAsync(object instance, TOwner owner, object excludeTarget = null)
         {
             var methodInfo = instance.GetType().GetMethod(GlobalConstants.IsDeletableMethodName);
             if (methodInfo != null)
@@ -145,8 +145,19 @@ namespace FlowBlox.UICore.Factory.Base
 
                     if (!isDeletable && dependencies != null)
                     {
+                        var excludedTargets = new HashSet<object>(ReferenceEqualityComparer.Instance)
+                        {
+                            instance
+                        };
+
+                        if (_target != null)
+                            excludedTargets.Add(_target);
+
+                        if (excludeTarget != null)
+                            excludedTargets.Add(excludeTarget);
+
                         var allReferences = new List<string>();
-                        foreach (var dependency in dependencies.Where(x => x != _target && x != instance))
+                        foreach (var dependency in dependencies.Where(x => !excludedTargets.Contains(x)))
                         {
                             allReferences.Add(string.Format(
                                 FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),

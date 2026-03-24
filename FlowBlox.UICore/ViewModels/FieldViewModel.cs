@@ -4,6 +4,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
@@ -20,6 +21,9 @@ namespace FlowBlox.UICore.ViewModels
 {
     public sealed class FieldViewModel : INotifyPropertyChanged, IDisposable
     {
+        private const int DefaultFieldViewMaxDisplayLength = 4000;
+        private const string FieldViewMaxDisplayLengthOptionName = "FieldView.MaxDisplayLength";
+
         private readonly IFlowBloxProjectComponentProvider _componentProvider;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
         private readonly SynchronizationContext? _uiContext;
@@ -35,6 +39,8 @@ namespace FlowBlox.UICore.ViewModels
 
         private string _filterText = string.Empty;
         private bool _showFlowBlock;
+        private bool _isSingleLineFieldValues;
+        private int _maxDisplayLength = DefaultFieldViewMaxDisplayLength;
 
         public ObservableCollection<FieldEntryViewModel> Fields { get; } = new();
 
@@ -67,6 +73,20 @@ namespace FlowBlox.UICore.ViewModels
                 _showFlowBlock = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(FlowBlockColumnWidth));
+            }
+        }
+
+        public bool IsSingleLineFieldValues
+        {
+            get => _isSingleLineFieldValues;
+            set
+            {
+                if (_isSingleLineFieldValues == value)
+                    return;
+
+                _isSingleLineFieldValues = value;
+                OnPropertyChanged();
+                UpdateFieldValuePresentation();
             }
         }
 
@@ -132,6 +152,8 @@ namespace FlowBlox.UICore.ViewModels
 
         private void ReloadFields()
         {
+            _maxDisplayLength = ResolveFieldViewMaxDisplayLength();
+
             foreach (var field in _rowsByField.Keys.ToList())
             {
                 UnsubscribeFieldEvents(field);
@@ -206,6 +228,8 @@ namespace FlowBlox.UICore.ViewModels
             SubscribeFieldEvents(fieldElement);
 
             var row = new FieldEntryViewModel(fieldElement);
+            row.SetSingleLineFieldValues(IsSingleLineFieldValues);
+            row.SetMaxDisplayLength(_maxDisplayLength);
             _rowsByField[fieldElement] = row;
             _allRows.Add(row);
 
@@ -288,6 +312,14 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
+        private void UpdateFieldValuePresentation()
+        {
+            foreach (var row in _allRows)
+            {
+                row.SetSingleLineFieldValues(IsSingleLineFieldValues);
+            }
+        }
+
         private void ApplyFilter()
         {
             var filter = FilterText?.Trim() ?? string.Empty;
@@ -345,6 +377,25 @@ namespace FlowBlox.UICore.ViewModels
             FlowBloxEditingHelper.OpenUsingEditor(
                 selectedRow.FieldElement.StringValue,
                 selectedRow.FieldElement.FullyQualifiedName);
+        }
+
+        private int ResolveFieldViewMaxDisplayLength()
+        {
+            try
+            {
+                var option = FlowBloxOptions.GetOptionInstance().GetOption(FieldViewMaxDisplayLengthOptionName);
+                if (option?.Type == OptionElement.OptionType.Integer)
+                {
+                    var value = option.GetValueInt();
+                    if (value > 0)
+                        return value;
+                }
+            }
+            catch
+            {
+            }
+
+            return DefaultFieldViewMaxDisplayLength;
         }
 
         private void PostToUi(Action action)

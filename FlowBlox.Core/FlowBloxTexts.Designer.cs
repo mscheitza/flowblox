@@ -919,6 +919,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result field type ähnelt.
+        /// </summary>
+        public static string BaseSingleResultFlowBlock_ResultFieldFieldType {
+            get {
+                return ResourceManager.GetString("BaseSingleResultFlowBlock_ResultFieldFieldType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Uses a BERT-format vocabulary to tokenize text. ähnelt.
         /// </summary>
         public static string BertTokenizer_Description {
@@ -2494,6 +2503,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Compression ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_Compression {
+            get {
+                return ResourceManager.GetString("FloxBloxCategory_Compression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Control flow ähnelt.
         /// </summary>
         public static string FloxBloxCategory_ControlFlow {
@@ -2661,6 +2679,123 @@ namespace FlowBlox.Core {
         public static string FormatParameterDefinition_IsRequired {
             get {
                 return ResourceManager.GetString("FormatParameterDefinition_IsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creation date ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorDestinations_CreationDate {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorDestinations_CreationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die File name ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorDestinations_FileName {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorDestinations_FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Full path ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorDestinations_FullPath {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorDestinations_FullPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Last modified ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorDestinations_LastModified {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorDestinations_LastModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Relative path ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorDestinations_RelativePath {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorDestinations_RelativePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Size ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorDestinations_Size {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorDestinations_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Lists files from a directory and outputs metadata fields for each file. ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Directory path ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorFlowBlock_DirectoryPath {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorFlowBlock_DirectoryPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die File system directory iterator ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Filter expression ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorFlowBlock_FilterExpression {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorFlowBlock_FilterExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use &apos;;&apos; separated wildcard patterns with &apos;*&apos; and &apos;?&apos;. Prefix a pattern with &apos;!&apos; to exclude it. Matching is applied to file name and relative path. Example: *.txt;logs/*.log;!archive/* ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorFlowBlock_FilterExpression_Tooltip {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorFlowBlock_FilterExpression_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recursive ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorFlowBlock_Recursive {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorFlowBlock_Recursive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result fields ähnelt.
+        /// </summary>
+        public static string FSDirectoryIteratorFlowBlock_ResultFields {
+            get {
+                return ResourceManager.GetString("FSDirectoryIteratorFlowBlock_ResultFields", resourceCulture);
             }
         }
         
@@ -6774,6 +6909,330 @@ namespace FlowBlox.Core {
         public static string XmlDocumentXPathSelector_XPath {
             get {
                 return ResourceManager.GetString("XmlDocumentXPathSelector_XPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Read access ähnelt.
+        /// </summary>
+        public static string ZipArchiveAccessMode_ReadAccess {
+            get {
+                return ResourceManager.GetString("ZipArchiveAccessMode_ReadAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Write access ähnelt.
+        /// </summary>
+        public static string ZipArchiveAccessMode_WriteAccess {
+            get {
+                return ResourceManager.GetString("ZipArchiveAccessMode_WriteAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Compression strength ähnelt.
+        /// </summary>
+        public static string ZipArchiveCreatorFlowBlock_CompressionStrength {
+            get {
+                return ResourceManager.GetString("ZipArchiveCreatorFlowBlock_CompressionStrength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a new in-memory ZIP archive in the selected ZIP archive managed object. ähnelt.
+        /// </summary>
+        public static string ZipArchiveCreatorFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ZipArchiveCreatorFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP archive creator ähnelt.
+        /// </summary>
+        public static string ZipArchiveCreatorFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ZipArchiveCreatorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string ZipArchiveCreatorFlowBlock_Password {
+            get {
+                return ResourceManager.GetString("ZipArchiveCreatorFlowBlock_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP archive object ähnelt.
+        /// </summary>
+        public static string ZipArchiveCreatorFlowBlock_ZipArchiveObject {
+            get {
+                return ResourceManager.GetString("ZipArchiveCreatorFlowBlock_ZipArchiveObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Archive path ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_ArchivePath {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_ArchivePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Absolute path in the ZIP archive, for example &quot;/docs/reports&quot;. ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_ArchivePath_Tooltip {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_ArchivePath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated ZIP archive ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_AssociatedZipArchive {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_AssociatedZipArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content field ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_ContentField {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_ContentField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Writes a file to a ZIP archive at an absolute archive path. ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP file appender ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die File name ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_FileName {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Name of the file that will be created or replaced in the ZIP archive. ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_FileName_Tooltip {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_FileName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_Password {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP archive object ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileAppenderFlowBlock_ZipArchiveObject {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileAppenderFlowBlock_ZipArchiveObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated ZIP archive ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileIteratorFlowBlock_AssociatedZipArchive {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileIteratorFlowBlock_AssociatedZipArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Iterates recursively over all files in a ZIP archive and outputs file path and content. ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileIteratorFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileIteratorFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP file iterator ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileIteratorFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileIteratorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileIteratorFlowBlock_Password {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileIteratorFlowBlock_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result fields ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileIteratorFlowBlock_ResultFields {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileIteratorFlowBlock_ResultFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP archive object ähnelt.
+        /// </summary>
+        public static string ZipArchiveFileIteratorFlowBlock_ZipArchiveObject {
+            get {
+                return ResourceManager.GetString("ZipArchiveFileIteratorFlowBlock_ZipArchiveObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Access mode ähnelt.
+        /// </summary>
+        public static string ZipArchiveFlowBlock_AccessMode {
+            get {
+                return ResourceManager.GetString("ZipArchiveFlowBlock_AccessMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a new ZIP archive or loads an existing archive from a data source. ähnelt.
+        /// </summary>
+        public static string ZipArchiveFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ZipArchiveFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP archive ähnelt.
+        /// </summary>
+        public static string ZipArchiveFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ZipArchiveFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use existing ZIP archive ähnelt.
+        /// </summary>
+        public static string ZipArchiveFlowBlock_UseExistingArchive {
+            get {
+                return ResourceManager.GetString("ZipArchiveFlowBlock_UseExistingArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP archive ähnelt.
+        /// </summary>
+        public static string ZipArchiveObject_DisplayName {
+            get {
+                return ResourceManager.GetString("ZipArchiveObject_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated ZIP archive ähnelt.
+        /// </summary>
+        public static string ZipArchiveOutputFlowBlock_AssociatedZipArchive {
+            get {
+                return ResourceManager.GetString("ZipArchiveOutputFlowBlock_AssociatedZipArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Outputs the ZIP archive as byte array. ähnelt.
+        /// </summary>
+        public static string ZipArchiveOutputFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ZipArchiveOutputFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP archive output ähnelt.
+        /// </summary>
+        public static string ZipArchiveOutputFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ZipArchiveOutputFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die High ähnelt.
+        /// </summary>
+        public static string ZipCompressionStrength_High {
+            get {
+                return ResourceManager.GetString("ZipCompressionStrength_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Low ähnelt.
+        /// </summary>
+        public static string ZipCompressionStrength_Low {
+            get {
+                return ResourceManager.GetString("ZipCompressionStrength_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Medium ähnelt.
+        /// </summary>
+        public static string ZipCompressionStrength_Medium {
+            get {
+                return ResourceManager.GetString("ZipCompressionStrength_Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No compression (store) ähnelt.
+        /// </summary>
+        public static string ZipCompressionStrength_None {
+            get {
+                return ResourceManager.GetString("ZipCompressionStrength_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Very high ähnelt.
+        /// </summary>
+        public static string ZipCompressionStrength_VeryHigh {
+            get {
+                return ResourceManager.GetString("ZipCompressionStrength_VeryHigh", resourceCulture);
             }
         }
     }

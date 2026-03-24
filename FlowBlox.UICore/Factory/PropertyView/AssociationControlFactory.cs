@@ -201,6 +201,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
                     InvalidateAll();
                 }
+                else
+                {
+                    DeleteInstance(newInstance);
+                }
             }
         }
 

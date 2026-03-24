@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
@@ -257,8 +257,6 @@ namespace FlowBlox.Views.PropertyView
                             }
                         }
                             
-                        if (textBoxAttribute?.PasswordChar != null)
-                            flowBloxTextBox.InnerTextBox.PasswordChar = textBoxAttribute.PasswordChar;
 
                         if (textBoxAttribute?.IsCodingMode == true)
                             flowBloxTextBox.EnableDeveloperMode();
@@ -401,7 +399,7 @@ namespace FlowBlox.Views.PropertyView
                 if (useLabel)
                     AppendLabelRow(displayName, ref rowIndex, property);
 
-                // HÃ¶he der Zeile einstellen
+                // Höhe der Zeile einstellen
                 if (flowBlockUIAttribute?.Height > 0)
                     RowStyles.Add(new RowStyle(SizeType.Absolute, flowBlockUIAttribute.Height));
                 else
@@ -426,7 +424,7 @@ namespace FlowBlox.Views.PropertyView
                     Validate(property);
                 };
 
-                // Steuerelement fÃ¼r diese Eigenschaft speichern
+                // Steuerelement für diese Eigenschaft speichern
                 _propertyControls[property] = control;
             }
 
@@ -650,7 +648,7 @@ namespace FlowBlox.Views.PropertyView
                     originalBackgroundColor[control] = control.BackColor;
                 control.BackColor = Color.LightSalmon;
 
-                // Im Falle eines FlowLayoutPanels muss ein AuÃŸenabstand zur Anzeige des Fehler-Symbols hinzugefÃ¼gt werden:
+                // Im Falle eines FlowLayoutPanels muss ein Außenabstand zur Anzeige des Fehler-Symbols hinzugefügt werden:
                 if (control is FlowLayoutPanel ||
                     control is DataGridView ||
                     control is ListView)
@@ -689,3 +687,4 @@ namespace FlowBlox.Views.PropertyView
         }
     }
 }
+
