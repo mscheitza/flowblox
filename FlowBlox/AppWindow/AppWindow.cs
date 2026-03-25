@@ -60,14 +60,13 @@ namespace FlowBlox.AppWindow
             }
         }
 
-        private DockableObjectManagerInitializer _objectManagerInitializer;
-
         private ProjectPanel _dockContentProjectPanel;
 
         private string _recentProjectPath;
         private string _recentProjectSpaceGuid;
         private ComponentLibraryPanel _componentLibraryPanel;
         private FieldView _fieldViewPanel;
+        private ManagedObjectsView _managedObjectsViewPanel;
         private DockContentUserControlWrapper<RuntimeView> _runtimeViewPanel;
         private DockContentUserControlWrapper<ProblemsView> _problemsViewPanel;
         private AIAssistantView _aiAssistantViewPanel;
@@ -160,6 +159,7 @@ namespace FlowBlox.AppWindow
 
             this._dockContentProjectPanel?.UpdateUI();
             this._componentLibraryPanel?.UpdateUI();
+            this._managedObjectsViewPanel?.UpdateUI();
         }
 
         private void UpdateUI_ProjectName()
@@ -296,6 +296,7 @@ namespace FlowBlox.AppWindow
         {
             InitializeDockPanel(exceptAiAssistantView: exceptAiAssistantView);
             this._fieldViewPanel.OnAfterUIRegistryInitialized();
+            this._managedObjectsViewPanel?.OnAfterUIRegistryInitialized();
             if (!exceptAiAssistantView)
                 this._aiAssistantViewPanel?.OnAfterUIRegistryInitialized();
             this._dockContentProjectPanel.OnAfterUIRegistryInitialized();
@@ -828,11 +829,6 @@ namespace FlowBlox.AppWindow
             });
         }
 
-        internal void ReloadAllObjectManager()
-        {
-            _objectManagerInitializer.Reload();
-        }
-
         private void Runtime_LogMessageCreated(BaseRuntime runtime, string message, FlowBloxLogLevel logLevel)
         {
             if (this.InvokeRequired)
@@ -863,8 +859,6 @@ namespace FlowBlox.AppWindow
                 backtraceInterceptor.ProblemTraceCreated += Runtime_ProblemTraceCreated;
             }
 
-            _objectManagerInitializer.Recreate();
-
             _runtimeViewPanel.UserControl.InitializeRuntime(runtime);
 
             UpdateUI();
@@ -876,7 +870,6 @@ namespace FlowBlox.AppWindow
         {
             UpdateUI();
 
-            _objectManagerInitializer.Recreate();
         }
 
         private void itmPaste_Click(object sender, EventArgs e)

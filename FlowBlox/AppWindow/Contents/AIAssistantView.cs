@@ -241,7 +241,6 @@ namespace FlowBlox.AppWindow.Contents
                 uiElement.Dispose();
             }
 
-            appWindow.ReloadAllObjectManager();
             projectPanel.UpdateUI(gridUpdate: true, appWindowUpdate: true);
         }
     }

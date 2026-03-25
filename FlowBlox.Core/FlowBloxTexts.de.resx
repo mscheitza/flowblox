@@ -231,9 +231,12 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	<data name="BertTokenizer_Description" xml:space="preserve">
 		<value>Verwendet ein Vokabular im BERT-Format zur Tokenisierung von Text.</value>
 	</data>
-	<data name="BertTokenizer_DisplayName" xml:space="preserve">
-		<value>BERT Tokenizer</value>
-	</data>
+		<data name="BertTokenizer_DisplayName" xml:space="preserve">
+			<value>BERT Tokenizer</value>
+		</data>
+		<data name="BertTokenizer_DisplayName_Plural" xml:space="preserve">
+			<value>BERT Tokenizer</value>
+		</data>
 	<data name="BertTokenizer_VocabFile" xml:space="preserve">
 		<value>Vokabular-Datei</value>
 	</data>
@@ -1209,9 +1212,12 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="RobertaQATokenizer_Description" xml:space="preserve">
 		<value>Tokenisiert Text für Frage-Antwort-Modelle mithilfe von Byte Pair Encoding (BPE) basierend auf vocab.json und merges.txt. Verwendet dabei das für RoBERTa-Modelle typische Satzformat.</value>
 	</data>
-	<data name="RobertaQATokenizer_DisplayName" xml:space="preserve">
-		<value>RoBERTa BPE-Tokenizer (Q&amp;A)</value>
-	</data>
+		<data name="RobertaQATokenizer_DisplayName" xml:space="preserve">
+			<value>RoBERTa BPE-Tokenizer (Q&amp;A)</value>
+		</data>
+		<data name="RobertaQATokenizer_DisplayName_Plural" xml:space="preserve">
+			<value>RoBERTa BPE-Tokenizer (Q&amp;A)</value>
+		</data>
 	<data name="RobertaQATokenizer_TokenizerConfiguration" xml:space="preserve">
 		<value>Tokenizer-Konfiguration</value>
 	</data>
@@ -1872,9 +1878,12 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="AIPromptFlowBlock_TimeoutSecondsOverride_Tooltip" xml:space="preserve">
 		<value>Optionaler Timeout für diesen FlowBlock. Wenn leer, wird der Standard-Timeout des Providers verwendet.</value>
 	</data>
-	<data name="TypeNames_AIProvider" xml:space="preserve">
-		<value>KI-Provider</value>
-	</data>
+		<data name="TypeNames_AIProvider" xml:space="preserve">
+			<value>KI-Provider</value>
+		</data>
+		<data name="AIProviderBase_DisplayName" xml:space="preserve">
+			<value>KI-Provider</value>
+		</data>
 	<data name="AIProvider_ApiKey" xml:space="preserve">
 		<value>API-Schlüssel</value>
 	</data>
@@ -1899,12 +1908,24 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="AIProvider_BaseUrl_Tooltip" xml:space="preserve">
 		<value>Optionale Basis-URL zum Überschreiben des Provider-Endpunkts (für Fortgeschrittene).</value>
 	</data>
-	<data name="TypeNames_OpenAIProvider" xml:space="preserve">
-		<value>OpenAI-Provider</value>
-	</data>
-	<data name="TypeNames_GeminiAIProvider" xml:space="preserve">
-		<value>Gemini-Provider</value>
-	</data>
+		<data name="TypeNames_OpenAIProvider" xml:space="preserve">
+			<value>OpenAI-Provider</value>
+		</data>
+		<data name="OpenAIProvider_DisplayName" xml:space="preserve">
+			<value>OpenAI-Provider</value>
+		</data>
+		<data name="OpenAIProvider_DisplayName_Plural" xml:space="preserve">
+			<value>OpenAI-Provider</value>
+		</data>
+		<data name="TypeNames_GeminiAIProvider" xml:space="preserve">
+			<value>Gemini-Provider</value>
+		</data>
+		<data name="GeminiAIProvider_DisplayName" xml:space="preserve">
+			<value>Gemini-Provider</value>
+		</data>
+		<data name="GeminiAIProvider_DisplayName_Plural" xml:space="preserve">
+			<value>Gemini-Provider</value>
+		</data>
 	<data name="OpenAIProvider_OrganizationId" xml:space="preserve">
 		<value>Organisations-ID</value>
 	</data>
@@ -2471,6 +2492,72 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	</data>
 	<data name="ZipArchiveFileIteratorFlowBlock_Password" xml:space="preserve">
 		<value>Passwort</value>
+	</data>
+	<data name="TypeNames_ManagedObject" xml:space="preserve">
+		<value>Verwaltetes Objekt</value>
+	</data>
+	<data name="TypeNames_ManagedObject_Plural" xml:space="preserve">
+		<value>Verwaltete Objekte</value>
+	</data>
+	<data name="TypeNames_DataObject" xml:space="preserve">
+		<value>Datenobjekt</value>
+	</data>
+	<data name="TypeNames_DataObject_Plural" xml:space="preserve">
+		<value>Datenobjekte</value>
+	</data>
+	<data name="TypeNames_DataTable" xml:space="preserve">
+		<value>Datentabelle</value>
+	</data>
+	<data name="TypeNames_DataTable_Plural" xml:space="preserve">
+		<value>Datentabellen</value>
+	</data>
+	<data name="FlowBloxTestDefinition_DisplayName" xml:space="preserve">
+		<value>Testdefinition</value>
+	</data>
+	<data name="FlowBloxTestDefinition_DisplayName_Plural" xml:space="preserve">
+		<value>Testdefinitionen</value>
+	</data>
+	<data name="TypeNames_Tokenizer" xml:space="preserve">
+		<value>Tokenizer</value>
+	</data>
+	<data name="QATokenizerBase_DisplayName" xml:space="preserve">
+		<value>QA-Tokenizer</value>
+	</data>
+	<data name="TypeNames_Tokenizer_Plural" xml:space="preserve">
+		<value>Tokenizer</value>
+	</data>
+	<data name="QATokenizerBase_DisplayName_Plural" xml:space="preserve">
+		<value>QA-Tokenizer</value>
+	</data>
+	<data name="TypeNames_AIProvider_Plural" xml:space="preserve">
+		<value>KI-Provider</value>
+	</data>
+	<data name="AIProviderBase_DisplayName_Plural" xml:space="preserve">
+		<value>KI-Provider</value>
+	</data>
+		<data name="FlowBloxResourceUtil_FallbackPluralSuffix" xml:space="preserve">
+			<value>Objekte</value>
+		</data>
+	<data name="FileObject_DisplayName_Plural" xml:space="preserve">
+		<value>Dateien</value>
+	</data>
+	<data name="MemoryObject_DisplayName_Plural" xml:space="preserve">
+		<value>Speicherobjekte</value>
+	</data>
+	<data name="CsvTable_DisplayName_Plural" xml:space="preserve">
+		<value>CSV-Tabellen</value>
+	</data>
+	<data name="ExcelTable_DisplayName_Plural" xml:space="preserve">
+		<value>Excel-Tabellen</value>
+	</data>
+	<data name="SQLTable_DisplayName_Plural" xml:space="preserve">
+		<value>SQL-Tabellen</value>
+	</data>
+	<data name="ZipArchiveObject_DisplayName_Plural" xml:space="preserve">
+		<value>ZIP-Archive</value>
+	</data>
+	<data name="VocabMergesConfiguration_DisplayName_Plural" xml:space="preserve">
+		<value>Vokabular-/Merges-Konfigurationen</value>
 	</data>
 </root>
 

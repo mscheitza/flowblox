@@ -1,16 +1,22 @@
+using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Attributes.FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.Fields;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using FlowBlox.Core.Attributes.FlowBlox.Core.Attributes;
 
 namespace FlowBlox.Core.Models.Components.IO
 {
     [Display(Name = "FileObject_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("FileObject_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class FileObject : DataObjectBase
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_document_outline, 16, new SKColor(2, 132, 199));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_document_outline, 32, new SKColor(2, 132, 199));
         [Required()]
         [Display(Name = "PropertyNames_FilePath", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBlockUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection)]
@@ -64,6 +70,9 @@ namespace FlowBlox.Core.Models.Components.IO
             return File.Exists(GetRuntimeFilePath());
         }
 
+        public override List<string> GetDisplayableProperties()
+            => [nameof(Name), nameof(FilePath)];
+
         public override void RegisterPropertyChangedEventHandlers()
         {
             foreach (var fieldElement in FlowBloxFieldHelper.GetFieldElementsFromString(FilePath))
@@ -89,4 +98,6 @@ namespace FlowBlox.Core.Models.Components.IO
         }
     }
 }
+
+
 

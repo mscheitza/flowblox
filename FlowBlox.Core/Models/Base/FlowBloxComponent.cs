@@ -196,6 +196,8 @@ namespace FlowBlox.Core.Models.Base
         /// </summary>
         public IEnumerable<IManagedObject> GetAssociatedManagedObjects() => FlowBlockObjectCollector.CollectManagedObjectsRecursive(this);
 
+        public virtual List<string> GetDisplayableProperties() => [nameof(Name)];
+
         public virtual bool IsDeletable(out List<IFlowBloxComponent> dependencies)
         {
             dependencies = new List<IFlowBloxComponent>();

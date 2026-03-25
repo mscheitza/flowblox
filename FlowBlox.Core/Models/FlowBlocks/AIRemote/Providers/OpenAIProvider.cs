@@ -16,7 +16,8 @@ using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 {
-    [Display(Name = "TypeNames_OpenAIProvider", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "OpenAIProvider_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("OpenAIProvider_DisplayName_Plural", typeof(FlowBloxTexts))]
     public sealed class OpenAIProvider : AIProviderBase
     {
         [Display(Name = "OpenAIProvider_OrganizationId", Description = "OpenAIProvider_OrganizationId_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 10)]

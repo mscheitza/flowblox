@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title" xml:space="preserve">
+    <value>Verwaltete Objekte</value>
+  </data>
+  <data name="Toolbar_Add_Tooltip" xml:space="preserve">
+    <value>Verwaltetes Objekt hinzufügen</value>
+  </data>
+  <data name="Toolbar_Edit_Tooltip" xml:space="preserve">
+    <value>Verwaltetes Objekt bearbeiten</value>
+  </data>
+  <data name="Toolbar_Delete_Tooltip" xml:space="preserve">
+    <value>Verwaltetes Objekt löschen</value>
+  </data>
+  <data name="Toolbar_Refresh_Tooltip" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="Toolbar_Actions" xml:space="preserve">
+    <value>Aktionen</value>
+  </data>
+  <data name="Col_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Col_DisplayableProperties" xml:space="preserve">
+    <value>Angezeigte Eigenschaften</value>
+  </data>
+  <data name="Col_UsedIn" xml:space="preserve">
+    <value>Verwendet in</value>
+  </data>
+  <data name="Tree_UncategorizedManagedObjects" xml:space="preserve">
+    <value>Weitere verwaltete Objekte</value>
+  </data>
+  <data name="DisplayableProperties_None" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="UsedIn_None" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="EmptyState_NoManagedObjects" xml:space="preserve">
+    <value>Für die ausgewählte Kategorie sind keine verwalteten Objekte vorhanden.</value>
+  </data>
+  <data name="Message_CannotCreateInstance_Title" xml:space="preserve">
+    <value>Erstellung nicht möglich</value>
+  </data>
+  <data name="Message_CannotCreateInstance_Description" xml:space="preserve">
+    <value>Für '{0}' ist kein Standardkonstruktor verfügbar.</value>
+  </data>
+  <data name="Message_DeleteBlocked_Title" xml:space="preserve">
+    <value>Löschen blockiert</value>
+  </data>
+  <data name="Message_DeleteBlocked_Description" xml:space="preserve">
+    <value>Das verwaltete Objekt '{0}' wird noch verwendet in: {1}</value>
+  </data>
+  <data name="Message_DeleteConfirm_Title" xml:space="preserve">
+    <value>Verwaltetes Objekt löschen</value>
+  </data>
+  <data name="Message_DeleteConfirm_Description" xml:space="preserve">
+    <value>Möchten Sie '{0}' wirklich löschen?</value>
+  </data>
+</root>

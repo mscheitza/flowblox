@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.UICore.Attributes;
 using SkiaSharp;
 using FlowBlox.UICore.Interfaces;
 
@@ -11,13 +12,13 @@ namespace FlowBlox.UICore.Provider
     {
         protected abstract TItem CreateItem(string displayName, EventHandler clickHandler, bool enabled, SKImage icon16);
 
-        public List<TItem> GetToolStripItemsForComponent<T>(T component) where T : IFlowBloxComponent
+        public List<TItem> GetToolStripItemsForComponent<T>(T component, bool includePropertyWindowOnlyActions = true) where T : IFlowBloxComponent
         {
             var items = new List<TItem>();
             var componentType = component.GetType();
 
             var actionTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
+                .SelectMany(GetLoadableTypes)
                 .Where(t => t.IsClass && !t.IsAbstract)
                 .Where(t => t.BaseType != null && t.BaseType.IsGenericType && t.BaseType.GetGenericTypeDefinition() == typeof(ComponentUIActions<>))
                 .Where(t => t.BaseType.GetGenericArguments()[0].IsAssignableFrom(componentType));
@@ -45,6 +46,10 @@ namespace FlowBlox.UICore.Provider
                     if (displayAttribute == null)
                         continue;
 
+                    var actionMetadata = method.GetCustomAttribute<UIActionMetadataAttribute>();
+                    if (!includePropertyWindowOnlyActions && actionMetadata?.OnlyShowInPropertyWindow == true)
+                        continue;
+
                     var displayName = FlowBloxResourceUtil.GetDisplayName(displayAttribute);
                     if (string.IsNullOrEmpty(displayName))
                         continue;
@@ -62,6 +67,22 @@ namespace FlowBlox.UICore.Provider
             }
 
             return items;
+        }
+
+        private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                return ex.Types.Where(t => t != null)!;
+            }
+            catch
+            {
+                return Enumerable.Empty<Type>();
+            }
         }
 
         private static SKImage TryGetIcon(object instance, Type type, string propertyName)

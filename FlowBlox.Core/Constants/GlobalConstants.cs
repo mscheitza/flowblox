@@ -20,10 +20,6 @@
 
         public const int GridSizeY = 2000;
 
-        public const string PropertyViewUIFrameworkWPF = "WPF";
-
-        public const string PropertyViewUIFrameworkWinForms = "WinForms";
-
         public const string GetPreviousFlowBlockOnPathMethodName = "GetPreviousFlowBlockOnPath";
 
         public const string FlowBloxUICoreAssemblyName = "FlowBlox.UICore";

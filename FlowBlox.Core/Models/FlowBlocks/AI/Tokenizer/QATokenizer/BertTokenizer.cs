@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.QATokenizer
 {
     [Display(Name = "BertTokenizer_DisplayName", Description = "BertTokenizer_Description", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("BertTokenizer_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class BertTokenizer : QATokenizerBase
     {
         private Microsoft.ML.Tokenizers.BertTokenizer _tokenizer;

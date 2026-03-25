@@ -969,7 +969,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             base.OnAfterSave();
         }
 
-        public virtual List<string> GetDisplayableProperties() => new List<string>() { nameof(Name) };
+        public override List<string> GetDisplayableProperties() => base.GetDisplayableProperties();
 
         public override string ToString() => this.Name;
     }

@@ -16,6 +16,8 @@ namespace FlowBlox.Core.Interfaces
 
         IEnumerable<FieldElement> GetAssociatedFields();
 
+        List<string> GetDisplayableProperties();
+
         bool IsDeletable(out List<IFlowBloxComponent> dependencies);
 
         void OnAfterCreate();

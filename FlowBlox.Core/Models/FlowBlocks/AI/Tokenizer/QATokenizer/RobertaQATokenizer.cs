@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.QATokenizer
 {
     [Display(Name = "RobertaQATokenizer_DisplayName", Description = "RobertaQATokenizer_Description", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("RobertaQATokenizer_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class RobertaQATokenizer : QATokenizerBase
     {
         private Microsoft.ML.Tokenizers.Tokenizer _tokenizer;

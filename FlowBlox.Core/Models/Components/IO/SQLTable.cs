@@ -1,4 +1,6 @@
-﻿using FlowBlox.Core.Attributes;
+﻿using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
@@ -13,8 +15,13 @@ namespace FlowBlox.Core.Models.Components.IO
 {
     [Serializable()]
     [Display(Name = "SQLTable_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("SQLTable_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class SQLTable : ManagedObject, IReadableTable
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.database_cog, 16, new SKColor(220, 38, 38));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.database_cog, 32, new SKColor(220, 38, 38));
+
         private List<Action> _readableTableDataSourceChangedHandler = new List<Action>();
 
         [Required()]
@@ -95,10 +102,12 @@ namespace FlowBlox.Core.Models.Components.IO
             }
         }
 
+        public override List<string> GetDisplayableProperties()
+            => [nameof(Name), nameof(DbType)];
+
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             _readableTableDataSourceChangedHandler.Clear();
         }
     }
 }
-

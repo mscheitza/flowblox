@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+using FlowBlox.Core.Attributes;
+using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
 using System.Resources;
 
@@ -71,6 +72,43 @@ namespace FlowBlox.Core.Util.Resources
                 }
             }
             return description;
+        }
+
+        public static string GetPluralDisplayName(Type type)
+        {
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+
+            var pluralAttribute = type.GetCustomAttributes(typeof(PluralDisplayNameAttribute), inherit: false)
+                .OfType<PluralDisplayNameAttribute>()
+                .FirstOrDefault();
+
+            if (pluralAttribute != null && !string.IsNullOrWhiteSpace(pluralAttribute.Name))
+            {
+                var localized = GetLocalizedString(pluralAttribute.Name, pluralAttribute.ResourceType);
+                if (!string.IsNullOrWhiteSpace(localized))
+                    return localized;
+            }
+
+            var displayAttribute = type.GetCustomAttributes(typeof(DisplayAttribute), inherit: false)
+                .OfType<DisplayAttribute>()
+                .FirstOrDefault();
+
+            if (displayAttribute != null)
+            {
+                var singular = GetDisplayName(displayAttribute, requireDisplayName: false);
+                if (!string.IsNullOrWhiteSpace(singular))
+                    return $"{singular} {GetPluralFallbackSuffix()}";
+            }
+
+            return $"{type.Name} {GetPluralFallbackSuffix()}";
+        }
+
+        private static string GetPluralFallbackSuffix()
+        {
+            const string suffixResourceName = "FlowBloxResourceUtil_FallbackPluralSuffix";
+            var suffix = GetLocalizedString(suffixResourceName, DefaultResourceType);
+            return string.IsNullOrWhiteSpace(suffix) ? "Objects" : suffix;
         }
 
         public static SKImage LoadSKImageFromBytes(byte[] data)

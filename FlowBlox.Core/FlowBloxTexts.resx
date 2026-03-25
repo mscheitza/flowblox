@@ -234,6 +234,9 @@ All inputs are collected during the referenced block's iteration and this flow b
   <data name="BertTokenizer_DisplayName" xml:space="preserve">
 		<value>BERT tokenizer</value>
 	</data>
+  <data name="BertTokenizer_DisplayName_Plural" xml:space="preserve">
+		<value>BERT tokenizers</value>
+	</data>
   <data name="BertTokenizer_VocabFile" xml:space="preserve">
 		<value>Vocabulary file</value>
 	</data>
@@ -1207,6 +1210,9 @@ Use the "+" button to add entries to the table.</value>
   <data name="RobertaQATokenizer_DisplayName" xml:space="preserve">
 		<value>RoBERTa BPE Tokenizer (Q&amp;A)</value>
 	</data>
+  <data name="RobertaQATokenizer_DisplayName_Plural" xml:space="preserve">
+		<value>RoBERTa BPE Tokenizers (Q&amp;A)</value>
+	</data>
   <data name="RobertaQATokenizer_TokenizerConfiguration" xml:space="preserve">
 		<value>Tokenizer configuration</value>
 	</data>
@@ -1939,6 +1945,9 @@ Note: Once a provider is loaded, switching providers within the same process is 
   <data name="TypeNames_AIProvider" xml:space="preserve">
 		<value>AI Provider</value>
 	</data>
+  <data name="AIProviderBase_DisplayName" xml:space="preserve">
+		<value>AI Provider</value>
+	</data>
   <data name="AIProvider_ApiKey" xml:space="preserve">
 		<value>API key</value>
 	</data>
@@ -1966,8 +1975,20 @@ Note: Once a provider is loaded, switching providers within the same process is 
   <data name="TypeNames_OpenAIProvider" xml:space="preserve">
 		<value>OpenAI Provider</value>
 	</data>
+  <data name="OpenAIProvider_DisplayName" xml:space="preserve">
+		<value>OpenAI Provider</value>
+	</data>
+  <data name="OpenAIProvider_DisplayName_Plural" xml:space="preserve">
+		<value>OpenAI Providers</value>
+	</data>
   <data name="TypeNames_GeminiAIProvider" xml:space="preserve">
 		<value>Gemini Provider</value>
+	</data>
+  <data name="GeminiAIProvider_DisplayName" xml:space="preserve">
+		<value>Gemini Provider</value>
+	</data>
+  <data name="GeminiAIProvider_DisplayName_Plural" xml:space="preserve">
+		<value>Gemini Providers</value>
 	</data>
   <data name="OpenAIProvider_OrganizationId" xml:space="preserve">
 		<value>Organization ID</value>
@@ -2517,6 +2538,72 @@ Multi-level XPath expressions are not allowed here.</value>
   </data>
   <data name="ZipArchiveFileIteratorFlowBlock_Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="TypeNames_ManagedObject" xml:space="preserve">
+    <value>Managed Object</value>
+  </data>
+  <data name="TypeNames_ManagedObject_Plural" xml:space="preserve">
+    <value>Managed Objects</value>
+  </data>
+  <data name="TypeNames_DataObject" xml:space="preserve">
+    <value>Data Object</value>
+  </data>
+  <data name="TypeNames_DataObject_Plural" xml:space="preserve">
+    <value>Data Objects</value>
+  </data>
+  <data name="TypeNames_DataTable" xml:space="preserve">
+    <value>Data Table</value>
+  </data>
+  <data name="TypeNames_DataTable_Plural" xml:space="preserve">
+    <value>Data Tables</value>
+  </data>
+  <data name="FlowBloxTestDefinition_DisplayName" xml:space="preserve">
+    <value>Test Definition</value>
+  </data>
+  <data name="FlowBloxTestDefinition_DisplayName_Plural" xml:space="preserve">
+    <value>Test Definitions</value>
+  </data>
+  <data name="TypeNames_Tokenizer" xml:space="preserve">
+		<value>Tokenizer</value>
+	</data>
+  <data name="QATokenizerBase_DisplayName" xml:space="preserve">
+		<value>QA Tokenizer</value>
+	</data>
+  <data name="TypeNames_Tokenizer_Plural" xml:space="preserve">
+		<value>Tokenizers</value>
+	</data>
+  <data name="QATokenizerBase_DisplayName_Plural" xml:space="preserve">
+		<value>QA Tokenizers</value>
+	</data>
+  <data name="TypeNames_AIProvider_Plural" xml:space="preserve">
+		<value>AI Providers</value>
+	</data>
+  <data name="AIProviderBase_DisplayName_Plural" xml:space="preserve">
+		<value>AI Providers</value>
+	</data>
+  <data name="FlowBloxResourceUtil_FallbackPluralSuffix" xml:space="preserve">
+    <value>Objects</value>
+  </data>
+  <data name="FileObject_DisplayName_Plural" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="MemoryObject_DisplayName_Plural" xml:space="preserve">
+    <value>Memory Objects</value>
+  </data>
+  <data name="CsvTable_DisplayName_Plural" xml:space="preserve">
+    <value>CSV Tables</value>
+  </data>
+  <data name="ExcelTable_DisplayName_Plural" xml:space="preserve">
+    <value>Excel Tables</value>
+  </data>
+  <data name="SQLTable_DisplayName_Plural" xml:space="preserve">
+    <value>SQL Tables</value>
+  </data>
+  <data name="ZipArchiveObject_DisplayName_Plural" xml:space="preserve">
+    <value>ZIP Archives</value>
+  </data>
+  <data name="VocabMergesConfiguration_DisplayName_Plural" xml:space="preserve">
+    <value>Vocab/Merges Configurations</value>
   </data>
 </root>
 

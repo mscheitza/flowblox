@@ -1,4 +1,6 @@
-﻿using System.Data;
+using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
+using System.Data;
 using FlowBlox.Core.Util;
 using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Attributes;
@@ -8,8 +10,12 @@ using FlowBlox.Core.Extensions;
 namespace FlowBlox.Core.Models.Components.IO
 {
     [Display(Name = "CsvTable_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("CsvTable_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class CsvTable : DataTableBase
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_delimited_outline, 16, new SKColor(37, 99, 235));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_delimited_outline, 32, new SKColor(37, 99, 235));
         [Required()]
         [Display(Name = "PropertyNames_EncodingName", Description = "PropertyNames_EncodingName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBlockUI(Factory = UIFactory.ComboBox)]
@@ -67,4 +73,6 @@ namespace FlowBlox.Core.Models.Components.IO
         }
     }
 }
+
+
 

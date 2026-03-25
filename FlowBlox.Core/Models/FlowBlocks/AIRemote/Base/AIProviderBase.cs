@@ -1,3 +1,4 @@
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,9 +15,13 @@ using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
 {
-    [Display(Name = "TypeNames_AIProvider", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "AIProviderBase_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("AIProviderBase_DisplayName_Plural", typeof(FlowBloxTexts))]
     public abstract class AIProviderBase : ManagedObject, IAIProvider
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.robot_outline, 16, new SKColor(3, 105, 161));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.robot_outline, 32, new SKColor(3, 105, 161));
         [Required]
         [Display(Name = "AIProvider_ApiKey", Description = "AIProvider_ApiKey_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
@@ -165,3 +170,5 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         }
     }
 }
+
+

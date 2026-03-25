@@ -36,14 +36,15 @@ namespace FlowBlox.AppWindow
 
             var fieldViewPanelFactory = new FieldViewPanelFactory(dockPanel);
             _fieldViewPanel = fieldViewPanelFactory.Create();
+
+            var managedObjectsViewPanelFactory = new ManagedObjectsViewPanelFactory(dockPanel);
+            _managedObjectsViewPanel = managedObjectsViewPanelFactory.Create();
+
             if (!exceptAiAssistantView || _aiAssistantViewPanel == null)
             {
                 var aiAssistantPanelFactory = new AIAssistantViewPanelFactory(dockPanel);
                 _aiAssistantViewPanel = aiAssistantPanelFactory.Create();
             }
-
-            _objectManagerInitializer = new DockableObjectManagerInitializer(dockPanel);
-            _objectManagerInitializer.InitializeAllObjectManager();
 
             var problemsViewPanelFactory = new ProblemsViewPanelFactory(dockPanel);
             _problemsViewPanel = problemsViewPanelFactory.Create();

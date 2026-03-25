@@ -110,6 +110,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ManageInputTemplatesWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ManagedObjectsView.Designer.cs">
+      <DependentUpon>ManagedObjectsView.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\ManageNotificationsWindow.Designer.cs">
       <DependentUpon>ManageNotificationsWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -233,6 +238,10 @@
     <EmbeddedResource Update="Resources\ManageInputTemplatesWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ManageInputTemplatesWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ManagedObjectsView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ManagedObjectsView.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ManageNotificationsWindow.resx">
       <LastGenOutput>ManageNotificationsWindow.Designer.cs</LastGenOutput>

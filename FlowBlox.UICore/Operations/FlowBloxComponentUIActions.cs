@@ -4,6 +4,7 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.ObjectManager;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.UICore.Attributes;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Views;
 using SkiaSharp;
@@ -22,6 +23,7 @@ namespace FlowBlox.UICore.Operations
 
         public SKImage ManageUserFieldsIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.account_cog, 16, SKColors.SteelBlue);
 
+        [UIActionMetadata(OnlyShowInPropertyWindow = true)]
         [Display(Name = "FlowBloxComponentUIActions_ManageUserFields", ResourceType = typeof(FlowBloxTexts))]
         public void ManageUserFields()
         {

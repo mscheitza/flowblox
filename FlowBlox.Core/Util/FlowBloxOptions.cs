@@ -69,21 +69,6 @@ namespace FlowBlox.Core.Util
 
         public void InitDefaults(bool overwrite)
         {
-            // Migrate legacy option keys to the current category structure.
-            if (OptionCollection.TryGetValue("General.UICulture", out var legacyUiCultureOption) &&
-                !OptionCollection.ContainsKey("UI.Culture"))
-            {
-                OptionCollection["UI.Culture"] = new OptionElement(
-                    "UI.Culture",
-                    legacyUiCultureOption.Value,
-                    legacyUiCultureOption.Description,
-                    legacyUiCultureOption.Type,
-                    legacyUiCultureOption.DisplayName,
-                    legacyUiCultureOption.IsPlaceholderEnabled);
-            }
-
-            OptionCollection.Remove("General.UICulture");
-
             var defaultOptions = new List<OptionElement>
             {
                 new OptionElement("Account.LoginData", "", "The encrypted login data for the user account. This option stores the login token securely using encryption.", OptionElement.OptionType.Password),
@@ -123,8 +108,6 @@ namespace FlowBlox.Core.Util
                 new OptionElement("MainPanel.DockSettings", "", "Stores the layout and visibility settings of all dockable panels within the main application window. This includes the default docking positions, size dimensions (width, height), and display states (shown/hidden) of each panel.", OptionElement.OptionType.Text),
 
                 new OptionElement("Modifier.DefaultSeparator", ",", "If a modifier returns multiple result values, these values are separated by this delimiter.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-
-                new OptionElement("PropertyView.UIFramework", "WPF", "Defines which UI framework should be used for rendering property views. Valid values are 'WPF' and 'WinForms'.", OptionElement.OptionType.Text),
 
                 new OptionElement("AI.Onnx.Provider", "Default", "Global ONNX execution provider used by the application. Allowed values: Default (CPU), CUDA, DirectML, OpenVINO. Changing this requires restarting the application.", OptionElement.OptionType.Text)
             };

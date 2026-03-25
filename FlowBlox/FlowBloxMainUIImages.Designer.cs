@@ -203,16 +203,6 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap DataObjectManager_16 {
-            get {
-                object obj = ResourceManager.GetObject("DataObjectManager_16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap DataTableManager_16 {
             get {
                 object obj = ResourceManager.GetObject("DataTableManager_16", resourceCulture);
@@ -336,6 +326,16 @@ namespace FlowBlox {
         public static System.Drawing.Bitmap link_16 {
             get {
                 object obj = ResourceManager.GetObject("link_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ManagedObjectsView_16 {
+            get {
+                object obj = ResourceManager.GetObject("ManagedObjectsView_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

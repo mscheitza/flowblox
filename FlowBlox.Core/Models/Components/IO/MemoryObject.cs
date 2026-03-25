@@ -1,4 +1,6 @@
-﻿using FlowBlox.Core.Attributes;
+using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Util.DeepCopier;
 using Newtonsoft.Json;
@@ -8,8 +10,12 @@ using static FlowBlox.Core.Extensions.DotNetEncodingNamesExtension;
 namespace FlowBlox.Core.Models.Components.IO
 {
     [Display(Name = "MemoryObject_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("MemoryObject_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class MemoryObject : DataObjectBase
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.memory, 16, new SKColor(124, 58, 237));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.memory, 32, new SKColor(124, 58, 237));
         public MemoryObject()
         {
             this.EncodingName = DotNetEncodingNames.Default;
@@ -138,9 +144,14 @@ namespace FlowBlox.Core.Models.Components.IO
             return true;
         }
 
+        public override List<string> GetDisplayableProperties()
+            => [nameof(Name), nameof(Field), nameof(FileName)];
+
         public override string ToString()
         {
             return $"From binary data of field: \"{Field?.Name}\"";
         }
     }
 }
+
+

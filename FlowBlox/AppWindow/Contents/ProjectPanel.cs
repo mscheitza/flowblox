@@ -12,7 +12,6 @@ using WeifenLuo.WinFormsUI.Docking;
 using FlowBlox.AppWindow.Handler;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util;
-using FlowBlox.Grid.Views.Main;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.DeepCopier;
@@ -29,7 +28,6 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core;
 using FlowBlox.Core.Models.Drawing;
-using FlowBlox.Core.Constants;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Actions;
@@ -38,6 +36,7 @@ using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Utilities;
 using SkiaSharp;
+using FlowBlox.Core.Constants;
 
 namespace FlowBlox.AppWindow.Contents
 {
@@ -350,61 +349,32 @@ namespace FlowBlox.AppWindow.Contents
 
         private void EditReactiveObject(FlowBlockUIElement flowBlockUIElement, FlowBloxReactiveObject reactiveObject, string propertyName = null, object selectedInstance = null)
         {
-            var framework = FlowBloxOptions.GetOptionInstance().GetOption("PropertyView.UIFramework");
-            if (framework.Value == GlobalConstants.PropertyViewUIFrameworkWPF)
-            {
-                var propertyWindowArgs = new PropertyWindowArgs(reactiveObject, 
-                    readOnly: IsRuntimeActive, 
-                    preselectedProperty: propertyName, 
-                    preselectedInstance: (FlowBloxReactiveObject)selectedInstance);
+            var propertyWindowArgs = new PropertyWindowArgs(
+                reactiveObject,
+                readOnly: IsRuntimeActive,
+                preselectedProperty: propertyName,
+                preselectedInstance: (FlowBloxReactiveObject)selectedInstance);
 
-                var propertyViewWpf = new UICore.Views.PropertyWindow(propertyWindowArgs);
-                var owner = ControlHelper.FindParentOfType<Form>(this, true);
-                WindowsFormWPFHelper.ShowDialog(propertyViewWpf, owner);
-            }
-            else
-            {
+            var propertyViewWpf = new UICore.Views.PropertyWindow(propertyWindowArgs);
+            var owner = ControlHelper.FindParentOfType<Form>(this, true);
+            WindowsFormWPFHelper.ShowDialog(propertyViewWpf, owner);
 
-                var propertyWindow = new Views.PropertyWindow();
-                propertyWindow.StartPosition = FormStartPosition.CenterParent;
-                propertyWindow.Initialize(reactiveObject);
-
-                if (propertyWindow.ShowDialog(FindForm()) == DialogResult.OK)
-                    flowBlockUIElement.UpdateContent(true);
-            }
             flowBlockUIElement.RefreshSize();
-            AppWindow.Instance.ReloadAllObjectManager();
             UpdateUI(appWindowUpdate: true);
         }
 
         private void EditFlowBlock(FlowBlockUIElement flowBlockUIElement, string propertyName = null, object selectedInstance = null)
         {
-            var framework = FlowBloxOptions.GetOptionInstance().GetOption("PropertyView.UIFramework");
-            if (framework.Value == GlobalConstants.PropertyViewUIFrameworkWPF)
-            {
-                var propertyWindowArgs = new PropertyWindowArgs(
-                    flowBlockUIElement.InternalFlowBlock, 
-                    readOnly: IsRuntimeActive, 
-                    preselectedProperty: propertyName);
+            var propertyWindowArgs = new PropertyWindowArgs(
+                flowBlockUIElement.InternalFlowBlock,
+                readOnly: IsRuntimeActive,
+                preselectedProperty: propertyName);
 
-                var propertyViewWpf = new UICore.Views.PropertyWindow(propertyWindowArgs);
-                var owner = ControlHelper.FindParentOfType<Form>(this, true);
-                WindowsFormWPFHelper.ShowDialog(propertyViewWpf, owner);
-            }
-            else
-            {
+            var propertyViewWpf = new UICore.Views.PropertyWindow(propertyWindowArgs);
+            var owner = ControlHelper.FindParentOfType<Form>(this, true);
+            WindowsFormWPFHelper.ShowDialog(propertyViewWpf, owner);
 
-                FlowBlockMainView flowBlockMainView = new FlowBlockMainView();
-                flowBlockMainView.ReadOnly = IsRuntimeActive;
-                flowBlockMainView.Initialize(flowBlockUIElement.InternalFlowBlock);
-                flowBlockMainView.FormClosed += new FormClosedEventHandler(View_FormClosed);
-                flowBlockMainView.StartPosition = FormStartPosition.CenterParent;
-                flowBlockMainView.InitiallyFocussedProperty = propertyName;
-                flowBlockMainView.ShowDialog(this);
-                flowBlockMainView.Update();
-            }
             flowBlockUIElement.RefreshSize();
-            AppWindow.Instance.ReloadAllObjectManager();
             UpdateUI(appWindowUpdate: true);
         }
 
@@ -414,11 +384,6 @@ namespace FlowBlox.AppWindow.Contents
                 return;
 
             EditFlowBlock(_recentFlowBlock);
-        }
-
-        private void View_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            UpdateUI();
         }
 
         private bool HasSelectedGridElements()

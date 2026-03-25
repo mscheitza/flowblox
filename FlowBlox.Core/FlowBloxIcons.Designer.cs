@@ -223,9 +223,49 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] database_cog1 {
+            get {
+                object obj = ResourceManager.GetObject("database_cog1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] database_outline {
+            get {
+                object obj = ResourceManager.GetObject("database_outline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] download {
             get {
                 object obj = ResourceManager.GetObject("download", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] file_delimited_outline {
+            get {
+                object obj = ResourceManager.GetObject("file_delimited_outline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] file_document_outline {
+            get {
+                object obj = ResourceManager.GetObject("file_document_outline", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -293,6 +333,26 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] folder_zip_outline {
+            get {
+                object obj = ResourceManager.GetObject("folder_zip_outline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] form_textbox {
+            get {
+                object obj = ResourceManager.GetObject("form_textbox", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] format_line_style {
             get {
                 object obj = ResourceManager.GetObject("format_line_style", resourceCulture);
@@ -346,6 +406,26 @@ namespace FlowBlox.Core {
         public static byte[] magnify_scan {
             get {
                 object obj = ResourceManager.GetObject("magnify_scan", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] memory {
+            get {
+                object obj = ResourceManager.GetObject("memory", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] microsoft_excel {
+            get {
+                object obj = ResourceManager.GetObject("microsoft_excel", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -423,6 +503,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] robot_outline {
+            get {
+                object obj = ResourceManager.GetObject("robot_outline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] selection_ellipse_arrow_inside {
             get {
                 object obj = ResourceManager.GetObject("selection_ellipse_arrow_inside", resourceCulture);
@@ -463,6 +553,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] shape_outline1 {
+            get {
+                object obj = ResourceManager.GetObject("shape_outline1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] source_branch {
             get {
                 object obj = ResourceManager.GetObject("source_branch", resourceCulture);
@@ -483,6 +583,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] source_merge1 {
+            get {
+                object obj = ResourceManager.GetObject("source_merge1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] table_arrow_down {
             get {
                 object obj = ResourceManager.GetObject("table_arrow_down", resourceCulture);
@@ -496,6 +606,16 @@ namespace FlowBlox.Core {
         public static byte[] table_arrow_up {
             get {
                 object obj = ResourceManager.GetObject("table_arrow_up", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] table_large {
+            get {
+                object obj = ResourceManager.GetObject("table_large", resourceCulture);
                 return ((byte[])(obj));
             }
         }

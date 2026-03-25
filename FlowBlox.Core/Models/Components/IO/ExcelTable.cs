@@ -1,4 +1,7 @@
-﻿using FlowBlox.Core.Models.Runtime;
+using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util;
 using OfficeOpenXml;
 using System.ComponentModel.DataAnnotations;
@@ -7,8 +10,12 @@ using System.Data;
 namespace FlowBlox.Core.Models.Components.IO
 {
     [Display(Name = "ExcelTable_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("ExcelTable_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class ExcelTable : DataTableBase
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.microsoft_excel, 16, new SKColor(22, 163, 74));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.microsoft_excel, 32, new SKColor(22, 163, 74));
         public ExcelTable() : base() 
         {
 
@@ -134,4 +141,7 @@ namespace FlowBlox.Core.Models.Components.IO
         }
     }
 }
+
+
+
 

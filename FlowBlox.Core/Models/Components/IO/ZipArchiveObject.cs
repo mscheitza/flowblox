@@ -1,3 +1,5 @@
+using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Base;
@@ -10,8 +12,12 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.Components.IO
 {
     [Display(Name = "ZipArchiveObject_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("ZipArchiveObject_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class ZipArchiveObject : ManagedObject
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.folder_zip_outline, 16, new SKColor(14, 116, 144));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.folder_zip_outline, 32, new SKColor(14, 116, 144));
         [Display(Name = "PropertyNames_DataSource", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association,
                      SelectionFilterMethod = nameof(GetPossibleDataSources),
@@ -233,6 +239,9 @@ namespace FlowBlox.Core.Models.Components.IO
                 DataSource.Content = _archiveContent;
         }
 
+        public override List<string> GetDisplayableProperties()
+            => [nameof(Name), nameof(DataSource)];
+
         public override void RegisterPropertyChangedEventHandlers()
         {
             if (DataSource != null)
@@ -248,3 +257,5 @@ namespace FlowBlox.Core.Models.Components.IO
         }
     }
 }
+
+

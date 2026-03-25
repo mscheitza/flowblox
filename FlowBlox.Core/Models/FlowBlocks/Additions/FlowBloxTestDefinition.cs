@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-using FlowBlox.Core.Models.Base;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Base;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Additions
 {
+    [Display(Name = "FlowBloxTestDefinition_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("FlowBloxTestDefinition_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class FlowBloxTestDefinition : ManagedObject, INotifyPropertyChanged
     {
         private ObservableCollection<FlowBlockTestDataset> _entries;
@@ -64,5 +67,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         {
             Entries = new ObservableCollection<FlowBlockTestDataset>();
         }
+
+        public override List<string> GetDisplayableProperties()
+            => [nameof(Name)];
     }
 }

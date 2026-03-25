@@ -1,4 +1,6 @@
-﻿using FlowBlox.Core.Attributes;
+using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Base;
 using Models.FlowBlocks.AI;
@@ -7,8 +9,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer
 {
+    [Display(Name = "TypeNames_Tokenizer", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("TypeNames_Tokenizer_Plural", typeof(FlowBloxTexts))]
     public abstract class TokenizerBase : ManagedObject
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.form_textbox, 16, new SKColor(8, 145, 178));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.form_textbox, 32, new SKColor(8, 145, 178));
         protected TokenizerBase()
         {
             this.TokenTranslations = new ObservableCollection<TokenTranslation>();
@@ -86,3 +93,5 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer
         }
     }
 }
+
+

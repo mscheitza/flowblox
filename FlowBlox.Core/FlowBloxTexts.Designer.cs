@@ -484,6 +484,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Provider ähnelt.
+        /// </summary>
+        public static string AIProviderBase_DisplayName {
+            get {
+                return ResourceManager.GetString("AIProviderBase_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Providers ähnelt.
+        /// </summary>
+        public static string AIProviderBase_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("AIProviderBase_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die EOS token ID ähnelt.
         /// </summary>
         public static string AiTokenizerBase_EOSToken {
@@ -946,6 +964,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die BERT tokenizers ähnelt.
+        /// </summary>
+        public static string BertTokenizer_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("BertTokenizer_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Vocabulary file ähnelt.
         /// </summary>
         public static string BertTokenizer_VocabFile {
@@ -1351,6 +1378,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die CSV Tables ähnelt.
+        /// </summary>
+        public static string CsvTable_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("CsvTable_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Separator ähnelt.
         /// </summary>
         public static string CsvTable_Separator {
@@ -1599,6 +1635,15 @@ namespace FlowBlox.Core {
         public static string ExcelTable_DisplayName {
             get {
                 return ResourceManager.GetString("ExcelTable_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Excel Tables ähnelt.
+        /// </summary>
+        public static string ExcelTable_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("ExcelTable_DisplayName_Plural", resourceCulture);
             }
         }
         
@@ -2098,6 +2143,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Files ähnelt.
+        /// </summary>
+        public static string FileObject_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("FileObject_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Delete file ähnelt.
         /// </summary>
         public static string FileObjectUIActions_Delete {
@@ -2287,6 +2341,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Objects ähnelt.
+        /// </summary>
+        public static string FlowBloxResourceUtil_FallbackPluralSuffix {
+            get {
+                return ResourceManager.GetString("FlowBloxResourceUtil_FallbackPluralSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test case configuration ähnelt.
         /// </summary>
         public static string FlowBloxTestConfiguration {
@@ -2382,6 +2445,24 @@ namespace FlowBlox.Core {
         public static string FlowBloxTestControl_CbItem_ManualExecution {
             get {
                 return ResourceManager.GetString("FlowBloxTestControl_CbItem_ManualExecution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test Definition ähnelt.
+        /// </summary>
+        public static string FlowBloxTestDefinition_DisplayName {
+            get {
+                return ResourceManager.GetString("FlowBloxTestDefinition_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test Definitions ähnelt.
+        /// </summary>
+        public static string FlowBloxTestDefinition_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("FlowBloxTestDefinition_DisplayName_Plural", resourceCulture);
             }
         }
         
@@ -2796,6 +2877,24 @@ namespace FlowBlox.Core {
         public static string FSDirectoryIteratorFlowBlock_ResultFields {
             get {
                 return ResourceManager.GetString("FSDirectoryIteratorFlowBlock_ResultFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Gemini Provider ähnelt.
+        /// </summary>
+        public static string GeminiAIProvider_DisplayName {
+            get {
+                return ResourceManager.GetString("GeminiAIProvider_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Gemini Providers ähnelt.
+        /// </summary>
+        public static string GeminiAIProvider_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("GeminiAIProvider_DisplayName_Plural", resourceCulture);
             }
         }
         
@@ -3944,6 +4043,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Memory Objects ähnelt.
+        /// </summary>
+        public static string MemoryObject_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("MemoryObject_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Specifies a stored or runtime field from which the textual or binary content is read or to which it is written (depending on the data type). Application-wide fields can be created via Window → Custom Fields → Custom Memory Fields. The content is then read from or stored in this field. ähnelt.
         /// </summary>
         public static string MemoryObject_Field_Tooltip {
@@ -4508,6 +4616,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OpenAI Provider ähnelt.
+        /// </summary>
+        public static string OpenAIProvider_DisplayName {
+            get {
+                return ResourceManager.GetString("OpenAIProvider_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OpenAI Providers ähnelt.
+        /// </summary>
+        public static string OpenAIProvider_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("OpenAIProvider_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Organization ID ähnelt.
         /// </summary>
         public static string OpenAIProvider_OrganizationId {
@@ -4949,6 +5075,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die QA Tokenizer ähnelt.
+        /// </summary>
+        public static string QATokenizerBase_DisplayName {
+            get {
+                return ResourceManager.GetString("QATokenizerBase_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die QA Tokenizers ähnelt.
+        /// </summary>
+        public static string QATokenizerBase_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("QATokenizerBase_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Behavior ähnelt.
         /// </summary>
         public static string RegexMatchModifier_Behavior {
@@ -5165,6 +5309,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die RoBERTa BPE Tokenizers (Q&amp;A) ähnelt.
+        /// </summary>
+        public static string RobertaQATokenizer_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("RobertaQATokenizer_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer configuration ähnelt.
         /// </summary>
         public static string RobertaQATokenizer_TokenizerConfiguration {
@@ -5341,6 +5494,15 @@ namespace FlowBlox.Core {
         public static string SQLTable_DisplayName {
             get {
                 return ResourceManager.GetString("SQLTable_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SQL Tables ähnelt.
+        /// </summary>
+        public static string SQLTable_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("SQLTable_DisplayName_Plural", resourceCulture);
             }
         }
         
@@ -5903,6 +6065,51 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Providers ähnelt.
+        /// </summary>
+        public static string TypeNames_AIProvider_Plural {
+            get {
+                return ResourceManager.GetString("TypeNames_AIProvider_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Data Object ähnelt.
+        /// </summary>
+        public static string TypeNames_DataObject {
+            get {
+                return ResourceManager.GetString("TypeNames_DataObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Data Objects ähnelt.
+        /// </summary>
+        public static string TypeNames_DataObject_Plural {
+            get {
+                return ResourceManager.GetString("TypeNames_DataObject_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Data Table ähnelt.
+        /// </summary>
+        public static string TypeNames_DataTable {
+            get {
+                return ResourceManager.GetString("TypeNames_DataTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Data Tables ähnelt.
+        /// </summary>
+        public static string TypeNames_DataTable_Plural {
+            get {
+                return ResourceManager.GetString("TypeNames_DataTable_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Gemini Provider ähnelt.
         /// </summary>
         public static string TypeNames_GeminiAIProvider {
@@ -5912,11 +6119,47 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Managed Object ähnelt.
+        /// </summary>
+        public static string TypeNames_ManagedObject {
+            get {
+                return ResourceManager.GetString("TypeNames_ManagedObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Managed Objects ähnelt.
+        /// </summary>
+        public static string TypeNames_ManagedObject_Plural {
+            get {
+                return ResourceManager.GetString("TypeNames_ManagedObject_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die OpenAI Provider ähnelt.
         /// </summary>
         public static string TypeNames_OpenAIProvider {
             get {
                 return ResourceManager.GetString("TypeNames_OpenAIProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizer ähnelt.
+        /// </summary>
+        public static string TypeNames_Tokenizer {
+            get {
+                return ResourceManager.GetString("TypeNames_Tokenizer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizers ähnelt.
+        /// </summary>
+        public static string TypeNames_Tokenizer_Plural {
+            get {
+                return ResourceManager.GetString("TypeNames_Tokenizer_Plural", resourceCulture);
             }
         }
         
@@ -6016,6 +6259,15 @@ namespace FlowBlox.Core {
         public static string VocabMergesConfiguration_DisplayName {
             get {
                 return ResourceManager.GetString("VocabMergesConfiguration_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Vocab/Merges Configurations ähnelt.
+        /// </summary>
+        public static string VocabMergesConfiguration_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("VocabMergesConfiguration_DisplayName_Plural", resourceCulture);
             }
         }
         
@@ -7161,6 +7413,15 @@ namespace FlowBlox.Core {
         public static string ZipArchiveObject_DisplayName {
             get {
                 return ResourceManager.GetString("ZipArchiveObject_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ZIP Archives ähnelt.
+        /// </summary>
+        public static string ZipArchiveObject_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("ZipArchiveObject_DisplayName_Plural", resourceCulture);
             }
         }
         

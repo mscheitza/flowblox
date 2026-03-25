@@ -1,4 +1,6 @@
-﻿using FlowBlox.Core.Attributes;
+using SkiaSharp;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Util.Fields;
 using System.ComponentModel.DataAnnotations;
@@ -6,8 +8,12 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.Core
 {
     [Display(Name = "VocabMergesConfiguration_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("VocabMergesConfiguration_DisplayName_Plural", typeof(FlowBloxTexts))]
     public class VocabMergesConfiguration : ManagedObject
     {
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.source_merge, 16, new SKColor(2, 132, 199));
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.source_merge, 32, new SKColor(2, 132, 199));
         private Microsoft.ML.Tokenizers.Tokenizer _tokenizer;
 
         [ConditionallyRequired(CheckReadOnly = true)]
@@ -77,3 +83,5 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.Core
         }
     }
 }
+
+

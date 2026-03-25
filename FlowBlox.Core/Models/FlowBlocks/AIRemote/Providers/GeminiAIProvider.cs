@@ -1,3 +1,4 @@
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
@@ -14,7 +15,8 @@ using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 {
-    [Display(Name = "TypeNames_GeminiAIProvider", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "GeminiAIProvider_DisplayName", ResourceType = typeof(FlowBloxTexts))]
+    [PluralDisplayName("GeminiAIProvider_DisplayName_Plural", typeof(FlowBloxTexts))]
     public sealed class GeminiAIProvider : AIProviderBase
     {
         public override string ProviderType => "Gemini";

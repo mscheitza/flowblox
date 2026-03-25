@@ -166,8 +166,20 @@
   <data name="database_cog" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\database-cog.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="database_cog1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\database-cog.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="database_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\database-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\download.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="file_delimited_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file-delimited-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="file_document_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file-document-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="file_document_remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\file-document-remove.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -187,11 +199,17 @@
   <data name="folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\folder-open.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="folder_zip_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\folder-zip-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="format_line_style" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\format-line-style.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="format_list_bulleted" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\format-list-bulleted.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="form_textbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\form-textbox.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="identifier" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\identifier.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -204,6 +222,12 @@
   </data>
   <data name="magnify_scan" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\magnify-scan.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="memory" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\memory.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="microsoft_excel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\microsoft-excel.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="note_text" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\note-text.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -226,6 +250,9 @@
   <data name="robot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\robot.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="robot_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\robot-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="selection_ellipse_arrow_inside" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\selection-ellipse-arrow-inside.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -238,10 +265,16 @@
   <data name="shape_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\shape-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="shape_outline1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\shape-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="source_branch" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\source-branch.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="source_merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\source-merge.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="source_merge1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\source-merge.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="table_arrow_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -249,6 +282,9 @@
   </data>
   <data name="table_arrow_up" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\table-arrow-up.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="table_large" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\table-large.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="text_long" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\text-long.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
