@@ -36,6 +36,8 @@ namespace FlowBlox.AppWindow
             itmOpenInputDir = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenOutputDir = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenProjectDir = new System.Windows.Forms.ToolStripMenuItem();
+            itmOpenProjectInputDir = new System.Windows.Forms.ToolStripMenuItem();
+            itmOpenProjectOutputDir = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
             itmOpenRuntimeLogDirectory = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenApplicationLogDirectory = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +54,7 @@ namespace FlowBlox.AppWindow
             mnItmProject = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenProject = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenFromProjectSpace = new System.Windows.Forms.ToolStripMenuItem();
+            itmRecentProjects = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             itmEditProject = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -76,6 +79,7 @@ namespace FlowBlox.AppWindow
             itmResetDockablePanels = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             itmToolbox = new System.Windows.Forms.ToolStripMenuItem();
+            mnItmDirectories = new System.Windows.Forms.ToolStripMenuItem();
             mnItmHelp = new System.Windows.Forms.ToolStripMenuItem();
             itmVisitOnline = new System.Windows.Forms.ToolStripMenuItem();
             itmGitHub = new System.Windows.Forms.ToolStripMenuItem();
@@ -100,7 +104,7 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmMisc
             // 
-            mnItmMisc.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmOpenInputDir, itmOpenOutputDir, itmOpenProjectDir, toolStripSeparator20, itmOpenRuntimeLogDirectory, itmOpenApplicationLogDirectory, toolStripSeparator8, itmFbProjects, itmFbExtensions, toolStripSeparator1, itmOptions });
+            mnItmMisc.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmManageInputTemplates, itmUserFields, toolStripSeparator5, itmFbProjects, itmFbExtensions, toolStripSeparator1, itmOptions });
             mnItmMisc.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmMisc.Name = "mnItmMisc";
             mnItmMisc.Size = new System.Drawing.Size(106, 19);
@@ -132,6 +136,22 @@ namespace FlowBlox.AppWindow
             itmOpenProjectDir.Size = new System.Drawing.Size(403, 22);
             itmOpenProjectDir.Text = "itmOpenProjectDir_Text";
             itmOpenProjectDir.Click += itmOpenProjectDir_Click;
+            // 
+            // itmOpenProjectInputDir
+            // 
+            itmOpenProjectInputDir.Image = (System.Drawing.Image)resources.GetObject("itmOpenProjectInputDir.Image");
+            itmOpenProjectInputDir.Name = "itmOpenProjectInputDir";
+            itmOpenProjectInputDir.Size = new System.Drawing.Size(403, 22);
+            itmOpenProjectInputDir.Text = "itmOpenProjectInputDir_Text";
+            itmOpenProjectInputDir.Click += itmOpenProjectInputDir_Click;
+            // 
+            // itmOpenProjectOutputDir
+            // 
+            itmOpenProjectOutputDir.Image = (System.Drawing.Image)resources.GetObject("itmOpenProjectOutputDir.Image");
+            itmOpenProjectOutputDir.Name = "itmOpenProjectOutputDir";
+            itmOpenProjectOutputDir.Size = new System.Drawing.Size(403, 22);
+            itmOpenProjectOutputDir.Text = "itmOpenProjectOutputDir_Text";
+            itmOpenProjectOutputDir.Click += itmOpenProjectOutputDir_Click;
             // 
             // toolStripSeparator20
             // 
@@ -216,7 +236,7 @@ namespace FlowBlox.AppWindow
             // menuStrip
             // 
             menuStrip.BackColor = System.Drawing.SystemColors.Control;
-            menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnItmProject, mnItmEdit, mnItmWindows, mnItmMisc, mnItmHelp });
+            menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnItmProject, mnItmEdit, mnItmWindows, mnItmMisc, mnItmDirectories, mnItmHelp });
             menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             menuStrip.Location = new System.Drawing.Point(0, 0);
             menuStrip.Name = "menuStrip";
@@ -226,7 +246,7 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmProject
             // 
-            mnItmProject.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmCreateProject, itmOpenProject, itmOpenFromProjectSpace, toolStripSeparator11, itmEditProject, toolStripSeparator2, itmSaveProject, itmSaveToProjectSpace, itmSaveAs, toolStripSeparator3, itmCloseProject, toolStripSeparator4, itmQuitApplication });
+            mnItmProject.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmCreateProject, itmOpenProject, itmOpenFromProjectSpace, itmRecentProjects, toolStripSeparator11, itmEditProject, toolStripSeparator2, itmSaveProject, itmSaveToProjectSpace, itmSaveAs, toolStripSeparator3, itmCloseProject, toolStripSeparator4, itmQuitApplication });
             mnItmProject.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmProject.Name = "mnItmProject";
             mnItmProject.Size = new System.Drawing.Size(118, 19);
@@ -248,6 +268,12 @@ namespace FlowBlox.AppWindow
             itmOpenFromProjectSpace.Size = new System.Drawing.Size(243, 22);
             itmOpenFromProjectSpace.Text = "itmOpenFromProjectSpace_Text";
             itmOpenFromProjectSpace.Click += itmOpenFromProjectSpace_Click;
+            // 
+            // itmRecentProjects
+            // 
+            itmRecentProjects.Name = "itmRecentProjects";
+            itmRecentProjects.Size = new System.Drawing.Size(243, 22);
+            itmRecentProjects.Text = "itmRecentProjects_Text";
             // 
             // toolStripSeparator11
             // 
@@ -370,7 +396,7 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmWindows
             // 
-            mnItmWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmManageInputTemplates, itmUserFields, toolStripSeparator5, itmDockablePanels, itmResetDockablePanels, toolStripSeparator6, itmToolbox });
+            mnItmWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmDockablePanels, itmResetDockablePanels, toolStripSeparator6, itmToolbox });
             mnItmWindows.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmWindows.Name = "mnItmWindows";
             mnItmWindows.Size = new System.Drawing.Size(130, 19);
@@ -426,6 +452,14 @@ namespace FlowBlox.AppWindow
             itmToolbox.Size = new System.Drawing.Size(243, 22);
             itmToolbox.Text = "itmToolbox_Text";
             itmToolbox.Click += itmToolbox_Click;
+            // 
+            // mnItmDirectories
+            // 
+            mnItmDirectories.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmOpenInputDir, itmOpenOutputDir, itmOpenProjectDir, toolStripSeparator8, itmOpenProjectInputDir, itmOpenProjectOutputDir, toolStripSeparator20, itmOpenRuntimeLogDirectory, itmOpenApplicationLogDirectory });
+            mnItmDirectories.ForeColor = System.Drawing.SystemColors.ControlText;
+            mnItmDirectories.Name = "mnItmDirectories";
+            mnItmDirectories.Size = new System.Drawing.Size(132, 19);
+            mnItmDirectories.Text = "mnItmDirectories_Text";
             // 
             // mnItmHelp
             // 
@@ -658,6 +692,10 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripMenuItem itmManageInputTemplates;
         private System.Windows.Forms.ToolStripMenuItem itmOpenInputDir;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem itmRecentProjects;
+        private System.Windows.Forms.ToolStripMenuItem mnItmDirectories;
+        private System.Windows.Forms.ToolStripMenuItem itmOpenProjectInputDir;
+        private System.Windows.Forms.ToolStripMenuItem itmOpenProjectOutputDir;
     }
 }
 

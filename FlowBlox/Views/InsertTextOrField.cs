@@ -3,8 +3,12 @@ using System.Windows.Forms;
 using FlowBlox.Core;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Controls;
+using FlowBlox.Core.Util.WPF;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Models;
+using WpfFieldSelectionWindow = FlowBlox.UICore.Views.FieldSelectionWindow;
 
 namespace FlowBlox.Views
 {
@@ -105,14 +109,22 @@ namespace FlowBlox.Views
         /// </summary>
         private void btSelectField_Click(object sender, EventArgs e)
         {
-            var selectionDialog = new FieldSelectionWindow(_flowBlock);
-            selectionDialog.ShowDialog(this);
-            if (selectionDialog.SelectedFields.Count == 1)
+            var args = new FieldSelectionWindowArgs
             {
-                tbSelectedField.Text = selectionDialog.SelectedFields[0].FullyQualifiedName;
+                FlowBlock = _flowBlock,
+                SelectionMode = FieldSelectionMode.Fields,
+                MultiSelect = false,
+                IsRequired = true
+            };
 
-                _selectedField = selectionDialog.SelectedFields[0];
-                _selectedFieldRequired = selectionDialog.IsRequired;
+            var selectionDialog = new WpfFieldSelectionWindow(args);
+            if (WindowsFormWPFHelper.ShowDialog(selectionDialog, this) == true &&
+                selectionDialog.Result?.SelectedFields?.Count == 1)
+            {
+                var selectedField = selectionDialog.Result.SelectedFields[0];
+                tbSelectedField.Text = selectedField.FullyQualifiedName;
+                _selectedField = selectedField;
+                _selectedFieldRequired = selectionDialog.Result.IsRequired;
             }
         }
     }

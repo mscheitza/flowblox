@@ -33,10 +33,10 @@ namespace FlowBlox.AIAssistant.Tools
                     return Task.FromResult(ToolHandlerUtilities.Fail(canConnectReason));
                 }
 
-                if (from is InvokerFlowBlock invokerFrom)
+                if (from is RecursiveCallFlowBlock recursiveCallFrom)
                 {
-                    var wasChanged = !ReferenceEquals(invokerFrom.TargetFlowBlock, to);
-                    invokerFrom.TargetFlowBlock = to;
+                    var wasChanged = !ReferenceEquals(recursiveCallFrom.TargetFlowBlock, to);
+                    recursiveCallFrom.TargetFlowBlock = to;
 
                     return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
                     {
@@ -64,12 +64,12 @@ namespace FlowBlox.AIAssistant.Tools
                 }));
             }
 
-            if (from is InvokerFlowBlock invokerFromOnDisconnect)
+            if (from is RecursiveCallFlowBlock recursiveCallFromOnDisconnect)
             {
-                var disconnectedInvoke = ReferenceEquals(invokerFromOnDisconnect.TargetFlowBlock, to);
+                var disconnectedInvoke = ReferenceEquals(recursiveCallFromOnDisconnect.TargetFlowBlock, to);
                 if (disconnectedInvoke)
                 {
-                    invokerFromOnDisconnect.TargetFlowBlock = null;
+                    recursiveCallFromOnDisconnect.TargetFlowBlock = null;
                 }
 
                 return Task.FromResult(ToolHandlerUtilities.Ok(new JObject

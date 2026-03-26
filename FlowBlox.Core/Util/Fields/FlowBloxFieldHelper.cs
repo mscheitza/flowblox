@@ -58,6 +58,20 @@ namespace FlowBlox.Core.Util.Fields
                     if (value.Contains(placeholder))
                         value = value.Replace(placeholder, prop.Value ?? "");
                 }
+
+                var propertyValuesByKey = propertyElements
+                    .GroupBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(x => x.Key, x => x.First().Value ?? string.Empty, StringComparer.OrdinalIgnoreCase);
+
+                foreach (var alias in activeProject.ProjectPropertyPlaceholderAliases)
+                {
+                    if (!propertyValuesByKey.TryGetValue(alias.Value, out var resolvedValue))
+                        continue;
+
+                    var aliasPlaceholder = $"$Project::{alias.Key}";
+                    if (value.Contains(aliasPlaceholder))
+                        value = value.Replace(aliasPlaceholder, resolvedValue ?? string.Empty);
+                }
             }
 
             // Options elements

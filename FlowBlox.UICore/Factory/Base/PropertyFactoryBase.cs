@@ -1,9 +1,11 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util.Resources;
+using System.Collections;
 using System.Reflection;
 
 namespace FlowBlox.UICore.Factory.Base
@@ -119,7 +121,78 @@ namespace FlowBlox.UICore.Factory.Base
 
         protected virtual void DeleteInstance(object instance)
         {
+            if (instance == null)
+                return;
+
+            var deletedInstances = new HashSet<object>(ReferenceEqualityComparer.Instance);
+            DeleteInstanceRecursive(instance, deletedInstances);
+        }
+
+        private void DeleteInstanceRecursive(object instance, ISet<object> deletedInstances)
+        {
+            if (instance == null || !deletedInstances.Add(instance))
+                return;
+
+            if (IsNestedRowDeleteScope(instance))
+            {
+                foreach (var nestedManagedObject in GetNestedManagedObjects(instance))
+                {
+                    DeleteInstanceRecursive(nestedManagedObject, deletedInstances);
+                }
+            }
+
             _registry.Unregister(instance);
+        }
+
+        private static bool IsNestedRowDeleteScope(object instance)
+        {
+            return instance is FlowBloxReactiveObject && 
+                   instance is not FlowBloxComponent;
+        }
+
+        private static IEnumerable<IManagedObject> GetNestedManagedObjects(object instance)
+        {
+            var instanceType = instance.GetType();
+            var properties = instanceType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var property in properties)
+            {
+                if (!property.CanRead || property.GetIndexParameters().Length > 0)
+                    continue;
+
+                var flowBlockUIAttribute = property.GetCustomAttribute<FlowBlockUIAttribute>();
+                if (!IsRowManagedAssociation(flowBlockUIAttribute))
+                    continue;
+
+                object propertyValue = property.GetValue(instance);
+                if (propertyValue is IManagedObject managedObject)
+                {
+                    yield return managedObject;
+                    continue;
+                }
+
+                if (propertyValue is IEnumerable enumerable && property.PropertyType != typeof(string))
+                {
+                    foreach (var childManagedObject in enumerable.OfType<IManagedObject>())
+                    {
+                        yield return childManagedObject;
+                    }
+                }
+            }
+        }
+
+        private static bool IsRowManagedAssociation(FlowBlockUIAttribute flowBlockUIAttribute)
+        {
+            if (flowBlockUIAttribute?.Factory != UIFactory.Association)
+                return false;
+
+            var operations = flowBlockUIAttribute.Operations;
+            var supportsCreate = operations.HasFlag(UIOperations.Create);
+            var supportsDelete = operations.HasFlag(UIOperations.Delete);
+            var supportsLink = operations.HasFlag(UIOperations.Link);
+            var supportsUnlink = operations.HasFlag(UIOperations.Unlink);
+
+            return supportsCreate && supportsDelete && !supportsLink && !supportsUnlink;
         }
 
         public bool IsDeletable(object instance, TOwner owner, object excludeTarget = null)

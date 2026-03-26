@@ -86,11 +86,11 @@ namespace FlowBlox.AppWindow.Handler
                     return;
 
                 FlowBloxBaseAction connectAction;
-                if (startElement.InternalFlowBlock is InvokerFlowBlock)
+                if (startElement.InternalFlowBlock is RecursiveCallFlowBlock)
                 {
                     connectAction = new FlowBloxInvokeAction()
                     {
-                        From = (InvokerFlowBlock)startElement.InternalFlowBlock,
+                        From = (RecursiveCallFlowBlock)startElement.InternalFlowBlock,
                         To = endElement.InternalFlowBlock
                     };
                 }
@@ -152,3 +152,4 @@ namespace FlowBlox.AppWindow.Handler
         }
     }
 }
+

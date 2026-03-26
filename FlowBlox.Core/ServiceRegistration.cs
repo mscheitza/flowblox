@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Interceptors;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Migration.MigrationStrategies;
 using FlowBlox.Core.Provider.Project;
@@ -15,6 +16,8 @@ namespace FlowBlox.Core
             serviceCollection.AddTransient<IFlowBloxMigrationStrategy, FlowBloxComponentMigrationStrategy_1_0_0>();
             serviceCollection.AddSingleton<IFlowBloxCategoryRegistrationService, FlowBlockCategoryRegistrationService>();
             serviceCollection.AddSingleton<IFlowBlockToolboxRegistrationService, FlowBlockToolboxRegistrationService>();
+            serviceCollection.AddSingleton<IFlowBloxLegacyTypeMappingService, FlowBloxCoreLegacyTypeMappingService>();
+            serviceCollection.AddTransient<IRuntimeInterceptor, RuntimeDebuggingInterceptor>();
         }
     }
 }

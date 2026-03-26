@@ -2,7 +2,6 @@
 <root>
 	<!-- 
     Microsoft ResX Schema 
-    
     Version 2.0
     
     The primary goals of this format is to allow a simple XML format 
@@ -827,25 +826,25 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	<data name="InvocationFieldTransferConfig_TransferTo" xml:space="preserve">
 		<value>Übertragen nach</value>
 	</data>
-	<data name="InvokerFlowBlock_Description" xml:space="preserve">
+	<data name="RecursiveCallFlowBlock_Description" xml:space="preserve">
 		<value>Ruft einen Ziel-Flow-Block auf und überträgt dabei definierte Ausgabe-Feldwerte aus dem Eingangs-Flow-Block mittels konfigurierbarem Feldmapping. Alle Ausgabefelder des Ziel-Flow-Blocks müssen durch ein Mapping abgedeckt sein. Dieser Flow-Block eignet sich insbesondere zur Realisierung wiederholter Abläufe. Beachten Sie, dass der Ziel-Flow-Block auf dem Pfad des Eingangs-Flow-Blocks liegen muss.</value>
 	</data>
-	<data name="InvokerFlowBlock_DisplayName" xml:space="preserve">
+	<data name="RecursiveCallFlowBlock_DisplayName" xml:space="preserve">
 		<value>Rekursiver Aufruf</value>
 	</data>
-	<data name="InvokerFlowBlock_FieldTransferConfigs" xml:space="preserve">
+	<data name="RecursiveCallFlowBlock_FieldTransferConfigs" xml:space="preserve">
 		<value>Feldübertragungen</value>
 	</data>
-	<data name="InvokerFlowBlock_Groups_Transferrations" xml:space="preserve">
+	<data name="RecursiveCallFlowBlock_Groups_Transferrations" xml:space="preserve">
 		<value>Übertragungen</value>
 	</data>
-	<data name="InvokerFlowBlock_TargetFlowBlock" xml:space="preserve">
+	<data name="RecursiveCallFlowBlock_TargetFlowBlock" xml:space="preserve">
 		<value>Ziel-Flowblock</value>
 	</data>
-	<data name="InvokerFlowBlock_Validation_TargetNotReachable" xml:space="preserve">
+	<data name="RecursiveCallFlowBlock_Validation_TargetNotReachable" xml:space="preserve">
 		<value>Der Ziel-Flow-Block muss im aktuellen Ausführungspfad liegen.</value>
 	</data>
-	<data name="InvokerFlowBlock_Validation_UnmappedFields" xml:space="preserve">
+	<data name="RecursiveCallFlowBlock_Validation_UnmappedFields" xml:space="preserve">
 		<value>Alle Felder des Ziel-Flow-Blocks müssen abgebildet werden. Es fehlen Übertragungen für folgende Felder: {0}</value>
 	</data>
 	<data name="JoinFlowBlock_Description" xml:space="preserve">
@@ -2353,7 +2352,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 		<value>Vorhandenes ZIP-Archiv verwenden</value>
 	</data>
 	<data name="ZipArchiveFileIteratorFlowBlock_DisplayName" xml:space="preserve">
-		<value>ZIP-Datei-Iterator</value>
+		<value>ZIP-Archiv auslesen</value>
 	</data>
 	<data name="ZipArchiveFileIteratorFlowBlock_Description" xml:space="preserve">
 		<value>Iteriert rekursiv über alle Dateien im ZIP-Archiv und gibt Dateipfad sowie Inhalt aus.</value>
@@ -2365,7 +2364,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 		<value>Ergebnisfelder</value>
 	</data>
 	<data name="ZipArchiveFileAppenderFlowBlock_DisplayName" xml:space="preserve">
-		<value>ZIP-Datei-Appender</value>
+		<value>Datei in ZIP-Archiv schreiben</value>
 	</data>
 	<data name="ZipArchiveFileAppenderFlowBlock_Description" xml:space="preserve">
 		<value>Schreibt eine Datei in ein ZIP-Archiv an einen absoluten Archivpfad.</value>
@@ -2407,7 +2406,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 		<value>Schreibzugriff</value>
 	</data>
 	<data name="FSDirectoryIteratorFlowBlock_DisplayName" xml:space="preserve">
-		<value>Dateisystem-Verzeichnis-Iterator</value>
+		<value>Dateien in Verzeichnis ermitteln</value>
 	</data>
 	<data name="FSDirectoryIteratorFlowBlock_Description" xml:space="preserve">
 		<value>Listet Dateien aus einem Verzeichnis auf und gibt für jede Datei Metadatenfelder aus.</value>
@@ -2452,7 +2451,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 		<value>ZIP-Archiv</value>
 	</data>
 	<data name="ZipArchiveCreatorFlowBlock_DisplayName" xml:space="preserve">
-		<value>ZIP-Archiv-Ersteller</value>
+		<value>ZIP-Archiv erstellen</value>
 	</data>
 	<data name="ZipArchiveCreatorFlowBlock_Description" xml:space="preserve">
 		<value>Erstellt ein neues In-Memory-ZIP-Archiv im ausgewählten ZIP-Archiv-ManagedObject.</value>
@@ -2560,6 +2559,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 		<value>Vokabular-/Merges-Konfigurationen</value>
 	</data>
 </root>
+
 
 
 

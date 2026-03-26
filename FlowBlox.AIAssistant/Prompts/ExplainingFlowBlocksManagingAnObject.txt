@@ -1,13 +1,27 @@
 Explaining "FlowBlock manages object":
 
-- Some flow blocks create/manage a runtime object (for example JSON object, XML document, browser session).
-- Downstream blocks on the same path operate on that managed object (writers, selectors, outputs).
+- Some flow blocks initialize and manage a runtime object (for example XmlDocumentFlowBlock, JsonObjectFlowBlock).
+- Downstream blocks on the same path work on this managed object (node writers, selectors, outputs).
+- Important: the manager initializes the object when it is executed. Downstream blocks do not create a new object unless manager scope causes re-execution.
 
-Lifecycle rule:
-- Object creation position defines scope.
-- If object-managing block is before an iterator (for example TableReader with N rows): one object can accumulate data from all rows.
-- If object-managing block is after an iterator: a new object is created per dataset/row.
+Lifecycle and scope rule:
+- The position of the object-managing flow block defines lifetime and reuse.
+- Manager before an iterator (for example TableReader with N rows): usually one object is reused and enriched across rows.
+- Manager after an iterator: typically a new object is created per row/dataset.
 
-Design patterns:
-- Aggregated output (all rows in one object/file): Start -> ObjectManager -> Iterator -> ObjectWriter -> Output/FileWriter
-- Per-row output (one object/file per row): Start -> Iterator -> ObjectManager -> ObjectWriter -> Output/FileWriter (usually with field placeholders in file name)
+Flow-order patterns:
+- Aggregated object (all rows in one object/file):
+  Start -> ObjectManager -> Iterator -> ObjectWriter -> ObjectOutput -> FileWriter
+- Per-row object/file:
+  Start -> Iterator -> ObjectManager -> ObjectWriter -> ObjectOutput -> FileWriter
+  (usually with field placeholders in file naming)
+
+Concrete XML example (aggregated):
+- Start -> XmlDocumentFlowBlock -> TableReader -> XmlDocumentNodeWriter -> XmlDocumentOutput -> FileWriter
+- Behavior:
+  - XmlDocumentFlowBlock creates one XML document.
+  - TableReader iterates rows.
+  - XmlDocumentNodeWriter appends one node per row.
+  - Without IterationContext, XmlDocumentOutput is called N times (once per row/iteration).
+  - With IterationContext = XmlDocumentFlowBlock, XmlDocumentOutput is called once after reader completion, then FileWriter writes once.
+  - For IterationContext details, see: "Explaining IterationContext"

@@ -1,4 +1,6 @@
-﻿namespace FlowBlox.Core.Runner.Contracts
+﻿using FlowBlox.Core.Models.Runtime.Debugging;
+
+namespace FlowBlox.Core.Runner.Contracts
 {
     public sealed class RunnerResponse
     {
@@ -19,7 +21,10 @@
         public DateTime StartedUtc { get; set; }
         public DateTime FinishedUtc { get; set; }
         public string LogfilePath { get; set; }
+        public string DebuggingResultFilePath { get; set; }
+        public RuntimeCancellationKind? CancellationKind { get; set; }
+        public string CancellationReason { get; set; }
 
-        public Dictionary<string, List<ProjectOutputDatasetDto>> Outputs { get; set; } 
+        public Dictionary<string, List<ProjectOutputDatasetDto>> Outputs { get; set; }
     }
 }

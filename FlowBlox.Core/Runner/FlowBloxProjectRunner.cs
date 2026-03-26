@@ -1,12 +1,14 @@
+﻿using FlowBlox.Core.Authentication;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Models.Runtime.Debugging;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Util;
 using FlowBlox.Core.Runner.Contracts;
-using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
-using FlowBlox.Core.Authentication;
+using FlowBlox.Core.Runner.Serialization;
+using FlowBlox.Core.Util;
 
 namespace FlowBlox.Core.Runner
 {
@@ -68,6 +70,7 @@ namespace FlowBlox.Core.Runner
             };
 
             FlowBloxRuntime runtime = null;
+            CancellationTokenSource timeoutCts = null;
 
             try
             {
@@ -115,9 +118,8 @@ namespace FlowBlox.Core.Runner
                 runtime = new FlowBloxRuntime(project)
                 {
                     IsNoDesignerMode = true,
-
-                    // Note: ExecuteProjectFlowBlock/RunnerHost may force this to false before calling the runner.
-                    AutoRestart = request.AutoRestart
+                    AutoRestart = request.AutoRestart, // Note: ExecuteProjectFlowBlock/RunnerHost may force this to false before calling the runner.
+                    ExternalDebuggingInformation = MapDebuggingInformation(request.ExternalDebuggingInformation)
                 };
 
                 response.LogfilePath = runtime.GetLogfilePath();
@@ -140,44 +142,43 @@ namespace FlowBlox.Core.Runner
                     }
 
                     if (request.AbortOnError && level == FlowBloxLogLevel.Error)
-                        rt.Aborted = true;
+                        rt.CancelExecution(RuntimeCancellationKind.AbortOnWarningOrError, abortReason);
 
                     if (request.AbortOnWarning && level == FlowBloxLogLevel.Warning)
-                        rt.Aborted = true;
+                        rt.CancelExecution(RuntimeCancellationKind.AbortOnWarningOrError, abortReason);
                 };
 
-                Report($"Execution of project '{project.ProjectName}' started...");
+                StartDebugTimeoutIfConfigured(runtime, out timeoutCts);
 
-                // Execute synchronously.
+                Report($"Execution of project '{project.ProjectName}' started...");
                 runtime.Execute();
 
-                // If aborted, return aborted response.
+                timeoutCts?.Cancel();
+
+                CollectOutputs(runtime, response);
+                TryWriteDebuggingResult(runtime, request.ExternalDebuggingInformation, response);
+
+                response.CancellationKind = runtime.CancellationContext?.CancellationKind;
+                response.CancellationReason = runtime.CancellationContext?.Reason;
+
                 if (runtime.Aborted)
                 {
-                    response.Success = false;
-                    response.ExitCode = RunnerExitCodes.Aborted;
-                    response.ErrorMessage = abortReason ?? "Execution aborted.";
-                    Report(response.ErrorMessage, FlowBloxLogLevel.Warning);
-                    return response;
-                }
-
-                // Collect outputs (values only).
-                var outputs = runtime.GetAllOutputs();
-                foreach (var outputKvp in outputs)
-                {
-                    var list = new List<ProjectOutputDatasetDto>();
-
-                    foreach (var ds in outputKvp.Value)
+                    if (runtime.CancellationContext?.CancellationKind == RuntimeCancellationKind.DebuggingTargetReached)
                     {
-                        list.Add(new ProjectOutputDatasetDto
-                        {
-                            OutputName = ds.OutputName,
-                            CreatedUtc = ds.CreatedUtc,
-                            Values = ds.Values ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
-                        });
+                        response.Success = true;
+                        response.ExitCode = RunnerExitCodes.Success;
+                        response.Warnings.Add(runtime.CancellationContext.Reason);
+                        Report(runtime.CancellationContext.Reason, FlowBloxLogLevel.Info);
+                    }
+                    else
+                    {
+                        response.Success = false;
+                        response.ExitCode = RunnerExitCodes.Aborted;
+                        response.ErrorMessage = abortReason ?? runtime.CancellationContext?.Reason ?? "Execution aborted.";
+                        Report(response.ErrorMessage, FlowBloxLogLevel.Warning);
                     }
 
-                    response.Outputs[outputKvp.Key] = list;
+                    return response;
                 }
 
                 response.Success = true;
@@ -188,7 +189,6 @@ namespace FlowBlox.Core.Runner
             }
             catch (InvalidOperationException ex)
             {
-                // Often used for FlowBlox validation errors
                 response.Success = false;
                 response.ExitCode = RunnerExitCodes.ValidationError;
                 response.ErrorMessage = ex.Message;
@@ -209,10 +209,103 @@ namespace FlowBlox.Core.Runner
             }
             finally
             {
+                timeoutCts?.Cancel();
+                timeoutCts?.Dispose();
                 response.FinishedUtc = DateTime.UtcNow;
             }
         }
 
+        private static void StartDebugTimeoutIfConfigured(
+            FlowBloxRuntime runtime,
+            out CancellationTokenSource timeoutCts)
+        {
+            timeoutCts = null;
+
+            if (runtime?.ExternalDebuggingInformation == null)
+                return;
+
+            var maxRuntimeSeconds = Math.Max(1, runtime.ExternalDebuggingInformation.MaxRuntimeSeconds);
+            var cts = new CancellationTokenSource();
+            timeoutCts = cts;
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(maxRuntimeSeconds), cts.Token).ConfigureAwait(false);
+
+                    if (!cts.IsCancellationRequested && runtime.Running && !runtime.Aborted)
+                    {
+                        runtime.CancelExecution(
+                            RuntimeCancellationKind.DebuggingTimeout,
+                            $"Debug runtime timeout reached ({maxRuntimeSeconds}s).");
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    // ignored
+                }
+            });
+        }
+
+        private static RuntimeExternalDebuggingInformation MapDebuggingInformation(RunnerExternalDebuggingInformation debugging)
+        {
+            if (debugging == null)
+                return null;
+
+            return new RuntimeExternalDebuggingInformation
+            {
+                MaxRuntimeSeconds = Math.Max(1, debugging.MaxRuntimeSeconds),
+                TargetFlowBlockName = debugging.TargetFlowBlockName,
+                FinishWhenTargetFlowBlockReached = debugging.FinishWhenTargetFlowBlockReached,
+                MaxCapturedFieldValueChanges = Math.Max(0, debugging.MaxCapturedFieldValueChanges),
+                MaxFieldValueLength = Math.Max(1, debugging.MaxFieldValueLength)
+            };
+        }
+
+        private static void CollectOutputs(FlowBloxRuntime runtime, RunnerResponse response)
+        {
+            var outputs = runtime.GetAllOutputs();
+            foreach (var outputKvp in outputs)
+            {
+                var list = new List<ProjectOutputDatasetDto>();
+
+                foreach (var ds in outputKvp.Value)
+                {
+                    list.Add(new ProjectOutputDatasetDto
+                    {
+                        OutputName = ds.OutputName,
+                        CreatedUtc = ds.CreatedUtc,
+                        Values = ds.Values ?? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
+                    });
+                }
+
+                response.Outputs[outputKvp.Key] = list;
+            }
+        }
+
+        private static void TryWriteDebuggingResult(
+            FlowBloxRuntime runtime,
+            RunnerExternalDebuggingInformation requestDebugging,
+            RunnerResponse response)
+        {
+            if (requestDebugging == null)
+                return;
+
+            var debuggingResult = runtime.GetDebuggingResult();
+            if (debuggingResult == null)
+                return;
+
+            var filePath = requestDebugging.DebuggingResultFilePath;
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                var fileName = $"debugging_{DateTime.UtcNow:yyyyMMdd_HHmmss}_{Guid.NewGuid():N}.json";
+                filePath = Path.Combine(Path.GetTempPath(), "FlowBloxRunner", fileName);
+            }
+
+            RunnerJson.WriteFile(filePath, debuggingResult);
+            response.DebuggingResultFilePath = filePath;
+        }
 
         private static void ApplyOptionOverrides(FlowBloxOptions flowBloxOptions, Dictionary<string, string> overrides)
         {
@@ -249,7 +342,6 @@ namespace FlowBlox.Core.Runner
                 }
                 else
                 {
-                    // Keep project-defined value; log if empty
                     if (string.IsNullOrEmpty(fieldElement.StringValue))
                         Report($"No value provided for input field '{fieldElement.Name}'.", FlowBloxLogLevel.Warning);
                     else

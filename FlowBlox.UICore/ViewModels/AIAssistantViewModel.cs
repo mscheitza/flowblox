@@ -12,6 +12,7 @@ using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
@@ -327,10 +328,28 @@ namespace FlowBlox.UICore.ViewModels
 
         private static string GetTranscriptContent(AssistantTranscriptLine line)
         {
-            if (!string.IsNullOrWhiteSpace(line.InternalContent))
-                return line.InternalContent;
+            if (line == null)
+                return string.Empty;
 
-            return line.Text ?? string.Empty;
+            var sb = new StringBuilder();
+            sb.AppendLine($"Timestamp: {line.Timestamp:O}");
+            sb.AppendLine($"Kind: {line.Kind}");
+
+            if (!string.IsNullOrWhiteSpace(line.Text))
+            {
+                sb.AppendLine();
+                sb.AppendLine("Text:");
+                sb.AppendLine(line.Text);
+            }
+
+            if (!string.IsNullOrWhiteSpace(line.InternalContent))
+            {
+                sb.AppendLine();
+                sb.AppendLine("Details:");
+                sb.AppendLine(line.InternalContent);
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         private void AddTranscriptLine(AssistantTranscriptLine line)

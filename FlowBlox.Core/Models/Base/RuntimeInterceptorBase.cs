@@ -3,6 +3,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Models.Runtime.Debugging;
 
 namespace FlowBlox.Core.Models.Base
 {
@@ -22,9 +23,19 @@ namespace FlowBlox.Core.Models.Base
             
         }
 
+        public virtual void NotifyFieldChange(FieldElement fieldElement, string oldValue, string newValue)
+        {
+
+        }
+
         public virtual void NotifyRuntimeFinished()
         {
             
+        }
+
+        public virtual void NotifyRuntimeCancelled(RuntimeCancellationContext cancellationContext)
+        {
+
         }
 
         public virtual void NotifyRuntimeStarted()
@@ -38,6 +49,26 @@ namespace FlowBlox.Core.Models.Base
         }
 
         public virtual void NotifyInvocationFinished(BaseFlowBlock flowBlock)
+        {
+
+        }
+
+        public virtual void NotifyPreconditionsNotMet(BaseFlowBlock flowBlock, IReadOnlyList<string> messages)
+        {
+
+        }
+
+        public virtual void NotifyIterationStarted(BaseFlowBlock flowBlock)
+        {
+
+        }
+
+        public virtual void NotifyIterationFinished(BaseFlowBlock flowBlock)
+        {
+
+        }
+
+        public virtual void NotifyResultDatasetGenerated(RuntimeResultDatasetSummary resultDatasetSummary)
         {
 
         }

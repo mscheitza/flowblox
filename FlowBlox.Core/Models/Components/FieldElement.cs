@@ -400,7 +400,7 @@ namespace FlowBlox.Core.Models.Components
                     this.StringValue = value;
 
                 OnValueChanged?.Invoke(this, oldValue, value);
-                runtime.NotifyFieldChange(this);
+                runtime.NotifyFieldChange(this, oldValue, value);
             }
         }
 

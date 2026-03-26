@@ -461,10 +461,10 @@ namespace FlowBlox.AppWindow.Contents
                     }
                 }
 
-                if (uiElement.InternalFlowBlock is InvokerFlowBlock)
+                if (uiElement.InternalFlowBlock is RecursiveCallFlowBlock)
                 {
-                    var invokerFlowBlock = (InvokerFlowBlock)uiElement.InternalFlowBlock;
-                    var invocationTargetFlowBlock = invokerFlowBlock.TargetFlowBlock;
+                    var recursiveCallFlowBlock = (RecursiveCallFlowBlock)uiElement.InternalFlowBlock;
+                    var invocationTargetFlowBlock = recursiveCallFlowBlock.TargetFlowBlock;
 
                     if (invocationTargetFlowBlock != null)
                     {
@@ -668,3 +668,4 @@ namespace FlowBlox.AppWindow.Contents
         }
     }
 }
+

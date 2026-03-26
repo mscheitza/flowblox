@@ -189,8 +189,17 @@
 	<data name="AppWindow_itmOpenProjectDir_Text" xml:space="preserve">
 		<value>Open project &amp;folder</value>
 	</data>
+	<data name="AppWindow_itmOpenProjectInputDir_Text" xml:space="preserve">
+		<value>Open project input directory</value>
+	</data>
+	<data name="AppWindow_itmOpenProjectOutputDir_Text" xml:space="preserve">
+		<value>Open project output directory</value>
+	</data>
 	<data name="AppWindow_itmOpenProject_Text" xml:space="preserve">
 		<value>&amp;Open project</value>
+	</data>
+	<data name="AppWindow_itmRecentProjects_Text" xml:space="preserve">
+		<value>Recent projects</value>
 	</data>
 	<data name="AppWindow_itmOpenRuntimeLogDirectory_Text" xml:space="preserve">
 		<value>Show runtime log file(s)</value>
@@ -238,13 +247,16 @@
 		<value>&amp;Help</value>
 	</data>
 	<data name="AppWindow_mnItmMisc_Text" xml:space="preserve">
-		<value>&amp;Extras</value>
+		<value>&amp;Tools</value>
 	</data>
 	<data name="AppWindow_mnItmProject_Text" xml:space="preserve">
 		<value>&amp;Project</value>
 	</data>
 	<data name="AppWindow_mnItmWindows_Text" xml:space="preserve">
-		<value>&amp;Window</value>
+		<value>&amp;View</value>
+	</data>
+	<data name="AppWindow_mnItmDirectories_Text" xml:space="preserve">
+		<value>&amp;Directories</value>
 	</data>
 	<data name="AppWindow_NewProjectConfirm_Message" xml:space="preserve">
 		<value>Do you really want to close the project "{0}" and create a new project?</value>
@@ -603,6 +615,24 @@ The application will now restart to restore a clean environment.</value>
 	</data>
 	<data name="ProjectPanel_itmRemoveIndex_Text" xml:space="preserve">
 		<value>&amp;Remove index</value>
+	</data>
+	<data name="ProjectPanel_Warning_NotExecutedElements_Text" xml:space="preserve">
+		<value>There are grid elements that are never executed. Affected elements: {0}</value>
+	</data>
+	<data name="ProjectPanel_RuntimeStartFailed_Title" xml:space="preserve">
+		<value>Runtime execution failed</value>
+	</data>
+	<data name="ProjectPanel_RuntimeStartFailed_Message" xml:space="preserve">
+		<value>The execution could not be started: {0}</value>
+	</data>
+	<data name="ProjectPanel_RuntimeAborted_Title" xml:space="preserve">
+		<value>Runtime aborted</value>
+	</data>
+	<data name="ProjectPanel_RuntimeAborted_Message" xml:space="preserve">
+		<value>The runtime was aborted due to an unexpected error.{1}Runtime exception:{1}{0}</value>
+	</data>
+	<data name="ProjectPanel_Copy_NameFormat" xml:space="preserve">
+		<value>{0} (Copy)</value>
 	</data>
 	<data name="ProjectView_btApply_Text" xml:space="preserve">
 		<value>&amp;Apply</value>

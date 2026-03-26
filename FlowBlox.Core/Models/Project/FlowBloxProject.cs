@@ -136,40 +136,60 @@ namespace FlowBlox.Core.Models.Project
             {
                 new FlowBloxProjectPropertyElement
                 {
-                    Key = "ProjectName",
-                    DisplayName = "Project Name",
+                    Key = "Name",
+                    DisplayName = "Name",
                     Description = "The name of the project.",
                     Value = ProjectName ?? string.Empty
                 },
                 new FlowBloxProjectPropertyElement
                 {
-                    Key = "ProjectInputDirectory",
-                    DisplayName = "Project Input Directory",
+                    Key = "InputDirectory",
+                    DisplayName = "Input Directory",
                     Description = "Resolved input directory for this project.",
                     Value = ProjectInputDirectory ?? string.Empty
                 },
                 new FlowBloxProjectPropertyElement
                 {
-                    Key = "ProjectOutputDirectory",
-                    DisplayName = "Project Output Directory",
+                    Key = "OutputDirectory",
+                    DisplayName = "Output Directory",
                     Description = "Resolved output directory for this project.",
                     Value = ProjectOutputDirectory ?? string.Empty
                 },
                 new FlowBloxProjectPropertyElement
                 {
-                    Key = "ProjectAuthor",
-                    DisplayName = "Project Author",
+                    Key = "Author",
+                    DisplayName = "Author",
                     Description = "Author of the project.",
                     Value = Author ?? string.Empty
                 },
                 new FlowBloxProjectPropertyElement
                 {
-                    Key = "ProjectDescription",
-                    DisplayName = "Project Description",
+                    Key = "Description",
+                    DisplayName = "Description",
                     Description = "Description of the project.",
                     Value = ProjectDescription ?? string.Empty
                 }
             };
+        }
+
+        /// <summary>
+        /// Legacy placeholder aliases (AliasKey -> CanonicalKey) for backward compatibility.
+        /// Example: $Project::ProjectOutputDirectory -> $Project::OutputDirectory
+        /// </summary>
+        [JsonIgnore]
+        public IReadOnlyDictionary<string, string> ProjectPropertyPlaceholderAliases
+        {
+            get
+            {
+                return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "ProjectName", "Name" },
+                    { "ProjectInputDirectory", "InputDirectory" },
+                    { "ProjectOutputDirectory", "OutputDirectory" },
+                    { "ProjectAuthor", "Author" },
+                    { "ProjectDescription", "Description" }
+                };
+            }
         }
 
         private static Dictionary<string, AssemblyLoadContext> LoadExtensions(IEnumerable<FlowBloxProjectExtension> extensions)

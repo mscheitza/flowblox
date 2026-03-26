@@ -7,7 +7,7 @@ namespace FlowBlox.UICore.Actions
     {
         private BaseFlowBlock _recentTargetFlowBlock;
 
-        public InvokerFlowBlock From { get; set; }
+        public RecursiveCallFlowBlock From { get; set; }
 
         public BaseFlowBlock To { get; set; }
 

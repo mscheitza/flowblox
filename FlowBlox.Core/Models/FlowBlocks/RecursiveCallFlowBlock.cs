@@ -18,25 +18,25 @@ namespace FlowBlox.Core.Models.FlowBlocks
         [Display(Name = "InvocationFieldTransferConfig_TransferFrom", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
-            SelectionFilterMethod = nameof(InvokerFlowBlock.GetPossibleTransferFromFieldElements))]
+            SelectionFilterMethod = nameof(RecursiveCallFlowBlock.GetPossibleTransferFromFieldElements))]
         public FieldElement TransferFrom { get; set; }
 
         [Required()]
         [Display(Name = "InvocationFieldTransferConfig_TransferTo", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBlockUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
-            SelectionFilterMethod = nameof(InvokerFlowBlock.GetPossibleTransferToFieldElements))]
+            SelectionFilterMethod = nameof(RecursiveCallFlowBlock.GetPossibleTransferToFieldElements))]
         public FieldElement TransferTo { get; set; }
     }
 
-    [FlowBlockUIGroup("InvokerFlowBlock_Groups_Transferrations", 0)]
-    [Display(Name = "InvokerFlowBlock_DisplayName", Description = "InvokerFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class InvokerFlowBlock : BaseFlowBlock
+    [FlowBlockUIGroup("RecursiveCallFlowBlock_Groups_Transferrations", 0)]
+    [Display(Name = "RecursiveCallFlowBlock_DisplayName", Description = "RecursiveCallFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    public class RecursiveCallFlowBlock : BaseFlowBlock
     {
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.call_merge, 16, SKColors.MediumSlateBlue);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.call_merge, 32, SKColors.MediumSlateBlue);
 
-        public InvokerFlowBlock() : base ()
+        public RecursiveCallFlowBlock() : base ()
         {
             this.FieldTransferConfigs = new ObservableCollection<InvocationFieldTransferConfig>();
         }
@@ -47,11 +47,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
         private BaseFlowBlock _targetFlowBlock;
 
         [Required]
-        [Display(Name = "InvokerFlowBlock_TargetFlowBlock", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "RecursiveCallFlowBlock_TargetFlowBlock", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleReferencedElements),
             SelectionDisplayMember = nameof(Name))]
-        [CustomValidation(typeof(InvokerFlowBlock), nameof(ValidateTargetFlowBlock))]
+        [CustomValidation(typeof(RecursiveCallFlowBlock), nameof(ValidateTargetFlowBlock))]
         public BaseFlowBlock TargetFlowBlock
         {
             get
@@ -67,16 +67,16 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public static ValidationResult ValidateTargetFlowBlock(BaseFlowBlock target, ValidationContext context)
         {
-            var invoker = (InvokerFlowBlock)context.ObjectInstance;
+            var recursiveCallFlowBlock = (RecursiveCallFlowBlock)context.ObjectInstance;
             if (target == null)
                 return ValidationResult.Success;
 
             var visited = new HashSet<BaseFlowBlock>();
-            bool found = IsTargetReachable(invoker, target, visited);
+            bool found = IsTargetReachable(recursiveCallFlowBlock, target, visited);
 
             if (!found)
             {
-                var message = FlowBloxResourceUtil.GetLocalizedString("InvokerFlowBlock_Validation_TargetNotReachable");
+                var message = FlowBloxResourceUtil.GetLocalizedString("RecursiveCallFlowBlock_Validation_TargetNotReachable");
                 return new ValidationResult(message, [context.MemberName]);
             }
 
@@ -103,16 +103,16 @@ namespace FlowBlox.Core.Models.FlowBlocks
             return false;
         }
 
-        [Display(Name = "InvokerFlowBlock_FieldTransferConfigs", ResourceType = typeof(FlowBloxTexts), GroupName = "InvokerFlowBlock_Groups_Transferrations", Order = 0)]
+        [Display(Name = "RecursiveCallFlowBlock_FieldTransferConfigs", ResourceType = typeof(FlowBloxTexts), GroupName = "RecursiveCallFlowBlock_Groups_Transferrations", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Delete,
             SelectionFilterMethod = nameof(GetPossibleReferencedElements),
             SelectionDisplayMember = nameof(Name))]
-        [CustomValidation(typeof(InvokerFlowBlock), nameof(ValidateFieldTransferConfigs))]
+        [CustomValidation(typeof(RecursiveCallFlowBlock), nameof(ValidateFieldTransferConfigs))]
         public ObservableCollection<InvocationFieldTransferConfig> FieldTransferConfigs { get; set; }
 
         public static ValidationResult ValidateFieldTransferConfigs(ObservableCollection<InvocationFieldTransferConfig> transferConfigs, ValidationContext context)
         {
-            var block = context.ObjectInstance as InvokerFlowBlock;
+            var block = context.ObjectInstance as RecursiveCallFlowBlock;
             if (block?.TargetFlowBlock is BaseResultFlowBlock targetResultBlock)
             {
                 var unmappedFields = targetResultBlock.Fields
@@ -123,7 +123,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 {
                     var fieldNames = string.Join(", ", unmappedFields.Select(f => f.FullyQualifiedName));
                     return new ValidationResult(
-                        string.Format(FlowBloxResourceUtil.GetLocalizedString("InvokerFlowBlock_Validation_UnmappedFields"),
+                        string.Format(FlowBloxResourceUtil.GetLocalizedString("RecursiveCallFlowBlock_Validation_UnmappedFields"),
                         fieldNames), [context.MemberName]);
                 }
             }
@@ -201,3 +201,4 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
     }
 }
+

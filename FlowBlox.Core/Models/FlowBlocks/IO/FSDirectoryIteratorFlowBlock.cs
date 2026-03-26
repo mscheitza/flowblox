@@ -94,8 +94,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             return properties;
         }
 
-        private static string NormalizePath(string path) =>
-            (path ?? string.Empty).Replace('\\', '/');
+        private static string NormalizePath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return string.Empty;
+
+            return path.Replace('\\', '/');
+        }
 
         private static bool WildcardMatch(string input, string pattern)
         {

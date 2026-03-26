@@ -1,5 +1,6 @@
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Events;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
@@ -15,6 +16,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels
@@ -23,6 +25,8 @@ namespace FlowBlox.UICore.ViewModels
     {
         private const int DefaultFieldViewMaxDisplayLength = 4000;
         private const string FieldViewMaxDisplayLengthOptionName = "FieldView.MaxDisplayLength";
+        private const string FieldViewShowFlowBlockOptionName = "FieldView.ShowFlowBlock";
+        private const string FieldViewSingleLineFieldValuesOptionName = "FieldView.SingleLineFieldValues";
 
         private readonly IFlowBloxProjectComponentProvider _componentProvider;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
@@ -73,6 +77,7 @@ namespace FlowBlox.UICore.ViewModels
                 _showFlowBlock = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(FlowBlockColumnWidth));
+                SaveFieldViewBooleanOption(FieldViewShowFlowBlockOptionName, value);
             }
         }
 
@@ -87,6 +92,7 @@ namespace FlowBlox.UICore.ViewModels
                 _isSingleLineFieldValues = value;
                 OnPropertyChanged();
                 UpdateFieldValuePresentation();
+                SaveFieldViewBooleanOption(FieldViewSingleLineFieldValuesOptionName, value);
             }
         }
 
@@ -99,6 +105,8 @@ namespace FlowBlox.UICore.ViewModels
             _uiContext = SynchronizationContext.Current;
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<IFlowBloxProjectComponentProvider>();
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
+            _showFlowBlock = ResolveFieldViewShowFlowBlock();
+            _isSingleLineFieldValues = ResolveFieldViewSingleLineFieldValues();
 
             RefreshCommand = new RelayCommand(Refresh);
             CopyCommand = new RelayCommand(CopySelection, () => _selectedRows.Count > 0);
@@ -391,11 +399,48 @@ namespace FlowBlox.UICore.ViewModels
                         return value;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                FlowBloxLogManager.Instance.GetLogger().Error("Failed to resolve FieldView max display length option.", e);
             }
 
             return DefaultFieldViewMaxDisplayLength;
+        }
+
+        private bool ResolveFieldViewShowFlowBlock()
+            => ResolveFieldViewBooleanOption(FieldViewShowFlowBlockOptionName, defaultValue: false);
+
+        private bool ResolveFieldViewSingleLineFieldValues()
+            => ResolveFieldViewBooleanOption(FieldViewSingleLineFieldValuesOptionName, defaultValue: false);
+
+        private static bool ResolveFieldViewBooleanOption(string optionName, bool defaultValue)
+        {
+            var option = FlowBloxOptions.GetOptionInstance().GetOption(optionName);
+            if (option?.Type == OptionElement.OptionType.Boolean && bool.TryParse(option.Value, out var parsed))
+                return parsed;
+
+            return defaultValue;
+        }
+
+        private static void SaveFieldViewBooleanOption(string optionName, bool value)
+        {
+            var options = FlowBloxOptions.GetOptionInstance();
+            var option = options.GetOption(optionName);
+            if (option?.Type != OptionElement.OptionType.Boolean)
+                return;
+
+            option.Value = value.ToString().ToLowerInvariant();
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    options.Save();
+                }
+                catch (Exception e)
+                {
+                    FlowBloxLogManager.Instance.GetLogger().Error($"Failed to persist FieldView option '{optionName}'.", e);
+                }
+            });
         }
 
         private void PostToUi(Action action)

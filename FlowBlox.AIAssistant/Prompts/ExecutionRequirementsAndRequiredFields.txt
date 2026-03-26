@@ -1,0 +1,21 @@
+﻿When adding fields or mappings in a flow, always decide whether downstream execution must be guarded.
+
+Core behavior to remember:
+- A BaseResultFlowBlock can still emit exactly one iteration with empty/null result-field values when no real data was produced.
+- Therefore, downstream blocks may still execute once unless execution requirements are explicitly defined.
+
+How to guard execution correctly:
+1) Prefer type-native required mapping flags if available.
+For mapping entries derived from FieldRequiredDefinitionBase (or similar required-field entries), set IsRequired correctly so execution is blocked when mapped values are missing.
+
+2) If no required mapping exists, configure RequiredFields / requirement handling on the target block.
+
+3) If execution depends on value logic, use ActivationConditions (for example FieldLogicalComparisonCondition / LogicalGroupCondition).
+
+Practical rule:
+- Every time a new field is created or connected, verify whether the consuming block should run on empty/null input.
+- If "no", add a requirement or activation condition immediately.
+
+Typical chain example:
+Start -> XmlDocument -> TableReader -> XmlNodeWriter -> XmlDocumentOutput -> FileWriter
+If TableReader has no rows, it can still produce an empty-result iteration; XmlNodeWriter/XmlDocumentOutput/FileWriter must therefore be guarded by required mappings, required fields, or activation conditions.

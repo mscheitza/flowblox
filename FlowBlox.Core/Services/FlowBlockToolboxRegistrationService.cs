@@ -29,6 +29,7 @@ namespace FlowBlox.Core.Services
                 "FlowBlox.Core.Files.globalToolbox_format.json",
                 "FlowBlox.Core.Files.globalToolbox_regex.json",
                 "FlowBlox.Core.Files.globalToolbox_regex_extended.json",
+                "FlowBlox.Core.Files.globalToolbox_dbconnection.json",
                 "FlowBlox.Core.Files.globalToolbox_sql_lite.json",
                 "FlowBlox.Core.Files.globalToolbox_sql_mssql.json",
                 "FlowBlox.Core.Files.globalToolbox_sql_mysql.json",

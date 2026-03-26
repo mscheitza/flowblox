@@ -14,6 +14,9 @@ namespace FlowBlox.Core.Models.Runtime
 
             while (_stack.Count > 0)
             {
+                if (_runtime.Aborted)
+                    break;
+
                 _runtime.HandlePause();
 
                 var item = _stack.Pop();
@@ -50,6 +53,11 @@ namespace FlowBlox.Core.Models.Runtime
                 if (item != null)
                     _stack.Push(item);
             }
+        }
+
+        public void CancelPendingWorkItems()
+        {
+            _stack.Clear();
         }
 
         /// <summary>

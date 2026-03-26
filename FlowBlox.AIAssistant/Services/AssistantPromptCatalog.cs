@@ -12,6 +12,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string FlowBlocksManagingObjectKey = "explaining_flow_blocks_managing_an_object";
         public const string EditAndDeleteKey = "explaining_edit_and_delete";
         public const string NamingConventionsKey = "naming_conventions";
+        public const string ExecutionRequirementsKey = "execution_requirements_and_required_fields";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
             new Dictionary<string, PromptEntryDefinition>(StringComparer.OrdinalIgnoreCase)
@@ -45,7 +46,12 @@ namespace FlowBlox.AIAssistant.Services
                     NamingConventionsKey,
                     "Naming Conventions",
                     "FlowBlox.AIAssistant.Prompts.NamingConventions.txt",
-                    "Consistent naming rules for FlowBlocks and result-field descriptors.")
+                    "Consistent naming rules for FlowBlocks and result-field descriptors."),
+                [ExecutionRequirementsKey] = new PromptEntryDefinition(
+                    ExecutionRequirementsKey,
+                    "Execution Requirements and Required Fields",
+                    "FlowBlox.AIAssistant.Prompts.ExecutionRequirementsAndRequiredFields.txt",
+                    "How to ensure downstream execution is guarded when upstream result datasets are empty.")
             };
 
         private static readonly Lazy<IReadOnlyDictionary<string, PromptEntry>> Entries = new(LoadEntries, isThreadSafe: true);

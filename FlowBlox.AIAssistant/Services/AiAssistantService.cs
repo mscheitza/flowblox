@@ -199,9 +199,7 @@ namespace FlowBlox.AIAssistant.Services
 
                     protocolWriter?.AppendAiJson(round, TryParseFirstJsonObject(assistantOutput));
 
-                    var assistantRoundMessage = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
-                        ? "[no assistantMessage]"
-                        : instruction.AssistantMessage;
+                    var assistantRoundMessage = BuildAssistantRoundMessage(instruction, assistantOutput);
                     AddTranscript(
                         result,
                         AssistantTranscriptKind.Assistant,
@@ -222,6 +220,7 @@ namespace FlowBlox.AIAssistant.Services
                     }
 
                     var roundToolTranscript = new List<string>();
+                    var executedToolCalls = new List<ExecutedToolCallInfo>();
                     var toolExecutionFailed = false;
                     var failedToolNames = new List<string>();
 
@@ -245,6 +244,12 @@ namespace FlowBlox.AIAssistant.Services
                             arguments = request.Arguments,
                             response
                         }, Formatting.None));
+                        executedToolCalls.Add(new ExecutedToolCallInfo
+                        {
+                            ToolName = request.ToolName,
+                            Arguments = request.Arguments,
+                            Response = response
+                        });
 
                         if (!response.Ok)
                         {
@@ -262,9 +267,11 @@ namespace FlowBlox.AIAssistant.Services
                     else
                         latestToolTranscript.AddRange(roundToolTranscript);
 
-                    var internalStatus = toolExecutionFailed
-                        ? $"Failed operations: {string.Join(", ", failedToolNames.Distinct(StringComparer.OrdinalIgnoreCase))}"
-                        : $"Executed operations: {instruction.ToolCalls.Count}";
+                    var internalStatus = BuildToolExecutionTranscript(
+                        instruction.ToolCalls.Count,
+                        toolExecutionFailed,
+                        failedToolNames,
+                        executedToolCalls);
                     AddTranscript(
                         result,
                         toolExecutionFailed ? AssistantTranscriptKind.ToolError : AssistantTranscriptKind.ToolSuccess,
@@ -512,6 +519,10 @@ namespace FlowBlox.AIAssistant.Services
             if (!string.IsNullOrWhiteSpace(namingConventions))
                 sections.Add("Topic: Naming Conventions\n" + namingConventions.Trim());
 
+            var executionRequirements = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.ExecutionRequirementsKey);
+            if (!string.IsNullOrWhiteSpace(executionRequirements))
+                sections.Add("Topic: Execution Requirements / Required Fields\n" + executionRequirements.Trim());
+
             if (sections.Count == 0)
                 return "No central guidelines available.";
 
@@ -619,6 +630,86 @@ namespace FlowBlox.AIAssistant.Services
             return true;
         }
 
+        private static string BuildToolExecutionTranscript(
+            int requestedOperationCount,
+            bool hasFailures,
+            List<string> failedToolNames,
+            List<ExecutedToolCallInfo> executedToolCalls)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Requested operations: {requestedOperationCount}");
+            sb.AppendLine($"Executed operations: {executedToolCalls?.Count ?? 0}");
+            sb.AppendLine($"Status: {(hasFailures ? "failed" : "success")}");
+
+            if (hasFailures && failedToolNames?.Count > 0)
+                sb.AppendLine("Failed tools: " + string.Join(", ", failedToolNames.Distinct(StringComparer.OrdinalIgnoreCase)));
+
+            if (executedToolCalls == null || executedToolCalls.Count == 0)
+                return sb.ToString().TrimEnd();
+
+            sb.AppendLine();
+            sb.AppendLine("Tool API outputs:");
+
+            for (var i = 0; i < executedToolCalls.Count; i++)
+            {
+                var call = executedToolCalls[i];
+                var response = call.Response ?? new ToolResponse();
+
+                sb.AppendLine($"[{i + 1}] {call.ToolName}");
+                sb.AppendLine("arguments:");
+                sb.AppendLine((call.Arguments ?? new JObject()).ToString(Formatting.Indented));
+                sb.AppendLine($"ok: {response.Ok}");
+
+                if (!string.IsNullOrWhiteSpace(response.Error))
+                {
+                    sb.AppendLine("error:");
+                    sb.AppendLine(response.Error);
+                }
+
+                if (response.Result != null && response.Result.HasValues)
+                {
+                    sb.AppendLine("result:");
+                    sb.AppendLine(response.Result.ToString(Formatting.Indented));
+                }
+
+                if (response.Log != null && response.Log.HasValues)
+                {
+                    sb.AppendLine("log:");
+                    sb.AppendLine(response.Log.ToString(Formatting.Indented));
+                }
+
+                if (i < executedToolCalls.Count - 1)
+                    sb.AppendLine();
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        private static string BuildAssistantRoundMessage(AssistantInstruction instruction, string assistantOutput)
+        {
+            if (!string.IsNullOrWhiteSpace(instruction?.AssistantMessage))
+                return instruction.AssistantMessage;
+
+            if (instruction?.ToolCalls?.Count > 0)
+            {
+                var toolNames = instruction.ToolCalls
+                    .Select(x => x.ToolName)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                if (toolNames.Count > 0)
+                    return $"Executing {instruction.ToolCalls.Count} operation(s): {string.Join(", ", toolNames)}";
+
+                return $"Executing {instruction.ToolCalls.Count} operation(s).";
+            }
+
+            if (!string.IsNullOrWhiteSpace(assistantOutput))
+                return assistantOutput;
+
+            return "[no assistant message]";
+        }
+
         private static JObject? TryParseFirstJsonObject(string output)
         {
             try
@@ -661,6 +752,13 @@ namespace FlowBlox.AIAssistant.Services
         {
             public string ToolName { get; set; } = string.Empty;
             public JObject Arguments { get; set; } = new JObject();
+        }
+
+        private sealed class ExecutedToolCallInfo
+        {
+            public string ToolName { get; set; } = string.Empty;
+            public JObject Arguments { get; set; } = new JObject();
+            public ToolResponse Response { get; set; } = new ToolResponse();
         }
 
         private sealed class AssistantSessionState

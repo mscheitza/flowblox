@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Logging;
+using FlowBlox.Core.Models.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Runtime.Loader;
@@ -8,31 +9,43 @@ namespace FlowBlox.Core.Util.Json.SerializationBinder
     public class FlowBloxSerializationBinder : DefaultSerializationBinder
     {
         private readonly Dictionary<string, AssemblyLoadContext> _loadContexts;
-
-        private static readonly Dictionary<string, string> _typeAliases = new(StringComparer.Ordinal)
-        {
-            {
-                "FlowBlox.Core.Models.FlowBlocks.Additions.Condition, FlowBlox.Core",
-                "FlowBlox.Core.Models.FlowBlocks.Additions.ComparisonCondition, FlowBlox.Core"
-            },
-            {
-                "FlowBlox.Core.Models.FlowBlocks.Additions.FieldCondition, FlowBlox.Core",
-                "FlowBlox.Core.Models.FlowBlocks.Additions.FieldComparisonCondition, FlowBlox.Core"
-            },
-            {
-                "FlowBlox.Core.Models.FlowBlocks.Additions.SummarizationCondition, FlowBlox.Core",
-                "FlowBlox.Core.Models.FlowBlocks.Additions.LogicalGroupCondition, FlowBlox.Core"
-            }
-        };
+        private readonly Dictionary<string, string> _typeAliases;
 
         private static readonly ILogger _logger = FlowBloxLogManager.Instance.GetLogger();
 
-        public FlowBloxSerializationBinder(Dictionary<string, AssemblyLoadContext> loadContexts)
+        public FlowBloxSerializationBinder(
+            Dictionary<string, AssemblyLoadContext> loadContexts,
+            IEnumerable<FlowBloxLegacyTypeMapping>? legacyTypeMappings = null)
         {
             _loadContexts = loadContexts ?? new Dictionary<string, AssemblyLoadContext>();
+            _typeAliases = BuildTypeAliasMap(legacyTypeMappings);
         }
 
-        private static string ApplyTypeAliases(string typeName)
+        private static Dictionary<string, string> BuildTypeAliasMap(IEnumerable<FlowBloxLegacyTypeMapping>? legacyTypeMappings)
+        {
+            var aliases = new Dictionary<string, string>(StringComparer.Ordinal);
+            if (legacyTypeMappings == null)
+                return aliases;
+
+            foreach (var mapping in legacyTypeMappings)
+            {
+                if (mapping?.TargetType == null)
+                    continue;
+
+                var targetTypeName = mapping.TargetAssemblyQualifiedTypeName;
+                foreach (var legacyTypeName in mapping.LegacyTypeNames)
+                {
+                    if (string.IsNullOrWhiteSpace(legacyTypeName))
+                        continue;
+
+                    aliases[legacyTypeName] = targetTypeName;
+                }
+            }
+
+            return aliases;
+        }
+
+        private string ApplyTypeAliases(string typeName)
         {
             if (string.IsNullOrWhiteSpace(typeName))
                 return typeName;
@@ -41,9 +54,24 @@ namespace FlowBlox.Core.Util.Json.SerializationBinder
             {
                 if (typeName.Contains(kvp.Key, StringComparison.Ordinal))
                     typeName = typeName.Replace(kvp.Key, kvp.Value, StringComparison.Ordinal);
+
+                var normalizedKey = NormalizeTypeName(kvp.Key);
+                var normalizedValue = NormalizeTypeName(kvp.Value);
+
+                if (typeName.Contains(normalizedKey, StringComparison.Ordinal))
+                    typeName = typeName.Replace(normalizedKey, normalizedValue, StringComparison.Ordinal);
             }
 
             return typeName;
+        }
+
+        private static string NormalizeTypeName(string typeName)
+        {
+            if (string.IsNullOrWhiteSpace(typeName))
+                return typeName;
+
+            var index = typeName.IndexOf(',');
+            return index > 0 ? typeName.Substring(0, index) : typeName;
         }
 
         public override Type BindToType(string assemblyName, string typeName)
@@ -62,7 +90,6 @@ namespace FlowBlox.Core.Util.Json.SerializationBinder
                     var bySimpleName = TypeNameHelper.FindTypeBySimpleName(assembly, TypeNameHelper.GetSimpleTypeName(typeName));
                     if (bySimpleName != null)
                         return bySimpleName;
-
                 }
             }
 

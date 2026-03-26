@@ -12,5 +12,6 @@ namespace FlowBlox.Core.Runner.Contracts
         public bool AutoRestart { get; set; } = false;
         public bool AbortOnError { get; set; } = true;
         public bool AbortOnWarning { get; set; } = false;
+        public RunnerExternalDebuggingInformation ExternalDebuggingInformation { get; set; }
     }
 }

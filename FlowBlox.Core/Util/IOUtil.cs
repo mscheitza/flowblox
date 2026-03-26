@@ -86,5 +86,39 @@ namespace FlowBlox.Core.Util
                 }
             }
         }
+
+        public static string NormalizePath(string path, bool trimTrailingDirectorySeparator = false)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return string.Empty;
+
+            var replacedSeparators = path
+                .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+                .Trim();
+
+            string normalizedPath;
+            try
+            {
+                normalizedPath = Path.GetFullPath(replacedSeparators);
+            }
+            catch
+            {
+                normalizedPath = replacedSeparators;
+            }
+
+            return trimTrailingDirectorySeparator
+                ? normalizedPath.TrimEnd(Path.DirectorySeparatorChar)
+                : normalizedPath;
+        }
+
+        public static string EnsureTrailingDirectorySeparator(string directoryPath)
+        {
+            if (string.IsNullOrWhiteSpace(directoryPath))
+                return directoryPath;
+
+            return directoryPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal)
+                ? directoryPath
+                : directoryPath + Path.DirectorySeparatorChar;
+        }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using FlowBlox.Core;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Attributes.FlowBlox.Core.Attributes;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Factory.Adapter;
@@ -9,6 +13,7 @@ using FlowBlox.UICore.Factory.PropertyView;
 using FlowBlox.UICore.Interfaces;
 using MahApps.Metro.IconPacks;
 using System.Collections;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -113,10 +118,12 @@ namespace FlowBlox.UICore.Resolver
                     {
                         Filter = filter
                     };
+                    ApplyFileDialogInitialPath(dialog, property.GetValue(target)?.ToString());
 
                     if (dialog.ShowDialog() == true)
                     {
-                        property.SetValue(target, dialog.FileName);
+                        var replacedPath = ReplacePathPrefixesWithKnownPlaceholders(dialog.FileName);
+                        property.SetValue(target, replacedPath);
 
                         if (textBoxControl is WpfTextBoxAdapter wpfAdapter)
                         {
@@ -157,12 +164,14 @@ namespace FlowBlox.UICore.Resolver
                 folderButton.Click += (s, e) =>
                 {
                     using var dialog = new System.Windows.Forms.FolderBrowserDialog();
+                    ApplyFolderDialogInitialPath(dialog, property.GetValue(target)?.ToString());
 
                     var result = dialog.ShowDialog();
 
                     if (result == System.Windows.Forms.DialogResult.OK)
                     {
-                        property.SetValue(target, dialog.SelectedPath);
+                        var replacedPath = ReplacePathPrefixesWithKnownPlaceholders(dialog.SelectedPath);
+                        property.SetValue(target, replacedPath);
 
                         if (textBoxControl is WpfTextBoxAdapter wpfAdapter)
                         {
@@ -310,5 +319,115 @@ namespace FlowBlox.UICore.Resolver
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
         }
+
+        private static void ApplyFileDialogInitialPath(Microsoft.Win32.OpenFileDialog dialog, string currentValue)
+        {
+            if (dialog == null)
+                return;
+
+            var resolvedValue = FlowBloxFieldHelper.ReplaceFieldsInString(currentValue);
+            if (string.IsNullOrWhiteSpace(resolvedValue))
+                return;
+
+            try
+            {
+                if (Directory.Exists(resolvedValue))
+                {
+                    dialog.InitialDirectory = resolvedValue;
+                    return;
+                }
+
+                var directory = Path.GetDirectoryName(resolvedValue);
+                if (!string.IsNullOrWhiteSpace(directory) && Directory.Exists(directory))
+                    dialog.InitialDirectory = directory;
+
+                var fileName = Path.GetFileName(resolvedValue);
+                if (!string.IsNullOrWhiteSpace(fileName))
+                    dialog.FileName = fileName;
+            }
+            catch (Exception e)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Error("An error occurred while determining the directory and filename from the current value.", e);
+            }
+        }
+
+        private static void ApplyFolderDialogInitialPath(System.Windows.Forms.FolderBrowserDialog dialog, string currentValue)
+        {
+            if (dialog == null)
+                return;
+
+            var resolvedValue = FlowBloxFieldHelper.ReplaceFieldsInString(currentValue);
+            if (string.IsNullOrWhiteSpace(resolvedValue))
+                return;
+
+            try
+            {
+                if (Directory.Exists(resolvedValue))
+                {
+                    dialog.SelectedPath = resolvedValue;
+                    return;
+                }
+
+                var directory = Path.GetDirectoryName(resolvedValue);
+                if (!string.IsNullOrWhiteSpace(directory) && Directory.Exists(directory))
+                    dialog.SelectedPath = directory;
+            }
+            catch (Exception e)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Error("An error occurred while determining the directory from the current value.", e);
+            }
+        }
+
+        private static string ReplacePathPrefixesWithKnownPlaceholders(string selectedPath)
+        {
+            if (string.IsNullOrWhiteSpace(selectedPath))
+                return selectedPath;
+
+            var candidates = new List<(string DirectoryPath, string Placeholder)>();
+
+            var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
+            if (activeProject != null)
+            {
+                candidates.Add((activeProject.ProjectInputDirectory, "$Project::InputDirectory"));
+                candidates.Add((activeProject.ProjectOutputDirectory, "$Project::OutputDirectory"));
+            }
+
+            var options = FlowBloxOptions.GetOptionInstance();
+            if (options.OptionCollection.TryGetValue("Paths.InputDir", out var inputDirOption))
+            {
+                candidates.Add((FlowBloxFieldHelper.ReplaceFieldsInString(inputDirOption.Value), "$Options::Paths.InputDir"));
+            }
+
+            if (options.OptionCollection.TryGetValue("Paths.OutputDir", out var outputDirOption))
+            {
+                candidates.Add((FlowBloxFieldHelper.ReplaceFieldsInString(outputDirOption.Value), "$Options::Paths.OutputDir"));
+            }
+
+            var normalizedSelectedPath = IOUtil.NormalizePath(selectedPath, trimTrailingDirectorySeparator: true);
+            if (string.IsNullOrWhiteSpace(normalizedSelectedPath))
+                return selectedPath;
+
+            foreach (var candidate in candidates)
+            {
+                var normalizedCandidate = IOUtil.NormalizePath(candidate.DirectoryPath, trimTrailingDirectorySeparator: true);
+                if (string.IsNullOrWhiteSpace(normalizedCandidate))
+                    continue;
+
+                if (normalizedSelectedPath.Equals(normalizedCandidate, StringComparison.OrdinalIgnoreCase))
+                    return candidate.Placeholder;
+
+                var candidateWithSeparator = IOUtil.EnsureTrailingDirectorySeparator(normalizedCandidate);
+                if (normalizedSelectedPath.StartsWith(candidateWithSeparator, StringComparison.OrdinalIgnoreCase))
+                {
+                    var suffix = normalizedSelectedPath.Substring(candidateWithSeparator.Length);
+                    return string.IsNullOrWhiteSpace(suffix)
+                        ? candidate.Placeholder
+                        : $"{candidate.Placeholder}\\{suffix}";
+                }
+            }
+
+            return selectedPath;
+        }
+
     }
 }

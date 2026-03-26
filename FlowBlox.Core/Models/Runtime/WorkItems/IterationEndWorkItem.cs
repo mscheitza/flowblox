@@ -8,6 +8,10 @@ namespace FlowBlox.Core.Models.Runtime.WorkItems
 
         public IterationEndWorkItem(BaseFlowBlock current) => _current = current;
 
-        public void Run(BaseRuntime runtime) => _current.RaiseIterationEnd(runtime);
+        public void Run(BaseRuntime runtime)
+        {
+            _current.RaiseIterationEnd(runtime);
+            runtime.NotifyIterationFinished(_current);
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using FlowBlox.Core.Util.Json.ContractResolver;
+﻿using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Util.Json.ContractResolver;
 using FlowBlox.Core.Util.Json.SerializationBinder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -30,12 +32,17 @@ namespace FlowBlox.Core.Util.Json
 
         public static JsonSerializerSettings ProjectImport(Dictionary<string, AssemblyLoadContext> loadContexts)
         {
+            var legacyTypeMappings = FlowBloxServiceLocator.Instance
+                .GetServices<IFlowBloxLegacyTypeMappingService>()
+                .SelectMany(x => x.GetLegacyTypeMappings())
+                .ToArray();
+
             var jsonSettings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore,
                 TypeNameHandling = TypeNameHandling.All,
-                SerializationBinder = new FlowBloxSerializationBinder(loadContexts)
+                SerializationBinder = new FlowBloxSerializationBinder(loadContexts, legacyTypeMappings)
             };
             jsonSettings.Converters.Add(new StringEnumConverter
             {
@@ -71,9 +78,9 @@ namespace FlowBlox.Core.Util.Json
             return jsonSettings;
         }
 
-        private JsonSettings() 
+        private JsonSettings()
         {
-            
+
         }
     }
 }

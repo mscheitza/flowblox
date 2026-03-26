@@ -10,6 +10,7 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote;
+using FlowBlox.Core.Models.Runtime.Debugging;
 
 namespace FlowBlox.Core.Models.Runtime
 {
@@ -37,6 +38,7 @@ namespace FlowBlox.Core.Models.Runtime
         public int StepTimeunit { get; set; }
         public bool ExecutionFlowEnabled { get; set; }
         public bool DisableInterceptors { get; set; }
+        public RuntimeExternalDebuggingInformation ExternalDebuggingInformation { get; set; }
 
         private readonly IEnumerable<IRuntimeInterceptor> _interceptors;
 
@@ -95,7 +97,7 @@ namespace FlowBlox.Core.Models.Runtime
             }
         }
 
-        internal void NotifyFieldChange(FieldElement fieldElement)
+        internal void NotifyFieldChange(FieldElement fieldElement, string oldValue, string newValue)
         {
             FieldChanged?.Invoke(fieldElement);
 
@@ -104,6 +106,7 @@ namespace FlowBlox.Core.Models.Runtime
                 foreach (var interceptor in _interceptors)
                 {
                     interceptor.NotifyFieldChange(fieldElement);
+                    interceptor.NotifyFieldChange(fieldElement, oldValue, newValue);
                 }
             }
 
@@ -160,6 +163,51 @@ namespace FlowBlox.Core.Models.Runtime
             }
 
             Report($"Invocation finished for flow block: \"{flowBlock.Name}\"", FlowBloxLogLevel.Info);
+        }
+
+        internal void NotifyPreconditionsNotMet(BaseFlowBlock flowBlock, IReadOnlyList<string> messages)
+        {
+            if (DisableInterceptors)
+                return;
+
+            foreach (var interceptor in _interceptors)
+            {
+                interceptor.NotifyPreconditionsNotMet(flowBlock, messages ?? Array.Empty<string>());
+            }
+        }
+
+        internal void NotifyIterationStarted(BaseFlowBlock flowBlock)
+        {
+            if (!DisableInterceptors)
+            {
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyIterationStarted(flowBlock);
+                }
+            }
+        }
+
+        internal void NotifyIterationFinished(BaseFlowBlock flowBlock)
+        {
+            if (!DisableInterceptors)
+            {
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyIterationFinished(flowBlock);
+                }
+            }
+        }
+
+        internal void NotifyResultDatasetGenerated(BaseResultFlowBlock flowBlock, int datasetCount)
+        {
+            if (!DisableInterceptors)
+            {
+                var summary = new RuntimeResultDatasetSummary(flowBlock, datasetCount);
+                foreach (var interceptor in _interceptors)
+                {
+                    interceptor.NotifyResultDatasetGenerated(summary);
+                }
+            }
         }
 
         public void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
@@ -408,6 +456,9 @@ namespace FlowBlox.Core.Models.Runtime
         }
 
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly object _cancellationSync = new object();
+
+        public RuntimeCancellationContext CancellationContext { get; private set; }
 
         /// <summary>
         /// Returns a CancellationToken that can be used by FlowBlocks and external services.
@@ -415,6 +466,47 @@ namespace FlowBlox.Core.Models.Runtime
         public virtual CancellationToken GetCancellationToken()
         {
             return _cancellationTokenSource.Token;
+        }
+
+        public virtual void CancelExecution(RuntimeCancellationKind cancellationKind, string reason)
+        {
+            lock (_cancellationSync)
+            {
+                if (Aborted)
+                    return;
+
+                Aborted = true;
+                ExecutionFlowEnabled = false;
+                CancellationContext = new RuntimeCancellationContext
+                {
+                    UtcTimestamp = DateTime.UtcNow,
+                    CancellationKind = cancellationKind,
+                    Reason = reason ?? string.Empty
+                };
+
+                try
+                {
+                    _cancellationTokenSource.Cancel();
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                TaskRunner.CancelPendingWorkItems();
+                NotifyRuntimeCancelled(CancellationContext);
+            }
+        }
+
+        private void NotifyRuntimeCancelled(RuntimeCancellationContext cancellationContext)
+        {
+            if (DisableInterceptors || cancellationContext == null)
+                return;
+
+            foreach (var interceptor in _interceptors)
+            {
+                interceptor.NotifyRuntimeCancelled(cancellationContext);
+            }
         }
     }
 }

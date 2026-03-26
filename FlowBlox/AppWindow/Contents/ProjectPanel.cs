@@ -42,10 +42,6 @@ namespace FlowBlox.AppWindow.Contents
 {
     public partial class ProjectPanel : DockContent
     {
-
-        private const string WarningTextNotExecutedElements = "Es existieren Grid-Elemente, die niemals ausgeführt werden. Betroffene Elemente: $Elements";
-        private const string MessageFlowBlockNameAlreadyExists = "Es existiert bereits ein Flock-Block mit dem Bezeichner \"{0}\".";
-
         private const int GridCenterY = 360;
         private const int GridStepX = 350;
         private const int GridStepY = 160;
@@ -299,7 +295,9 @@ namespace FlowBlox.AppWindow.Contents
         {
             if (_notExecutedElements.Count > 0)
             {
-                AppWindow.Instance.labelWarning.Text = WarningTextNotExecutedElements.Replace("$Elements", string.Join(", ", _notExecutedElements));
+                AppWindow.Instance.labelWarning.Text = string.Format(
+                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Warning_NotExecutedElements_Text", typeof(FlowBloxMainUITexts)),
+                    string.Join(", ", _notExecutedElements));
                 AppWindow.Instance.WarningStrip.Visible = true;
             }
             else
@@ -606,10 +604,12 @@ namespace FlowBlox.AppWindow.Contents
                     }
                     catch (Exception ex)
                     {
-                        FlowBloxMessageBox.Show(this, 
-                            "The execution could not be started: " + ex.Message, 
-                            "Runtime execution failed", 
-                            FlowBloxMessageBox.Buttons.OK, 
+                        FlowBloxMessageBox.Show(this,
+                            string.Format(
+                                FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeStartFailed_Message", typeof(FlowBloxMainUITexts)),
+                                ex.Message),
+                            FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeStartFailed_Title", typeof(FlowBloxMainUITexts)),
+                            FlowBloxMessageBox.Buttons.OK,
                             FlowBloxMessageBox.Icons.Info);
                     }
                 }
@@ -663,11 +663,12 @@ namespace FlowBlox.AppWindow.Contents
                 if (!(exception is RuntimeCancellationException))
                 {
                     FlowBloxMessageBox.Show(this,
-                        "The runtime was aborted due to an unexpected error." + Environment.NewLine +
-                        "Runtime exception:" + Environment.NewLine +
-                        exception.ToString(),
-                        "Runtime aborted", 
-                        FlowBloxMessageBox.Buttons.OK, 
+                        string.Format(
+                            FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeAborted_Message", typeof(FlowBloxMainUITexts)),
+                            exception.ToString(),
+                            Environment.NewLine),
+                        FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeAborted_Title", typeof(FlowBloxMainUITexts)),
+                        FlowBloxMessageBox.Buttons.OK,
                         FlowBloxMessageBox.Icons.Error);
                 }
             }
@@ -952,7 +953,9 @@ namespace FlowBlox.AppWindow.Contents
                 DynamicDeepCopier dynamicDeepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(uiElement.InternalFlowBlock));
                 var copy = (BaseFlowBlock)dynamicDeepCopier.Copy(uiElement.InternalFlowBlock);
                 copy.Location = new Point(uiElement.Location.X + uiElement.Width + 20, uiElement.Location.Y);
-                copy.Name = string.Format("{0} (Copy)", uiElement.Name);
+                copy.Name = string.Format(
+                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Copy_NameFormat", typeof(FlowBloxMainUITexts)),
+                    uiElement.Name);
                 _copiedFlowBlocks.Add(copy);
             }
         }

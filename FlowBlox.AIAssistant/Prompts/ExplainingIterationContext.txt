@@ -12,9 +12,17 @@ Multiple predecessors into one target:
 - Target executes once per resulting combined dataset.
 
 Manual IterationContext:
-- Use it to define the aggregation boundary: "within which iteration scope should this target collect datasets?"
-- Start-level IterationContext is valid if you want full-project aggregation.
+- Use it to define an explicit aggregation boundary: "within which iteration scope should this target collect datasets?"
+- Typical optimization: run output/writer once after a reader is fully finished.
+- Practical way: set output IterationContext to a parent of the reader, so output executes on parent iteration finish.
 
-Practical rule of thumb:
-- If output should contain all rows from a reader: set writer IterationContext to a parent before the reader.
-- If you want one object/file per row: place object creation after the row reader and use field placeholders in file naming.
+Concrete decision helper (XML from table):
+- Flow: Start -> XmlDocumentFlowBlock -> TableReader -> XmlDocumentNodeWriter -> XmlDocumentOutput -> FileWriter
+- Desired result: one XML for all rows, one file write.
+- Recommended:
+  - XmlDocumentFlowBlock before TableReader.
+  - XmlDocumentNodeWriter runs per row and appends nodes.
+  - XmlDocumentOutput waits for parent iteration finish of TableReader (for example parent XmlDocumentFlowBlock context), then outputs once.
+  - FileWriter writes once.
+  - Important: do not re-apply the same IterationContext on every downstream block. It is enough to set it on the first block that must wait (here: XmlDocumentOutput). FileWriter can stay in normal sequence behind XmlDocumentOutput and is then executed once after XmlDocumentOutput has finished.
+- If you want one XML per row instead: place XmlDocumentFlowBlock after TableReader (and usually use placeholders in file names).

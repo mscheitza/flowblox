@@ -340,6 +340,24 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open project input directory ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmOpenProjectInputDir_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmOpenProjectInputDir_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open project output directory ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmOpenProjectOutputDir_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmOpenProjectOutputDir_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Show runtime log file(s) ähnelt.
         /// </summary>
         internal static string AppWindow_itmOpenRuntimeLogDirectory_Text {
@@ -372,6 +390,15 @@ namespace FlowBlox {
         internal static string AppWindow_itmQuitApplication_Text {
             get {
                 return ResourceManager.GetString("AppWindow_itmQuitApplication_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recent projects ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmRecentProjects_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmRecentProjects_Text", resourceCulture);
             }
         }
         
@@ -484,6 +511,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Directories ähnelt.
+        /// </summary>
+        internal static string AppWindow_mnItmDirectories_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_mnItmDirectories_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Edit ähnelt.
         /// </summary>
         internal static string AppWindow_mnItmEdit_Text {
@@ -502,7 +538,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Extras ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Tools ähnelt.
         /// </summary>
         internal static string AppWindow_mnItmMisc_Text {
             get {
@@ -520,7 +556,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Window ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;View ähnelt.
         /// </summary>
         internal static string AppWindow_mnItmWindows_Text {
             get {
@@ -1487,6 +1523,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die {0} (Copy) ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_Copy_NameFormat {
+            get {
+                return ResourceManager.GetString("ProjectPanel_Copy_NameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove &amp;breakpoint ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmBreakPoint_Remove_Text {
@@ -1645,6 +1690,51 @@ namespace FlowBlox {
         internal static string ProjectPanel_labelRecursiveCall_Text {
             get {
                 return ResourceManager.GetString("ProjectPanel_labelRecursiveCall_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The runtime was aborted due to an unexpected error.{1}Runtime exception:{1}{0} ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_RuntimeAborted_Message {
+            get {
+                return ResourceManager.GetString("ProjectPanel_RuntimeAborted_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime aborted ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_RuntimeAborted_Title {
+            get {
+                return ResourceManager.GetString("ProjectPanel_RuntimeAborted_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The execution could not be started: {0} ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_RuntimeStartFailed_Message {
+            get {
+                return ResourceManager.GetString("ProjectPanel_RuntimeStartFailed_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime execution failed ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_RuntimeStartFailed_Title {
+            get {
+                return ResourceManager.GetString("ProjectPanel_RuntimeStartFailed_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die There are grid elements that are never executed. Affected elements: {0} ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_Warning_NotExecutedElements_Text {
+            get {
+                return ResourceManager.GetString("ProjectPanel_Warning_NotExecutedElements_Text", resourceCulture);
             }
         }
         

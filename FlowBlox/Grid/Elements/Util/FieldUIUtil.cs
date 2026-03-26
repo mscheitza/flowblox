@@ -42,18 +42,6 @@ namespace FlowBlox.Grid.Elements.Util
             }
         }
 
-        public static void InvokeFieldSelectionDialog(Form form, TextBox textBox, BaseResultFlowBlock currentElement = null)
-        {
-            FieldSelectionWindow fieldSelectionWindow = new FieldSelectionWindow(currentElement);
-            if (fieldSelectionWindow.ShowDialog(form) == DialogResult.OK)
-            {
-                foreach (var selectedField in fieldSelectionWindow.SelectedFields)
-                {
-                    ApplyFieldToTextBox(selectedField, textBox);
-                }
-            }
-        }
-
         private static void EditRegularExpression(TextBox textBoxControl, string fieldName)
         {
             EditValueWindow editValue = new EditValueWindow(true, true);

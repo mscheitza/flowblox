@@ -9,6 +9,7 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
@@ -20,6 +21,7 @@ using FlowBlox.UICore.ViewModels.PropertyWindow;
 using FlowBlox.UICore.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
@@ -408,13 +410,14 @@ namespace FlowBlox.UICore.ViewModels
                 if (string.IsNullOrWhiteSpace(propertyText))
                     continue;
 
-                values.Add(propertyText);
+                var propertyDisplayName = GetPropertyDisplayName(property);
+                values.Add($"{propertyDisplayName}: {propertyText}");
             }
 
             if (!values.Any())
                 return noneText;
 
-            return string.Join(" | ", values);
+            return string.Join(", ", values);
         }
 
         private static string FormatDisplayablePropertyValue(object? propertyValue)
@@ -423,7 +426,7 @@ namespace FlowBlox.UICore.ViewModels
                 return string.Empty;
 
             if (propertyValue is string s)
-                return s;
+                return TextHelper.ShortenString(s, 30, true);
 
             if (propertyValue is Enum e)
                 return e.GetDisplayName();
@@ -453,6 +456,12 @@ namespace FlowBlox.UICore.ViewModels
             }
 
             return propertyValue.ToString() ?? string.Empty;
+        }
+
+        private static string GetPropertyDisplayName(PropertyInfo property)
+        {
+            var displayAttribute = property.GetCustomAttribute<DisplayAttribute>();
+            return FlowBloxResourceUtil.GetDisplayName(displayAttribute, false) ?? property.Name;
         }
 
         private string BuildUsedIn(IManagedObject target)

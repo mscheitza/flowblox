@@ -1,5 +1,6 @@
 using FlowBlox.AppWindow.ContentFactories;
 using FlowBlox.AppWindow.Contents;
+using FlowBlox.AppWindow.RecentProjects;
 using FlowBlox.Core;
 using FlowBlox.Core.Authentication;
 using FlowBlox.Core.DependencyInjection;
@@ -40,6 +41,7 @@ namespace FlowBlox.AppWindow
 {
     public partial class AppWindow : Form
     {
+        private const string ProjectFileExtension = ".fbprj";
         private static AppWindow _appWindow;
         public static AppWindow Instance
         {
@@ -71,6 +73,8 @@ namespace FlowBlox.AppWindow
         private DockContentUserControlWrapper<ProblemsView> _problemsViewPanel;
         private AIAssistantView _aiAssistantViewPanel;
         private bool _defaultFieldViewActivationApplied;
+        private bool _isProjectLoading;
+        private WaitOverlayWindow _waitOverlayWindow;
 
         private FlowBloxProjectComponentProvider _componentProvider;
 
@@ -81,7 +85,10 @@ namespace FlowBlox.AppWindow
             FlowBloxUILocalizationUtil.Localize(this);
 
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
+            this.Resize += (_, __) => PositionProjectLoadingOverlay();
+            this.Move += (_, __) => PositionProjectLoadingOverlay();
 
+            RefreshRecentProjectsMenu();
             this.UpdateUI();
         }
 
@@ -128,13 +135,14 @@ namespace FlowBlox.AppWindow
 
             var isProjectActive = project != null;
 
-            dockPanel.Visible = project != null;
-            BackColor = isProjectActive ?
+            dockPanel.Visible = isProjectActive && !_isProjectLoading;
+            BackColor = isProjectActive && !_isProjectLoading ?
                 Color.FromKnownColor(KnownColor.Control) :
                 Color.FromArgb(53, 53, 53);
 
             itmCreateProject.Enabled = !isRuntimeActive;
             itmOpenProject.Enabled = !isRuntimeActive;
+            itmRecentProjects.Enabled = !isRuntimeActive && itmRecentProjects.DropDownItems.Count > 0;
             itmCloseProject.Enabled = isProjectActive && !isRuntimeActive;
             itmUserFields.Enabled = isProjectActive && !isRuntimeActive;
             itmManageInputTemplates.Enabled = isProjectActive && !isRuntimeActive;
@@ -147,6 +155,8 @@ namespace FlowBlox.AppWindow
             itmResetDockablePanels.Enabled = isProjectActive;
 
             itmOpenRuntimeLogDirectory.Enabled = !string.IsNullOrEmpty(RuntimeLogfilePath);
+            itmOpenProjectInputDir.Enabled = isProjectActive;
+            itmOpenProjectOutputDir.Enabled = isProjectActive;
 
             itmSaveToProjectSpace.Enabled = isProjectActive;
 
@@ -314,7 +324,7 @@ namespace FlowBlox.AppWindow
             }
         }
 
-        private void OpenProjectWithConfirmation(Action openProjectAction)
+        private async Task OpenProjectWithConfirmationAsync(Func<Task> openProjectAction)
         {
             if (openProjectAction == null)
                 throw new ArgumentNullException(nameof(openProjectAction));
@@ -339,7 +349,7 @@ namespace FlowBlox.AppWindow
 
             if (proceed)
             {
-                openProjectAction();
+                await openProjectAction();
             }
             else
             {
@@ -347,15 +357,102 @@ namespace FlowBlox.AppWindow
             }
         }
 
-        private void rbOpenProject_Click(object sender, EventArgs e)
+        private void ShowProjectLoadingOverlay()
         {
-            OpenProjectWithConfirmation(() =>
+            if (this.InvokeRequired)
             {
-                openProjectDialog.InitialDirectory =
-                    FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.ProjectDir"].Value;
+                this.Invoke(new MethodInvoker(ShowProjectLoadingOverlay));
+                return;
+            }
 
-                if (!Directory.Exists(openProjectDialog.InitialDirectory))
-                    Directory.CreateDirectory(openProjectDialog.InitialDirectory);
+            if (_waitOverlayWindow == null)
+            {
+                _waitOverlayWindow = new WaitOverlayWindow();
+                var helper = new System.Windows.Interop.WindowInteropHelper(_waitOverlayWindow)
+                {
+                    Owner = this.Handle
+                };
+            }
+
+            PositionProjectLoadingOverlay();
+
+            if (!_waitOverlayWindow.IsVisible)
+                _waitOverlayWindow.Show();
+        }
+
+        private void PositionProjectLoadingOverlay()
+        {
+            if (_waitOverlayWindow == null)
+                return;
+
+            var clientAnchorPoint = new Point(this.ClientSize.Width / 2, (this.ClientSize.Height / 2) + 100);
+            var screenAnchorPoint = this.PointToScreen(clientAnchorPoint);
+            _waitOverlayWindow.Left = screenAnchorPoint.X - (_waitOverlayWindow.Width / 2d);
+            _waitOverlayWindow.Top = screenAnchorPoint.Y - (_waitOverlayWindow.Height / 2d);
+        }
+
+        private void HideProjectLoadingOverlay()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(HideProjectLoadingOverlay));
+                return;
+            }
+
+            if (_waitOverlayWindow == null)
+                return;
+
+            _waitOverlayWindow.Close();
+            _waitOverlayWindow = null;
+        }
+
+        private string GetProjectDirectoryForDialogs()
+        {
+            var projectDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.ProjectDir"].Value;
+            if (!Directory.Exists(projectDirectory))
+                Directory.CreateDirectory(projectDirectory);
+            return projectDirectory;
+        }
+
+        private static string EnsureProjectFileExtension(string fileNameOrPath)
+        {
+            if (string.IsNullOrWhiteSpace(fileNameOrPath))
+                return string.Empty;
+
+            if (string.IsNullOrWhiteSpace(Path.GetExtension(fileNameOrPath)))
+                return fileNameOrPath + ProjectFileExtension;
+
+            return fileNameOrPath;
+        }
+
+        private string BuildDefaultProjectFileName()
+        {
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            var safeProjectName = IOUtil.GetValidFileName(project?.ProjectName ?? string.Empty).Trim('_');
+            if (string.IsNullOrWhiteSpace(safeProjectName))
+                safeProjectName = "Project";
+
+            return EnsureProjectFileExtension(safeProjectName);
+        }
+
+        private void ConfigureSaveProjectDialogDefaults()
+        {
+            saveProjectDialog.InitialDirectory = GetProjectDirectoryForDialogs();
+
+            if (!string.IsNullOrWhiteSpace(_recentProjectPath))
+            {
+                saveProjectDialog.FileName = EnsureProjectFileExtension(Path.GetFileName(_recentProjectPath));
+                return;
+            }
+
+            saveProjectDialog.FileName = BuildDefaultProjectFileName();
+        }
+
+        private async void rbOpenProject_Click(object sender, EventArgs e)
+        {
+            await OpenProjectWithConfirmationAsync(async () =>
+            {
+                openProjectDialog.InitialDirectory = GetProjectDirectoryForDialogs();
 
                 if (openProjectDialog.ShowDialog(this) == DialogResult.OK)
                 {
@@ -364,7 +461,7 @@ namespace FlowBlox.AppWindow
                     _recentProjectPath = openProjectDialog.FileName;
 
                     UnloadProject();
-                    OpenProjectFromRecentProjectPath();
+                    await OpenProjectFromRecentProjectPathAsync();
                 }
                 else
                 {
@@ -379,14 +476,11 @@ namespace FlowBlox.AppWindow
             {
                 if (string.IsNullOrWhiteSpace(_recentProjectPath))
                 {
-                    saveProjectDialog.InitialDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.ProjectDir"].Value;
-
-                    if (!Directory.Exists(saveProjectDialog.InitialDirectory))
-                        Directory.CreateDirectory(saveProjectDialog.InitialDirectory);
+                    ConfigureSaveProjectDialogDefaults();
 
                     if (saveProjectDialog.ShowDialog(this) == DialogResult.OK)
                     {
-                        _recentProjectPath = saveProjectDialog.FileName;
+                        _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
                         OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
                         FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
@@ -397,6 +491,7 @@ namespace FlowBlox.AppWindow
                 {
                     OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
                     FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
+                    FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
                 }
             }
             catch (Exception ex)
@@ -421,16 +516,11 @@ namespace FlowBlox.AppWindow
         {
             try
             {
-                saveProjectDialog.InitialDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.ProjectDir"].Value;
-
-                if (!Directory.Exists(saveProjectDialog.InitialDirectory))
-                {
-                    Directory.CreateDirectory(saveProjectDialog.InitialDirectory);
-                }
+                ConfigureSaveProjectDialogDefaults();
 
                 if (saveProjectDialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    _recentProjectPath = saveProjectDialog.FileName;
+                    _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
                     OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
                     FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
@@ -469,9 +559,10 @@ namespace FlowBlox.AppWindow
                 {
                     if (_recentProjectPath.Equals(string.Empty))
                     {
+                        ConfigureSaveProjectDialogDefaults();
                         if (saveProjectDialog.ShowDialog(this) == DialogResult.OK)
                         {
-                            _recentProjectPath = saveProjectDialog.FileName;
+                            _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
                             OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
                             FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
@@ -482,6 +573,7 @@ namespace FlowBlox.AppWindow
                     {
                         OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
                         FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
+                        FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
                     }
                 }
             }
@@ -538,9 +630,10 @@ namespace FlowBlox.AppWindow
             UpdateUI();
         }
 
-        private void OpenProjectFromRecentProjectPath()
+        private async Task OpenProjectFromRecentProjectPathAsync()
         {
-            TryOpenProject(() =>
+            _recentProjectSpaceGuid = string.Empty;
+            await TryOpenProjectAsync(() =>
             {
                 var project = FlowBloxProject.FromFile(_recentProjectPath);
                 FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
@@ -548,15 +641,20 @@ namespace FlowBlox.AppWindow
             });
         }
 
-        private bool TryOpenProject(Func<FlowBloxProject> projectLoader)
+        private async Task<bool> TryOpenProjectAsync(Func<FlowBloxProject> projectLoader)
         {
             if (projectLoader == null)
                 throw new ArgumentNullException(nameof(projectLoader));
 
+            var openedSuccessfully = false;
+            _isProjectLoading = true;
+            ShowProjectLoadingOverlay();
+            UpdateUI();
+
             FlowBloxProject project;
             try
             {
-                project = projectLoader();
+                project = await Task.Run(projectLoader);
 
                 if (project == null)
                     return false;
@@ -565,6 +663,7 @@ namespace FlowBlox.AppWindow
 
                 this.OnAfterUIRegistryInitialized();
                 this.OnAfterProjectOpened(project);
+                openedSuccessfully = true;
             }
             catch (Exception e)
             {
@@ -592,6 +691,14 @@ namespace FlowBlox.AppWindow
 
                 return false;
             }
+            finally
+            {
+                if (openedSuccessfully)
+                    await Task.Delay(2000);
+                _isProjectLoading = false;
+                HideProjectLoadingOverlay();
+                UpdateUI();
+            }
 
             if (!project.Notice.Equals(string.Empty))
             {
@@ -611,6 +718,8 @@ namespace FlowBlox.AppWindow
         private void OnAfterProjectOpened(FlowBloxProject project)
         {
             this._dockContentProjectPanel.OnAfterProjectOpened(project);
+            RecentProjectsManager.Instance.RegisterOpenedProject(project, _recentProjectPath, project?.ProjectSpaceGuid);
+            RefreshRecentProjectsMenu();
             this.UpdateUI();
         }
 
@@ -661,8 +770,9 @@ namespace FlowBlox.AppWindow
                 {
                     Environment.Exit(0);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    FlowBloxLogManager.Instance.GetLogger().Error("Failed to terminate process on AppWindow close.", ex);
                 }
             }
         }
@@ -684,10 +794,11 @@ namespace FlowBlox.AppWindow
             UpdateUI_ProjectName();
         }
 
-        private void AppWindow_Load(object sender, EventArgs e)
+        private async void AppWindow_Load(object sender, EventArgs e)
         {
             InitVersion();
-            InitPreconfiguredProject();
+            RefreshRecentProjectsMenu();
+            await InitPreconfiguredProjectAsync();
             Background_TrialInfo.RunWorkerAsync();
         }
 
@@ -695,13 +806,13 @@ namespace FlowBlox.AppWindow
 
         public void SetProjectSpaceGuid(string projectSpaceGuid) => _recentProjectSpaceGuid = projectSpaceGuid;
 
-        private void InitPreconfiguredProject()
+        private async Task InitPreconfiguredProjectAsync()
         {
             if (File.Exists(_recentProjectPath))
-                OpenProjectFromRecentProjectPath();
+                await OpenProjectFromRecentProjectPathAsync();
 
             if (!string.IsNullOrEmpty(_recentProjectSpaceGuid))
-                OpenProjectFromProjectSpace(_recentProjectSpaceGuid);
+                await OpenProjectFromProjectSpaceAsync(_recentProjectSpaceGuid);
         }
 
         private void itmOpenOutputDir_Click(object sender, EventArgs e)
@@ -1060,9 +1171,9 @@ namespace FlowBlox.AppWindow
             WindowsFormWPFHelper.ShowDialog(dialog, this);
         }
 
-        private void itmOpenFromProjectSpace_Click(object sender, EventArgs e)
+        private async void itmOpenFromProjectSpace_Click(object sender, EventArgs e)
         {
-            OpenProjectWithConfirmation(() =>
+            await OpenProjectWithConfirmationAsync(async () =>
             {
                 var dialog = new PSProjectsWindow();
                 WindowsFormWPFHelper.ShowDialog(dialog, this);
@@ -1079,18 +1190,21 @@ namespace FlowBlox.AppWindow
 
                 CloseProject();
                 UnloadProject();
-                OpenProjectFromProjectSpace(projectGuid, version);
+                await OpenProjectFromProjectSpaceAsync(projectGuid, version);
             });
         }
 
-        private void OpenProjectFromProjectSpace(string projectGuid, int? projectSpaceVersion = null)
+        private async Task OpenProjectFromProjectSpaceAsync(string projectGuid, int? projectSpaceVersion = null)
         {
+            _recentProjectPath = string.Empty;
+            _recentProjectSpaceGuid = projectGuid;
+
             var baseUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["Api.ProjectServiceBaseUrl"].Value;
             var webApi = new FlowBloxWebApiService(baseUrl);
             var token = FlowBloxAccountManager.Instance.GetUserToken(baseUrl);
 
             FlowBloxProject loadedProject = null;
-            TryOpenProject(() =>
+            await TryOpenProjectAsync(() =>
             {
                 loadedProject = Task.Run(async () =>
                         await FlowBloxProject.FromProjectSpaceGuidAsync(projectGuid, projectSpaceVersion, token, webApi))
@@ -1103,7 +1217,7 @@ namespace FlowBlox.AppWindow
             });
         }
 
-        private void itmFbProjects_Click(object sender, EventArgs e)
+        private async void itmFbProjects_Click(object sender, EventArgs e)
         {
             var dialog = new PSProjectsWindow();
             WindowsFormWPFHelper.ShowDialog(dialog, this);
@@ -1117,11 +1231,11 @@ namespace FlowBlox.AppWindow
             var projectGuid = selection.Project.Guid;
             int? version = selection.Version?.VersionNumber;
 
-            OpenProjectWithConfirmation(() =>
+            await OpenProjectWithConfirmationAsync(async () =>
             {
                 CloseProject();
                 UnloadProject();
-                OpenProjectFromProjectSpace(projectGuid, version);
+                await OpenProjectFromProjectSpaceAsync(projectGuid, version);
             });
         }
 
@@ -1153,6 +1267,121 @@ namespace FlowBlox.AppWindow
                 FileName = "explorer.exe",
                 Arguments = inputDirectory,
                 UseShellExecute = true
+            });
+        }
+
+        private void itmOpenProjectInputDir_Click(object sender, EventArgs e)
+        {
+            var projectInputDirectory = FlowBloxProjectManager.Instance.ActiveProject?.ProjectInputDirectory;
+            if (string.IsNullOrWhiteSpace(projectInputDirectory))
+                return;
+
+            if (!Directory.Exists(projectInputDirectory))
+                Directory.CreateDirectory(projectInputDirectory);
+
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = "explorer.exe",
+                Arguments = projectInputDirectory,
+                UseShellExecute = true
+            });
+        }
+
+        private void itmOpenProjectOutputDir_Click(object sender, EventArgs e)
+        {
+            var projectOutputDirectory = FlowBloxProjectManager.Instance.ActiveProject?.ProjectOutputDirectory;
+            if (string.IsNullOrWhiteSpace(projectOutputDirectory))
+                return;
+
+            if (!Directory.Exists(projectOutputDirectory))
+                Directory.CreateDirectory(projectOutputDirectory);
+
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = "explorer.exe",
+                Arguments = projectOutputDirectory,
+                UseShellExecute = true
+            });
+        }
+
+        private void RefreshRecentProjectsMenu()
+        {
+            itmRecentProjects.DropDownItems.Clear();
+
+            var recentProjects = RecentProjectsManager.Instance.GetRecentProjects();
+            foreach (var recentProject in recentProjects)
+            {
+                var item = new ToolStripMenuItem
+                {
+                    Text = BuildRecentProjectDisplayText(recentProject),
+                    Tag = recentProject
+                };
+                item.Click += itmRecentProjectsItem_Click;
+                itmRecentProjects.DropDownItems.Add(item);
+            }
+
+            FlowBloxStyle.ApplyStyle(menuStrip);
+        }
+
+        private static string BuildRecentProjectDisplayText(RecentProjectEntry entry)
+        {
+            if (entry == null)
+                return string.Empty;
+
+            var descriptor = string.Empty;
+            if (!string.IsNullOrWhiteSpace(entry.ProjectFilePath))
+                descriptor = Path.GetFileNameWithoutExtension(entry.ProjectFilePath);
+            else if (!string.IsNullOrWhiteSpace(entry.ProjectSpaceGuid))
+                descriptor = entry.ProjectSpaceGuid;
+
+            if (string.IsNullOrWhiteSpace(entry.ProjectName))
+                return descriptor;
+
+            if (string.IsNullOrWhiteSpace(descriptor) ||
+                string.Equals(entry.ProjectName, descriptor, StringComparison.OrdinalIgnoreCase))
+            {
+                return entry.ProjectName;
+            }
+
+            return $"{entry.ProjectName} ({descriptor})";
+        }
+
+        private async void itmRecentProjectsItem_Click(object sender, EventArgs e)
+        {
+            if (sender is not ToolStripMenuItem menuItem)
+                return;
+
+            if (menuItem.Tag is not RecentProjectEntry recentProject)
+                return;
+
+            await OpenProjectWithConfirmationAsync(async () =>
+            {
+                if (!string.IsNullOrWhiteSpace(recentProject.ProjectFilePath))
+                {
+                    if (!File.Exists(recentProject.ProjectFilePath))
+                    {
+                        RecentProjectsManager.Instance.RemoveEntry(recentProject);
+                        RefreshRecentProjectsMenu();
+                        UpdateUI();
+                        return;
+                    }
+
+                    CloseProject();
+                    _recentProjectPath = recentProject.ProjectFilePath;
+                    _recentProjectSpaceGuid = string.Empty;
+                    UnloadProject();
+                    await OpenProjectFromRecentProjectPathAsync();
+                    return;
+                }
+
+                if (!string.IsNullOrWhiteSpace(recentProject.ProjectSpaceGuid))
+                {
+                    CloseProject();
+                    _recentProjectPath = string.Empty;
+                    _recentProjectSpaceGuid = recentProject.ProjectSpaceGuid;
+                    UnloadProject();
+                    await OpenProjectFromProjectSpaceAsync(recentProject.ProjectSpaceGuid);
+                }
             });
         }
 

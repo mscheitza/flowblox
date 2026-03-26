@@ -80,7 +80,7 @@
     <value>Name</value>
   </data>
   <data name="Col_DisplayableProperties" xml:space="preserve">
-    <value>Angezeigte Eigenschaften</value>
+    <value>Eigenschaften</value>
   </data>
   <data name="Col_UsedIn" xml:space="preserve">
     <value>Verwendet in</value>
@@ -116,3 +116,4 @@
     <value>Möchten Sie '{0}' wirklich löschen?</value>
   </data>
 </root>
+
