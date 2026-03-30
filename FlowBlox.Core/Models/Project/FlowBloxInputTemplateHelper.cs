@@ -1,11 +1,20 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
+using FlowBlox.Core.Util;
 
 namespace FlowBlox.Core.Models.Project
 {
     public static class FlowBloxInputTemplateHelper
     {
+        public static string NormalizeRelativePath(string relativePath)
+        {
+            if (relativePath == null)
+                return string.Empty;
+
+            return relativePath.Replace('\\', '/').Trim('/');
+        }
+
         /// <summary>
         /// Validates that the given relative path stays inside the project input directory.
         /// Prevents rooted paths and path traversal ("..").
@@ -18,7 +27,7 @@ namespace FlowBlox.Core.Models.Project
             if (Path.IsPathRooted(relativePath))
                 throw new InvalidOperationException("RelativePath must not be rooted.");
 
-            var normalized = relativePath.Replace('\\', '/').Trim('/');
+            var normalized = NormalizeRelativePath(relativePath);
             if (normalized.Length == 0)
                 throw new InvalidOperationException("RelativePath is invalid.");
 
@@ -34,11 +43,12 @@ namespace FlowBlox.Core.Models.Project
             if (string.IsNullOrWhiteSpace(projectInputDirectory))
                 throw new InvalidOperationException("Project input directory is not configured.");
 
-            var combined = Path.Combine(projectInputDirectory, relativePath);
+            var normalizedRelativePath = NormalizeRelativePath(relativePath);
+            var combined = Path.Combine(projectInputDirectory, normalizedRelativePath);
 
             // Ensure the result is still under projectInputDirectory.
-            var fullBase = Path.GetFullPath(projectInputDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar);
-            var fullTarget = Path.GetFullPath(combined);
+            var fullBase = IOUtil.EnsureTrailingDirectorySeparator(IOUtil.NormalizePath(projectInputDirectory, trimTrailingDirectorySeparator: true));
+            var fullTarget = IOUtil.NormalizePath(combined);
 
             if (!fullTarget.StartsWith(fullBase, StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException("RelativePath escapes the project input directory.");
@@ -47,9 +57,17 @@ namespace FlowBlox.Core.Models.Project
         }
 
         /// <summary>
-        /// Creates all input template files in the project input directory if they do not exist yet.
+        /// Synchronizes input template files in the project input directory according to SyncMode.
         /// </summary>
         public static void EnsureInputFilesExist(FlowBloxProject project)
+        {
+            SynchronizeInputFiles(project);
+        }
+
+        /// <summary>
+        /// Synchronizes all input templates into the project input directory according to each template SyncMode.
+        /// </summary>
+        public static void SynchronizeInputFiles(FlowBloxProject project)
         {
             if (project == null)
                 return;
@@ -72,8 +90,9 @@ namespace FlowBlox.Core.Models.Project
                     continue;
 
                 var targetPath = BuildAbsoluteTargetPath(inputDir, tpl.RelativePath);
+                var syncMode = tpl.SyncMode;
 
-                if (File.Exists(targetPath))
+                if (File.Exists(targetPath) && syncMode != FlowBloxInputTemplateSyncMode.AlwaysOverwrite)
                     continue;
 
                 var parentDir = Path.GetDirectoryName(targetPath);

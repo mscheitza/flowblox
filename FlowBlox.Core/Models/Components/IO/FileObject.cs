@@ -49,20 +49,15 @@ namespace FlowBlox.Core.Models.Components.IO
             }
         }
 
-        public string GetRuntimeFilePath() => ReplaceRuntimeVariables(FilePath);
+        public string GetRuntimeFilePath() => GetRuntimeFilePath(FilePath);
 
-        private string ReplaceRuntimeVariables(string filePath)
+        private string GetRuntimeFilePath(string filePath)
         {
-            if (!string.IsNullOrEmpty(filePath) && 
-                filePath.Contains("${Paths.OutputDirectory}"))
-            {
-                string outputDirectory = FlowBloxOptions.GetOptionInstance().OptionCollection["Paths.OutputDir"].Value;
-                if (!Directory.Exists(outputDirectory))
-                    Directory.CreateDirectory(outputDirectory);
-                filePath = filePath.Replace("${Paths.OutputDirectory}", outputDirectory);
-            }
+            var resolvedPath = FlowBloxFieldHelper.ReplaceFieldsInString(filePath);
+            if (string.IsNullOrWhiteSpace(resolvedPath))
+                return string.Empty;
 
-            return FlowBloxFieldHelper.ReplaceFieldsInString(filePath);
+            return IOUtil.NormalizePath(resolvedPath);
         }
 
         public override bool CanRead()

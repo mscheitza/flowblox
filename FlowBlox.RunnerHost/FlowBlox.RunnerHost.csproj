@@ -1,23 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-	<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>FlowBloxMainIcon.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Company>FlowBlox and contributors</Company>
+    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
+    <Authors>FlowBlox and contributors</Authors>
+    <Product>FlowBlox</Product>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="FlowBloxMainIcon.ico" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
-
 </Project>

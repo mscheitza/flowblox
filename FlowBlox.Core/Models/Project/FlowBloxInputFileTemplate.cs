@@ -10,6 +10,7 @@ namespace FlowBlox.Core.Models.Project
     {
         private string _relativePath;
         private string _contentBase64;
+        private FlowBloxInputTemplateSyncMode _syncMode = FlowBloxInputTemplateSyncMode.CreateIfNotExists;
 
         /// <summary>
         /// Relative path inside the project's input directory.
@@ -43,6 +44,22 @@ namespace FlowBlox.Core.Models.Project
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ContentBytes));
                 OnPropertyChanged(nameof(SizeBytes));
+            }
+        }
+
+        /// <summary>
+        /// Controls how template content is synchronized to project input directory.
+        /// </summary>
+        public FlowBloxInputTemplateSyncMode SyncMode
+        {
+            get => _syncMode;
+            set
+            {
+                if (_syncMode == value)
+                    return;
+
+                _syncMode = value;
+                OnPropertyChanged();
             }
         }
 

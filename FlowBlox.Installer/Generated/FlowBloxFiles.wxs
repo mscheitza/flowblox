@@ -1,0 +1,550 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Directory Id="DIR_95CC64DD2825F9DF13EC4AD6" Name="cs">
+      </Directory>
+      <Directory Id="DIR_5F02F0889301FD7BE1AC972C" Name="de">
+      </Directory>
+      <Directory Id="DIR_12470FE406D44017D96EAB37" Name="es">
+      </Directory>
+      <Directory Id="DIR_82A9E4D26595C87AB6E44239" Name="fr">
+      </Directory>
+      <Directory Id="DIR_0D149B90E7394297301C9019" Name="it">
+      </Directory>
+      <Directory Id="DIR_A78C5BF69B40D464B954EF76" Name="ja">
+      </Directory>
+      <Directory Id="DIR_ED73F6B46391B95E1D03C681" Name="ko">
+      </Directory>
+      <Directory Id="DIR_288404204E3D452229308317" Name="pl">
+      </Directory>
+      <Directory Id="DIR_C6397FDBD08F902F9AFDDE3B" Name="pt-BR">
+      </Directory>
+      <Directory Id="DIR_89484B14B36A8D5329426A3D" Name="ru">
+      </Directory>
+      <Directory Id="DIR_71A98CA9E8BEF9557263C0B6" Name="selenium-manager">
+        <Directory Id="DIR_4D950C4DF4F55AAE1EE73F17" Name="linux">
+        </Directory>
+        <Directory Id="DIR_4A6EAC344171F239D5C99AA2" Name="macos">
+        </Directory>
+        <Directory Id="DIR_1ADEE0DA1264B19503F6575D" Name="windows">
+        </Directory>
+      </Directory>
+      <Directory Id="DIR_E7D707A26E7F7B6FF52C489C" Name="tr">
+      </Directory>
+      <Directory Id="DIR_5FC0714FE3A9D9E11AAB70B8" Name="zh-Hans">
+      </Directory>
+      <Directory Id="DIR_015BC51145E68C8AA9D1C0EA" Name="zh-Hant">
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="FlowBloxFiles">
+      <Component Id="CMP_EF73E581A8AD42484715FA0E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_EF73E581A8AD42484715FA0E" Source="$(var.SourceDir)\\Antlr4.Runtime.Standard.dll" />
+      </Component>
+      <Component Id="CMP_B52854F55811CB4AA71F3EE1" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_B52854F55811CB4AA71F3EE1" Source="$(var.SourceDir)\\Azure.Core.dll" />
+      </Component>
+      <Component Id="CMP_0A157D44ECF8DBB47693F389" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_0A157D44ECF8DBB47693F389" Source="$(var.SourceDir)\\Azure.Identity.dll" />
+      </Component>
+      <Component Id="CMP_7BC6C8633A8880C29D0C02F0" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_7BC6C8633A8880C29D0C02F0" Source="$(var.SourceDir)\\BouncyCastle.Cryptography.dll" />
+      </Component>
+      <Component Id="CMP_C5D659E689CF846ECB729830" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C5D659E689CF846ECB729830" Source="$(var.SourceDir)\\comerr64.dll" />
+      </Component>
+      <Component Id="CMP_C24E01B6D2300FD25A930AE6" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C24E01B6D2300FD25A930AE6" Source="$(var.SourceDir)\\CommandLine.dll" />
+      </Component>
+      <Component Id="CMP_9C3894C6FD82D11C40273D40" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_9C3894C6FD82D11C40273D40" Source="$(var.SourceDir)\\ControlzEx.dll" />
+      </Component>
+      <Component Id="CMP_A7A474DFCD123A28EEC8B32E" Directory="DIR_95CC64DD2825F9DF13EC4AD6" Guid="*">
+        <File Id="FIL_A7A474DFCD123A28EEC8B32E" Source="$(var.SourceDir)\\cs\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_6DC9F36ADD0EB0CFA8060D28" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_6DC9F36ADD0EB0CFA8060D28" Source="$(var.SourceDir)\\CsvHelper.dll" />
+      </Component>
+      <Component Id="CMP_1746E1EDF690D8F651DFD58B" Directory="DIR_5F02F0889301FD7BE1AC972C" Guid="*">
+        <File Id="FIL_1746E1EDF690D8F651DFD58B" Source="$(var.SourceDir)\\de\FlowBlox.Core.resources.dll" />
+      </Component>
+      <Component Id="CMP_16952200F39998F698FA6CF2" Directory="DIR_5F02F0889301FD7BE1AC972C" Guid="*">
+        <File Id="FIL_16952200F39998F698FA6CF2" Source="$(var.SourceDir)\\de\FlowBlox.resources.dll" />
+      </Component>
+      <Component Id="CMP_BFEBC4F9402BA2458E969AEA" Directory="DIR_5F02F0889301FD7BE1AC972C" Guid="*">
+        <File Id="FIL_BFEBC4F9402BA2458E969AEA" Source="$(var.SourceDir)\\de\FlowBlox.UICore.resources.dll" />
+      </Component>
+      <Component Id="CMP_3E371F22DD1693A63494380B" Directory="DIR_5F02F0889301FD7BE1AC972C" Guid="*">
+        <File Id="FIL_3E371F22DD1693A63494380B" Source="$(var.SourceDir)\\de\MahApps.Metro.resources.dll" />
+      </Component>
+      <Component Id="CMP_1399AE490B9B033D0964E776" Directory="DIR_5F02F0889301FD7BE1AC972C" Guid="*">
+        <File Id="FIL_1399AE490B9B033D0964E776" Source="$(var.SourceDir)\\de\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_7B2C4CCFE8F97DF953CF236E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_7B2C4CCFE8F97DF953CF236E" Source="$(var.SourceDir)\\EPPlus.dll" />
+      </Component>
+      <Component Id="CMP_7E79B546CD4E19BF70596A39" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_7E79B546CD4E19BF70596A39" Source="$(var.SourceDir)\\EPPlus.Interfaces.dll" />
+      </Component>
+      <Component Id="CMP_9B76CE8DB95A2625C8AB0527" Directory="DIR_12470FE406D44017D96EAB37" Guid="*">
+        <File Id="FIL_9B76CE8DB95A2625C8AB0527" Source="$(var.SourceDir)\\es\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_9D9CC71FABAFB1A869A6F9E3" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_9D9CC71FABAFB1A869A6F9E3" Source="$(var.SourceDir)\\ExCSS.dll" />
+      </Component>
+      <Component Id="CMP_948F4AD739EFD02441B8AD32" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_948F4AD739EFD02441B8AD32" Source="$(var.SourceDir)\\FastColoredTextBox.dll" />
+      </Component>
+      <Component Id="CMP_30FB014C48DABB9D83D6CDCE" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_30FB014C48DABB9D83D6CDCE" Source="$(var.SourceDir)\\FlowBlox.AIAssistant.dll" />
+      </Component>
+      <Component Id="CMP_3C33DB89B437C704C01C0039" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_3C33DB89B437C704C01C0039" Source="$(var.SourceDir)\\FlowBlox.AIAssistant.pdb" />
+      </Component>
+      <Component Id="CMP_F5B4BCEF2BABD70FAA81918E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_F5B4BCEF2BABD70FAA81918E" Source="$(var.SourceDir)\\FlowBlox.Core.dll" />
+      </Component>
+      <Component Id="CMP_32670F7E78AF517B51D12648" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_32670F7E78AF517B51D12648" Source="$(var.SourceDir)\\FlowBlox.Core.pdb" />
+      </Component>
+      <Component Id="CMP_3AF3219DFED34CD3753F8E15" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_3AF3219DFED34CD3753F8E15" Source="$(var.SourceDir)\\FlowBlox.deps.json" />
+      </Component>
+      <Component Id="CMP_22493EC277FF113A4001FC3B" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_22493EC277FF113A4001FC3B" Source="$(var.SourceDir)\\FlowBlox.dll" />
+      </Component>
+      <Component Id="CMP_F4A38EED2A6AF17D3D0EDCD6" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_F4A38EED2A6AF17D3D0EDCD6" Source="$(var.SourceDir)\\FlowBlox.dll.config" />
+      </Component>
+      <Component Id="CMP_BB82132763A425EC000E78E4" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_BB82132763A425EC000E78E4" Source="$(var.SourceDir)\\FlowBlox.exe" />
+      </Component>
+      <Component Id="CMP_CFB24077B0EDFE8DFC6111AC" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_CFB24077B0EDFE8DFC6111AC" Source="$(var.SourceDir)\\FlowBlox.pdb" />
+      </Component>
+      <Component Id="CMP_BD5E8C2203F599883B6661CF" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_BD5E8C2203F599883B6661CF" Source="$(var.SourceDir)\\FlowBlox.runtimeconfig.json" />
+      </Component>
+      <Component Id="CMP_9B253E05668C83741A34D1E2" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_9B253E05668C83741A34D1E2" Source="$(var.SourceDir)\\FlowBlox.SequenceDetection.dll" />
+      </Component>
+      <Component Id="CMP_C77112430EC8EA2C4B7E486E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C77112430EC8EA2C4B7E486E" Source="$(var.SourceDir)\\FlowBlox.SequenceDetection.pdb" />
+      </Component>
+      <Component Id="CMP_0411C11F67D6EA0B697CE492" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_0411C11F67D6EA0B697CE492" Source="$(var.SourceDir)\\FlowBlox.UICore.dll" />
+      </Component>
+      <Component Id="CMP_4248CB3DDD63FC6DCA51BF7C" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_4248CB3DDD63FC6DCA51BF7C" Source="$(var.SourceDir)\\FlowBlox.UICore.pdb" />
+      </Component>
+      <Component Id="CMP_F9A9A3792F543D770D4C3C4D" Directory="DIR_82A9E4D26595C87AB6E44239" Guid="*">
+        <File Id="FIL_F9A9A3792F543D770D4C3C4D" Source="$(var.SourceDir)\\fr\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_3FE014CAA34752BA634A9E94" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_3FE014CAA34752BA634A9E94" Source="$(var.SourceDir)\\Google.Protobuf.dll" />
+      </Component>
+      <Component Id="CMP_38949193E981FBE35CA7053E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_38949193E981FBE35CA7053E" Source="$(var.SourceDir)\\gssapi64.dll" />
+      </Component>
+      <Component Id="CMP_3F6743FE4B2C4E1B30EBA657" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_3F6743FE4B2C4E1B30EBA657" Source="$(var.SourceDir)\\ICSharpCode.AvalonEdit.dll" />
+      </Component>
+      <Component Id="CMP_0203E8B7969C182ED757E87B" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_0203E8B7969C182ED757E87B" Source="$(var.SourceDir)\\ICSharpCode.SharpZipLib.dll" />
+      </Component>
+      <Component Id="CMP_FE78AA2147689D653ED130E1" Directory="DIR_0D149B90E7394297301C9019" Guid="*">
+        <File Id="FIL_FE78AA2147689D653ED130E1" Source="$(var.SourceDir)\\it\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_8B3A9F2D6D992667ABCDC69D" Directory="DIR_A78C5BF69B40D464B954EF76" Guid="*">
+        <File Id="FIL_8B3A9F2D6D992667ABCDC69D" Source="$(var.SourceDir)\\ja\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_731DE72F867D1C5BEB0B40A6" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_731DE72F867D1C5BEB0B40A6" Source="$(var.SourceDir)\\K4os.Compression.LZ4.dll" />
+      </Component>
+      <Component Id="CMP_F5F1E7AFAA9AF6DAC2CD0DDA" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_F5F1E7AFAA9AF6DAC2CD0DDA" Source="$(var.SourceDir)\\K4os.Compression.LZ4.Streams.dll" />
+      </Component>
+      <Component Id="CMP_99B5486EFD24BD74FB3ACA6D" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_99B5486EFD24BD74FB3ACA6D" Source="$(var.SourceDir)\\K4os.Hash.xxHash.dll" />
+      </Component>
+      <Component Id="CMP_603E8BA0BF06272CF8AD86F7" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_603E8BA0BF06272CF8AD86F7" Source="$(var.SourceDir)\\k5sprt64.dll" />
+      </Component>
+      <Component Id="CMP_BC0A2281D357484844AE62FB" Directory="DIR_ED73F6B46391B95E1D03C681" Guid="*">
+        <File Id="FIL_BC0A2281D357484844AE62FB" Source="$(var.SourceDir)\\ko\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_F55545344143ADEA263EB1AB" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_F55545344143ADEA263EB1AB" Source="$(var.SourceDir)\\krb5_64.dll" />
+      </Component>
+      <Component Id="CMP_C8DFBA580471F5BE2F5C7267" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C8DFBA580471F5BE2F5C7267" Source="$(var.SourceDir)\\krbcc64.dll" />
+      </Component>
+      <Component Id="CMP_C1D3692F09FAE8AB54A8CB69" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C1D3692F09FAE8AB54A8CB69" Source="$(var.SourceDir)\\libSkiaSharp.dll" />
+      </Component>
+      <Component Id="CMP_235D1FEBFDAD13FBAE8CCD4B" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_235D1FEBFDAD13FBAE8CCD4B" Source="$(var.SourceDir)\\log4net.application.config" />
+      </Component>
+      <Component Id="CMP_93DFB0665079F5BDFFB442E9" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_93DFB0665079F5BDFFB442E9" Source="$(var.SourceDir)\\log4net.dll" />
+      </Component>
+      <Component Id="CMP_16C454E2A0398424BC0C67EC" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_16C454E2A0398424BC0C67EC" Source="$(var.SourceDir)\\log4net.runtime.config" />
+      </Component>
+      <Component Id="CMP_4A6D7142B1B780B6B5F8010C" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_4A6D7142B1B780B6B5F8010C" Source="$(var.SourceDir)\\MahApps.Metro.dll" />
+      </Component>
+      <Component Id="CMP_2135130813BB81148D04B2B8" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_2135130813BB81148D04B2B8" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.BootstrapIcons.dll" />
+      </Component>
+      <Component Id="CMP_3AF4BEBE0884539896D466B8" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_3AF4BEBE0884539896D466B8" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.BoxIcons.dll" />
+      </Component>
+      <Component Id="CMP_55FA65DCAAE6FB7FB68E4D55" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_55FA65DCAAE6FB7FB68E4D55" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Codicons.dll" />
+      </Component>
+      <Component Id="CMP_B1F64C95DC0441951AC49BD6" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_B1F64C95DC0441951AC49BD6" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Coolicons.dll" />
+      </Component>
+      <Component Id="CMP_A3FD53B3F231F31602770C2E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_A3FD53B3F231F31602770C2E" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Core.dll" />
+      </Component>
+      <Component Id="CMP_41827EC793DE1C1D1C6D6963" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_41827EC793DE1C1D1C6D6963" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.dll" />
+      </Component>
+      <Component Id="CMP_70CA9DD0C1607971F21D6688" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_70CA9DD0C1607971F21D6688" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Entypo.dll" />
+      </Component>
+      <Component Id="CMP_C2FCB5683930B4BB648334C4" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C2FCB5683930B4BB648334C4" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.EvaIcons.dll" />
+      </Component>
+      <Component Id="CMP_35236AFB37EB3AE65D886A43" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_35236AFB37EB3AE65D886A43" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.FeatherIcons.dll" />
+      </Component>
+      <Component Id="CMP_D07F0F41EF5F0C190D435FEC" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_D07F0F41EF5F0C190D435FEC" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.FileIcons.dll" />
+      </Component>
+      <Component Id="CMP_F99EEE6BE04E5ECA52B600D1" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_F99EEE6BE04E5ECA52B600D1" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Fontaudio.dll" />
+      </Component>
+      <Component Id="CMP_FAF6A62B4B927835D721FF0E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_FAF6A62B4B927835D721FF0E" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.FontAwesome.dll" />
+      </Component>
+      <Component Id="CMP_5DD7FD44367F6317F8BCA885" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5DD7FD44367F6317F8BCA885" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Fontisto.dll" />
+      </Component>
+      <Component Id="CMP_CE047CA10291D79FE5E81CED" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_CE047CA10291D79FE5E81CED" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.ForkAwesome.dll" />
+      </Component>
+      <Component Id="CMP_9C5A8B265BE661798D9BD6FF" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_9C5A8B265BE661798D9BD6FF" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Ionicons.dll" />
+      </Component>
+      <Component Id="CMP_44C12667195D56C46F369A1B" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_44C12667195D56C46F369A1B" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.JamIcons.dll" />
+      </Component>
+      <Component Id="CMP_C63C130CCA84498878904E1A" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C63C130CCA84498878904E1A" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Material.dll" />
+      </Component>
+      <Component Id="CMP_BAA45C4BE959D4DEEE00BD39" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_BAA45C4BE959D4DEEE00BD39" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.MaterialDesign.dll" />
+      </Component>
+      <Component Id="CMP_33E9309E23942EA188C7DBAF" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_33E9309E23942EA188C7DBAF" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.MaterialLight.dll" />
+      </Component>
+      <Component Id="CMP_F911A67D18339E4493DFF065" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_F911A67D18339E4493DFF065" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Microns.dll" />
+      </Component>
+      <Component Id="CMP_30A286BE335A221AB907EB3B" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_30A286BE335A221AB907EB3B" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Modern.dll" />
+      </Component>
+      <Component Id="CMP_27B4576872A537D17612D6AE" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_27B4576872A537D17612D6AE" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Octicons.dll" />
+      </Component>
+      <Component Id="CMP_48E996AAA27EBB14C921C3B6" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_48E996AAA27EBB14C921C3B6" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.PicolIcons.dll" />
+      </Component>
+      <Component Id="CMP_174F91048A5D905288C011DA" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_174F91048A5D905288C011DA" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.PixelartIcons.dll" />
+      </Component>
+      <Component Id="CMP_4203BCB28E07C693367F3171" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_4203BCB28E07C693367F3171" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.RadixIcons.dll" />
+      </Component>
+      <Component Id="CMP_EA078A32EACDF431CE2DC655" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_EA078A32EACDF431CE2DC655" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.RemixIcon.dll" />
+      </Component>
+      <Component Id="CMP_DAB0C4393CF46BA0D3026FEC" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_DAB0C4393CF46BA0D3026FEC" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.RPGAwesome.dll" />
+      </Component>
+      <Component Id="CMP_A9139B6BEF3B9781D85E5CD8" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_A9139B6BEF3B9781D85E5CD8" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.SimpleIcons.dll" />
+      </Component>
+      <Component Id="CMP_0B2D60407C3A7643C3BD8051" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_0B2D60407C3A7643C3BD8051" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Typicons.dll" />
+      </Component>
+      <Component Id="CMP_2FE8EC0C3CDC1613BF16F8DE" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_2FE8EC0C3CDC1613BF16F8DE" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Unicons.dll" />
+      </Component>
+      <Component Id="CMP_FFC4B89AB8C6253ADFE2B182" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_FFC4B89AB8C6253ADFE2B182" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.VaadinIcons.dll" />
+      </Component>
+      <Component Id="CMP_5F53D5C37CB6290C27B2380A" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5F53D5C37CB6290C27B2380A" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.WeatherIcons.dll" />
+      </Component>
+      <Component Id="CMP_E79E74EAB584CE20CAF04F25" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_E79E74EAB584CE20CAF04F25" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Zondicons.dll" />
+      </Component>
+      <Component Id="CMP_78BA15314D7968958D1A6B91" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_78BA15314D7968958D1A6B91" Source="$(var.SourceDir)\\Microsoft.Bcl.AsyncInterfaces.dll" />
+      </Component>
+      <Component Id="CMP_B61EC3ADC614F2C20F130BC2" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_B61EC3ADC614F2C20F130BC2" Source="$(var.SourceDir)\\Microsoft.Bcl.Cryptography.dll" />
+      </Component>
+      <Component Id="CMP_536B7C75C80BFF55D0129F60" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_536B7C75C80BFF55D0129F60" Source="$(var.SourceDir)\\Microsoft.Data.SqlClient.dll" />
+      </Component>
+      <Component Id="CMP_1853E685752BE2511FCBE1FC" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_1853E685752BE2511FCBE1FC" Source="$(var.SourceDir)\\Microsoft.Data.SqlClient.SNI.dll" />
+      </Component>
+      <Component Id="CMP_4334980CD440F0DA432B02B2" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_4334980CD440F0DA432B02B2" Source="$(var.SourceDir)\\Microsoft.Data.Sqlite.dll" />
+      </Component>
+      <Component Id="CMP_1F3A6EA0AEF4986BA11BD8C7" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_1F3A6EA0AEF4986BA11BD8C7" Source="$(var.SourceDir)\\Microsoft.Extensions.AI.Abstractions.dll" />
+      </Component>
+      <Component Id="CMP_41218391836E65CC9A93225D" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_41218391836E65CC9A93225D" Source="$(var.SourceDir)\\Microsoft.Extensions.Caching.Abstractions.dll" />
+      </Component>
+      <Component Id="CMP_A4EF547FBA8BCF47F58DC632" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_A4EF547FBA8BCF47F58DC632" Source="$(var.SourceDir)\\Microsoft.Extensions.Caching.Memory.dll" />
+      </Component>
+      <Component Id="CMP_878D93C486EEA7501E7ABAAC" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_878D93C486EEA7501E7ABAAC" Source="$(var.SourceDir)\\Microsoft.Extensions.Configuration.Abstractions.dll" />
+      </Component>
+      <Component Id="CMP_5278328790221C26C2FA76D4" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5278328790221C26C2FA76D4" Source="$(var.SourceDir)\\Microsoft.Extensions.Configuration.dll" />
+      </Component>
+      <Component Id="CMP_DDA8FE4995CE06014291BEDB" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_DDA8FE4995CE06014291BEDB" Source="$(var.SourceDir)\\Microsoft.Extensions.Configuration.FileExtensions.dll" />
+      </Component>
+      <Component Id="CMP_33C22AA7F568E18C9265DE22" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_33C22AA7F568E18C9265DE22" Source="$(var.SourceDir)\\Microsoft.Extensions.Configuration.Json.dll" />
+      </Component>
+      <Component Id="CMP_2334AD895A3904FB5B0E8C26" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_2334AD895A3904FB5B0E8C26" Source="$(var.SourceDir)\\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+      </Component>
+      <Component Id="CMP_8A65D7958BBAB64E8EA48E7B" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_8A65D7958BBAB64E8EA48E7B" Source="$(var.SourceDir)\\Microsoft.Extensions.DependencyInjection.dll" />
+      </Component>
+      <Component Id="CMP_C8908796AAE79F09BADC77E6" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C8908796AAE79F09BADC77E6" Source="$(var.SourceDir)\\Microsoft.Extensions.FileProviders.Abstractions.dll" />
+      </Component>
+      <Component Id="CMP_66C9FC0A457519890D3B725A" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_66C9FC0A457519890D3B725A" Source="$(var.SourceDir)\\Microsoft.Extensions.FileProviders.Physical.dll" />
+      </Component>
+      <Component Id="CMP_088763BEE6657A83E472541D" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_088763BEE6657A83E472541D" Source="$(var.SourceDir)\\Microsoft.Extensions.FileSystemGlobbing.dll" />
+      </Component>
+      <Component Id="CMP_16B57B1729016129DF5CFF8C" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_16B57B1729016129DF5CFF8C" Source="$(var.SourceDir)\\Microsoft.Extensions.Localization.Abstractions.dll" />
+      </Component>
+      <Component Id="CMP_A336EEBB9CA863878FB5B22C" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_A336EEBB9CA863878FB5B22C" Source="$(var.SourceDir)\\Microsoft.Extensions.Localization.dll" />
+      </Component>
+      <Component Id="CMP_5D8B96B269A6A1ED3DBDDD2C" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5D8B96B269A6A1ED3DBDDD2C" Source="$(var.SourceDir)\\Microsoft.Extensions.Logging.Abstractions.dll" />
+      </Component>
+      <Component Id="CMP_7DE28CE2E7FD1E11ECAF1AA1" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_7DE28CE2E7FD1E11ECAF1AA1" Source="$(var.SourceDir)\\Microsoft.Extensions.Options.dll" />
+      </Component>
+      <Component Id="CMP_4707372D3D5905AB870A321F" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_4707372D3D5905AB870A321F" Source="$(var.SourceDir)\\Microsoft.Extensions.Primitives.dll" />
+      </Component>
+      <Component Id="CMP_E7AF043BF34DAB51FBEECF9E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_E7AF043BF34DAB51FBEECF9E" Source="$(var.SourceDir)\\Microsoft.Identity.Client.dll" />
+      </Component>
+      <Component Id="CMP_6A329F43348120AE114A7582" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_6A329F43348120AE114A7582" Source="$(var.SourceDir)\\Microsoft.Identity.Client.Extensions.Msal.dll" />
+      </Component>
+      <Component Id="CMP_2A6B90178B048FD58B6886C9" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_2A6B90178B048FD58B6886C9" Source="$(var.SourceDir)\\Microsoft.IdentityModel.Abstractions.dll" />
+      </Component>
+      <Component Id="CMP_CAAFE27575F3A7C8898374D2" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_CAAFE27575F3A7C8898374D2" Source="$(var.SourceDir)\\Microsoft.IdentityModel.JsonWebTokens.dll" />
+      </Component>
+      <Component Id="CMP_CFF2375308F359352CBF30BE" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_CFF2375308F359352CBF30BE" Source="$(var.SourceDir)\\Microsoft.IdentityModel.Logging.dll" />
+      </Component>
+      <Component Id="CMP_668ABD3BD5048A58112300E4" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_668ABD3BD5048A58112300E4" Source="$(var.SourceDir)\\Microsoft.IdentityModel.Protocols.dll" />
+      </Component>
+      <Component Id="CMP_F168DA0104590490D958C717" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_F168DA0104590490D958C717" Source="$(var.SourceDir)\\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll" />
+      </Component>
+      <Component Id="CMP_9C77D7F417BDC3410EA7CE4B" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_9C77D7F417BDC3410EA7CE4B" Source="$(var.SourceDir)\\Microsoft.IdentityModel.Tokens.dll" />
+      </Component>
+      <Component Id="CMP_3C58E764043E072E36E8EA75" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_3C58E764043E072E36E8EA75" Source="$(var.SourceDir)\\Microsoft.IO.RecyclableMemoryStream.dll" />
+      </Component>
+      <Component Id="CMP_6AA38F19CF32A55155A28506" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_6AA38F19CF32A55155A28506" Source="$(var.SourceDir)\\Microsoft.ML.OnnxRuntime.dll" />
+      </Component>
+      <Component Id="CMP_5D42D7F57E1E697CFBB7E725" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5D42D7F57E1E697CFBB7E725" Source="$(var.SourceDir)\\Microsoft.ML.OnnxRuntimeGenAI.dll" />
+      </Component>
+      <Component Id="CMP_7ED3F3339ED88B0BED95C3EF" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_7ED3F3339ED88B0BED95C3EF" Source="$(var.SourceDir)\\Microsoft.ML.Tokenizers.Data.Gpt2.dll" />
+      </Component>
+      <Component Id="CMP_9139848024AB00D73E175545" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_9139848024AB00D73E175545" Source="$(var.SourceDir)\\Microsoft.ML.Tokenizers.dll" />
+      </Component>
+      <Component Id="CMP_066DA0DBF7CC96F946BD955A" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_066DA0DBF7CC96F946BD955A" Source="$(var.SourceDir)\\Microsoft.SqlServer.Server.dll" />
+      </Component>
+      <Component Id="CMP_1C0C81D209841705F916B308" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_1C0C81D209841705F916B308" Source="$(var.SourceDir)\\Microsoft.Windows.SDK.NET.dll" />
+      </Component>
+      <Component Id="CMP_5681D1C513DE4D99476D4A32" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5681D1C513DE4D99476D4A32" Source="$(var.SourceDir)\\Microsoft.Xaml.Behaviors.dll" />
+      </Component>
+      <Component Id="CMP_8A0CB90675F8753841DB40B6" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_8A0CB90675F8753841DB40B6" Source="$(var.SourceDir)\\MySql.Data.dll" />
+      </Component>
+      <Component Id="CMP_5C54471BC8A4968EEF6928DD" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5C54471BC8A4968EEF6928DD" Source="$(var.SourceDir)\\NCalc.dll" />
+      </Component>
+      <Component Id="CMP_0900B6C72905788ACA613F89" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_0900B6C72905788ACA613F89" Source="$(var.SourceDir)\\Newtonsoft.Json.dll" />
+      </Component>
+      <Component Id="CMP_E6CFB62110FE8BD8F6246BEA" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_E6CFB62110FE8BD8F6246BEA" Source="$(var.SourceDir)\\ObjectListView2022NET.dll" />
+      </Component>
+      <Component Id="CMP_534EB861FFA76CACA8120E5A" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_534EB861FFA76CACA8120E5A" Source="$(var.SourceDir)\\Oracle.ManagedDataAccess.dll" />
+      </Component>
+      <Component Id="CMP_F217C6E0CCC26A6B5EC06519" Directory="DIR_288404204E3D452229308317" Guid="*">
+        <File Id="FIL_F217C6E0CCC26A6B5EC06519" Source="$(var.SourceDir)\\pl\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_B6E21EDBC4E20BD847DA6967" Directory="DIR_C6397FDBD08F902F9AFDDE3B" Guid="*">
+        <File Id="FIL_B6E21EDBC4E20BD847DA6967" Source="$(var.SourceDir)\\pt-BR\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_907546E9C2ABA339655ACDF5" Directory="DIR_89484B14B36A8D5329426A3D" Guid="*">
+        <File Id="FIL_907546E9C2ABA339655ACDF5" Source="$(var.SourceDir)\\ru\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_566DB6EC144FBE62A38FC6AE" Directory="DIR_4D950C4DF4F55AAE1EE73F17" Guid="*">
+        <File Id="FIL_566DB6EC144FBE62A38FC6AE" Source="$(var.SourceDir)\\selenium-manager\linux\selenium-manager" />
+      </Component>
+      <Component Id="CMP_F06C615F313609C22B4904E6" Directory="DIR_4A6EAC344171F239D5C99AA2" Guid="*">
+        <File Id="FIL_F06C615F313609C22B4904E6" Source="$(var.SourceDir)\\selenium-manager\macos\selenium-manager" />
+      </Component>
+      <Component Id="CMP_7C29AE0D2DC6F825106F3ED9" Directory="DIR_1ADEE0DA1264B19503F6575D" Guid="*">
+        <File Id="FIL_7C29AE0D2DC6F825106F3ED9" Source="$(var.SourceDir)\\selenium-manager\windows\selenium-manager.exe" />
+      </Component>
+      <Component Id="CMP_33CB199928FCE54EDD110E87" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_33CB199928FCE54EDD110E87" Source="$(var.SourceDir)\\ShimSkiaSharp.dll" />
+      </Component>
+      <Component Id="CMP_24B5B68527C5071B62920658" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_24B5B68527C5071B62920658" Source="$(var.SourceDir)\\SkiaSharp.dll" />
+      </Component>
+      <Component Id="CMP_1A3C1DFF6C5F0035BB255439" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_1A3C1DFF6C5F0035BB255439" Source="$(var.SourceDir)\\SQLitePCLRaw.core.dll" />
+      </Component>
+      <Component Id="CMP_E138606754B5A315BC60BAFA" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_E138606754B5A315BC60BAFA" Source="$(var.SourceDir)\\Svg.Custom.dll" />
+      </Component>
+      <Component Id="CMP_D17DBCCA8226966F4DD6DAB2" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_D17DBCCA8226966F4DD6DAB2" Source="$(var.SourceDir)\\Svg.Model.dll" />
+      </Component>
+      <Component Id="CMP_69C972850025D3CF4E47DDFA" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_69C972850025D3CF4E47DDFA" Source="$(var.SourceDir)\\Svg.Skia.dll" />
+      </Component>
+      <Component Id="CMP_56E2F4FF536CE3B386FEE6B3" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_56E2F4FF536CE3B386FEE6B3" Source="$(var.SourceDir)\\System.ClientModel.dll" />
+      </Component>
+      <Component Id="CMP_AB4C1A5F9407686238D943A0" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_AB4C1A5F9407686238D943A0" Source="$(var.SourceDir)\\System.Configuration.ConfigurationManager.dll" />
+      </Component>
+      <Component Id="CMP_14A2AC2C630332C4B0D05CA6" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_14A2AC2C630332C4B0D05CA6" Source="$(var.SourceDir)\\System.Diagnostics.EventLog.dll" />
+      </Component>
+      <Component Id="CMP_7C013CB25FB93DFB08BFB329" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_7C013CB25FB93DFB08BFB329" Source="$(var.SourceDir)\\System.DirectoryServices.Protocols.dll" />
+      </Component>
+      <Component Id="CMP_692030912068064FC276DC8E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_692030912068064FC276DC8E" Source="$(var.SourceDir)\\System.IdentityModel.Tokens.Jwt.dll" />
+      </Component>
+      <Component Id="CMP_B9F41B0BD45DACE0A32D61A0" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_B9F41B0BD45DACE0A32D61A0" Source="$(var.SourceDir)\\System.IO.Pipelines.dll" />
+      </Component>
+      <Component Id="CMP_085CA31762F44E9C41208B79" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_085CA31762F44E9C41208B79" Source="$(var.SourceDir)\\System.Management.dll" />
+      </Component>
+      <Component Id="CMP_2AD6CF137E9F23C3CE976C27" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_2AD6CF137E9F23C3CE976C27" Source="$(var.SourceDir)\\System.Memory.Data.dll" />
+      </Component>
+      <Component Id="CMP_712F54A74575FA1CFCC07898" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_712F54A74575FA1CFCC07898" Source="$(var.SourceDir)\\System.Numerics.Tensors.dll" />
+      </Component>
+      <Component Id="CMP_8ACD3A013C3522D9E9CA4411" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_8ACD3A013C3522D9E9CA4411" Source="$(var.SourceDir)\\System.Security.Cryptography.Pkcs.dll" />
+      </Component>
+      <Component Id="CMP_29F98F298718D7F33D3924E7" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_29F98F298718D7F33D3924E7" Source="$(var.SourceDir)\\System.Security.Cryptography.Xml.dll" />
+      </Component>
+      <Component Id="CMP_FE5FAF0737E201D50C517976" Directory="DIR_E7D707A26E7F7B6FF52C489C" Guid="*">
+        <File Id="FIL_FE5FAF0737E201D50C517976" Source="$(var.SourceDir)\\tr\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_E1E14277E95309F000C156A5" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_E1E14277E95309F000C156A5" Source="$(var.SourceDir)\\Ude.NetStandard.dll" />
+      </Component>
+      <Component Id="CMP_7B5DAE90C2B13D6A8C7564CD" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_7B5DAE90C2B13D6A8C7564CD" Source="$(var.SourceDir)\\UglyToad.PdfPig.Core.dll" />
+      </Component>
+      <Component Id="CMP_443312D56BC6C3CE1D48827D" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_443312D56BC6C3CE1D48827D" Source="$(var.SourceDir)\\UglyToad.PdfPig.dll" />
+      </Component>
+      <Component Id="CMP_9A2F4BE3E831CCF247B45820" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_9A2F4BE3E831CCF247B45820" Source="$(var.SourceDir)\\UglyToad.PdfPig.DocumentLayoutAnalysis.dll" />
+      </Component>
+      <Component Id="CMP_F5DF07BEE73D24C11CABBCCF" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_F5DF07BEE73D24C11CABBCCF" Source="$(var.SourceDir)\\UglyToad.PdfPig.Fonts.dll" />
+      </Component>
+      <Component Id="CMP_6BD59115BEF963E1E0CB66F0" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_6BD59115BEF963E1E0CB66F0" Source="$(var.SourceDir)\\UglyToad.PdfPig.Package.dll" />
+      </Component>
+      <Component Id="CMP_5023764671C1F3FBAD31A9BB" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5023764671C1F3FBAD31A9BB" Source="$(var.SourceDir)\\UglyToad.PdfPig.Tokenization.dll" />
+      </Component>
+      <Component Id="CMP_5EFB74A0766D90748FB6FCFE" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_5EFB74A0766D90748FB6FCFE" Source="$(var.SourceDir)\\UglyToad.PdfPig.Tokens.dll" />
+      </Component>
+      <Component Id="CMP_3BF0139881EF74C7DEA0C57D" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_3BF0139881EF74C7DEA0C57D" Source="$(var.SourceDir)\\WebDriver.dll" />
+      </Component>
+      <Component Id="CMP_FBD1EE112D2135239991FFCB" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_FBD1EE112D2135239991FFCB" Source="$(var.SourceDir)\\WebDriver.Support.dll" />
+      </Component>
+      <Component Id="CMP_C2C4DFECB1C9B23FE540F82E" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C2C4DFECB1C9B23FE540F82E" Source="$(var.SourceDir)\\WeifenLuo.WinFormsUI.Docking.dll" />
+      </Component>
+      <Component Id="CMP_186E4633B3B451496FFBDF43" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_186E4633B3B451496FFBDF43" Source="$(var.SourceDir)\\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" />
+      </Component>
+      <Component Id="CMP_C70E8FCE58D11AFAB112F6BB" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C70E8FCE58D11AFAB112F6BB" Source="$(var.SourceDir)\\WinRT.Runtime.dll" />
+      </Component>
+      <Component Id="CMP_DF08B4D24B5E4031EDACDD86" Directory="DIR_5FC0714FE3A9D9E11AAB70B8" Guid="*">
+        <File Id="FIL_DF08B4D24B5E4031EDACDD86" Source="$(var.SourceDir)\\zh-Hans\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_7BB3E2B56F25BBF0312B9ED8" Directory="DIR_015BC51145E68C8AA9D1C0EA" Guid="*">
+        <File Id="FIL_7BB3E2B56F25BBF0312B9ED8" Source="$(var.SourceDir)\\zh-Hant\Microsoft.Data.SqlClient.resources.dll" />
+      </Component>
+      <Component Id="CMP_CC2916AE9FA31F518E653181" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_CC2916AE9FA31F518E653181" Source="$(var.SourceDir)\\ZstdSharp.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
+

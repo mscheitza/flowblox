@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
 	<!-- 
     Microsoft ResX Schema 
@@ -159,6 +159,9 @@
 	</data>
 	<data name="Header_Size" xml:space="preserve">
 		<value>Größe (Bytes)</value>
+	</data>
+	<data name="Header_SyncMode" xml:space="preserve">
+		<value>Synchronisationsmodus</value>
 	</data>
 	<data name="Error_OpenInputDirectoryFailed" xml:space="preserve">
 		<value>Eingabeverzeichnis konnte nicht geöffnet werden.</value>

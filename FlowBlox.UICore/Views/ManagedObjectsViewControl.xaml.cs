@@ -2,6 +2,8 @@ using FlowBlox.UICore.ViewModels;
 using FlowBlox.UICore.ViewModels.ManagedObjects;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace FlowBlox.UICore.Views
 {
@@ -52,6 +54,24 @@ namespace FlowBlox.UICore.Views
 
             if (e.NewValue is ManagedObjectTypeNodeViewModel node)
                 vm.SelectedTypeNode = node;
+        }
+
+        private void ManagedObjectsListView_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is not ListView listView)
+                return;
+
+            var current = e.OriginalSource as DependencyObject;
+            while (current != null && current is not ListViewItem)
+            {
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            if (current is ListViewItem item)
+            {
+                item.IsSelected = true;
+                item.Focus();
+            }
         }
     }
 }

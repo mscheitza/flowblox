@@ -9,7 +9,6 @@ using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.FlowBlocks;
-using FlowBlox.Core.Models.FlowBlocks.AIRemote;
 using FlowBlox.Core.Models.Runtime.Debugging;
 
 namespace FlowBlox.Core.Models.Runtime
@@ -163,6 +162,17 @@ namespace FlowBlox.Core.Models.Runtime
             }
 
             Report($"Invocation finished for flow block: \"{flowBlock.Name}\"", FlowBloxLogLevel.Info);
+        }
+
+        internal void NotifyBeforeFlowBlockValidation(BaseFlowBlock flowBlock)
+        {
+            if (DisableInterceptors)
+                return;
+
+            foreach (var interceptor in _interceptors)
+            {
+                interceptor.NotifyBeforeFlowBlockValidation(flowBlock);
+            }
         }
 
         internal void NotifyPreconditionsNotMet(BaseFlowBlock flowBlock, IReadOnlyList<string> messages)
@@ -323,85 +333,87 @@ namespace FlowBlox.Core.Models.Runtime
             }
         }
 
-        private void ValidateFlowBlocks(IEnumerable<BaseFlowBlock> flowBlocks)
+        private void ValidateFlowBlocks(BaseFlowBlock startFlowBlock)
         {
+            if (startFlowBlock == null)
+                return;
+
             var invalidBlocks = new Dictionary<BaseFlowBlock, List<ValidationResult>>();
-            foreach (var block in flowBlocks)
+            var visited = new HashSet<BaseFlowBlock>();
+
+            ValidateFlowBlocksRecursive(startFlowBlock, visited, invalidBlocks);
+
+            if (!invalidBlocks.Any())
+                return;
+
+            var errorMessage = "Validation errors occurred:";
+            foreach (var kvp in invalidBlocks)
             {
-                var context = new ValidationContext(block, serviceProvider: null, items: null);
-                var results = new List<ValidationResult>();
-
-                Validator.TryValidateObject(block, context, results, true);
-
-                var filteredResults = FilterValidationResultsWithAIGenerationExceptions(block, results);
-                if (filteredResults.Any())
+                errorMessage += $"\n\nFlowBlock: {kvp.Key.Name}";
+                foreach (var validationResult in kvp.Value)
                 {
-                    invalidBlocks[block] = filteredResults;
+                    errorMessage += $"\n  - {validationResult.ErrorMessage}";
                 }
             }
 
-            if (invalidBlocks.Any())
-            {
-                var errorMessage = "Validation errors occurred:";
-                foreach (var kvp in invalidBlocks)
-                {
-                    errorMessage += $"\n\nFlowBlock: {kvp.Key.Name}";
-                    foreach (var validationResult in kvp.Value)
-                    {
-                        errorMessage += $"\n  - {validationResult.ErrorMessage}";
-                    }
-                }
+            throw new InvalidOperationException(errorMessage);
+        }
 
-                throw new InvalidOperationException(errorMessage);
+        private void ValidateFlowBlocksRecursive(
+            BaseFlowBlock flowBlock,
+            HashSet<BaseFlowBlock> visited,
+            Dictionary<BaseFlowBlock, List<ValidationResult>> invalidBlocks)
+        {
+            ValidateFlowBlocksRecursive(flowBlock, visited, invalidBlocks, out _);
+        }
+
+        private void ValidateFlowBlocksRecursive(
+            BaseFlowBlock flowBlock,
+            HashSet<BaseFlowBlock> visited,
+            Dictionary<BaseFlowBlock, List<ValidationResult>> invalidBlocks,
+            out bool validationCancelled)
+        {
+            validationCancelled = false;
+
+            if (flowBlock == null)
+                return;
+
+            if (!visited.Add(flowBlock))
+                return;
+
+            if (ShouldCancelValidation(flowBlock, false))
+            {
+                validationCancelled = true;
+                return;
+            }    
+
+            var context = new ValidationContext(flowBlock, serviceProvider: null, items: null);
+            var results = new List<ValidationResult>();
+            Validator.TryValidateObject(flowBlock, context, results, true);
+
+            if (results.Any())
+                invalidBlocks[flowBlock] = results;
+
+            if (ShouldCancelValidation(flowBlock, true))
+            {
+                validationCancelled = true;
+                return;
+            }
+
+            foreach (var nextFlowBlock in flowBlock.GetNextFlowBlocks())
+            {
+                ValidateFlowBlocksRecursive(nextFlowBlock, visited, invalidBlocks, out validationCancelled);
+                if (validationCancelled)
+                    return;
             }
         }
 
-        private List<ValidationResult> FilterValidationResultsWithAIGenerationExceptions(BaseFlowBlock block, List<ValidationResult> results)
+        protected virtual bool ShouldCancelValidation(BaseFlowBlock flowBlock, bool validationFinished)
         {
-            var filteredResults = new List<ValidationResult>();
-            foreach (var result in results)
-            {
-                if (CanBypassValidationResultViaAIGenerationStrategy(block, result, out var memberName))
-                {
-                    Report($"Validation bypass: FlowBlock \"{block.Name}\", property \"{memberName}\" is required but will be generated by AI strategy.", FlowBloxLogLevel.Info);
-                    continue;
-                }
-
-                filteredResults.Add(result);
-            }
-
-            return filteredResults;
-        }
-
-        private static bool CanBypassValidationResultViaAIGenerationStrategy(BaseFlowBlock block, ValidationResult result, out string memberName)
-        {
-            memberName = null;
-            if (block == null || result == null)
+            if (DisableInterceptors)
                 return false;
 
-            var memberNames = result.MemberNames?.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-            if (memberNames == null || memberNames.Count != 1)
-                return false;
-
-            memberName = memberNames.Single();
-
-            var property = block.GetType().GetProperty(memberName);
-            if (property == null)
-                return false;
-
-            var isRequired = property.GetCustomAttributes(typeof(RequiredAttribute), true).Any();
-            if (!isRequired)
-                return false;
-
-            var propertyValue = property.GetValue(block);
-            var isMissing = propertyValue == null || (propertyValue is string s && string.IsNullOrWhiteSpace(s));
-            if (!isMissing)
-                return false;
-
-            var targetMember = memberName;
-            return block.GenerationStrategies
-                .OfType<AIPropertyValueGenerationStrategy>()
-                .Any(x => string.Equals(x.TargetPropertyName, targetMember, StringComparison.OrdinalIgnoreCase));
+            return _interceptors.Any(x => x.ShouldCancelValidation(flowBlock, validationFinished));
         }
 
         protected virtual void OnBeforeRuntimeStarted(IEnumerable<BaseFlowBlock> flowBlocks)
@@ -414,7 +426,7 @@ namespace FlowBlox.Core.Models.Runtime
 
             this.OnBeforeRuntimeStarted(startFlowBlock, flowBlocks, managedObjects);
             this.IntegrityCheck(flowBlocks, userFields);
-            this.ValidateFlowBlocks(flowBlocks);
+            this.ValidateFlowBlocks(startFlowBlock);
         }
 
         protected virtual void OnBeforeRuntimeStarted()
@@ -476,7 +488,6 @@ namespace FlowBlox.Core.Models.Runtime
                     return;
 
                 Aborted = true;
-                ExecutionFlowEnabled = false;
                 CancellationContext = new RuntimeCancellationContext
                 {
                     UtcTimestamp = DateTime.UtcNow,

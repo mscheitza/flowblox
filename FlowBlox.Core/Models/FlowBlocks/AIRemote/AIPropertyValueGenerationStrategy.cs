@@ -17,7 +17,8 @@ using System.Text.RegularExpressions;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 {
-    [Display(Name = "AIPropertyValueGenerationStrategy_DisplayName", Description = "AIPropertyValueGenerationStrategy_Description", ResourceType = typeof(FlowBloxTexts))]
+    [Display(Name = "AIPropertyValueGenerationStrategy_DisplayName", 
+             Description = "AIPropertyValueGenerationStrategy_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSupportedTypes(typeof(BaseSingleResultFlowBlock))]
     public class AIPropertyValueGenerationStrategy : FlowBloxGenerationStrategyBase
     {

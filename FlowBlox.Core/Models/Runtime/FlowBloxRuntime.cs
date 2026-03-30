@@ -1,12 +1,14 @@
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Interfaces;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Logging;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Registry;
 
 namespace FlowBlox.Core.Models.Runtime
 {
@@ -23,52 +25,89 @@ namespace FlowBlox.Core.Models.Runtime
             this.AutoRestart = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.AutoRestart"].Value.ToLower().Equals("true");
         }
 
-        private readonly HashSet<BaseFlowBlock> _approvedFlowBlocks = new HashSet<BaseFlowBlock>();
-
-        private void ApproveFlowBlocks(BaseFlowBlock flowBlock)
+        private void ExecuteRequiredTestDefinitions()
         {
-            if (flowBlock.ReferencedFlowBlocks.All(refBlock => _approvedFlowBlocks.Contains(refBlock)))
+            var requiredTestDefinitions = ResolveRequiredTestDefinitions();
+            if (requiredTestDefinitions.Count == 0)
+                return;
+
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+            var failedTests = new List<FlowBloxTestDefinition>();
+            foreach (var testDefinition in requiredTestDefinitions)
             {
-                if (!_approvedFlowBlocks.Contains(flowBlock))
+                var testExecutor = new FlowBloxTestExecutor();
+                try
                 {
-                    // TODO: Es wird ein Test übergreifender Kontext für bereits ausgeführte Testschritte benötigt!!!
-
-                    if (flowBlock.GenerationStrategies.Any())
-                    {
-                        var strategyExecutor = new FlowBlockGenerationStrategyExecutor(flowBlock);
-                        if (!strategyExecutor.ExecuteGeneration())
-                        {
-                            this.Report($"The generation strategies for flow block \"{flowBlock.Name}\" could not be completed successfully.");
-                        }
-                    }
-
-                    List<FlowBloxTestDefinition> failedTests = new List<FlowBloxTestDefinition>();
-                    foreach (var testDefinition in flowBlock.TestDefinitions.Where(x => x.RequiredForExecution))
-                    {
-                        var testExecutor = new FlowBloxTestExecutor();
-                        testExecutor.Initialize(testDefinition, flowBlock);
-
-                        var testResult = testExecutor.ExecuteTest();
-                        if (!testResult.Success)
-                            failedTests.Add(testDefinition);
-                    }
-
-                    if (failedTests.Any())
-                    {
-                        this.Report("The following test cases required for execution were not passed: " + string.Join(", ", failedTests.Select(x => x.Name)));
-                    }
-                    else
-                    {
-                        _approvedFlowBlocks.Add(flowBlock);
-                        flowBlock.GetNextFlowBlocks().ForEach(x => ApproveFlowBlocks(x));
-                    }
+                    testExecutor.ExpectationConditionFailed += TestExecutor_ExpectationConditionFailed;
+                    testExecutor.Initialize(testDefinition, currentFlowBlock: null);
+                    var testResult = testExecutor.ExecuteTest();
+                    if (!testResult.Success)
+                        failedTests.Add(testDefinition);
+                }
+                finally
+                {
+                    testExecutor.ExpectationConditionFailed -= TestExecutor_ExpectationConditionFailed;
+                    testExecutor.Shutdown();
                 }
             }
+
+            if (!failedTests.Any())
+                return;
+
+            var failedDescriptions = failedTests.Select(testDefinition =>
+            {
+                var requiredFor = registry.GetFlowBlocks()
+                    .Where(x => x.TestDefinitions.Contains(testDefinition))
+                    .Select(x => x.Name)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+
+                var requiredForText = requiredFor.Any() ? string.Join(", ", requiredFor) : "n/a";
+                return $"{testDefinition.Name} (required for: {requiredForText})";
+            });
+
+            var message = "The following required test cases failed: " + string.Join("; ", failedDescriptions);
+            Report(message, FlowBloxLogLevel.Error);
+            throw new InvalidOperationException(message);
         }
+
+        private static List<FlowBloxTestDefinition> ResolveRequiredTestDefinitions()
+        {
+            return FlowBloxRegistryProvider.GetRegistry()
+                .GetManagedObjects<FlowBloxTestDefinition>()
+                .Where(x => x.RequiredForExecution)
+                .OrderBy(x => x.Name)
+                .ToList();
+        }
+
+        private void TestExecutor_ExpectationConditionFailed(object? sender, TestExpectationConditionFailedEventArgs e)
+        {
+            var flowBlock = e.FlowBlock;
+            if (flowBlock == null || !flowBlock.GenerationStrategies.Any())
+                return;
+
+            Report(
+                $"Expectation failed in test \"{e.TestDefinition?.Name}\" at flow block \"{flowBlock.Name}\". Trying regeneration.",
+                FlowBloxLogLevel.Info);
+
+            var regenerationExecutor = new FlowBlockRuntimeRegenerationExecutor(flowBlock);
+            regenerationExecutor.LogCreated += RegenerationExecutor_LogCreated;
+            var regenerationSuccessful = regenerationExecutor.ExecuteRegeneration(
+                e.Runtime,
+                e.TestDefinition,
+                e.CurrentResult);
+            regenerationExecutor.LogCreated -= RegenerationExecutor_LogCreated;
+
+            e.RepeatLatestExecution = regenerationSuccessful;
+        }
+
+        private void RegenerationExecutor_LogCreated(object? sender, LogCreatedEventArgs e) => Report(e.Message, e.LogLevel);
 
         protected override void OnBeforeRuntimeStarted(BaseFlowBlock startFlowBlock, IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<IManagedObject> managedObjects)
         {
-            ApproveFlowBlocks(startFlowBlock);
+            ExecuteRequiredTestDefinitions();
 
             base.OnBeforeRuntimeStarted(startFlowBlock, flowBlocks, managedObjects);
         }
@@ -215,3 +254,5 @@ namespace FlowBlox.Core.Models.Runtime
         }
     }
 }
+
+

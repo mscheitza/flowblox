@@ -40,6 +40,9 @@ namespace FlowBlox.AppWindow
             var managedObjectsViewPanelFactory = new ManagedObjectsViewPanelFactory(dockPanel);
             _managedObjectsViewPanel = managedObjectsViewPanelFactory.Create();
 
+            var testViewPanelFactory = new TestViewPanelFactory(dockPanel);
+            _testViewPanel = testViewPanelFactory.Create();
+
             if (!exceptAiAssistantView || _aiAssistantViewPanel == null)
             {
                 var aiAssistantPanelFactory = new AIAssistantViewPanelFactory(dockPanel);

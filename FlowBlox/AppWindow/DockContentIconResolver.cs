@@ -16,6 +16,7 @@ namespace FlowBlox.AppWindow
             [typeof(ComponentLibraryPanel)] = nameof(FlowBloxMainUIImages.ComponentLibraryPanel_16),
             [typeof(FieldView)] = nameof(FlowBloxMainUIImages.FieldView_16),
             [typeof(ManagedObjectsView)] = nameof(FlowBloxMainUIImages.ManagedObjectsView_16),
+            [typeof(TestView)] = nameof(FlowBloxMainUIImages.DockContent_16),
             [typeof(AIAssistantView)] = nameof(FlowBloxMainUIImages.AIAssistantView_16)
         };
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title">
+    <value>Tests</value>
+  </data>
+  <data name="Toolbar_Create_Tooltip">
+    <value>Testfall erstellen</value>
+  </data>
+  <data name="Toolbar_Edit_Tooltip">
+    <value>Testfall bearbeiten</value>
+  </data>
+  <data name="Toolbar_Delete_Tooltip">
+    <value>Testfall/Tests löschen</value>
+  </data>
+  <data name="Toolbar_Run_Tooltip">
+    <value>Markierte oder alle Tests ausführen</value>
+  </data>
+  <data name="Toolbar_OpenProtocol_Tooltip">
+    <value>Protokoll öffnen</value>
+  </data>
+  <data name="Toolbar_ResetStatus_Tooltip">
+    <value>Status und Protokoll zurücksetzen</value>
+  </data>
+  <data name="Toolbar_Refresh_Tooltip">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="Col_Name">
+    <value>Name</value>
+  </data>
+  <data name="Col_RequiredFor">
+    <value>Erforderlich für</value>
+  </data>
+  <data name="Col_DefinedAt">
+    <value>Definiert an</value>
+  </data>
+  <data name="EmptyState_NoTests">
+    <value>Es sind noch keine Testfälle vorhanden.</value>
+  </data>
+  <data name="StatusSummary_Format">
+    <value>Erfolgreich: {0} | Fehlerhaft: {1} | Gesamt: {2}</value>
+  </data>
+  <data name="Text_None">
+    <value>Keine</value>
+  </data>
+  <data name="Message_DeleteConfirm_Title">
+    <value>Testfälle löschen</value>
+  </data>
+  <data name="Message_DeleteConfirm_Description">
+    <value>Möchten Sie wirklich {0} Testfall/Testfälle löschen?</value>
+  </data>
+</root>

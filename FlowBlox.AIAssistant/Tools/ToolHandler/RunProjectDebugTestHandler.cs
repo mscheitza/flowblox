@@ -14,14 +14,15 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Runs the current project in RunnerHost debug mode with minimal runtime protocol and field-change references.",
+            "Runs the current project in RunnerHost debug mode with minimal runtime protocol and field-change references. If a target is set, runtime always stops at target: default is stopping before target execution. Set includeTargetExecution=true to execute target once and then stop.",
             new JObject
             {
                 ["targetFlowBlockName"] = "string?",
                 ["maxRuntimeSeconds"] = "int? (default: 30)",
-                ["finishWhenTargetFlowBlockReached"] = "bool? (default: true)",
+                ["includeTargetExecution"] = "bool? (default: false, only relevant when target is set)",
                 ["maxCapturedFieldValueChanges"] = "int? (default: 100)",
-                ["maxFieldValueLength"] = "int? (default: 2000)"
+                ["maxFieldValueLength"] = "int? (default: 2000)",
+                ["usageHint"] = "Prefer one optimistic debug run first (usually includeTargetExecution=false). Only run additional debug calls if needed."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -32,7 +33,7 @@ namespace FlowBlox.AIAssistant.Tools
                 project.RefreshOrderedTopLevelCollectionsForSerialization();
 
                 var maxRuntimeSeconds = Math.Max(1, args.Value<int?>("maxRuntimeSeconds") ?? 30);
-                var finishOnTarget = args.Value<bool?>("finishWhenTargetFlowBlockReached") ?? true;
+                var includeTargetExecution = args.Value<bool?>("includeTargetExecution") ?? false;
                 var targetFlowBlockName = (args.Value<string>("targetFlowBlockName") ?? string.Empty).Trim();
                 var maxCapturedChanges = Math.Max(0, args.Value<int?>("maxCapturedFieldValueChanges") ?? 100);
                 var maxFieldValueLength = Math.Max(1, args.Value<int?>("maxFieldValueLength") ?? 2000);
@@ -65,7 +66,7 @@ namespace FlowBlox.AIAssistant.Tools
                     {
                         MaxRuntimeSeconds = maxRuntimeSeconds,
                         TargetFlowBlockName = string.IsNullOrWhiteSpace(targetFlowBlockName) ? null : targetFlowBlockName,
-                        FinishWhenTargetFlowBlockReached = finishOnTarget,
+                        IncludeTargetExecution = includeTargetExecution,
                         MaxCapturedFieldValueChanges = maxCapturedChanges,
                         MaxFieldValueLength = maxFieldValueLength,
                         DebuggingResultFilePath = debuggingResultFile
@@ -126,6 +127,7 @@ namespace FlowBlox.AIAssistant.Tools
                     ["exception"] = response.Exception ?? string.Empty,
                     ["cancellationKind"] = response.CancellationKind?.ToString() ?? string.Empty,
                     ["cancellationReason"] = response.CancellationReason ?? string.Empty,
+                    ["includeTargetExecution"] = includeTargetExecution,
                     ["debuggingResultFilePath"] = response.DebuggingResultFilePath ?? debuggingResultFile,
                     ["protocolEntryCount"] = protocol.Count,
                     ["fieldValueChangeCount"] = fieldChanges.Count,

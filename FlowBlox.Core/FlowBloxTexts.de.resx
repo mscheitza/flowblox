@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<!-- 
+  <!-- 
     Microsoft ResX Schema 
     Version 2.0
     
@@ -58,2513 +58,2510 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
-		<xsd:element name="root" msdata:IsDataSet="true">
-			<xsd:complexType>
-				<xsd:choice maxOccurs="unbounded">
-					<xsd:element name="metadata">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
-							</xsd:sequence>
-							<xsd:attribute name="name" use="required" type="xsd:string"/>
-							<xsd:attribute name="type" type="xsd:string"/>
-							<xsd:attribute name="mimetype" type="xsd:string"/>
-							<xsd:attribute ref="xml:space"/>
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="assembly">
-						<xsd:complexType>
-							<xsd:attribute name="alias" type="xsd:string"/>
-							<xsd:attribute name="name" type="xsd:string"/>
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="data">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-							<xsd:attribute ref="xml:space"/>
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="resheader">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required"/>
-						</xsd:complexType>
-					</xsd:element>
-				</xsd:choice>
-			</xsd:complexType>
-		</xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>2.0</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<data name="ActivatableManagedObject_Groups_ActivationConditions" xml:space="preserve">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActivatableManagedObject_Groups_ActivationConditions" xml:space="preserve">
 		<value>Aktivierungsbedingungen</value>
 	</data>
-	<data name="ActivatableManagedObject_RequiredFields" xml:space="preserve">
+  <data name="ActivatableManagedObject_RequiredFields" xml:space="preserve">
 		<value>Erforderliche Felder</value>
 	</data>
-	<data name="ActivationConditionAttribute_Messages_IsRequired" xml:space="preserve">
+  <data name="ActivationConditionAttribute_Messages_IsRequired" xml:space="preserve">
 		<value>Die Eigenschaft \"{0}\" ist erforderlich.</value>
 	</data>
-	<data name="AiTokenizerBase_EOSToken" xml:space="preserve">
+  <data name="AiTokenizerBase_EOSToken" xml:space="preserve">
 		<value>EOS-Token-ID</value>
 	</data>
-	<data name="AiTokenizerBase_EOSToken_Tooltip" xml:space="preserve">
+  <data name="AiTokenizerBase_EOSToken_Tooltip" xml:space="preserve">
 		<value>Die ID des End-of-Sequence-Tokens, das vom Modell zur Beendigung der Textgenerierung verwendet wird. Standard ist 50256 bei GPT2-kompatiblen Modellen.</value>
 	</data>
-	<data name="AssociatedFlowBlockRequired_ValidationMessage" xml:space="preserve">
+  <data name="AssociatedFlowBlockRequired_ValidationMessage" xml:space="preserve">
 		<value>"{0}" muss gesetzt sein oder ein vorheriger Flow-Block vom Typ "{1}" muss im Ablauf vorhanden sein.</value>
 	</data>
-	<data name="AssociationControlFactory_NotResolvable" xml:space="preserve">
+  <data name="AssociationControlFactory_NotResolvable" xml:space="preserve">
 		<value>Keine automatische Ermittlung möglich.</value>
 	</data>
-	<data name="AssociationControlFactory_Resolvable" xml:space="preserve">
+  <data name="AssociationControlFactory_Resolvable" xml:space="preserve">
 		<value>Automatisch ermittelt: {0}</value>
 	</data>
-	<data name="AssociationTextBox_Empty" xml:space="preserve">
+  <data name="AssociationTextBox_Empty" xml:space="preserve">
 		<value>Bitte wählen...</value>
 	</data>
-	<data name="Base64ToTextModifier_DisplayName" xml:space="preserve">
+  <data name="Base64ToTextModifier_DisplayName" xml:space="preserve">
 		<value>Base64-codierten Text entschlüsseln</value>
 	</data>
-	<data name="Base64ToTextModifier_ObjectDisplayName" xml:space="preserve">
+  <data name="Base64ToTextModifier_ObjectDisplayName" xml:space="preserve">
 		<value>Base64 dekodieren mit {0}-Kodierung</value>
 	</data>
-	<data name="BaseFlowBlock_ActivationConditions" xml:space="preserve">
+  <data name="BaseFlowBlock_ActivationConditions" xml:space="preserve">
 		<value>Aktivierungsbedingungen</value>
 	</data>
-	<data name="BaseFlowBlock_AssociatedIterationContext" xml:space="preserve">
+  <data name="BaseFlowBlock_AssociatedIterationContext" xml:space="preserve">
 		<value>Iterationskontext</value>
 	</data>
-	<data name="BaseFlowBlock_AssociatedIterationContext_Tooltip" xml:space="preserve">
+  <data name="BaseFlowBlock_AssociatedIterationContext_Tooltip" xml:space="preserve">
 		<value>Definiert den Flow-Block, dessen Iterationszyklus diesen Block steuert. 
 Bei mehreren eingehenden Pfaden wird der Iterationskontext automatisch auf den ersten gemeinsamen Flow-Block aller Pfade gesetzt und kann nicht geändert werden. 
 Ist nur ein Flow-Block verbunden, kann der Iterationskontext manuell ausgewählt werden. 
 Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesammelt, und dieser Flow-Block wird erst nach Abschluss der Iteration ausgeführt.</value>
 	</data>
-	<data name="BaseFlowBlock_DefaultDescription" xml:space="preserve">
+  <data name="BaseFlowBlock_DefaultDescription" xml:space="preserve">
 		<value>In diesem Bereich können Sie alle notwendigen Einstellungen für den „{0}“-FlowBlock vornehmen. Nehmen Sie die gewünschten Anpassungen vor und klicken Sie anschließend auf „Annehmen“, um Ihre Änderungen zu speichern.</value>
 	</data>
-	<data name="BaseFlowBlock_FieldUsages" xml:space="preserve">
+  <data name="BaseFlowBlock_FieldUsages" xml:space="preserve">
 		<value>Verwendete Felder</value>
 	</data>
-	<data name="BaseFlowBlock_GenerationStrategies" xml:space="preserve">
+  <data name="BaseFlowBlock_GenerationStrategies" xml:space="preserve">
 		<value>Generierungen</value>
 	</data>
-	<data name="BaseFlowBlock_GenerationStrategies_Tooltip" xml:space="preserve">
+  <data name="BaseFlowBlock_GenerationStrategies_Tooltip" xml:space="preserve">
 		<value>Generierungsstrategien dienen dazu, Werte oder Einstellungen für diesen Flow-Block automatisiert abzuleiten. Sie arbeiten mit Testdatensätzen, erzeugen entlang der aktuellen Flow-Chain einen konkreten Input und gleichen das Ergebnis mit den definierten Testerwartungen ab.</value>
 	</data>
-	<data name="BaseFlowBlock_Groups_ActivationConditions" xml:space="preserve">
+  <data name="BaseFlowBlock_Groups_ActivationConditions" xml:space="preserve">
 		<value>Aktivierung</value>
 	</data>
-	<data name="BaseFlowBlock_Groups_Dependencies" xml:space="preserve">
+  <data name="BaseFlowBlock_Groups_Dependencies" xml:space="preserve">
 		<value>Abhängigkeiten</value>
 	</data>
-	<data name="BaseFlowBlock_Groups_Input" xml:space="preserve">
+  <data name="BaseFlowBlock_Groups_Input" xml:space="preserve">
 		<value>Eingabe</value>
 	</data>
-	<data name="BaseFlowBlock_Groups_Tests" xml:space="preserve">
+  <data name="BaseFlowBlock_Groups_Tests" xml:space="preserve">
 		<value>Testfälle</value>
 	</data>
-	<data name="BaseFlowBlock_InheritRequirementsNotMet" xml:space="preserve">
+  <data name="BaseFlowBlock_InheritRequirementsNotMet" xml:space="preserve">
 		<value>Nur im Fall eines aktiven Vorgängers akivieren</value>
 	</data>
-	<data name="BaseFlowBlock_InputBehaviorAssignments" xml:space="preserve">
+  <data name="BaseFlowBlock_InputBehaviorAssignments" xml:space="preserve">
 		<value>Eingabeverhalten</value>
 	</data>
-	<data name="BaseFlowBlock_InputIgnoreDuplicates" xml:space="preserve">
+  <data name="BaseFlowBlock_InputIgnoreDuplicates" xml:space="preserve">
 		<value>Duplikate in Eingabedatensätzen ignorieren</value>
 	</data>
-	<data name="BaseFlowBlock_Name" xml:space="preserve">
+  <data name="BaseFlowBlock_Name" xml:space="preserve">
 		<value>Name</value>
 	</data>
-	<data name="BaseFlowBlock_ReferencedElements" xml:space="preserve">
+  <data name="BaseFlowBlock_ReferencedElements" xml:space="preserve">
 		<value>Verbundene Flow-Blocks</value>
 	</data>
-	<data name="BaseFlowBlock_TestDefinitions" xml:space="preserve">
+  <data name="BaseFlowBlock_TestDefinitions" xml:space="preserve">
 		<value>Testfälle</value>
 	</data>
-	<data name="BaseFlowBlock_TestDefinitions_Tooltip" xml:space="preserve">
+  <data name="BaseFlowBlock_TestDefinitions_Tooltip" xml:space="preserve">
 		<value>Testdefinitionen beschreiben prüfbare Szenarien für diesen Flow-Block. Für erforderliche Felder können konstante Werte hinterlegt oder erwartete Werte aus der kompletten Flow-Chain abgeleitet werden. Die daraus entstehenden InputValues werden anschließend für die Testausführung im Sinne von Test-Driven Design verwendet.</value>
 	</data>
-	<data name="BaseResultFlowBlockUIActions_Generate" xml:space="preserve">
+  <data name="BaseResultFlowBlockUIActions_Generate" xml:space="preserve">
 		<value>Generieren</value>
 	</data>
-	<data name="BaseResultFlowBlock_EndIndex" xml:space="preserve">
+  <data name="BaseResultFlowBlock_EndIndex" xml:space="preserve">
 		<value>End-Index</value>
 	</data>
-	<data name="BaseResultFlowBlock_Groups_Output" xml:space="preserve">
+  <data name="BaseResultFlowBlock_Groups_Output" xml:space="preserve">
 		<value>Ausgabe</value>
 	</data>
-	<data name="BaseResultFlowBlock_IgnoreDuplicates" xml:space="preserve">
+  <data name="BaseResultFlowBlock_IgnoreDuplicates" xml:space="preserve">
 		<value>Duplikate in Ergebnisdatensätzen entfernen</value>
 	</data>
-	<data name="BaseResultFlowBlock_OutputBehavior" xml:space="preserve">
+  <data name="BaseResultFlowBlock_OutputBehavior" xml:space="preserve">
 		<value>Ausgabeverhalten</value>
 	</data>
-	<data name="BaseResultFlowBlock_StartIndex" xml:space="preserve">
+  <data name="BaseResultFlowBlock_StartIndex" xml:space="preserve">
 		<value>Start-Index</value>
 	</data>
-	<data name="BaseResultFlowBlock_StartValue" xml:space="preserve">
+  <data name="BaseResultFlowBlock_StartValue" xml:space="preserve">
 		<value>Start-Wert</value>
 	</data>
-	<data name="BertTokenizer_Description" xml:space="preserve">
+  <data name="BertTokenizer_Description" xml:space="preserve">
 		<value>Verwendet ein Vokabular im BERT-Format zur Tokenisierung von Text.</value>
 	</data>
-		<data name="BertTokenizer_DisplayName" xml:space="preserve">
+  <data name="BertTokenizer_DisplayName" xml:space="preserve">
 			<value>BERT Tokenizer</value>
 		</data>
-		<data name="BertTokenizer_DisplayName_Plural" xml:space="preserve">
+  <data name="BertTokenizer_DisplayName_Plural" xml:space="preserve">
 			<value>BERT Tokenizer</value>
 		</data>
-	<data name="BertTokenizer_VocabFile" xml:space="preserve">
+  <data name="BertTokenizer_VocabFile" xml:space="preserve">
 		<value>Vokabular-Datei</value>
 	</data>
-	<data name="BertTokenizer_VocabFile_Tooltip" xml:space="preserve">
+  <data name="BertTokenizer_VocabFile_Tooltip" xml:space="preserve">
 		<value>Pfad zur Vokabular-Datei (.txt) für den BERT Tokenizer.</value>
 	</data>
-	<data name="BpeAiTokenizer_Description" xml:space="preserve">
+  <data name="BpeAiTokenizer_Description" xml:space="preserve">
 		<value>Verwendet Byte Pair Encoding (BPE) mit vocab.json und merges.txt zur Tokenisierung von Text für Transformer-Modelle.</value>
 	</data>
-	<data name="BpeAiTokenizer_DisplayName" xml:space="preserve">
+  <data name="BpeAiTokenizer_DisplayName" xml:space="preserve">
 		<value>BPE-Tokenizer</value>
 	</data>
-	<data name="BpeAiTokenizer_TokenizerConfiguration" xml:space="preserve">
+  <data name="BpeAiTokenizer_TokenizerConfiguration" xml:space="preserve">
 		<value>Tokenizer-Konfiguration</value>
 	</data>
-	<data name="Buttons_Add" xml:space="preserve">
+  <data name="Buttons_Add" xml:space="preserve">
 		<value>Hinzufügen</value>
 	</data>
-	<data name="Buttons_Apply" xml:space="preserve">
+  <data name="Buttons_Apply" xml:space="preserve">
 		<value>Übernehmen</value>
 	</data>
-	<data name="Buttons_Cancel" xml:space="preserve">
+  <data name="Buttons_Cancel" xml:space="preserve">
 		<value>Zurück</value>
 	</data>
-	<data name="Buttons_Edit" xml:space="preserve">
+  <data name="Buttons_Edit" xml:space="preserve">
 		<value>Bearbeiten</value>
 	</data>
-	<data name="Buttons_Link" xml:space="preserve">
+  <data name="Buttons_Link" xml:space="preserve">
 		<value>Verknüpfen</value>
 	</data>
-	<data name="Buttons_MoveDown" xml:space="preserve">
+  <data name="Buttons_MoveDown" xml:space="preserve">
 		<value>Nach unten</value>
 	</data>
-	<data name="Buttons_MoveUp" xml:space="preserve">
+  <data name="Buttons_MoveUp" xml:space="preserve">
 		<value>Nach oben</value>
 	</data>
-	<data name="Buttons_Remove" xml:space="preserve">
+  <data name="Buttons_Remove" xml:space="preserve">
 		<value>Entfernen</value>
 	</data>
-	<data name="Buttons_Unlink" xml:space="preserve">
+  <data name="Buttons_Unlink" xml:space="preserve">
 		<value>Trennen</value>
 	</data>
-	<data name="ComparisonOperator_Contains" xml:space="preserve">
+  <data name="ComparisonOperator_Contains" xml:space="preserve">
 		<value>enthält</value>
 	</data>
-	<data name="ComparisonOperator_Equals" xml:space="preserve">
+  <data name="ComparisonOperator_Equals" xml:space="preserve">
 		<value>ist gleich</value>
 	</data>
-	<data name="ComparisonOperator_GreaterThan" xml:space="preserve">
+  <data name="ComparisonOperator_GreaterThan" xml:space="preserve">
 		<value>ist größer</value>
 	</data>
-	<data name="ComparisonOperator_GreaterThanOrEquals" xml:space="preserve">
+  <data name="ComparisonOperator_GreaterThanOrEquals" xml:space="preserve">
 		<value>ist größer oder gleich</value>
 	</data>
-	<data name="ComparisonOperator_HasNoValue" xml:space="preserve">
+  <data name="ComparisonOperator_HasNoValue" xml:space="preserve">
 		<value>hat keinen Wert</value>
 	</data>
-	<data name="ComparisonOperator_HasValue" xml:space="preserve">
+  <data name="ComparisonOperator_HasValue" xml:space="preserve">
 		<value>hat einen Wert</value>
 	</data>
-	<data name="ComparisonOperator_LowerThan" xml:space="preserve">
+  <data name="ComparisonOperator_LowerThan" xml:space="preserve">
 		<value>ist kleiner</value>
 	</data>
-	<data name="ComparisonOperator_LowerThanOrEquals" xml:space="preserve">
+  <data name="ComparisonOperator_LowerThanOrEquals" xml:space="preserve">
 		<value>ist kleiner oder gleich</value>
 	</data>
-	<data name="ComparisonOperator_NotContains" xml:space="preserve">
+  <data name="ComparisonOperator_NotContains" xml:space="preserve">
 		<value>enthält nicht</value>
 	</data>
-	<data name="ComparisonOperator_NotEquals" xml:space="preserve">
+  <data name="ComparisonOperator_NotEquals" xml:space="preserve">
 		<value>ungleich</value>
 	</data>
-	<data name="ComparisonOperator_RegexIsFalse" xml:space="preserve">
+  <data name="ComparisonOperator_RegexIsFalse" xml:space="preserve">
 		<value>Regulärer Ausdruck ist falsch</value>
 	</data>
-	<data name="ComparisonOperator_RegexIsTrue" xml:space="preserve">
+  <data name="ComparisonOperator_RegexIsTrue" xml:space="preserve">
 		<value>Regulärer Ausdruck ist wahr</value>
 	</data>
-	<data name="ComponentActions" xml:space="preserve">
+  <data name="ComponentActions" xml:space="preserve">
 		<value>Komponenten-Aktionen</value>
 	</data>
-	<data name="ConcatUriFlowBlock_Description" xml:space="preserve">
+  <data name="ConcatUriFlowBlock_Description" xml:space="preserve">
 		<value>Setzt mehrere URI-Teile zu einer vollständig aufgelösten URL zusammen.</value>
 	</data>
-	<data name="ConcatUriFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ConcatUriFlowBlock_DisplayName" xml:space="preserve">
 		<value>URI zusammenfügen</value>
 	</data>
-	<data name="ConcatUriFlowBlock_UriParts" xml:space="preserve">
+  <data name="ConcatUriFlowBlock_UriParts" xml:space="preserve">
 		<value>URI-Teile</value>
 	</data>
-	<data name="ConcatUriFlowBlock_UriPart_DisplayName" xml:space="preserve">
+  <data name="ConcatUriFlowBlock_UriPart_DisplayName" xml:space="preserve">
 		<value>URI-Teil</value>
 	</data>
-	<data name="ConcatUriFlowBlock_UriPart_Value" xml:space="preserve">
+  <data name="ConcatUriFlowBlock_UriPart_Value" xml:space="preserve">
 		<value>Wert</value>
 	</data>
-	<data name="Condition" xml:space="preserve">
+  <data name="Condition" xml:space="preserve">
 		<value>Bedingung</value>
 	</data>
-	<data name="ConditionallyRequiredAttribute_ValidationFailed_Message" xml:space="preserve">
+  <data name="ConditionallyRequiredAttribute_ValidationFailed_Message" xml:space="preserve">
 		<value>Die Angabe der Eigenschaft "{0}" ist erforderlich.</value>
 	</data>
-	<data name="ComparisonCondition_Operator" xml:space="preserve">
+  <data name="ComparisonCondition_Operator" xml:space="preserve">
 		<value>Vergleichsoperator</value>
 	</data>
-	<data name="ComparisonCondition_Value" xml:space="preserve">
+  <data name="ComparisonCondition_Value" xml:space="preserve">
 		<value>Wert</value>
 	</data>
-	<data name="CounterFlowBlock_AlphaRange" xml:space="preserve">
+  <data name="CounterFlowBlock_AlphaRange" xml:space="preserve">
 		<value>Alphanumerischer Bereich</value>
 	</data>
-	<data name="CounterFlowBlock_CounterType" xml:space="preserve">
+  <data name="CounterFlowBlock_CounterType" xml:space="preserve">
 		<value>Zählertyp</value>
 	</data>
-	<data name="CounterFlowBlock_Description" xml:space="preserve">
+  <data name="CounterFlowBlock_Description" xml:space="preserve">
 		<value>Flow-Block zur Erzeugung von numerischen oder alphanumerischen Werten, die an nachfolgende Flow-Blocks weitergegeben werden.</value>
 	</data>
-	<data name="CounterFlowBlock_DisplayName" xml:space="preserve">
+  <data name="CounterFlowBlock_DisplayName" xml:space="preserve">
 		<value>Zähler</value>
 	</data>
-	<data name="CounterFlowBlock_FinalValue" xml:space="preserve">
+  <data name="CounterFlowBlock_FinalValue" xml:space="preserve">
 		<value>Endwert</value>
 	</data>
-	<data name="CounterFlowBlock_Format" xml:space="preserve">
+  <data name="CounterFlowBlock_Format" xml:space="preserve">
 		<value>Format</value>
 	</data>
-	<data name="CounterFlowBlock_StartValue" xml:space="preserve">
+  <data name="CounterFlowBlock_StartValue" xml:space="preserve">
 		<value>Startwert</value>
 	</data>
-	<data name="CsvTableUIActions_Open" xml:space="preserve">
+  <data name="CsvTableUIActions_Open" xml:space="preserve">
 		<value>Tabelle &amp;öffnen</value>
 	</data>
-	<data name="CsvTable_Separator" xml:space="preserve">
+  <data name="CsvTable_Separator" xml:space="preserve">
 		<value>Trennzeichen</value>
 	</data>
-	<data name="DataObjectManager_DisplayName" xml:space="preserve">
+  <data name="DataObjectManager_DisplayName" xml:space="preserve">
 		<value>Datenquellen</value>
 	</data>
-	<data name="DataObjectManager_Groups_FileObjects" xml:space="preserve">
+  <data name="DataObjectManager_Groups_FileObjects" xml:space="preserve">
 		<value>Dateiobjekte</value>
 	</data>
-	<data name="DataObjectManager_Groups_MemoryObjects" xml:space="preserve">
+  <data name="DataObjectManager_Groups_MemoryObjects" xml:space="preserve">
 		<value>Speicherobjekte</value>
 	</data>
-	<data name="DataTableBase_FirstRowHeader" xml:space="preserve">
+  <data name="DataTableBase_FirstRowHeader" xml:space="preserve">
 		<value>Die erste Zeile enthält die Spaltenüberschriften</value>
 	</data>
-	<data name="DataTableManager_CsvTables" xml:space="preserve">
+  <data name="DataTableManager_CsvTables" xml:space="preserve">
 		<value>Csv-Tabellen</value>
 	</data>
-	<data name="DataTableManager_DisplayName" xml:space="preserve">
+  <data name="DataTableManager_DisplayName" xml:space="preserve">
 		<value>Datentabellen</value>
 	</data>
-	<data name="DataTableManager_Groups_CsvTables" xml:space="preserve">
+  <data name="DataTableManager_Groups_CsvTables" xml:space="preserve">
 		<value>CSV-Tabellen</value>
 	</data>
-	<data name="DataTableManager_Groups_ExcelTables" xml:space="preserve">
+  <data name="DataTableManager_Groups_ExcelTables" xml:space="preserve">
 		<value>Excel-Tabellen</value>
 	</data>
-	<data name="DataTableManager_Groups_SqlTables" xml:space="preserve">
+  <data name="DataTableManager_Groups_SqlTables" xml:space="preserve">
 		<value>SQL-Tabellen</value>
 	</data>
-	<data name="DecisionFlowBlock_Description" xml:space="preserve">
+  <data name="DecisionFlowBlock_Description" xml:space="preserve">
 		<value>Flow-Block zur bedingten Ausführung von Pfaden basierend auf konfigurierbaren Entscheidungsregeln.</value>
 	</data>
-	<data name="DecisionFlowBlock_DisplayName" xml:space="preserve">
+  <data name="DecisionFlowBlock_DisplayName" xml:space="preserve">
 		<value>Entscheidung</value>
 	</data>
-	<data name="DecisionFlowBlock_Groups_Decisions" xml:space="preserve">
+  <data name="DecisionFlowBlock_Groups_Decisions" xml:space="preserve">
 		<value>Entscheidungen</value>
 	</data>
-	<data name="DecisionFlowBlock_Validation_DuplicateFields" xml:space="preserve">
+  <data name="DecisionFlowBlock_Validation_DuplicateFields" xml:space="preserve">
 		<value>Die folgenden Felder wurden mehrfach verwendet: {0}</value>
 	</data>
-	<data name="Direction_Decode" xml:space="preserve">
+  <data name="Direction_Decode" xml:space="preserve">
 		<value>Dekodieren</value>
 	</data>
-	<data name="Direction_Encode" xml:space="preserve">
+  <data name="Direction_Encode" xml:space="preserve">
 		<value>Enkodieren</value>
 	</data>
-	<data name="DistributorFlowBlock_Description" xml:space="preserve">
+  <data name="DistributorFlowBlock_Description" xml:space="preserve">
 		<value>Erhält einen einzelnen Eingabewert und verteilt diesen auf eine beliebige Anzahl definierter Ausgabefeldwerte.</value>
 	</data>
-	<data name="DistributorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="DistributorFlowBlock_DisplayName" xml:space="preserve">
 		<value>Verteilen</value>
 	</data>
-	<data name="DistributorFlowBlock_DisributedFields" xml:space="preserve">
+  <data name="DistributorFlowBlock_DisributedFields" xml:space="preserve">
 		<value>Wert aus Eingangsfeld auf folgende Felder verteilen</value>
 	</data>
-	<data name="DownloaderFlowBlock_Description" xml:space="preserve">
+  <data name="DownloaderFlowBlock_Description" xml:space="preserve">
 		<value>Flow-Block zum Herunterladen von Dateien aus dem Internet unter Verwendung einer URL.</value>
 	</data>
-	<data name="DownloaderFlowBlock_DisplayName" xml:space="preserve">
+  <data name="DownloaderFlowBlock_DisplayName" xml:space="preserve">
 		<value>Datei herunterladen</value>
 	</data>
-	<data name="EnableFieldSelection_Hint" xml:space="preserve">
+  <data name="EnableFieldSelection_Hint" xml:space="preserve">
 		<value>Strg + F für Feldauswahl</value>
 	</data>
-	<data name="EnumerationFlowBlock_Description" xml:space="preserve">
+  <data name="EnumerationFlowBlock_Description" xml:space="preserve">
 		<value>Gibt jeden verlinkten Parameterwert einzeln aus.</value>
 	</data>
-	<data name="EnumerationFlowBlock_DisplayName" xml:space="preserve">
+  <data name="EnumerationFlowBlock_DisplayName" xml:space="preserve">
 		<value>Einzelne Werte ausgeben</value>
 	</data>
-	<data name="EnumerationFlowBlock_Parameters" xml:space="preserve">
+  <data name="EnumerationFlowBlock_Parameters" xml:space="preserve">
 		<value>Zu enumerierende Parameter</value>
 	</data>
-	<data name="EnumerationFlowBlock_Parameters_Tooltip" xml:space="preserve">
+  <data name="EnumerationFlowBlock_Parameters_Tooltip" xml:space="preserve">
 		<value>Felder, deren Werte einzeln ausgegeben werden sollen.</value>
 	</data>
-	<data name="ExecuteSQLFlowBlock_ConnectionString" xml:space="preserve">
+  <data name="ExecuteSQLFlowBlock_ConnectionString" xml:space="preserve">
 		<value>Verbindungszeichenfolge</value>
 	</data>
-	<data name="ExecuteSQLFlowBlock_DbType" xml:space="preserve">
+  <data name="ExecuteSQLFlowBlock_DbType" xml:space="preserve">
 		<value>Datenbanktyp</value>
 	</data>
-	<data name="ExecuteSQLFlowBlock_Description" xml:space="preserve">
+  <data name="ExecuteSQLFlowBlock_Description" xml:space="preserve">
 		<value>Führt einen SQL-Befehl auf einer externen Datenbankverbindung aus.</value>
 	</data>
-	<data name="ExecuteSQLFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ExecuteSQLFlowBlock_DisplayName" xml:space="preserve">
 		<value>SQL ausführen</value>
 	</data>
-	<data name="ExecuteSQLFlowBlock_SQLStatement" xml:space="preserve">
+  <data name="ExecuteSQLFlowBlock_SQLStatement" xml:space="preserve">
 		<value>SQL-Anweisung</value>
 	</data>
-	<data name="ExpectationConditionTarget_AnyValue" xml:space="preserve">
+  <data name="ExpectationConditionTarget_AnyValue" xml:space="preserve">
 		<value>Beliebiger Wert</value>
 	</data>
-	<data name="ExpectationConditionTarget_FirstValue" xml:space="preserve">
+  <data name="ExpectationConditionTarget_FirstValue" xml:space="preserve">
 		<value>Erster Wert</value>
 	</data>
-	<data name="ExpectationConditionTarget_LastValue" xml:space="preserve">
+  <data name="ExpectationConditionTarget_LastValue" xml:space="preserve">
 		<value>Letzter Wert</value>
 	</data>
-	<data name="ExpectationConditionTarget_NumberOfDatasets" xml:space="preserve">
+  <data name="ExpectationConditionTarget_NumberOfDatasets" xml:space="preserve">
 		<value>Anzahl der Datensätze</value>
 	</data>
-	<data name="ExpectationConditionTarget_ValueAtIndex" xml:space="preserve">
+  <data name="ExpectationConditionTarget_ValueAtIndex" xml:space="preserve">
 		<value>Wert an Stelle</value>
 	</data>
-	<data name="ExpectationCondition_ExpectationConditionTarget" xml:space="preserve">
+  <data name="ExpectationCondition_ExpectationConditionTarget" xml:space="preserve">
 		<value>Erwartungsziel</value>
 	</data>
-	<data name="ExpectationCondition_Index" xml:space="preserve">
+  <data name="ExpectationCondition_Index" xml:space="preserve">
 		<value>Index</value>
 	</data>
-	<data name="FieldCondition_DisplayName" xml:space="preserve">
+  <data name="FieldCondition_DisplayName" xml:space="preserve">
 		<value>Feld-Bedingung</value>
 	</data>
-	<data name="FieldElement_DisplayName" xml:space="preserve">
+  <data name="FieldElement_DisplayName" xml:space="preserve">
 		<value>Feld-Element</value>
 	</data>
-	<data name="FieldElement_Conditions" xml:space="preserve">
+  <data name="FieldElement_Conditions" xml:space="preserve">
 		<value>Bedingungen</value>
 	</data>
-	<data name="FieldElement_FieldType" xml:space="preserve">
+  <data name="FieldElement_FieldType" xml:space="preserve">
 		<value>Feldtyp</value>
 	</data>
-	<data name="FieldElement_Groups_Conditions" xml:space="preserve">
+  <data name="FieldElement_Groups_Conditions" xml:space="preserve">
 		<value>Bedingungen</value>
 	</data>
-	<data name="FieldElement_Groups_Modifiers" xml:space="preserve">
+  <data name="FieldElement_Groups_Modifiers" xml:space="preserve">
 		<value>Automatische Anpassungen</value>
 	</data>
-	<data name="FieldElement_ListOfValues" xml:space="preserve">
+  <data name="FieldElement_ListOfValues" xml:space="preserve">
 		<value>Werteliste</value>
 	</data>
-	<data name="FieldElement_Modifiers" xml:space="preserve">
+  <data name="FieldElement_Modifiers" xml:space="preserve">
 		<value>Automatische Anpassungen</value>
 	</data>
-	<data name="FieldElement_PendingValue" xml:space="preserve">
+  <data name="FieldElement_PendingValue" xml:space="preserve">
 		<value>&lt;&lt;wartend&gt;&gt;</value>
 	</data>
-	<data name="FieldElement_StringValue" xml:space="preserve">
+  <data name="FieldElement_StringValue" xml:space="preserve">
 		<value>Wert</value>
 	</data>
-	<data name="FileObjectUIActions_Delete" xml:space="preserve">
+  <data name="FileObjectUIActions_Delete" xml:space="preserve">
 		<value>Datei &amp;löschen</value>
 	</data>
-	<data name="FileObjectUIActions_Open" xml:space="preserve">
+  <data name="FileObjectUIActions_Open" xml:space="preserve">
 		<value>Öff&amp;nen</value>
 	</data>
-	<data name="FileObjectUIActions_OpenDirectory" xml:space="preserve">
+  <data name="FileObjectUIActions_OpenDirectory" xml:space="preserve">
 		<value>Verzeichnis ö&amp;ffnen</value>
 	</data>
-	<data name="FileOpenMode_Dialog_Message" xml:space="preserve">
+  <data name="FileOpenMode_Dialog_Message" xml:space="preserve">
 		<value>Bitte wählen Sie, wie die Datei geöffnet werden soll:</value>
 	</data>
-	<data name="FileOpenMode_Dialog_Title" xml:space="preserve">
+  <data name="FileOpenMode_Dialog_Title" xml:space="preserve">
 		<value>Datei öffnen</value>
 	</data>
-	<data name="FileOpenMode_FlowBloxEditor" xml:space="preserve">
+  <data name="FileOpenMode_FlowBloxEditor" xml:space="preserve">
 		<value>Öffnen mit FlowBlox-Standardeditor</value>
 	</data>
-	<data name="FileOpenMode_WindowsDefaultApp" xml:space="preserve">
+  <data name="FileOpenMode_WindowsDefaultApp" xml:space="preserve">
 		<value>Öffnen mit Windows-Standardanwendung</value>
 	</data>
-	<data name="FileReaderFlowBlock_Description" xml:space="preserve">
+  <data name="FileReaderFlowBlock_Description" xml:space="preserve">
 		<value>Liest Inhalte aus einer Datei zur weiteren Verarbeitung.</value>
 	</data>
-	<data name="FileReaderFlowBlock_DisplayName" xml:space="preserve">
+  <data name="FileReaderFlowBlock_DisplayName" xml:space="preserve">
 		<value>Datei lesen</value>
 	</data>
-	<data name="FileReaderFlowBlock_FilePath" xml:space="preserve">
+  <data name="FileReaderFlowBlock_FilePath" xml:space="preserve">
 		<value>Dateipfad</value>
 	</data>
-	<data name="FileWriterFlowBlock_Description" xml:space="preserve">
+  <data name="FileWriterFlowBlock_Description" xml:space="preserve">
 		<value>Schreibt Daten in eine Datei.</value>
 	</data>
-	<data name="FileWriterFlowBlock_DisplayName" xml:space="preserve">
+  <data name="FileWriterFlowBlock_DisplayName" xml:space="preserve">
 		<value>Datei schreiben</value>
 	</data>
-	<data name="FlowBlockMainView_ApplyFailed_Message" xml:space="preserve">
+  <data name="FlowBlockMainView_ApplyFailed_Message" xml:space="preserve">
 		<value>Speichern konnte aufgrund eines technisches Fehler nicht durchgeführt werden. Bitte überprüfen Sie die Logfiles für weitere Informationen.</value>
 	</data>
-	<data name="FlowBlockMainView_ApplyFailed_Title" xml:space="preserve">
+  <data name="FlowBlockMainView_ApplyFailed_Title" xml:space="preserve">
 		<value>Speichern fehlgeschlagen</value>
 	</data>
-	<data name="FlowBlockMainView_InvalidName_Message" xml:space="preserve">
+  <data name="FlowBlockMainView_InvalidName_Message" xml:space="preserve">
 		<value>Bitte geben Sie eine gültige Bezeichnung für Ihren Flow-Block an.</value>
 	</data>
-	<data name="FlowBlockMainView_InvalidName_Title" xml:space="preserve">
+  <data name="FlowBlockMainView_InvalidName_Title" xml:space="preserve">
 		<value>Bezeichnung ungültig</value>
 	</data>
-	<data name="FlowBloxComponentNameValidator_FieldSourceNotSet" xml:space="preserve">
+  <data name="FlowBloxComponentNameValidator_FieldSourceNotSet" xml:space="preserve">
 		<value>Das Feldelement hat keine Quelle.</value>
 	</data>
-	<data name="FlowBloxComponentNameValidator_NameAlreadyExists" xml:space="preserve">
+  <data name="FlowBloxComponentNameValidator_NameAlreadyExists" xml:space="preserve">
 		<value>Es existiert bereits eine Komponente mit dem Bezeichner "{0}".</value>
 	</data>
-	<data name="FlowBloxComponent_RequiredFields" xml:space="preserve">
+  <data name="FlowBloxComponent_RequiredFields" xml:space="preserve">
 		<value>Erforderliche Felder</value>
 	</data>
-	<data name="FlowBloxComponentUIActions_ManageUserFields" xml:space="preserve">
+  <data name="FlowBloxComponentUIActions_ManageUserFields" xml:space="preserve">
 		<value>Benutzerfelder verwalten</value>
 	</data>
-	<data name="FlowBloxComponent_Validation_NameRequired" xml:space="preserve">
+  <data name="FlowBloxComponent_Validation_NameRequired" xml:space="preserve">
 		<value>Bitte legen Sie einen eindeutigen Namen fest.</value>
 	</data>
-	<data name="FlowBloxTestConfiguration" xml:space="preserve">
+  <data name="FlowBloxTestConfiguration" xml:space="preserve">
 		<value>Testfallkonfiguration</value>
 	</data>
-	<data name="FlowBloxTestConfigurationSelectionMode_First" xml:space="preserve">
+  <data name="FlowBloxTestConfigurationSelectionMode_First" xml:space="preserve">
 		<value>Automatische Auswahl: Erster Wert</value>
 	</data>
-	<data name="FlowBloxTestConfigurationSelectionMode_Index" xml:space="preserve">
+  <data name="FlowBloxTestConfigurationSelectionMode_Index" xml:space="preserve">
 		<value>Automatische Auswahl: Index</value>
 	</data>
-	<data name="FlowBloxTestConfigurationSelectionMode_Keep" xml:space="preserve">
+  <data name="FlowBloxTestConfigurationSelectionMode_Keep" xml:space="preserve">
 		<value>Aktuellen Wert beibehalten</value>
 	</data>
-	<data name="FlowBloxTestConfigurationSelectionMode_Last" xml:space="preserve">
+  <data name="FlowBloxTestConfigurationSelectionMode_Last" xml:space="preserve">
 		<value>Automatische Auswahl: Letzer Wert</value>
 	</data>
-	<data name="FlowBloxTestConfigurationSelectionMode_UserInput" xml:space="preserve">
+  <data name="FlowBloxTestConfigurationSelectionMode_UserInput" xml:space="preserve">
 		<value>Manuelle Benutzereingabe</value>
 	</data>
-	<data name="FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue" xml:space="preserve">
+  <data name="FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue" xml:space="preserve">
 		<value>Benutzereingabe wird erwartet</value>
 	</data>
-	<data name="FlowBloxTestConfiguration_ExpectationConditions" xml:space="preserve">
+  <data name="FlowBloxTestConfiguration_ExpectationConditions" xml:space="preserve">
 		<value>Erwartete Ergebnisse</value>
 	</data>
-	<data name="FlowBloxTestControl_CbItem_FirstValue" xml:space="preserve">
+  <data name="FlowBloxTestControl_CbItem_FirstValue" xml:space="preserve">
 		<value>--- Erster Wert</value>
 	</data>
-	<data name="FlowBloxTestControl_CbItem_LastValue" xml:space="preserve">
+  <data name="FlowBloxTestControl_CbItem_LastValue" xml:space="preserve">
 		<value>--- Letzter Wert</value>
 	</data>
-	<data name="FlowBloxTestControl_CbItem_ManualExecution" xml:space="preserve">
+  <data name="FlowBloxTestControl_CbItem_ManualExecution" xml:space="preserve">
 		<value>--- Manuelle Eingabe</value>
 	</data>
-	<data name="FlowBloxTestDefinition_RequiredForExecution" xml:space="preserve">
+  <data name="FlowBloxTestDefinition_RequiredForExecution" xml:space="preserve">
 		<value>Erforderlich für Ausführung</value>
 	</data>
-	<data name="FloxBloxCategory_Additional" xml:space="preserve">
+  <data name="FloxBloxCategory_Additional" xml:space="preserve">
 		<value>Zusätzliche Elemente</value>
 	</data>
-	<data name="FloxBloxCategory_AI" xml:space="preserve">
+  <data name="FloxBloxCategory_AI" xml:space="preserve">
 		<value>AI</value>
 	</data>
-	<data name="FloxBloxCategory_ControlFlow" xml:space="preserve">
+  <data name="FloxBloxCategory_ControlFlow" xml:space="preserve">
 		<value>Kontrollfluss</value>
 	</data>
-	<data name="FloxBloxCategory_Extensions" xml:space="preserve">
+  <data name="FloxBloxCategory_Extensions" xml:space="preserve">
 		<value>Erweiterungen</value>
 	</data>
-	<data name="FloxBloxCategory_Generation" xml:space="preserve">
+  <data name="FloxBloxCategory_Generation" xml:space="preserve">
 		<value>Generierung</value>
 	</data>
-	<data name="FloxBloxCategory_IO" xml:space="preserve">
+  <data name="FloxBloxCategory_IO" xml:space="preserve">
 		<value>Eingabe-/Ausgabe</value>
 	</data>
-	<data name="FloxBloxCategory_Logic" xml:space="preserve">
+  <data name="FloxBloxCategory_Logic" xml:space="preserve">
 		<value>Logik</value>
 	</data>
-	<data name="FloxBloxCategory_Persistence" xml:space="preserve">
+  <data name="FloxBloxCategory_Persistence" xml:space="preserve">
 		<value>Persistierung</value>
 	</data>
-	<data name="FloxBloxCategory_Selection" xml:space="preserve">
+  <data name="FloxBloxCategory_Selection" xml:space="preserve">
 		<value>Auswahl</value>
 	</data>
-	<data name="FloxBloxCategory_Serialization" xml:space="preserve">
+  <data name="FloxBloxCategory_Serialization" xml:space="preserve">
 		<value>Serialisierung</value>
 	</data>
-	<data name="FloxBloxCategory_Serialization_Json" xml:space="preserve">
+  <data name="FloxBloxCategory_Serialization_Json" xml:space="preserve">
 		<value>JSON</value>
 	</data>
-	<data name="FloxBloxCategory_Serialization_XML" xml:space="preserve">
+  <data name="FloxBloxCategory_Serialization_XML" xml:space="preserve">
 		<value>XML</value>
 	</data>
-	<data name="FloxBloxCategory_TextOperations" xml:space="preserve">
+  <data name="FloxBloxCategory_TextOperations" xml:space="preserve">
 		<value>Textoperationen</value>
 	</data>
-	<data name="FloxBloxCategory_Web" xml:space="preserve">
+  <data name="FloxBloxCategory_Web" xml:space="preserve">
 		<value>Web-Komponenten</value>
 	</data>
-	<data name="FormatFlowBlock_Description" xml:space="preserve">
+  <data name="FormatFlowBlock_Description" xml:space="preserve">
 		<value>Formatiert Texte oder numerische Werte mithilfe von Platzhaltern gemäß den .NET-Formatierungsregeln. Siehe: https://learn.microsoft.com/en-us/dotnet/standard/base-types/composite-formatting</value>
 	</data>
-	<data name="FormatFlowBlock_DisplayName" xml:space="preserve">
+  <data name="FormatFlowBlock_DisplayName" xml:space="preserve">
 		<value>Formatieren</value>
 	</data>
-	<data name="FormatFlowBlock_FormatExpression" xml:space="preserve">
+  <data name="FormatFlowBlock_FormatExpression" xml:space="preserve">
 		<value>Format-Ausdruck</value>
 	</data>
-	<data name="FormatFlowBlock_FormatParameters" xml:space="preserve">
+  <data name="FormatFlowBlock_FormatParameters" xml:space="preserve">
 		<value>Format-Parameter</value>
 	</data>
-	<data name="FormatFlowBlock_Validation_InvalidFieldElementCount" xml:space="preserve">
+  <data name="FormatFlowBlock_Validation_InvalidFieldElementCount" xml:space="preserve">
 		<value>Die Anzahl der Formatparameter ({0}) stimmt nicht mit der Anzahl der verknüpften Feld-Elemente ({1}) überein.</value>
 	</data>
-	<data name="FormatParameterDefinition" xml:space="preserve">
+  <data name="FormatParameterDefinition" xml:space="preserve">
 		<value>Format-Parameter</value>
 	</data>
-	<data name="FormatParameterDefinition_IsRequired" xml:space="preserve">
+  <data name="FormatParameterDefinition_IsRequired" xml:space="preserve">
 		<value>Erforderlich</value>
 	</data>
-	<data name="Global_Add" xml:space="preserve">
+  <data name="Global_Add" xml:space="preserve">
 		<value>Hinzufügen</value>
 	</data>
-	<data name="Global_Create" xml:space="preserve">
+  <data name="Global_Create" xml:space="preserve">
 		<value>Erstellen</value>
 	</data>
-	<data name="Global_DefaultResultFieldName" xml:space="preserve">
+  <data name="Global_DefaultResultFieldName" xml:space="preserve">
 		<value>Inhalt</value>
 	</data>
-	<data name="Global_DependencyViolation_Message" xml:space="preserve">
+  <data name="Global_DependencyViolation_Message" xml:space="preserve">
 		<value>Die Löschaktion kann nicht durchgeführt werden, weil dadurch bestehende Abhängkeiten verletzt werden:
 {0}</value>
 	</data>
-	<data name="Global_DependencyViolation_Message_Entry" xml:space="preserve">
+  <data name="Global_DependencyViolation_Message_Entry" xml:space="preserve">
 		<value>Die zu löschende Komponente "{0}" wird von "{1}" verwendet</value>
 	</data>
-	<data name="Global_DependencyViolation_Title" xml:space="preserve">
+  <data name="Global_DependencyViolation_Title" xml:space="preserve">
 		<value>Verletzung von Abhängigkeiten</value>
 	</data>
-	<data name="Global_Edit" xml:space="preserve">
+  <data name="Global_Edit" xml:space="preserve">
 		<value>Bearbeiten</value>
 	</data>
-	<data name="Global_FieldElement" xml:space="preserve">
+  <data name="Global_FieldElement" xml:space="preserve">
 		<value>Feldelement</value>
 	</data>
-	<data name="Global_FilterMethodNotFound_Message" xml:space="preserve">
+  <data name="Global_FilterMethodNotFound_Message" xml:space="preserve">
 		<value>Die Auswahlmethode '{0}' wurde nicht in der Zielklasse '{1}' gefunden.</value>
 	</data>
-	<data name="Global_FilterMethodNotFound_Title" xml:space="preserve">
+  <data name="Global_FilterMethodNotFound_Title" xml:space="preserve">
 		<value>Auswahlmethode nicht gefunden</value>
 	</data>
-	<data name="Global_FlowBlock" xml:space="preserve">
+  <data name="Global_FlowBlock" xml:space="preserve">
 		<value>Flow-Block</value>
 	</data>
-	<data name="Global_Groups_Default" xml:space="preserve">
+  <data name="Global_Groups_Default" xml:space="preserve">
 		<value>Allgemein</value>
 	</data>
-	<data name="Global_Groups_Requirements" xml:space="preserve">
+  <data name="Global_Groups_Requirements" xml:space="preserve">
 		<value>Anforderungen</value>
 	</data>
-	<data name="Global_InputField" xml:space="preserve">
+  <data name="Global_InputField" xml:space="preserve">
 		<value>Eingabefeld</value>
 	</data>
-	<data name="Global_Link" xml:space="preserve">
+  <data name="Global_Link" xml:space="preserve">
 		<value>Verknüpfen</value>
 	</data>
-	<data name="Global_MessageBox_Error_Title" xml:space="preserve">
+  <data name="Global_MessageBox_Error_Title" xml:space="preserve">
 		<value>Fehler</value>
 	</data>
-	<data name="Global_MessageBox_Notification_Title" xml:space="preserve">
+  <data name="Global_MessageBox_Notification_Title" xml:space="preserve">
 		<value>Hinweis</value>
 	</data>
-	<data name="Global_MissingDisplayAttributes_Message" xml:space="preserve">
+  <data name="Global_MissingDisplayAttributes_Message" xml:space="preserve">
 		<value>Die folgenden Typen besitzen kein DisplayAttribute:
 {0}</value>
 	</data>
-	<data name="Global_MissingDisplayAttributes_Title" xml:space="preserve">
+  <data name="Global_MissingDisplayAttributes_Title" xml:space="preserve">
 		<value>Anzeige-Fehler</value>
 	</data>
-	<data name="Global_MissingFilterMethod_Message" xml:space="preserve">
+  <data name="Global_MissingFilterMethod_Message" xml:space="preserve">
 		<value>Für die Eigenschaft '{0}' wurde keine Auswahlmethode (SelectionFilterMethod) definiert.</value>
 	</data>
-	<data name="Global_MissingFilterMethod_Title" xml:space="preserve">
+  <data name="Global_MissingFilterMethod_Title" xml:space="preserve">
 		<value>Auswahlmethode fehlt</value>
 	</data>
-	<data name="Global_MoveDown" xml:space="preserve">
+  <data name="Global_MoveDown" xml:space="preserve">
 		<value>Nach unten</value>
 	</data>
-	<data name="Global_MoveUp" xml:space="preserve">
+  <data name="Global_MoveUp" xml:space="preserve">
 		<value>Nach oben</value>
 	</data>
-	<data name="Global_Name" xml:space="preserve">
+  <data name="Global_Name" xml:space="preserve">
 		<value>Name</value>
 	</data>
-	<data name="Global_NoItemsFound_Message" xml:space="preserve">
+  <data name="Global_NoItemsFound_Message" xml:space="preserve">
 		<value>Es konnten keine auswählbaren Objekte gefunden werden.</value>
 	</data>
-	<data name="Global_NoItemsFound_Title" xml:space="preserve">
+  <data name="Global_NoItemsFound_Title" xml:space="preserve">
 		<value>Keine Auswahl möglich</value>
 	</data>
-	<data name="Global_Remove" xml:space="preserve">
+  <data name="Global_Remove" xml:space="preserve">
 		<value>Entfernen</value>
 	</data>
-	<data name="Global_ResultField" xml:space="preserve">
+  <data name="Global_ResultField" xml:space="preserve">
 		<value>Ausgabefeld</value>
 	</data>
-	<data name="Global_Select" xml:space="preserve">
+  <data name="Global_Select" xml:space="preserve">
 		<value>Auswählen</value>
 	</data>
-	<data name="Global_Selection" xml:space="preserve">
+  <data name="Global_Selection" xml:space="preserve">
 		<value>Auswahl</value>
 	</data>
-	<data name="Global_SelectionDialog_Message" xml:space="preserve">
+  <data name="Global_SelectionDialog_Message" xml:space="preserve">
 		<value>Wählen Sie bitte einen Eintrag aus der Liste aus.</value>
 	</data>
-	<data name="Global_SelectionDialog_Title" xml:space="preserve">
+  <data name="Global_SelectionDialog_Title" xml:space="preserve">
 		<value>Eintrag auswählen</value>
 	</data>
-	<data name="Global_Unlink" xml:space="preserve">
+  <data name="Global_Unlink" xml:space="preserve">
 		<value>Trennen</value>
 	</data>
-	<data name="Global_ValidationFailed_Title" xml:space="preserve">
+  <data name="Global_ValidationFailed_Title" xml:space="preserve">
 		<value>Validierung fehlgeschlagen</value>
 	</data>
-	<data name="HoldConditionManager_DisplayName" xml:space="preserve">
+  <data name="HoldConditionManager_DisplayName" xml:space="preserve">
 		<value>Haltebedingungen</value>
 	</data>
-	<data name="HoldConditionManager_HoldConditions" xml:space="preserve">
+  <data name="HoldConditionManager_HoldConditions" xml:space="preserve">
 		<value>Haltebedingungen</value>
 	</data>
-	<data name="HttpEncodeDecodeModifier_DisplayName" xml:space="preserve">
+  <data name="HttpEncodeDecodeModifier_DisplayName" xml:space="preserve">
 		<value>HTTP Enkodierung/Dekodierung (Automatische Anpassung)</value>
 	</data>
-	<data name="HttpEncodeDecodeModifier_Direction" xml:space="preserve">
+  <data name="HttpEncodeDecodeModifier_Direction" xml:space="preserve">
 		<value>Richtung</value>
 	</data>
-	<data name="HttpEncodeDecodeModifier_Mode" xml:space="preserve">
+  <data name="HttpEncodeDecodeModifier_Mode" xml:space="preserve">
 		<value>Modus</value>
 	</data>
-	<data name="HttpEncodeDecodeModifier_ObjectDisplayName" xml:space="preserve">
+  <data name="HttpEncodeDecodeModifier_ObjectDisplayName" xml:space="preserve">
 		<value>HTTP "{1}" "{0}"</value>
 	</data>
-	<data name="InputBehaviorAssignment_Behavior" xml:space="preserve">
+  <data name="InputBehaviorAssignment_Behavior" xml:space="preserve">
 		<value>Eingabeverhalten</value>
 	</data>
-	<data name="InputBehavior_Cross" xml:space="preserve">
+  <data name="InputBehavior_Cross" xml:space="preserve">
 		<value>Datensätze kombinieren</value>
 	</data>
-	<data name="InputBehavior_CrossValid" xml:space="preserve">
+  <data name="InputBehavior_CrossValid" xml:space="preserve">
 		<value>Gültige Datensätze kombinieren</value>
 	</data>
-	<data name="InputBehavior_First" xml:space="preserve">
+  <data name="InputBehavior_First" xml:space="preserve">
 		<value>Erster Datensatz</value>
 	</data>
-	<data name="InputBehavior_FirstValid" xml:space="preserve">
+  <data name="InputBehavior_FirstValid" xml:space="preserve">
 		<value>Erster gültiger Datensatz</value>
 	</data>
-	<data name="InputBehavior_Last" xml:space="preserve">
+  <data name="InputBehavior_Last" xml:space="preserve">
 		<value>Letzter Datensatz</value>
 	</data>
-	<data name="InputBehavior_LastValid" xml:space="preserve">
+  <data name="InputBehavior_LastValid" xml:space="preserve">
 		<value>Letzter gültiger Datensatz</value>
 	</data>
-	<data name="InvocationFieldTransferConfig" xml:space="preserve">
+  <data name="InvocationFieldTransferConfig" xml:space="preserve">
 		<value>Feld-Übertragung</value>
 	</data>
-	<data name="InvocationFieldTransferConfig_TransferFrom" xml:space="preserve">
+  <data name="InvocationFieldTransferConfig_TransferFrom" xml:space="preserve">
 		<value>Übertragen von</value>
 	</data>
-	<data name="InvocationFieldTransferConfig_TransferTo" xml:space="preserve">
+  <data name="InvocationFieldTransferConfig_TransferTo" xml:space="preserve">
 		<value>Übertragen nach</value>
 	</data>
-	<data name="RecursiveCallFlowBlock_Description" xml:space="preserve">
+  <data name="RecursiveCallFlowBlock_Description" xml:space="preserve">
 		<value>Ruft einen Ziel-Flow-Block auf und überträgt dabei definierte Ausgabe-Feldwerte aus dem Eingangs-Flow-Block mittels konfigurierbarem Feldmapping. Alle Ausgabefelder des Ziel-Flow-Blocks müssen durch ein Mapping abgedeckt sein. Dieser Flow-Block eignet sich insbesondere zur Realisierung wiederholter Abläufe. Beachten Sie, dass der Ziel-Flow-Block auf dem Pfad des Eingangs-Flow-Blocks liegen muss.</value>
 	</data>
-	<data name="RecursiveCallFlowBlock_DisplayName" xml:space="preserve">
+  <data name="RecursiveCallFlowBlock_DisplayName" xml:space="preserve">
 		<value>Rekursiver Aufruf</value>
 	</data>
-	<data name="RecursiveCallFlowBlock_FieldTransferConfigs" xml:space="preserve">
+  <data name="RecursiveCallFlowBlock_FieldTransferConfigs" xml:space="preserve">
 		<value>Feldübertragungen</value>
 	</data>
-	<data name="RecursiveCallFlowBlock_Groups_Transferrations" xml:space="preserve">
+  <data name="RecursiveCallFlowBlock_Groups_Transferrations" xml:space="preserve">
 		<value>Übertragungen</value>
 	</data>
-	<data name="RecursiveCallFlowBlock_TargetFlowBlock" xml:space="preserve">
+  <data name="RecursiveCallFlowBlock_TargetFlowBlock" xml:space="preserve">
 		<value>Ziel-Flowblock</value>
 	</data>
-	<data name="RecursiveCallFlowBlock_Validation_TargetNotReachable" xml:space="preserve">
+  <data name="RecursiveCallFlowBlock_Validation_TargetNotReachable" xml:space="preserve">
 		<value>Der Ziel-Flow-Block muss im aktuellen Ausführungspfad liegen.</value>
 	</data>
-	<data name="RecursiveCallFlowBlock_Validation_UnmappedFields" xml:space="preserve">
+  <data name="RecursiveCallFlowBlock_Validation_UnmappedFields" xml:space="preserve">
 		<value>Alle Felder des Ziel-Flow-Blocks müssen abgebildet werden. Es fehlen Übertragungen für folgende Felder: {0}</value>
 	</data>
-	<data name="JoinFlowBlock_Description" xml:space="preserve">
+  <data name="JoinFlowBlock_Description" xml:space="preserve">
 		<value>Kombiniert mehrere Eingaben zu einer konsolidierten Ausgabe.</value>
 	</data>
-	<data name="JoinFlowBlock_DisplayName" xml:space="preserve">
+  <data name="JoinFlowBlock_DisplayName" xml:space="preserve">
 		<value>Zusammenführen</value>
 	</data>
-	<data name="JoinFlowBlock_JoinedParameters" xml:space="preserve">
+  <data name="JoinFlowBlock_JoinedParameters" xml:space="preserve">
 		<value>Zusammenzuführende Feldwerte</value>
 	</data>
-	<data name="JoinFlowBlock_Separator" xml:space="preserve">
+  <data name="JoinFlowBlock_Separator" xml:space="preserve">
 		<value>Trennzeichen</value>
 	</data>
-	<data name="JoinFlowBlock_SpecialSeparator" xml:space="preserve">
+  <data name="JoinFlowBlock_SpecialSeparator" xml:space="preserve">
 		<value>Spezielles Trennzeichen</value>
 	</data>
-	<data name="JoinFlowBlock_Validation_ManySeparatorsDefined" xml:space="preserve">
+  <data name="JoinFlowBlock_Validation_ManySeparatorsDefined" xml:space="preserve">
 		<value>Es wurde mehr als ein Trennzeichen angegeben. Bitte geben Sie entweder ein Trennzeichen oder ein spezielles Trennzeichen an.</value>
 	</data>
-	<data name="JoinFlowBlock_Validation_NoSeparatorDefined" xml:space="preserve">
+  <data name="JoinFlowBlock_Validation_NoSeparatorDefined" xml:space="preserve">
 		<value>Es wurde kein Trennzeichen angegeben. Bitte geben Sie entweder ein Trennzeichen oder ein spezielles Trennzeichen an.</value>
 	</data>
-	<data name="JsonObjectFlowBlock_Description" xml:space="preserve">
+  <data name="JsonObjectFlowBlock_Description" xml:space="preserve">
 		<value>Erzeugt ein JSON-Objekt aus einem angegebenen JSON-Text und stellt es nachfolgenden Flow-Blocks zur Verfügung.</value>
 	</data>
-	<data name="JsonObjectFlowBlock_DisplayName" xml:space="preserve">
+  <data name="JsonObjectFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Objekt</value>
 	</data>
-	<data name="JsonObjectFlowBlock_JsonContent" xml:space="preserve">
+  <data name="JsonObjectFlowBlock_JsonContent" xml:space="preserve">
 		<value>JSON-Inhalt</value>
 	</data>
-	<data name="JsonObjectOutputFlowBlock_AssociatedJsonObject" xml:space="preserve">
+  <data name="JsonObjectOutputFlowBlock_AssociatedJsonObject" xml:space="preserve">
 		<value>Zugehöriges JSON-Objekt</value>
 	</data>
-	<data name="JsonObjectOutputFlowBlock_DateFormatHandling" xml:space="preserve">
+  <data name="JsonObjectOutputFlowBlock_DateFormatHandling" xml:space="preserve">
 		<value>Datumsformat</value>
 	</data>
-	<data name="JsonObjectOutputFlowBlock_Description" xml:space="preserve">
+  <data name="JsonObjectOutputFlowBlock_Description" xml:space="preserve">
 		<value>Gibt ein JSON-Objekt aus und speichert es im Ausgabefeld.</value>
 	</data>
-	<data name="JsonObjectOutputFlowBlock_DisplayName" xml:space="preserve">
+  <data name="JsonObjectOutputFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Objekt-Ausgabe</value>
 	</data>
-	<data name="JsonObjectOutputFlowBlock_Indented" xml:space="preserve">
+  <data name="JsonObjectOutputFlowBlock_Indented" xml:space="preserve">
 		<value>Mehrzeilige Ausgabe</value>
 	</data>
-	<data name="JsonObjectOutputFlowBlock_NullValueHandling" xml:space="preserve">
+  <data name="JsonObjectOutputFlowBlock_NullValueHandling" xml:space="preserve">
 		<value>Nullwertbehandlung</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_AssociatedJsonObject" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_AssociatedJsonObject" xml:space="preserve">
 		<value>Zugehöriges JSON-Objekt (über JSON-Objekt)</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_AssociatedJsonObjectWriter" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_AssociatedJsonObjectWriter" xml:space="preserve">
 		<value>JSON-Objekt (über "JSON-Objekt schreiben" Flow-Block)</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_Description" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_Description" xml:space="preserve">
 		<value>Erstellt bei Bedarf ein neues JSON-Objekt oder aktualisiert ein bestehendes mit JSON-Zuweisungen. Um Elemente zu einem Array hinzuzufügen: Geben Sie im Pfad den JSON-Pfad zur Array-Property an und beschreiben Sie mittels JSON-Zuweisungen die Eigenschaftswerte.</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_DisplayName" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Objekt schreiben</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_JsonAssignments" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_JsonAssignments" xml:space="preserve">
 		<value>JSON-Zuweisungen</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_JsonAssignments_Tooltip" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_JsonAssignments_Tooltip" xml:space="preserve">
 		<value>Liste von Eigenschaftszuweisungen für das Ziel-JSON-Objekt. Jede Zeile weist genau einen Property-Namen einem Wert zu (statisch oder feldbasiert). Kein komplettes JSON-Dokument als Einzelwert einfügen.</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_Path" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_Path" xml:space="preserve">
 		<value>Pfad</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_Path_Tooltip" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_Path_Tooltip" xml:space="preserve">
 		<value>Pfad zum Zielknoten, an dem das Objekt erstellt oder aktualisiert wird. Verwenden Sie '/' zur Trennung von Segmenten; Objekt-Eigenschaften über Namen, Array-Einträge über Index (z. B. 'participants/0'). Für Array-Append den Pfad auf die Array-Property setzen (z. B. 'participants') und die Element-Eigenschaften über JSON-Zuweisungen definieren. Ein leerer Pfad adressiert das Root-Objekt.</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_IsArray" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_IsArray" xml:space="preserve">
 		<value>Ist Array</value>
 	</data>
-	<data name="JsonObjectWriterFlowBlock_IsArray_Tooltip" xml:space="preserve">
+  <data name="JsonObjectWriterFlowBlock_IsArray_Tooltip" xml:space="preserve">
 		<value>Wenn aktiviert und der Pfad noch nicht existiert, wird am Pfad ein Array angelegt und ein neues Objekt-Element hinzugefügt. Wenn deaktiviert, wird am Pfad ein JSON-Objekt angelegt.</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_Description" xml:space="preserve">
+  <data name="JsonPathSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Liest ein JSON-Objekt ein und gibt den Wert oder die Werte zurück, die dem angegebenen JSON-Pfad entsprechen.</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="JsonPathSelectorFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Pfad-Selektor</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_JsonContent" xml:space="preserve">
+  <data name="JsonPathSelectorFlowBlock_JsonContent" xml:space="preserve">
 		<value>JSON-Inhalt</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_Path" xml:space="preserve">
+  <data name="JsonPathSelectorFlowBlock_Path" xml:space="preserve">
 		<value>JSON-Pfad</value>
 	</data>
-	<data name="JsonPropertyValueAssignment_DisplayName" xml:space="preserve">
+  <data name="JsonPropertyValueAssignment_DisplayName" xml:space="preserve">
 		<value>JSON-Property-Zuweisung</value>
 	</data>
-	<data name="JsonPropertyValueAssignment_FieldValue" xml:space="preserve">
+  <data name="JsonPropertyValueAssignment_FieldValue" xml:space="preserve">
 		<value>Feldwert</value>
 	</data>
-	<data name="JsonPropertyValueAssignment_IsArray" xml:space="preserve">
+  <data name="JsonPropertyValueAssignment_IsArray" xml:space="preserve">
 		<value>Ist Array</value>
 	</data>
-	<data name="JsonPropertyValueAssignment_IsArray_Tooltip" xml:space="preserve">
+  <data name="JsonPropertyValueAssignment_IsArray_Tooltip" xml:space="preserve">
 		<value>Gibt an, ob die Ziel-JSON-Property als Array behandelt wird. Wenn aktiviert, wird jeder ausgewertete Zuweisungswert dem Array hinzugefügt statt die Property zu überschreiben.</value>
 	</data>
-	<data name="JsonPropertyValueAssignment_PropertyName" xml:space="preserve">
+  <data name="JsonPropertyValueAssignment_PropertyName" xml:space="preserve">
 		<value>Property-Name</value>
 	</data>
-	<data name="JsonPropertyValueAssignment_PropertyPath" xml:space="preserve">
+  <data name="JsonPropertyValueAssignment_PropertyPath" xml:space="preserve">
 		<value>Property-Pfad</value>
 	</data>
-	<data name="JsonPropertyValueAssignment_Value" xml:space="preserve">
+  <data name="JsonPropertyValueAssignment_Value" xml:space="preserve">
 		<value>Wert</value>
 	</data>
-	<data name="JsonPropertyValueAssignment_Value_Tooltip" xml:space="preserve">
+  <data name="JsonPropertyValueAssignment_Value_Tooltip" xml:space="preserve">
 		<value>Wert für den angegebenen Property-Pfad. Direktes JSON wird hier nicht unterstützt: pro Property-Set einen eigenen Mapping-Eintrag anlegen. Nicht vorhandene Parent-Pfade werden automatisch erzeugt.</value>
 	</data>
-	<data name="LineExtractorModifier_DisplayName" xml:space="preserve">
+  <data name="LineExtractorModifier_DisplayName" xml:space="preserve">
 		<value>Zeilenweise extrahieren (Automatische Anpassung)</value>
 	</data>
-	<data name="LineExtractorModifier_LineCount" xml:space="preserve">
+  <data name="LineExtractorModifier_LineCount" xml:space="preserve">
 		<value>Anzahl der Zeilen</value>
 	</data>
-	<data name="LineExtractorModifier_ObjectDisplayName" xml:space="preserve">
+  <data name="LineExtractorModifier_ObjectDisplayName" xml:space="preserve">
 		<value>Text von Zeile {0} bis {1}</value>
 	</data>
-	<data name="LineExtractorModifier_StartLine" xml:space="preserve">
+  <data name="LineExtractorModifier_StartLine" xml:space="preserve">
 		<value>Erste Zeile</value>
 	</data>
-	<data name="ListFactoryBase_NoDataAvailable_Text" xml:space="preserve">
+  <data name="ListFactoryBase_NoDataAvailable_Text" xml:space="preserve">
 		<value>Es sind keine Datensätze vorhanden.
 Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</value>
 	</data>
-	<data name="ListViewSplitModeFactory_NoElementSelected_Text" xml:space="preserve">
+  <data name="ListViewSplitModeFactory_NoElementSelected_Text" xml:space="preserve">
 		<value>Bitte wählen Sie ein Element in der Liste aus, um die Details anzuzeigen.</value>
 	</data>
-	<data name="LlamaAiTokenizer_Description" xml:space="preserve">
+  <data name="LlamaAiTokenizer_Description" xml:space="preserve">
 		<value>Verwendet das LLaMA-Tokenisierungsmodell (SentencePiece), um Texte in Token-IDs umzuwandeln und zurück. Unterstützt spezielle Token-Übersetzungen wie das Ersetzen des „Ġ“-Zeichens durch Leerzeichen.</value>
 	</data>
-	<data name="LlamaAiTokenizer_DisplayName" xml:space="preserve">
+  <data name="LlamaAiTokenizer_DisplayName" xml:space="preserve">
 		<value>LLaMA-AI-Tokenizer</value>
 	</data>
-	<data name="LlamaAiTokenizer_TokenizerModelPath" xml:space="preserve">
+  <data name="LlamaAiTokenizer_TokenizerModelPath" xml:space="preserve">
 		<value>Pfad zum Tokenizer-Modell</value>
 	</data>
-	<data name="LlamaAiTokenizer_TokenizerModelPath_Tooltip" xml:space="preserve">
+  <data name="LlamaAiTokenizer_TokenizerModelPath_Tooltip" xml:space="preserve">
 		<value>Geben Sie den vollständigen Pfad zur Tokenizer-Modell-Datei (SentencePiece .model) an, die für LLaMA verwendet werden soll.</value>
 	</data>
-	<data name="MemoryObjectUIActions_Export" xml:space="preserve">
+  <data name="MemoryObjectUIActions_Export" xml:space="preserve">
 		<value>&amp;Exportieren</value>
 	</data>
-	<data name="MemoryObjectUIActions_Import" xml:space="preserve">
+  <data name="MemoryObjectUIActions_Import" xml:space="preserve">
 		<value>&amp;Importieren</value>
 	</data>
-	<data name="MemoryObjectUIActions_Open" xml:space="preserve">
+  <data name="MemoryObjectUIActions_Open" xml:space="preserve">
 		<value>Ö&amp;ffnen (Bearbeitung möglich)</value>
 	</data>
-	<data name="NoteFlowBlock_Description" xml:space="preserve">
+  <data name="NoteFlowBlock_Description" xml:space="preserve">
 		<value>Dient zur Einbindung von Kommentaren oder Hinweisen im Flow-Diagramm.</value>
 	</data>
-	<data name="NoteFlowBlock_DisplayName" xml:space="preserve">
+  <data name="NoteFlowBlock_DisplayName" xml:space="preserve">
 		<value>Hinweis</value>
 	</data>
-	<data name="NoteFlowBlock_Note" xml:space="preserve">
+  <data name="NoteFlowBlock_Note" xml:space="preserve">
 		<value>Notiz</value>
 	</data>
-	<data name="NotificationType_Error" xml:space="preserve">
+  <data name="NotificationType_Error" xml:space="preserve">
 		<value>Fehler</value>
 	</data>
-	<data name="NotificationType_None" xml:space="preserve">
+  <data name="NotificationType_None" xml:space="preserve">
 		<value>Keine</value>
 	</data>
-	<data name="NotificationType_Warning" xml:space="preserve">
+  <data name="NotificationType_Warning" xml:space="preserve">
 		<value>Warnung</value>
 	</data>
-	<data name="OnnxBaseFlowBlock_AiExecutionProvider" xml:space="preserve">
+  <data name="OnnxBaseFlowBlock_AiExecutionProvider" xml:space="preserve">
 		<value>Ausführungsprovider</value>
 	</data>
-	<data name="OnnxBaseFlowBlock_AssociatedOnnxFlowBlock" xml:space="preserve">
+  <data name="OnnxBaseFlowBlock_AssociatedOnnxFlowBlock" xml:space="preserve">
 		<value>Assoziierter ONNX-Flow-Block (Inferenz-Session)</value>
 	</data>
-	<data name="OnnxBaseFlowBlock_AssociatedOnnxFlowBlock_Tooltip" xml:space="preserve">
+  <data name="OnnxBaseFlowBlock_AssociatedOnnxFlowBlock_Tooltip" xml:space="preserve">
 		<value>Übernimmt die vorhandene Inferenz-Session des ausgewählten ONNX-Flow-Blocks, sofern verfügbar.</value>
 	</data>
-	<data name="OnnxBaseFlowBlock_Groups_ExtendedSettings" xml:space="preserve">
+  <data name="OnnxBaseFlowBlock_Groups_ExtendedSettings" xml:space="preserve">
 		<value>Erweiterte ONNX-Einstellungen</value>
 	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_Context" xml:space="preserve">
+  <data name="OnnxQuestionAnsweringFlowBlock_Context" xml:space="preserve">
 		<value>Kontext</value>
 	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_DisplayName" xml:space="preserve">
+  <data name="OnnxQuestionAnsweringFlowBlock_DisplayName" xml:space="preserve">
 		<value>ONNX Q&amp;A</value>
 	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy" xml:space="preserve">
+  <data name="OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy" xml:space="preserve">
 		<value>Strategie zur Positionsauswahl</value>
 	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy_Tooltip" xml:space="preserve">
+  <data name="OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy_Tooltip" xml:space="preserve">
 		<value>Legt fest, wie die beste Start- und Endposition aus den Logits ausgewählt wird – z.B. per ArgMax oder benutzerdefinierter Bewertungsmethode.</value>
 	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_QATokenizer" xml:space="preserve">
+  <data name="OnnxQuestionAnsweringFlowBlock_QATokenizer" xml:space="preserve">
 		<value>Q&amp;A Tokenizer</value>
 	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_Question" xml:space="preserve">
+  <data name="OnnxQuestionAnsweringFlowBlock_Question" xml:space="preserve">
 		<value>Frage</value>
 	</data>
-	<data name="OnnxTextGenerationFlowBlock_AiTokenizer" xml:space="preserve">
+  <data name="OnnxTextGenerationFlowBlock_AiTokenizer" xml:space="preserve">
 		<value>KI-Tokenizer</value>
 	</data>
-	<data name="OnnxTextGenerationFlowBlock_Description" xml:space="preserve">
+  <data name="OnnxTextGenerationFlowBlock_Description" xml:space="preserve">
 		<value>Führt ein ONNX-Modell mit einem angegebenen Prompt unter Verwendung eines ausgewählten Tokenizers aus.</value>
 	</data>
-	<data name="OnnxTextGenerationFlowBlock_DisplayName" xml:space="preserve">
+  <data name="OnnxTextGenerationFlowBlock_DisplayName" xml:space="preserve">
 		<value>ONNX Text-Generierung</value>
 	</data>
-	<data name="OnnxTextGenerationFlowBlock_MaxTokens" xml:space="preserve">
+  <data name="OnnxTextGenerationFlowBlock_MaxTokens" xml:space="preserve">
 		<value>Maximale Anzahl zu generierender Tokens</value>
 	</data>
-	<data name="OnnxTextGenerationFlowBlock_ModelPath" xml:space="preserve">
+  <data name="OnnxTextGenerationFlowBlock_ModelPath" xml:space="preserve">
 		<value>Pfad zum ONNX-Modell</value>
 	</data>
-	<data name="OnnxTextGenerationFlowBlock_Prompt" xml:space="preserve">
+  <data name="OnnxTextGenerationFlowBlock_Prompt" xml:space="preserve">
 		<value>Prompt</value>
 	</data>
-	<data name="OnnxTextGenerationFlowBlock_TokenSelectionStrategy" xml:space="preserve">
+  <data name="OnnxTextGenerationFlowBlock_TokenSelectionStrategy" xml:space="preserve">
 		<value>Token-Auswahlstrategie</value>
 	</data>
-	<data name="OnnxTextGenerationFlowBlock_TokenSelectionStrategy_Tooltip" xml:space="preserve">
+  <data name="OnnxTextGenerationFlowBlock_TokenSelectionStrategy_Tooltip" xml:space="preserve">
 		<value>Bestimmt, wie der nächste Token im Textgenerierungsprozess ausgewählt wird. 'ArgMax' wählt immer den wahrscheinlichsten Token. 'Sample' wählt zufällig anhand der Wahrscheinlichkeitsverteilung.</value>
 	</data>
-	<data name="OutputBehavior_All" xml:space="preserve">
+  <data name="OutputBehavior_All" xml:space="preserve">
 		<value>Alle</value>
 	</data>
-	<data name="OutputBehavior_First" xml:space="preserve">
+  <data name="OutputBehavior_First" xml:space="preserve">
 		<value>Erster Datensatz</value>
 	</data>
-	<data name="OutputBehavior_Last" xml:space="preserve">
+  <data name="OutputBehavior_Last" xml:space="preserve">
 		<value>Letzter Datensatz</value>
 	</data>
-	<data name="OutputBehavior_Range" xml:space="preserve">
+  <data name="OutputBehavior_Range" xml:space="preserve">
 		<value>Bereich</value>
 	</data>
-	<data name="PDF2TextFlowBlock_Description" xml:space="preserve">
+  <data name="PDF2TextFlowBlock_Description" xml:space="preserve">
 		<value>Liest ein PDF-Dokument aus der angegebenen Datenquelle und gibt den extrahierten Klartext seitenweise als Ergebnis zurück.</value>
 	</data>
-	<data name="PDF2TextFlowBlock_DisplayName" xml:space="preserve">
+  <data name="PDF2TextFlowBlock_DisplayName" xml:space="preserve">
 		<value>PDF zu Text (PdfPig)</value>
 	</data>
-	<data name="Phi2AiTokenizer_Description" xml:space="preserve">
+  <data name="Phi2AiTokenizer_Description" xml:space="preserve">
 		<value>Verwendet das Phi-2-Tokenizer-Modell zur Tokenisierung und Detokenisierung von Text für AI-Inferenz.</value>
 	</data>
-	<data name="Phi2AiTokenizer_DisplayName" xml:space="preserve">
+  <data name="Phi2AiTokenizer_DisplayName" xml:space="preserve">
 		<value>Phi-2 AI Tokenizer</value>
 	</data>
-	<data name="Phi2AiTokenizer_TokenizerConfiguration" xml:space="preserve">
+  <data name="Phi2AiTokenizer_TokenizerConfiguration" xml:space="preserve">
 		<value>Tokenizer-Konfiguration</value>
 	</data>
-	<data name="Phi2AiTokenizer_TokenizerConfiguration_Tooltip" xml:space="preserve">
+  <data name="Phi2AiTokenizer_TokenizerConfiguration_Tooltip" xml:space="preserve">
 		<value>Wählen Sie den zu verwendenden Vokabular-/Merges-Tokenizer für das Phi-2 Modell.</value>
 	</data>
-	<data name="ProjectPanel_AssignFlowBlockName_Description" xml:space="preserve">
+  <data name="ProjectPanel_AssignFlowBlockName_Description" xml:space="preserve">
 		<value>Bitte geben Sie den Namen des Flow-Blocks an.</value>
 	</data>
-	<data name="ProjectPanel_AssignFlowBlockName_Title" xml:space="preserve">
+  <data name="ProjectPanel_AssignFlowBlockName_Title" xml:space="preserve">
 		<value>{0} erstellen</value>
 	</data>
-	<data name="PropertyNames_DataSource" xml:space="preserve">
+  <data name="PropertyNames_DataSource" xml:space="preserve">
 		<value>Datenquelle</value>
 	</data>
-	<data name="PropertyNames_EncodingName" xml:space="preserve">
+  <data name="PropertyNames_EncodingName" xml:space="preserve">
 		<value>TextEncoding</value>
 	</data>
-	<data name="PropertyNames_EncodingName_Tooltip" xml:space="preserve">
+  <data name="PropertyNames_EncodingName_Tooltip" xml:space="preserve">
 		<value>Wählen Sie das Text-Encoding aus, das zur Umwandlung von Zeichen in Bytefolgen und zurück verwendet wird.</value>
 	</data>
-	<data name="PropertyNames_FileName" xml:space="preserve">
+  <data name="PropertyNames_FileName" xml:space="preserve">
 		<value>Dateiname</value>
 	</data>
-	<data name="PropertyNames_FilePath" xml:space="preserve">
+  <data name="PropertyNames_FilePath" xml:space="preserve">
 		<value>Datei</value>
 	</data>
-	<data name="PropertyNames_Name" xml:space="preserve">
+  <data name="PropertyNames_Name" xml:space="preserve">
 		<value>Name</value>
 	</data>
-	<data name="PropertyNames_Value" xml:space="preserve">
+  <data name="PropertyNames_Value" xml:space="preserve">
 		<value>Wert</value>
 	</data>
-	<data name="PropertyViewTabControl_FormInvalid_Message" xml:space="preserve">
+  <data name="PropertyViewTabControl_FormInvalid_Message" xml:space="preserve">
 		<value>Bitte überprüfen Sie die folgenden Angaben: {0}</value>
 	</data>
-	<data name="PropertyViewTabControl_FormInvalid_Title" xml:space="preserve">
+  <data name="PropertyViewTabControl_FormInvalid_Title" xml:space="preserve">
 		<value>Formulardaten ungültig</value>
 	</data>
-	<data name="PropertyWindow_ApplyFailed_Title" xml:space="preserve">
+  <data name="PropertyWindow_ApplyFailed_Title" xml:space="preserve">
 		<value>Speichern fehlgeschlagen</value>
 	</data>
-	<data name="PropertyWindo_ApplyFailed_Message" xml:space="preserve">
+  <data name="PropertyWindo_ApplyFailed_Message" xml:space="preserve">
 		<value>Speichern konnte aufgrund eines technisches Fehler nicht durchgeführt werden. Bitte überprüfen Sie die Logfiles für weitere Informationen.</value>
 	</data>
-	<data name="RegexMatchModifier_DisplayName" xml:space="preserve">
+  <data name="RegexMatchModifier_DisplayName" xml:space="preserve">
 		<value>Regulärer Ausdruck trifft zu (Automatische Anpassung)</value>
 	</data>
-	<data name="RegexMatchModifierBehavior_All" xml:space="preserve">
+  <data name="RegexMatchModifierBehavior_All" xml:space="preserve">
 		<value>Alle Treffer</value>
 	</data>
-	<data name="RegexMatchModifierBehavior_Distinct" xml:space="preserve">
+  <data name="RegexMatchModifierBehavior_Distinct" xml:space="preserve">
 		<value>Nur eindeutige Treffer</value>
 	</data>
-	<data name="RegexMatchModifierBehavior_First" xml:space="preserve">
+  <data name="RegexMatchModifierBehavior_First" xml:space="preserve">
 		<value>Der erste Treffer</value>
 	</data>
-	<data name="RegexMatchModifier_Behavior" xml:space="preserve">
+  <data name="RegexMatchModifier_Behavior" xml:space="preserve">
 		<value>Verhalten</value>
 	</data>
-	<data name="RegexMatchModifier_ObjectDisplayName" xml:space="preserve">
+  <data name="RegexMatchModifier_ObjectDisplayName" xml:space="preserve">
 		<value>Treffer sammeln zu "{0}" Verhalten "{1}"</value>
 	</data>
-	<data name="RegexMatchModifier_Replace" xml:space="preserve">
+  <data name="RegexMatchModifier_Replace" xml:space="preserve">
 		<value>Ersetzen durch</value>
 	</data>
-	<data name="RegexMatchModifier_Search" xml:space="preserve">
+  <data name="RegexMatchModifier_Search" xml:space="preserve">
 		<value>Regulärer Ausdruck (Suchbegriff)</value>
 	</data>
-	<data name="RegexMatchModifier_Separator" xml:space="preserve">
+  <data name="RegexMatchModifier_Separator" xml:space="preserve">
 		<value>Trennzeichen</value>
 	</data>
-	<data name="RegexReplaceModifier_DisplayName" xml:space="preserve">
+  <data name="RegexReplaceModifier_DisplayName" xml:space="preserve">
 		<value>Ersetzen durch regulären Ausdruck (Automatische Anpassung)</value>
 	</data>
-	<data name="RegexReplaceModifier_ObjectDisplayName" xml:space="preserve">
+  <data name="RegexReplaceModifier_ObjectDisplayName" xml:space="preserve">
 		<value>Ersetze "{0}" durch "{1}"</value>
 	</data>
-	<data name="RegexSelectorFlowBlock_CaseSensitive" xml:space="preserve">
+  <data name="RegexSelectorFlowBlock_CaseSensitive" xml:space="preserve">
 		<value>Case-Sensitiv</value>
 	</data>
-	<data name="RegexSelectorFlowBlock_Description" xml:space="preserve">
+  <data name="RegexSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Flow-Block zur Auswahl von Textmustern mithilfe regulärer Ausdrücke.</value>
 	</data>
-	<data name="RegexSelectorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="RegexSelectorFlowBlock_DisplayName" xml:space="preserve">
 		<value>Regulärer Ausdruck</value>
 	</data>
-	<data name="RegexSelectorFlowBlock_Group" xml:space="preserve">
+  <data name="RegexSelectorFlowBlock_Group" xml:space="preserve">
 		<value>Gruppenname</value>
 	</data>
-	<data name="RegexSelectorFlowBlock_Multiline" xml:space="preserve">
+  <data name="RegexSelectorFlowBlock_Multiline" xml:space="preserve">
 		<value>Mehrzeilig</value>
 	</data>
-	<data name="RegexSelectorFlowBlock_RegularExpression" xml:space="preserve">
+  <data name="RegexSelectorFlowBlock_RegularExpression" xml:space="preserve">
 		<value>Regulärer Ausdruck</value>
 	</data>
-	<data name="ReplaceModifier_DisplayName" xml:space="preserve">
+  <data name="ReplaceModifier_DisplayName" xml:space="preserve">
 		<value>Ersetzen (Automatische Anpassung)</value>
 	</data>
-	<data name="ReplaceModifier_ObjectDisplayName" xml:space="preserve">
+  <data name="ReplaceModifier_ObjectDisplayName" xml:space="preserve">
 		<value>Ersetze "{0}" durch "{1}"</value>
 	</data>
-	<data name="ReplaceModifier_Replace" xml:space="preserve">
+  <data name="ReplaceModifier_Replace" xml:space="preserve">
 		<value>Ersetzen durch</value>
 	</data>
-	<data name="ReplaceModifier_Search" xml:space="preserve">
+  <data name="ReplaceModifier_Search" xml:space="preserve">
 		<value>Suchbegriff</value>
 	</data>
-	<data name="ResultFieldByEnumValue_EnumValue" xml:space="preserve">
+  <data name="ResultFieldByEnumValue_EnumValue" xml:space="preserve">
 		<value>Datenschlüssel</value>
 	</data>
-	<data name="RobertaQATokenizer_Description" xml:space="preserve">
+  <data name="RobertaQATokenizer_Description" xml:space="preserve">
 		<value>Tokenisiert Text für Frage-Antwort-Modelle mithilfe von Byte Pair Encoding (BPE) basierend auf vocab.json und merges.txt. Verwendet dabei das für RoBERTa-Modelle typische Satzformat.</value>
 	</data>
-		<data name="RobertaQATokenizer_DisplayName" xml:space="preserve">
+  <data name="RobertaQATokenizer_DisplayName" xml:space="preserve">
 			<value>RoBERTa BPE-Tokenizer (Q&amp;A)</value>
 		</data>
-		<data name="RobertaQATokenizer_DisplayName_Plural" xml:space="preserve">
+  <data name="RobertaQATokenizer_DisplayName_Plural" xml:space="preserve">
 			<value>RoBERTa BPE-Tokenizer (Q&amp;A)</value>
 		</data>
-	<data name="RobertaQATokenizer_TokenizerConfiguration" xml:space="preserve">
+  <data name="RobertaQATokenizer_TokenizerConfiguration" xml:space="preserve">
 		<value>Tokenizer-Konfiguration</value>
 	</data>
-	<data name="SequenceDetectionFlowBlock_Description" xml:space="preserve">
+  <data name="SequenceDetectionFlowBlock_Description" xml:space="preserve">
 		<value>Erkennt vordefinierte Zeichenfolgen innerhalb eines Eingabetextes auf Basis wiederkehrender struktureller Muster. Die Sequenz-Erkennung eignet sich besonders für strukturierte Inhalte, deren Aufbau gleich bleibt, während sich die konkreten Werte ändern, z. B. HTML-Seiten mit identischer Struktur, aber unterschiedlichen Inhalten je nach URL oder Seitenaufruf. Unter "Testfälle" müssen mindestens zwei Tests definiert werden, jeweils mit einer erwarteten Zeichenfolge und einer erwarteten Anzahl von Treffern. Anhand dieser Informationen wird versucht, ein hierarchisches Muster zu ermitteln, das den gewünschten Wert zuverlässig extrahiert. Weitere Testfälle dienen zur Validierung, dass das ermittelte Muster auch bei anderen, strukturell identischen Inhalten korrekt funktioniert.</value>
 	</data>
-	<data name="SequenceDetectionFlowBlock_DisplayName" xml:space="preserve">
+  <data name="SequenceDetectionFlowBlock_DisplayName" xml:space="preserve">
 		<value>Sequenz-Erkennung</value>
 	</data>
-	<data name="SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
+  <data name="SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
 		<value>Maximale Laufzeit der Sequenz-Generierung (Sekunden)</value>
 	</data>
-	<data name="SpecialCharacter_CarriageReturn" xml:space="preserve">
+  <data name="SpecialCharacter_CarriageReturn" xml:space="preserve">
 		<value>Wagenrücklauf</value>
 	</data>
-	<data name="SpecialCharacter_CarriageReturn_Tooltip" xml:space="preserve">
+  <data name="SpecialCharacter_CarriageReturn_Tooltip" xml:space="preserve">
 		<value>Ersetzt durch einen Wagenrücklauf (\\r).</value>
 	</data>
-	<data name="SpecialCharacter_LineBreak" xml:space="preserve">
+  <data name="SpecialCharacter_LineBreak" xml:space="preserve">
 		<value>Zeilenumbruch</value>
 	</data>
-	<data name="SpecialCharacter_LineBreak_Tooltip" xml:space="preserve">
+  <data name="SpecialCharacter_LineBreak_Tooltip" xml:space="preserve">
 		<value>Ersetzt durch einen Zeilenumbruch (\\n).</value>
 	</data>
-	<data name="SpecialCharacter_Space" xml:space="preserve">
+  <data name="SpecialCharacter_Space" xml:space="preserve">
 		<value>Leerzeichen</value>
 	</data>
-	<data name="SpecialCharacter_Space_Tooltip" xml:space="preserve">
+  <data name="SpecialCharacter_Space_Tooltip" xml:space="preserve">
 		<value>Ersetzt durch ein Leerzeichen.</value>
 	</data>
-	<data name="SpecialCharacter_Tab" xml:space="preserve">
+  <data name="SpecialCharacter_Tab" xml:space="preserve">
 		<value>Tabulator</value>
 	</data>
-	<data name="SpecialCharacter_Tab_Tooltip" xml:space="preserve">
+  <data name="SpecialCharacter_Tab_Tooltip" xml:space="preserve">
 		<value>Ersetzt durch einen Tabulator (\\t).</value>
 	</data>
-	<data name="SpecialSeparator_NewLine" xml:space="preserve">
+  <data name="SpecialSeparator_NewLine" xml:space="preserve">
 		<value>Zeilenumbruch</value>
 	</data>
-	<data name="SpecialSeparator_Tab" xml:space="preserve">
+  <data name="SpecialSeparator_Tab" xml:space="preserve">
 		<value>Tabstopp</value>
 	</data>
-	<data name="SQLTable_DbType" xml:space="preserve">
+  <data name="SQLTable_DbType" xml:space="preserve">
 		<value>Datenbanktyp</value>
 	</data>
-	<data name="SQLTable_DbType_Tooltip" xml:space="preserve">
+  <data name="SQLTable_DbType_Tooltip" xml:space="preserve">
 		<value>Der Typ der Datenbank (z. B. MSSQL, MySQL, Oracle, SQLite).</value>
 	</data>
-	<data name="SQLTable_SQLConnectionstring" xml:space="preserve">
+  <data name="SQLTable_SQLConnectionstring" xml:space="preserve">
 		<value>Verbindungszeichenfolge</value>
 	</data>
-	<data name="SQLTable_SQLConnectionstring_Tooltip" xml:space="preserve">
+  <data name="SQLTable_SQLConnectionstring_Tooltip" xml:space="preserve">
 		<value>Die Verbindungszeichenfolge, die zum Aufbau der Datenbankverbindung verwendet wird.</value>
 	</data>
-	<data name="SQLTable_SQLStatement" xml:space="preserve">
+  <data name="SQLTable_SQLStatement" xml:space="preserve">
 		<value>SQL-Anweisung</value>
 	</data>
-	<data name="SQLTable_SQLStatement_Tooltip" xml:space="preserve">
+  <data name="SQLTable_SQLStatement_Tooltip" xml:space="preserve">
 		<value>Die SQL-Abfrage, mit der die Tabellendaten ausgelesen werden. Parameter können über Felder definiert werden.</value>
 	</data>
-	<data name="StartEndPatternSelectorFlowBlock_Description" xml:space="preserve">
+  <data name="StartEndPatternSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Wählt Inhalte zwischen definierten Start- und Endmustern aus einem Text.</value>
 	</data>
-	<data name="StartEndPatternSelectorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="StartEndPatternSelectorFlowBlock_DisplayName" xml:space="preserve">
 		<value>Start/Ende-Mustererkennung</value>
 	</data>
-	<data name="StartEndPatternSelectorFlowBlock_StartEndPatterns" xml:space="preserve">
+  <data name="StartEndPatternSelectorFlowBlock_StartEndPatterns" xml:space="preserve">
 		<value>Start-/Endmuster</value>
 	</data>
-	<data name="StartEndPattern_EndPattern" xml:space="preserve">
+  <data name="StartEndPattern_EndPattern" xml:space="preserve">
 		<value>Endmuster</value>
 	</data>
-	<data name="StartEndPattern_Index" xml:space="preserve">
+  <data name="StartEndPattern_Index" xml:space="preserve">
 		<value>Index</value>
 	</data>
-	<data name="StartEndPattern_StartPattern" xml:space="preserve">
+  <data name="StartEndPattern_StartPattern" xml:space="preserve">
 		<value>Startmuster</value>
 	</data>
-	<data name="StartFlowBlock_Description" xml:space="preserve">
+  <data name="StartFlowBlock_Description" xml:space="preserve">
 		<value>Initialer Einstiegspunkt für die Ausführung eines Flow-Diagramms.</value>
 	</data>
-	<data name="StartFlowBlock_DisplayName" xml:space="preserve">
+  <data name="StartFlowBlock_DisplayName" xml:space="preserve">
 		<value>Start</value>
 	</data>
-	<data name="SubstringModifier_DisplayName" xml:space="preserve">
+  <data name="SubstringModifier_DisplayName" xml:space="preserve">
 		<value>Textabschnitt extrahieren (Automatische Anpassung)</value>
 	</data>
-	<data name="SubstringModifier_Index" xml:space="preserve">
+  <data name="SubstringModifier_Index" xml:space="preserve">
 		<value>Index</value>
 	</data>
-	<data name="SubstringModifier_Length" xml:space="preserve">
+  <data name="SubstringModifier_Length" xml:space="preserve">
 		<value>Länge</value>
 	</data>
-	<data name="SubstringModifier_ObjectDisplayName" xml:space="preserve">
+  <data name="SubstringModifier_ObjectDisplayName" xml:space="preserve">
 		<value>Text von Zeichen {0} bis {1}</value>
 	</data>
-	<data name="TableColumnDefinition_ColumnName" xml:space="preserve">
+  <data name="TableColumnDefinition_ColumnName" xml:space="preserve">
 		<value>Spaltenbezeichner</value>
 	</data>
-	<data name="TableColumnDefinition_IsKeyColumn" xml:space="preserve">
+  <data name="TableColumnDefinition_IsKeyColumn" xml:space="preserve">
 		<value>Ist Schlüsselspalte</value>
 	</data>
-	<data name="TableColumnDefinition_IsRequired" xml:space="preserve">
+  <data name="TableColumnDefinition_IsRequired" xml:space="preserve">
 		<value>Ist erforderlich</value>
 	</data>
-	<data name="TableReaderFlowBlock" xml:space="preserve">
+  <data name="TableReaderFlowBlock" xml:space="preserve">
 		<value>Tabellen-Selektor</value>
 	</data>
-	<data name="TableReaderFlowBlock_DatasetColumnConditions" xml:space="preserve">
+  <data name="TableReaderFlowBlock_DatasetColumnConditions" xml:space="preserve">
 		<value>Spaltenbedingungen</value>
 	</data>
-	<data name="TableReaderFlowBlock_Description" xml:space="preserve">
+  <data name="TableReaderFlowBlock_Description" xml:space="preserve">
 		<value>Liest strukturierte Daten aus einer Tabelle zur weiteren Verarbeitung.</value>
 	</data>
-	<data name="TableReaderFlowBlock_DisplayName" xml:space="preserve">
+  <data name="TableReaderFlowBlock_DisplayName" xml:space="preserve">
 		<value>Tabelle lesen</value>
 	</data>
-	<data name="TableReaderFlowBlock_Groups_DatasetColumnConditions" xml:space="preserve">
+  <data name="TableReaderFlowBlock_Groups_DatasetColumnConditions" xml:space="preserve">
 		<value>Spaltenbedingungen</value>
 	</data>
-	<data name="TableReaderFlowBlock_Groups_FieldColumnMapping" xml:space="preserve">
+  <data name="TableReaderFlowBlock_Groups_FieldColumnMapping" xml:space="preserve">
 		<value>Feld-/Spaltenmapping</value>
 	</data>
-	<data name="TableReaderFlowBlock_MappingEntries" xml:space="preserve">
+  <data name="TableReaderFlowBlock_MappingEntries" xml:space="preserve">
 		<value>Mapping-Einträge</value>
 	</data>
-	<data name="TableReaderFlowBlock_ReferencedTable" xml:space="preserve">
+  <data name="TableReaderFlowBlock_ReferencedTable" xml:space="preserve">
 		<value>Referenzierte Tabelle</value>
 	</data>
-	<data name="TableSelectorColumnCondition_ColumnName" xml:space="preserve">
+  <data name="TableSelectorColumnCondition_ColumnName" xml:space="preserve">
 		<value>Name der bedingten Spalte</value>
 	</data>
-	<data name="TableSelectorMappingEntry" xml:space="preserve">
+  <data name="TableSelectorMappingEntry" xml:space="preserve">
 		<value>Tabellenselektor-Mapping Eintrag</value>
 	</data>
-	<data name="TableSelectorMappingEntry_ColumnName" xml:space="preserve">
+  <data name="TableSelectorMappingEntry_ColumnName" xml:space="preserve">
 		<value>Spaltenbezeichner</value>
 	</data>
-	<data name="TableSelectorMappingEntry_DisplayName" xml:space="preserve">
+  <data name="TableSelectorMappingEntry_DisplayName" xml:space="preserve">
 		<value>Tabellenspalten-Mapping</value>
 	</data>
-	<data name="TableWriterFlowBlock_CreateNewDatasets" xml:space="preserve">
+  <data name="TableWriterFlowBlock_CreateNewDatasets" xml:space="preserve">
 		<value>Neue Datensätze erstellen</value>
 	</data>
-	<data name="TableWriterFlowBlock_Description" xml:space="preserve">
+  <data name="TableWriterFlowBlock_Description" xml:space="preserve">
 		<value>Schreibt strukturierte Daten in eine Tabelle zur späteren Verwendung.</value>
 	</data>
-	<data name="TableWriterFlowBlock_DisplayName" xml:space="preserve">
+  <data name="TableWriterFlowBlock_DisplayName" xml:space="preserve">
 		<value>Tabelle schreiben</value>
 	</data>
-	<data name="TableWriterFlowBlock_Groups_Schema" xml:space="preserve">
+  <data name="TableWriterFlowBlock_Groups_Schema" xml:space="preserve">
 		<value>Schema</value>
 	</data>
-	<data name="TableWriterFlowBlock_ReferencedTable" xml:space="preserve">
+  <data name="TableWriterFlowBlock_ReferencedTable" xml:space="preserve">
 		<value>Referenzierte Tabelle</value>
 	</data>
-	<data name="TableWriterFlowBlock_TableColumnDefinitions" xml:space="preserve">
+  <data name="TableWriterFlowBlock_TableColumnDefinitions" xml:space="preserve">
 		<value>Tabellen-/Spaltendefinitionen</value>
 	</data>
-	<data name="TableWriterFlowBlock_UpdateExistingDatasets" xml:space="preserve">
+  <data name="TableWriterFlowBlock_UpdateExistingDatasets" xml:space="preserve">
 		<value>Vorhandene Datensätze aktualisieren</value>
 	</data>
-	<data name="TableWriterFlowBlock_Validation_DuplicateColumnNames" xml:space="preserve">
+  <data name="TableWriterFlowBlock_Validation_DuplicateColumnNames" xml:space="preserve">
 		<value>Duplikate in Spaltenbezeichnern gefunden: {0}. Jeder Spaltenbezeichner muss eindeutig sein.</value>
 	</data>
-	<data name="TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip" xml:space="preserve">
+  <data name="TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip" xml:space="preserve">
 		<value>Feld einfügen oder ausgewählten Text ersetzen</value>
 	</data>
-	<data name="TextBoxWithOptionalButtonsCreator_EnableFileSelection_Tooltip" xml:space="preserve">
+  <data name="TextBoxWithOptionalButtonsCreator_EnableFileSelection_Tooltip" xml:space="preserve">
 		<value>Datei auswählen</value>
 	</data>
-	<data name="TextBoxWithOptionalButtonsCreator_EnableFolderSelection_Tooltip" xml:space="preserve">
+  <data name="TextBoxWithOptionalButtonsCreator_EnableFolderSelection_Tooltip" xml:space="preserve">
 		<value>Ordner auswählen</value>
 	</data>
-	<data name="TextBoxWithOptionalButtonsCreator_EnableToolbox_Tooltip" xml:space="preserve">
+  <data name="TextBoxWithOptionalButtonsCreator_EnableToolbox_Tooltip" xml:space="preserve">
 		<value>Toolbox öffnen</value>
 	</data>
-	<data name="TiktokenAiTokenizer_Description" xml:space="preserve">
+  <data name="TiktokenAiTokenizer_Description" xml:space="preserve">
 		<value>Verwendet die Tiktoken-Tokenisierung mit vorkonfiguriertem Vokabular und Kodierung für GPT-basierte Modelle.</value>
 	</data>
-	<data name="TiktokenAiTokenizer_DisplayName" xml:space="preserve">
+  <data name="TiktokenAiTokenizer_DisplayName" xml:space="preserve">
 		<value>Tiktoken-Tokenizer</value>
 	</data>
-	<data name="TiktokenAiTokenizer_ModelName" xml:space="preserve">
+  <data name="TiktokenAiTokenizer_ModelName" xml:space="preserve">
 		<value>Modellname</value>
 	</data>
-	<data name="TiktokenAiTokenizer_ModelName_Tooltip" xml:space="preserve">
+  <data name="TiktokenAiTokenizer_ModelName_Tooltip" xml:space="preserve">
 		<value>Gibt den Namen des GPT-Modells an, das für die Tokenisierung verwendet werden soll (z.B. gpt2, gpt-neo, gpt-3.5).</value>
 	</data>
-	<data name="TokenizerBase_TokenTranslations" xml:space="preserve">
+  <data name="TokenizerBase_TokenTranslations" xml:space="preserve">
 		<value>Token-Ersetzungen</value>
 	</data>
-	<data name="TokenizerBase_TokenTranslations_Tooltip" xml:space="preserve">
+  <data name="TokenizerBase_TokenTranslations_Tooltip" xml:space="preserve">
 		<value>Optionales Mapping zur Umwandlung von Zeichen nach der Decodierung</value>
 	</data>
-	<data name="TokenTranslation_DestinationCharacter" xml:space="preserve">
+  <data name="TokenTranslation_DestinationCharacter" xml:space="preserve">
 		<value>Zielzeichen</value>
 	</data>
-	<data name="TokenTranslation_SourceCharacter" xml:space="preserve">
+  <data name="TokenTranslation_SourceCharacter" xml:space="preserve">
 		<value>Quellzeichen (in Modellausgabe)</value>
 	</data>
-	<data name="TokenTranslation_SpecialCharacter" xml:space="preserve">
+  <data name="TokenTranslation_SpecialCharacter" xml:space="preserve">
 		<value>Sonderzeichen</value>
 	</data>
-	<data name="TypeElement_DisplayName" xml:space="preserve">
+  <data name="TypeElement_DisplayName" xml:space="preserve">
 		<value>Typ-Element</value>
 	</data>
-	<data name="TypeElement_DateFormat" xml:space="preserve">
+  <data name="TypeElement_DateFormat" xml:space="preserve">
 		<value>Datumsformat</value>
 	</data>
-	<data name="TypeElement_DecimalSeparator" xml:space="preserve">
+  <data name="TypeElement_DecimalSeparator" xml:space="preserve">
 		<value>Dezimaltrennzeichen</value>
 	</data>
-	<data name="TypeElement_FieldType" xml:space="preserve">
+  <data name="TypeElement_FieldType" xml:space="preserve">
 		<value>Typ</value>
 	</data>
-	<data name="TypeElement_GroupSeparator" xml:space="preserve">
+  <data name="TypeElement_GroupSeparator" xml:space="preserve">
 		<value>Tausendertrennzeichen</value>
 	</data>
-	<data name="TypeElement_IsNullable" xml:space="preserve">
+  <data name="TypeElement_IsNullable" xml:space="preserve">
 		<value>Darf NULL-Werte enthalten</value>
 	</data>
-	<data name="CsvTable_DisplayName" xml:space="preserve">
+  <data name="CsvTable_DisplayName" xml:space="preserve">
 		<value>CSV-Tabelle</value>
 	</data>
-	<data name="ExcelTable_DisplayName" xml:space="preserve">
+  <data name="ExcelTable_DisplayName" xml:space="preserve">
 		<value>Excel-Tabelle</value>
 	</data>
-	<data name="FileObject_DisplayName" xml:space="preserve">
+  <data name="FileObject_DisplayName" xml:space="preserve">
 		<value>Datei-Objekt</value>
 	</data>
-	<data name="MemoryObject_DisplayName" xml:space="preserve">
+  <data name="MemoryObject_DisplayName" xml:space="preserve">
 		<value>Gespeichertes Objekt</value>
 	</data>
-	<data name="SQLTable_DisplayName" xml:space="preserve">
+  <data name="SQLTable_DisplayName" xml:space="preserve">
 		<value>SQL-Tabelle</value>
 	</data>
-	<data name="UserFieldObjectManager_Description" xml:space="preserve">
+  <data name="UserFieldObjectManager_Description" xml:space="preserve">
 		<value>Benutzerdefinierte Felder können als Eingabeparameter verwendet werden und dienen auch dazu, Informationen während der Projektausführung zwischenzuspeichern. Sie lassen sich sowohl manuell setzen als auch über Argumente übergeben (z. B. bei Verwendung von FlowBlox.CLI) und können zur Laufzeit gelesen und verändert werden.</value>
 	</data>
-	<data name="UserFieldObjectManager_DisplayName" xml:space="preserve">
+  <data name="UserFieldObjectManager_DisplayName" xml:space="preserve">
 		<value>Benutzerdefinierte Felder verwalten</value>
 	</data>
-	<data name="UserFieldObjectManager_InputFields" xml:space="preserve">
+  <data name="UserFieldObjectManager_InputFields" xml:space="preserve">
 		<value>Benutzerdefinierte Eingabefelder</value>
 	</data>
-	<data name="UserFieldObjectManager_MemoryFields" xml:space="preserve">
+  <data name="UserFieldObjectManager_MemoryFields" xml:space="preserve">
 		<value>Benutzerdefinierte Speicherfelder</value>
 	</data>
-	<data name="UserFieldTypes_Input" xml:space="preserve">
+  <data name="UserFieldTypes_Input" xml:space="preserve">
 		<value>Eingabefeld</value>
 	</data>
-	<data name="UserFieldTypes_Memory" xml:space="preserve">
+  <data name="UserFieldTypes_Memory" xml:space="preserve">
 		<value>Speicherfeld</value>
 	</data>
-	<data name="UserFieldTypes_None" xml:space="preserve">
+  <data name="UserFieldTypes_None" xml:space="preserve">
 		<value>Keine Auswahl</value>
 	</data>
-	<data name="ValueItem_DisplayName" xml:space="preserve">
+  <data name="ValueItem_DisplayName" xml:space="preserve">
 		<value>Wertelement</value>
 	</data>
-	<data name="ValueItem_DisplayNameProperty" xml:space="preserve">
+  <data name="ValueItem_DisplayNameProperty" xml:space="preserve">
 		<value>Anzeigename</value>
 	</data>
-	<data name="ValueItem_Value" xml:space="preserve">
+  <data name="ValueItem_Value" xml:space="preserve">
 		<value>Wert</value>
 	</data>
-	<data name="VocabMergesConfiguration_DisplayName" xml:space="preserve">
+  <data name="VocabMergesConfiguration_DisplayName" xml:space="preserve">
 		<value>Vocab-Merges-Konfiguration</value>
 	</data>
-	<data name="VocabMergesConfiguration_MergesFile" xml:space="preserve">
+  <data name="VocabMergesConfiguration_MergesFile" xml:space="preserve">
 		<value>Merges-Datei (merges.txt)</value>
 	</data>
-	<data name="VocabMergesConfiguration_MergesFile_Tooltip" xml:space="preserve">
+  <data name="VocabMergesConfiguration_MergesFile_Tooltip" xml:space="preserve">
 		<value>Optional: Wähle direkt die Merges-Datei aus, falls kein Verzeichnis angegeben ist.</value>
 	</data>
-	<data name="VocabMergesConfiguration_TokenizerDirectory" xml:space="preserve">
+  <data name="VocabMergesConfiguration_TokenizerDirectory" xml:space="preserve">
 		<value>Tokenizer-Verzeichnis</value>
 	</data>
-	<data name="VocabMergesConfiguration_TokenizerDirectory_Tooltip" xml:space="preserve">
+  <data name="VocabMergesConfiguration_TokenizerDirectory_Tooltip" xml:space="preserve">
 		<value>Wähle ein Verzeichnis, das die Dateien „vocab.json“ und „merges.txt“ enthält.</value>
 	</data>
-	<data name="VocabMergesConfiguration_VocabFile" xml:space="preserve">
+  <data name="VocabMergesConfiguration_VocabFile" xml:space="preserve">
 		<value>Vocab-Datei (vocab.json)</value>
 	</data>
-	<data name="VocabMergesConfiguration_VocabFile_Tooltip" xml:space="preserve">
+  <data name="VocabMergesConfiguration_VocabFile_Tooltip" xml:space="preserve">
 		<value>Optional: Wähle direkt die Vocab-Datei aus, falls kein Verzeichnis angegeben ist.</value>
 	</data>
-	<data name="WebActionFlowblockBase_AssociatedWebBrowser" xml:space="preserve">
+  <data name="WebActionFlowblockBase_AssociatedWebBrowser" xml:space="preserve">
 		<value>Verknüpfter Web-Browser (Flow-Block)</value>
 	</data>
-	<data name="WebBrowserEventAbortionTypes_ByFailure" xml:space="preserve">
+  <data name="WebBrowserEventAbortionTypes_ByFailure" xml:space="preserve">
 		<value>Bei Fehler</value>
 	</data>
-	<data name="WebBrowserEventAbortionTypes_ByLimitOrFailure" xml:space="preserve">
+  <data name="WebBrowserEventAbortionTypes_ByLimitOrFailure" xml:space="preserve">
 		<value>Bei Erreichen des Limits oder Fehler</value>
 	</data>
-	<data name="WebBrowserEventTypes_Click" xml:space="preserve">
+  <data name="WebBrowserEventTypes_Click" xml:space="preserve">
 		<value>Klick</value>
 	</data>
-	<data name="WebBrowserEventTypes_ClickAll" xml:space="preserve">
+  <data name="WebBrowserEventTypes_ClickAll" xml:space="preserve">
 		<value>Alle anklicken</value>
 	</data>
-	<data name="WebBrowserEventTypes_Enter" xml:space="preserve">
+  <data name="WebBrowserEventTypes_Enter" xml:space="preserve">
 		<value>Eingabe</value>
 	</data>
-	<data name="WebBrowserEventTypes_Scroll" xml:space="preserve">
+  <data name="WebBrowserEventTypes_Scroll" xml:space="preserve">
 		<value>Scrollen</value>
 	</data>
-	<data name="WebBrowserEventTypes_SwitchToUrl" xml:space="preserve">
+  <data name="WebBrowserEventTypes_SwitchToUrl" xml:space="preserve">
 		<value>Zu URL wechseln</value>
 	</data>
-	<data name="WebBrowserEventTypes_UpdateDOM" xml:space="preserve">
+  <data name="WebBrowserEventTypes_UpdateDOM" xml:space="preserve">
 		<value>DOM aktualisieren</value>
 	</data>
-	<data name="WebBrowserEventTypes_UploadFile" xml:space="preserve">
+  <data name="WebBrowserEventTypes_UploadFile" xml:space="preserve">
 		<value>Datei hochladen</value>
 	</data>
-	<data name="WebBrowserFlowBlock_AssociatedWebBrowser" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_AssociatedWebBrowser" xml:space="preserve">
 		<value>Verbundener Web-Browser</value>
 	</data>
-	<data name="WebBrowserFlowBlock_Description" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_Description" xml:space="preserve">
 		<value>Simuliert einen einfachen Browser zur Darstellung oder Analyse von Webseiteninhalten.</value>
 	</data>
-	<data name="WebBrowserFlowBlock_DisplayName" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_DisplayName" xml:space="preserve">
 		<value>Webbrowser</value>
 	</data>
-	<data name="WebBrowserFlowBlock_Groups_Advanced" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_Groups_Advanced" xml:space="preserve">
 		<value>Erweiterte Einstellungen</value>
 	</data>
-	<data name="WebBrowserFlowBlock_Url" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_Url" xml:space="preserve">
 		<value>Url</value>
 	</data>
-	<data name="WebEventFlowBlock_CallLimit" xml:space="preserve">
+  <data name="WebEventFlowBlock_CallLimit" xml:space="preserve">
 		<value>Aufruflimit</value>
 	</data>
-	<data name="WebEventFlowBlock_CloneTab" xml:space="preserve">
+  <data name="WebEventFlowBlock_CloneTab" xml:space="preserve">
 		<value>Spezieller Modus: Tab klonen</value>
 	</data>
-	<data name="WebEventFlowBlock_CSSSelector" xml:space="preserve">
+  <data name="WebEventFlowBlock_CSSSelector" xml:space="preserve">
 		<value>CSS-Selektor</value>
 	</data>
-	<data name="WebEventFlowBlock_Description" xml:space="preserve">
+  <data name="WebEventFlowBlock_Description" xml:space="preserve">
 		<value>Reagiert auf Benutzerinteraktionen oder Ereignisse innerhalb einer Webkomponente.</value>
 	</data>
-	<data name="WebEventFlowBlock_DisplayName" xml:space="preserve">
+  <data name="WebEventFlowBlock_DisplayName" xml:space="preserve">
 		<value>Web-Ereignis</value>
 	</data>
-	<data name="WebEventFlowBlock_ElementDeterminationRequired" xml:space="preserve">
+  <data name="WebEventFlowBlock_ElementDeterminationRequired" xml:space="preserve">
 		<value>Ermittlung des Elements erforderlich</value>
 	</data>
-	<data name="WebEventFlowBlock_Groups_Advanced" xml:space="preserve">
+  <data name="WebEventFlowBlock_Groups_Advanced" xml:space="preserve">
 		<value>Erweiterte Einstellungen</value>
 	</data>
-	<data name="WebEventFlowBlock_InputText" xml:space="preserve">
+  <data name="WebEventFlowBlock_InputText" xml:space="preserve">
 		<value>Eingabetext</value>
 	</data>
-	<data name="WebEventFlowBlock_WaitingTimeAfterExecution" xml:space="preserve">
+  <data name="WebEventFlowBlock_WaitingTimeAfterExecution" xml:space="preserve">
 		<value>Wartezeit nach Ausführung (in Millisekunden)</value>
 	</data>
-	<data name="WebEventFlowBlock_WebBrowserEventAbortionType" xml:space="preserve">
+  <data name="WebEventFlowBlock_WebBrowserEventAbortionType" xml:space="preserve">
 		<value>Web-Browser-Ereignisabbruchtyp</value>
 	</data>
-	<data name="WebEventFlowBlock_WebBrowserEventType" xml:space="preserve">
+  <data name="WebEventFlowBlock_WebBrowserEventType" xml:space="preserve">
 		<value>Ereignistyp</value>
 	</data>
-	<data name="WebEventFlowBlock_XPath" xml:space="preserve">
+  <data name="WebEventFlowBlock_XPath" xml:space="preserve">
 		<value>X-Path</value>
 	</data>
-	<data name="WebRequestFlowBlock_AssociatedWebRequest" xml:space="preserve">
+  <data name="WebRequestFlowBlock_AssociatedWebRequest" xml:space="preserve">
 		<value>Verknüpfter Web-Request</value>
 	</data>
-	<data name="WebRequestFlowBlock_CacheAlreadyProcessedContents" xml:space="preserve">
+  <data name="WebRequestFlowBlock_CacheAlreadyProcessedContents" xml:space="preserve">
 		<value>Bereits abgerufene Inhalte erneut verwenden</value>
 	</data>
-	<data name="WebRequestFlowBlock_ContentCacheSize" xml:space="preserve">
+  <data name="WebRequestFlowBlock_ContentCacheSize" xml:space="preserve">
 		<value>Größe des Inhalt-Speichers (in Bytes)</value>
 	</data>
-	<data name="WebRequestFlowBlock_Description" xml:space="preserve">
+  <data name="WebRequestFlowBlock_Description" xml:space="preserve">
 		<value>Sendet eine HTTP-Anfrage an einen Webserver und verarbeitet die Antwort.</value>
 	</data>
-	<data name="WebRequestFlowBlock_DisableCache" xml:space="preserve">
+  <data name="WebRequestFlowBlock_DisableCache" xml:space="preserve">
 		<value>Cache deaktivieren</value>
 	</data>
-	<data name="WebRequestFlowBlock_DisplayName" xml:space="preserve">
+  <data name="WebRequestFlowBlock_DisplayName" xml:space="preserve">
 		<value>Webanfrage</value>
 	</data>
-	<data name="WebRequestFlowBlock_Groups_Advanced" xml:space="preserve">
+  <data name="WebRequestFlowBlock_Groups_Advanced" xml:space="preserve">
 		<value>Erweiterte Einstellungen</value>
 	</data>
-	<data name="WebRequestFlowBlock_Groups_Authentication" xml:space="preserve">
+  <data name="WebRequestFlowBlock_Groups_Authentication" xml:space="preserve">
 		<value>Authentifizierung</value>
 	</data>
-	<data name="WebRequestFlowBlock_Groups_Payload" xml:space="preserve">
+  <data name="WebRequestFlowBlock_Groups_Payload" xml:space="preserve">
 		<value>Payload</value>
 	</data>
-	<data name="WebRequestFlowBlock_HeaderParameters" xml:space="preserve">
+  <data name="WebRequestFlowBlock_HeaderParameters" xml:space="preserve">
 		<value>Header-Parameter</value>
 	</data>
-	<data name="WebRequestFlowBlock_HTTPAction" xml:space="preserve">
+  <data name="WebRequestFlowBlock_HTTPAction" xml:space="preserve">
 		<value>HTTP-Aktion</value>
 	</data>
-	<data name="WebRequestFlowBlock_IgnoreAlreadyProcessedContents" xml:space="preserve">
+  <data name="WebRequestFlowBlock_IgnoreAlreadyProcessedContents" xml:space="preserve">
 		<value>Bereits verarbeitete Inhalte nicht erneut verarbeiten</value>
 	</data>
-	<data name="WebRequestFlowBlock_IgnoreAlreadyProcessedUrls" xml:space="preserve">
+  <data name="WebRequestFlowBlock_IgnoreAlreadyProcessedUrls" xml:space="preserve">
 		<value>Bereits verarbeitete URLs nicht erneut verarbeiten</value>
 	</data>
-	<data name="WebRequestFlowBlock_Password" xml:space="preserve">
+  <data name="WebRequestFlowBlock_Password" xml:space="preserve">
 		<value>Passwort</value>
 	</data>
-	<data name="WebRequestFlowBlock_Payload" xml:space="preserve">
+  <data name="WebRequestFlowBlock_Payload" xml:space="preserve">
 		<value>Payload</value>
 	</data>
-	<data name="WebRequestFlowBlock_Payload_ContentType" xml:space="preserve">
+  <data name="WebRequestFlowBlock_Payload_ContentType" xml:space="preserve">
 		<value>Typ des Inhalts</value>
 	</data>
-	<data name="WebRequestFlowBlock_PostParameters" xml:space="preserve">
+  <data name="WebRequestFlowBlock_PostParameters" xml:space="preserve">
 		<value>POST-Parameter</value>
 	</data>
-	<data name="WebRequestFlowBlock_ResponseBodyKind" xml:space="preserve">
+  <data name="WebRequestFlowBlock_ResponseBodyKind" xml:space="preserve">
 		<value>Antwort-Typ</value>
 	</data>
-	<data name="WebRequestFlowBlock_ResultFields" xml:space="preserve">
+  <data name="WebRequestFlowBlock_ResultFields" xml:space="preserve">
 		<value>Ergebnis-Felder</value>
 	</data>
-	<data name="WebRequestFlowBlock_Url" xml:space="preserve">
+  <data name="WebRequestFlowBlock_Url" xml:space="preserve">
 		<value>URL</value>
 	</data>
-	<data name="WebRequestFlowBlock_UserName" xml:space="preserve">
+  <data name="WebRequestFlowBlock_UserName" xml:space="preserve">
 		<value>Benutzername</value>
 	</data>
-	<data name="WebRequestFlowBlock_WebRequestTimeout" xml:space="preserve">
+  <data name="WebRequestFlowBlock_WebRequestTimeout" xml:space="preserve">
 		<value>Timeout (in Millisekunden)</value>
 	</data>
-	<data name="WebRequestParameter_Key" xml:space="preserve">
+  <data name="WebRequestParameter_Key" xml:space="preserve">
 		<value>Parameter</value>
 	</data>
-	<data name="WebRequestParameter_Value" xml:space="preserve">
+  <data name="WebRequestParameter_Value" xml:space="preserve">
 		<value>Wert</value>
 	</data>
-	<data name="WebSelectorFlowBlock_CSSSelector" xml:space="preserve">
+  <data name="WebSelectorFlowBlock_CSSSelector" xml:space="preserve">
 		<value>CSS-Selektor</value>
 	</data>
-	<data name="WebSelectorFlowBlock_Description" xml:space="preserve">
+  <data name="WebSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Wählt Elemente aus einer Webseite anhand von CSS-Selektoren oder XPath aus.</value>
 	</data>
-	<data name="WebSelectorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="WebSelectorFlowBlock_DisplayName" xml:space="preserve">
 		<value>Web-Selektor</value>
 	</data>
-	<data name="WebSelectorFlowBlock_InnerContent" xml:space="preserve">
+  <data name="WebSelectorFlowBlock_InnerContent" xml:space="preserve">
 		<value>Inneres HTML</value>
 	</data>
-	<data name="WebSelectorFlowBlock_XPath" xml:space="preserve">
+  <data name="WebSelectorFlowBlock_XPath" xml:space="preserve">
 		<value>X-Path</value>
 	</data>
-	<data name="XmlAssignment_FieldValue" xml:space="preserve">
+  <data name="XmlAssignment_FieldValue" xml:space="preserve">
 		<value>Feld</value>
 	</data>
-	<data name="XmlAssignment_Value" xml:space="preserve">
+  <data name="XmlAssignment_Value" xml:space="preserve">
 		<value>Wert</value>
 	</data>
-	<data name="XmlAssignment_XPath" xml:space="preserve">
+  <data name="XmlAssignment_XPath" xml:space="preserve">
 		<value>XPath</value>
 	</data>
-	<data name="XmlDocumentFlowBlock_Description" xml:space="preserve">
+  <data name="XmlDocumentFlowBlock_Description" xml:space="preserve">
 		<value>Erzeugt ein neues XML-Dokument oder lädt ein bestehendes XML zur weiteren Verarbeitung.</value>
 	</data>
-	<data name="XmlDocumentFlowBlock_DisplayName" xml:space="preserve">
+  <data name="XmlDocumentFlowBlock_DisplayName" xml:space="preserve">
 		<value>XML-Dokument</value>
 	</data>
-	<data name="XmlDocumentFlowBlock_XmlContent" xml:space="preserve">
+  <data name="XmlDocumentFlowBlock_XmlContent" xml:space="preserve">
 		<value>XML-Inhalt</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_Assignments" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_Assignments" xml:space="preserve">
 		<value>Zuweisungen</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter" xml:space="preserve">
 		<value>Referenz-Knoten (über "XML-Knoten schreiben" Flow-Block)</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument" xml:space="preserve">
 		<value>Verknüpftes XML-Dokument (über XML-Dokument Flow-Block)</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_Description" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_Description" xml:space="preserve">
 		<value>Fügt einem bestehenden XML-Dokument einen neuen Knoten hinzu.</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_DisplayName" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_DisplayName" xml:space="preserve">
 		<value>XML-Knoten schreiben</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_XPath" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_XPath" xml:space="preserve">
 		<value>Ziel-XPath</value>
 	</data>
-	<data name="XmlDocumentOutputFlowBlock_AssociatedXmlDocument" xml:space="preserve">
+  <data name="XmlDocumentOutputFlowBlock_AssociatedXmlDocument" xml:space="preserve">
 		<value>XML-Dokument (Flow-Block)</value>
 	</data>
-	<data name="XmlDocumentOutputFlowBlock_Description" xml:space="preserve">
+  <data name="XmlDocumentOutputFlowBlock_Description" xml:space="preserve">
 		<value>Speichert das aktuelle XML-Dokument in ein Ausgabefeld als Byte-Array oder String.</value>
 	</data>
-	<data name="XmlDocumentOutputFlowBlock_DisplayName" xml:space="preserve">
+  <data name="XmlDocumentOutputFlowBlock_DisplayName" xml:space="preserve">
 		<value>XML-Dokument Ausgabe</value>
 	</data>
-	<data name="XmlDocumentOutputFlowBlock_Indent" xml:space="preserve">
+  <data name="XmlDocumentOutputFlowBlock_Indent" xml:space="preserve">
 		<value>Ausgabe einrücken</value>
 	</data>
-	<data name="XmlDocumentOutputFlowBlock_NewLineOnAttributes" xml:space="preserve">
+  <data name="XmlDocumentOutputFlowBlock_NewLineOnAttributes" xml:space="preserve">
 		<value>Neue Zeile bei Attributen</value>
 	</data>
-	<data name="XmlDocumentOutputFlowBlock_OmitXmlDeclaration" xml:space="preserve">
+  <data name="XmlDocumentOutputFlowBlock_OmitXmlDeclaration" xml:space="preserve">
 		<value>XML-Deklaration unterdrücken</value>
 	</data>
-	<data name="XmlDocumentUpdaterFlowBlock_AssociatedXmlDocument" xml:space="preserve">
+  <data name="XmlDocumentUpdaterFlowBlock_AssociatedXmlDocument" xml:space="preserve">
 		<value>XML-Dokument (Flow-Block)</value>
 	</data>
-	<data name="XmlDocumentXPathSelector_Description" xml:space="preserve">
+  <data name="XmlDocumentXPathSelector_Description" xml:space="preserve">
 		<value>Wählt einen oder mehrere XML-Knoten basierend auf einem XPath-Ausdruck aus.</value>
 	</data>
-	<data name="XmlDocumentXPathSelector_DisplayName" xml:space="preserve">
+  <data name="XmlDocumentXPathSelector_DisplayName" xml:space="preserve">
 		<value>XPath-Selektor</value>
 	</data>
-	<data name="XmlDocumentXPathSelector_DocumentSource" xml:space="preserve">
+  <data name="XmlDocumentXPathSelector_DocumentSource" xml:space="preserve">
 		<value>XML-Dokumentenquelle</value>
 	</data>
-	<data name="XmlDocumentXPathSelector_XPath" xml:space="preserve">
+  <data name="XmlDocumentXPathSelector_XPath" xml:space="preserve">
 		<value>XPath</value>
 	</data>
-	<data name="XmlDocumentXPathSelector_AssociatedXmlDocument" xml:space="preserve">
+  <data name="XmlDocumentXPathSelector_AssociatedXmlDocument" xml:space="preserve">
 		<value>XML-Dokument (Flow-Block)</value>
 	</data>
-	<data name="InputBehavior_RowWise" xml:space="preserve">
+  <data name="InputBehavior_RowWise" xml:space="preserve">
 		<value>Reihenweise</value>
 	</data>
-	<data name="InputBehavior_RowWiseValid" xml:space="preserve">
+  <data name="InputBehavior_RowWiseValid" xml:space="preserve">
 		<value>Reihenweise - gültige Zeilen</value>
 	</data>
-	<data name="StartEndPatternSelectorFlowBlock_IncludePatternInResult" xml:space="preserve">
+  <data name="StartEndPatternSelectorFlowBlock_IncludePatternInResult" xml:space="preserve">
 		<value>Muster in Ausgabewert einschließen</value>
 	</data>
-	<data name="StartEndPatternSelectorFlowBlock_ReturnOptions" xml:space="preserve">
+  <data name="StartEndPatternSelectorFlowBlock_ReturnOptions" xml:space="preserve">
 		<value>Rückgabeoptionen</value>
 	</data>
-	<data name="WebBrowserFlowBlock_RetryLimit" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_RetryLimit" xml:space="preserve">
 		<value>Maximale Anzahl der Wiederholungsversuche</value>
 	</data>
-	<data name="WebBrowserFlowBlock_RetryTimeunit" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_RetryTimeunit" xml:space="preserve">
 		<value>Warteintervall zwischen Wiederholungen (in Millisekunden)</value>
 	</data>
-	<data name="WebBrowserFlowBlock_Timeout" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_Timeout" xml:space="preserve">
 		<value>Timeout (in Sekunden)</value>
 	</data>
-	<data name="WebBrowserFlowBlock_Timeout_Tooltip" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_Timeout_Tooltip" xml:space="preserve">
 		<value>Legt fest, wie viele Sekunden maximal auf eine Browseraktion gewartet wird, bevor ein Timeout ausgelöst wird.</value>
 	</data>
-	<data name="WebBrowserFlowBlock_RetryLimit_Tooltip" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_RetryLimit_Tooltip" xml:space="preserve">
 		<value>Gibt an, wie oft ein fehlgeschlagener Browserzugriff erneut versucht wird, bevor ein Fehler zurückgegeben wird.</value>
 	</data>
-	<data name="WebBrowserFlowBlock_RetryTimeunit_Tooltip" xml:space="preserve">
+  <data name="WebBrowserFlowBlock_RetryTimeunit_Tooltip" xml:space="preserve">
 		<value>Zeitspanne in Millisekunden, die zwischen zwei Wiederholungsversuchen gewartet wird.</value>
 	</data>
-	<data name="IndexFlowBlock_DisplayName" xml:space="preserve">
+  <data name="IndexFlowBlock_DisplayName" xml:space="preserve">
 		<value>Index</value>
 	</data>
-	<data name="IndexFlowBlock_Description" xml:space="preserve">
+  <data name="IndexFlowBlock_Description" xml:space="preserve">
 		<value>Erzeugt einen fortlaufenden Indexwert. Optional wird der Index beim Iterationsstart eines verknüpften Kontext-FlowBlocks auf den Initialwert zurückgesetzt.</value>
 	</data>
-	<data name="IndexFlowBlock_InitialIndex" xml:space="preserve">
+  <data name="IndexFlowBlock_InitialIndex" xml:space="preserve">
 		<value>Initialer Index</value>
 	</data>
-	<data name="IndexFlowBlock_Context" xml:space="preserve">
+  <data name="IndexFlowBlock_Context" xml:space="preserve">
 		<value>Index-Kontext</value>
 	</data>
-	<data name="IndexFlowBlock_InitialIndex_Tooltip" xml:space="preserve">
+  <data name="IndexFlowBlock_InitialIndex_Tooltip" xml:space="preserve">
 		<value>Legt den Startwert des Indexzählers fest. Der Index beginnt mit diesem Wert und wird bei jedem Durchlauf um eins erhöht.</value>
 	</data>
-	<data name="IndexFlowBlock_Context_Tooltip" xml:space="preserve">
+  <data name="IndexFlowBlock_Context_Tooltip" xml:space="preserve">
 		<value>Optionaler Kontext-FlowBlock. Wenn gesetzt, wird der Index bei jedem Iterationsstart dieses FlowBlocks auf den initialen Index zurückgesetzt. Ist kein Kontext angegeben, läuft der Index über die gesamte Laufzeit kontinuierlich weiter.</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
+  <data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
 		<value>Pfad zur Navigation im JSON-Dokument. Verwenden Sie '/' zur Trennung von Knoten. Objekt-Eigenschaften werden über ihren Property-Namen adressiert, Array-Elemente über einen numerischen Index (z. B. 'participants/addresses/0').</value>
 	</data>
-	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
+  <data name="MathFlowBlock_DisplayName" xml:space="preserve">
 		<value>Berechnung</value>
 	</data>
-	<data name="MathFlowBlock_Description" xml:space="preserve">
+  <data name="MathFlowBlock_Description" xml:space="preserve">
 		<value>Führt mathematische Berechnungen auf Basis einer Ausdruckssyntax aus und unterstützt referenzierte Felder als Parameter.</value>
 	</data>
-	<data name="MathFlowBlock_Expression" xml:space="preserve">
+  <data name="MathFlowBlock_Expression" xml:space="preserve">
 		<value>Mathematischer Ausdruck</value>
 	</data>
-	<data name="MathFlowBlock_Expression_Tooltip" xml:space="preserve">
+  <data name="MathFlowBlock_Expression_Tooltip" xml:space="preserve">
 		<value>Mathematischer Ausdruck mit unterstützten Operatoren (+, -, *, /, Klammern). Feldreferenzen können direkt im Ausdruck verwendet werden, z. B. "$Order::Quantity * 10".</value>
 	</data>
-	<data name="FloxBloxCategory_Calculation" xml:space="preserve">
+  <data name="FloxBloxCategory_Calculation" xml:space="preserve">
 		<value>Berechnung</value>
 	</data>
-	<data name="TableWriterFlowBlock_ColumnAlreadyExists" xml:space="preserve">
+  <data name="TableWriterFlowBlock_ColumnAlreadyExists" xml:space="preserve">
 		<value>Es existiert bereits eine Spalte mit dem Bezeichner "{0}".</value>
 	</data>
-	<data name="ExcelTableUIActions_Open" xml:space="preserve">
+  <data name="ExcelTableUIActions_Open" xml:space="preserve">
 		<value>Tabelle &amp;öffnen</value>
 	</data>
-	<data name="MemoryObject_Field_Tooltip" xml:space="preserve">
+  <data name="MemoryObject_Field_Tooltip" xml:space="preserve">
 		<value>Hier kann ein gespeichertes oder Laufzeit-Feld angegeben werden, aus dem der textuelle oder binäre Inhalt gelesen bzw. in das er gespeichert wird (abhängig vom Datentyp). Um ein anwendungsweit verfügbares Feld zu verwenden, kann dieses über Fenster → Benutzerdefinierte Felder → Benutzerdefinierte Speicherfelder angelegt werden. Der Inhalt wird anschließend von hier gelesen bzw. hierhin gespeichert.</value>
 	</data>
-	<data name="MemoryObject_Filename_Tooltip" xml:space="preserve">
+  <data name="MemoryObject_Filename_Tooltip" xml:space="preserve">
 		<value>Gibt den Dateinamen an, der für die temporäre Speicherung verwendet wird, z. B. um den Inhalt live zu bearbeiten oder die Datei in der Standardanwendung zu öffnen.</value>
 	</data>
-	<data name="AIPromptFlowBlock_DisplayName" xml:space="preserve">
+  <data name="AIPromptFlowBlock_DisplayName" xml:space="preserve">
 		<value>KI-Prompt</value>
 	</data>
-	<data name="AIPromptFlowBlock_Description" xml:space="preserve">
+  <data name="AIPromptFlowBlock_Description" xml:space="preserve">
 		<value>Führt einen Prompt über einen ausgewählten KI-Provider aus und gibt die Rohtext-Antwort zurück.</value>
 	</data>
-	<data name="AIPromptFlowBlock_Groups_Request" xml:space="preserve">
+  <data name="AIPromptFlowBlock_Groups_Request" xml:space="preserve">
 		<value>Anfrage</value>
 	</data>
-	<data name="AIPromptFlowBlock_Groups_Output" xml:space="preserve">
+  <data name="AIPromptFlowBlock_Groups_Output" xml:space="preserve">
 		<value>Ausgabe</value>
 	</data>
-	<data name="AIPromptFlowBlock_Provider" xml:space="preserve">
+  <data name="AIPromptFlowBlock_Provider" xml:space="preserve">
 		<value>KI-Provider</value>
 	</data>
-	<data name="AIPromptFlowBlock_Provider_Tooltip" xml:space="preserve">
+  <data name="AIPromptFlowBlock_Provider_Tooltip" xml:space="preserve">
 		<value>Wähle den KI-Provider (z. B. OpenAI, Anthropic), der den Prompt ausführt.</value>
 	</data>
-	<data name="AIPromptFlowBlock_PromptTemplate" xml:space="preserve">
+  <data name="AIPromptFlowBlock_PromptTemplate" xml:space="preserve">
 		<value>Prompt</value>
 	</data>
-	<data name="AIPromptFlowBlock_PromptTemplate_Tooltip" xml:space="preserve">
+  <data name="AIPromptFlowBlock_PromptTemplate_Tooltip" xml:space="preserve">
 		<value>Der Prompt, der an den KI-Provider gesendet wird. Du kannst FlowBlox-Feldplatzhalter (z. B. %%Input%%) verwenden, die zur Laufzeit aufgelöst werden.</value>
 	</data>
-	<data name="AIPromptFlowBlock_SystemInstruction" xml:space="preserve">
+  <data name="AIPromptFlowBlock_SystemInstruction" xml:space="preserve">
 		<value>System-Anweisung</value>
 	</data>
-	<data name="AIPromptFlowBlock_SystemInstruction_Tooltip" xml:space="preserve">
+  <data name="AIPromptFlowBlock_SystemInstruction_Tooltip" xml:space="preserve">
 		<value>Optionale System-Anweisung zur Steuerung des Assistentenverhaltens (sofern vom Provider unterstützt).</value>
 	</data>
-	<data name="AIPromptFlowBlock_ModelOverride" xml:space="preserve">
+  <data name="AIPromptFlowBlock_ModelOverride" xml:space="preserve">
 		<value>Modell überschreiben</value>
 	</data>
-	<data name="AIPromptFlowBlock_ModelOverride_Tooltip" xml:space="preserve">
+  <data name="AIPromptFlowBlock_ModelOverride_Tooltip" xml:space="preserve">
 		<value>Optionaler Modellname, der das Standardmodell des Providers überschreibt.</value>
 	</data>
-	<data name="AIPromptFlowBlock_Temperature" xml:space="preserve">
+  <data name="AIPromptFlowBlock_Temperature" xml:space="preserve">
 		<value>Temperatur</value>
 	</data>
-	<data name="AIPromptFlowBlock_Temperature_Tooltip" xml:space="preserve">
+  <data name="AIPromptFlowBlock_Temperature_Tooltip" xml:space="preserve">
 		<value>Steuert die Zufälligkeit. Für deterministische Ergebnisse 0 verwenden.</value>
 	</data>
-	<data name="AIPromptFlowBlock_MaxTokens" xml:space="preserve">
+  <data name="AIPromptFlowBlock_MaxTokens" xml:space="preserve">
 		<value>Max. Tokens</value>
 	</data>
-	<data name="AIPromptFlowBlock_MaxTokens_Tooltip" xml:space="preserve">
+  <data name="AIPromptFlowBlock_MaxTokens_Tooltip" xml:space="preserve">
 		<value>Optionales Limit für die erzeugten Ausgabe-Tokens.</value>
 	</data>
-	<data name="AIPromptFlowBlock_TimeoutSecondsOverride" xml:space="preserve">
+  <data name="AIPromptFlowBlock_TimeoutSecondsOverride" xml:space="preserve">
 		<value>Timeout überschreiben (Sekunden)</value>
 	</data>
-	<data name="AIPromptFlowBlock_TimeoutSecondsOverride_Tooltip" xml:space="preserve">
+  <data name="AIPromptFlowBlock_TimeoutSecondsOverride_Tooltip" xml:space="preserve">
 		<value>Optionaler Timeout für diesen FlowBlock. Wenn leer, wird der Standard-Timeout des Providers verwendet.</value>
 	</data>
-		<data name="TypeNames_AIProvider" xml:space="preserve">
+  <data name="TypeNames_AIProvider" xml:space="preserve">
 			<value>KI-Provider</value>
 		</data>
-		<data name="AIProviderBase_DisplayName" xml:space="preserve">
+  <data name="AIProviderBase_DisplayName" xml:space="preserve">
 			<value>KI-Provider</value>
 		</data>
-	<data name="AIProvider_ApiKey" xml:space="preserve">
+  <data name="AIProvider_ApiKey" xml:space="preserve">
 		<value>API-Schlüssel</value>
 	</data>
-	<data name="AIProvider_ApiKey_Tooltip" xml:space="preserve">
+  <data name="AIProvider_ApiKey_Tooltip" xml:space="preserve">
 		<value>Der API-Schlüssel zur Authentifizierung beim KI-Provider.</value>
 	</data>
-	<data name="AIProvider_DefaultModel" xml:space="preserve">
+  <data name="AIProvider_DefaultModel" xml:space="preserve">
 		<value>Standardmodell</value>
 	</data>
-	<data name="AIProvider_DefaultModel_Tooltip" xml:space="preserve">
+  <data name="AIProvider_DefaultModel_Tooltip" xml:space="preserve">
 		<value>Das Standardmodell, falls im Request kein Modell überschrieben wird.</value>
 	</data>
-	<data name="AIProvider_TimeoutSeconds" xml:space="preserve">
+  <data name="AIProvider_TimeoutSeconds" xml:space="preserve">
 		<value>Timeout (Sekunden)</value>
 	</data>
-	<data name="AIProvider_TimeoutSeconds_Tooltip" xml:space="preserve">
+  <data name="AIProvider_TimeoutSeconds_Tooltip" xml:space="preserve">
 		<value>Standard-Timeout für KI-Anfragen in Sekunden.</value>
 	</data>
-	<data name="AIProvider_BaseUrl" xml:space="preserve">
+  <data name="AIProvider_BaseUrl" xml:space="preserve">
 		<value>Basis-URL</value>
 	</data>
-	<data name="AIProvider_BaseUrl_Tooltip" xml:space="preserve">
+  <data name="AIProvider_BaseUrl_Tooltip" xml:space="preserve">
 		<value>Optionale Basis-URL zum Überschreiben des Provider-Endpunkts (für Fortgeschrittene).</value>
 	</data>
-		<data name="TypeNames_OpenAIProvider" xml:space="preserve">
+  <data name="TypeNames_OpenAIProvider" xml:space="preserve">
 			<value>OpenAI-Provider</value>
 		</data>
-		<data name="OpenAIProvider_DisplayName" xml:space="preserve">
+  <data name="OpenAIProvider_DisplayName" xml:space="preserve">
 			<value>OpenAI-Provider</value>
 		</data>
-		<data name="OpenAIProvider_DisplayName_Plural" xml:space="preserve">
+  <data name="OpenAIProvider_DisplayName_Plural" xml:space="preserve">
 			<value>OpenAI-Provider</value>
 		</data>
-		<data name="TypeNames_GeminiAIProvider" xml:space="preserve">
+  <data name="TypeNames_GeminiAIProvider" xml:space="preserve">
 			<value>Gemini-Provider</value>
 		</data>
-		<data name="GeminiAIProvider_DisplayName" xml:space="preserve">
+  <data name="GeminiAIProvider_DisplayName" xml:space="preserve">
 			<value>Gemini-Provider</value>
 		</data>
-		<data name="GeminiAIProvider_DisplayName_Plural" xml:space="preserve">
+  <data name="GeminiAIProvider_DisplayName_Plural" xml:space="preserve">
 			<value>Gemini-Provider</value>
 		</data>
-	<data name="OpenAIProvider_OrganizationId" xml:space="preserve">
+  <data name="OpenAIProvider_OrganizationId" xml:space="preserve">
 		<value>Organisations-ID</value>
 	</data>
-	<data name="OpenAIProvider_OrganizationId_Tooltip" xml:space="preserve">
+  <data name="OpenAIProvider_OrganizationId_Tooltip" xml:space="preserve">
 		<value>Optionale OpenAI-Organisations-ID. Nur bei bestimmten Account-Setups erforderlich.</value>
 	</data>
-	<data name="OpenAIProvider_ProjectId" xml:space="preserve">
+  <data name="OpenAIProvider_ProjectId" xml:space="preserve">
 		<value>Projekt-ID</value>
 	</data>
-	<data name="OpenAIProvider_ProjectId_Tooltip" xml:space="preserve">
+  <data name="OpenAIProvider_ProjectId_Tooltip" xml:space="preserve">
 		<value>Optionaler OpenAI-Header für eine Projekt-ID (Project-scoped Keys / Zuordnung der Nutzung).</value>
 	</data>
-	<data name="OpenAIProvider_StoreResponses" xml:space="preserve">
+  <data name="OpenAIProvider_StoreResponses" xml:space="preserve">
 		<value>Antworten speichern</value>
 	</data>
-	<data name="OpenAIProvider_StoreResponses_Tooltip" xml:space="preserve">
+  <data name="OpenAIProvider_StoreResponses_Tooltip" xml:space="preserve">
 		<value>Wenn aktiviert, werden Antworten (sofern API/Account es unterstützt) serverseitig gespeichert.</value>
 	</data>
-	<data name="Phi3AiTokenizer_DisplayName" xml:space="preserve">
+  <data name="Phi3AiTokenizer_DisplayName" xml:space="preserve">
 		<value>Phi-3 Tokenizer</value>
 	</data>
-	<data name="Phi3AiTokenizer_Description" xml:space="preserve">
+  <data name="Phi3AiTokenizer_Description" xml:space="preserve">
 		<value>Tokenizer für Phi-3/Phi-3.5 (Llama/SentencePiece) auf Basis von tokenizer.model inkl. automatischer Ermittlung der Special-Token-IDs.</value>
 	</data>
-	<data name="Phi3AiTokenizer_TokenizerModelPath" xml:space="preserve">
+  <data name="Phi3AiTokenizer_TokenizerModelPath" xml:space="preserve">
 		<value>Tokenizer model path</value>
 	</data>
-	<data name="Phi3AiTokenizer_TokenizerModelPath_Tooltip" xml:space="preserve">
+  <data name="Phi3AiTokenizer_TokenizerModelPath_Tooltip" xml:space="preserve">
 		<value>Pfad zur Datei tokenizer.model (SentencePiece) des Phi-3/Phi-3.5 Tokenizers.</value>
 	</data>
-	<data name="OnnxGenAIFlowBlock_DisplayName" xml:space="preserve">
+  <data name="OnnxGenAIFlowBlock_DisplayName" xml:space="preserve">
 		<value>ONNX GenAI Text Generation</value>
 	</data>
-	<data name="OnnxGenAIFlowBlock_Description" xml:space="preserve">
+  <data name="OnnxGenAIFlowBlock_Description" xml:space="preserve">
 		<value>Textgenerierung über ONNX Runtime GenAI (KV-Cache / past_key_values / present) mit inkrementellem Decoding für bessere Performance.</value>
 	</data>
-	<data name="OnnxGenAIFlowBlock_AiTokenizer" xml:space="preserve">
+  <data name="OnnxGenAIFlowBlock_AiTokenizer" xml:space="preserve">
 		<value>AI Tokenizer</value>
 	</data>
-	<data name="OnnxGenAIFlowBlock_Prompt" xml:space="preserve">
+  <data name="OnnxGenAIFlowBlock_Prompt" xml:space="preserve">
 		<value>Prompt</value>
 	</data>
-	<data name="OnnxGenAIFlowBlock_TokenSelectionStrategy" xml:space="preserve">
+  <data name="OnnxGenAIFlowBlock_TokenSelectionStrategy" xml:space="preserve">
 		<value>Token selection strategy</value>
 	</data>
-	<data name="OnnxGenAIFlowBlock_TokenSelectionStrategy_Tooltip" xml:space="preserve">
+  <data name="OnnxGenAIFlowBlock_TokenSelectionStrategy_Tooltip" xml:space="preserve">
 		<value>Legt fest, wie das nächste Token aus den Logits ausgewählt wird (z. B. ArgMax, Sampling).</value>
 	</data>
-	<data name="OnnxGenAIFlowBlock_MaxTokens" xml:space="preserve">
+  <data name="OnnxGenAIFlowBlock_MaxTokens" xml:space="preserve">
 		<value>Max tokens</value>
 	</data>
-	<data name="AiTokenizerBase_EOSTokens" xml:space="preserve">
+  <data name="AiTokenizerBase_EOSTokens" xml:space="preserve">
 		<value>EOS tokens</value>
 	</data>
-	<data name="AiTokenizerBase_EOSTokens_Tooltip" xml:space="preserve">
+  <data name="AiTokenizerBase_EOSTokens_Tooltip" xml:space="preserve">
 		<value>Optionale Liste von EOS-Token-IDs (Komma-/Leerzeichen-getrennt). Wenn gesetzt, wird diese Liste zum Stoppen der Generierung verwendet; andernfalls wird EOSToken verwendet. Beispiel: 32007,32001,32000</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_DisplayName" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_DisplayName" xml:space="preserve">
 		<value>ONNX GenAI</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_Description" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_Description" xml:space="preserve">
 		<value>Führt Textgenerierung über ONNX Runtime GenAI (z. B. Phi-3.5) aus und unterstützt Chat-Templates.</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_ModelFolder" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_ModelFolder" xml:space="preserve">
 		<value>Modellordner</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip" xml:space="preserve">
 		<value>Ordner mit dem GenAI-Modell (inkl. genai.config, *.onnx und Tokenizer-Assets).</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_Prompt" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_Prompt" xml:space="preserve">
 		<value>Prompt</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy" xml:space="preserve">
 		<value>Token-Auswahlstrategie</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_TokenSelectionStrategy_Tooltip" xml:space="preserve">
 		<value>Steuert, ob deterministisch oder mit Sampling generiert wird (z. B. ArgMax vs. Sampling).</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_MaxNewTokens" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_MaxNewTokens" xml:space="preserve">
 		<value>Max. neue Tokens</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_MaxNewTokens_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_MaxNewTokens_Tooltip" xml:space="preserve">
 		<value>Maximale Anzahl neu zu generierender Tokens (zusätzlich zum Prompt).</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_Temperature" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_Temperature" xml:space="preserve">
 		<value>Temperatur</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_Temperature_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_Temperature_Tooltip" xml:space="preserve">
 		<value>Sampling-Temperatur. 0 bedeutet deterministisch (kein Sampling).</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_TopP" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_TopP" xml:space="preserve">
 		<value>Top-P</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_TopP_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_TopP_Tooltip" xml:space="preserve">
 		<value>Top-P (Nucleus Sampling). Wertebereich 0–1.</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_TopK" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_TopK" xml:space="preserve">
 		<value>Top-K</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_TopK_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_TopK_Tooltip" xml:space="preserve">
 		<value>Top-K Sampling. Begrenzt die Auswahl auf die K wahrscheinlichsten Tokens.</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_UseChatTemplate" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_UseChatTemplate" xml:space="preserve">
 		<value>Chat-Template verwenden</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_UseChatTemplate_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_UseChatTemplate_Tooltip" xml:space="preserve">
 		<value>Wenn aktiviert, wird das Prompt über das Chat-Template aus SystemPrompt und UserPrompt zusammengesetzt.</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_SystemPrompt" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_SystemPrompt" xml:space="preserve">
 		<value>System-Prompt</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_SystemPrompt_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_SystemPrompt_Tooltip" xml:space="preserve">
 		<value>Systemanweisung für das Modell (wird in das Chat-Template eingesetzt).</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_ChatTemplate" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_ChatTemplate" xml:space="preserve">
 		<value>Chat-Template</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_ChatTemplate_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_ChatTemplate_Tooltip" xml:space="preserve">
 		<value>Template für Chat-Prompts. Verwendet Platzhalter {SystemPrompt} und {UserPrompt}. Kann über die Toolbox befüllt werden.</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_AiExecutionProvider" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_AiExecutionProvider" xml:space="preserve">
 		<value>Ausführungsprovider</value>
 	</data>
-	<data name="OnnxBaseFlowBlock_AiExecutionProvider_Tooltip" xml:space="preserve">
+  <data name="OnnxBaseFlowBlock_AiExecutionProvider_Tooltip" xml:space="preserve">
 		<value>Wählt den ONNX-Ausführungsanbieter für den gesamten Anwendungsprozess aus.
 Der Wert wird aus der globalen Option AI.Onnx.Provider gelesen.
 Unterstützte Werte: Standard (CPU), CUDA, DirectML, OpenVINO.
 Hinweis: Sobald ein Anbieter geladen ist, kann der Anbieter innerhalb desselben Prozesses nicht gewechselt werden. Starten Sie die Anwendung nach der Änderung dieser Option neu.</value>
 	</data>
-	<data name="OnnxRuntimeGenAIFlowBlock_AiExecutionProvider_Tooltip" xml:space="preserve">
+  <data name="OnnxRuntimeGenAIFlowBlock_AiExecutionProvider_Tooltip" xml:space="preserve">
 		<value>Wählt den ONNX-Ausführungsanbieter für den gesamten Anwendungsprozess aus.
 Der Wert wird aus der globalen Option AI.Onnx.Provider gelesen.
 Unterstützte Werte: Standard (CPU), CUDA, DirectML, OpenVINO.
 Hinweis: Sobald ein Anbieter geladen ist, kann der Anbieter innerhalb desselben Prozesses nicht gewechselt werden. Starten Sie die Anwendung nach der Änderung dieser Option neu.</value>
 	</data>
-	<data name="LogicalCondition" xml:space="preserve">
+  <data name="LogicalCondition" xml:space="preserve">
 		<value>Bedingung</value>
 	</data>
-	<data name="LogicalCondition_LogicalOperator" xml:space="preserve">
+  <data name="LogicalCondition_LogicalOperator" xml:space="preserve">
 		<value>Logischer Operator</value>
 	</data>
-	<data name="LogicalGroupCondition_DisplayName" xml:space="preserve">
+  <data name="LogicalGroupCondition_DisplayName" xml:space="preserve">
 		<value>Bedingungsgruppe</value>
 	</data>
-	<data name="LogicalGroupCondition_Conditions" xml:space="preserve">
+  <data name="LogicalGroupCondition_Conditions" xml:space="preserve">
 		<value>Bedingungen</value>
 	</data>
-	<data name="LogicalOperator_And" xml:space="preserve">
+  <data name="LogicalOperator_And" xml:space="preserve">
 		<value>UND</value>
 	</data>
-	<data name="LogicalOperator_Or" xml:space="preserve">
+  <data name="LogicalOperator_Or" xml:space="preserve">
 		<value>ODER</value>
 	</data>
-	<data name="ComparisonCondition_DisplayName" xml:space="preserve">
+  <data name="ComparisonCondition_DisplayName" xml:space="preserve">
 		<value>Vergleichsbedingung</value>
 	</data>
-	<data name="LogicalComparisonCondition_DisplayName" xml:space="preserve">
+  <data name="LogicalComparisonCondition_DisplayName" xml:space="preserve">
 		<value>Logische Vergleichsbedingung</value>
 	</data>
-	<data name="FieldComparisonCondition_DisplayName" xml:space="preserve">
+  <data name="FieldComparisonCondition_DisplayName" xml:space="preserve">
 		<value>Feldbedingung</value>
 	</data>
-	<data name="FieldLogicalComparisonCondition_DisplayName" xml:space="preserve">
+  <data name="FieldLogicalComparisonCondition_DisplayName" xml:space="preserve">
 		<value>Logische Feldbedingung</value>
 	</data>
-	<data name="SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
+  <data name="SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds" xml:space="preserve">
 		<value>Die maximale Laufzeit der Sequenzgenerierung muss mindestens eine Sekunde betragen.</value>
 	</data>
-	<data name="NodeFlowBlock_DisplayName" xml:space="preserve">
+  <data name="NodeFlowBlock_DisplayName" xml:space="preserve">
 		<value>Knoten</value>
 	</data>
-	<data name="NodeFlowBlock_Description" xml:space="preserve">
+  <data name="NodeFlowBlock_Description" xml:space="preserve">
 		<value>Führt mehrere eingehende Pfade an einem Ausführungspunkt zusammen. Nutze den Knoten, um den Flow übersichtlich zu strukturieren und gemeinsame Aktivierungsbedingungen auf alle nachfolgenden Blöcke anzuwenden.</value>
 	</data>
-	<!-- FlowBloxTexts.de.resx (de) -->
-	<data name="ProjectOutputFlowBlock_DisplayName" xml:space="preserve">
+  <!-- FlowBloxTexts.de.resx (de) -->
+  <data name="ProjectOutputFlowBlock_DisplayName" xml:space="preserve">
 		<value>Projekt-Ausgabe</value>
 	</data>
-	<data name="ProjectOutputFlowBlock_Description" xml:space="preserve">
+  <data name="ProjectOutputFlowBlock_Description" xml:space="preserve">
 		<value>Erzeugt Projekt-Ausgabe-Datensätze und speichert sie in der Runtime. Bei jeder Ausführung wird unter dem Namen dieses Blocks ein neuer Datensatz angehängt – basierend auf dem konfigurierten Feld-zu-Property-Mapping.</value>
 	</data>
-	<data name="ProjectOutputFlowBlock_Groups_Mapping" xml:space="preserve">
+  <data name="ProjectOutputFlowBlock_Groups_Mapping" xml:space="preserve">
 		<value>Feldzuordnung</value>
 	</data>
-	<data name="ProjectOutputFlowBlock_MappingEntries" xml:space="preserve">
+  <data name="ProjectOutputFlowBlock_MappingEntries" xml:space="preserve">
 		<value>Zuordnung</value>
 	</data>
-	<data name="ProjectOutputMappingEntry_DisplayName" xml:space="preserve">
+  <data name="ProjectOutputMappingEntry_DisplayName" xml:space="preserve">
 		<value>Ausgabe-Zuordnungseintrag</value>
 	</data>
-	<data name="ProjectOutputMappingEntry_OutputPropertyName" xml:space="preserve">
+  <data name="ProjectOutputMappingEntry_OutputPropertyName" xml:space="preserve">
 		<value>Ausgabe-Property-Name</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_DisplayName" xml:space="preserve">
 		<value>Projekt ausführen</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_Description" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_Description" xml:space="preserve">
 		<value>Führt ein anderes FlowBlox-Projekt in einem isolierten RunnerHost-Prozess aus. Du kannst Eingabefelder auf User Fields und Options des Zielprojekts mappen und optional die Ausgaben des Zielprojekts wieder in diese Runtime übernehmen.</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_Groups_Project" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_Groups_Project" xml:space="preserve">
 		<value>Projekt</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_Groups_Parameters" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_Groups_Parameters" xml:space="preserve">
 		<value>Parameter</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_Groups_Output" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_Groups_Output" xml:space="preserve">
 		<value>Ausgabe</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ProjectFile" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ProjectFile" xml:space="preserve">
 		<value>Projektdatei</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_RunnerHostPath" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_RunnerHostPath" xml:space="preserve">
 		<value>RunnerHost-Pfad</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_AbortOnError" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_AbortOnError" xml:space="preserve">
 		<value>Bei Fehler abbrechen</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_AbortOnWarning" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_AbortOnWarning" xml:space="preserve">
 		<value>Bei Warnung abbrechen</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ParameterMappings" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ParameterMappings" xml:space="preserve">
 		<value>Parameterzuordnung</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_OutputMappings" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_OutputMappings" xml:space="preserve">
 		<value>Ausgabezuordnung</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ImportChildOutputs" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ImportChildOutputs" xml:space="preserve">
 		<value>Ausgaben des Zielprojekts übernehmen</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ImportedOutputPrefix" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ImportedOutputPrefix" xml:space="preserve">
 		<value>Präfix für übernommene Ausgaben</value>
 	</data>
-	<data name="ExecuteProjectParameterMappingEntry_DisplayName" xml:space="preserve">
+  <data name="ExecuteProjectParameterMappingEntry_DisplayName" xml:space="preserve">
 		<value>Parameter-Zuordnungseintrag</value>
 	</data>
-	<data name="ExecuteProjectParameterMappingEntry_TargetType" xml:space="preserve">
+  <data name="ExecuteProjectParameterMappingEntry_TargetType" xml:space="preserve">
 		<value>Zieltyp</value>
 	</data>
-	<data name="ExecuteProjectParameterMappingEntry_TargetKey" xml:space="preserve">
+  <data name="ExecuteProjectParameterMappingEntry_TargetKey" xml:space="preserve">
 		<value>Zielschlüssel</value>
 	</data>
-	<data name="ExecuteProjectOutputMappingEntry_DisplayName" xml:space="preserve">
+  <data name="ExecuteProjectOutputMappingEntry_DisplayName" xml:space="preserve">
 		<value>Ausgabe-Zuordnungseintrag</value>
 	</data>
-	<data name="ExecuteProjectOutputMappingEntry_OutputPropertyName" xml:space="preserve">
+  <data name="ExecuteProjectOutputMappingEntry_OutputPropertyName" xml:space="preserve">
 		<value>Ausgabe-Property-Name</value>
 	</data>
-	<data name="ProjectOutputMappingEntry_IsRequired" xml:space="preserve">
+  <data name="ProjectOutputMappingEntry_IsRequired" xml:space="preserve">
 		<value>Erforderlich</value>
 	</data>
-	<data name="ExecuteProjectParameterMappingEntry_TargetValue" xml:space="preserve">
+  <data name="ExecuteProjectParameterMappingEntry_TargetValue" xml:space="preserve">
 		<value>Zielwert</value>
 	</data>
-	<data name="ProjectOutputIteratorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ProjectOutputIteratorFlowBlock_DisplayName" xml:space="preserve">
 		<value>Projekt-Ausgabe iterieren</value>
 	</data>
-	<data name="ProjectOutputIteratorFlowBlock_Description" xml:space="preserve">
+  <data name="ProjectOutputIteratorFlowBlock_Description" xml:space="preserve">
 		<value>Iteriert eine Output-Gruppe aus dem Runner-Response-JSON und mappt Output-Properties auf Felder, um pro Dataset Ergebnisse zu erzeugen.</value>
 	</data>
-	<data name="ProjectOutputIteratorFlowBlock_Groups_Source" xml:space="preserve">
+  <data name="ProjectOutputIteratorFlowBlock_Groups_Source" xml:space="preserve">
 		<value>Quelle</value>
 	</data>
-	<data name="ProjectOutputIteratorFlowBlock_Groups_Mapping" xml:space="preserve">
+  <data name="ProjectOutputIteratorFlowBlock_Groups_Mapping" xml:space="preserve">
 		<value>Mapping</value>
 	</data>
-	<data name="ProjectOutputIteratorFlowBlock_ResponseJson" xml:space="preserve">
+  <data name="ProjectOutputIteratorFlowBlock_ResponseJson" xml:space="preserve">
 		<value>Response JSON</value>
 	</data>
-	<data name="ProjectOutputIteratorFlowBlock_OutputName" xml:space="preserve">
+  <data name="ProjectOutputIteratorFlowBlock_OutputName" xml:space="preserve">
 		<value>Output-Gruppe</value>
 	</data>
-	<data name="ProjectOutputIteratorFlowBlock_OutputMappings" xml:space="preserve">
+  <data name="ProjectOutputIteratorFlowBlock_OutputMappings" xml:space="preserve">
 		<value>Output-Mappings</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_DisplayName" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_DisplayName" xml:space="preserve">
 		<value>Bestehenden Knoten aktualisieren</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_Tooltip" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_UpdateExistingNode_Tooltip" xml:space="preserve">
 		<value>Wenn aktiviert, wird der erste vorhandene Knoten mit dem angegebenen Namen aktualisiert. Wenn deaktiviert, wird immer ein neuer Knoten hinzugefügt (z. B. für Listeneinträge).</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip" xml:space="preserve">
 		<value>Das verknüpfte XML-Dokument (über einen XmlDocument-FlowBlock). Falls nicht gesetzt, wird das vorherige XmlDocument im Flow verwendet.</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter_Tooltip" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter_Tooltip" xml:space="preserve">
 		<value>Ein verknüpfter XmlDocumentNodeWriter-FlowBlock. Dadurch wird der zuletzt erstellte oder aktualisierte Knoten als neuer Ausgangspunkt verwendet, sodass XPath relativ zu diesem Knoten ausgewertet wird – statt vom Dokument-Root aus.</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_XPath_Tooltip" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_XPath_Tooltip" xml:space="preserve">
 		<value>XPath-Ausdruck zur Bestimmung des Zielknotens. Beispiel: /root/participant-list. Wenn ein NodeWriter verknüpft ist, wird der XPath relativ zum zuletzt erzeugten Knoten ausgewertet.</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_NodeName_Tooltip" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_NodeName_Tooltip" xml:space="preserve">
 		<value>Name des zu erstellenden oder zu aktualisierenden XML-Knotens, z. B. participant. 
 Optional kann ein einstufiger XPath-Ausdruck mit Attributfilter verwendet werden, z. B. participant[@id='1'].
 Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	</data>
-	<data name="XmlDocumentNodeWriterFlowBlock_Assignments_Tooltip" xml:space="preserve">
+  <data name="XmlDocumentNodeWriterFlowBlock_Assignments_Tooltip" xml:space="preserve">
 		<value>Liste von XPath-Zuweisungen für Attribute oder Unterelemente des erzeugten Knotens. Werte können statisch oder über Feldreferenzen gesetzt werden.</value>
 	</data>
-	<data name="FieldElement_StoreValueLocally" xml:space="preserve">
+  <data name="FieldElement_StoreValueLocally" xml:space="preserve">
 		<value>Feldwert lokal speichern</value>
 	</data>
-	<data name="FieldElement_StoreValueLocally_Tooltip" xml:space="preserve">
+  <data name="FieldElement_StoreValueLocally_Tooltip" xml:space="preserve">
 		<value>Wenn aktiviert, wird der Feldwert nicht in der Projektdatei gespeichert, sondern in der lokalen *.fblocaldata-Datei (z. B. für Eingabefelder oder lokale Benutzerdaten).</value>
 	</data>
-	<data name="PropertyControlResolver_ToggleSwitch_OnContent" xml:space="preserve">
+  <data name="PropertyControlResolver_ToggleSwitch_OnContent" xml:space="preserve">
 		<value>An</value>
 	</data>
-	<data name="PropertyControlResolver_ToggleSwitch_OffContent" xml:space="preserve">
+  <data name="PropertyControlResolver_ToggleSwitch_OffContent" xml:space="preserve">
 		<value>Aus</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ProjectFile_Description" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ProjectFile_Description" xml:space="preserve">
 		<value>Wählen Sie die auszuführende FlowBlox-Projektdatei aus. Feldplatzhalter werden unterstützt.</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ProjectSpaceGuid" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ProjectSpaceGuid" xml:space="preserve">
 		<value>Project-Space GUID</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ProjectSpaceGuid_Description" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ProjectSpaceGuid_Description" xml:space="preserve">
 		<value>Optional. Wenn gesetzt, wird das Projekt über Project Space geladen. Feldplatzhalter werden unterstützt.</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ProjectSpaceVersion" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ProjectSpaceVersion" xml:space="preserve">
 		<value>Project-Space Version</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ProjectSpaceVersion_Description" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ProjectSpaceVersion_Description" xml:space="preserve">
 		<value>Optional. Gibt die stabile Versionsnummer an. Wenn gesetzt, muss auch die Project-Space GUID gesetzt sein.</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_AbortOnError_Description" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_AbortOnError_Description" xml:space="preserve">
 		<value>Bricht die Ausführung ab, wenn im Kindprojekt ein Fehler auftritt.</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_AbortOnWarning_Description" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_AbortOnWarning_Description" xml:space="preserve">
 		<value>Bricht die Ausführung ab, wenn im Kindprojekt eine Warnung auftritt.</value>
 	</data>
-	<data name="ExecuteProjectFlowBlock_ParameterMappings_Description" xml:space="preserve">
+  <data name="ExecuteProjectFlowBlock_ParameterMappings_Description" xml:space="preserve">
 		<value>Ordnet Werte als User Fields oder Option Overrides für das Kindprojekt zu. Feldplatzhalter werden unterstützt.</value>
 	</data>
-	<data name="Global_MessageBox_Warning_Title" xml:space="preserve">
+  <data name="Global_MessageBox_Warning_Title" xml:space="preserve">
 		<value>Warnung</value>
 	</data>
-	<data name="AIPropertyValueGenerationStrategy_DisplayName" xml:space="preserve">
+  <data name="AIPropertyValueGenerationStrategy_DisplayName" xml:space="preserve">
 		<value>KI-Propertywert-Generierung</value>
 	</data>
-	<data name="AIPropertyValueGenerationStrategy_Description" xml:space="preserve">
+  <data name="AIPropertyValueGenerationStrategy_Description" xml:space="preserve">
 		<value>Erzeugt den Wert einer beschreibbaren String-Property (z. B. XPath, CSS-Selektor, Regex) per KI-Prompt anhand von Testfällen. Benötigt mindestens einen Testfall für den Ziel-FlowBlock mit Erwartungsankern (Expected Value) und erwarteter Ergebnisdatensatz-Anzahl.</value>
 	</data>
-	<data name="SequenceDetectionGenerationStrategy_DisplayName" xml:space="preserve">
+  <data name="SequenceDetectionGenerationStrategy_DisplayName" xml:space="preserve">
 		<value>Sequenzerkennungs-Generierung</value>
 	</data>
-	<data name="SequenceDetectionGenerationStrategy_Description" xml:space="preserve">
+  <data name="SequenceDetectionGenerationStrategy_Description" xml:space="preserve">
 		<value>Erzeugt ein Sequenzerkennungsmuster aus Testdaten. Benötigt mindestens zwei Testfälle mit vergleichbaren Eingaben, erwarteten Werten und einer Erwartung zur Anzahl der Ergebnisdatensätze.</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_Regex" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_Regex" xml:space="preserve">
 		<value>Regex</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_XPath" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_XPath" xml:space="preserve">
 		<value>XPath</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_CounterFormat" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_CounterFormat" xml:space="preserve">
 		<value>Zählerformat</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_Format" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_Format" xml:space="preserve">
 		<value>Format</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_SQL" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_SQL" xml:space="preserve">
 		<value>SQL</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_Filter" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_Filter" xml:space="preserve">
 		<value>Filter</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_DBConnection" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_DBConnection" xml:space="preserve">
 		<value>Datenbankverbindung</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_ChatTemplates" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_ChatTemplates" xml:space="preserve">
 		<value>Chat-Templates</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
+  <data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
 		<value>KI-Propertywert-Prompts</value>
 	</data>
-	<data name="AssistantConfiguration_DisplayName" xml:space="preserve">
+  <data name="AssistantConfiguration_DisplayName" xml:space="preserve">
 		<value>KI-Assistent-Konfiguration</value>
 	</data>
-	<data name="AssistantConfiguration_Description" xml:space="preserve">
+  <data name="AssistantConfiguration_Description" xml:space="preserve">
 		<value>Konfiguriert Provider und Standardwerte für Anfragen des KI-Assistenten.</value>
 	</data>
-	<data name="AssistantConfiguration_Groups_General" xml:space="preserve">
+  <data name="AssistantConfiguration_Groups_General" xml:space="preserve">
 		<value>Allgemein</value>
 	</data>
-	<data name="AssistantConfiguration_Provider" xml:space="preserve">
+  <data name="AssistantConfiguration_Provider" xml:space="preserve">
 		<value>Provider</value>
 	</data>
-	<data name="AssistantConfiguration_Provider_Tooltip" xml:space="preserve">
+  <data name="AssistantConfiguration_Provider_Tooltip" xml:space="preserve">
 		<value>Provider-Instanz für Anfragen des KI-Assistenten.</value>
 	</data>
-	<data name="AssistantConfiguration_Temperature" xml:space="preserve">
+  <data name="AssistantConfiguration_Temperature" xml:space="preserve">
 		<value>Temperatur</value>
 	</data>
-	<data name="AssistantConfiguration_Temperature_Tooltip" xml:space="preserve">
+  <data name="AssistantConfiguration_Temperature_Tooltip" xml:space="preserve">
 		<value>Sampling-Temperatur im Bereich 0-2. Niedrigere Werte erhöhen die Deterministik.</value>
 	</data>
-	<data name="AssistantConfiguration_MaxTokens" xml:space="preserve">
+  <data name="AssistantConfiguration_MaxTokens" xml:space="preserve">
 		<value>Max. Tokens</value>
 	</data>
-	<data name="AssistantConfiguration_MaxTokens_Tooltip" xml:space="preserve">
+  <data name="AssistantConfiguration_MaxTokens_Tooltip" xml:space="preserve">
 		<value>Optionale maximale Anzahl generierter Tokens je Modellanfrage.</value>
 	</data>
-	<data name="AssistantConfiguration_MaxToolRounds" xml:space="preserve">
+  <data name="AssistantConfiguration_MaxToolRounds" xml:space="preserve">
 		<value>Max. Tool-Runden</value>
 	</data>
-	<data name="AssistantConfiguration_MaxToolRounds_Tooltip" xml:space="preserve">
+  <data name="AssistantConfiguration_MaxToolRounds_Tooltip" xml:space="preserve">
 		<value>Obere Grenze der Tool-Call-Runden pro Prompt-Ausführung.</value>
 	</data>
-	<data name="AssistantConfiguration_EnableCommunicationProtocol" xml:space="preserve">
+  <data name="AssistantConfiguration_EnableCommunicationProtocol" xml:space="preserve">
 		<value>Kommunikationsprotokoll schreiben</value>
 	</data>
-	<data name="AssistantConfiguration_EnableCommunicationProtocol_Tooltip" xml:space="preserve">
+  <data name="AssistantConfiguration_EnableCommunicationProtocol_Tooltip" xml:space="preserve">
 		<value>Schreibt pro Assistenten-Ausführung eine formatierte Protokolldatei mit KI-Ausgaben und Tool-API-Aufrufen.</value>
 	</data>
-	<data name="FloxBloxCategory_Compression" xml:space="preserve">
+  <data name="FloxBloxCategory_Compression" xml:space="preserve">
 		<value>Komprimierung</value>
 	</data>
-	<data name="ZipArchiveFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ZipArchiveFlowBlock_DisplayName" xml:space="preserve">
 		<value>ZIP-Archiv</value>
 	</data>
-	<data name="ZipArchiveFlowBlock_Description" xml:space="preserve">
+  <data name="ZipArchiveFlowBlock_Description" xml:space="preserve">
 		<value>Erstellt ein neues ZIP-Archiv oder lädt ein vorhandenes Archiv aus einer Datenquelle.</value>
 	</data>
-	<data name="ZipArchiveFlowBlock_UseExistingArchive" xml:space="preserve">
+  <data name="ZipArchiveFlowBlock_UseExistingArchive" xml:space="preserve">
 		<value>Vorhandenes ZIP-Archiv verwenden</value>
 	</data>
-	<data name="ZipArchiveFileIteratorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ZipArchiveFileIteratorFlowBlock_DisplayName" xml:space="preserve">
 		<value>ZIP-Archiv auslesen</value>
 	</data>
-	<data name="ZipArchiveFileIteratorFlowBlock_Description" xml:space="preserve">
+  <data name="ZipArchiveFileIteratorFlowBlock_Description" xml:space="preserve">
 		<value>Iteriert rekursiv über alle Dateien im ZIP-Archiv und gibt Dateipfad sowie Inhalt aus.</value>
 	</data>
-	<data name="ZipArchiveFileIteratorFlowBlock_AssociatedZipArchive" xml:space="preserve">
+  <data name="ZipArchiveFileIteratorFlowBlock_AssociatedZipArchive" xml:space="preserve">
 		<value>Zugeordnetes ZIP-Archiv</value>
 	</data>
-	<data name="ZipArchiveFileIteratorFlowBlock_ResultFields" xml:space="preserve">
+  <data name="ZipArchiveFileIteratorFlowBlock_ResultFields" xml:space="preserve">
 		<value>Ergebnisfelder</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_DisplayName" xml:space="preserve">
 		<value>Datei in ZIP-Archiv schreiben</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_Description" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_Description" xml:space="preserve">
 		<value>Schreibt eine Datei in ein ZIP-Archiv an einen absoluten Archivpfad.</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_AssociatedZipArchive" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_AssociatedZipArchive" xml:space="preserve">
 		<value>Zugeordnetes ZIP-Archiv</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_ArchivePath" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_ArchivePath" xml:space="preserve">
 		<value>Archivpfad</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_ArchivePath_Tooltip" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_ArchivePath_Tooltip" xml:space="preserve">
 		<value>Absoluter Pfad im ZIP-Archiv, z. B. "/docs/reports".</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_FileName" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_FileName" xml:space="preserve">
 		<value>Dateiname</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_FileName_Tooltip" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_FileName_Tooltip" xml:space="preserve">
 		<value>Name der Datei, die im ZIP-Archiv erstellt oder ersetzt wird.</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_ContentField" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_ContentField" xml:space="preserve">
 		<value>Inhaltsfeld</value>
 	</data>
-	<data name="ZipArchiveOutputFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ZipArchiveOutputFlowBlock_DisplayName" xml:space="preserve">
 		<value>ZIP-Archiv-Ausgabe</value>
 	</data>
-	<data name="ZipArchiveOutputFlowBlock_Description" xml:space="preserve">
+  <data name="ZipArchiveOutputFlowBlock_Description" xml:space="preserve">
 		<value>Gibt das ZIP-Archiv als Byte-Array aus.</value>
 	</data>
-	<data name="ZipArchiveOutputFlowBlock_AssociatedZipArchive" xml:space="preserve">
+  <data name="ZipArchiveOutputFlowBlock_AssociatedZipArchive" xml:space="preserve">
 		<value>Zugeordnetes ZIP-Archiv</value>
 	</data>
-	<data name="ZipArchiveFlowBlock_AccessMode" xml:space="preserve">
+  <data name="ZipArchiveFlowBlock_AccessMode" xml:space="preserve">
 		<value>Zugriffsmodus</value>
 	</data>
-	<data name="ZipArchiveAccessMode_ReadAccess" xml:space="preserve">
+  <data name="ZipArchiveAccessMode_ReadAccess" xml:space="preserve">
 		<value>Lesezugriff</value>
 	</data>
-	<data name="ZipArchiveAccessMode_WriteAccess" xml:space="preserve">
+  <data name="ZipArchiveAccessMode_WriteAccess" xml:space="preserve">
 		<value>Schreibzugriff</value>
 	</data>
-	<data name="FSDirectoryIteratorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="FSDirectoryIteratorFlowBlock_DisplayName" xml:space="preserve">
 		<value>Dateien in Verzeichnis ermitteln</value>
 	</data>
-	<data name="FSDirectoryIteratorFlowBlock_Description" xml:space="preserve">
+  <data name="FSDirectoryIteratorFlowBlock_Description" xml:space="preserve">
 		<value>Listet Dateien aus einem Verzeichnis auf und gibt für jede Datei Metadatenfelder aus.</value>
 	</data>
-	<data name="FSDirectoryIteratorFlowBlock_DirectoryPath" xml:space="preserve">
+  <data name="FSDirectoryIteratorFlowBlock_DirectoryPath" xml:space="preserve">
 		<value>Verzeichnispfad</value>
 	</data>
-	<data name="FSDirectoryIteratorFlowBlock_Recursive" xml:space="preserve">
+  <data name="FSDirectoryIteratorFlowBlock_Recursive" xml:space="preserve">
 		<value>Rekursiv</value>
 	</data>
-	<data name="FSDirectoryIteratorFlowBlock_FilterExpression" xml:space="preserve">
+  <data name="FSDirectoryIteratorFlowBlock_FilterExpression" xml:space="preserve">
 		<value>Filterausdruck</value>
 	</data>
-	<data name="FSDirectoryIteratorFlowBlock_FilterExpression_Tooltip" xml:space="preserve">
+  <data name="FSDirectoryIteratorFlowBlock_FilterExpression_Tooltip" xml:space="preserve">
 		<value>Verwenden Sie ';' getrennte Wildcard-Muster mit '*' und '?'. Ein Muster mit '!' am Anfang schließt Treffer aus. Der Abgleich erfolgt gegen Dateiname und relativen Pfad. Beispiel: *.txt;logs/*.log;!archive/*</value>
 	</data>
-	<data name="FSDirectoryIteratorFlowBlock_ResultFields" xml:space="preserve">
+  <data name="FSDirectoryIteratorFlowBlock_ResultFields" xml:space="preserve">
 		<value>Ergebnisfelder</value>
 	</data>
-	<data name="FSDirectoryIteratorDestinations_FullPath" xml:space="preserve">
+  <data name="FSDirectoryIteratorDestinations_FullPath" xml:space="preserve">
 		<value>Vollständiger Pfad</value>
 	</data>
-	<data name="FSDirectoryIteratorDestinations_RelativePath" xml:space="preserve">
+  <data name="FSDirectoryIteratorDestinations_RelativePath" xml:space="preserve">
 		<value>Relativer Pfad</value>
 	</data>
-	<data name="FSDirectoryIteratorDestinations_FileName" xml:space="preserve">
+  <data name="FSDirectoryIteratorDestinations_FileName" xml:space="preserve">
 		<value>Dateiname</value>
 	</data>
-	<data name="FSDirectoryIteratorDestinations_Size" xml:space="preserve">
+  <data name="FSDirectoryIteratorDestinations_Size" xml:space="preserve">
 		<value>Größe</value>
 	</data>
-	<data name="FSDirectoryIteratorDestinations_LastModified" xml:space="preserve">
+  <data name="FSDirectoryIteratorDestinations_LastModified" xml:space="preserve">
 		<value>Zuletzt geändert</value>
 	</data>
-	<data name="FSDirectoryIteratorDestinations_CreationDate" xml:space="preserve">
+  <data name="FSDirectoryIteratorDestinations_CreationDate" xml:space="preserve">
 		<value>Erstelldatum</value>
 	</data>
-	<data name="BaseSingleResultFlowBlock_ResultFieldFieldType" xml:space="preserve">
+  <data name="BaseSingleResultFlowBlock_ResultFieldFieldType" xml:space="preserve">
 		<value>Ergebnisfeld-Typ</value>
 	</data>
-	<data name="ZipArchiveObject_DisplayName" xml:space="preserve">
+  <data name="ZipArchiveObject_DisplayName" xml:space="preserve">
 		<value>ZIP-Archiv</value>
 	</data>
-	<data name="ZipArchiveCreatorFlowBlock_DisplayName" xml:space="preserve">
+  <data name="ZipArchiveCreatorFlowBlock_DisplayName" xml:space="preserve">
 		<value>ZIP-Archiv erstellen</value>
 	</data>
-	<data name="ZipArchiveCreatorFlowBlock_Description" xml:space="preserve">
+  <data name="ZipArchiveCreatorFlowBlock_Description" xml:space="preserve">
 		<value>Erstellt ein neues In-Memory-ZIP-Archiv im ausgewählten ZIP-Archiv-ManagedObject.</value>
 	</data>
-	<data name="ZipArchiveCreatorFlowBlock_ZipArchiveObject" xml:space="preserve">
+  <data name="ZipArchiveCreatorFlowBlock_ZipArchiveObject" xml:space="preserve">
 		<value>ZIP-Archiv-Objekt</value>
 	</data>
-	<data name="ZipArchiveCreatorFlowBlock_CompressionStrength" xml:space="preserve">
+  <data name="ZipArchiveCreatorFlowBlock_CompressionStrength" xml:space="preserve">
 		<value>Komprimierungsstärke</value>
 	</data>
-	<data name="ZipArchiveCreatorFlowBlock_Password" xml:space="preserve">
+  <data name="ZipArchiveCreatorFlowBlock_Password" xml:space="preserve">
 		<value>Passwort</value>
 	</data>
-	<data name="ZipCompressionStrength_None" xml:space="preserve">
+  <data name="ZipCompressionStrength_None" xml:space="preserve">
 		<value>Keine Komprimierung (nur speichern)</value>
 	</data>
-	<data name="ZipCompressionStrength_Low" xml:space="preserve">
+  <data name="ZipCompressionStrength_Low" xml:space="preserve">
 		<value>Niedrig</value>
 	</data>
-	<data name="ZipCompressionStrength_Medium" xml:space="preserve">
+  <data name="ZipCompressionStrength_Medium" xml:space="preserve">
 		<value>Mittel</value>
 	</data>
-	<data name="ZipCompressionStrength_High" xml:space="preserve">
+  <data name="ZipCompressionStrength_High" xml:space="preserve">
 		<value>Hoch</value>
 	</data>
-	<data name="ZipCompressionStrength_VeryHigh" xml:space="preserve">
+  <data name="ZipCompressionStrength_VeryHigh" xml:space="preserve">
 		<value>Sehr hoch</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_ZipArchiveObject" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_ZipArchiveObject" xml:space="preserve">
 		<value>ZIP-Archiv-Objekt</value>
 	</data>
-	<data name="ZipArchiveFileAppenderFlowBlock_Password" xml:space="preserve">
+  <data name="ZipArchiveFileAppenderFlowBlock_Password" xml:space="preserve">
 		<value>Passwort</value>
 	</data>
-	<data name="ZipArchiveFileIteratorFlowBlock_ZipArchiveObject" xml:space="preserve">
+  <data name="ZipArchiveFileIteratorFlowBlock_ZipArchiveObject" xml:space="preserve">
 		<value>ZIP-Archiv-Objekt</value>
 	</data>
-	<data name="ZipArchiveFileIteratorFlowBlock_Password" xml:space="preserve">
+  <data name="ZipArchiveFileIteratorFlowBlock_Password" xml:space="preserve">
 		<value>Passwort</value>
 	</data>
-	<data name="TypeNames_ManagedObject" xml:space="preserve">
+  <data name="TypeNames_ManagedObject" xml:space="preserve">
 		<value>Verwaltetes Objekt</value>
 	</data>
-	<data name="TypeNames_ManagedObject_Plural" xml:space="preserve">
+  <data name="TypeNames_ManagedObject_Plural" xml:space="preserve">
 		<value>Verwaltete Objekte</value>
 	</data>
-	<data name="TypeNames_DataObject" xml:space="preserve">
+  <data name="TypeNames_DataObject" xml:space="preserve">
 		<value>Datenobjekt</value>
 	</data>
-	<data name="TypeNames_DataObject_Plural" xml:space="preserve">
+  <data name="TypeNames_DataObject_Plural" xml:space="preserve">
 		<value>Datenobjekte</value>
 	</data>
-	<data name="TypeNames_DataTable" xml:space="preserve">
+  <data name="TypeNames_DataTable" xml:space="preserve">
 		<value>Datentabelle</value>
 	</data>
-	<data name="TypeNames_DataTable_Plural" xml:space="preserve">
+  <data name="TypeNames_DataTable_Plural" xml:space="preserve">
 		<value>Datentabellen</value>
 	</data>
-	<data name="FlowBloxTestDefinition_DisplayName" xml:space="preserve">
+  <data name="FlowBloxTestDefinition_DisplayName" xml:space="preserve">
 		<value>Testdefinition</value>
 	</data>
-	<data name="FlowBloxTestDefinition_DisplayName_Plural" xml:space="preserve">
+  <data name="FlowBloxTestDefinition_DisplayName_Plural" xml:space="preserve">
 		<value>Testdefinitionen</value>
 	</data>
-	<data name="TypeNames_Tokenizer" xml:space="preserve">
+  <data name="TypeNames_Tokenizer" xml:space="preserve">
 		<value>Tokenizer</value>
 	</data>
-	<data name="QATokenizerBase_DisplayName" xml:space="preserve">
+  <data name="QATokenizerBase_DisplayName" xml:space="preserve">
 		<value>QA-Tokenizer</value>
 	</data>
-	<data name="TypeNames_Tokenizer_Plural" xml:space="preserve">
+  <data name="TypeNames_Tokenizer_Plural" xml:space="preserve">
 		<value>Tokenizer</value>
 	</data>
-	<data name="QATokenizerBase_DisplayName_Plural" xml:space="preserve">
+  <data name="QATokenizerBase_DisplayName_Plural" xml:space="preserve">
 		<value>QA-Tokenizer</value>
 	</data>
-	<data name="TypeNames_AIProvider_Plural" xml:space="preserve">
+  <data name="TypeNames_AIProvider_Plural" xml:space="preserve">
 		<value>KI-Provider</value>
 	</data>
-	<data name="AIProviderBase_DisplayName_Plural" xml:space="preserve">
+  <data name="AIProviderBase_DisplayName_Plural" xml:space="preserve">
 		<value>KI-Provider</value>
 	</data>
-		<data name="FlowBloxResourceUtil_FallbackPluralSuffix" xml:space="preserve">
+  <data name="FlowBloxResourceUtil_FallbackPluralSuffix" xml:space="preserve">
 			<value>Objekte</value>
 		</data>
-	<data name="FileObject_DisplayName_Plural" xml:space="preserve">
+  <data name="FileObject_DisplayName_Plural" xml:space="preserve">
 		<value>Dateien</value>
 	</data>
-	<data name="MemoryObject_DisplayName_Plural" xml:space="preserve">
+  <data name="MemoryObject_DisplayName_Plural" xml:space="preserve">
 		<value>Speicherobjekte</value>
 	</data>
-	<data name="CsvTable_DisplayName_Plural" xml:space="preserve">
+  <data name="CsvTable_DisplayName_Plural" xml:space="preserve">
 		<value>CSV-Tabellen</value>
 	</data>
-	<data name="ExcelTable_DisplayName_Plural" xml:space="preserve">
+  <data name="ExcelTable_DisplayName_Plural" xml:space="preserve">
 		<value>Excel-Tabellen</value>
 	</data>
-	<data name="SQLTable_DisplayName_Plural" xml:space="preserve">
+  <data name="SQLTable_DisplayName_Plural" xml:space="preserve">
 		<value>SQL-Tabellen</value>
 	</data>
-	<data name="ZipArchiveObject_DisplayName_Plural" xml:space="preserve">
+  <data name="ZipArchiveObject_DisplayName_Plural" xml:space="preserve">
 		<value>ZIP-Archive</value>
 	</data>
-	<data name="VocabMergesConfiguration_DisplayName_Plural" xml:space="preserve">
+  <data name="VocabMergesConfiguration_DisplayName_Plural" xml:space="preserve">
 		<value>Vokabular-/Merges-Konfigurationen</value>
 	</data>
+  <data name="FlowBloxInputTemplateSyncMode_CreateIfNotExists" xml:space="preserve">
+		<value>Erstellen, falls nicht vorhanden</value>
+	</data>
+  <data name="FlowBloxInputTemplateSyncMode_Overwrite" xml:space="preserve">
+		<value>Überschreiben</value>
+	</data>
 </root>
-
-
-
-
-
-
-
-
-

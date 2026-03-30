@@ -18,12 +18,17 @@ namespace FlowBlox.Core.Models.Testing
         private FlowBloxTestDefinition _testDefinition;
         private List<BaseFlowBlock> _capturedFlowBlocks;
 
+        public event EventHandler<TestExpectationConditionFailedEventArgs>? ExpectationConditionFailed;
+
         public FlowBloxTestExecutor()
         {
             this._registry = FlowBloxRegistryProvider.GetRegistry();
         }
 
-        public void Initialize(FlowBloxTestDefinition testDefinition, BaseFlowBlock currentFlowBlock)
+        public void Initialize(
+            FlowBloxTestDefinition testDefinition,
+            BaseFlowBlock currentFlowBlock,
+            BaseFlowBlock? validationTargetFlowBlock = null)
         {
             _testDefinition = testDefinition;
 
@@ -31,7 +36,7 @@ namespace FlowBlox.Core.Models.Testing
             flowBloxCapture.CreateCapture(_registry.GetStartFlowBlock(), currentFlowBlock);
             _capturedFlowBlocks = flowBloxCapture.GetCapturedFlowBlocks();
 
-            InitializeTransientRuntime();
+            InitializeTransientRuntime(validationTargetFlowBlock?.Name);
         }
 
         public void Shutdown()
@@ -39,9 +44,10 @@ namespace FlowBlox.Core.Models.Testing
             _localRuntime.ShutdownRuntime(_capturedFlowBlocks);
         }
 
-        private void InitializeTransientRuntime()
+        private void InitializeTransientRuntime(string? targetFlowBlockName)
         {
             _localRuntime = new TransientRuntime(FlowBloxProjectManager.Instance.ActiveProject);
+            _localRuntime.TargetFlowBlockName = targetFlowBlockName;
             _localRuntime.InitializeRuntime(_capturedFlowBlocks);
         }
 
@@ -127,8 +133,42 @@ namespace FlowBlox.Core.Models.Testing
                                 .Where(x => x.Field == field)
                                 .Select(x => x.Value);
 
-                            if (!EvaluateExpectationConditions(field, FlowBloxTestConfiguration, fieldValues))
-                                return new FlowBloxTestResult(false, fieldValueAssignments);
+                            if (!EvaluateExpectationConditions(field, FlowBloxTestConfiguration, fieldValues, out var failedCondition))
+                            {
+                                var eventArgs = new TestExpectationConditionFailedEventArgs(
+                                    _testDefinition,
+                                    capturedFlowBlock,
+                                    field,
+                                    FlowBloxTestConfiguration,
+                                    failedCondition!,
+                                    _localRuntime,
+                                    new FlowBloxTestResult(false, new Dictionary<string, string>(fieldValueAssignments)));
+
+                                ExpectationConditionFailed?.Invoke(this, eventArgs);
+                                if (!eventArgs.RepeatLatestExecution)
+                                    return new FlowBloxTestResult(false, fieldValueAssignments);
+
+                                _localRuntime.Report(
+                                    $"Test case: Repeating latest execution for \"{capturedFlowBlock.Name}\" after regeneration hook.",
+                                    FlowBloxLogLevel.Info);
+
+                                if (testDataset.Execute)
+                                {
+                                    if (!capturedFlowBlock.ValidateRequirements(out List<string> repeatMessages))
+                                        repeatMessages.ForEach(x => _localRuntime.Report($"Test case: {x}", FlowBloxLogLevel.Warning));
+
+                                    if (!capturedFlowBlock.Execute(_localRuntime, null))
+                                        _localRuntime.Report($"Test case: Re-execution of \"{capturedFlowBlock.Name}\" has failed.", FlowBloxLogLevel.Warning);
+                                }
+
+                                fieldValues = resultFlowBlock.GridElementResult.Results
+                                    .SelectMany(x => x.FieldValueMappings)
+                                    .Where(x => x.Field == field)
+                                    .Select(x => x.Value);
+
+                                if (!EvaluateExpectationConditions(field, FlowBloxTestConfiguration, fieldValues, out _))
+                                    return new FlowBloxTestResult(false, fieldValueAssignments);
+                            }
 
                             if (FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.First)
                             {
@@ -192,8 +232,14 @@ namespace FlowBlox.Core.Models.Testing
             return new FlowBloxTestResult(true, fieldValueAssignments);
         }
 
-        private bool EvaluateExpectationConditions(FieldElement field, FlowBloxTestConfiguration flowBloxTestConfiguration, IEnumerable<string> fieldValues)
+        private bool EvaluateExpectationConditions(
+            FieldElement field,
+            FlowBloxTestConfiguration flowBloxTestConfiguration,
+            IEnumerable<string> fieldValues,
+            out ExpectationCondition? failedCondition)
         {
+            failedCondition = null;
+
             if (flowBloxTestConfiguration.ExpectationConditions == null)
                 return true;
 
@@ -234,6 +280,7 @@ namespace FlowBlox.Core.Models.Testing
                 if (!conditionMet)
                 {
                     _localRuntime.Report($"Test case: Expectation condition \"{expectationCondition.DisplayName}\" failed for the field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
+                    failedCondition = expectationCondition;
                     return false;
                 }
             }

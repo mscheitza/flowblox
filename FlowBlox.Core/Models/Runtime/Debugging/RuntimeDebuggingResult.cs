@@ -7,6 +7,7 @@ namespace FlowBlox.Core.Models.Runtime.Debugging
         public DateTime FinishedUtc { get; set; }
         public string TargetFlowBlockName { get; set; }
         public int MaxRuntimeSeconds { get; set; }
+        public bool IncludeTargetExecution { get; set; }
         public int MaxCapturedFieldValueChanges { get; set; }
         public int MaxFieldValueLength { get; set; }
         public bool Aborted { get; set; }

@@ -8,9 +8,9 @@
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Company>FlowBlox Community</Company>
-    <Copyright>Copyright © 2025 Marcel Scheitza and contributors. Licensed under the MIT License.</Copyright>
-    <Authors>Marcel Scheitza and contributors</Authors>
+    <Company>FlowBlox and contributors</Company>
+    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
+    <Authors>FlowBlox and contributors</Authors>
     <Product>FlowBlox</Product>
   </PropertyGroup>
   <ItemGroup>

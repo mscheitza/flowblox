@@ -21,6 +21,9 @@ Rules for updates and references:
 - ActivationConditions can be used on every flow block to control whether it should execute.
 - Use FieldLogicalComparisonCondition (with logical operator) or LogicalGroupCondition (group of logical conditions) in ActivationConditions.
 - If a flow block is not activated, it produces an empty result and forwards it to downstream blocks (follow-up chain is effectively cleared).
+- If a flow block has multiple next flow blocks, execution order is ascending by ElementIndex. Set ElementIndex explicitly via UpdateFlowBlock when sequence matters.
+- Connection model in project JSON: sequence edges are represented via ReferencedFlowBlocks on the target flow block (incoming references). This is expected; there is no separate connection collection required.
+- For file-based inputs in FlowBlocks/ManagedObjects, prefer paths relative to $Project::InputDirectory.
 - Always call kind info tools before writing updates: inspect inheritance, UI metadata, enum members, nullability, supported types, and property semantics. Prefer GetTypeKindsInfo.
 - BaseFlowBlock members are excluded by default when describing derived flow blocks. Query GetTypeKindsInfo explicitly for typeFullName "FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock" when needed.
 - Do not assume category names, paths, types, or objects.

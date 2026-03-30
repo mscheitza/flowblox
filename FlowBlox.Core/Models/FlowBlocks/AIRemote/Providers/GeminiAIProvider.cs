@@ -20,6 +20,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
     public sealed class GeminiAIProvider : AIProviderBase
     {
         public override string ProviderType => "Gemini";
+        public override bool SupportsNativeResponseContinuation => true;
 
         private HttpClient _http;
 
@@ -70,45 +71,33 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
                 ? "https://generativelanguage.googleapis.com/v1beta"
                 : resolvedBaseUrl.TrimEnd('/');
 
-            var url = $"{urlBase}/models/{Uri.EscapeDataString(resolvedModel)}:generateContent?key={Uri.EscapeDataString(resolvedApiKey)}";
+            var url = $"{urlBase}/interactions";
 
             using var msg = new HttpRequestMessage(HttpMethod.Post, url);
+            msg.Headers.TryAddWithoutValidation("x-goog-api-key", resolvedApiKey);
 
             var body = new JObject
             {
-                ["contents"] = new JArray
-                {
-                    new JObject
-                    {
-                        ["role"] = "user",
-                        ["parts"] = new JArray
-                        {
-                            new JObject { ["text"] = request.Prompt ?? string.Empty }
-                        }
-                    }
-                }
+                ["model"] = resolvedModel,
+                ["input"] = request.Prompt ?? string.Empty,
+                ["store"] = true
             };
 
             if (!string.IsNullOrWhiteSpace(request.SystemInstruction))
-            {
-                body["systemInstruction"] = new JObject
-                {
-                    ["parts"] = new JArray
-                    {
-                        new JObject { ["text"] = request.SystemInstruction }
-                    }
-                };
-            }
+                body["system_instruction"] = request.SystemInstruction;
+
+            if (!string.IsNullOrWhiteSpace(request.PreviousResponseId))
+                body["previous_interaction_id"] = request.PreviousResponseId;
 
             var generationConfig = new JObject();
             if (request.Temperature >= 0)
                 generationConfig["temperature"] = request.Temperature;
 
             if (request.MaxTokens.HasValue && request.MaxTokens.Value > 0)
-                generationConfig["maxOutputTokens"] = request.MaxTokens.Value;
+                generationConfig["max_output_tokens"] = request.MaxTokens.Value;
 
             if (generationConfig.HasValues)
-                body["generationConfig"] = generationConfig;
+                body["generation_config"] = generationConfig;
 
             msg.Content = new StringContent(body.ToString(Formatting.None), Encoding.UTF8, "application/json");
 
@@ -126,34 +115,50 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
             var parsed = JObject.Parse(json);
             var text = TryExtractOutputText(parsed);
-            if (string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(text) && parsed["error"] == null)
             {
-                var blocked = parsed["promptFeedback"]?["blockReason"]?.Value<string>();
-                var message = parsed["promptFeedback"]?["blockReasonMessage"]?.Value<string>();
-                if (!string.IsNullOrWhiteSpace(blocked))
+                return new AIResponse
                 {
-                    return new AIResponse
-                    {
-                        Success = false,
-                        Error = string.IsNullOrWhiteSpace(message)
-                            ? $"Gemini prompt blocked: {blocked}"
-                            : $"Gemini prompt blocked: {blocked} ({message})"
-                    };
-                }
+                    Success = false,
+                    Error = $"Gemini interaction returned no text output: {json}"
+                };
             }
 
             return new AIResponse
             {
                 Success = true,
                 Text = text ?? string.Empty,
-                ResponseId = parsed["responseId"]?.Value<string>(),
-                PromptTokens = parsed["usageMetadata"]?["promptTokenCount"]?.Value<int?>(),
-                CompletionTokens = parsed["usageMetadata"]?["candidatesTokenCount"]?.Value<int?>()
+                ResponseId = parsed["id"]?.Value<string>() ?? parsed["responseId"]?.Value<string>(),
+                PromptTokens = parsed["usage"]?["total_input_tokens"]?.Value<int?>()
+                    ?? parsed["usageMetadata"]?["promptTokenCount"]?.Value<int?>(),
+                CompletionTokens = parsed["usage"]?["total_output_tokens"]?.Value<int?>()
+                    ?? parsed["usageMetadata"]?["candidatesTokenCount"]?.Value<int?>()
             };
         }
 
         private static string TryExtractOutputText(JObject root)
         {
+            var outputs = root?["outputs"] as JArray;
+            if (outputs != null && outputs.Count > 0)
+            {
+                var sbOutputs = new StringBuilder();
+
+                foreach (var output in outputs.OfType<JObject>())
+                {
+                    var text = output["text"]?.Value<string>();
+                    if (string.IsNullOrWhiteSpace(text))
+                        continue;
+
+                    if (sbOutputs.Length > 0)
+                        sbOutputs.AppendLine();
+
+                    sbOutputs.Append(text);
+                }
+
+                if (sbOutputs.Length > 0)
+                    return sbOutputs.ToString();
+            }
+
             var candidates = root?["candidates"] as JArray;
             if (candidates == null || candidates.Count == 0)
                 return null;

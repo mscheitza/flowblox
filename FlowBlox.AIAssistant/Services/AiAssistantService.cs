@@ -1,4 +1,6 @@
 using System.Text;
+using System.Diagnostics;
+using System.Reflection;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Logging;
@@ -105,8 +107,8 @@ namespace FlowBlox.AIAssistant.Services
             }
 
             var maxRounds = Math.Clamp(config.MaxToolRounds, 1, 200);
-            var useNativeContinuation = config.Provider?.SupportsNativeResponseContinuation == true;
             var session = GetOrCreateSession();
+            var isConversationStart = string.IsNullOrWhiteSpace(session.LastResponseId);
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = BuildSystemPrompt();
             var sessionBootstrapPrompt = BuildSessionBootstrapPrompt(toolDefinitions);
@@ -124,16 +126,16 @@ namespace FlowBlox.AIAssistant.Services
                 for (var round = 1; round <= maxRounds; round++)
                 {
                     ct.ThrowIfCancellationRequested();
+                    var includeConversationStartContext = round == 1 && isConversationStart;
 
                     var roundPrompt = BuildRoundPrompt(
-                        session,
                         sessionBootstrapPrompt,
                         userPrompt,
-                        (round == 1 || !useNativeContinuation) ? GetCurrentProjectJson() : null,
+                        includeConversationStartContext ? GetCurrentProjectJson() : null,
                         latestToolTranscript,
                         round,
                         maxRounds,
-                        includeFullContext: !useNativeContinuation);
+                        includeConversationStartContext);
                     protocolWriter?.AppendAiAssistantServiceText($"Round {round} prompt prepared", roundPrompt);
 
                     var exec = await _executor.ExecutePromptAsync(
@@ -179,11 +181,7 @@ namespace FlowBlox.AIAssistant.Services
                                 "Response format invalid. Retrying once.");
                             result.Warnings.Add("Assistant response format invalid; retrying once with explicit format guidance.");
                             protocolWriter?.AppendAiAssistantServiceText("Format validation guidance issued", formatGuidance);
-
-                            if (useNativeContinuation)
-                                latestToolTranscript = [formatGuidance];
-                            else
-                                latestToolTranscript.Add(formatGuidance);
+                            latestToolTranscript = [formatGuidance];
 
                             continue;
                         }
@@ -262,10 +260,7 @@ namespace FlowBlox.AIAssistant.Services
                         knownFlowBlocksByName = NotifyFlowBlockChanges(knownFlowBlocksByName);
                     }
 
-                    if (useNativeContinuation)
-                        latestToolTranscript = roundToolTranscript;
-                    else
-                        latestToolTranscript.AddRange(roundToolTranscript);
+                    latestToolTranscript = roundToolTranscript;
 
                     var internalStatus = BuildToolExecutionTranscript(
                         instruction.ToolCalls.Count,
@@ -441,7 +436,7 @@ namespace FlowBlox.AIAssistant.Services
                     $"Required assistant system prompt '{AssistantPromptCatalog.SystemMessageKey}' is missing or empty.");
             }
 
-            return prompt;
+            return ReplaceRuntimePromptTokens(prompt);
         }
 
         private static string BuildSessionBootstrapPrompt(IReadOnlyList<ToolDefinition> toolDefinitions)
@@ -460,7 +455,7 @@ namespace FlowBlox.AIAssistant.Services
                     $"Required assistant bootstrap prompt '{AssistantPromptCatalog.SessionBootstrapKey}' is missing or empty.");
             }
 
-            return template
+            return ReplaceRuntimePromptTokens(template)
                 .Replace("{{ROOT_CATEGORIES}}", string.Join(", ", rootCategories), StringComparison.Ordinal)
                 .Replace("{{CENTRAL_GUIDELINES}}", BuildCentralGuidelinesText(), StringComparison.Ordinal)
                 .Replace("{{EXPLANATION_MANIFEST}}", BuildExplanationManifestText(), StringComparison.Ordinal)
@@ -505,23 +500,23 @@ namespace FlowBlox.AIAssistant.Services
 
             var iteration = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.IterationContextKey);
             if (!string.IsNullOrWhiteSpace(iteration))
-                sections.Add("Topic: IterationContext / Flow\n" + iteration.Trim());
+                sections.Add("Topic: IterationContext / Flow\n" + ReplaceRuntimePromptTokens(iteration).Trim());
 
             var objectManagingFlowBlocks = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.FlowBlocksManagingObjectKey);
             if (!string.IsNullOrWhiteSpace(objectManagingFlowBlocks))
-                sections.Add("Topic: FlowBlocks Managing an Object\n" + objectManagingFlowBlocks.Trim());
+                sections.Add("Topic: FlowBlocks Managing an Object\n" + ReplaceRuntimePromptTokens(objectManagingFlowBlocks).Trim());
 
             var editDelete = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.EditAndDeleteKey);
             if (!string.IsNullOrWhiteSpace(editDelete))
-                sections.Add("Topic: Update / Delete Handling\n" + editDelete.Trim());
+                sections.Add("Topic: Update / Delete Handling\n" + ReplaceRuntimePromptTokens(editDelete).Trim());
 
             var namingConventions = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.NamingConventionsKey);
             if (!string.IsNullOrWhiteSpace(namingConventions))
-                sections.Add("Topic: Naming Conventions\n" + namingConventions.Trim());
+                sections.Add("Topic: Naming Conventions\n" + ReplaceRuntimePromptTokens(namingConventions).Trim());
 
             var executionRequirements = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.ExecutionRequirementsKey);
             if (!string.IsNullOrWhiteSpace(executionRequirements))
-                sections.Add("Topic: Execution Requirements / Required Fields\n" + executionRequirements.Trim());
+                sections.Add("Topic: Execution Requirements / Required Fields\n" + ReplaceRuntimePromptTokens(executionRequirements).Trim());
 
             if (sections.Count == 0)
                 return "No central guidelines available.";
@@ -529,32 +524,65 @@ namespace FlowBlox.AIAssistant.Services
             return string.Join("\n\n", sections);
         }
 
+        private static string ReplaceRuntimePromptTokens(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return text ?? string.Empty;
+
+            return text.Replace("{{FLOWBLOX_VERSION}}", GetFlowBloxApplicationVersion(), StringComparison.Ordinal);
+        }
+
+        private static string GetFlowBloxApplicationVersion()
+        {
+            try
+            {
+                var entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly == null)
+                    return "unknown";
+
+                var location = entryAssembly.Location;
+                if (!string.IsNullOrWhiteSpace(location))
+                {
+                    var productVersion = FileVersionInfo.GetVersionInfo(location).ProductVersion;
+                    if (!string.IsNullOrWhiteSpace(productVersion))
+                        return productVersion;
+                }
+
+                return entryAssembly.GetName().Version?.ToString() ?? "unknown";
+            }
+            catch
+            {
+                return "unknown";
+            }
+        }
+
         private static string BuildRoundPrompt(
-            AssistantSessionState session,
             string sessionBootstrapPrompt,
             string userPrompt,
             string? projectJson,
             List<string> toolTranscript,
             int round,
             int maxRounds,
-            bool includeFullContext)
+            bool includeConversationStartContext)
         {
             var sb = new StringBuilder();
             sb.AppendLine($"Round: {round}/{maxRounds}");
 
-            if (session != null && (string.IsNullOrWhiteSpace(session.LastResponseId) || includeFullContext))
+            var includeStartContext = round == 1 && includeConversationStartContext;
+
+            if (includeStartContext)
             {
                 sb.AppendLine(sessionBootstrapPrompt);
                 sb.AppendLine();
             }
 
-            if (round == 1 || includeFullContext)
+            if (round == 1)
             {
                 sb.AppendLine("User prompt:");
                 sb.AppendLine(userPrompt);
                 sb.AppendLine();
 
-                if (!string.IsNullOrWhiteSpace(projectJson))
+                if (includeStartContext && !string.IsNullOrWhiteSpace(projectJson))
                 {
                     sb.AppendLine("Current project JSON:");
                     sb.AppendLine(projectJson);

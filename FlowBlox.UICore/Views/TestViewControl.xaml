@@ -1,0 +1,248 @@
+<UserControl x:Class="FlowBlox.UICore.Views.TestViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
+             xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+             xmlns:viewModels="clr-namespace:FlowBlox.UICore.ViewModels"
+             xmlns:testViewModels="clr-namespace:FlowBlox.UICore.ViewModels.TestView"
+             mc:Ignorable="d"
+             d:DesignHeight="520"
+             d:DesignWidth="900">
+
+    <UserControl.DataContext>
+        <viewModels:TestViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+
+            <Style x:Key="TestView.ToolbarButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="28" />
+                <Setter Property="Height" Value="28" />
+                <Setter Property="Margin" Value="0,0,6,0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Background" Value="#FFF3F6FA" />
+                <Setter Property="BorderBrush" Value="#FFD1D9E2" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#FFE9EEF4" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#FFDDE6F0" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                BorderThickness="1"
+                BorderBrush="#FFD4DEE9"
+                CornerRadius="6"
+                Background="#FFF9FBFD"
+                Padding="4"
+                Margin="0,0,0,6">
+            <ToolBarTray Background="Transparent" IsLocked="True">
+                <ToolBar Background="Transparent" BorderThickness="0" Padding="0" Margin="0">
+                    <Button Command="{Binding CreateCommand}"
+                            Style="{StaticResource TestView.ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:TestView.Toolbar_Create_Tooltip}">
+                        <iconPacks:PackIconMaterial Kind="Plus" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+
+                    <Button Command="{Binding EditCommand}"
+                            Style="{StaticResource TestView.ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:TestView.Toolbar_Edit_Tooltip}">
+                        <iconPacks:PackIconMaterial Kind="Pencil" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+
+                    <Button Command="{Binding DeleteCommand}"
+                            Style="{StaticResource TestView.ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:TestView.Toolbar_Delete_Tooltip}">
+                        <iconPacks:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+
+                    <Button Command="{Binding RunCommand}"
+                            Style="{StaticResource TestView.ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:TestView.Toolbar_Run_Tooltip}">
+                        <iconPacks:PackIconMaterial Kind="Play" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+
+                    <Button Command="{Binding OpenProtocolCommand}"
+                            Style="{StaticResource TestView.ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:TestView.Toolbar_OpenProtocol_Tooltip}">
+                        <iconPacks:PackIconMaterial Kind="FileDocumentOutline" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+
+                    <Button Command="{Binding ResetStatusCommand}"
+                            Style="{StaticResource TestView.ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:TestView.Toolbar_ResetStatus_Tooltip}">
+                        <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+
+                    <Button Command="{Binding RefreshCommand}"
+                            Style="{StaticResource TestView.ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:TestView.Toolbar_Refresh_Tooltip}">
+                        <iconPacks:PackIconMaterial Kind="Reload" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+                </ToolBar>
+            </ToolBarTray>
+        </Border>
+
+        <Border Grid.Row="1" BorderThickness="1" BorderBrush="#FFD4DEE9" CornerRadius="6" Background="White" Padding="6">
+            <ListView x:Name="TestCasesListView"
+                      ItemsSource="{Binding TestCases}"
+                      SelectionMode="Extended"
+                      BorderThickness="0"
+                      PreviewMouseRightButtonDown="TestCasesListView_PreviewMouseRightButtonDown">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="Padding" Value="8,0,0,0" />
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.InputBindings>
+                    <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+                    <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
+                    <KeyBinding Key="F6" Command="{Binding RunCommand}" />
+                </ListView.InputBindings>
+
+                <ListView.ContextMenu>
+                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                        <MenuItem Header="{x:Static resources:TestView.Toolbar_Create_Tooltip}"
+                                  Command="{Binding CreateCommand}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="Plus" Width="14" Height="14" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static resources:TestView.Toolbar_Edit_Tooltip}"
+                                  Command="{Binding EditCommand}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="Pencil" Width="14" Height="14" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static resources:TestView.Toolbar_Delete_Tooltip}"
+                                  Command="{Binding DeleteCommand}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="DeleteOutline" Width="14" Height="14" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="{x:Static resources:TestView.Toolbar_Run_Tooltip}"
+                                  Command="{Binding RunCommand}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="Play" Width="14" Height="14" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static resources:TestView.Toolbar_OpenProtocol_Tooltip}"
+                                  Command="{Binding OpenProtocolCommand}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="FileDocumentOutline" Width="14" Height="14" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static resources:TestView.Toolbar_ResetStatus_Tooltip}"
+                                  Command="{Binding ResetStatusCommand}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="Refresh" Width="14" Height="14" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="{x:Static resources:TestView.Toolbar_Refresh_Tooltip}"
+                                  Command="{Binding RefreshCommand}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="Reload" Width="14" Height="14" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="36">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate DataType="{x:Type testViewModels:TestCaseEntryViewModel}">
+                                    <iconPacks:PackIconMaterial Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <iconPacks:PackIconMaterial.Style>
+                                            <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                                                <Setter Property="Kind" Value="ClipboardTextOutline" />
+                                                <Setter Property="Foreground" Value="#7A8693" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static testViewModels:TestCaseStatus.Running}">
+                                                        <Setter Property="Kind" Value="ProgressClock" />
+                                                        <Setter Property="Foreground" Value="#E6A100" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static testViewModels:TestCaseStatus.Failed}">
+                                                        <Setter Property="Kind" Value="CloseCircleOutline" />
+                                                        <Setter Property="Foreground" Value="#C62828" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="{x:Static testViewModels:TestCaseStatus.Succeeded}">
+                                                        <Setter Property="Kind" Value="CheckCircleOutline" />
+                                                        <Setter Property="Foreground" Value="#2E7D32" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </iconPacks:PackIconMaterial.Style>
+                                    </iconPacks:PackIconMaterial>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="{x:Static resources:TestView.Col_Name}" Width="240" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="{x:Static resources:TestView.Col_RequiredFor}" Width="360" DisplayMemberBinding="{Binding RequiredFor}" />
+                        <GridViewColumn Header="{x:Static resources:TestView.Col_DefinedAt}" Width="360" DisplayMemberBinding="{Binding DefinedAt}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+
+        <Border Grid.Row="1"
+                IsHitTestVisible="False"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Margin="24,56,24,0"
+                Visibility="{Binding TestCases.Count, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=Reverse}">
+            <Grid VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <iconPacks:PackIconMaterial Kind="InformationOutline"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Top"
+                                            Style="{StaticResource FlowBlox.EmptyStateIconStyle}" />
+                <TextBlock Grid.Column="1"
+                           TextAlignment="Left"
+                           Text="{x:Static resources:TestView.EmptyState_NoTests}"
+                           Style="{StaticResource FlowBlox.EmptyStateTextStyle}" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2"
+                BorderThickness="1"
+                BorderBrush="#FFD4DEE9"
+                CornerRadius="6"
+                Background="#FFF9FBFD"
+                Padding="8,6"
+                Margin="0,6,0,0">
+            <TextBlock Text="{Binding SummaryText}" />
+        </Border>
+    </Grid>
+</UserControl>

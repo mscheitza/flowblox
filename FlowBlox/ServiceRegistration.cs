@@ -8,6 +8,7 @@ using FlowBlox.UICore.Interfaces;
 using FlowBlox.Services;
 using FlowBlox.Interfaces;
 using FlowBlox.Core.Services;
+using FlowBlox.WebServices;
 
 namespace FlowBlox
 {
@@ -25,6 +26,8 @@ namespace FlowBlox
             serviceCollection.AddSingleton<IOwnerService, OwnerService>();
             serviceCollection.AddSingleton<IAssemblyPreloader, AssemblyPreloader>();
             serviceCollection.AddSingleton<IFlowBloxUIEvaluationService, FlowBloxUIEvaluationService>();
+            serviceCollection.AddSingleton<IAppNotificationService, AppNotificationService>();
+            serviceCollection.AddSingleton<IFlowBloxInstallerService, FlowBloxInstallerService>();
         }
     }
 }

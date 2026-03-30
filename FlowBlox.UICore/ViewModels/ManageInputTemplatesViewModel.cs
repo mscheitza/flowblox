@@ -32,6 +32,7 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand RemoveTemplateCommand { get; }
 
         public ObservableCollection<FlowBloxInputFileTemplate> Templates { get; }
+        public ObservableCollection<FlowBloxInputTemplateSyncMode> SyncModes { get; }
 
         public string ProjectInputDirectory => _project?.ProjectInputDirectory ?? "";
 
@@ -57,6 +58,8 @@ namespace FlowBlox.UICore.ViewModels
             _project = project;
 
             Templates = new ObservableCollection<FlowBloxInputFileTemplate>(_project?.InputTemplates ?? new System.Collections.Generic.List<FlowBloxInputFileTemplate>());
+            SyncModes = new ObservableCollection<FlowBloxInputTemplateSyncMode>(
+                Enum.GetValues(typeof(FlowBloxInputTemplateSyncMode)).Cast<FlowBloxInputTemplateSyncMode>());
 
             CloseCommand = new RelayCommand(() => _ownerWindow?.Close());
 

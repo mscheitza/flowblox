@@ -9,7 +9,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Connects from -> to.",
+            "Connects from -> to. In project JSON this edge is represented by adding 'from' into 'to.ReferencedFlowBlocks' (incoming-reference model).",
             new JObject
             {
                 ["from"] = "string",

@@ -1,8 +1,8 @@
 ﻿using FlowBlox.Core;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
 using System;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace FlowBlox.Views
@@ -19,11 +19,9 @@ namespace FlowBlox.Views
 
             string productName = Application.ProductName;
 
-            string productVersion = Application.ProductVersion;
-            productVersion = Regex.Replace(productVersion, @"\+.*$", "");
+            string productVersion = FlowBloxVersionHelper.GetDisplayVersion(Application.ProductVersion);
 
             string description = asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description ?? string.Empty;
-            string company = asm.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company ?? string.Empty;
             string copyright = asm.GetCustomAttribute<AssemblyCopyrightAttribute>()?.Copyright ?? string.Empty;
 
             labelTitle.Text = productName;
@@ -36,13 +34,13 @@ namespace FlowBlox.Views
                 ? $"© {DateTime.Now.Year} Marcel Scheitza and contributors. Licensed under MIT."
                 : copyright;
 
-            copyrightOrDefault = Regex.Replace(
+            copyrightOrDefault = System.Text.RegularExpressions.Regex.Replace(
                 copyrightOrDefault,
                 @"(©\s*\d{4})\s+",
                 "$1" + Environment.NewLine
             );
 
-            copyrightOrDefault = Regex.Replace(
+            copyrightOrDefault = System.Text.RegularExpressions.Regex.Replace(
                 copyrightOrDefault,
                 @"\.\s+",
                 "." + Environment.NewLine

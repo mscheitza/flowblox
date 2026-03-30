@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title">
+    <value>Tests</value>
+  </data>
+  <data name="Toolbar_Create_Tooltip">
+    <value>Create test case</value>
+  </data>
+  <data name="Toolbar_Edit_Tooltip">
+    <value>Edit test case</value>
+  </data>
+  <data name="Toolbar_Delete_Tooltip">
+    <value>Delete test case(s)</value>
+  </data>
+  <data name="Toolbar_Run_Tooltip">
+    <value>Run selected or all tests</value>
+  </data>
+  <data name="Toolbar_OpenProtocol_Tooltip">
+    <value>Open protocol</value>
+  </data>
+  <data name="Toolbar_ResetStatus_Tooltip">
+    <value>Reset status and protocol</value>
+  </data>
+  <data name="Toolbar_Refresh_Tooltip">
+    <value>Refresh</value>
+  </data>
+  <data name="Col_Name">
+    <value>Name</value>
+  </data>
+  <data name="Col_RequiredFor">
+    <value>Required for</value>
+  </data>
+  <data name="Col_DefinedAt">
+    <value>Defined at</value>
+  </data>
+  <data name="EmptyState_NoTests">
+    <value>No test cases are available yet.</value>
+  </data>
+  <data name="StatusSummary_Format">
+    <value>Successful: {0} | Failed: {1} | Total: {2}</value>
+  </data>
+  <data name="Text_None">
+    <value>None</value>
+  </data>
+  <data name="Message_DeleteConfirm_Title">
+    <value>Delete test cases</value>
+  </data>
+  <data name="Message_DeleteConfirm_Description">
+    <value>Do you really want to delete {0} test case(s)?</value>
+  </data>
+</root>

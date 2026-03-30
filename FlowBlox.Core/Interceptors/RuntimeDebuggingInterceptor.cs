@@ -31,6 +31,7 @@ namespace FlowBlox.Core.Interceptors
                 StartedUtc = DateTime.UtcNow,
                 TargetFlowBlockName = config.TargetFlowBlockName,
                 MaxRuntimeSeconds = Math.Max(1, config.MaxRuntimeSeconds),
+                IncludeTargetExecution = config.IncludeTargetExecution,
                 MaxCapturedFieldValueChanges = Math.Max(0, config.MaxCapturedFieldValueChanges),
                 MaxFieldValueLength = Math.Max(1, config.MaxFieldValueLength)
             };
@@ -59,6 +60,12 @@ namespace FlowBlox.Core.Interceptors
                 return;
 
             var reason = cancellationContext?.Reason ?? "Cancellation requested.";
+            if (cancellationContext?.CancellationKind == RuntimeCancellationKind.DebuggingTargetReached)
+            {
+                AppendProtocol("DebugTargetReached", reason);
+                return;
+            }
+
             AppendProtocol("RuntimeCancelled", reason);
         }
 
@@ -73,6 +80,38 @@ namespace FlowBlox.Core.Interceptors
                 flowBlock?.Name);
         }
 
+        public override void NotifyBeforeFlowBlockValidation(BaseFlowBlock flowBlock)
+        {
+            if (!IsEnabled || flowBlock == null || Runtime.Aborted)
+                return;
+
+            var config = Runtime.ExternalDebuggingInformation;
+            if (config.IncludeTargetExecution)
+                return;
+
+            if (!IsTarget(flowBlock.Name, config.TargetFlowBlockName))
+                return;
+
+            Runtime.CancelExecution(
+                RuntimeCancellationKind.DebuggingTargetReached,
+                $"Debug target flow block reached before execution: '{flowBlock.Name}'.");
+        }
+
+        public override bool ShouldCancelValidation(BaseFlowBlock flowBlock, bool validationFinished)
+        {
+            if (!IsEnabled || flowBlock == null)
+                return false;
+
+            var config = Runtime.ExternalDebuggingInformation;
+            if (!IsTarget(flowBlock.Name, config.TargetFlowBlockName))
+                return false;
+
+            if (!validationFinished)
+                return !config.IncludeTargetExecution;
+
+            return config.IncludeTargetExecution;
+        }
+
         public override void NotifyInvocationFinished(BaseFlowBlock flowBlock)
         {
             if (!IsEnabled)
@@ -85,18 +124,14 @@ namespace FlowBlox.Core.Interceptors
                 flowBlockName);
 
             var config = Runtime.ExternalDebuggingInformation;
-            if (config.FinishWhenTargetFlowBlockReached
+            if (config.IncludeTargetExecution
                 && !string.IsNullOrWhiteSpace(config.TargetFlowBlockName)
                 && string.Equals(config.TargetFlowBlockName, flowBlockName, StringComparison.OrdinalIgnoreCase)
                 && !Runtime.Aborted)
             {
-                AppendProtocol(
-                    "DebugTargetReached",
-                    $"Debug target flow block reached: '{flowBlockName}'.",
-                    flowBlockName);
                 Runtime.CancelExecution(
                     RuntimeCancellationKind.DebuggingTargetReached,
-                    $"Debug target flow block reached: '{flowBlockName}'.");
+                    $"Debug target flow block reached after execution: '{flowBlockName}'.");
             }
         }
 
@@ -292,6 +327,14 @@ namespace FlowBlox.Core.Interceptors
                 return value;
 
             return TextHelper.ShortenString(value, maxLength, false);
+        }
+
+        private static bool IsTarget(string flowBlockName, string targetFlowBlockName)
+        {
+            if (string.IsNullOrWhiteSpace(flowBlockName) || string.IsNullOrWhiteSpace(targetFlowBlockName))
+                return false;
+
+            return string.Equals(flowBlockName, targetFlowBlockName, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

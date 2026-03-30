@@ -158,13 +158,13 @@ namespace FlowBlox.UICore.Resources {
                 return ResourceManager.GetString("Message_ResetCommunicationState_Question", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Please configure your AI provider first. API key required. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset Communication State ähnelt.
         /// </summary>
-        public static string Warning_MissingProvider {
+        public static string Message_ResetCommunicationState_Title {
             get {
-                return ResourceManager.GetString("Warning_MissingProvider", resourceCulture);
+                return ResourceManager.GetString("Message_ResetCommunicationState_Title", resourceCulture);
             }
         }
         
@@ -210,6 +210,15 @@ namespace FlowBlox.UICore.Resources {
         public static string Tooltip_Undo {
             get {
                 return ResourceManager.GetString("Tooltip_Undo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please configure your AI provider first. API key required. ähnelt.
+        /// </summary>
+        public static string Warning_MissingProvider {
+            get {
+                return ResourceManager.GetString("Warning_MissingProvider", resourceCulture);
             }
         }
         

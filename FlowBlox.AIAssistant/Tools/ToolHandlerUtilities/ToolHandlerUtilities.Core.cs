@@ -108,7 +108,22 @@ namespace FlowBlox.AIAssistant.Tools
                 return null;
             }
 
-            return ReflectionHelper.GetTypeByClass(fullName);
+            var requested = fullName.Trim();
+
+            var direct = Type.GetType(requested, throwOnError: false);
+            if (direct != null)
+                return direct;
+
+            var commaIndex = requested.IndexOf(',');
+            var typeNameOnly = commaIndex > 0
+                ? requested[..commaIndex].Trim()
+                : requested;
+
+            var resolved = ReflectionHelper.GetTypeByClass(typeNameOnly);
+            if (resolved != null)
+                return resolved;
+
+            return ReflectionHelper.GetTypeByClass(requested);
         }
 
         public static JObject ToTypeInfo(FlowBloxReactiveObject instance)

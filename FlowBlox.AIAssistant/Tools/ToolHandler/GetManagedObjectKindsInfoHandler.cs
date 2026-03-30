@@ -13,7 +13,7 @@ namespace FlowBlox.AIAssistant.Tools
             "Returns managed object kind metadata.",
             new JObject
             {
-                ["typeFullName"] = "string"
+                ["typeFullName"] = "string (type full name, assembly-qualified names are supported)"
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)

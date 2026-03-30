@@ -825,6 +825,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         {
             ResetNotifications(runtime);
 
+            runtime.NotifyBeforeFlowBlockValidation(this);
+            if (runtime.Aborted)
+                return false;
+
             if (!this.ValidateRequirements(out var requirementMessages))
             {
                 runtime.NotifyPreconditionsNotMet(this, requirementMessages);

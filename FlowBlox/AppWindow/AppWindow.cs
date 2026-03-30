@@ -20,6 +20,8 @@ using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.Grid.Provider;
+using FlowBlox.Interfaces;
+using FlowBlox.Services;
 using FlowBlox.UICore.ViewModels.PSProjects;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
@@ -33,8 +35,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using Windows.ApplicationModel;
-using Windows.Management.Deployment;
 using static FlowBlox.Core.Interceptors.RuntimeBacktraceInterceptor;
 
 namespace FlowBlox.AppWindow
@@ -42,6 +42,12 @@ namespace FlowBlox.AppWindow
     public partial class AppWindow : Form
     {
         private const string ProjectFileExtension = ".fbprj";
+        private const string UpdateDownloadDirectoryName = "updates";
+        private const string UpdateNotificationId = "app.update.available";
+        private const string UpdateStatusNotificationId = "app.update.status";
+        private static readonly TimeSpan UpdateNotificationLifetime = TimeSpan.FromDays(14);
+        private static readonly TimeSpan UpdateStatusNotificationLifetime = TimeSpan.FromSeconds(15);
+        private static readonly TimeSpan UpdateErrorNotificationLifetime = TimeSpan.FromSeconds(15);
         private static AppWindow _appWindow;
         public static AppWindow Instance
         {
@@ -69,12 +75,18 @@ namespace FlowBlox.AppWindow
         private ComponentLibraryPanel _componentLibraryPanel;
         private FieldView _fieldViewPanel;
         private ManagedObjectsView _managedObjectsViewPanel;
+        private TestView _testViewPanel;
         private DockContentUserControlWrapper<RuntimeView> _runtimeViewPanel;
         private DockContentUserControlWrapper<ProblemsView> _problemsViewPanel;
         private AIAssistantView _aiAssistantViewPanel;
         private bool _defaultFieldViewActivationApplied;
         private bool _isProjectLoading;
         private WaitOverlayWindow _waitOverlayWindow;
+        private readonly IAppNotificationService _appNotificationService;
+        private readonly IFlowBloxInstallerService _flowBloxInstallerService;
+        private bool _isNotificationActionRunning;
+        private string _downloadedInstallerPath;
+        private string _installerPathToLaunchOnClose;
 
         private FlowBloxProjectComponentProvider _componentProvider;
 
@@ -85,6 +97,9 @@ namespace FlowBlox.AppWindow
             FlowBloxUILocalizationUtil.Localize(this);
 
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
+            _appNotificationService = FlowBloxServiceLocator.Instance.GetService<IAppNotificationService>();
+            _flowBloxInstallerService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxInstallerService>();
+            _appNotificationService.NotificationsChanged += AppNotificationService_NotificationsChanged;
             this.Resize += (_, __) => PositionProjectLoadingOverlay();
             this.Move += (_, __) => PositionProjectLoadingOverlay();
 
@@ -170,6 +185,7 @@ namespace FlowBlox.AppWindow
             this._dockContentProjectPanel?.UpdateUI();
             this._componentLibraryPanel?.UpdateUI();
             this._managedObjectsViewPanel?.UpdateUI();
+            this._testViewPanel?.UpdateUI();
         }
 
         private void UpdateUI_ProjectName()
@@ -307,6 +323,7 @@ namespace FlowBlox.AppWindow
             InitializeDockPanel(exceptAiAssistantView: exceptAiAssistantView);
             this._fieldViewPanel.OnAfterUIRegistryInitialized();
             this._managedObjectsViewPanel?.OnAfterUIRegistryInitialized();
+            this._testViewPanel?.OnAfterUIRegistryInitialized();
             if (!exceptAiAssistantView)
                 this._aiAssistantViewPanel?.OnAfterUIRegistryInitialized();
             this._dockContentProjectPanel.OnAfterUIRegistryInitialized();
@@ -544,6 +561,13 @@ namespace FlowBlox.AppWindow
 
         private void itmQuitApplication_Click(object sender, EventArgs e)
         {
+            CloseApplicationControlled();
+        }
+
+        private void CloseApplicationControlled(string installerPathToLaunch = null)
+        {
+            _installerPathToLaunchOnClose = installerPathToLaunch;
+
             if (FlowBloxProjectManager.Instance.ActiveProject != null)
             {
                 DialogResult result = FlowBloxMessageBox.Show
@@ -760,14 +784,25 @@ namespace FlowBlox.AppWindow
                         FlowBloxResourceUtil.GetLocalizedString("AppWindow_RuntimeActiveClose_Title", typeof(FlowBloxMainUITexts)),
                         FlowBloxMessageBox.Buttons.OK,
                         FlowBloxMessageBox.Icons.Info
-                    );
+                );
 
                 e.Cancel = true;
+                _installerPathToLaunchOnClose = null;
             }
             else
             {
                 try
                 {
+                    _appNotificationService.NotificationsChanged -= AppNotificationService_NotificationsChanged;
+
+                    if (!string.IsNullOrWhiteSpace(_installerPathToLaunchOnClose))
+                    {
+                        if (!LaunchInstaller(_installerPathToLaunchOnClose))
+                            FlowBloxLogManager.Instance.GetLogger().Error("Failed to launch installer during controlled close.");
+
+                        _installerPathToLaunchOnClose = null;
+                    }
+
                     Environment.Exit(0);
                 }
                 catch (Exception ex)
@@ -796,10 +831,11 @@ namespace FlowBlox.AppWindow
 
         private async void AppWindow_Load(object sender, EventArgs e)
         {
-            InitVersion();
+            lblApplicationVersion.Visible = false;
+            RefreshNotificationBar();
             RefreshRecentProjectsMenu();
             await InitPreconfiguredProjectAsync();
-            Background_TrialInfo.RunWorkerAsync();
+            await InitializeNotificationsAsync();
         }
 
         public void SetProjectFile(string projectFile) => _recentProjectPath = projectFile;
@@ -834,21 +870,6 @@ namespace FlowBlox.AppWindow
             About AboutWindow = new About();
             AboutWindow.ShowDialog(this);
             UpdateUI();
-        }
-
-        private void InitVersion()
-        {
-            lblApplicationVersion.Text = lblApplicationVersion.Text.Replace("$Version", Application.ProductVersion);
-        }
-
-        private void Background_TrialInfo_DoWork(object sender, DoWorkEventArgs e)
-        {
-            System.Threading.Thread.Sleep(8000);
-        }
-
-        private void Background_TrialInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            statusStrip.Visible = false;
         }
 
         private void itmLicense_Click(object sender, EventArgs e)
@@ -1002,117 +1023,217 @@ namespace FlowBlox.AppWindow
 
         private async void itmCheckForNewVersion_Click(object sender, EventArgs e)
         {
+            await CheckForUpdatesAsync(showMessageWhenNoUpdate: true);
+        }
+
+        private async Task InitializeNotificationsAsync()
+        {
+            _appNotificationService.RemoveExpiredNotifications();
+            await CheckForUpdatesAsync(showMessageWhenNoUpdate: false);
+        }
+
+        private async Task CheckForUpdatesAsync(bool showMessageWhenNoUpdate)
+        {
             try
             {
-                if (!IsRunningPackaged())
+                var manifestUrl = FlowBloxOptions.GetOptionInstance()
+                    .GetOption("Updates.InstallerManifestUrl")
+                    ?.Value;
+
+                if (string.IsNullOrWhiteSpace(manifestUrl))
                 {
-                    FlowBloxMessageBox.Show(
-                        this,
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NotPackaged_Message", typeof(FlowBloxMainUITexts)),
-                        FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NotPackaged_Title", typeof(FlowBloxMainUITexts)),
-                        FlowBloxMessageBox.Buttons.OK,
-                        FlowBloxMessageBox.Icons.Info);
+                    if (showMessageWhenNoUpdate)
+                    {
+                        PublishUpdateStatusNotification(
+                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NotPackaged_Message", typeof(FlowBloxMainUITexts)),
+                            UpdateErrorNotificationLifetime);
+                    }
+
                     return;
                 }
 
-                var result = await Package.Current.CheckUpdateAvailabilityAsync();
-                switch (result.Availability)
+                var latestUpdate = await _flowBloxInstallerService.GetLatestInstallerUpdateAsync(manifestUrl);
+                if (latestUpdate == null)
                 {
-                    case PackageUpdateAvailability.NoUpdates:
-                        FlowBloxMessageBox.Show(
-                            this,
-                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NoUpdates_Message", typeof(FlowBloxMainUITexts)),
-                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NoUpdates_Title", typeof(FlowBloxMainUITexts)),
-                            FlowBloxMessageBox.Buttons.OK,
-                            FlowBloxMessageBox.Icons.Info);
-                        return;
-
-                    case PackageUpdateAvailability.Available:
-                    case PackageUpdateAvailability.Required:
-                        await InstallUpdateNowAsync();
-                        return;
-
-                    case PackageUpdateAvailability.Unknown:
-                        FlowBloxMessageBox.Show(
-                            this,
-                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_UnknownSource_Message", typeof(FlowBloxMainUITexts)),
-                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_UnknownSource_Title", typeof(FlowBloxMainUITexts)),
-                            FlowBloxMessageBox.Buttons.OK,
-                            FlowBloxMessageBox.Icons.Warning);
-                        OpenUrl("https://www.flowblox.net/");
-                        return;
-
-                    case PackageUpdateAvailability.Error:
-                    default:
-                        FlowBloxMessageBox.Show(
-                            this,
+                    if (showMessageWhenNoUpdate)
+                    {
+                        PublishUpdateStatusNotification(
                             FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Error_Message", typeof(FlowBloxMainUITexts)),
-                            FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Error_Title", typeof(FlowBloxMainUITexts)),
-                            FlowBloxMessageBox.Buttons.OK,
-                            FlowBloxMessageBox.Icons.Error);
-                        return;
+                            UpdateErrorNotificationLifetime);
+                    }
+
+                    return;
+                }
+
+                var currentVersion = FlowBloxVersionHelper.ParseComparableVersion(Application.ProductVersion);
+                if (latestUpdate.Version > currentVersion)
+                {
+                    _appNotificationService.Publish(new AppNotification
+                    {
+                        Id = UpdateNotificationId,
+                        Message = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Notification_UpdateAvailable_Message", typeof(FlowBloxMainUITexts)),
+                        ActionText = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Notification_UpdateAvailable_Action_Text", typeof(FlowBloxMainUITexts)),
+                        ActionType = AppNotificationActionType.DownloadUpdateInstaller,
+                        ActionData = latestUpdate.InstallerUrl,
+                        ExpiresUtc = DateTimeOffset.UtcNow.Add(UpdateNotificationLifetime)
+                    });
+                }
+                else
+                {
+                    _appNotificationService.Dismiss(UpdateNotificationId);
+                    if (showMessageWhenNoUpdate)
+                        PublishUpdateStatusNotification(FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NoUpdates_Message", typeof(FlowBloxMainUITexts)));
                 }
             }
             catch (Exception ex)
             {
                 var logger = FlowBloxLogManager.Instance.GetLogger();
                 logger.Exception(ex);
-                FlowBloxMessageBox.Show(
-                    this,
+                PublishUpdateStatusNotification(
                     FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Exception_Message", typeof(FlowBloxMainUITexts)),
-                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Exception_Title", typeof(FlowBloxMainUITexts)),
-                    FlowBloxMessageBox.Buttons.OK,
-                    FlowBloxMessageBox.Icons.Error);
+                    UpdateErrorNotificationLifetime);
             }
         }
 
-        private static bool IsRunningPackaged()
+        private bool LaunchInstaller(string installerPath)
         {
+            if (string.IsNullOrWhiteSpace(installerPath) || !File.Exists(installerPath))
+                return false;
+
             try
             {
-                var _ = Package.Current;
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = installerPath,
+                    UseShellExecute = true
+                });
+
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                FlowBloxLogManager.Instance.GetLogger().Error("Failed to start installer.", ex);
                 return false;
             }
         }
 
-        private async Task InstallUpdateNowAsync()
+        private void PublishUpdateStatusNotification(string message, TimeSpan? lifetime = null)
         {
-            var appInstallerUri = Package.Current.GetAppInstallerInfo()?.Uri;
-            if (appInstallerUri == null)
-                appInstallerUri = new Uri("https://flowblox.net/app/FlowBlox.appinstaller");
+            if (string.IsNullOrWhiteSpace(message))
+                return;
 
-            var pm = new PackageManager();
+            _appNotificationService.Publish(new AppNotification
+            {
+                Id = UpdateStatusNotificationId,
+                Message = message,
+                ActionText = string.Empty,
+                ActionType = AppNotificationActionType.None,
+                ExpiresUtc = DateTimeOffset.UtcNow.Add(lifetime ?? UpdateStatusNotificationLifetime)
+            });
+        }
 
-            var options = AddPackageByAppInstallerOptions.ForceTargetAppShutdown;
+        private void AppNotificationService_NotificationsChanged(object sender, EventArgs e)
+        {
+            RefreshNotificationBar();
+        }
+
+        private void RefreshNotificationBar()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(RefreshNotificationBar));
+                return;
+            }
+
+            _appNotificationService.RemoveExpiredNotifications();
+
+            var notification = _appNotificationService.GetCurrentNotification();
+            if (notification == null)
+            {
+                lblNotificationMessage.Text = string.Empty;
+                lblNotificationAction.Text = string.Empty;
+                lblNotificationAction.Visible = false;
+                statusStrip.Visible = false;
+                return;
+            }
+
+            lblNotificationMessage.Text = notification.Message ?? string.Empty;
+            lblNotificationAction.Text = NormalizeNotificationActionText(notification.ActionText);
+            lblNotificationAction.Visible = !string.IsNullOrWhiteSpace(notification.ActionText)
+                                            && notification.ActionType != AppNotificationActionType.None;
+            statusStrip.Visible = true;
+        }
+
+        private static string NormalizeNotificationActionText(string actionText)
+        {
+            if (string.IsNullOrWhiteSpace(actionText))
+                return string.Empty;
+
+            var normalized = actionText.Trim();
+            if (string.Equals(normalized, "JUpdate herunterlader", StringComparison.OrdinalIgnoreCase))
+                return "Update herunterladen";
+
+            if (string.Equals(normalized, "Update herunterlader", StringComparison.OrdinalIgnoreCase))
+                return "Update herunterladen";
+
+            return normalized;
+        }
+
+        private async void lblNotificationAction_Click(object sender, EventArgs e)
+        {
+            if (_isNotificationActionRunning)
+                return;
+
+            var notification = _appNotificationService.GetCurrentNotification();
+            if (notification == null)
+                return;
 
             try
             {
-                // Starts the update immediately; Windows will close the app automatically if necessary.
-                var op = pm.AddPackageByAppInstallerFileAsync(appInstallerUri, options, pm.GetDefaultPackageVolume());
-                var result = await op.AsTask();
+                _isNotificationActionRunning = true;
 
-                if (result != null &&
-                    result.ErrorText != null &&
-                    result.ExtendedErrorCode != null)
+                switch (notification.ActionType)
                 {
-                    throw new InvalidOperationException($"An error occurred when attempting to start the update: {result.ErrorText}", result.ExtendedErrorCode);
+                    case AppNotificationActionType.DownloadUpdateInstaller:
+                        var installerPath = await _flowBloxInstallerService.DownloadInstallerAsync(notification.ActionData, UpdateDownloadDirectoryName);
+                        if (string.IsNullOrWhiteSpace(installerPath))
+                        {
+                            PublishUpdateStatusNotification(
+                                FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateInstall_Failed_Message", typeof(FlowBloxMainUITexts)),
+                                UpdateErrorNotificationLifetime);
+                            break;
+                        }
+
+                        _downloadedInstallerPath = installerPath;
+                        _appNotificationService.Publish(new AppNotification
+                        {
+                            Id = UpdateNotificationId,
+                            Message = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Notification_UpdateDownloaded_Message", typeof(FlowBloxMainUITexts)),
+                            ActionText = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Notification_UpdateInstallDownloaded_Action_Text", typeof(FlowBloxMainUITexts)),
+                            ActionType = AppNotificationActionType.InstallDownloadedUpdate,
+                            ActionData = installerPath,
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(UpdateNotificationLifetime)
+                        });
+                        break;
+                    case AppNotificationActionType.InstallDownloadedUpdate:
+                        var pathToInstall = notification.ActionData;
+                        if (string.IsNullOrWhiteSpace(pathToInstall))
+                            pathToInstall = _downloadedInstallerPath;
+
+                        if (!string.IsNullOrWhiteSpace(pathToInstall))
+                        {
+                            _appNotificationService.Dismiss(notification.Id);
+                            CloseApplicationControlled(pathToInstall);
+                        }
+                        break;
+                    case AppNotificationActionType.None:
+                    default:
+                        break;
                 }
             }
-            catch (Exception ex)
+            finally
             {
-                var logger = FlowBloxLogManager.Instance.GetLogger();
-                logger.Exception(ex);
-
-                FlowBloxMessageBox.Show(
-                    null,
-                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateInstall_Failed_Message", typeof(FlowBloxMainUITexts)),
-                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateInstall_Failed_Title", typeof(FlowBloxMainUITexts)),
-                    FlowBloxMessageBox.Buttons.OK,
-                    FlowBloxMessageBox.Icons.Error);
+                _isNotificationActionRunning = false;
             }
         }
 

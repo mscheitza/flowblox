@@ -24,6 +24,7 @@
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <converters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter"/>
 
             <Style x:Key="ManageInputTemplates.Icon.Open"
                    TargetType="{x:Type iconPacks:PackIconMaterial}"
@@ -192,6 +193,27 @@
                                         Binding="{Binding SizeBytes}"
                                         IsReadOnly="True"
                                         Width="120"/>
+
+                    <DataGridTemplateColumn Header="{x:Static resources:ManageInputTemplatesWindow.Header_SyncMode}"
+                                            Width="190">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SyncMode, Converter={StaticResource EnumDisplayNameConverter}}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.SyncModes, RelativeSource={RelativeSource AncestorType=Window}}"
+                                          SelectedItem="{Binding SyncMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
 
                 </DataGrid.Columns>
             </DataGrid>

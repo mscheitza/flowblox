@@ -2341,6 +2341,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die CreateIfNotExists ähnelt.
+        /// </summary>
+        public static string FlowBloxInputTemplateSyncMode_CreateIfNotExists {
+            get {
+                return ResourceManager.GetString("FlowBloxInputTemplateSyncMode_CreateIfNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Overwrite ähnelt.
+        /// </summary>
+        public static string FlowBloxInputTemplateSyncMode_Overwrite {
+            get {
+                return ResourceManager.GetString("FlowBloxInputTemplateSyncMode_Overwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Objects ähnelt.
         /// </summary>
         public static string FlowBloxResourceUtil_FallbackPluralSuffix {

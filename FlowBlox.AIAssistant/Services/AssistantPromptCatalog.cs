@@ -13,6 +13,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string EditAndDeleteKey = "explaining_edit_and_delete";
         public const string NamingConventionsKey = "naming_conventions";
         public const string ExecutionRequirementsKey = "execution_requirements_and_required_fields";
+        public const string InputFileTemplatesKey = "explaining_input_file_templates";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
             new Dictionary<string, PromptEntryDefinition>(StringComparer.OrdinalIgnoreCase)
@@ -51,7 +52,12 @@ namespace FlowBlox.AIAssistant.Services
                     ExecutionRequirementsKey,
                     "Execution Requirements and Required Fields",
                     "FlowBlox.AIAssistant.Prompts.ExecutionRequirementsAndRequiredFields.txt",
-                    "How to ensure downstream execution is guarded when upstream result datasets are empty.")
+                    "How to ensure downstream execution is guarded when upstream result datasets are empty."),
+                [InputFileTemplatesKey] = new PromptEntryDefinition(
+                    InputFileTemplatesKey,
+                    "Explaining Input File Templates",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingInputFileTemplates.txt",
+                    "How input file templates are used for schemas, mock data, and helper scripts.")
             };
 
         private static readonly Lazy<IReadOnlyDictionary<string, PromptEntry>> Entries = new(LoadEntries, isThreadSafe: true);

@@ -5,36 +5,17 @@ using FlowBlox.Core.Models.Testing;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
-    public class LogCreatedEventArgs : EventArgs
-    {
-        public string Message { get; }
-        public FlowBloxLogLevel LogLevel { get; }
+    
 
-        public LogCreatedEventArgs(string message, FlowBloxLogLevel logLevel)
-        {
-            Message = message;
-            LogLevel = logLevel;
-        }
-    }
-
-    public enum TestScope
+    public class FlowBlockGenerationStrategyExecutor : FlowBlockGenerationStrategyExecutorBase
     {
-        All,
-        RequiredForExecution
-    }
-
-    public class FlowBlockGenerationStrategyExecutor
-    {
-        private BaseFlowBlock _flowBlock;
-        private TestScope _scope;
+        private readonly TestScope _scope;
 
         public FlowBlockGenerationStrategyExecutor(BaseFlowBlock flowBlock, TestScope scope = TestScope.RequiredForExecution)
+            : base(flowBlock)
         {
-            _flowBlock = flowBlock;
             _scope = scope;
         }
-
-        public event EventHandler<LogCreatedEventArgs> LogCreated;
 
         public bool ExecuteGeneration()
         {
@@ -53,11 +34,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             try
             {
                 foreach (var testDefinition in _scope == TestScope.All ?
-                     _flowBlock.TestDefinitions :
-                     _flowBlock.TestDefinitions.Where(x => x.RequiredForExecution))
+                     FlowBlock.TestDefinitions :
+                    FlowBlock.TestDefinitions.Where(x => x.RequiredForExecution))
                 {
                     var testExecutor = new FlowBloxTestExecutor();
-                    testExecutor.Initialize(testDefinition, _flowBlock);
+                    testExecutor.Initialize(testDefinition, FlowBlock, validationTargetFlowBlock: FlowBlock);
                     var runtime = testExecutor.GetRuntime();
                     runtime.LogMessageCreated += Runtime_LogMessageCreated;
 
@@ -83,36 +64,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
                 if (!success)
                 {
-                    foreach (var flowBloxGenerationStrategy in _flowBlock.GenerationStrategies)
-                    {
-                        object result;
-                        try
-                        {
-                            result = flowBloxGenerationStrategy.Execute(generationRuntime, testResults);
-                        }
-                        catch(Exception e)
-                        {
-                            OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" failed unexpectedly.", FlowBloxLogLevel.Error));
-                            OnLogCreated(new LogCreatedEventArgs(e.ToString(), FlowBloxLogLevel.Error));
-                            return false;
-                        }
+                    if (!ExecuteGenerationStrategies(generationRuntime, testResults))
+                        return false;
 
-                        if (result == null)
-                        {
-                            OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" failed. Please make sure all generation parameters are correct.", FlowBloxLogLevel.Error));
-                            return false;
-                        }
-                        else
-                        {
-                            OnLogCreated(new LogCreatedEventArgs($"Generation strategy \"{flowBloxGenerationStrategy.Name}\" successful.", FlowBloxLogLevel.Success));
-                            flowBloxGenerationStrategy.Assign(result);
-                        }
-                    }
-
-                    foreach (var testDefinition in _flowBlock.TestDefinitions)
+                    foreach (var testDefinition in FlowBlock.TestDefinitions)
                     {
                         var testExecutor = new FlowBloxTestExecutor();
-                        testExecutor.Initialize(testDefinition, _flowBlock);
+                        testExecutor.Initialize(testDefinition, FlowBlock, validationTargetFlowBlock: FlowBlock);
 
                         var testResult1 = await testExecutor.ExecuteTestAsync();
                         testExecutor.Shutdown();
@@ -140,11 +98,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private void Runtime_LogMessageCreated(BaseRuntime runtime, string message, FlowBloxLogLevel logLevel)
         {
             OnLogCreated(new LogCreatedEventArgs(message, logLevel));
-        }
-
-        protected virtual void OnLogCreated(LogCreatedEventArgs e)
-        {
-            LogCreated?.Invoke(this, e);
         }
     }
 }

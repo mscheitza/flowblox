@@ -1,17 +1,17 @@
 ﻿<# 
 .SYNOPSIS
-  Sets version + metadata centrally for multiple csproj files, and updates the MSIX appxmanifest.
+  Sets version + metadata centrally for FlowBlox projects.
 .PARAMETER Version
-  SemVer with 3 parts, e.g. "1.0.0". For MSIX, ".0" will be appended.
+  SemVer with 3 parts, e.g. "1.0.0".
 .PARAMETER Root
-  Optional: Root path; default is the script directory.
+  Optional: Root path; default is the repository root (parent of this scripts directory).
 #>
 
 param(
   [Parameter(Mandatory = $true)]
   [ValidatePattern('^\d+\.\d+\.\d+$')]
   [string]$Version,
-  [string]$Root = $PSScriptRoot
+  [string]$Root = ""
 )
 
 $ErrorActionPreference = 'Stop'
@@ -19,28 +19,33 @@ $ErrorActionPreference = 'Stop'
 # Fallback for Root (robust for different invocation styles)
 if ([string]::IsNullOrWhiteSpace($Root)) { $Root = Split-Path -Parent $MyInvocation.MyCommand.Path }
 if ([string]::IsNullOrWhiteSpace($Root)) { $Root = Get-Location }
+$rootPath = [string]$Root
+if ((Split-Path -Leaf $rootPath) -ieq "scripts") {
+  $Root = Split-Path -Parent $rootPath
+}
 
 # ---- Configuration ----
 $Projects = @(
   "FlowBlox\FlowBlox.csproj",
+  "FlowBlox.CLI\FlowBlox.CLI.csproj",
   "FlowBlox.Core\FlowBlox.Core.csproj",
+  "FlowBlox.RunnerHost\FlowBlox.RunnerHost.csproj",
   "FlowBlox.UICore\FlowBlox.UICore.csproj",
   "FlowBlox.SequenceDetection\FlowBlox.SequenceDetection.csproj"
 )
 
-$AppxManifestPath  = "FlowBlox.Packaging\Package.appxmanifest"
-$MsixVersion       = "$Version.0"  # MSIX needs 4 parts
+$AssemblyVersion = "$Version.0"
 
 # Metadata for all csproj
 $Meta = @{
-  "Company"                  = "FlowBlox Community"
+  "Company"                  = "FlowBlox and contributors"
   "Product"                  = "FlowBlox"
-  "Authors"                  = "Marcel Scheitza and contributors"
-  "Copyright"                = "Copyright © 2025 Marcel Scheitza and contributors. Licensed under the MIT License."
+  "Authors"                  = "FlowBlox and contributors"
+  "Copyright"                = "Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License."
   "PackageLicenseExpression" = "MIT"
   "Version"                  = $Version
-  "AssemblyVersion"          = $MsixVersion
-  "FileVersion"              = $MsixVersion
+  "AssemblyVersion"          = $AssemblyVersion
+  "FileVersion"              = $AssemblyVersion
 }
 
 # ---- Helpers ----
@@ -108,28 +113,6 @@ foreach ($rel in $Projects) {
   } catch {
     Write-Warning ("Error processing {0}: {1}" -f $path, $_.Exception.Message)
   }
-}
-
-# ---- Process appxmanifest: set Package/Identity/@Version ----
-$manifestPath = Join-Path $Root $AppxManifestPath
-try {
-  $xml = Load-Xml $manifestPath
-  # Use GetElementsByTagName("Identity") and take the first one
-  $identity = $xml.GetElementsByTagName("Identity") | Select-Object -First 1
-  if (-not $identity) { throw "Identity element not found in appxmanifest." }
-
-  if ($identity.Attributes["Version"]) {
-    $identity.Attributes["Version"].Value = $MsixVersion
-  } else {
-    $attr = $xml.CreateAttribute("Version")
-    $attr.Value = $MsixVersion
-    [void]$identity.Attributes.Append($attr)
-  }
-
-  Save-Xml $xml $manifestPath
-  $updated += $manifestPath
-} catch {
-  Write-Warning ("Error processing {0}: {1}" -f $manifestPath, $_.Exception.Message)
 }
 
 # ---- Result ----

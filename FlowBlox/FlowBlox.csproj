@@ -1,213 +1,213 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
-		<PlatformTarget>AnyCPU</PlatformTarget>
-		<Prefer32Bit>false</Prefer32Bit>
-		<OutputType>WinExe</OutputType>
-		<UseWindowsForms>true</UseWindowsForms>
-		<UseWPF>true</UseWPF>
-		<AssemblyTitle>FlowBlox</AssemblyTitle>
-		<Description>FlowBlox – Open Source Visual Data Flow IDE</Description>
-		<Company>FlowBlox Community</Company>
-		<Product>FlowBlox</Product>
-		<Authors>Marcel Scheitza and contributors</Authors>
-		<Copyright>Copyright © 2025 Marcel Scheitza and contributors. Licensed under the MIT License.</Copyright>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.0</Version>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<FileVersion>1.0.0.0</FileVersion>
-		<RunnerHostProjectDir>$(MSBuildProjectDirectory)\..\FlowBlox.RunnerHost\</RunnerHostProjectDir>
-		<RunnerHostOutputDir>$(RunnerHostProjectDir)bin\$(Configuration)\$(TargetFramework)\</RunnerHostOutputDir>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-		<DocumentationFile />
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-		<DocumentationFile>bin\Release\FlowBlox.xml</DocumentationFile>
-		<NoWarn>1591</NoWarn>
-	</PropertyGroup>
-	<PropertyGroup>
-		<ApplicationIcon>FlowBloxMainIcon.ico</ApplicationIcon>
-	</PropertyGroup>
-	<PropertyGroup>
-		<SignManifests>false</SignManifests>
-	</PropertyGroup>
-	<PropertyGroup>
-		<TargetZone>LocalIntranet</TargetZone>
-	</PropertyGroup>
-	<PropertyGroup>
-		<GenerateManifests>false</GenerateManifests>
-	</PropertyGroup>
-	<PropertyGroup>
-		<ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject>FlowBlox.Program</StartupObject>
-	</PropertyGroup>
-	<PropertyGroup>
-		<ManifestCertificateThumbprint>06483A1741A4740855F1279FEACCA43B2BFDCFE4</ManifestCertificateThumbprint>
-	</PropertyGroup>
-	<ItemGroup>
-		<Compile Remove="Core\Enums\**" />
-		<Compile Remove="Core\Repositories\**" />
-		<Compile Remove="Grid\Elements\Interfaces\**" />
-		<Compile Remove="Grid\Elements\UI\CustomActions\**" />
-		<Compile Remove="Grid\Views\FlowBlockUI\**" />
-		<EmbeddedResource Remove="Core\Enums\**" />
-		<EmbeddedResource Remove="Core\Repositories\**" />
-		<EmbeddedResource Remove="Grid\Elements\Interfaces\**" />
-		<EmbeddedResource Remove="Grid\Elements\UI\CustomActions\**" />
-		<EmbeddedResource Remove="Grid\Views\FlowBlockUI\**" />
-		<None Remove="Core\Enums\**" />
-		<None Remove="Core\Repositories\**" />
-		<None Remove="Grid\Elements\Interfaces\**" />
-		<None Remove="Grid\Elements\UI\CustomActions\**" />
-		<None Remove="Grid\Views\FlowBlockUI\**" />
-		<Page Remove="Core\Enums\**" />
-		<Page Remove="Core\Repositories\**" />
-		<Page Remove="Grid\Elements\Interfaces\**" />
-		<Page Remove="Grid\Elements\UI\CustomActions\**" />
-		<Page Remove="Grid\Views\FlowBlockUI\**" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Remove="Icons\extension.ico" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Update="Core\Components\NumericTextBox.cs" />
-		<Compile Update="FlowBloxMainUIImages.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>FlowBloxMainUIImages.resx</DependentUpon>
-		</Compile>
-		<Compile Update="FlowBloxMainUITexts.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>FlowBloxMainUITexts.resx</DependentUpon>
-		</Compile>
-		<Compile Update="Grid\Elements\UI\NoteUIElement.cs" />
-		<Compile Update="FlowBloxMainUITexts.de.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>FlowBloxMainUITexts.de.resx</DependentUpon>
-		</Compile>
-		<Compile Update="Core\Components\SplitTableLayoutPanel.cs">
-			<SubType>Component</SubType>
-		</Compile>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
-		<Compile Update="Properties\Settings.Designer.cs">
-			<DesignTimeSharedInput>True</DesignTimeSharedInput>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Settings.settings</DependentUpon>
-		</Compile>
-		<Compile Update="Views\RuntimeView.cs">
-			<SubType>UserControl</SubType>
-		</Compile>
-		<Compile Update="Core\Components\DoubleBufferedPanel.cs">
-			<SubType>Component</SubType>
-		</Compile>
-		<Compile Update="Views\OptionView.cs">
-			<SubType>UserControl</SubType>
-		</Compile>
-		<Compile Update="Grid\Elements\UserControls\FlowBlockUIElement.cs">
-			<SubType>UserControl</SubType>
-		</Compile>
-		<None Include="..\.editorconfig">
-			<Link>.editorconfig</Link>
-		</None>
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="FlowBloxMainIcon.ico" />
-	</ItemGroup>
-	<ItemGroup>
-		<BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-			<Visible>False</Visible>
-			<ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-			<Install>false</Install>
-		</BootstrapperPackage>
-		<BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-			<Visible>False</Visible>
-			<ProductName>.NET Framework 3.5 SP1</ProductName>
-			<Install>true</Install>
-		</BootstrapperPackage>
-		<BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-			<Visible>False</Visible>
-			<ProductName>Windows Installer 3.1</ProductName>
-			<Install>true</Install>
-		</BootstrapperPackage>
-	</ItemGroup>
-	<ItemGroup>
-		<Resource Include="Icons\extension.ico" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\FlowBlox.UICore\FlowBlox.UICore.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.9.1" />
-		<PackageReference Include="DockPanelSuite" Version="3.1.1" />
-		<PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.1" />
-		<PackageReference Include="FastColoredTextBox.Net5" Version="2.16.26" />
-		<PackageReference Include="MahApps.Metro" Version="2.4.10" />
-		<PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
-		<PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
-		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-		<PackageReference Include="ObjectListView.Repack.NET6Plus" Version="2.9.5" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-		<PackageReference Include="System.Management" Version="7.0.1" />
-		<PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
-	</ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Update="FlowBloxMainUIImages.resx">
-			<Generator>PublicResXFileCodeGenerator</Generator>
-			<LastGenOutput>FlowBloxMainUIImages.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-		<EmbeddedResource Update="FlowBloxMainUITexts.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>FlowBloxMainUITexts.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-		<EmbeddedResource Update="Properties\Resources.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
-	<ItemGroup>
-		<None Update="log4net.application.config">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="log4net.runtime.config">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Properties\Settings.settings">
-			<Generator>SettingsSingleFileGenerator</Generator>
-			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
-		</None>
-	</ItemGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<Optimize>False</Optimize>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<Optimize>False</Optimize>
-	</PropertyGroup>
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="&quot;$(ProjectDir)prebuild.bat&quot; $(Configuration)" />
-	</Target>
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="&quot;$(ProjectDir)postbuild.bat&quot; &quot;$(TargetDir)&quot;" />
-	</Target>
-	<Target Name="CopyRunnerHostToOutput" AfterTargets="Build">
-		<Message Importance="high" Text="[FlowBlox] Copying RunnerHost from $(RunnerHostOutputDir) to $(TargetDir)" />
-		<ItemGroup>
-			<RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.exe" />
-			<RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.dll" />
-			<RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.runtimeconfig.json" />
-			<RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.deps.json" Condition="Exists('$(RunnerHostOutputDir)FlowBlox.RunnerHost.deps.json')" />
-			<RunnerHostFiles Include="$(RunnerHostOutputDir)System.Security.Cryptography.ProtectedData.dll" Condition="Exists('$(RunnerHostOutputDir)System.Security.Cryptography.ProtectedData.dll')" />
-		</ItemGroup>
-		<Copy SourceFiles="@(RunnerHostFiles)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" Condition="Exists('$(RunnerHostOutputDir)FlowBlox.RunnerHost.exe')" />
-	</Target>
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <AssemblyTitle>FlowBlox</AssemblyTitle>
+    <Description>FlowBlox – Open Source Visual Data Flow IDE</Description>
+    <Company>FlowBlox and contributors</Company>
+    <Product>FlowBlox</Product>
+    <Authors>FlowBlox and contributors</Authors>
+    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <RunnerHostProjectDir>$(MSBuildProjectDirectory)\..\FlowBlox.RunnerHost\</RunnerHostProjectDir>
+    <RunnerHostOutputDir>$(RunnerHostProjectDir)bin\$(Configuration)\$(TargetFramework)\</RunnerHostOutputDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DocumentationFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DocumentationFile>bin\Release\FlowBlox.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>FlowBloxMainIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>FlowBlox.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>06483A1741A4740855F1279FEACCA43B2BFDCFE4</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Core\Enums\**" />
+    <Compile Remove="Core\Repositories\**" />
+    <Compile Remove="Grid\Elements\Interfaces\**" />
+    <Compile Remove="Grid\Elements\UI\CustomActions\**" />
+    <Compile Remove="Grid\Views\FlowBlockUI\**" />
+    <EmbeddedResource Remove="Core\Enums\**" />
+    <EmbeddedResource Remove="Core\Repositories\**" />
+    <EmbeddedResource Remove="Grid\Elements\Interfaces\**" />
+    <EmbeddedResource Remove="Grid\Elements\UI\CustomActions\**" />
+    <EmbeddedResource Remove="Grid\Views\FlowBlockUI\**" />
+    <None Remove="Core\Enums\**" />
+    <None Remove="Core\Repositories\**" />
+    <None Remove="Grid\Elements\Interfaces\**" />
+    <None Remove="Grid\Elements\UI\CustomActions\**" />
+    <None Remove="Grid\Views\FlowBlockUI\**" />
+    <Page Remove="Core\Enums\**" />
+    <Page Remove="Core\Repositories\**" />
+    <Page Remove="Grid\Elements\Interfaces\**" />
+    <Page Remove="Grid\Elements\UI\CustomActions\**" />
+    <Page Remove="Grid\Views\FlowBlockUI\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Icons\extension.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Core\Components\NumericTextBox.cs" />
+    <Compile Update="FlowBloxMainUIImages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FlowBloxMainUIImages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="FlowBloxMainUITexts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FlowBloxMainUITexts.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Grid\Elements\UI\NoteUIElement.cs" />
+    <Compile Update="FlowBloxMainUITexts.de.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FlowBloxMainUITexts.de.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Core\Components\SplitTableLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Views\RuntimeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Core\Components\DoubleBufferedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Views\OptionView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Grid\Elements\UserControls\FlowBlockUIElement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FlowBloxMainIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\extension.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlowBlox.UICore\FlowBlox.UICore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="DockPanelSuite" Version="3.1.1" />
+    <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.1" />
+    <PackageReference Include="FastColoredTextBox.Net5" Version="2.16.26" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="ObjectListView.Repack.NET6Plus" Version="2.9.5" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Management" Version="7.0.1" />
+    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="FlowBloxMainUIImages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FlowBloxMainUIImages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="FlowBloxMainUITexts.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FlowBloxMainUITexts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="log4net.application.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="log4net.runtime.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="&quot;$(ProjectDir)prebuild.bat&quot; $(Configuration)" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="&quot;$(ProjectDir)postbuild.bat&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+  <Target Name="CopyRunnerHostToOutput" AfterTargets="Build">
+    <Message Importance="high" Text="[FlowBlox] Copying RunnerHost from $(RunnerHostOutputDir) to $(TargetDir)" />
+    <ItemGroup>
+      <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.exe" />
+      <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.dll" />
+      <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.runtimeconfig.json" />
+      <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.deps.json" Condition="Exists('$(RunnerHostOutputDir)FlowBlox.RunnerHost.deps.json')" />
+      <RunnerHostFiles Include="$(RunnerHostOutputDir)System.Security.Cryptography.ProtectedData.dll" Condition="Exists('$(RunnerHostOutputDir)System.Security.Cryptography.ProtectedData.dll')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(RunnerHostFiles)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" Condition="Exists('$(RunnerHostOutputDir)FlowBlox.RunnerHost.exe')" />
+  </Target>
 </Project>

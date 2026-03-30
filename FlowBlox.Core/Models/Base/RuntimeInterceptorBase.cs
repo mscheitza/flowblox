@@ -53,6 +53,16 @@ namespace FlowBlox.Core.Models.Base
 
         }
 
+        public virtual void NotifyBeforeFlowBlockValidation(BaseFlowBlock flowBlock)
+        {
+
+        }
+
+        public virtual bool ShouldCancelValidation(BaseFlowBlock flowBlock, bool validationFinished)
+        {
+            return false;
+        }
+
         public virtual void NotifyPreconditionsNotMet(BaseFlowBlock flowBlock, IReadOnlyList<string> messages)
         {
 

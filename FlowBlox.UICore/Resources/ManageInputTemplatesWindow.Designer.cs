@@ -178,6 +178,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sync mode ähnelt.
+        /// </summary>
+        public static string Header_SyncMode {
+            get {
+                return ResourceManager.GetString("Header_SyncMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage Input File Templates ähnelt.
         /// </summary>
         public static string Header_Title_Main {
@@ -192,6 +201,24 @@ namespace FlowBlox.UICore.Resources {
         public static string Message_TemplateDownloaded {
             get {
                 return ResourceManager.GetString("Message_TemplateDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die CreateIfNotExists ähnelt.
+        /// </summary>
+        public static string SyncMode_CreateIfNotExists {
+            get {
+                return ResourceManager.GetString("SyncMode_CreateIfNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Overwrite ähnelt.
+        /// </summary>
+        public static string SyncMode_Overwrite {
+            get {
+                return ResourceManager.GetString("SyncMode_Overwrite", resourceCulture);
             }
         }
         

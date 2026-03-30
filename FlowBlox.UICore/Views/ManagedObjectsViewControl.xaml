@@ -134,13 +134,59 @@
                               ItemsSource="{Binding ManagedObjects}"
                               SelectedItem="{Binding SelectedEntry, Mode=TwoWay}"
                               BorderThickness="0"
-                              SelectionMode="Single">
+                              SelectionMode="Single"
+                              PreviewMouseRightButtonDown="ManagedObjectsListView_PreviewMouseRightButtonDown">
                         <ListView.Resources>
                             <Style TargetType="GridViewColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Left" />
                                 <Setter Property="Padding" Value="8,0,0,0" />
                             </Style>
                         </ListView.Resources>
+                        <ListView.ContextMenu>
+                            <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                <MenuItem Header="{x:Static resources:ManagedObjectsView.Toolbar_Add_Tooltip}"
+                                          Command="{Binding AddCommand}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconMaterial Kind="Plus" Width="14" Height="14" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{x:Static resources:ManagedObjectsView.Toolbar_Edit_Tooltip}"
+                                          Command="{Binding EditCommand}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconMaterial Kind="Pencil" Width="14" Height="14" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{x:Static resources:ManagedObjectsView.Toolbar_Delete_Tooltip}"
+                                          Command="{Binding DeleteCommand}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconMaterial Kind="DeleteOutline" Width="14" Height="14" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="{x:Static resources:ManagedObjectsView.Toolbar_Refresh_Tooltip}"
+                                          Command="{Binding RefreshCommand}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconMaterial Kind="Refresh" Width="14" Height="14" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator />
+                                <MenuItem Header="{x:Static resources:ManagedObjectsView.Toolbar_Actions}"
+                                          IsEnabled="{Binding HasSelectedEntryActions}"
+                                          ItemsSource="{Binding SelectedEntryActions}">
+                                    <MenuItem.ItemContainerStyle>
+                                        <Style TargetType="MenuItem">
+                                            <Setter Property="Header" Value="{Binding DisplayName}" />
+                                            <Setter Property="Command" Value="{Binding Command}" />
+                                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                                            <Setter Property="Icon">
+                                                <Setter.Value>
+                                                    <Image Source="{Binding Icon}" Width="14" Height="14"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </MenuItem.ItemContainerStyle>
+                                </MenuItem>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
 
                         <ListView.View>
                             <GridView>

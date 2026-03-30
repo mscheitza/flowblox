@@ -63,7 +63,11 @@ namespace FlowBlox.AIAssistant.Tools
                 new GetTypeKindsInfoHandler(),
                 new GetManagedObjectKindsInfoHandler(),
                 new GetPlaceholdersHandler(),
+                new GetInputFileTemplatesHandler(),
+                new GetInputFileTemplateContentHandler(),
                 new CreateFieldHandler(),
+                new CreateOrUpdateInputFileTemplateHandler(),
+                new DeleteInputFileTemplateHandler(),
                 new RunProjectDebugTestHandler(),
                 new GetLastDebugFieldValueChangeHandler(),
                 new BatchExecuteToolRequestsHandler(ExecuteAsync)

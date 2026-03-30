@@ -241,13 +241,8 @@ namespace FlowBlox.UICore.ViewModels
             }
 
             TypeNodes.Clear();
-
-            var uncategorizedNode = new ManagedObjectTypeNodeViewModel(
-                typeof(ManagedObject),
-                Resources.ManagedObjectsView.Tree_UncategorizedManagedObjects,
-                WpfIconHelper.CreateMaterialIcon(PackIconMaterialKind.ShapeOutline, 16),
-                canCreateInstance: false,
-                isCategoryOnly: true);
+            var categorizedRootNodes = new List<ManagedObjectTypeNodeViewModel>();
+            var uncategorizedRootNodes = new List<ManagedObjectTypeNodeViewModel>();
 
             foreach (var node in nodeByType.Values)
             {
@@ -260,12 +255,12 @@ namespace FlowBlox.UICore.ViewModels
 
                     if (isConcreteDirectManagedObject)
                     {
-                        uncategorizedNode.Children.Add(node);
+                        uncategorizedRootNodes.Add(node);
                         continue;
                     }
 
                     if (node.ManagedObjectType != typeof(ManagedObject))
-                        TypeNodes.Add(node);
+                        categorizedRootNodes.Add(node);
 
                     continue;
                 }
@@ -273,8 +268,11 @@ namespace FlowBlox.UICore.ViewModels
                 parentNode.Children.Add(node);
             }
 
-            if (uncategorizedNode.Children.Count > 0)
-                TypeNodes.Add(uncategorizedNode);
+            foreach (var node in categorizedRootNodes.OrderBy(x => x.DisplayName, StringComparer.CurrentCultureIgnoreCase))
+                TypeNodes.Add(node);
+
+            foreach (var node in uncategorizedRootNodes.OrderBy(x => x.DisplayName, StringComparer.CurrentCultureIgnoreCase))
+                TypeNodes.Add(node);
 
             var selected = FindNodeByType(previouslySelectedType)
                 ?? TypeNodes.FirstOrDefault(x => !x.IsCategoryOnly)

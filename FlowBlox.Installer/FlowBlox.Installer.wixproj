@@ -1,0 +1,14 @@
+<Project Sdk="WixToolset.Sdk/4.0.5">
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">1.0.0.0</ProductVersion>
+    <SourceDir Condition="'$(SourceDir)' == ''">$(MSBuildProjectDirectory)\..\artifacts\installer\publish\win-x64</SourceDir>
+    <OutputName Condition="'$(OutputName)' == ''">FlowBlox_$(ProductVersion)_x64</OutputName>
+    <OutputPath Condition="'$(OutputPath)' == ''">$(MSBuildProjectDirectory)\..\artifacts\installer\msi\</OutputPath>
+    <DefineConstants>ProductVersion=$(ProductVersion);SourceDir=$(SourceDir)</DefineConstants>
+  </PropertyGroup>
+  <Target Name="GenerateWixFileFragment" BeforeTargets="BeforeBuild">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\Tools\Generate-WixFileFragment.ps1&quot; -SourceDir &quot;$(SourceDir)&quot; -OutputFile &quot;$(MSBuildProjectDirectory)\Generated\FlowBloxFiles.wxs&quot;" />
+  </Target>
+</Project>

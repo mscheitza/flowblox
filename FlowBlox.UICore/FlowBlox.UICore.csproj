@@ -9,9 +9,9 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Company>FlowBlox Community</Company>
-    <Copyright>Copyright © 2025 Marcel Scheitza and contributors. Licensed under the MIT License.</Copyright>
-    <Authors>Marcel Scheitza and contributors</Authors>
+    <Company>FlowBlox and contributors</Company>
+    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
+    <Authors>FlowBlox and contributors</Authors>
     <Product>FlowBlox</Product>
   </PropertyGroup>
   <ItemGroup>
@@ -165,6 +165,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\TestView.Designer.cs">
+      <DependentUpon>TestView.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\ToolboxWindow.Designer.cs">
       <DependentUpon>ToolboxWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -281,6 +286,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\TestDefinitionView.resx">
       <LastGenOutput>TestDefinitionView.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TestView.resx">
+      <LastGenOutput>TestView.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ToolboxWindow.resx">

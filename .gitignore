@@ -7,7 +7,10 @@ Release/
 Debug/
 [Pp]ackages/
 *.pfx
+*.cer
 AppPackages/
+artifacts/installer/publish/
+artifacts/installer/msi/
 FlowBloxResources/data/README.txt
 FlowBloxResources/data/onnxruntimes/
 FlowBloxResources/data/onnxruntimesgenai/

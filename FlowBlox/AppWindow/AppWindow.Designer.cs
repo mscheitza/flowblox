@@ -89,9 +89,9 @@ namespace FlowBlox.AppWindow
             itmAbout = new System.Windows.Forms.ToolStripMenuItem();
             statusStrip = new System.Windows.Forms.StatusStrip();
             lblApplicationVersion = new System.Windows.Forms.ToolStripStatusLabel();
-            lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
+            lblNotificationMessage = new System.Windows.Forms.ToolStripStatusLabel();
+            lblNotificationAction = new System.Windows.Forms.ToolStripStatusLabel();
             imageList = new System.Windows.Forms.ImageList(components);
-            Background_TrialInfo = new System.ComponentModel.BackgroundWorker();
             saveFileDialog_GridImage = new System.Windows.Forms.SaveFileDialog();
             panelSeparator = new System.Windows.Forms.Panel();
             WarningStrip = new System.Windows.Forms.StatusStrip();
@@ -517,29 +517,38 @@ namespace FlowBlox.AppWindow
             // statusStrip
             // 
             statusStrip.BackColor = System.Drawing.Color.LightSlateGray;
-            statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { lblApplicationVersion, lblVersion });
+            statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { lblApplicationVersion, lblNotificationMessage, lblNotificationAction });
             statusStrip.Location = new System.Drawing.Point(0, 939);
             statusStrip.Name = "statusStrip";
             statusStrip.Size = new System.Drawing.Size(1404, 22);
             statusStrip.SizingGrip = false;
             statusStrip.TabIndex = 5;
+            statusStrip.Visible = false;
             // 
             // lblApplicationVersion
             // 
             lblApplicationVersion.Font = new System.Drawing.Font("Calibri", 9F);
             lblApplicationVersion.ForeColor = System.Drawing.Color.White;
             lblApplicationVersion.Name = "lblApplicationVersion";
-            lblApplicationVersion.Size = new System.Drawing.Size(235, 17);
-            lblApplicationVersion.Text = "Welcome. You are using flowblox $Version";
+            lblApplicationVersion.Size = new System.Drawing.Size(0, 17);
             // 
-            // lblVersion
+            // lblNotificationMessage
             // 
-            lblVersion.Font = new System.Drawing.Font("Calibri", 9F);
-            lblVersion.ForeColor = System.Drawing.Color.White;
-            lblVersion.Image = (System.Drawing.Image)resources.GetObject("lblVersion.Image");
-            lblVersion.Name = "lblVersion";
-            lblVersion.Size = new System.Drawing.Size(162, 17);
-            lblVersion.Text = "Trial Version - 30 days left";
+            lblNotificationMessage.Font = new System.Drawing.Font("Calibri", 9F);
+            lblNotificationMessage.ForeColor = System.Drawing.Color.White;
+            lblNotificationMessage.Name = "lblNotificationMessage";
+            lblNotificationMessage.Size = new System.Drawing.Size(156, 17);
+            lblNotificationMessage.Text = "Notification message text";
+            // 
+            // lblNotificationAction
+            // 
+            lblNotificationAction.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold);
+            lblNotificationAction.IsLink = true;
+            lblNotificationAction.LinkColor = System.Drawing.Color.LightSkyBlue;
+            lblNotificationAction.Name = "lblNotificationAction";
+            lblNotificationAction.Size = new System.Drawing.Size(76, 17);
+            lblNotificationAction.Text = "Run Action";
+            lblNotificationAction.Click += lblNotificationAction_Click;
             // 
             // imageList
             // 
@@ -549,11 +558,6 @@ namespace FlowBlox.AppWindow
             imageList.Images.SetKeyName(0, "TrialLow");
             imageList.Images.SetKeyName(1, "TrialNormal");
             imageList.Images.SetKeyName(2, "Full");
-            // 
-            // Background_TrialInfo
-            // 
-            Background_TrialInfo.DoWork += Background_TrialInfo_DoWork;
-            Background_TrialInfo.RunWorkerCompleted += Background_TrialInfo_RunWorkerCompleted;
             // 
             // saveFileDialog_GridImage
             // 
@@ -658,9 +662,9 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
         private System.Windows.Forms.ToolStripMenuItem itmAbout;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel lblVersion;
+        private System.Windows.Forms.ToolStripStatusLabel lblNotificationMessage;
+        private System.Windows.Forms.ToolStripStatusLabel lblNotificationAction;
         private System.Windows.Forms.ImageList imageList;
-        private System.ComponentModel.BackgroundWorker Background_TrialInfo;
         private System.Windows.Forms.ToolStripStatusLabel lblApplicationVersion;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.SaveFileDialog saveFileDialog_GridImage;

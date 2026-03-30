@@ -2604,6 +2604,12 @@ Multi-level XPath expressions are not allowed here.</value>
   <data name="VocabMergesConfiguration_DisplayName_Plural" xml:space="preserve">
     <value>Vocab/Merges Configurations</value>
   </data>
+  <data name="FlowBloxInputTemplateSyncMode_CreateIfNotExists" xml:space="preserve">
+    <value>CreateIfNotExists</value>
+  </data>
+  <data name="FlowBloxInputTemplateSyncMode_Overwrite" xml:space="preserve">
+    <value>Overwrite</value>
+  </data>
 </root>
 
 

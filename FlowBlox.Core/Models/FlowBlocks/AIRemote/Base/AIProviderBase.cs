@@ -40,6 +40,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         public string BaseUrl { get; set; }
 
         public abstract string ProviderType { get; }
+
         public virtual bool SupportsNativeResponseContinuation => false;
 
         protected AIProviderBase()
@@ -88,13 +89,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             catch (TaskCanceledException ex)
             {
                 runtime?.Report($"AI request cancelled or timed out.", FlowBloxLogLevel.Error, ex);
+                var innerMessage = ex.InnerException?.Message;
 
                 if (ct.IsCancellationRequested)
                 {
                     return new AIResponse
                     {
                         Success = false,
-                        Error = "AI request was cancelled."
+                        Error = string.IsNullOrWhiteSpace(innerMessage)
+                            ? "AI request was cancelled."
+                            : $"AI request was cancelled. Details: {innerMessage}"
                     };
                 }
                 else
@@ -102,7 +106,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
                     return new AIResponse
                     {
                         Success = false,
-                        Error = "AI request timed out."
+                        Error = string.IsNullOrWhiteSpace(innerMessage)
+                            ? $"AI request timed out after {timeoutSeconds}s."
+                            : $"AI request timed out after {timeoutSeconds}s. Details: {innerMessage}"
                     };
                 }   
             }

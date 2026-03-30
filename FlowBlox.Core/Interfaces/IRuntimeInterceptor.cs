@@ -25,6 +25,8 @@ namespace FlowBlox.Core.Interfaces
 
         void NotifyInvocationStarted(BaseFlowBlock flowBlock);
         void NotifyInvocationFinished(BaseFlowBlock flowBlock);
+        void NotifyBeforeFlowBlockValidation(BaseFlowBlock flowBlock);
+        bool ShouldCancelValidation(BaseFlowBlock flowBlock, bool validationFinished);
         void NotifyPreconditionsNotMet(BaseFlowBlock flowBlock, IReadOnlyList<string> messages);
         void NotifyIterationStarted(BaseFlowBlock flowBlock);
         void NotifyIterationFinished(BaseFlowBlock flowBlock);

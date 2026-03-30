@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -319,38 +319,20 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   <data name="AppWindow_UpdateCheck_Error_Message" xml:space="preserve">
 		<value>Fehler bei der Updateprüfung.</value>
 	</data>
-  <data name="AppWindow_UpdateCheck_Error_Title" xml:space="preserve">
-		<value>Updateprüfung</value>
-	</data>
   <data name="AppWindow_UpdateCheck_Exception_Message" xml:space="preserve">
 		<value>Beim Prüfen auf Updates ist ein unerwarteter Fehler aufgetreten.</value>
 	</data>
-  <data name="AppWindow_UpdateCheck_Exception_Title" xml:space="preserve">
-		<value>Updateprüfung</value>
-	</data>
   <data name="AppWindow_UpdateCheck_NotPackaged_Message" xml:space="preserve">
-		<value>Diese Funktion ist nur für die MSIX-installierte Version verfügbar.</value>
-	</data>
-  <data name="AppWindow_UpdateCheck_NotPackaged_Title" xml:space="preserve">
-		<value>Updateprüfung</value>
+		<value>Die Versionsüberprüfung konnte nicht durchgeführt werden, da keine Installer-Updatequelle konfiguriert ist.</value>
 	</data>
   <data name="AppWindow_UpdateCheck_NoUpdates_Message" xml:space="preserve">
 		<value>Kein Update verfügbar.</value>
 	</data>
-  <data name="AppWindow_UpdateCheck_NoUpdates_Title" xml:space="preserve">
-		<value>Updateprüfung</value>
-	</data>
   <data name="AppWindow_UpdateCheck_UnknownSource_Message" xml:space="preserve">
 		<value>Die Updatequelle ist unbekannt. Öffne die Website zur manuellen Prüfung.</value>
 	</data>
-  <data name="AppWindow_UpdateCheck_UnknownSource_Title" xml:space="preserve">
-		<value>Updateprüfung</value>
-	</data>
   <data name="AppWindow_UpdateInstall_Failed_Message" xml:space="preserve">
 		<value>Das Update konnte nicht installiert werden. Bitte versuche es später erneut oder lade die aktuelle Version von der Website.</value>
-	</data>
-  <data name="AppWindow_UpdateInstall_Failed_Title" xml:space="preserve">
-		<value>Update fehlgeschlagen</value>
 	</data>
   <data name="AppWindow_VisitOnline_Text" xml:space="preserve">
 		<value>FlowBlox-Website öffnen</value>
@@ -784,4 +766,18 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   <data name="AppWindow_itmRecentProjects_Text" xml:space="preserve">
     <value>Zuletzt geöffnete Projekte</value>
   </data>
+  <data name="AppWindow_Notification_UpdateAvailable_Message" xml:space="preserve">
+    <value>Ein neues FlowBlox-Update ist verfügbar.</value>
+  </data>
+  <data name="AppWindow_Notification_UpdateAvailable_Action_Text" xml:space="preserve">
+    <value>Update herunterladen</value>
+  </data>
+  <data name="AppWindow_Notification_UpdateDownloaded_Message" xml:space="preserve">
+    <value>Das Update-Installationspaket wurde heruntergeladen.</value>
+  </data>
+  <data name="AppWindow_Notification_UpdateInstallDownloaded_Action_Text" xml:space="preserve">
+    <value>Update installieren</value>
+  </data>
 </root>
+
+
