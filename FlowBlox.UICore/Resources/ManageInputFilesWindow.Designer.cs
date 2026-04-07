@@ -22,14 +22,14 @@ namespace FlowBlox.UICore.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ManageInputTemplatesWindow {
+    public class ManageInputFilesWindow {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ManageInputTemplatesWindow() {
+        internal ManageInputFilesWindow() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace FlowBlox.UICore.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ManageInputTemplatesWindow", typeof(ManageInputTemplatesWindow).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ManageInputFilesWindow", typeof(ManageInputFilesWindow).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -70,7 +70,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to download the template. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to download the input file. ähnelt.
         /// </summary>
         public static string Error_DownloadTemplateFailed {
             get {
@@ -79,7 +79,16 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to create template files in the input directory. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to execute input file command. ähnelt.
+        /// </summary>
+        public static string Error_ExecuteInputFileCommandFailed {
+            get {
+                return ResourceManager.GetString("Error_ExecuteInputFileCommandFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to create managed input files in the input directory. ähnelt.
         /// </summary>
         public static string Error_MaterializeTemplatesFailed {
             get {
@@ -97,7 +106,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to open the template file in Explorer. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to open the input file in Explorer. ähnelt.
         /// </summary>
         public static string Error_OpenTemplateInExplorerFailed {
             get {
@@ -106,7 +115,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to remove the template. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to remove the input file entry. ähnelt.
         /// </summary>
         public static string Error_RemoveTemplateFailed {
             get {
@@ -115,7 +124,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The template file was not found in the input directory. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The input file was not found in the input directory. ähnelt.
         /// </summary>
         public static string Error_TemplateFileMissing {
             get {
@@ -124,7 +133,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to upload the template. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed to upload the input file. ähnelt.
         /// </summary>
         public static string Error_UploadTemplateFailed {
             get {
@@ -133,11 +142,29 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manage file templates that will be created automatically in the project input directory when a project is loaded, if the files do not exist yet. Relative paths always refer to the project&apos;s input directory. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Command ähnelt.
+        /// </summary>
+        public static string Header_Command {
+            get {
+                return ResourceManager.GetString("Header_Command", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage project input files. These files can be used as fixed inputs, mocks or templates (e.g. XML, JSON, XLSX). With sync mode CreateIfNotExists they act like templates. Commands can be configured per input file for manual execution or before runtime start. ähnelt.
         /// </summary>
         public static string Header_Description_Main {
             get {
                 return ResourceManager.GetString("Header_Description_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execute before runtime start ähnelt.
+        /// </summary>
+        public static string Header_ExecuteBeforeRuntime {
+            get {
+                return ResourceManager.GetString("Header_ExecuteBeforeRuntime", resourceCulture);
             }
         }
         
@@ -187,7 +214,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manage Input File Templates ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage Input Files ähnelt.
         /// </summary>
         public static string Header_Title_Main {
             get {
@@ -196,7 +223,34 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Template has been saved. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Press Ctrl+F to insert placeholders, e.g. $InputFile:Path. ähnelt.
+        /// </summary>
+        public static string Hint_CommandFieldSelection {
+            get {
+                return ResourceManager.GetString("Hint_CommandFieldSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No command is configured for the selected input file. ähnelt.
+        /// </summary>
+        public static string Message_InputFileCommandMissing {
+            get {
+                return ResourceManager.GetString("Message_InputFileCommandMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input file command finished successfully. ähnelt.
+        /// </summary>
+        public static string Message_InputFileCommandSuccess {
+            get {
+                return ResourceManager.GetString("Message_InputFileCommandSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input file has been saved. ähnelt.
         /// </summary>
         public static string Message_TemplateDownloaded {
             get {
@@ -223,7 +277,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Input File Templates ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Managed Input Files ähnelt.
         /// </summary>
         public static string Title {
             get {
@@ -232,7 +286,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Create new template ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Create new input file entry ähnelt.
         /// </summary>
         public static string Tooltip_CreateTemplate {
             get {
@@ -241,11 +295,29 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Download template (save as file) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download managed input file (save as file) ähnelt.
         /// </summary>
         public static string Tooltip_DownloadTemplate {
             get {
                 return ResourceManager.GetString("Tooltip_DownloadTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execute command for selected input file ähnelt.
+        /// </summary>
+        public static string Tooltip_ExecuteInputFileCommand {
+            get {
+                return ResourceManager.GetString("Tooltip_ExecuteInputFileCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Insert field or replace selected text ähnelt.
+        /// </summary>
+        public static string Tooltip_InsertInputFilePlaceholder {
+            get {
+                return ResourceManager.GetString("Tooltip_InsertInputFilePlaceholder", resourceCulture);
             }
         }
         
@@ -259,7 +331,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Show template file in Explorer (inside input directory) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Show input file in Explorer (inside project input directory) ähnelt.
         /// </summary>
         public static string Tooltip_OpenTemplateInExplorer {
             get {
@@ -268,7 +340,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Remove template (file in input directory remains unchanged) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove managed input file entry (file on disk remains unchanged) ähnelt.
         /// </summary>
         public static string Tooltip_RemoveTemplate {
             get {
@@ -277,7 +349,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Upload template (replace content) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upload file content (replace) ähnelt.
         /// </summary>
         public static string Tooltip_UploadTemplate {
             get {

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using FlowBlox.Core.Util;
 
 namespace FlowBlox.Core.Models.Project
@@ -56,8 +57,71 @@ namespace FlowBlox.Core.Models.Project
             return fullTarget;
         }
 
+        public static string ReplaceInputTemplatePlaceholders(string input, FlowBloxProject project, FlowBloxInputFileTemplate template)
+        {
+            if (input == null)
+                return null;
+
+            if (project == null || template == null)
+                return input;
+
+            var absolutePath = string.Empty;
+            var relativePath = NormalizeRelativePath(template.RelativePath ?? string.Empty);
+
+            if (!string.IsNullOrWhiteSpace(relativePath) && !string.IsNullOrWhiteSpace(project.ProjectInputDirectory))
+            {
+                try
+                {
+                    absolutePath = BuildAbsoluteTargetPath(project.ProjectInputDirectory, relativePath);
+                }
+                catch
+                {
+                    absolutePath = string.Empty;
+                }
+            }
+
+            var replaced = input;
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile:Path", absolutePath);
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile::Path", absolutePath);
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile:RelativePath", relativePath);
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile::RelativePath", relativePath);
+
+            // Backward compatibility for legacy placeholder naming.
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputTemplate:Path", absolutePath);
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputTemplate::Path", absolutePath);
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputTemplate:RelativePath", relativePath);
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputTemplate::RelativePath", relativePath);
+            return replaced;
+        }
+
+        private static string ReplaceOrdinalIgnoreCase(string input, string search, string replacement)
+        {
+            if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(search))
+                return input;
+
+            var source = input;
+            var index = source.IndexOf(search, StringComparison.OrdinalIgnoreCase);
+            if (index < 0)
+                return source;
+
+            var builder = new StringBuilder(source.Length + Math.Max(0, replacement?.Length ?? 0));
+            var currentIndex = 0;
+            var replacementSafe = replacement ?? string.Empty;
+
+            while (index >= 0)
+            {
+                builder.Append(source, currentIndex, index - currentIndex);
+                builder.Append(replacementSafe);
+                currentIndex = index + search.Length;
+                index = source.IndexOf(search, currentIndex, StringComparison.OrdinalIgnoreCase);
+            }
+
+            builder.Append(source, currentIndex, source.Length - currentIndex);
+            return builder.ToString();
+        }
+
         /// <summary>
-        /// Synchronizes input template files in the project input directory according to SyncMode.
+        /// Synchronizes managed input files in the project input directory according to SyncMode.
         /// </summary>
         public static void EnsureInputFilesExist(FlowBloxProject project)
         {
@@ -65,14 +129,14 @@ namespace FlowBlox.Core.Models.Project
         }
 
         /// <summary>
-        /// Synchronizes all input templates into the project input directory according to each template SyncMode.
+        /// Synchronizes all managed input files into the project input directory according to each file SyncMode.
         /// </summary>
         public static void SynchronizeInputFiles(FlowBloxProject project)
         {
             if (project == null)
                 return;
 
-            if (project.InputTemplates == null || project.InputTemplates.Count == 0)
+            if (project.InputFiles == null || project.InputFiles.Count == 0)
                 return;
 
             var inputDir = project.ProjectInputDirectory;
@@ -81,7 +145,7 @@ namespace FlowBlox.Core.Models.Project
 
             Directory.CreateDirectory(inputDir);
 
-            foreach (var tpl in project.InputTemplates)
+            foreach (var tpl in project.InputFiles)
             {
                 if (tpl == null)
                     continue;
@@ -105,3 +169,5 @@ namespace FlowBlox.Core.Models.Project
         }
     }
 }
+
+

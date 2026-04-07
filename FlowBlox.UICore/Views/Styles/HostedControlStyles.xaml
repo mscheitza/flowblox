@@ -36,4 +36,18 @@
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
+    <Style x:Key="HostedControlToolbarIconBase"
+           TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="Foreground" Value="#FF4E7FB3" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="#9AA3AF" />
+                <Setter Property="Opacity" Value="1" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

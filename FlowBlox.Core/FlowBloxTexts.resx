@@ -617,6 +617,12 @@ All inputs are collected during the referenced block's iteration and this flow b
   <data name="FloxBloxCategory_ControlFlow" xml:space="preserve">
 		<value>Control flow</value>
 	</data>
+  <data name="FloxBloxCategory_Communication" xml:space="preserve">
+		<value>Communication</value>
+	</data>
+  <data name="FloxBloxCategory_Authorization" xml:space="preserve">
+		<value>Authorization</value>
+	</data>
   <data name="FloxBloxCategory_Extensions" xml:space="preserve">
 		<value>Extensions</value>
 	</data>
@@ -625,6 +631,9 @@ All inputs are collected during the referenced block's iteration and this flow b
 	</data>
   <data name="FloxBloxCategory_IO" xml:space="preserve">
 		<value>Input/output</value>
+	</data>
+  <data name="FloxBloxCategory_ShellExecution" xml:space="preserve">
+		<value>Shell execution</value>
 	</data>
   <data name="FloxBloxCategory_Logic" xml:space="preserve">
 		<value>Logic</value>
@@ -1989,6 +1998,12 @@ Note: Once a provider is loaded, switching providers within the same process is 
   <data name="GeminiAIProvider_DisplayName_Plural" xml:space="preserve">
 		<value>Gemini Providers</value>
 	</data>
+  <data name="AnthropicAIProvider_DisplayName" xml:space="preserve">
+		<value>Anthropic Provider</value>
+	</data>
+  <data name="AnthropicAIProvider_DisplayName_Plural" xml:space="preserve">
+		<value>Anthropic Providers</value>
+	</data>
   <data name="OpenAIProvider_OrganizationId" xml:space="preserve">
 		<value>Organization ID</value>
 	</data>
@@ -2346,6 +2361,9 @@ Multi-level XPath expressions are not allowed here.</value>
   <data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
 		<value>AI Property Value Prompts</value>
 	</data>
+  <data name="FlowBloxToolboxCategory_ShellExecution" xml:space="preserve">
+		<value>Shell Execution</value>
+	</data>
   <data name="AssistantConfiguration_DisplayName" xml:space="preserve">
 		<value>AI Assistant Configuration</value>
 	</data>
@@ -2609,6 +2627,144 @@ Multi-level XPath expressions are not allowed here.</value>
   </data>
   <data name="FlowBloxInputTemplateSyncMode_Overwrite" xml:space="preserve">
     <value>Overwrite</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_DisplayName" xml:space="preserve">
+    <value>Shell Execute</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_Description" xml:space="preserve">
+    <value>Executes an external command or script and exposes status and output as result fields.</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_Command" xml:space="preserve">
+    <value>Command</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_Command_Description" xml:space="preserve">
+    <value>Command line to execute. Supports placeholders and field mapping.</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_WorkingDirectory" xml:space="preserve">
+    <value>Working Directory</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_WorkingDirectory_Description" xml:space="preserve">
+    <value>Optional working directory for the command execution.</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_TimeoutMilliseconds" xml:space="preserve">
+    <value>Timeout (ms)</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_TimeoutMilliseconds_Description" xml:space="preserve">
+    <value>Optional timeout in milliseconds. Leave empty to wait indefinitely.</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_FailOnNonZeroExitCode" xml:space="preserve">
+    <value>Fail on non-zero exit code</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_FailOnNonZeroExitCode_Description" xml:space="preserve">
+    <value>If enabled, runtime throws an error when the command returns a non-zero exit code.</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_ReportStandardOutput" xml:space="preserve">
+    <value>Report standard output</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_ReportStandardOutput_Description" xml:space="preserve">
+    <value>If enabled, stdout and stderr lines are reported live to runtime logs.</value>
+  </data>
+  <data name="ShellExecuteFlowBlock_ResultFields" xml:space="preserve">
+    <value>Result Fields</value>
+  </data>
+  <data name="SMTPFlowBlock_DisplayName" xml:space="preserve">
+    <value>SMTP Mail</value>
+  </data>
+  <data name="SMTPFlowBlock_Description" xml:space="preserve">
+    <value>Sends emails via SMTP (legacy or SSL), including optional HTML body and dynamic attachments from fields.</value>
+  </data>
+  <data name="SMTPFlowBlock_Host" xml:space="preserve">
+    <value>SMTP host</value>
+  </data>
+  <data name="SMTPFlowBlock_Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="SMTPFlowBlock_UseSsl" xml:space="preserve">
+    <value>Use SSL</value>
+  </data>
+  <data name="SMTPFlowBlock_UseSsl_Tooltip" xml:space="preserve">
+    <value>Enable SSL/TLS for SMTP connection. Disable for legacy unencrypted SMTP.</value>
+  </data>
+  <data name="SMTPFlowBlock_UseAuthentication" xml:space="preserve">
+    <value>Use authentication</value>
+  </data>
+  <data name="SMTPFlowBlock_UserName" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="SMTPFlowBlock_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="SMTPFlowBlock_FromAddress" xml:space="preserve">
+    <value>From address</value>
+  </data>
+  <data name="SMTPFlowBlock_ToAddresses" xml:space="preserve">
+    <value>To addresses</value>
+  </data>
+  <data name="SMTPFlowBlock_ToAddresses_Tooltip" xml:space="preserve">
+    <value>One or more recipient addresses, separated by comma, semicolon, or new line.</value>
+  </data>
+  <data name="SMTPFlowBlock_CcAddresses" xml:space="preserve">
+    <value>Cc addresses</value>
+  </data>
+  <data name="SMTPFlowBlock_CcAddresses_Tooltip" xml:space="preserve">
+    <value>Optional Cc addresses, separated by comma, semicolon, or new line.</value>
+  </data>
+  <data name="SMTPFlowBlock_BccAddresses" xml:space="preserve">
+    <value>Bcc addresses</value>
+  </data>
+  <data name="SMTPFlowBlock_BccAddresses_Tooltip" xml:space="preserve">
+    <value>Optional Bcc addresses, separated by comma, semicolon, or new line.</value>
+  </data>
+  <data name="SMTPFlowBlock_Subject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="SMTPFlowBlock_Body" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="SMTPFlowBlock_IsBodyHtml" xml:space="preserve">
+    <value>Body is HTML</value>
+  </data>
+  <data name="SMTPFlowBlock_Attachments" xml:space="preserve">
+    <value>Attachment mappings</value>
+  </data>
+  <data name="SMTPFlowBlock_Notification_MailSendFailure" xml:space="preserve">
+    <value>Mail send failure</value>
+  </data>
+  <data name="SmtpAttachmentMappingEntry_DisplayName" xml:space="preserve">
+    <value>Attachment mapping entry</value>
+  </data>
+  <data name="SmtpAttachmentMappingEntry_FileName" xml:space="preserve">
+    <value>Attachment file name</value>
+  </data>
+  <data name="OAuthFlowBlock_DisplayName" xml:space="preserve">
+    <value>OAuth Access Token</value>
+  </data>
+  <data name="OAuthFlowBlock_Description" xml:space="preserve">
+    <value>Performs OAuth/OpenID client-credentials authorization and returns an access token.</value>
+  </data>
+  <data name="OAuthFlowBlock_TokenEndpoint" xml:space="preserve">
+    <value>Token endpoint</value>
+  </data>
+  <data name="OAuthFlowBlock_ClientId" xml:space="preserve">
+    <value>Client ID</value>
+  </data>
+  <data name="OAuthFlowBlock_ClientSecret" xml:space="preserve">
+    <value>Client secret</value>
+  </data>
+  <data name="OAuthFlowBlock_Scope" xml:space="preserve">
+    <value>Scope</value>
+  </data>
+  <data name="OAuthFlowBlock_Audience" xml:space="preserve">
+    <value>Audience</value>
+  </data>
+  <data name="OAuthFlowBlock_GrantType" xml:space="preserve">
+    <value>Grant type</value>
+  </data>
+  <data name="OAuthFlowBlock_SendClientCredentialsInBody" xml:space="preserve">
+    <value>Send client credentials in body</value>
+  </data>
+  <data name="OAuthFlowBlock_Notification_AuthorizationFailed" xml:space="preserve">
+    <value>Authorization failed</value>
   </data>
 </root>
 

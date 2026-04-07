@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace FlowBlox.UICore.Resolver
 {
@@ -197,9 +198,10 @@ namespace FlowBlox.UICore.Resolver
                 {
                     Content = new PackIconMaterial
                     {
-                        Kind = PackIconMaterialKind.CursorText,
+                        Kind = PackIconMaterialKind.Variable,
                         Width = IconSize,
-                        Height = IconSize
+                        Height = IconSize,
+                        Foreground = (Brush)new BrushConverter().ConvertFromString("#2F6DB3")
                     },
                     Margin = new Thickness(4, 0, 0, 0),
                     Padding = new Thickness(6, 0, 6, 0),

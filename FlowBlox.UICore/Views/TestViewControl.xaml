@@ -41,6 +41,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -63,43 +64,43 @@
                     <Button Command="{Binding CreateCommand}"
                             Style="{StaticResource TestView.ToolbarButtonStyle}"
                             ToolTip="{x:Static resources:TestView.Toolbar_Create_Tooltip}">
-                        <iconPacks:PackIconMaterial Kind="Plus" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        <iconPacks:PackIconMaterial Kind="Plus" Style="{StaticResource HostedControlToolbarIconBase}" />
                     </Button>
 
                     <Button Command="{Binding EditCommand}"
                             Style="{StaticResource TestView.ToolbarButtonStyle}"
                             ToolTip="{x:Static resources:TestView.Toolbar_Edit_Tooltip}">
-                        <iconPacks:PackIconMaterial Kind="Pencil" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        <iconPacks:PackIconMaterial Kind="Pencil" Style="{StaticResource HostedControlToolbarIconBase}" />
                     </Button>
 
                     <Button Command="{Binding DeleteCommand}"
                             Style="{StaticResource TestView.ToolbarButtonStyle}"
                             ToolTip="{x:Static resources:TestView.Toolbar_Delete_Tooltip}">
-                        <iconPacks:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        <iconPacks:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource HostedControlToolbarIconBase}" />
                     </Button>
 
                     <Button Command="{Binding RunCommand}"
                             Style="{StaticResource TestView.ToolbarButtonStyle}"
                             ToolTip="{x:Static resources:TestView.Toolbar_Run_Tooltip}">
-                        <iconPacks:PackIconMaterial Kind="Play" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        <iconPacks:PackIconMaterial Kind="Play" Style="{StaticResource HostedControlToolbarIconBase}" />
                     </Button>
 
                     <Button Command="{Binding OpenProtocolCommand}"
                             Style="{StaticResource TestView.ToolbarButtonStyle}"
                             ToolTip="{x:Static resources:TestView.Toolbar_OpenProtocol_Tooltip}">
-                        <iconPacks:PackIconMaterial Kind="FileDocumentOutline" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        <iconPacks:PackIconMaterial Kind="FileDocumentOutline" Style="{StaticResource HostedControlToolbarIconBase}" />
                     </Button>
 
                     <Button Command="{Binding ResetStatusCommand}"
                             Style="{StaticResource TestView.ToolbarButtonStyle}"
                             ToolTip="{x:Static resources:TestView.Toolbar_ResetStatus_Tooltip}">
-                        <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource HostedControlToolbarIconBase}" />
                     </Button>
 
                     <Button Command="{Binding RefreshCommand}"
                             Style="{StaticResource TestView.ToolbarButtonStyle}"
                             ToolTip="{x:Static resources:TestView.Toolbar_Refresh_Tooltip}">
-                        <iconPacks:PackIconMaterial Kind="Reload" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        <iconPacks:PackIconMaterial Kind="Reload" Style="{StaticResource HostedControlToolbarIconBase}" />
                     </Button>
                 </ToolBar>
             </ToolBarTray>
@@ -205,6 +206,25 @@
                         </GridViewColumn>
 
                         <GridViewColumn Header="{x:Static resources:TestView.Col_Name}" Width="240" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="{x:Static resources:TestDefinitionView.Label_RequiredForExecution}" Width="165">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate DataType="{x:Type testViewModels:TestCaseEntryViewModel}">
+                                    <iconPacks:PackIconMaterial Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <iconPacks:PackIconMaterial.Style>
+                                            <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                                                <Setter Property="Kind" Value="Close" />
+                                                <Setter Property="Foreground" Value="#111111" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RequiredForExecution}" Value="True">
+                                                        <Setter Property="Kind" Value="Check" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </iconPacks:PackIconMaterial.Style>
+                                    </iconPacks:PackIconMaterial>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="{x:Static resources:TestView.Col_RequiredFor}" Width="360" DisplayMemberBinding="{Binding RequiredFor}" />
                         <GridViewColumn Header="{x:Static resources:TestView.Col_DefinedAt}" Width="360" DisplayMemberBinding="{Binding DefinedAt}" />
                     </GridView>

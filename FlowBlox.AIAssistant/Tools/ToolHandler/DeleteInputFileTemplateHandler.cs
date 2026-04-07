@@ -10,7 +10,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Deletes an input file template by key (relative to $Project::InputDirectory).",
+            "Deletes a managed input file entry by key (relative to $Project::InputDirectory).",
             new JObject
             {
                 ["key"] = "string (relative path under $Project::InputDirectory)"
@@ -21,7 +21,7 @@ namespace FlowBlox.AIAssistant.Tools
             try
             {
                 var project = ToolHandlerUtilities.GetProject();
-                project.InputTemplates ??= new List<FlowBloxInputFileTemplate>();
+                project.InputFiles ??= new List<FlowBloxInputFileTemplate>();
 
                 var key = (args.Value<string>("key") ?? string.Empty).Trim();
                 if (string.IsNullOrWhiteSpace(key))
@@ -30,16 +30,16 @@ namespace FlowBlox.AIAssistant.Tools
                 FlowBloxInputTemplateHelper.ValidateRelativePathOrThrow(key);
                 var normalizedKey = FlowBloxInputTemplateHelper.NormalizeRelativePath(key);
 
-                var existing = project.InputTemplates.FirstOrDefault(x =>
+                var existing = project.InputFiles.FirstOrDefault(x =>
                     string.Equals(
                         FlowBloxInputTemplateHelper.NormalizeRelativePath(x?.RelativePath ?? string.Empty),
                         normalizedKey,
                         StringComparison.OrdinalIgnoreCase));
 
                 if (existing == null)
-                    return Task.FromResult(ToolHandlerUtilities.Fail($"Input template '{normalizedKey}' was not found."));
+                    return Task.FromResult(ToolHandlerUtilities.Fail($"Input file '{normalizedKey}' was not found."));
 
-                project.InputTemplates.Remove(existing);
+                project.InputFiles.Remove(existing);
 
                 // Keep behavior aligned with project-load synchronization path.
                 FlowBloxInputTemplateHelper.EnsureInputFilesExist(project);
@@ -49,7 +49,7 @@ namespace FlowBlox.AIAssistant.Tools
                     ["deleted"] = true,
                     ["key"] = normalizedKey,
                     ["projectInputDirectory"] = project.ProjectInputDirectory ?? string.Empty,
-                    ["note"] = "Existing file on disk is not removed automatically; only template reference is deleted."
+                    ["note"] = "Existing file on disk is not removed automatically; only the managed input file entry is deleted."
                 }));
             }
             catch (Exception ex)
@@ -59,3 +59,5 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
+

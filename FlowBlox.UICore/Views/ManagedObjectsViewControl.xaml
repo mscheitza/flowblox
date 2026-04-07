@@ -40,6 +40,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -84,25 +85,25 @@
                             <Button Command="{Binding AddCommand}"
                                     Style="{StaticResource ManagedObjects.ToolbarButtonStyle}"
                                     ToolTip="{x:Static resources:ManagedObjectsView.Toolbar_Add_Tooltip}">
-                                <iconPacks:PackIconMaterial Kind="Plus" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                                <iconPacks:PackIconMaterial Kind="Plus" Style="{StaticResource HostedControlToolbarIconBase}" />
                             </Button>
 
                             <Button Command="{Binding EditCommand}"
                                     Style="{StaticResource ManagedObjects.ToolbarButtonStyle}"
                                     ToolTip="{x:Static resources:ManagedObjectsView.Toolbar_Edit_Tooltip}">
-                                <iconPacks:PackIconMaterial Kind="Pencil" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                                <iconPacks:PackIconMaterial Kind="Pencil" Style="{StaticResource HostedControlToolbarIconBase}" />
                             </Button>
 
                             <Button Command="{Binding DeleteCommand}"
                                     Style="{StaticResource ManagedObjects.ToolbarButtonStyle}"
                                     ToolTip="{x:Static resources:ManagedObjectsView.Toolbar_Delete_Tooltip}">
-                                <iconPacks:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                                <iconPacks:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource HostedControlToolbarIconBase}" />
                             </Button>
 
                             <Button Command="{Binding RefreshCommand}"
                                     Style="{StaticResource ManagedObjects.ToolbarButtonStyle}"
                                     ToolTip="{x:Static resources:ManagedObjectsView.Toolbar_Refresh_Tooltip}">
-                                <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                                <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource HostedControlToolbarIconBase}" />
                             </Button>
 
                             <Menu VerticalAlignment="Center"

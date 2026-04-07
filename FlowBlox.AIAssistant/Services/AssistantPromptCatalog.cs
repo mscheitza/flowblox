@@ -55,9 +55,9 @@ namespace FlowBlox.AIAssistant.Services
                     "How to ensure downstream execution is guarded when upstream result datasets are empty."),
                 [InputFileTemplatesKey] = new PromptEntryDefinition(
                     InputFileTemplatesKey,
-                    "Explaining Input File Templates",
-                    "FlowBlox.AIAssistant.Prompts.ExplainingInputFileTemplates.txt",
-                    "How input file templates are used for schemas, mock data, and helper scripts.")
+                    "Explaining Managed Input Files",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingInputFiles.txt",
+                    "How managed input files are used for schemas, mock data, helper scripts and command execution.")
             };
 
         private static readonly Lazy<IReadOnlyDictionary<string, PromptEntry>> Entries = new(LoadEntries, isThreadSafe: true);

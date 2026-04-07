@@ -25,6 +25,7 @@
     <None Remove="Files\globalToolbox_sql_mssql.json" />
     <None Remove="Files\globalToolbox_sql_mysql.json" />
     <None Remove="Files\globalToolbox_sql_oracle.json" />
+    <None Remove="Files\globalToolbox_shellexecution.json" />
     <None Remove="Files\globalToolbox_xpath.json" />
     <None Remove="Models\FlowBlocks\WebBrowser\duplicate_tab_shortcut_1.5.1.0.crx" />
   </ItemGroup>
@@ -82,6 +83,7 @@
     <EmbeddedResource Include="Files\globalToolbox_sql_mssql.json" />
     <EmbeddedResource Include="Files\globalToolbox_sql_mysql.json" />
     <EmbeddedResource Include="Files\globalToolbox_sql_oracle.json" />
+    <EmbeddedResource Include="Files\globalToolbox_shellexecution.json" />
     <EmbeddedResource Include="Files\globalToolbox_xpath.json" />
   </ItemGroup>
   <ItemGroup>

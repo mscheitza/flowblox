@@ -4,6 +4,7 @@
     {
         Fields,
         ProjectProperties,
-        Options
+        Options,
+        InputFiles
     }
 }

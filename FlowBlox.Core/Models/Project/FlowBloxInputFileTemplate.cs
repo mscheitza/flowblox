@@ -10,6 +10,8 @@ namespace FlowBlox.Core.Models.Project
     {
         private string _relativePath;
         private string _contentBase64;
+        private string _command;
+        private bool _executeBeforeRuntime;
         private FlowBloxInputTemplateSyncMode _syncMode = FlowBloxInputTemplateSyncMode.CreateIfNotExists;
 
         /// <summary>
@@ -59,6 +61,39 @@ namespace FlowBlox.Core.Models.Project
                     return;
 
                 _syncMode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Optional command executed in runtime startup context.
+        /// Supports placeholders, including $InputFile:Path.
+        /// </summary>
+        public string Command
+        {
+            get => _command;
+            set
+            {
+                if (string.Equals(_command, value, StringComparison.Ordinal))
+                    return;
+
+                _command = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// If true, <see cref="Command"/> is executed before runtime starts.
+        /// </summary>
+        public bool ExecuteBeforeRuntime
+        {
+            get => _executeBeforeRuntime;
+            set
+            {
+                if (_executeBeforeRuntime == value)
+                    return;
+
+                _executeBeforeRuntime = value;
                 OnPropertyChanged();
             }
         }

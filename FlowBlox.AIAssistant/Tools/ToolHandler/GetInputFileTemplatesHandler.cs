@@ -10,13 +10,13 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns project input file templates (key is relative to $Project::InputDirectory). Returns metadata only.",
+            "Returns project managed input files (key is relative to $Project::InputDirectory). Returns metadata only.",
             new JObject());
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {
             var project = ToolHandlerUtilities.GetProject();
-            var templates = project.InputTemplates ?? new List<FlowBloxInputFileTemplate>();
+            var templates = project.InputFiles ?? new List<FlowBloxInputFileTemplate>();
 
             var items = new JArray(
                 templates
@@ -28,6 +28,7 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 ["projectInputDirectory"] = project.ProjectInputDirectory ?? string.Empty,
                 ["placeholderHint"] = "$Project::InputDirectory",
+                ["commandPlaceholderHint"] = "$InputFile:Path",
                 ["count"] = items.Count,
                 ["templates"] = items
             };
@@ -45,6 +46,8 @@ namespace FlowBlox.AIAssistant.Tools
                 ["key"] = normalizedKey,
                 ["relativePath"] = normalizedKey,
                 ["syncMode"] = template.SyncMode.ToString(),
+                ["command"] = template.Command ?? string.Empty,
+                ["executeBeforeRuntime"] = template.ExecuteBeforeRuntime,
                 ["sizeBytes"] = bytes.LongLength,
                 ["hasContent"] = bytes.LongLength > 0
             };
@@ -56,3 +59,5 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
+

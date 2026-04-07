@@ -39,7 +39,9 @@ namespace FlowBlox.AIAssistant.Services
                         Temperature = configuration?.Temperature ?? 0.0,
                         MaxTokens = configuration?.MaxTokens,
                         TimeoutSecondsOverride = Math.Max(provider.TimeoutSeconds, 180),
-                        PreviousResponseId = previousResponseId ?? string.Empty
+                        PreviousResponseId = provider.SupportsNativeResponseContinuation
+                            ? previousResponseId ?? string.Empty
+                            : string.Empty
                     };
 
                     request.Meta["Source"] = "FlowBloxAIAssistant";

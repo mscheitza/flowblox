@@ -1,4 +1,4 @@
-﻿using FlowBlox.AIAssistant.Helper;
+using FlowBlox.AIAssistant.Helper;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools.ToolHandler.Converter;
 using FlowBlox.Core.Models.Project;
@@ -13,7 +13,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns template content for a single key (relative to $Project::InputDirectory). Response fields: mimeType, key, textContent, converter, message.",
+            "Returns managed input file content for a single key (relative to $Project::InputDirectory). Response fields: mimeType, key, textContent, converter, message.",
             new JObject
             {
                 ["key"] = "string (relative path under $Project::InputDirectory)",
@@ -25,7 +25,7 @@ namespace FlowBlox.AIAssistant.Tools
             try
             {
                 var project = ToolHandlerUtilities.GetProject();
-                var templates = project.InputTemplates ?? new List<FlowBloxInputFileTemplate>();
+                var templates = project.InputFiles ?? new List<FlowBloxInputFileTemplate>();
 
                 var key = (args.Value<string>("key") ?? string.Empty).Trim();
                 if (string.IsNullOrWhiteSpace(key))
@@ -41,7 +41,7 @@ namespace FlowBlox.AIAssistant.Tools
                         StringComparison.OrdinalIgnoreCase));
 
                 if (template == null)
-                    return Task.FromResult(ToolHandlerUtilities.Fail($"Input template '{normalizedKey}' was not found."));
+                    return Task.FromResult(ToolHandlerUtilities.Fail($"Input file '{normalizedKey}' was not found."));
 
                 var bytes = template.ContentBytes ?? Array.Empty<byte>();
                 var extension = Path.GetExtension(normalizedKey) ?? string.Empty;
@@ -53,7 +53,7 @@ namespace FlowBlox.AIAssistant.Tools
 
                 if (bytes.Length == 0)
                 {
-                    message = "Template is empty.";
+                    message = "Input file is empty.";
                 }
                 else if (IsTextualMimeType(mimeType))
                 {
@@ -134,3 +134,5 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
+

@@ -232,6 +232,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input files ähnelt.
+        /// </summary>
+        public static string Tab_InputFiles {
+            get {
+                return ResourceManager.GetString("Tab_InputFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Options ähnelt.
         /// </summary>
         public static string Tab_Options {

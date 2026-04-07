@@ -74,15 +74,6 @@ namespace FlowBlox.Views
         }
 
         /// <summary>
-        /// Enables "Continue" instead of "Cancel"
-        /// </summary>
-        public void ShowContinueButton()
-        {
-            btCancel.Text = FlowBloxResourceUtil.GetLocalizedString("EditValueWindow_TextContinue", typeof(FlowBloxMainUITexts));
-            btCancel.ImageKey = "next.png";
-        }
-
-        /// <summary>
         /// Displays a list of suggestions in a ComboBox.
         /// </summary>
         /// <param name="suggestions"></param>

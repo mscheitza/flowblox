@@ -1,11 +1,13 @@
 ﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Views;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FlowBlox.UICore.Enums;
 using FlowBlox.Core.Utilities;
+using FlowBlox.Core.Util.WPF;
+using FlowBlox.UICore.Views;
+using FlowBlox.Core.Util.FlowBlocks;
 
 namespace FlowBlox.Grid.Elements.Util
 {
@@ -44,10 +46,10 @@ namespace FlowBlox.Grid.Elements.Util
 
         private static void EditRegularExpression(TextBox textBoxControl, string fieldName)
         {
-            EditValueWindow editValue = new EditValueWindow(true, true);
+            var editValue = new EditValueWindow(true, true);
             editValue.SetParameterName(fieldName.Replace("%%", string.Empty));
             editValue.SetMode(EditMode.Developer);
-            editValue.ShowDialog(textBoxControl.FindForm());
+            WindowsFormWPFHelper.ShowDialog(editValue, textBoxControl.FindForm());
             if (!string.IsNullOrEmpty(editValue.GetValue()))
             {
                 string text = textBoxControl.Text;
@@ -92,14 +94,20 @@ namespace FlowBlox.Grid.Elements.Util
                 string parameterName = GetSelectedParameter(textBox);
                 if (!string.IsNullOrEmpty(parameterName))
                 {
-                    InsertTextOrField insertTextOrField = new InsertTextOrField(flowBlock, parameterName, false);
-                    insertTextOrField.ShowDialog(textBox.FindForm());
-                    if (!insertTextOrField.SelectedValue.Equals(string.Empty))
+                    var insertTextOrField = new InsertTextOrFieldWindow(flowBlock, parameterName);
+                    if (WindowsFormWPFHelper.ShowDialog(insertTextOrField, textBox.FindForm()) == true &&
+                        !insertTextOrField.SelectedValue.Equals(string.Empty))
                     {
                         string text = textBox.Text;
                         text = text.Insert(textBox.SelectionStart, insertTextOrField.SelectedValue);
                         text = text.Replace(parameterName, insertTextOrField.SelectedValue);
                         textBox.Text = text;
+
+                        var selectedField = insertTextOrField.GetSelectedField();
+                        if (selectedField != null)
+                        {
+                            FlowBlockHelper.ApplyFieldSelectionRequiredOption(flowBlock, [selectedField], insertTextOrField.IsSelectedFieldRequired());
+                        }
                     }
                 }
             };

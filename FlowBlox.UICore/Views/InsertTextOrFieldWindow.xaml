@@ -1,0 +1,65 @@
+﻿<mah:MetroWindow
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    x:Class="FlowBlox.UICore.Views.InsertTextOrFieldWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    mc:Ignorable="d"
+    Title="{x:Static resources:InsertTextOrFieldWindow.Title}"
+    Width="700"
+    Height="300"
+    WindowStartupLocation="CenterOwner">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Margin="0,0,8,0"
+                       VerticalAlignment="Center"
+                       Text="{x:Static resources:InsertTextOrFieldWindow.LabelParameter}"/>
+            <TextBlock Grid.Column="1"
+                       x:Name="ParameterTextBlock"
+                       VerticalAlignment="Center"
+                       FontWeight="SemiBold"/>
+        </Grid>
+
+        <TextBlock Grid.Row="1" Text="{x:Static resources:InsertTextOrFieldWindow.LabelInsertText}" Margin="0,0,0,4"/>
+        <TextBox Grid.Row="2" x:Name="ValueTextBox" TextChanged="ValueTextBox_TextChanged" Margin="0,0,0,8"/>
+
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="{x:Static resources:InsertTextOrFieldWindow.LabelInsertField}" Margin="0,0,0,4"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="SelectedFieldTextBox" Grid.Column="0" IsReadOnly="True" Margin="0,0,8,0"/>
+                <Button Grid.Column="1"
+                        x:Name="SelectFieldButton"
+                        Content="{x:Static resources:InsertTextOrFieldWindow.ButtonSelectField}"
+                        Click="SelectFieldButton_Click"/>
+            </Grid>
+        </Grid>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Width="100" IsDefault="True" Margin="0,0,8,0" Click="ApplyButton_Click" Content="{x:Static resources:InsertTextOrFieldWindow.ButtonApply}"/>
+            <Button Width="100" IsCancel="True" Click="CancelButton_Click" Content="{x:Static resources:InsertTextOrFieldWindow.ButtonCancel}"/>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

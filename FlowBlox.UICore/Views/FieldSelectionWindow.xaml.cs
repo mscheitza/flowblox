@@ -28,10 +28,12 @@ namespace FlowBlox.UICore.Views
             FieldsListView.SelectionMode = _args.MultiSelect ? SelectionMode.Extended : SelectionMode.Single;
             ProjectPropertiesListView.SelectionMode = _args.MultiSelect ? SelectionMode.Extended : SelectionMode.Single;
             OptionsListView.SelectionMode = _args.MultiSelect ? SelectionMode.Extended : SelectionMode.Single;
+            InputFilesListView.SelectionMode = _args.MultiSelect ? SelectionMode.Extended : SelectionMode.Single;
 
             FieldsListView.SelectionChanged += (_, __) => RefreshOkEnabled();
             ProjectPropertiesListView.SelectionChanged += (_, __) => RefreshOkEnabled();
             OptionsListView.SelectionChanged += (_, __) => RefreshOkEnabled();
+            InputFilesListView.SelectionChanged += (_, __) => RefreshOkEnabled();
 
             RefreshOkEnabled();
         }
@@ -46,9 +48,13 @@ namespace FlowBlox.UICore.Views
             {
                 OkButton.IsEnabled = ProjectPropertiesListView.SelectedItems != null && ProjectPropertiesListView.SelectedItems.Count > 0;
             }
-            else
+            else if (_vm.IsOptionsMode)
             {
                 OkButton.IsEnabled = OptionsListView.SelectedItems != null && OptionsListView.SelectedItems.Count > 0;
+            }
+            else
+            {
+                OkButton.IsEnabled = InputFilesListView.SelectedItems != null && InputFilesListView.SelectedItems.Count > 0;
             }
         }
 
@@ -76,6 +82,7 @@ namespace FlowBlox.UICore.Views
                 res.SelectedFields = selected;
                 res.SelectedOptions = new List<OptionElement>();
                 res.SelectedProjectProperties = new List<FlowBloxProjectPropertyElement>();
+                res.SelectedInputFiles = new List<FlowBloxInputFilePlaceholderElement>();
             }
             else if (_vm.IsProjectPropertiesMode)
             {
@@ -88,9 +95,10 @@ namespace FlowBlox.UICore.Views
                 res.SelectedProjectProperties = selected;
                 res.SelectedFields = new List<FieldElement>();
                 res.SelectedOptions = new List<OptionElement>();
+                res.SelectedInputFiles = new List<FlowBloxInputFilePlaceholderElement>();
                 res.IsRequired = false;
             }
-            else
+            else if (_vm.IsOptionsMode)
             {
                 var selected = OptionsListView.SelectedItems.Cast<object>()
                     .Select(x => x as OptionRowViewModel)
@@ -101,6 +109,21 @@ namespace FlowBlox.UICore.Views
                 res.SelectedOptions = selected;
                 res.SelectedFields = new List<FieldElement>();
                 res.SelectedProjectProperties = new List<FlowBloxProjectPropertyElement>();
+                res.SelectedInputFiles = new List<FlowBloxInputFilePlaceholderElement>();
+                res.IsRequired = false;
+            }
+            else
+            {
+                var selected = InputFilesListView.SelectedItems.Cast<object>()
+                    .Select(x => x as InputFileRowViewModel)
+                    .Where(x => x?.InputFileElement != null)
+                    .Select(x => x.InputFileElement)
+                    .ToList();
+
+                res.SelectedInputFiles = selected;
+                res.SelectedFields = new List<FieldElement>();
+                res.SelectedProjectProperties = new List<FlowBloxProjectPropertyElement>();
+                res.SelectedOptions = new List<OptionElement>();
                 res.IsRequired = false;
             }
 
@@ -120,6 +143,12 @@ namespace FlowBlox.UICore.Views
         }
 
         private void OptionsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (OkButton.IsEnabled)
+                _vm.OkCommand.Execute(null);
+        }
+
+        private void InputFilesListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (OkButton.IsEnabled)
                 _vm.OkCommand.Execute(null);

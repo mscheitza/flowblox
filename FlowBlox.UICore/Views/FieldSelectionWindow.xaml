@@ -214,6 +214,50 @@
                             </Grid>
                         </TabItem>
 
+                        <!-- Input files -->
+                        <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_InputFiles}"
+                                 Visibility="{Binding CanSelectInputFiles, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TabItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                        <iconPacks:PackIconMaterial Kind="FileDocumentOutline"
+                                        Width="16"
+                                        Height="16"
+                                        Margin="0,0,8,0"
+                                        VerticalAlignment="Center"
+                                        Foreground="#1565C0"/>
+                                        <TextBlock Text="{Binding}"
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Padding="0,5"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabItem.HeaderTemplate>
+
+                            <Grid>
+                                <ListView x:Name="InputFilesListView"
+                                          ItemsSource="{Binding InputFileRows}"
+                                          MouseDoubleClick="InputFilesListView_MouseDoubleClick">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyName}"
+                                                            DisplayMemberBinding="{Binding Name}"
+                                                            Width="260"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyKey}"
+                                                            DisplayMemberBinding="{Binding Key}"
+                                                            Width="220"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyDescription}"
+                                                            DisplayMemberBinding="{Binding Description}"
+                                                            Width="320"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyValue}"
+                                                            DisplayMemberBinding="{Binding Value}"
+                                                            Width="160"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
+
                     </TabControl>
                 </Grid>
             </ScrollViewer>

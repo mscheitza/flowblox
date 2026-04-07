@@ -538,6 +538,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Anthropic Provider ähnelt.
+        /// </summary>
+        public static string AnthropicAIProvider_DisplayName {
+            get {
+                return ResourceManager.GetString("AnthropicAIProvider_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Anthropic Providers ähnelt.
+        /// </summary>
+        public static string AnthropicAIProvider_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("AnthropicAIProvider_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Configure provider and request defaults for the AI Assistant. ähnelt.
         /// </summary>
         public static string AssistantConfiguration_Description {
@@ -2557,6 +2575,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Shell Execution ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_ShellExecution {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_ShellExecution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die SQL ähnelt.
         /// </summary>
         public static string FlowBloxToolboxCategory_SQL {
@@ -2593,11 +2620,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Authorization ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_Authorization {
+            get {
+                return ResourceManager.GetString("FloxBloxCategory_Authorization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Calculation ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Calculation {
             get {
                 return ResourceManager.GetString("FloxBloxCategory_Calculation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Communication ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_Communication {
+            get {
+                return ResourceManager.GetString("FloxBloxCategory_Communication", resourceCulture);
             }
         }
         
@@ -2697,6 +2742,15 @@ namespace FlowBlox.Core {
         public static string FloxBloxCategory_Serialization_XML {
             get {
                 return ResourceManager.GetString("FloxBloxCategory_Serialization_XML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Shell execution ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_ShellExecution {
+            get {
+                return ResourceManager.GetString("FloxBloxCategory_ShellExecution", resourceCulture);
             }
         }
         
@@ -4124,6 +4178,96 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Audience ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_Audience {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_Audience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Client ID ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_ClientId {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_ClientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Client secret ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_ClientSecret {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_ClientSecret", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Performs OAuth/OpenID client-credentials authorization and returns an access token. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OAuth Access Token ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Grant type ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_GrantType {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_GrantType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Authorization failed ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_Notification_AuthorizationFailed {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_Notification_AuthorizationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Scope ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_Scope {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_Scope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Send client credentials in body ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_SendClientCredentialsInBody {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_SendClientCredentialsInBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Token endpoint ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_TokenEndpoint {
+            get {
+                return ResourceManager.GetString("OAuthFlowBlock_TokenEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Execution provider ähnelt.
         /// </summary>
         public static string OnnxBaseFlowBlock_AiExecutionProvider {
@@ -5395,6 +5539,330 @@ namespace FlowBlox.Core {
         public static string SequenceDetectionGenerationStrategy_DisplayName {
             get {
                 return ResourceManager.GetString("SequenceDetectionGenerationStrategy_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Command ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_Command {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_Command", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Command line to execute. Supports placeholders and field mapping. ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_Command_Description {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_Command_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Executes an external command or script and exposes status and output as result fields. ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Shell Execute ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fail on non-zero exit code ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_FailOnNonZeroExitCode {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_FailOnNonZeroExitCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, runtime throws an error when the command returns a non-zero exit code. ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_FailOnNonZeroExitCode_Description {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_FailOnNonZeroExitCode_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Report standard output ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_ReportStandardOutput {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_ReportStandardOutput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, stdout and stderr lines are reported live to runtime logs. ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_ReportStandardOutput_Description {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_ReportStandardOutput_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result Fields ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_ResultFields {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_ResultFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (ms) ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_TimeoutMilliseconds {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_TimeoutMilliseconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional timeout in milliseconds. Leave empty to wait indefinitely. ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_TimeoutMilliseconds_Description {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_TimeoutMilliseconds_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Working Directory ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_WorkingDirectory {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_WorkingDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional working directory for the command execution. ähnelt.
+        /// </summary>
+        public static string ShellExecuteFlowBlock_WorkingDirectory_Description {
+            get {
+                return ResourceManager.GetString("ShellExecuteFlowBlock_WorkingDirectory_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Attachment mapping entry ähnelt.
+        /// </summary>
+        public static string SmtpAttachmentMappingEntry_DisplayName {
+            get {
+                return ResourceManager.GetString("SmtpAttachmentMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Attachment file name ähnelt.
+        /// </summary>
+        public static string SmtpAttachmentMappingEntry_FileName {
+            get {
+                return ResourceManager.GetString("SmtpAttachmentMappingEntry_FileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Attachment mappings ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Attachments {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Attachments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bcc addresses ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_BccAddresses {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_BccAddresses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional Bcc addresses, separated by comma, semicolon, or new line. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_BccAddresses_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_BccAddresses_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Body ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Body {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cc addresses ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_CcAddresses {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_CcAddresses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional Cc addresses, separated by comma, semicolon, or new line. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_CcAddresses_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_CcAddresses_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sends emails via SMTP (legacy or SSL), including optional HTML body and dynamic attachments from fields. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SMTP Mail ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die From address ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_FromAddress {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_FromAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SMTP host ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Host {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Body is HTML ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_IsBodyHtml {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_IsBodyHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mail send failure ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Notification_MailSendFailure {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Notification_MailSendFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Password {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Port ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Port {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Port", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Subject ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Subject {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die To addresses ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_ToAddresses {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_ToAddresses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die One or more recipient addresses, separated by comma, semicolon, or new line. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_ToAddresses_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_ToAddresses_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use authentication ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_UseAuthentication {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_UseAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_UserName {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use SSL ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_UseSsl {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_UseSsl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enable SSL/TLS for SMTP connection. Disable for legacy unencrypted SMTP. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_UseSsl_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_UseSsl_Tooltip", resourceCulture);
             }
         }
         

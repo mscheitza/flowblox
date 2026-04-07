@@ -113,7 +113,15 @@ namespace FlowBlox.Core.Models.Project
             return Path.Combine(baseDir, safeName);
         }
 
-        public List<FlowBloxInputFileTemplate> InputTemplates { get; set; }
+        [JsonProperty("InputFiles")]
+        public List<FlowBloxInputFileTemplate> InputFiles { get; set; }
+
+        [JsonProperty("InputTemplates")]
+        public List<FlowBloxInputFileTemplate> InputTemplates
+        {
+            get => InputFiles;
+            set => InputFiles = value ?? new List<FlowBloxInputFileTemplate>();
+        }
 
         public FlowBloxProject()
         {
@@ -123,7 +131,7 @@ namespace FlowBlox.Core.Models.Project
             FlowBloxRegistry = new FlowBloxRegistry();
             Extensions = new List<FlowBloxProjectExtension>();
             ProjectDependendDataObjects = new List<IProjectDependendData>();
-            InputTemplates = new List<FlowBloxInputFileTemplate>();
+            InputFiles = new List<FlowBloxInputFileTemplate>();
             _logger.Info("FlowBloxProject instance created.");
         }
 
@@ -168,6 +176,38 @@ namespace FlowBlox.Core.Models.Project
                     DisplayName = "Description",
                     Description = "Description of the project.",
                     Value = ProjectDescription ?? string.Empty
+                }
+            };
+        }
+
+        /// <summary>
+        /// Returns available input file placeholders for command editing.
+        /// </summary>
+        public IReadOnlyList<FlowBloxInputFilePlaceholderElement> GetInputFilePlaceholderElements(FlowBloxInputFileTemplate inputFile = null)
+        {
+            var relativePath = FlowBloxInputTemplateHelper.NormalizeRelativePath(inputFile?.RelativePath ?? string.Empty);
+            var absolutePath = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(relativePath) && !string.IsNullOrWhiteSpace(ProjectInputDirectory))
+            {
+                try
+                {
+                    absolutePath = FlowBloxInputTemplateHelper.BuildAbsoluteTargetPath(ProjectInputDirectory, relativePath);
+                }
+                catch
+                {
+                    absolutePath = string.Empty;
+                }
+            }
+
+            return new List<FlowBloxInputFilePlaceholderElement>
+            {
+                new FlowBloxInputFilePlaceholderElement
+                {
+                    Key = "Path",
+                    DisplayName = "Input file path",
+                    Description = "Absolute path to the current managed input file.",
+                    Value = absolutePath
                 }
             };
         }
@@ -411,14 +451,14 @@ namespace FlowBlox.Core.Models.Project
                 loadedComponent.OnAfterLoad();
             }
 
-            // Input templates -> materialize input files if missing
+            // Managed input files -> materialize input files if missing
             try
             {
                 FlowBloxInputTemplateHelper.EnsureInputFilesExist(this);
             }
             catch (Exception ex)
             {
-                _logger.Error("Failed to materialize input templates.", ex);
+                _logger.Error("Failed to materialize managed input files.", ex);
             }
 
             _logger.Info("Project loaded successfully.");

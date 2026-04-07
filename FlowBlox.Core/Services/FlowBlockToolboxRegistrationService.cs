@@ -17,7 +17,8 @@ namespace FlowBlox.Core.Services
                 FlowBloxToolboxCategory.Filter,
                 FlowBloxToolboxCategory.DBConnection,
                 FlowBloxToolboxCategory.ChatTemplates,
-                FlowBloxToolboxCategory.AIPropertyValueGenerationPrompts
+                FlowBloxToolboxCategory.AIPropertyValueGenerationPrompts,
+                FlowBloxToolboxCategory.ShellExecution
             ];
         }
 
@@ -36,7 +37,8 @@ namespace FlowBlox.Core.Services
                 "FlowBlox.Core.Files.globalToolbox_sql_oracle.json",
                 "FlowBlox.Core.Files.globalToolbox_xpath.json",
                 "FlowBlox.Core.Files.globalToolbox_chattemplates.json",
-                "FlowBlox.Core.Files.globalToolbox_aipropertyvaluegenerationprompts.json"
+                "FlowBlox.Core.Files.globalToolbox_aipropertyvaluegenerationprompts.json",
+                "FlowBlox.Core.Files.globalToolbox_shellexecution.json"
             ];
         }
     }

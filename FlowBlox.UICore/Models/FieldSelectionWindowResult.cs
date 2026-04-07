@@ -14,6 +14,8 @@ namespace FlowBlox.UICore.Models
 
         public List<OptionElement> SelectedOptions { get; set; } = new List<OptionElement>();
 
+        public List<FlowBloxInputFilePlaceholderElement> SelectedInputFiles { get; set; } = new List<FlowBloxInputFilePlaceholderElement>();
+
         public bool IsRequired { get; set; }
     }
 }

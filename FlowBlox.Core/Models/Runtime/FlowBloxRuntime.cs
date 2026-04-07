@@ -31,6 +31,8 @@ namespace FlowBlox.Core.Models.Runtime
             if (requiredTestDefinitions.Count == 0)
                 return;
 
+            Report($"Run required test cases...");
+
             var registry = FlowBloxRegistryProvider.GetRegistry();
             var failedTests = new List<FlowBloxTestDefinition>();
             foreach (var testDefinition in requiredTestDefinitions)
@@ -52,7 +54,10 @@ namespace FlowBlox.Core.Models.Runtime
             }
 
             if (!failedTests.Any())
+            {
+                Report($"All required test cases passed successfully ({requiredTestDefinitions.Count}).");
                 return;
+            }
 
             var failedDescriptions = failedTests.Select(testDefinition =>
             {
@@ -107,6 +112,7 @@ namespace FlowBlox.Core.Models.Runtime
 
         protected override void OnBeforeRuntimeStarted(BaseFlowBlock startFlowBlock, IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<IManagedObject> managedObjects)
         {
+            ExecuteInputTemplateStartupCommands();
             ExecuteRequiredTestDefinitions();
 
             base.OnBeforeRuntimeStarted(startFlowBlock, flowBlocks, managedObjects);

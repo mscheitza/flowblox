@@ -170,6 +170,7 @@ namespace FlowBlox.UICore.ViewModels
                     var row = new TestCaseEntryViewModel(testDefinition)
                     {
                         Name = testDefinition.Name ?? string.Empty,
+                        RequiredForExecution = testDefinition.RequiredForExecution,
                         RequiredFor = BuildRequiredForText(testDefinition),
                         DefinedAt = BuildDefinedAtText(testDefinition)
                     };

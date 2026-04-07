@@ -6,6 +6,7 @@ using FlowBlox.Core;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Util.WPF;
 
 namespace FlowBlox.Views
 {
@@ -167,8 +168,8 @@ namespace FlowBlox.Views
             List<OptionElement> OptionElements = options.GetOptions();
             OptionElement NewOptionElement = new OptionElement();
 
-            EditValueWindow EditValue = new EditValueWindow(false, false);
-            EditValue.ShowDialog(this);
+            var EditValue = new FlowBlox.UICore.Views.EditValueWindow(false, false);
+            WindowsFormWPFHelper.ShowDialog(EditValue, this);
             if (!string.IsNullOrEmpty(EditValue.GetValue()))
             {
                 string OptionName = EditValue.GetValue();

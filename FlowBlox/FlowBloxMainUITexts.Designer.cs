@@ -268,7 +268,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manage input file templates ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage input files ähnelt.
         /// </summary>
         internal static string AppWindow_itmManageInputTemplates_Text {
             get {
@@ -583,7 +583,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Install update ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download update ähnelt.
         /// </summary>
         internal static string AppWindow_Notification_UpdateAvailable_Action_Text {
             get {
@@ -597,6 +597,24 @@ namespace FlowBlox {
         internal static string AppWindow_Notification_UpdateAvailable_Message {
             get {
                 return ResourceManager.GetString("AppWindow_Notification_UpdateAvailable_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The update installer has been downloaded. ähnelt.
+        /// </summary>
+        internal static string AppWindow_Notification_UpdateDownloaded_Message {
+            get {
+                return ResourceManager.GetString("AppWindow_Notification_UpdateDownloaded_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Install update ähnelt.
+        /// </summary>
+        internal static string AppWindow_Notification_UpdateInstallDownloaded_Action_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_Notification_UpdateInstallDownloaded_Action_Text", resourceCulture);
             }
         }
         
@@ -776,7 +794,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This feature is only available for the MSIX-installed version. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Version check could not be performed because no installer update source is configured. ähnelt.
         /// </summary>
         internal static string AppWindow_UpdateCheck_NotPackaged_Message {
             get {

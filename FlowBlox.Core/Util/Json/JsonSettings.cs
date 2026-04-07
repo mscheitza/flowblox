@@ -75,6 +75,7 @@ namespace FlowBlox.Core.Util.Json
             jsonSettings.Formatting = Formatting.None;
             jsonSettings.NullValueHandling = NullValueHandling.Ignore;
             jsonSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+            jsonSettings.ContractResolver = new AiAssistantProjectContractResolver();
             return jsonSettings;
         }
 

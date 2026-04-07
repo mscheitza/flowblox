@@ -1,0 +1,30 @@
+Managed Input Files
+
+Purpose:
+- Use managed input files when a flow expects input files in a defined format (for example CSV, XLSX, JSON, XML).
+- Managed input files are synchronized to $Project::InputDirectory after AI Assistant actions and on project load.
+- Use generatedTemplate with textContent as default content source.
+- Supported converters: Csv2XlsxConverter (CSV text -> XLSX file), Csv2XlsConverter (CSV text -> XLS file).
+- FlowBlox v{{FLOWBLOX_VERSION}} note: direct binary-content authoring via AI Assistant managed-input-file calls is not supported; provide textContent and optional converter instead.
+- For content inspection, use GetInputFileTemplateContent for a specific key (returns mimeType, key, textContent, converter, message).
+- Commands can be stored per managed input file using CreateOrUpdateInputFileTemplate arguments:
+  - command (optional)
+  - executeBeforeRuntime (optional)
+- Use placeholder $InputFile:Path inside command values.
+
+Path rule:
+- Managed input file key is always relative to $Project::InputDirectory.
+
+Sync modes:
+1) CreateIfNotExists (default): write only if file is missing.
+2) AlwaysOverwrite: write on every synchronization.
+
+Use case 1 (schema/sample input):
+- Provide a starter file that matches the expected format/columns/structure.
+- Example: input.csv, input.xlsx, input.json, input.xml.
+- Recommended mode: CreateIfNotExists.
+
+Use case 2 (helper script):
+- Provide a script file needed by the project setup (for example model/download preparation).
+- Recommended mode: AlwaysOverwrite.
+- Optionally set command + executeBeforeRuntime for automatic execution before runtime start.

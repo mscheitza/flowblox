@@ -10,7 +10,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>FlowBlox and contributors</Company>
-    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
+    <Copyright>Copyright (c) 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
     <Authors>FlowBlox and contributors</Authors>
     <Product>FlowBlox</Product>
   </PropertyGroup>
@@ -70,6 +70,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>EditProjectVersionMetadataWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\EditValueWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EditValueWindow.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\EditUserPropertiesWindow.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -100,15 +105,20 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\InsertTextOrFieldWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InsertTextOrFieldWindow.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\LoginWindow.Designer.cs">
       <DependentUpon>LoginWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Resources\ManageInputTemplatesWindow.Designer.cs">
+    <Compile Update="Resources\ManageInputFilesWindow.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ManageInputTemplatesWindow.resx</DependentUpon>
+      <DependentUpon>ManageInputFilesWindow.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\ManagedObjectsView.Designer.cs">
       <DependentUpon>ManagedObjectsView.resx</DependentUpon>
@@ -212,6 +222,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditProjectVersionMetadataWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\EditValueWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditValueWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\EditUserPropertiesWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EditUserPropertiesWindow.Designer.cs</LastGenOutput>
@@ -236,13 +250,17 @@
       <LastGenOutput>InsightWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\InsertTextOrFieldWindow.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InsertTextOrFieldWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\LoginWindow.resx">
       <LastGenOutput>LoginWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ManageInputTemplatesWindow.resx">
+    <EmbeddedResource Update="Resources\ManageInputFilesWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ManageInputTemplatesWindow.Designer.cs</LastGenOutput>
+      <LastGenOutput>ManageInputFilesWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ManagedObjectsView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -298,3 +316,4 @@
     </EmbeddedResource>
   </ItemGroup>
 </Project>
+

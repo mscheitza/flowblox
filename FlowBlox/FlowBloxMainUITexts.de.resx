@@ -752,7 +752,7 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
 		<value>Eingabeverzeichnis öffnen</value>
 	</data>
   <data name="AppWindow_itmManageInputTemplates_Text" xml:space="preserve">
-		<value>Eingabe-Dateivorlagen verwalten</value>
+		<value>Eingabedateien verwalten</value>
 	</data>
   <data name="ProjectPanel_labelInvoke_Text" xml:space="preserve">
 		<value>Aufruf</value>

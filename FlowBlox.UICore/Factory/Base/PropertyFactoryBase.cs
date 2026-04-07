@@ -4,6 +4,7 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using System.Collections;
 using System.Reflection;
@@ -36,29 +37,14 @@ namespace FlowBlox.UICore.Factory.Base
             {
                 if (_flowBlockUIAttribute?.CreatableTypes != null && _flowBlockUIAttribute.CreatableTypes.Length > 0)
                 {
-                    types = _flowBlockUIAttribute.CreatableTypes
-                        .Where(t => t != null)
-                        .Where(t => propertyType.IsAssignableFrom(t))
-                        .Where(t => !t.IsAbstract && !t.IsInterface)
-                        .Where(t =>
-                        {
-                            var attr = t.GetCustomAttribute<FlowBloxSupportedTypesAttribute>();
-                            return attr == null || attr.SupportedTypes.Any(x => x.IsAssignableFrom(_target.GetType()));
-                        })
-                        .Distinct()
-                        .ToList();
+                    types = FlowBloxSupportedTypesResolver.ResolveSupportedTypes(
+                        _target,
+                        propertyType,
+                        _flowBlockUIAttribute.CreatableTypes);
                 }
                 else
                 {
-                    types = AppDomain.CurrentDomain.GetAssemblies()
-                        .SelectMany(a => a.GetTypes())
-                        .Where(t => propertyType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface)
-                        .Where(t =>
-                        {
-                            var attr = t.GetCustomAttribute<FlowBloxSupportedTypesAttribute>();
-                            return attr == null || attr.SupportedTypes.Any(x => x.IsAssignableFrom(_target.GetType()));
-                        })
-                        .ToList();
+                    types = FlowBloxSupportedTypesResolver.ResolveSupportedTypes(_target, propertyType);
                 }   
             }
             else

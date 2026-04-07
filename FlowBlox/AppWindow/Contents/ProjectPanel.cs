@@ -319,7 +319,7 @@ namespace FlowBlox.AppWindow.Contents
 
         private bool AssignFlowBlockName(BaseFlowBlock flowBlock)
         {
-            EditValueWindow editValueWindow = new EditValueWindow(flowBlock.Name, false, false)
+            var editValueWindow = new FlowBlox.UICore.Views.EditValueWindow(flowBlock.Name, false, false)
             {
                 Title = string.Format(FlowBloxResourceUtil.GetLocalizedString($"ProjectPanel_AssignFlowBlockName_Title"), FlowBloxComponentHelper.GetDisplayName(flowBlock)),
                 Description = FlowBloxResourceUtil.GetLocalizedString($"ProjectPanel_AssignFlowBlockName_Description"),
@@ -327,7 +327,8 @@ namespace FlowBlox.AppWindow.Contents
                 SelectionLength = flowBlock.Name.Length - flowBlock.NamePrefix.Length
             };
 
-            if (editValueWindow.ShowDialog(this) == DialogResult.OK)
+            var owner = (Form)AppWindow.Instance ?? ControlHelper.FindParentOfType<Form>(this, true) ?? this;
+            if (WindowsFormWPFHelper.ShowDialog(editValueWindow, owner) == true)
             {
                 string oldName = flowBlock.Name;
                 string newName = editValueWindow.GetValue();
@@ -698,19 +699,16 @@ namespace FlowBlox.AppWindow.Contents
                 var gridElement = _recentFlowBlock.InternalFlowBlock;
                 string value = (gridElement.ElementIndex >= 0) ? gridElement.ElementIndex.ToString() : string.Empty;
 
-                EditValueWindow editValueWindow;
+                FlowBlox.UICore.Views.EditValueWindow editValueWindow;
                 if (value.Equals(string.Empty))
-                {
-                    editValueWindow = new EditValueWindow(false, false);
-                }
+                    editValueWindow = new FlowBlox.UICore.Views.EditValueWindow(false, false);
                 else
-                {
-                    editValueWindow = new EditValueWindow(value, false, false);
-                }
+                    editValueWindow = new FlowBlox.UICore.Views.EditValueWindow(value, false, false);
 
                 editValueWindow.SetParameterName("Element.Index");
                 editValueWindow.SetMode(EditMode.Developer);
-                editValueWindow.ShowDialog(this);
+                var owner = (Form)AppWindow.Instance ?? ControlHelper.FindParentOfType<Form>(this, true) ?? this;
+                WindowsFormWPFHelper.ShowDialog(editValueWindow, owner);
                 if (!string.IsNullOrEmpty(editValueWindow.GetValue()))
                 {
                     int index;

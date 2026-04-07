@@ -629,6 +629,9 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
   <data name="FloxBloxCategory_IO" xml:space="preserve">
 		<value>Eingabe-/Ausgabe</value>
 	</data>
+  <data name="FloxBloxCategory_ShellExecution" xml:space="preserve">
+		<value>Shell-Ausführung</value>
+	</data>
   <data name="FloxBloxCategory_Logic" xml:space="preserve">
 		<value>Logik</value>
 	</data>
@@ -2300,6 +2303,9 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
   <data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
 		<value>KI-Propertywert-Prompts</value>
 	</data>
+  <data name="FlowBloxToolboxCategory_ShellExecution" xml:space="preserve">
+		<value>Shell-Ausführung</value>
+	</data>
   <data name="AssistantConfiguration_DisplayName" xml:space="preserve">
 		<value>KI-Assistent-Konfiguration</value>
 	</data>
@@ -2563,5 +2569,44 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	</data>
   <data name="FlowBloxInputTemplateSyncMode_Overwrite" xml:space="preserve">
 		<value>Überschreiben</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_DisplayName" xml:space="preserve">
+		<value>Shell-Ausführung</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_Description" xml:space="preserve">
+		<value>Führt externe Befehle oder Skripte aus und stellt Status sowie Ausgabe als Ergebnisfelder bereit.</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_Command" xml:space="preserve">
+		<value>Befehl</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_Command_Description" xml:space="preserve">
+		<value>Auszuführende Befehlszeile. Unterstützt Platzhalter und Feld-Mapping.</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_WorkingDirectory" xml:space="preserve">
+		<value>Arbeitsverzeichnis</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_WorkingDirectory_Description" xml:space="preserve">
+		<value>Optionales Arbeitsverzeichnis für die Befehlsausführung.</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_TimeoutMilliseconds" xml:space="preserve">
+		<value>Timeout (ms)</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_TimeoutMilliseconds_Description" xml:space="preserve">
+		<value>Optionales Timeout in Millisekunden. Leer lassen für unbegrenzte Wartezeit.</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_FailOnNonZeroExitCode" xml:space="preserve">
+		<value>Bei Exit-Code ungleich 0 fehlschlagen</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_FailOnNonZeroExitCode_Description" xml:space="preserve">
+		<value>Wenn aktiviert, wird bei Exit-Code ungleich 0 ein Laufzeitfehler ausgelöst.</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_ReportStandardOutput" xml:space="preserve">
+		<value>Standardausgabe protokollieren</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_ReportStandardOutput_Description" xml:space="preserve">
+		<value>Wenn aktiviert, werden StdOut- und StdErr-Zeilen live in den Laufzeit-Logs ausgegeben.</value>
+	</data>
+  <data name="ShellExecuteFlowBlock_ResultFields" xml:space="preserve">
+		<value>Ergebnisfelder</value>
 	</data>
 </root>

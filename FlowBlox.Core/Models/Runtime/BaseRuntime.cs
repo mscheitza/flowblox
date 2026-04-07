@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Enums;
+using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
@@ -10,6 +10,8 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.Runtime.Debugging;
+using FlowBlox.Core.Util.Fields;
+using FlowBlox.Core.Util.ShellExecution;
 
 namespace FlowBlox.Core.Models.Runtime
 {
@@ -276,6 +278,7 @@ namespace FlowBlox.Core.Models.Runtime
 
         protected virtual void OnBeforeRuntimeStarted(BaseFlowBlock startFlowBlock, IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<IManagedObject> managedObjects)
         {
+            ExecuteInputTemplateStartupCommands();
             Report($"Initializing runtime for managed objects...");
             foreach (var managedObject in managedObjects)
             {
@@ -290,6 +293,85 @@ namespace FlowBlox.Core.Models.Runtime
                 throw new InvalidOperationException($"The following FlowBlocks have not been initialized: {notInitializedNames}. Please check their dependencies and ensure they are correctly configured to allow proper initialization.");
             }
             Report($"Runtime initialization completed.");
+        }
+
+        protected virtual bool ShouldExecuteInputTemplateStartupCommands() => true;
+        private bool _inputTemplateStartupCommandsExecuted;
+
+        protected void ExecuteInputTemplateStartupCommands()
+        {
+            if (_inputTemplateStartupCommandsExecuted)
+                return;
+
+            _inputTemplateStartupCommandsExecuted = true;
+
+            if (!ShouldExecuteInputTemplateStartupCommands())
+                return;
+
+            if (Project?.InputFiles == null || Project.InputFiles.Count == 0)
+                return;
+
+            // Keep managed input files in sync before optional startup commands are executed.
+            FlowBloxInputTemplateHelper.SynchronizeInputFiles(Project);
+
+            var templatesWithCommands = Project.InputFiles
+                .Where(x => x != null
+                    && x.ExecuteBeforeRuntime
+                    && !string.IsNullOrWhiteSpace(x.Command))
+                .ToList();
+
+            if (!templatesWithCommands.Any())
+                return;
+
+            Report("Executing input file startup commands...");
+
+            foreach (var inputFile in templatesWithCommands)
+            {
+                var resolvedCommand = FlowBloxInputTemplateHelper.ReplaceInputTemplatePlaceholders(inputFile.Command ?? string.Empty, Project, inputFile);
+                resolvedCommand = FlowBloxFieldHelper.ReplaceFieldsInString(resolvedCommand ?? string.Empty);
+
+                if (string.IsNullOrWhiteSpace(resolvedCommand))
+                    continue;
+
+                var relativePath = FlowBloxInputTemplateHelper.NormalizeRelativePath(inputFile.RelativePath ?? string.Empty);
+                Report($"Executing startup command for input file \"{relativePath}\": {resolvedCommand}");
+
+                var result = FlowBloxShellExecutor.Execute(new FlowBloxShellExecutionRequest
+                {
+                    Command = resolvedCommand,
+                    WorkingDirectory = Project.ProjectInputDirectory,
+                    CancellationToken = GetCancellationToken()
+                });
+
+                if (!string.IsNullOrWhiteSpace(result.StandardOutput))
+                    Report($"Startup command output: {TruncateForReport(result.StandardOutput)}");
+
+                if (!string.IsNullOrWhiteSpace(result.StandardError))
+                    Report($"Startup command errors: {TruncateForReport(result.StandardError)}", FlowBloxLogLevel.Warning);
+
+                if (!result.Success)
+                {
+                    var errorText = !string.IsNullOrWhiteSpace(result.ExceptionMessage)
+                        ? result.ExceptionMessage
+                        : $"ExitCode={result.ExitCode}";
+
+                    throw new InvalidOperationException(
+                        $"Startup command failed for input file \"{relativePath}\" ({errorText}).");
+                }
+
+                Report($"Startup command finished successfully (ExitCode={result.ExitCode}).");
+            }
+        }
+
+        private static string TruncateForReport(string value, int maxLength = 1000)
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            if (value.Length <= maxLength)
+                return value.Trim();
+
+            return value[..maxLength].Trim() + "...";
         }
 
         protected virtual void OnAfterRuntimeFinished(IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<IManagedObject> managedObjects)
@@ -521,3 +603,5 @@ namespace FlowBlox.Core.Models.Runtime
         }
     }
 }
+
+

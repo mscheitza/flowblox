@@ -57,6 +57,11 @@ namespace FlowBlox.Core.Models.Components
             "FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts",
             typeof(FlowBloxTexts));
 
+        public static readonly FlowBloxToolboxCategoryItem ShellExecution = new(
+            nameof(ShellExecution),
+            "FlowBloxToolboxCategory_ShellExecution",
+            typeof(FlowBloxTexts));
+
         private static readonly Dictionary<string, FlowBloxToolboxCategoryItem> _registry = new(StringComparer.Ordinal);
 
         internal static void InvokeRegistration()

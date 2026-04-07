@@ -11,6 +11,7 @@ namespace FlowBlox.AppWindow
     {
         private void InitializeDockPanel(bool exceptProjectPanel = false, bool exceptAiAssistantView = false)
         {
+            _defaultPaneActivationApplied = false;
             this.dockPanel.SuspendLayout();
 
             this.dockPanel.Theme = new VS2015DarkTheme();
@@ -56,41 +57,78 @@ namespace FlowBlox.AppWindow
             _runtimeViewPanel = runtimeViewPanelFactory.Create();
 
             this.dockPanel.ResumeLayout();
-            ApplyDefaultFieldViewActivationOnce();
+            ApplyDefaultPaneActivationOnce();
         }
 
-        private void ActivateFieldView()
+        private enum DockRegion
         {
-            if (_defaultFieldViewActivationApplied || _fieldViewPanel == null || _fieldViewPanel.IsDisposed)
-                return;
-
-            if (_fieldViewPanel.IsHidden ||
-                _fieldViewPanel.DockState == DockState.Hidden ||
-                _fieldViewPanel.DockState == DockState.Unknown)
-            {
-                return;
-            }
-
-            _fieldViewPanel.Activate();
-            _defaultFieldViewActivationApplied = true;
+            Left,
+            Right,
+            Bottom
         }
 
-        private void ApplyDefaultFieldViewActivationOnce()
+        private void ActivateInitialDockContents()
         {
-            if (_defaultFieldViewActivationApplied || _fieldViewPanel == null)
+            if (_defaultPaneActivationApplied || dockPanel == null || dockPanel.IsDisposed)
                 return;
 
-            if (_fieldViewPanel.IsHidden ||
-                _fieldViewPanel.DockState == DockState.Hidden ||
-                _fieldViewPanel.DockState == DockState.Unknown)
+            var previouslyActive = dockPanel.ActiveContent as DockContent;
+            var targetRegions = new[] { DockRegion.Left, DockRegion.Right, DockRegion.Bottom };
+
+            foreach (var region in targetRegions)
             {
-                return;
+                var firstVisibleContent = GetFirstVisibleContentByRegion(region);
+                firstVisibleContent?.Activate();
             }
+
+            if (previouslyActive != null &&
+                !previouslyActive.IsDisposed &&
+                !previouslyActive.IsHidden &&
+                previouslyActive.DockState != DockState.Hidden &&
+                previouslyActive.DockState != DockState.Unknown)
+            {
+                previouslyActive.Activate();
+            }
+
+            _defaultPaneActivationApplied = true;
+        }
+
+        private DockContent GetFirstVisibleContentByRegion(DockRegion region)
+        {
+            return dockPanel.Contents
+                .OfType<DockContent>()
+                .Where(dc =>
+                    !dc.IsDisposed &&
+                    !dc.IsHidden &&
+                    dc.DockState != DockState.Hidden &&
+                    dc.DockState != DockState.Unknown &&
+                    GetDockRegion(dc.DockState) == region)
+                .FirstOrDefault();
+        }
+
+        private static DockRegion? GetDockRegion(DockState dockState)
+        {
+            return dockState switch
+            {
+                DockState.DockLeft => DockRegion.Left,
+                DockState.DockLeftAutoHide => DockRegion.Left,
+                DockState.DockRight => DockRegion.Right,
+                DockState.DockRightAutoHide => DockRegion.Right,
+                DockState.DockBottom => DockRegion.Bottom,
+                DockState.DockBottomAutoHide => DockRegion.Bottom,
+                _ => null
+            };
+        }
+
+        private void ApplyDefaultPaneActivationOnce()
+        {
+            if (_defaultPaneActivationApplied)
+                return;
 
             if (IsHandleCreated)
-                BeginInvoke(new MethodInvoker(ActivateFieldView));
+                BeginInvoke(new MethodInvoker(ActivateInitialDockContents));
             else
-                ActivateFieldView();
+                ActivateInitialDockContents();
         }
 
         private void DockPanel_ContentAdded(object sender, DockContentEventArgs e)

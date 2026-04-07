@@ -117,15 +117,15 @@
 	<resheader name="writer">
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
-	<!-- ManageInputTemplatesWindow.de.resx -->
+	<!-- ManageInputFilesWindow.de.resx -->
 	<data name="Title" xml:space="preserve">
-		<value>Eingabe-Dateivorlagen</value>
+		<value>Verwaltete Eingabedateien</value>
 	</data>
 	<data name="Header_Title_Main" xml:space="preserve">
-		<value>Eingabe-Dateivorlagen verwalten</value>
+		<value>Eingabedateien verwalten</value>
 	</data>
 	<data name="Header_Description_Main" xml:space="preserve">
-		<value>Verwalte Dateivorlagen, die beim Laden eines Projekts automatisch im Eingabeverzeichnis erzeugt werden, falls sie noch nicht existieren. Die relativen Pfade beziehen sich immer auf das Eingabeverzeichnis des Projekts.</value>
+		<value>Verwalte projektbezogene Eingabedateien. Diese können als feste Eingaben, Mocks oder Vorlagen (z.B. XML, JSON, XLSX) genutzt werden. Mit dem Synchronisationsmodus "Erstellen, falls nicht vorhanden" können Sie als Dateivorlage verwendet werden. Pro Eingabedatei kann ein Command für die manuelle Ausführung oder vor Laufzeitbeginn hinterlegt werden.</value>
 	</data>
 	<data name="Button_Close" xml:space="preserve">
 		<value>Schließen</value>
@@ -134,19 +134,25 @@
 		<value>Eingabeverzeichnis öffnen</value>
 	</data>
 	<data name="Tooltip_CreateTemplate" xml:space="preserve">
-		<value>Neue Dateivorlage erstellen</value>
+		<value>Neuen Eingabedatei-Eintrag erstellen</value>
 	</data>
 	<data name="Tooltip_UploadTemplate" xml:space="preserve">
-		<value>Dateivorlage hochladen (Inhalt ersetzen)</value>
+		<value>Dateiinhalt hochladen (ersetzen)</value>
 	</data>
 	<data name="Tooltip_DownloadTemplate" xml:space="preserve">
-		<value>Dateivorlage herunterladen (als Datei speichern)</value>
+		<value>Verwaltete Eingabedatei herunterladen (als Datei speichern)</value>
 	</data>
 	<data name="Tooltip_OpenTemplateInExplorer" xml:space="preserve">
-		<value>Vorlagen-Datei im Explorer anzeigen (im Eingabeverzeichnis)</value>
+		<value>Eingabedatei im Explorer anzeigen (im Projekt-Eingabeverzeichnis)</value>
 	</data>
 	<data name="Tooltip_RemoveTemplate" xml:space="preserve">
-		<value>Dateivorlage entfernen (Datei im Eingabeverzeichnis bleibt unverändert)</value>
+		<value>Verwalteten Eingabedatei-Eintrag entfernen (Datei auf Datenträger bleibt unverändert)</value>
+	</data>
+	<data name="Tooltip_ExecuteInputFileCommand" xml:space="preserve">
+		<value>Command für ausgewählte Eingabedatei ausführen</value>
+	</data>
+	<data name="Tooltip_InsertInputFilePlaceholder" xml:space="preserve">
+		<value>Feld einfügen oder ausgewählten Text ersetzen</value>
 	</data>
 	<data name="Header_InputDir" xml:space="preserve">
 		<value>Eingabeverzeichnis</value>
@@ -160,6 +166,15 @@
 	<data name="Header_Size" xml:space="preserve">
 		<value>Größe (Bytes)</value>
 	</data>
+	<data name="Header_Command" xml:space="preserve">
+		<value>Befehl</value>
+	</data>
+	<data name="Header_ExecuteBeforeRuntime" xml:space="preserve">
+		<value>Vor Laufzeitbeginn ausführen</value>
+	</data>
+	<data name="Hint_CommandFieldSelection" xml:space="preserve">
+		<value>Mit Strg+F Platzhalter einfügen, z.B. $InputFile:Path.</value>
+	</data>
 	<data name="Header_SyncMode" xml:space="preserve">
 		<value>Synchronisationsmodus</value>
 	</data>
@@ -167,24 +182,33 @@
 		<value>Eingabeverzeichnis konnte nicht geöffnet werden.</value>
 	</data>
 	<data name="Error_UploadTemplateFailed" xml:space="preserve">
-		<value>Dateivorlage konnte nicht hochgeladen werden.</value>
+		<value>Eingabedatei konnte nicht hochgeladen werden.</value>
 	</data>
 	<data name="Error_DownloadTemplateFailed" xml:space="preserve">
-		<value>Dateivorlage konnte nicht heruntergeladen werden.</value>
+		<value>Eingabedatei konnte nicht heruntergeladen werden.</value>
 	</data>
 	<data name="Error_OpenTemplateInExplorerFailed" xml:space="preserve">
-		<value>Vorlagen-Datei konnte nicht im Explorer geöffnet werden.</value>
+		<value>Eingabedatei konnte nicht im Explorer geöffnet werden.</value>
 	</data>
 	<data name="Error_RemoveTemplateFailed" xml:space="preserve">
-		<value>Dateivorlage konnte nicht entfernt werden.</value>
+		<value>Eingabedatei-Eintrag konnte nicht entfernt werden.</value>
 	</data>
 	<data name="Error_MaterializeTemplatesFailed" xml:space="preserve">
-		<value>Dateivorlagen konnten nicht im Eingabeverzeichnis erzeugt werden.</value>
+		<value>Verwaltete Eingabedateien konnten im Eingabeverzeichnis nicht erzeugt werden.</value>
 	</data>
 	<data name="Error_TemplateFileMissing" xml:space="preserve">
-		<value>Die Vorlagen-Datei wurde im Eingabeverzeichnis nicht gefunden.</value>
+		<value>Die Eingabedatei wurde im Eingabeverzeichnis nicht gefunden.</value>
 	</data>
 	<data name="Message_TemplateDownloaded" xml:space="preserve">
-		<value>Dateivorlage wurde gespeichert.</value>
+		<value>Eingabedatei wurde gespeichert.</value>
+	</data>
+	<data name="Error_ExecuteInputFileCommandFailed" xml:space="preserve">
+		<value>Command für Eingabedatei konnte nicht ausgeführt werden.</value>
+	</data>
+	<data name="Message_InputFileCommandMissing" xml:space="preserve">
+		<value>Für die ausgewählte Eingabedatei ist kein Command konfiguriert.</value>
+	</data>
+	<data name="Message_InputFileCommandSuccess" xml:space="preserve">
+		<value>Command der Eingabedatei wurde erfolgreich ausgeführt.</value>
 	</data>
 </root>

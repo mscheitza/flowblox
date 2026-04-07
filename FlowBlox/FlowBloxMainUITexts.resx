@@ -767,7 +767,7 @@ The application will now restart to restore a clean environment.</value>
 		<value>Open input directory</value>
 	</data>
   <data name="AppWindow_itmManageInputTemplates_Text" xml:space="preserve">
-		<value>Manage input file templates</value>
+		<value>Manage input files</value>
 	</data>
   <data name="ProjectPanel_labelInvoke_Text" xml:space="preserve">
 		<value>Invoke</value>

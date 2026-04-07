@@ -471,10 +471,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public ObservableCollection<FlowBloxTestDefinition> TestDefinitions { get; set; }
 
         [Display(Name = "BaseFlowBlock_GenerationStrategies", Description = "BaseFlowBlock_GenerationStrategies_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 1)]
+        [ActivationCondition(ActivationMethod = nameof(IsGenerationStrategiesVisible))]
         [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FlowBloxGenerationStrategyBase.Name) })]
         [CustomValidation(typeof(BaseFlowBlock), nameof(ValidateGenerationStrategies))]
         public ObservableCollection<FlowBloxGenerationStrategyBase> GenerationStrategies { get; set; }
+
+        public bool IsGenerationStrategiesVisible()
+        {
+            return FlowBloxSupportedTypesResolver
+                .ResolveSupportedTypes(this, typeof(FlowBloxGenerationStrategyBase))
+                .Any();
+        }
 
         public static ValidationResult ValidateGenerationStrategies(ObservableCollection<FlowBloxGenerationStrategyBase> generationStrategies, ValidationContext context)
         {

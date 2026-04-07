@@ -3,8 +3,10 @@ using System.Diagnostics;
 using System.Reflection;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
+using FlowBlox.Grid.Elements.Util;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
@@ -103,6 +105,19 @@ namespace FlowBlox.AIAssistant.Services
                 result.Success = false;
                 result.Errors.Add(configurationError);
                 AddTranscript(result, AssistantTranscriptKind.Error, configurationError);
+                return result;
+            }
+
+            var configuredProvider = config.Provider ?? new OpenAIProvider();
+            if (!configuredProvider.SupportsNativeResponseContinuation)
+            {
+                result.Success = false;
+                var providerLabel = FlowBloxComponentHelper.GetDisplayName(configuredProvider);
+                var message =
+                    $"Provider '{providerLabel}' does not support native conversation continuation. " +
+                    "AI Assistant requires conversation-capable providers.";
+                result.Errors.Add(message);
+                AddTranscript(result, AssistantTranscriptKind.Error, message);
                 return result;
             }
 

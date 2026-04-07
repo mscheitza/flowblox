@@ -12,7 +12,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns available placeholders for EnableFieldSelection-capable string properties. Includes field placeholders ($FlowBlock::FieldName / $User::FieldName) and additional $Project:: / $Options:: placeholders. Values are not resolved.",
+            "Returns available placeholders for EnableFieldSelection-capable string properties. Includes field placeholders ($FlowBlock::FieldName / $User::FieldName), $Project:: / $Options:: placeholders and $InputFile:* placeholders.",
             new JObject());
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -42,18 +42,26 @@ namespace FlowBlox.AIAssistant.Tools
                 .OrderBy(x => x.Value<string>("placeholder"), StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
+            var inputFilePlaceholders = project.GetInputFilePlaceholderElements()
+                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.Placeholder))
+                .OrderBy(x => x.Placeholder, StringComparer.OrdinalIgnoreCase)
+                .Select(ToInputFilePlaceholderInfo)
+                .ToList();
+
             return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
             {
                 ["fieldPlaceholders"] = new JArray(fieldPlaceholders),
                 ["projectPlaceholders"] = new JArray(projectPlaceholders),
                 ["optionPlaceholders"] = new JArray(optionPlaceholders),
+                ["inputFilePlaceholders"] = new JArray(inputFilePlaceholders),
                 ["summary"] = new JObject
                 {
                     ["fieldPlaceholderCount"] = fieldPlaceholders.Count,
                     ["userFieldCount"] = fieldPlaceholders.Count(x => x.Value<bool?>("isUserField") == true),
                     ["runtimeFieldCount"] = fieldPlaceholders.Count(x => x.Value<bool?>("isUserField") != true),
                     ["projectPlaceholderCount"] = projectPlaceholders.Count,
-                    ["optionPlaceholderCount"] = optionPlaceholders.Count
+                    ["optionPlaceholderCount"] = optionPlaceholders.Count,
+                    ["inputFilePlaceholderCount"] = inputFilePlaceholders.Count
                 },
                 ["hint"] = "Use these placeholders only in properties whose type metadata indicates EnableFieldSelection."
             }));
@@ -98,6 +106,18 @@ namespace FlowBlox.AIAssistant.Tools
                 ["description"] = optionElement.Description ?? string.Empty,
                 ["optionType"] = optionElement.Type.ToString(),
                 ["origin"] = "Option"
+            };
+        }
+
+        private static JObject ToInputFilePlaceholderInfo(FlowBloxInputFilePlaceholderElement inputFileElement)
+        {
+            return new JObject
+            {
+                ["placeholder"] = inputFileElement.Placeholder,
+                ["key"] = inputFileElement.Key ?? string.Empty,
+                ["displayName"] = inputFileElement.DisplayName ?? string.Empty,
+                ["description"] = inputFileElement.Description ?? string.Empty,
+                ["origin"] = "InputFile"
             };
         }
     }

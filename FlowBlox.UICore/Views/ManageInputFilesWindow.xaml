@@ -1,6 +1,6 @@
-﻿<mah:MetroWindow
+<mah:MetroWindow
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    x:Class="FlowBlox.UICore.Views.ManageInputTemplatesWindow"
+    x:Class="FlowBlox.UICore.Views.ManageInputFilesWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
     xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    Title="{x:Static resources:ManageInputTemplatesWindow.Title}"
+    Title="{x:Static resources:ManageInputFilesWindow.Title}"
     Height="760"
     Width="1100"
     mc:Ignorable="d"
@@ -26,37 +26,37 @@
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
             <converters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter"/>
 
-            <Style x:Key="ManageInputTemplates.Icon.Open"
+            <Style x:Key="ManageInputFiles.Icon.Open"
                    TargetType="{x:Type iconPacks:PackIconMaterial}"
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
                 <Setter Property="Foreground" Value="#2F6DB3"/>
             </Style>
 
-            <Style x:Key="ManageInputTemplates.Icon.Create"
+            <Style x:Key="ManageInputFiles.Icon.Create"
                    TargetType="{x:Type iconPacks:PackIconMaterial}"
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
                 <Setter Property="Foreground" Value="#2E8B57"/>
             </Style>
 
-            <Style x:Key="ManageInputTemplates.Icon.Upload"
+            <Style x:Key="ManageInputFiles.Icon.Upload"
                    TargetType="{x:Type iconPacks:PackIconMaterial}"
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
                 <Setter Property="Foreground" Value="#1F8A8A"/>
             </Style>
 
-            <Style x:Key="ManageInputTemplates.Icon.Download"
+            <Style x:Key="ManageInputFiles.Icon.Download"
                    TargetType="{x:Type iconPacks:PackIconMaterial}"
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
                 <Setter Property="Foreground" Value="#3A6EA5"/>
             </Style>
 
-            <Style x:Key="ManageInputTemplates.Icon.Locate"
+            <Style x:Key="ManageInputFiles.Icon.Locate"
                    TargetType="{x:Type iconPacks:PackIconMaterial}"
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
                 <Setter Property="Foreground" Value="#5C6B73"/>
             </Style>
 
-            <Style x:Key="ManageInputTemplates.Icon.Delete"
+            <Style x:Key="ManageInputFiles.Icon.Delete"
                    TargetType="{x:Type iconPacks:PackIconMaterial}"
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
                 <Setter Property="Foreground" Value="#C94F4F"/>
@@ -79,7 +79,7 @@
                                             Margin="0,0,10,0"
                                             VerticalAlignment="Center"
                                             Foreground="DarkSlateGray"/>
-                <TextBlock Text="{x:Static resources:ManageInputTemplatesWindow.Header_Title_Main}"
+                <TextBlock Text="{x:Static resources:ManageInputFilesWindow.Header_Title_Main}"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            FontSize="16"/>
@@ -93,7 +93,7 @@
                 CornerRadius="4"
                 Margin="0,8,0,10">
             <StackPanel>
-                <TextBlock Text="{x:Static resources:ManageInputTemplatesWindow.Header_Description_Main}"
+                <TextBlock Text="{x:Static resources:ManageInputFilesWindow.Header_Description_Main}"
                            FontWeight="UltraLight"
                            Foreground="DarkSlateGray"
                            TextWrapping="Wrap"/>
@@ -116,57 +116,66 @@
             <ToolBar Grid.Row="0" VerticalAlignment="Center">
 
                 <Button Command="{Binding OpenInputDirectoryCommand}"
-                        ToolTip="{x:Static resources:ManageInputTemplatesWindow.Tooltip_OpenInputDirectory}">
+                        ToolTip="{x:Static resources:ManageInputFilesWindow.Tooltip_OpenInputDirectory}">
                     <iconPacks:PackIconMaterial Kind="FolderOpenOutline"
-                                    Style="{StaticResource ManageInputTemplates.Icon.Open}"/>
+                                    Style="{StaticResource ManageInputFiles.Icon.Open}"/>
                 </Button>
 
                 <Separator/>
 
-                <Button Command="{Binding CreateTemplateCommand}"
-                        ToolTip="{x:Static resources:ManageInputTemplatesWindow.Tooltip_CreateTemplate}">
+                <Button Command="{Binding CreateInputFileCommand}"
+                        ToolTip="{x:Static resources:ManageInputFilesWindow.Tooltip_CreateTemplate}">
                     <iconPacks:PackIconMaterial Kind="FilePlusOutline"
-                                    Style="{StaticResource ManageInputTemplates.Icon.Create}"/>
+                                    Style="{StaticResource ManageInputFiles.Icon.Create}"/>
                 </Button>
 
-                <Button Command="{Binding UploadTemplateCommand}"
-                        IsEnabled="{Binding IsTemplateSelected}"
+                <Button Command="{Binding UploadInputFileCommand}"
+                        IsEnabled="{Binding IsInputFileSelected}"
                         Margin="6,0,0,0"
-                        ToolTip="{x:Static resources:ManageInputTemplatesWindow.Tooltip_UploadTemplate}">
+                        ToolTip="{x:Static resources:ManageInputFilesWindow.Tooltip_UploadTemplate}">
                     <iconPacks:PackIconMaterial Kind="UploadOutline"
-                                    Style="{StaticResource ManageInputTemplates.Icon.Upload}"/>
+                                    Style="{StaticResource ManageInputFiles.Icon.Upload}"/>
                 </Button>
 
-                <Button Command="{Binding DownloadTemplateCommand}"
-                        IsEnabled="{Binding IsTemplateSelected}"
+                <Button Command="{Binding DownloadInputFileCommand}"
+                        IsEnabled="{Binding IsInputFileSelected}"
                         Margin="6,0,0,0"
-                        ToolTip="{x:Static resources:ManageInputTemplatesWindow.Tooltip_DownloadTemplate}">
+                        ToolTip="{x:Static resources:ManageInputFilesWindow.Tooltip_DownloadTemplate}">
                     <iconPacks:PackIconMaterial Kind="DownloadOutline"
-                                    Style="{StaticResource ManageInputTemplates.Icon.Download}"/>
+                                    Style="{StaticResource ManageInputFiles.Icon.Download}"/>
                 </Button>
 
-                <Button Command="{Binding OpenTemplateInExplorerCommand}"
-                        IsEnabled="{Binding IsTemplateSelected}"
+                <Button Command="{Binding OpenInputFileInExplorerCommand}"
+                        IsEnabled="{Binding IsInputFileSelected}"
                         Margin="6,0,0,0"
-                        ToolTip="{x:Static resources:ManageInputTemplatesWindow.Tooltip_OpenTemplateInExplorer}">
+                        ToolTip="{x:Static resources:ManageInputFilesWindow.Tooltip_OpenTemplateInExplorer}">
                     <iconPacks:PackIconMaterial Kind="FolderSearchOutline"
-                                    Style="{StaticResource ManageInputTemplates.Icon.Locate}"/>
+                                    Style="{StaticResource ManageInputFiles.Icon.Locate}"/>
                 </Button>
 
-                <Button Command="{Binding RemoveTemplateCommand}"
-                        IsEnabled="{Binding IsTemplateSelected}"
+                <Button Command="{Binding ExecuteInputFileCommandCommand}"
+                        IsEnabled="{Binding IsInputFileSelected}"
+                        Margin="6,0,0,0"
+                        ToolTip="{x:Static resources:ManageInputFilesWindow.Tooltip_ExecuteInputFileCommand}">
+                    <iconPacks:PackIconMaterial Kind="PlayCircleOutline"
+                                    Style="{StaticResource ManageInputFiles.Icon.Create}"/>
+                </Button>
+
+                <Button Command="{Binding RemoveInputFileCommand}"
+                        IsEnabled="{Binding IsInputFileSelected}"
                         Margin="10,0,0,0"
-                        ToolTip="{x:Static resources:ManageInputTemplatesWindow.Tooltip_RemoveTemplate}">
+                        ToolTip="{x:Static resources:ManageInputFilesWindow.Tooltip_RemoveTemplate}">
                     <iconPacks:PackIconMaterial Kind="DeleteOutline"
-                                    Style="{StaticResource ManageInputTemplates.Icon.Delete}"/>
+                                    Style="{StaticResource ManageInputFiles.Icon.Delete}"/>
                 </Button>
 
             </ToolBar>
 
             <!-- Grid -->
-            <DataGrid Grid.Row="1"
-                      ItemsSource="{Binding Templates}"
-                      SelectedItem="{Binding SelectedTemplate}"
+            <DataGrid x:Name="InputFilesGrid"
+                      Grid.Row="1"
+                      ItemsSource="{Binding InputFiles}"
+                      SelectedItem="{Binding SelectedInputFile}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"
@@ -175,26 +184,59 @@
                 <DataGrid.Columns>
 
                     <!-- Read-only "InputDir" column to make the base directory explicit -->
-                    <DataGridTextColumn Header="{x:Static resources:ManageInputTemplatesWindow.Header_InputDir}"
+                    <DataGridTextColumn Header="{x:Static resources:ManageInputFilesWindow.Header_InputDir}"
                                         Binding="{Binding DataContext.ProjectInputDirectory, RelativeSource={RelativeSource AncestorType=Window}}"
                                         IsReadOnly="True"
                                         Width="*"/>
 
-                    <DataGridTextColumn Header="{x:Static resources:ManageInputTemplatesWindow.Header_RelativePath}"
+                    <DataGridTextColumn Header="{x:Static resources:ManageInputFilesWindow.Header_RelativePath}"
                                         Binding="{Binding RelativePath, UpdateSourceTrigger=PropertyChanged}"
                                         Width="2*"/>
 
-                    <DataGridTextColumn Header="{x:Static resources:ManageInputTemplatesWindow.Header_FileName}"
+                    <DataGridTextColumn Header="{x:Static resources:ManageInputFilesWindow.Header_FileName}"
                                         Binding="{Binding FileName}"
                                         IsReadOnly="True"
                                         Width="*"/>
 
-                    <DataGridTextColumn Header="{x:Static resources:ManageInputTemplatesWindow.Header_Size}"
+                    <DataGridTextColumn Header="{x:Static resources:ManageInputFilesWindow.Header_Size}"
                                         Binding="{Binding SizeBytes}"
                                         IsReadOnly="True"
                                         Width="120"/>
 
-                    <DataGridTemplateColumn Header="{x:Static resources:ManageInputTemplatesWindow.Header_SyncMode}"
+                    <DataGridTemplateColumn Header="{x:Static resources:ManageInputFilesWindow.Header_Command}"
+                                            Width="2.3*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Command}" TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <DockPanel LastChildFill="True">
+                                    <Button DockPanel.Dock="Right"
+                                            Width="28"
+                                            Height="24"
+                                            Margin="6,0,0,0"
+                                            ToolTip="{x:Static resources:ManageInputFilesWindow.Tooltip_InsertInputFilePlaceholder}"
+                                            Click="InsertInputFilePlaceholderButton_Click">
+                                        <iconPacks:PackIconMaterial Kind="Variable"
+                                                                    Width="14"
+                                                                    Height="14"
+                                                                    Foreground="#2F6DB3"/>
+                                    </Button>
+                                    <TextBox Text="{Binding Command, UpdateSourceTrigger=PropertyChanged}"
+                                             VerticalContentAlignment="Center"
+                                             PreviewKeyDown="CommandTextBox_PreviewKeyDown"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridCheckBoxColumn Header="{x:Static resources:ManageInputFilesWindow.Header_ExecuteBeforeRuntime}"
+                                            Binding="{Binding ExecuteBeforeRuntime, UpdateSourceTrigger=PropertyChanged}"
+                                            Width="180"/>
+
+                    <DataGridTemplateColumn Header="{x:Static resources:ManageInputFilesWindow.Header_SyncMode}"
                                             Width="190">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -227,7 +269,7 @@
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial Kind="Close" Margin="0,0,5,0"/>
-                            <TextBlock Text="{x:Static resources:ManageInputTemplatesWindow.Button_Close}"/>
+                            <TextBlock Text="{x:Static resources:ManageInputFilesWindow.Button_Close}"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>

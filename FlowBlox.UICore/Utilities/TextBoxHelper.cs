@@ -54,8 +54,21 @@ namespace FlowBlox.UICore.Utilities
             }
             else
             {
-                ApplyOptionElementsToTextBox(result.SelectedOptions, textBox);
+                if (result.SelectionMode == FieldSelectionMode.Options)
+                    ApplyOptionElementsToTextBox(result.SelectedOptions, textBox);
+                else
+                    ApplyInputFileElementsToTextBox(result.SelectedInputFiles, textBox);
             }
+        }
+
+        public static void ApplyInputFileElementsToTextBox(IEnumerable<FlowBloxInputFilePlaceholderElement> inputFileElements, ITextBoxLike textBox)
+        {
+            var defs = (inputFileElements ?? Enumerable.Empty<FlowBloxInputFilePlaceholderElement>())
+                .Select(x => x?.Placeholder)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x!);
+
+            ApplyFieldDefinitionsToTextBox(defs, textBox);
         }
 
         public static void ApplyOptionElementsToTextBox(IEnumerable<OptionElement> optionElements, ITextBoxLike textBox)

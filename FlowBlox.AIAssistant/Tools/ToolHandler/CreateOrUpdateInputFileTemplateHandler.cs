@@ -18,17 +18,19 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Creates or updates an input file template by key (relative to $Project::InputDirectory). If key exists, it is overwritten.",
+            "Creates or updates a managed input file by key (relative to $Project::InputDirectory). If key exists, it is overwritten.",
             new JObject
             {
                 ["key"] = "string (relative path under $Project::InputDirectory)",
                 ["generatedTemplate"] = "object (required): { textContent: string, converter?: string }",
                 ["supportedConverters"] = new JArray(SupportedConverters),
                 ["syncMode"] = "string? (CreateIfNotExists|AlwaysOverwrite, default: CreateIfNotExists)",
+                ["command"] = "string? (optional command; can use $InputFile:Path)",
+                ["executeBeforeRuntime"] = "bool? (optional; execute command before runtime start)",
                 ["usageHint"] =
-                    "Use generatedTemplate.textContent for template content. " +
+                    "Use generatedTemplate.textContent for input file content. " +
                     "Set generatedTemplate.converter='Csv2XlsxConverter' or 'Csv2XlsConverter' to convert CSV text to Excel. " +
-                    "No attachments."
+                    "Use command + executeBeforeRuntime for automatic execution scenarios. No attachments."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -36,7 +38,7 @@ namespace FlowBlox.AIAssistant.Tools
             try
             {
                 var project = ToolHandlerUtilities.GetProject();
-                project.InputTemplates ??= new List<FlowBloxInputFileTemplate>();
+                project.InputFiles ??= new List<FlowBloxInputFileTemplate>();
 
                 var key = (args.Value<string>("key") ?? string.Empty).Trim();
                 if (string.IsNullOrWhiteSpace(key))
@@ -59,7 +61,7 @@ namespace FlowBlox.AIAssistant.Tools
                 var contentBase64 = Convert.ToBase64String(contentBytes);
 
                 var syncMode = ParseSyncMode(args.Value<string>("syncMode"));
-                var existing = project.InputTemplates.FirstOrDefault(x =>
+                var existing = project.InputFiles.FirstOrDefault(x =>
                     string.Equals(
                         FlowBloxInputTemplateHelper.NormalizeRelativePath(x?.RelativePath ?? string.Empty),
                         normalizedKey,
@@ -70,9 +72,11 @@ namespace FlowBlox.AIAssistant.Tools
                 template.RelativePath = normalizedKey;
                 template.ContentBase64 = contentBase64;
                 template.SyncMode = syncMode;
+                template.Command = args.Value<string>("command") ?? template.Command;
+                template.ExecuteBeforeRuntime = args.Value<bool?>("executeBeforeRuntime") ?? template.ExecuteBeforeRuntime;
 
                 if (created)
-                    project.InputTemplates.Add(template);
+                    project.InputFiles.Add(template);
 
                 FlowBloxInputTemplateHelper.EnsureInputFilesExist(project);
 
@@ -90,6 +94,9 @@ namespace FlowBlox.AIAssistant.Tools
                     ["converterUsed"] = string.IsNullOrWhiteSpace(converter) ? "None" : converter,
                     ["supportedConverters"] = new JArray(SupportedConverters),
                     ["sizeBytes"] = template.ContentBytes?.LongLength ?? 0,
+                    ["command"] = template.Command ?? string.Empty,
+                    ["executeBeforeRuntime"] = template.ExecuteBeforeRuntime,
+                    ["placeholderHint"] = "$InputFile:Path",
                     ["materializedPath"] = materializedPath,
                     ["projectInputDirectory"] = project.ProjectInputDirectory ?? string.Empty
                 };
@@ -129,3 +136,5 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
+

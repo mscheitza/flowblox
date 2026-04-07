@@ -39,6 +39,7 @@ namespace FlowBlox.UICore.ViewModels
                 OnPropertyChanged(nameof(IsFieldsMode));
                 OnPropertyChanged(nameof(IsProjectPropertiesMode));
                 OnPropertyChanged(nameof(IsOptionsMode));
+                OnPropertyChanged(nameof(IsInputFilesMode));
                 OnPropertyChanged(nameof(ShowRequired));
             }
         }
@@ -61,6 +62,7 @@ namespace FlowBlox.UICore.ViewModels
         public bool IsFieldsMode => SelectionMode == FieldSelectionMode.Fields;
         public bool IsProjectPropertiesMode => SelectionMode == FieldSelectionMode.ProjectProperties;
         public bool IsOptionsMode => SelectionMode == FieldSelectionMode.Options;
+        public bool IsInputFilesMode => SelectionMode == FieldSelectionMode.InputFiles;
 
         public bool ShowRequired => IsFieldsMode && !HideRequired;
 
@@ -73,11 +75,12 @@ namespace FlowBlox.UICore.ViewModels
                 _selectedTabIndex = value;
                 OnPropertyChanged();
 
-                // Tab order: 0 = Fields, 1 = ProjectProperties, 2 = Options
+                // Tab order: 0 = Fields, 1 = ProjectProperties, 2 = Options, 3 = InputFiles
                 SelectionMode =
                     _selectedTabIndex == 0 ? FieldSelectionMode.Fields :
                     _selectedTabIndex == 1 ? FieldSelectionMode.ProjectProperties :
-                    FieldSelectionMode.Options;
+                    _selectedTabIndex == 2 ? FieldSelectionMode.Options :
+                    FieldSelectionMode.InputFiles;
             }
         }
 
@@ -93,9 +96,14 @@ namespace FlowBlox.UICore.ViewModels
             _args.AllowedFieldSelectionModes != null &&
             _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.Options);
 
+        public bool CanSelectInputFiles =>
+            _args.AllowedFieldSelectionModes != null &&
+            _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.InputFiles);
+
         public List<FieldRowViewModel> FieldRows { get; private set; } = new List<FieldRowViewModel>();
         public List<ProjectPropertyRowViewModel> ProjectPropertyRows { get; private set; } = new List<ProjectPropertyRowViewModel>();
         public List<OptionRowViewModel> OptionRows { get; private set; } = new List<OptionRowViewModel>();
+        public List<InputFileRowViewModel> InputFileRows { get; private set; } = new List<InputFileRowViewModel>();
 
         public FieldSelectionWindowViewModel(Window ownerWindow, FieldSelectionWindowArgs args)
         {
@@ -109,7 +117,8 @@ namespace FlowBlox.UICore.ViewModels
             SelectedTabIndex =
                 _args.SelectionMode == FieldSelectionMode.Fields ? 0 :
                 _args.SelectionMode == FieldSelectionMode.ProjectProperties ? 1 :
-                2;
+                _args.SelectionMode == FieldSelectionMode.Options ? 2 :
+                3;
 
             // Normalize tab selection based on allowed modes.
             NormalizeSelectedTabIndex();
@@ -135,7 +144,8 @@ namespace FlowBlox.UICore.ViewModels
             bool tabAllowed =
                 (SelectedTabIndex == 0 && CanSelectFields) ||
                 (SelectedTabIndex == 1 && CanSelectProjectProperties) ||
-                (SelectedTabIndex == 2 && CanSelectOptions);
+                (SelectedTabIndex == 2 && CanSelectOptions) ||
+                (SelectedTabIndex == 3 && CanSelectInputFiles);
 
             if (tabAllowed)
                 return;
@@ -143,6 +153,7 @@ namespace FlowBlox.UICore.ViewModels
             if (CanSelectFields) SelectedTabIndex = 0;
             else if (CanSelectProjectProperties) SelectedTabIndex = 1;
             else if (CanSelectOptions) SelectedTabIndex = 2;
+            else if (CanSelectInputFiles) SelectedTabIndex = 3;
         }
 
         private void LoadRows()
@@ -150,6 +161,7 @@ namespace FlowBlox.UICore.ViewModels
             LoadFieldRows();
             LoadProjectPropertyRows();
             LoadOptionRows();
+            LoadInputFileRows();
         }
 
         private void LoadFieldRows()
@@ -236,6 +248,20 @@ namespace FlowBlox.UICore.ViewModels
                 .ToList();
 
             OnPropertyChanged(nameof(OptionRows));
+        }
+
+        private void LoadInputFileRows()
+        {
+            IEnumerable<FlowBloxInputFilePlaceholderElement> inputFileElements = _args.InputFileElements
+                ?? Enumerable.Empty<FlowBloxInputFilePlaceholderElement>();
+
+            InputFileRows = inputFileElements
+                .OrderBy(x => x?.DisplayName ?? string.Empty)
+                .ThenBy(x => x?.Key ?? string.Empty)
+                .Select(x => new InputFileRowViewModel(x))
+                .ToList();
+
+            OnPropertyChanged(nameof(InputFileRows));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

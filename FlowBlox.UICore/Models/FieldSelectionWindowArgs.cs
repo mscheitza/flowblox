@@ -24,5 +24,7 @@ namespace FlowBlox.UICore.Models
         public IEnumerable<FlowBloxProjectPropertyElement> ProjectPropertyElements { get; set; }
 
         public IEnumerable<OptionElement> OptionElements { get; set; }
+
+        public IEnumerable<FlowBloxInputFilePlaceholderElement> InputFileElements { get; set; }
     }
 }

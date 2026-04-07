@@ -5,10 +5,9 @@ using FlowBlox.Core.Util.WPF;
 using FlowBlox.Interfaces;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Models.DialogService;
-using FlowBlox.Views;
+using FlowBlox.UICore.Views;
 using System.Collections;
 using System.Windows;
-using System.Windows.Forms;
 
 namespace FlowBlox.Services
 {
@@ -23,18 +22,18 @@ namespace FlowBlox.Services
 
         public InsertTextOrFieldResult InvokeInsertTextOrField(BaseFlowBlock flowBlock, string parameterName, Window window)
         {
-            var insertTextOrFieldDialog = new InsertTextOrField(flowBlock, parameterName, false);
-
-            var dialogResult = WindowsFormWPFHelper.ShowWinFormsDialog(insertTextOrFieldDialog, window);
-
-            if (dialogResult == DialogResult.OK)
+            var insertTextOrFieldDialog = new InsertTextOrFieldWindow(flowBlock, parameterName)
             {
-                var insertedValue = insertTextOrFieldDialog.SelectedValue;
+                Owner = window,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
 
+            if (insertTextOrFieldDialog.ShowDialog() == true)
+            {
                 return new InsertTextOrFieldResult
                 {
                     Success = true,
-                    InsertedValue = insertedValue,
+                    InsertedValue = insertTextOrFieldDialog.SelectedValue,
                     IsSelectedFieldRequired = insertTextOrFieldDialog.IsSelectedFieldRequired(),
                     SelectedField = insertTextOrFieldDialog.GetSelectedField()
                 };
@@ -45,23 +44,23 @@ namespace FlowBlox.Services
 
         public EditValueResult InvokeEditValue(EditValueRequest editValueRequest, Window window)
         {
-            var editValueWindow = new EditValueWindow(editValueRequest.Value, editValueRequest.IsRegex, editValueRequest.IsMultiline);
+            var editValueWindow = new EditValueWindow(editValueRequest.Value, editValueRequest.IsRegex, editValueRequest.IsMultiline)
+            {
+                Owner = window,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
             editValueWindow.SetMode(editValueRequest.EditMode);
             editValueWindow.SetParameterName(editValueRequest.ParameterName.Trim('%'));
-            var dialogResult = WindowsFormWPFHelper.ShowWinFormsDialog(editValueWindow, window);
 
-            if (dialogResult == DialogResult.OK)
+            if (editValueWindow.ShowDialog() == true)
             {
-                var modifiedValue = editValueWindow.GetValue();
-
-                var result = new EditValueResult
+                return new EditValueResult
                 {
                     Success = true,
-                    Value = modifiedValue,
+                    Value = editValueWindow.GetValue(),
                     IsMaskedRegexString = editValueWindow.IsMaskedRegexString()
                 };
-
-                return result;
             }
 
             return new EditValueResult();

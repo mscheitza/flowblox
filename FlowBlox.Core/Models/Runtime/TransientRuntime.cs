@@ -35,5 +35,7 @@ namespace FlowBlox.Core.Models.Runtime
 
             return base.ShouldCancelValidation(flowBlock, validationFinished);
         }
+
+        protected override bool ShouldExecuteInputTemplateStartupCommands() => false;
     }
 }

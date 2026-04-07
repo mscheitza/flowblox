@@ -9,6 +9,7 @@ namespace FlowBlox.UICore.ViewModels.TestView
         private string _name = string.Empty;
         private string _requiredFor = string.Empty;
         private string _definedAt = string.Empty;
+        private bool _requiredForExecution;
         private TestCaseStatus _status;
         private string? _protocolPath;
         private bool _isSelected;
@@ -50,6 +51,19 @@ namespace FlowBlox.UICore.ViewModels.TestView
                     return;
 
                 _definedAt = value ?? string.Empty;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool RequiredForExecution
+        {
+            get => _requiredForExecution;
+            set
+            {
+                if (_requiredForExecution == value)
+                    return;
+
+                _requiredForExecution = value;
                 OnPropertyChanged();
             }
         }

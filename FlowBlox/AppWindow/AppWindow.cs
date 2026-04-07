@@ -79,7 +79,7 @@ namespace FlowBlox.AppWindow
         private DockContentUserControlWrapper<RuntimeView> _runtimeViewPanel;
         private DockContentUserControlWrapper<ProblemsView> _problemsViewPanel;
         private AIAssistantView _aiAssistantViewPanel;
-        private bool _defaultFieldViewActivationApplied;
+        private bool _defaultPaneActivationApplied;
         private bool _isProjectLoading;
         private WaitOverlayWindow _waitOverlayWindow;
         private readonly IAppNotificationService _appNotificationService;
@@ -1373,7 +1373,7 @@ namespace FlowBlox.AppWindow
             if (project == null)
                 return;
 
-            var dialog = new ManageInputTemplatesWindow(project);
+            var dialog = new ManageInputFilesWindow(project);
             WindowsFormWPFHelper.ShowDialog(dialog, this.FindForm());
         }
 

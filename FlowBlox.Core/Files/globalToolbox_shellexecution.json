@@ -1,0 +1,34 @@
+﻿{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "ShellExecution",
+      "Name": "PowerShell Script",
+      "Content": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"%%ScriptPath%%\" %%Arguments%%",
+      "Description": "Runs a PowerShell script file with optional arguments."
+    },
+    {
+      "ToolboxCategory": "ShellExecution",
+      "Name": "Python Script",
+      "Content": "python \"%%ScriptPath%%\" %%Arguments%%",
+      "Description": "Runs a Python script with optional arguments."
+    },
+    {
+      "ToolboxCategory": "ShellExecution",
+      "Name": "Node.js Script",
+      "Content": "node \"%%ScriptPath%%\" %%Arguments%%",
+      "Description": "Runs a Node.js script with optional arguments."
+    },
+    {
+      "ToolboxCategory": "ShellExecution",
+      "Name": "Batch Script",
+      "Content": "cmd.exe /C \"\"%%ScriptPath%%\" %%Arguments%%\"",
+      "Description": "Runs a .bat/.cmd script file."
+    },
+    {
+      "ToolboxCategory": "ShellExecution",
+      "Name": "Executable",
+      "Content": "\"%%ExecutablePath%%\" %%Arguments%%",
+      "Description": "Runs an executable file with optional arguments."
+    }
+  ]
+}

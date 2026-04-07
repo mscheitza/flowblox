@@ -97,15 +97,15 @@
 	<resheader name="writer">
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
-	<!-- ManageInputTemplatesWindow.en.resx -->
+	<!-- ManageInputFilesWindow.en.resx -->
 	<data name="Title" xml:space="preserve">
-		<value>Input File Templates</value>
+		<value>Managed Input Files</value>
 	</data>
 	<data name="Header_Title_Main" xml:space="preserve">
-		<value>Manage Input File Templates</value>
+		<value>Manage Input Files</value>
 	</data>
 	<data name="Header_Description_Main" xml:space="preserve">
-		<value>Manage file templates that will be created automatically in the project input directory when a project is loaded, if the files do not exist yet. Relative paths always refer to the project's input directory.</value>
+		<value>Manage project input files. These files can be used as fixed inputs, mocks or templates (e.g. XML, JSON, XLSX). With sync mode CreateIfNotExists they act like templates. Commands can be configured per input file for manual execution or before runtime start.</value>
 	</data>
 	<data name="Button_Close" xml:space="preserve">
 		<value>Close</value>
@@ -114,19 +114,25 @@
 		<value>Open input directory</value>
 	</data>
 	<data name="Tooltip_CreateTemplate" xml:space="preserve">
-		<value>Create new template</value>
+		<value>Create new input file entry</value>
 	</data>
 	<data name="Tooltip_UploadTemplate" xml:space="preserve">
-		<value>Upload template (replace content)</value>
+		<value>Upload file content (replace)</value>
 	</data>
 	<data name="Tooltip_DownloadTemplate" xml:space="preserve">
-		<value>Download template (save as file)</value>
+		<value>Download managed input file (save as file)</value>
 	</data>
 	<data name="Tooltip_OpenTemplateInExplorer" xml:space="preserve">
-		<value>Show template file in Explorer (inside input directory)</value>
+		<value>Show input file in Explorer (inside project input directory)</value>
 	</data>
 	<data name="Tooltip_RemoveTemplate" xml:space="preserve">
-		<value>Remove template (file in input directory remains unchanged)</value>
+		<value>Remove managed input file entry (file on disk remains unchanged)</value>
+	</data>
+	<data name="Tooltip_ExecuteInputFileCommand" xml:space="preserve">
+		<value>Execute command for selected input file</value>
+	</data>
+	<data name="Tooltip_InsertInputFilePlaceholder" xml:space="preserve">
+		<value>Insert field or replace selected text</value>
 	</data>
 	<data name="Header_InputDir" xml:space="preserve">
 		<value>Input directory</value>
@@ -139,6 +145,15 @@
 	</data>
 	<data name="Header_Size" xml:space="preserve">
 		<value>Size (bytes)</value>
+	</data>
+	<data name="Header_Command" xml:space="preserve">
+		<value>Command</value>
+	</data>
+	<data name="Header_ExecuteBeforeRuntime" xml:space="preserve">
+		<value>Execute before runtime start</value>
+	</data>
+	<data name="Hint_CommandFieldSelection" xml:space="preserve">
+		<value>Press Ctrl+F to insert placeholders, e.g. $InputFile:Path.</value>
 	</data>
 	<data name="Header_SyncMode" xml:space="preserve">
 		<value>Sync mode</value>
@@ -153,24 +168,33 @@
 		<value>Failed to open the input directory.</value>
 	</data>
 	<data name="Error_UploadTemplateFailed" xml:space="preserve">
-		<value>Failed to upload the template.</value>
+		<value>Failed to upload the input file.</value>
 	</data>
 	<data name="Error_DownloadTemplateFailed" xml:space="preserve">
-		<value>Failed to download the template.</value>
+		<value>Failed to download the input file.</value>
 	</data>
 	<data name="Error_OpenTemplateInExplorerFailed" xml:space="preserve">
-		<value>Failed to open the template file in Explorer.</value>
+		<value>Failed to open the input file in Explorer.</value>
 	</data>
 	<data name="Error_RemoveTemplateFailed" xml:space="preserve">
-		<value>Failed to remove the template.</value>
+		<value>Failed to remove the input file entry.</value>
 	</data>
 	<data name="Error_MaterializeTemplatesFailed" xml:space="preserve">
-		<value>Failed to create template files in the input directory.</value>
+		<value>Failed to create managed input files in the input directory.</value>
 	</data>
 	<data name="Error_TemplateFileMissing" xml:space="preserve">
-		<value>The template file was not found in the input directory.</value>
+		<value>The input file was not found in the input directory.</value>
 	</data>
 	<data name="Message_TemplateDownloaded" xml:space="preserve">
-		<value>Template has been saved.</value>
+		<value>Input file has been saved.</value>
+	</data>
+	<data name="Error_ExecuteInputFileCommandFailed" xml:space="preserve">
+		<value>Failed to execute input file command.</value>
+	</data>
+	<data name="Message_InputFileCommandMissing" xml:space="preserve">
+		<value>No command is configured for the selected input file.</value>
+	</data>
+	<data name="Message_InputFileCommandSuccess" xml:space="preserve">
+		<value>Input file command finished successfully.</value>
 	</data>
 </root>
