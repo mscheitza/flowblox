@@ -32,6 +32,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
         {
             _listView = listView;
             listView.SelectionChanged += ListView_SelectionChanged;
+            listView.HorizontalAlignment = HorizontalAlignment.Stretch;
+            listView.VerticalAlignment = VerticalAlignment.Stretch;
+
+            // In split mode, avoid StackPanel sizing-to-content behavior on the left side.
+            // Rehost toolbar + list container in a docked grid (Auto + *) so the list fills available space.
+            var leftPanel = BuildDockedLeftPanel(stackPanel);
 
             // Prepare PropertyView
             _propertyViewModel = new PropertyViewModel(_window);
@@ -98,13 +104,56 @@ namespace FlowBlox.UICore.Factory.PropertyView
             _mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // List
             _mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) }); // Property
 
-            System.Windows.Controls.Grid.SetColumn(stackPanel, 0);
+            System.Windows.Controls.Grid.SetColumn(leftPanel, 0);
             System.Windows.Controls.Grid.SetColumn(rightGrid, 1);
 
-            _mainGrid.Children.Add(stackPanel);
+            _mainGrid.Children.Add(leftPanel);
             _mainGrid.Children.Add(rightGrid);
 
             return _mainGrid;
+        }
+
+        private static System.Windows.Controls.Grid BuildDockedLeftPanel(StackPanel stackPanel)
+        {
+            var leftGrid = new System.Windows.Controls.Grid
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch
+            };
+            leftGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            leftGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+
+            if (stackPanel.Children.Count > 0)
+            {
+                var toolbar = stackPanel.Children[0] as UIElement;
+                if (toolbar != null)
+                {
+                    stackPanel.Children.RemoveAt(0);
+                    System.Windows.Controls.Grid.SetRow(toolbar, 0);
+                    leftGrid.Children.Add(toolbar);
+                }
+            }
+
+            if (stackPanel.Children.Count > 0)
+            {
+                var listContainer = stackPanel.Children[0] as UIElement;
+                if (listContainer != null)
+                {
+                    stackPanel.Children.RemoveAt(0);
+                    if (listContainer is System.Windows.Controls.Grid containerGrid
+                        && containerGrid.RowDefinitions.Count > 0)
+                    {
+                        containerGrid.RowDefinitions[0].Height = new GridLength(1, GridUnitType.Star);
+                        containerGrid.VerticalAlignment = VerticalAlignment.Stretch;
+                        containerGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    }
+
+                    System.Windows.Controls.Grid.SetRow(listContainer, 1);
+                    leftGrid.Children.Add(listContainer);
+                }
+            }
+
+            return leftGrid;
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

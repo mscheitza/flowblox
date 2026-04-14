@@ -10,6 +10,7 @@ using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Grid.Elements.Util;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text;
@@ -88,7 +89,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
             return Source.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(IsSupportedTargetProperty)
+                .Where(AITargetPropertyHandler.IsSupportedTargetProperty)
                 .Select(x => x.Name)
                 .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
                 .ToList();
@@ -112,14 +113,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
                 messages.Add("No target property name specified.");
             else
             {
-                var targetProperty = GetTargetPropertyInfo();
+                var targetProperty = AITargetPropertyHandler.GetTargetPropertyInfo(this.Source, this.TargetPropertyName);
                 if (targetProperty == null)
                 {
                     messages.Add($"Could not resolve target property \"{TargetPropertyName}\".");
                 }
-                else if (!IsSupportedTargetProperty(targetProperty))
+                else if (!AITargetPropertyHandler.IsSupportedTargetProperty(targetProperty))
                 {
-                    messages.Add($"Target property \"{TargetPropertyName}\" must be a writable string property.");
+                    messages.Add($"Target property \"{TargetPropertyName}\" must be writable and support AI assignment (string/simple value or structured JSON object/list).");
                 }
             }
 
@@ -174,11 +175,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
         public override void Assign(object value)
         {
-            var targetProperty = GetTargetPropertyInfo();
+            var targetProperty = AITargetPropertyHandler.GetTargetPropertyInfo(this.Source, this.TargetPropertyName);
             if (targetProperty == null)
                 throw new InvalidOperationException($"Could not resolve target property \"{TargetPropertyName}\".");
 
-            targetProperty.SetValue(Source, value?.ToString());
+            var parsedValue = AITargetPropertyHandler.ParseTargetPropertyValue(targetProperty, value);
+            if (!TryAssignCollectionByMutation(targetProperty, parsedValue))
+            {
+                targetProperty.SetValue(Source, parsedValue);
+            }
+
             FlowBloxComponentHelper.RaisePropertyChanged(Source, targetProperty.Name);
         }
 
@@ -192,6 +198,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
             resolved = resolved.Replace("$GenerationStrategy::InputFieldValue", BuildGenerationInputText(testResults));
             resolved = resolved.Replace("$GenerationStrategy::TestExpectations", BuildTestExpectationsText(testResults));
             resolved = resolved.Replace("$GenerationStrategy::TestResults", BuildTestResultsText(testResults));
+            resolved = resolved.Replace("$GenerationStrategy::TargetPropertyDescription", AITargetPropertyHandler.BuildTargetPropertyDescription(this.Source, this.TargetPropertyName));
+            resolved = resolved.Replace("$GenerationStrategy::FlowBlockDescriptions", BuildFlowBlockDescriptions());
 
             resolved = ReplaceFieldTokensWithTestValues(resolved, testResults);
             resolved = FlowBloxFieldHelper.ReplaceFieldsInString(resolved);
@@ -331,24 +339,61 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
             return sb.ToString().Trim();
         }
 
-        private PropertyInfo GetTargetPropertyInfo()
+        private bool TryAssignCollectionByMutation(PropertyInfo targetProperty, object? parsedValue)
         {
-            if (Source == null || string.IsNullOrWhiteSpace(TargetPropertyName))
-                return null;
-
-            return Source.GetType().GetProperty(TargetPropertyName, BindingFlags.Instance | BindingFlags.Public);
-        }
-
-        private static bool IsSupportedTargetProperty(PropertyInfo property)
-        {
-            if (property == null)
+            if (targetProperty.PropertyType == typeof(string))
                 return false;
 
-            return property.CanWrite &&
-                   property.SetMethod != null &&
-                   property.SetMethod.IsPublic &&
-                   property.GetIndexParameters().Length == 0 &&
-                   property.PropertyType == typeof(string);
+            if (!typeof(System.Collections.IEnumerable).IsAssignableFrom(targetProperty.PropertyType))
+                return false;
+
+            var existingCollection = targetProperty.GetValue(Source) as System.Collections.IList;
+            if (existingCollection == null)
+                return false;
+
+            var newItems = (parsedValue as System.Collections.IEnumerable)?.Cast<object?>().ToList();
+            if (parsedValue != null && newItems == null)
+                return false;
+
+            existingCollection.Clear();
+            if (newItems != null)
+            {
+                foreach (var item in newItems)
+                {
+                    existingCollection.Add(item);
+                }
+            }
+
+            return true;
+        }
+
+        private string BuildFlowBlockDescriptions()
+        {
+            if (Source == null)
+                return string.Empty;
+
+            var description = FlowBloxComponentHelper.GetDescription(Source) ?? string.Empty;
+
+            var specialExplanations = Source.GetType()
+                .GetCustomAttributes(typeof(FlowBloxSpecialExplanationAttribute), inherit: true)
+                .OfType<FlowBloxSpecialExplanationAttribute>()
+                .Select(x => x.GetResolvedSpecialExplanation())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(string.IsNullOrWhiteSpace(description) ? "Description: n/a" : $"Description: {description}");
+
+            if (specialExplanations.Count > 0)
+            {
+                sb.AppendLine("SpecialExplanations:");
+                foreach (var explanation in specialExplanations)
+                {
+                    sb.AppendLine($"- {explanation}");
+                }
+            }
+
+            return sb.ToString().Trim();
         }
     }
 }

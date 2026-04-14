@@ -83,7 +83,7 @@ namespace FlowBlox.Core.Models.Base
 
         }
 
-        public virtual void NotifyResultDatasetGenerated(RuntimeResultDatasetSummary resultDatasetSummary)
+        public virtual void NotifyResultDatasetsGenerated(RuntimeResultDatasetSummary resultDatasetSummary)
         {
 
         }

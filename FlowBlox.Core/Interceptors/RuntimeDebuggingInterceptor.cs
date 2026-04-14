@@ -13,6 +13,7 @@ namespace FlowBlox.Core.Interceptors
         private Stopwatch _stopwatch;
         private RuntimeDebuggingResult _result;
         private int _nextFieldChangeId;
+        private int _nextGeneratedResultId;
 
         private bool IsEnabled => Runtime?.ExternalDebuggingInformation != null;
 
@@ -24,6 +25,7 @@ namespace FlowBlox.Core.Interceptors
             var config = Runtime.ExternalDebuggingInformation;
             _stopwatch = Stopwatch.StartNew();
             _nextFieldChangeId = 0;
+            _nextGeneratedResultId = 0;
 
             _result = new RuntimeDebuggingResult
             {
@@ -185,16 +187,37 @@ namespace FlowBlox.Core.Interceptors
                 flowBlock?.Name);
         }
 
-        public override void NotifyResultDatasetGenerated(RuntimeResultDatasetSummary resultDatasetSummary)
+        public override void NotifyResultDatasetsGenerated(RuntimeResultDatasetSummary resultDatasetSummary)
         {
             if (!IsEnabled || resultDatasetSummary == null)
                 return;
 
             var flowBlockName = resultDatasetSummary.FlowBlock?.Name;
+            var generatedResultId = Interlocked.Increment(ref _nextGeneratedResultId);
+            var serializedDatasets = RuntimeGeneratedResultMapper.MapDatasets(resultDatasetSummary.Datasets);
+
+            lock (_sync)
+            {
+                if (_result == null)
+                    return;
+
+                _result.TotalGeneratedResults++;
+                _result.GeneratedResults.Add(new RuntimeGeneratedResultDetails
+                {
+                    Id = generatedResultId,
+                    Elapsed = GetElapsed(),
+                    FlowBlockName = flowBlockName ?? string.Empty,
+                    DatasetCount = resultDatasetSummary.DatasetCount,
+                    Datasets = serializedDatasets
+                });
+            }
+
             AppendProtocol(
-                "ResultDatasetGenerated",
-                $"New result dataset generated: {resultDatasetSummary.DatasetCount} record(s) by '{flowBlockName}'.",
-                flowBlockName);
+                "ResultDatasetsGenerated",
+                $"Generated result with {resultDatasetSummary.DatasetCount} generated dataset(s) in total, see id: {generatedResultId}.",
+                flowBlockName,
+                null,
+                generatedResultId);
         }
 
         public override void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
@@ -303,7 +326,12 @@ namespace FlowBlox.Core.Interceptors
             }
         }
 
-        private void AppendProtocol(string eventType, string message, string flowBlockName = null, int? fieldValueChangeId = null)
+        private void AppendProtocol(
+            string eventType,
+            string message,
+            string flowBlockName = null,
+            int? fieldValueChangeId = null,
+            int? generatedResultId = null)
         {
             lock (_sync)
             {
@@ -316,7 +344,8 @@ namespace FlowBlox.Core.Interceptors
                     EventType = eventType ?? string.Empty,
                     Message = message ?? string.Empty,
                     FlowBlockName = flowBlockName,
-                    FieldValueChangeId = fieldValueChangeId
+                    FieldValueChangeId = fieldValueChangeId,
+                    GeneratedResultId = generatedResultId
                 });
             }
         }

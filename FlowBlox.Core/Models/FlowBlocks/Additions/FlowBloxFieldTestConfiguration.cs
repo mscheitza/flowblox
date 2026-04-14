@@ -86,6 +86,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
                 {
                     return
                     [
+                        FlowBloxTestConfigurationSelectionMode.Keep,
                         FlowBloxTestConfigurationSelectionMode.UserInput
                     ];
                 }

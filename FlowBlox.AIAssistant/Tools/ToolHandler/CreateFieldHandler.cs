@@ -17,7 +17,8 @@ namespace FlowBlox.AIAssistant.Tools
                 ["sourceFlowBlockName"] = "string",
                 ["fieldType"] = "FieldTypes? (default Text)",
                 ["nameGenerationMode"] = "FieldNameGenerationMode? (default UseFallbackIndexOnly)",
-                ["overrideName"] = "string?"
+                ["overrideName"] = "string?",
+                ["usageHint"] = "Before CreateField, call GetComponentSnapshot and create only missing fields. BaseSingleResultFlowBlock (incl. BasePipeFlowBlock) manages ResultField itself; do not create it via CreateField."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)

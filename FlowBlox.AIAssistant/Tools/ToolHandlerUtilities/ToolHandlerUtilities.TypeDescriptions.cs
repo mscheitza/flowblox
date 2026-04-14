@@ -16,7 +16,8 @@ namespace FlowBlox.AIAssistant.Tools
         public static ToolResponse CreateTypeInfoResponse(
             string? fullName,
             Type mustAssignType,
-            string label)
+            string label,
+            IReadOnlyCollection<Type>? excludedBaseTypes = null)
         {
             var type = ResolveType(fullName);
             if (type == null || !mustAssignType.IsAssignableFrom(type))
@@ -29,7 +30,8 @@ namespace FlowBlox.AIAssistant.Tools
                 type,
                 includeChildren: true,
                 additionalKinds,
-                isTopLevel: true);
+                isTopLevel: true,
+                excludedBaseTypes);
 
             return Ok(new JObject
             {
@@ -38,7 +40,9 @@ namespace FlowBlox.AIAssistant.Tools
             });
         }
 
-        public static ToolResponse CreateUnifiedTypeInfoResponse(string? fullName)
+        public static ToolResponse CreateUnifiedTypeInfoResponse(
+            string? fullName,
+            IReadOnlyCollection<Type>? excludedBaseTypes = null)
         {
             var type = ResolveType(fullName);
             if (type == null)
@@ -67,7 +71,8 @@ namespace FlowBlox.AIAssistant.Tools
                 type,
                 includeChildren: true,
                 additionalKinds,
-                isTopLevel: true);
+                isTopLevel: true,
+                excludedBaseTypes);
 
             return Ok(new JObject
             {
@@ -131,14 +136,15 @@ namespace FlowBlox.AIAssistant.Tools
             Type type,
             bool includeChildren,
             Dictionary<string, JObject> additionalKinds,
-            bool isTopLevel)
+            bool isTopLevel,
+            IReadOnlyCollection<Type>? excludedBaseTypes = null)
         {
             var typeDisplayMetadata = GetTypeDisplayMetadata(type);
             var usedTypes = new Dictionary<string, JObject>(StringComparer.Ordinal);
             var properties = type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
-                .Where(p => ShouldIncludeProperty(type, p))
+                .Where(p => ShouldIncludeProperty(type, p, excludedBaseTypes))
                 .OrderBy(p => p.Name)
                 .ToList();
 
@@ -149,7 +155,8 @@ namespace FlowBlox.AIAssistant.Tools
                     property,
                     includeChildren,
                     additionalKinds,
-                    usedTypes));
+                    usedTypes,
+                    excludedBaseTypes));
             }
 
             var result = new JObject
@@ -187,7 +194,8 @@ namespace FlowBlox.AIAssistant.Tools
             PropertyInfo property,
             bool includeChildren,
             Dictionary<string, JObject> additionalKinds,
-            Dictionary<string, JObject> usedTypes)
+            Dictionary<string, JObject> usedTypes,
+            IReadOnlyCollection<Type>? excludedBaseTypes = null)
         {
             var displayAttribute = property.GetCustomAttribute<DisplayAttribute>();
             var displayName = displayAttribute != null
@@ -319,7 +327,8 @@ namespace FlowBlox.AIAssistant.Tools
                         nonNullableType,
                         includeChildren: false,
                         additionalKinds,
-                        isTopLevel: false);
+                        isTopLevel: false,
+                        excludedBaseTypes);
                 }
             }
 
@@ -566,7 +575,53 @@ namespace FlowBlox.AIAssistant.Tools
             return chain;
         }
 
-        private static bool ShouldIncludeProperty(Type ownerType, PropertyInfo property)
+        public static IReadOnlyCollection<Type> ResolveExcludedBaseTypes(JToken? excludeBaseTypeToken)
+        {
+            var resolved = new Dictionary<string, Type>(StringComparer.Ordinal);
+
+            void AddResolvedType(string? typeName)
+            {
+                if (string.IsNullOrWhiteSpace(typeName))
+                {
+                    return;
+                }
+
+                var type = ResolveType(typeName);
+                if (type == null)
+                {
+                    return;
+                }
+
+                resolved[type.FullName ?? type.Name] = type;
+            }
+
+            switch (excludeBaseTypeToken)
+            {
+                case JValue value:
+                    AddResolvedType(value.Value<string>());
+                    break;
+                case JArray arr:
+                    foreach (var entry in arr)
+                    {
+                        AddResolvedType(entry?.Value<string>());
+                    }
+
+                    break;
+                case JObject:
+                    // Unsupported shape; ignore to keep metadata calls resilient.
+                    break;
+                default:
+                    AddResolvedType(excludeBaseTypeToken?.ToString());
+                    break;
+            }
+
+            return resolved.Values.ToList();
+        }
+
+        private static bool ShouldIncludeProperty(
+            Type ownerType,
+            PropertyInfo property,
+            IReadOnlyCollection<Type>? excludedBaseTypes = null)
         {
             if (HasJsonIgnore(property))
             {
@@ -583,6 +638,16 @@ namespace FlowBlox.AIAssistant.Tools
                 && property.DeclaringType == typeof(BaseFlowBlock))
             {
                 return false;
+            }
+
+            if (excludedBaseTypes != null && excludedBaseTypes.Count > 0)
+            {
+                var declaringType = property.DeclaringType;
+                if (declaringType != null
+                    && excludedBaseTypes.Any(excludedBaseType => excludedBaseType == declaringType))
+                {
+                    return false;
+                }
             }
 
             return true;

@@ -1,5 +1,6 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Models.Base;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools
@@ -13,13 +14,20 @@ namespace FlowBlox.AIAssistant.Tools
             "Returns managed object kind metadata.",
             new JObject
             {
-                ["typeFullName"] = "string (type full name, assembly-qualified names are supported)"
+                ["typeFullName"] = "string (type full name, assembly-qualified names are supported)",
+                ["excludeBaseTypes"] = "optional: string[] (base type full names to skip inherited members)",
+                ["usageHint"] =
+                    $"Best practice for traffic reduction: fetch base kinds first (Managed Object: '{typeof(ManagedObject).FullName}'), " +
+                    $"then call specific kinds with excludeBaseTypes to skip already known inherited members."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {
+            var excludedBaseTypes = ToolHandlerUtilities.ResolveExcludedBaseTypes(
+                args["excludeBaseTypes"] ?? args["excludeBaseType"]);
             var baseResponse = ToolHandlerUtilities.CreateUnifiedTypeInfoResponse(
-                args.Value<string>("typeFullName"));
+                args.Value<string>("typeFullName"),
+                excludedBaseTypes);
 
             if (!baseResponse.Ok)
             {

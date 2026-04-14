@@ -199,11 +199,17 @@
   <data name="file_import" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\file-import.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="file_move_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file-move-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="file_pdf_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\file-pdf-box.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\folder-open.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="folder_search_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\folder-search-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="folder_zip_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\folder-zip-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

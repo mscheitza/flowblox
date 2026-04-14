@@ -48,7 +48,7 @@ namespace FlowBlox.UICore.ViewModels
         public ObservableCollection<AssistantTranscriptLine> Transcript { get; } = new ObservableCollection<AssistantTranscriptLine>();
 
         public RelayCommand SubmitCommand { get; }
-        public RelayCommand CancelCommand { get; }
+        public RelayCommand StopCommand { get; }
         public RelayCommand CopyTranscriptEntryCommand { get; }
         public RelayCommand OpenTranscriptEntryInEditorCommand { get; }
         public RelayCommand OpenCommunicationProtocolDirectoryCommand { get; }
@@ -81,7 +81,7 @@ namespace FlowBlox.UICore.ViewModels
                     OnPropertyChanged(nameof(IsBusy));
                     OnPropertyChanged(nameof(CanEditInput));
                     SubmitCommand.Invalidate();
-                    CancelCommand.Invalidate();
+                    StopCommand.Invalidate();
                     ResetCommunicationStateCommand.Invalidate();
                     RefreshUndoRedoState();
                 }
@@ -117,7 +117,7 @@ namespace FlowBlox.UICore.ViewModels
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
 
             SubmitCommand = new RelayCommand(async () => await SubmitAsync(), CanSubmit);
-            CancelCommand = new RelayCommand(Cancel, () => IsBusy);
+            StopCommand = new RelayCommand(Stop, () => IsBusy);
             CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
             OpenTranscriptEntryInEditorCommand = new RelayCommand(OpenTranscriptEntryInEditor);
             OpenCommunicationProtocolDirectoryCommand = new RelayCommand(OpenCommunicationProtocolDirectory);
@@ -162,7 +162,7 @@ namespace FlowBlox.UICore.ViewModels
                 AddTranscriptLine(new AssistantTranscriptLine
                 {
                     Kind = AssistantTranscriptKind.Status,
-                    Text = "Cancelled.",
+                    Text = "Stopped.",
                     Timestamp = DateTime.Now
                 });
             }
@@ -196,7 +196,7 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        private void Cancel()
+        private void Stop()
         {
             if (!IsBusy)
                 return;
@@ -368,7 +368,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public void ResetForProjectInitialization()
         {
-            Cancel();
+            Stop();
             _service.ResetSession();
             Transcript.Clear();
             CurrentInput = string.Empty;

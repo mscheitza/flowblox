@@ -31,6 +31,6 @@ namespace FlowBlox.Core.Interfaces
         void NotifyPreconditionsNotMet(BaseFlowBlock flowBlock, IReadOnlyList<string> messages);
         void NotifyIterationStarted(BaseFlowBlock flowBlock);
         void NotifyIterationFinished(BaseFlowBlock flowBlock);
-        void NotifyResultDatasetGenerated(RuntimeResultDatasetSummary resultDatasetSummary);
+        void NotifyResultDatasetsGenerated(RuntimeResultDatasetSummary resultDatasetSummary);
     }
 }

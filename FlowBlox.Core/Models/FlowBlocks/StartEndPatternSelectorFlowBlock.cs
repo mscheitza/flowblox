@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -16,7 +17,6 @@ namespace FlowBlox.Core.Models.FlowBlocks
         [Display(Name = "StartEndPattern_StartPattern", ResourceType = typeof(FlowBloxTexts))]
         public string StartPattern { get; set; }
 
-        [Required]
         [Display(Name = "StartEndPattern_EndPattern", ResourceType = typeof(FlowBloxTexts))]
         public string EndPattern { get; set; }
 
@@ -25,6 +25,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
     }
 
     [Display(Name = "StartEndPatternSelectorFlowBlock_DisplayName", Description = "StartEndPatternSelectorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("StartEndPatternSelectorFlowBlock_SpecialExplanation_HierarchicalParsing", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("StartEndPatternSelectorFlowBlock_SpecialExplanation_PatternEntryBehavior", Icon = SpecialExplanationIcon.Information)]
     public class StartEndPatternSelectorFlowBlock : BasePipeFlowBlock
     {
         [Display(Name = "StartEndPatternSelectorFlowBlock_StartEndPatterns", ResourceType = typeof(FlowBloxTexts), Order = 1)]
@@ -69,7 +71,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
                 foreach (var startEndPattern in this.StartEndPatterns)
                 {
-                    results = PatternSelector.SelectPatternFromContext(results, startEndPattern.StartPattern, startEndPattern.EndPattern, true);
+                    var endPattern = string.IsNullOrWhiteSpace(startEndPattern.EndPattern)
+                        ? null
+                        : startEndPattern.EndPattern;
+
+                    results = PatternSelector.SelectPatternFromContext(results, startEndPattern.StartPattern, endPattern, true);
                     runtime.Report($"Found {results.Count} results for pattern combination \"{startEndPattern.StartPattern}\" and \"{startEndPattern.EndPattern}\"");
 
                     if (startEndPattern.Index != null)
@@ -120,3 +126,4 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
     }
 }
+

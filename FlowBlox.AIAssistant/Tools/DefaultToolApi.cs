@@ -50,6 +50,7 @@ namespace FlowBlox.AIAssistant.Tools
                 new GetExplanationContentHandler(),
                 new GetRootCategoriesHandler(),
                 new GetCategoryChildrenHandler(),
+                new SearchFlowBlockHandler(),
                 new GetComponentSnapshotHandler(),
                 new CreateFlowBlockHandler(),
                 new UpdateFlowBlockHandler(),
@@ -73,7 +74,8 @@ namespace FlowBlox.AIAssistant.Tools
                 new CreateOrUpdateInputFileHandler(),
                 new DeleteInputFileHandler(),
                 new RunProjectDebugTestHandler(),
-                new GetLastDebugFieldValueChangeHandler(),
+                new RunGenerationStrategiesHandler(),
+                new GetLastDebugArtefactHandler(),
                 new BatchExecuteToolRequestsHandler(ExecuteAsync)
             ];
         }

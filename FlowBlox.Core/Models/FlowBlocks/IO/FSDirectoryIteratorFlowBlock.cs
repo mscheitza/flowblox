@@ -78,8 +78,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             }
         }
 
-        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_import, 16, SKColors.SteelBlue);
-        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_import, 32, SKColors.SteelBlue);
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.folder_search_outline, 16, new SKColor(14, 116, 144));
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.folder_search_outline, 32, new SKColor(14, 116, 144));
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.IO;

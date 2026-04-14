@@ -1281,7 +1281,13 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Die SQL-Abfrage, mit der die Tabellendaten ausgelesen werden. Parameter können über Felder definiert werden.</value>
 	</data>
   <data name="StartEndPatternSelectorFlowBlock_Description" xml:space="preserve">
-		<value>Wählt Inhalte zwischen definierten Start- und Endmustern aus einem Text.</value>
+		<value>Extrahiert Inhalte zwischen Start-/Endmuster-Kombinationen. Die Muster werden sequentiell und hierarchisch angewendet: zuerst auf den Eingabetext, danach auf die Ergebnisse der vorherigen Ebene bis zur letzten Ebene. Die Ergebnisse der letzten Ebene werden zurückgegeben. EndPattern sollte in der Regel gesetzt werden, um bewusst zwischen Start- und Endmarker zu erfassen.</value>
+	</data>
+  <data name="StartEndPatternSelectorFlowBlock_SpecialExplanation_HierarchicalParsing" xml:space="preserve">
+		<value>Jeder Start-/Endmuster-Eintrag bildet eine Parsing-Ebene. Pro Ebene wird der aktuelle Inhalt in Treffersegmente zerlegt, die anschließend an die nächste Ebene übergeben werden.</value>
+	</data>
+  <data name="StartEndPatternSelectorFlowBlock_SpecialExplanation_PatternEntryBehavior" xml:space="preserve">
+		<value>EndPattern ist optional, sollte aber in der Regel gesetzt werden. Wenn es leer ist, wird bis zum Ende des aktuellen Segments gelesen. Index ist optional und wählt auf der aktuellen Ebene einen einzelnen Treffer (0-basiert) aus.</value>
 	</data>
   <data name="StartEndPatternSelectorFlowBlock_DisplayName" xml:space="preserve">
 		<value>Start/Ende-Mustererkennung</value>

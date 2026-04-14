@@ -1,4 +1,6 @@
 Use this only when the user explicitly asks to generate values from test results.
+Terminology note:
+- "Generator" means a value-generation strategy under `GenerationStrategies` (test-driven), not a dedicated generator flow block type.
 
 Purpose of generators:
 - Derive a property value from test input/output evidence.
@@ -12,6 +14,9 @@ Preconditions:
 - At the target flow block, define at least two expectations: one value expectation and one dataset-count expectation.
 
 Setup order:
+0. Discover available generator types when unclear:
+   - Call `GetSupportedTypes` with `baseTypeFullName="FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxGenerationStrategyBase"`.
+   - Inspect selected strategy details with `GetTypeKindsInfo`.
 1. Ensure test definitions exist and are connected/configured.
    Link test definitions via standard update logic, for example `UpdateFlowBlock` with `path=/TestDefinitions/Link` and value `{"resolveManagedObjectByName":"<testDefinitionName>"}`.
 2. For runtime-start test execution / generator application, explicitly set `RequiredForExecution=true` on the used test definitions.
@@ -26,6 +31,8 @@ Setup order:
 - prompt/template options.
 Hint for `AIPropertyValueGenerationStrategy` prompt design:
 - If unsure how to structure the prompt with input value and test expectations, use `GetToolboxEntries` for toolbox category `AIPropertyValueGenerationPrompts` and adapt a fitting template.
+- For `AIPropertyValueGenerationStrategy`, prefer toolbox templates first; do not invent prompt-template assumptions when a fitting toolbox template exists.
+- For structured target properties (for example Start/End pattern lists), require JSON-only output and include `$GenerationStrategy::TargetPropertyDescription` in the prompt template.
 6. Execute tests / runtime as requested by the user.
 
 Minimum expectations at target flow block:
@@ -38,9 +45,17 @@ Minimum test-case requirements:
 - `AIPropertyValueGenerationStrategy`: at least 1 suitable test case.
 - `SequenceDetectionGenerationStrategy`: at least 2 automatically executable test cases.
 
-Typical use-case:
-- Input field contains source text (for example HTML).
-- Test expectations define what must be extracted (value and/or dataset count).
-- Generator produces a fitting pattern/value (for example Regex/XPath-like target property) based on these expectations.
+Use-Cases / Examples:
+1. Happy path (simple target property):
+- Create `AIPropertyValueGenerationStrategy` on the target flow block.
+- Link/select the strategy input field.
+- Use a fitting prompt template from `GetToolboxEntries` (for example Regex/XPath template) and set target property.
+- Run tests/generation; generated value is assigned to the simple target property.
+2. Special use-case (complex/structured target property):
+- Example: `StartEndPatternFlowBlock.StartEndPatterns`.
+- Provide $GenerationStrategy::TargetPropertyDescription in the prompt so the AI sees the full target schema.
+- Convenience: You can also use the toolbox template `Start/End Pattern JSON Generator`.
+- Require JSON-only output; AI returns JSON matching the schema.
+- Generator value can then be deserialized into the target property type and assigned.
 
 Do not create or wire generators unless the user explicitly requests it.

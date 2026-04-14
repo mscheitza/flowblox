@@ -154,7 +154,7 @@
     <value>Senden</value>
   </data>
   <data name="Button_Cancel" xml:space="preserve">
-    <value>Abbrechen</value>
+    <value>Anhalten</value>
   </data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Title" xml:space="preserve">
     <value>Kommunikationsprotokoll-Verzeichnis nicht gefunden</value>

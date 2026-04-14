@@ -333,6 +333,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] file_move_outline {
+            get {
+                object obj = ResourceManager.GetObject("file_move_outline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] file_pdf_box {
             get {
                 object obj = ResourceManager.GetObject("file_pdf_box", resourceCulture);
@@ -346,6 +356,16 @@ namespace FlowBlox.Core {
         public static byte[] folder_open {
             get {
                 object obj = ResourceManager.GetObject("folder_open", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] folder_search_outline {
+            get {
+                object obj = ResourceManager.GetObject("folder_search_outline", resourceCulture);
                 return ((byte[])(obj));
             }
         }

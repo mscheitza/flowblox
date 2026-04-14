@@ -14,8 +14,10 @@ namespace FlowBlox.Core.Models.Runtime.Debugging
         public RuntimeCancellationContext Cancellation { get; set; }
         public int TotalFieldValueChanges { get; set; }
         public int StoredFieldValueChanges { get; set; }
+        public int TotalGeneratedResults { get; set; }
         public List<RuntimeDebugProtocolEntry> Protocol { get; set; } = new();
         public List<RuntimeFieldValueChangeDetails> FieldValueChanges { get; set; } = new();
+        public List<RuntimeGeneratedResultDetails> GeneratedResults { get; set; } = new();
         public List<RuntimeDebugProblemEntry> Warnings { get; set; } = new();
         public List<RuntimeDebugProblemEntry> Errors { get; set; } = new();
         public List<RuntimeDebugPreconditionFailureEntry> PreconditionFailures { get; set; } = new();

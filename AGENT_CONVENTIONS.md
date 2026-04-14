@@ -77,6 +77,13 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Do not introduce user-visible strings without localization keys.
 - For new UI-facing properties: label keys are required. Tooltip keys are strongly recommended for explanatory/complex properties (e.g., XPath/CSS selectors) and should include concise examples when useful.
 
+## Icon Workflow
+- For new/specific icons (for example for new FlowBlocks/ManagedObjects), do not copy random SVGs from `FlowBloxIcons.resx` first.
+- First search for the best matching icon in Pictogrammers MDI.
+- Download the selected SVG to `FlowBlox.Core/Resources`.
+- Import it into `FlowBlox.Core/FlowBloxIcons.resx`, then use the generated key in code.
+- If the icon is not imported yet, use `FlowBloxComponent` icon as temporary compile-safe fallback and switch to the final icon after import.
+
 ## FlowBlock Execute Contract
 - Keep notifications scoped to the concrete operation/context of the flow block.
 - Do not rely on `BaseFlowBlock` generic unexpected-error notification for expected domain failures.

@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.FlowBlocks;
+using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Runtime.Debugging;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.ShellExecution;
@@ -221,14 +222,14 @@ namespace FlowBlox.Core.Models.Runtime
             }
         }
 
-        internal void NotifyResultDatasetGenerated(BaseResultFlowBlock flowBlock, int datasetCount)
+        internal void NotifyResultDatasetsGenerated(BaseResultFlowBlock flowBlock, IReadOnlyList<FlowBlockOutDataset> resultDatasets)
         {
             if (!DisableInterceptors)
             {
-                var summary = new RuntimeResultDatasetSummary(flowBlock, datasetCount);
+                var summary = new RuntimeResultDatasetSummary(flowBlock, resultDatasets ?? Array.Empty<FlowBlockOutDataset>());
                 foreach (var interceptor in _interceptors)
                 {
-                    interceptor.NotifyResultDatasetGenerated(summary);
+                    interceptor.NotifyResultDatasetsGenerated(summary);
                 }
             }
         }

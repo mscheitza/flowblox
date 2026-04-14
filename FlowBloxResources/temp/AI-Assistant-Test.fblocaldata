@@ -1,0 +1,7 @@
+{
+  "$type": "FlowBlox.Core.Models.Project.FlowBloxProjectLocalData, FlowBlox.Core",
+  "LocalUserFieldValues": {
+    "$type": "System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib],[System.String, System.Private.CoreLib]], System.Private.CoreLib",
+    "Input_ApiKey": "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"
+  }
+}

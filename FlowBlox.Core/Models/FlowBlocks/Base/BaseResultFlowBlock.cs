@@ -224,7 +224,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     PrecedingFieldValues = precedingFieldValues
                 }).ToList()
             }).ToList() : CreateEmptyResults();
-            runtime.NotifyResultDatasetGenerated(this, this.GridElementResult.Results?.Count ?? 0);
+            runtime.NotifyResultDatasetsGenerated(this, this.GridElementResult.Results ?? new List<FlowBlockOutDataset>());
 
             if (!runtime.ExecutionFlowEnabled)
                 return;

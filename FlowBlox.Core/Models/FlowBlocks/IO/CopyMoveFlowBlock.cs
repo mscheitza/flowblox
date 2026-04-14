@@ -54,8 +54,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             DirectoryOverwrite = true;
         }
 
-        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_export, 16, SKColors.SteelBlue);
-        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_export, 32, SKColors.SteelBlue);
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_move_outline, 16, new SKColor(217, 119, 6));
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_move_outline, 32, new SKColor(217, 119, 6));
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.IO;

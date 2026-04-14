@@ -344,7 +344,7 @@
             <Button Content="{x:Static resources:AIAssistantControl.Button_Cancel}"
                     MinWidth="90"
                     Style="{StaticResource FlowBlox.RoundedActionButtonStyle}"
-                    Command="{Binding CancelCommand}" />
+                    Command="{Binding StopCommand}" />
         </StackPanel>
     </Grid>
 </UserControl>

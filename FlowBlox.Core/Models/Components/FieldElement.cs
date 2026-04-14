@@ -9,7 +9,9 @@ using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
+using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +27,10 @@ namespace FlowBlox.Core.Models.Components
     public class FieldElement : ManagedObject
     {
         private const string FallbackFieldFormat = "Field{0}";
+
+        private static readonly SKColor RegularFieldColor = new(71, 85, 105);
+        private static readonly SKColor InputFieldColor = new(30, 136, 229);
+        private static readonly SKColor MemoryFieldColor = new(124, 58, 237);
 
         private FieldNameGenerationMode? _nameGenerationMode;
 
@@ -61,6 +67,10 @@ namespace FlowBlox.Core.Models.Components
         }
 
         public override bool HandleRequirements => false;
+
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(GetIconSvg(), 16, GetIconColor());
+
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(GetIconSvg(), 32, GetIconColor());
 
         public override void OnAfterCreate()
         {
@@ -426,6 +436,32 @@ namespace FlowBlox.Core.Models.Components
         }
 
         public override string ToString() => this.FullyQualifiedName;
+
+        private byte[] GetIconSvg()
+        {
+            if (!UserField)
+                return FlowBloxIcons.component;
+
+            return UserFieldType switch
+            {
+                UserFieldTypes.Memory => FlowBloxIcons.memory,
+                UserFieldTypes.Input => FlowBloxIcons.form_textbox,
+                _ => FlowBloxIcons.component
+            };
+        }
+
+        private SKColor GetIconColor()
+        {
+            if (!UserField)
+                return RegularFieldColor;
+
+            return UserFieldType switch
+            {
+                UserFieldTypes.Memory => MemoryFieldColor,
+                UserFieldTypes.Input => InputFieldColor,
+                _ => RegularFieldColor
+            };
+        }
     }
 }
 

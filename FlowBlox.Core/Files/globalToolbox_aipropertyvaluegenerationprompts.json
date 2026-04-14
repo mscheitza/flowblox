@@ -29,6 +29,12 @@
       "Name": "CSS Selector Generator",
       "Content": "You are a CSS selector generator.\n\nGoal:\nGenerate exactly one CSS selector that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy::InputFieldValue\n\nTest expectations:\n$GenerationStrategy::TestExpectations\n\nRules:\n- Return only the CSS selector, without explanation, Markdown, or code block.\n- Prefer stable structural selectors over volatile classes or dynamic IDs.\n- Do not embed ExpectedValue text in the selector.\n- The selected element's text content must match ExpectedValue.",
       "Description": "Generates one stable CSS selector for test-driven extraction."
+    },
+    {
+      "ToolboxCategory": "AIPropertyValueGenerationPrompts",
+      "Name": "Start/End Pattern JSON Generator",
+      "Content": "You generate JSON values for structured FlowBlox properties.\n\nGoal:\nCreate JSON for the target property so test expectations are fulfilled.\n\nInput:\n$GenerationStrategy::InputFieldValue\n\nTest expectations:\n$GenerationStrategy::TestExpectations\n\nTarget property schema:\n$GenerationStrategy::TargetPropertyDescription\n\nDescriptions for the flow block:\n$GenerationStrategy::FlowBlockDescriptions\n\nRules:\n- Return valid JSON only. No explanation, no Markdown, no code block.\n- JSON must match the target property schema exactly.\n- For StartEnd patterns: build ordered pattern entries applied hierarchically.\n- EndPattern can be null if extraction should continue until end.\n- Use Index only when a specific match position is needed; otherwise use null.\n- Prefer robust start/end markers over fragile literal full values.",
+      "Description": "Generates structured JSON for Start/End pattern configurations based on tests and target schema."
     }
   ]
 }

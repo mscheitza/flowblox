@@ -1285,7 +1285,13 @@ Use the "+" button to add entries to the table.</value>
 		<value>The SQL query used to read the table data. Parameters can be defined via fields.</value>
 	</data>
   <data name="StartEndPatternSelectorFlowBlock_Description" xml:space="preserve">
-		<value>Selects content between defined start and end patterns from a text.</value>
+		<value>Extracts text between Start/End pattern pairs. Pattern entries are applied sequentially and hierarchically: first on the input text, then on the results of the previous entry, until the last entry. The final entry results are returned. EndPattern should usually be set to capture between a clear start and end marker.</value>
+	</data>
+  <data name="StartEndPatternSelectorFlowBlock_SpecialExplanation_HierarchicalParsing" xml:space="preserve">
+		<value>Each Start/End pattern entry defines one parsing level. Every level splits the current input into matching segments and passes these segments to the next level.</value>
+	</data>
+  <data name="StartEndPatternSelectorFlowBlock_SpecialExplanation_PatternEntryBehavior" xml:space="preserve">
+		<value>EndPattern is optional, but should usually be set. If empty, matching continues until the end of the current segment. Index is optional and selects one specific match (0-based) at the current level.</value>
 	</data>
   <data name="StartEndPatternSelectorFlowBlock_DisplayName" xml:space="preserve">
 		<value>Start/End pattern recognition</value>

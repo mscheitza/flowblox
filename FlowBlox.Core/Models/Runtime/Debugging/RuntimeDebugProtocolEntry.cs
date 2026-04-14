@@ -7,5 +7,6 @@ namespace FlowBlox.Core.Models.Runtime.Debugging
         public string Message { get; set; } = string.Empty;
         public string FlowBlockName { get; set; }
         public int? FieldValueChangeId { get; set; }
+        public int? GeneratedResultId { get; set; }
     }
 }

@@ -10,11 +10,10 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns explanation/prompt content by key. If knownHash matches, returns unchanged=true without content.",
+            "Returns explanation/prompt content by key.",
             new JObject
             {
-                ["key"] = "string",
-                ["knownHash"] = "string?"
+                ["key"] = "string"
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -31,29 +30,12 @@ namespace FlowBlox.AIAssistant.Tools
                     new JObject { ["availableKeys"] = availableKeys }));
             }
 
-            var knownHash = args.Value<string>("knownHash");
-            if (!string.IsNullOrWhiteSpace(knownHash)
-                && string.Equals(knownHash, entry.ContentHash, StringComparison.OrdinalIgnoreCase))
-            {
-                return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
-                {
-                    ["key"] = entry.Key,
-                    ["title"] = entry.Title,
-                    ["hint"] = entry.Hint,
-                    ["isIncludedInInitialPrompt"] = entry.IsIncludedInInitialPrompt,
-                    ["contentHash"] = entry.ContentHash,
-                    ["unchanged"] = true
-                }));
-            }
-
             return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
             {
                 ["key"] = entry.Key,
                 ["title"] = entry.Title,
                 ["hint"] = entry.Hint,
                 ["isIncludedInInitialPrompt"] = entry.IsIncludedInInitialPrompt,
-                ["contentHash"] = entry.ContentHash,
-                ["unchanged"] = false,
                 ["content"] = entry.Content
             }));
         }

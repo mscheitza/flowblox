@@ -43,9 +43,9 @@ namespace FlowBlox.UICore.Views
             }
             else if (e.Key == Key.Escape)
             {
-                if (vm.CancelCommand.CanExecute(null))
+                if (vm.StopCommand.CanExecute(null))
                 {
-                    vm.CancelCommand.Execute(null);
+                    vm.StopCommand.Execute(null);
                     e.Handled = true;
                 }
             }
