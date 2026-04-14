@@ -6,6 +6,7 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Converters.PropertyView;
 using FlowBlox.UICore.Factory.PropertyView;
+using FlowBlox.UICore.PropertyView.Resolver;
 using FlowBlox.UICore.ViewModels.PropertyView;
 using MahApps.Metro.Controls;
 using System.Collections;
@@ -21,11 +22,13 @@ namespace FlowBlox.UICore.Resolver
     public class PropertyControlResolver
     {
         private Window _window;
+        private readonly object _parent;
         private TextBoxWithOptionalButtonsCreator _textBoxWithOptionalButtonsCreator;
 
-        public PropertyControlResolver(Window window)
+        public PropertyControlResolver(Window window, object parent = null)
         {
             this._window = window;
+            this._parent = parent;
             this._textBoxWithOptionalButtonsCreator = new TextBoxWithOptionalButtonsCreator(window);
         }
 
@@ -180,13 +183,14 @@ namespace FlowBlox.UICore.Resolver
             // Selection-Filter
             if (flowBlockUI?.Factory == UIFactory.ComboBox)
             {
-                var filterMethod = !string.IsNullOrEmpty(flowBlockUI?.SelectionFilterMethod) ?
-                    target.GetType().GetMethod(flowBlockUI?.SelectionFilterMethod) :
-                    null;
+                var selectionMethodResolution = SelectionMethodResolver.ResolveSelectionFilterMethodFromTargetOrParent(
+                    target,
+                    _parent,
+                    flowBlockUI?.SelectionFilterMethod);
 
-                if (filterMethod != null)
+                if (selectionMethodResolution?.Method != null)
                 {
-                    var originalItems = filterMethod.Invoke(target, null) as IList;
+                    var originalItems = selectionMethodResolution.Method.Invoke(selectionMethodResolution.InvocationTarget, null) as IList;
                     
                     IList items = null;
 
@@ -243,7 +247,7 @@ namespace FlowBlox.UICore.Resolver
 
             if (flowBlockUI?.Factory == UIFactory.Association)
             {
-                AssociationControlFactory associationControlFactory = new AssociationControlFactory(_window, property, target, readOnly);
+                AssociationControlFactory associationControlFactory = new AssociationControlFactory(_window, property, target, readOnly, _parent);
                 return associationControlFactory.Create();
             }
 
@@ -256,14 +260,14 @@ namespace FlowBlox.UICore.Resolver
 
             if (flowBlockUI?.Factory == UIFactory.ListView)
             {
-                ListViewFactory listViewFactory = new ListViewFactory(_window, property, target, readOnly);
+                ListViewFactory listViewFactory = new ListViewFactory(_window, property, target, readOnly, _parent);
                 listViewFactory.SetPreselectedInstance(preselectedInstance);
                 return listViewFactory.Create();
             }
 
             if (flowBlockUI?.Factory == UIFactory.ListViewSplitMode)
             {
-                ListViewSplitModeFactory listViewSplitModeFactory = new ListViewSplitModeFactory(_window, property, target, readOnly);
+                ListViewSplitModeFactory listViewSplitModeFactory = new ListViewSplitModeFactory(_window, property, target, readOnly, _parent);
                 return listViewSplitModeFactory.Create();
             }
 

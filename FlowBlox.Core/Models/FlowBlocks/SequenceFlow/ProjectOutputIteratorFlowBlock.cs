@@ -6,7 +6,7 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow.ExecuteProject;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
-using FlowBlox.Core.Util.FlowBlocks;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
 using System.Collections.ObjectModel;
@@ -23,7 +23,9 @@ namespace FlowBlox.Core.Models.FlowBlocks
         private FieldElement _inputField;
 
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleFieldElements), SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
+        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+            SelectionFilterMethod = nameof(GetPossibleInputFields), 
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName))]
         [Required()]
         public FieldElement InputField
         {
@@ -31,9 +33,9 @@ namespace FlowBlox.Core.Models.FlowBlocks
             set => SetRequiredInputField(ref _inputField, value);
         }
 
-        public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);
+        public List<FieldElement> GetPossibleInputFields() => FlowBloxFieldsResolver.GetFieldsOfAssociatedFlowBlocks(this);
 
-        [Display(Name = "Execute project source", GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 1)]
+        [Display(Name = "ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock", Description = "ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 1)]
         [AssociatedFlowBlockResolvable()]
         [FlowBlockUI(
             Factory = UIFactory.Association,

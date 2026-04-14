@@ -162,11 +162,16 @@ namespace FlowBlox.AIAssistant.Tools
                 ["usedTypes"] = new JArray(usedTypes.Values.OrderBy(x => x.Value<string>("fullName")))
             };
 
+            var specialExplanations = BuildSpecialExplanations(type);
+            if (specialExplanations.Count > 0)
+            {
+                result["specialExplanations"] = specialExplanations;
+            }
+
             if (isTopLevel)
             {
                 result["rules"] = new JObject
                 {
-                    ["associatedFlowBlockResolvableRule"] = "Properties marked as AssociatedFlowBlockResolvable can stay null: runtime resolves the required previous flow block on path automatically (first matching instance wins), but explicit user override is allowed.",
                     ["fieldPlaceholderSyntax"] = "$FlowBlock::FieldName",
                     ["placeholderLookupTool"] = "GetPlaceholders",
                     ["baseFlowBlockHint"] = "BaseFlowBlock members are excluded by default for derived flow blocks. Query BaseFlowBlock directly to inspect those members.",
@@ -202,7 +207,6 @@ namespace FlowBlox.AIAssistant.Tools
             var isFieldElement = typeof(FieldElement).IsAssignableFrom(nonNullableType);
             var isReactiveObject = typeof(FlowBloxReactiveObject).IsAssignableFrom(nonNullableType);
             var isFlowBlockReference = typeof(BaseFlowBlock).IsAssignableFrom(nonNullableType);
-            var isAssociatedFlowBlockResolvable = property.GetCustomAttribute<AssociatedFlowBlockResolvableAttribute>() != null;
             var isEnum = nonNullableType.IsEnum;
             var isSimple = IsSimpleType(nonNullableType);
             var nullable = IsNullable(property);
@@ -238,7 +242,6 @@ namespace FlowBlox.AIAssistant.Tools
                 ["displayName"] = string.IsNullOrWhiteSpace(displayName) ? property.Name : displayName,
                 ["description"] = description,
                 ["type"] = propertyType.FullName ?? propertyType.Name,
-                ["actualType"] = actualType.FullName ?? actualType.Name,
                 ["nullable"] = nullable,
                 ["canWrite"] = property.CanWrite,
                 ["isSimple"] = isSimple,
@@ -258,7 +261,8 @@ namespace FlowBlox.AIAssistant.Tools
                     ["operations"] = new JArray(uiOperations),
                     ["uiOptions"] = new JArray(uiOptions),
                     ["creatableTypes"] = new JArray((flowBlockUi.CreatableTypes ?? Array.Empty<Type>()).Select(x => x.FullName ?? x.Name)),
-                    ["readOnly"] = flowBlockUi.ReadOnly
+                    ["readOnly"] = flowBlockUi.ReadOnly,
+                    ["toolboxCategory"] = flowBlockUi.ToolboxCategory ?? string.Empty
                 };
             }
 
@@ -296,13 +300,6 @@ namespace FlowBlox.AIAssistant.Tools
                 {
                     "resolveFlowBlockByName"
                 };
-            }
-
-            if (isAssociatedFlowBlockResolvable)
-            {
-                propertyInfo["isAssociatedFlowBlockResolvable"] = true;
-                propertyInfo["associatedFlowBlockResolvableHint"] =
-                    "AssociatedFlowBlockResolvable property: if null, the required flow block is auto-resolved from the previous path (first matching instance wins); user can still set/override it explicitly.";
             }
 
             if ((propertyType.IsInterface || propertyType.IsAbstract || isManagedObject || isFlowBlockReference)
@@ -484,6 +481,36 @@ namespace FlowBlox.AIAssistant.Tools
             };
         }
 
+        private static JArray BuildSpecialExplanations(Type type)
+        {
+            var entries = type
+                .GetCustomAttributes(typeof(FlowBloxSpecialExplanationAttribute), inherit: true)
+                .OfType<FlowBloxSpecialExplanationAttribute>()
+                .Select(x => new
+                {
+                    SpecialExplanation = x.GetResolvedSpecialExplanation(),
+                    x.Icon,
+                    x.Color
+                })
+                .Where(x => !string.IsNullOrWhiteSpace(x.SpecialExplanation))
+                .ToList();
+
+            if (!entries.Any())
+            {
+                return new JArray();
+            }
+
+            var flatEntries = entries
+                .Select(entry => new JObject
+                {
+                    ["icon"] = entry.Icon.ToString(),
+                    ["color"] = entry.Color ?? string.Empty,
+                    ["explanation"] = entry.SpecialExplanation
+                });
+
+            return new JArray(flatEntries);
+        }
+
         private static bool IsSimpleType(Type type)
         {
             return type.IsPrimitive
@@ -609,5 +636,6 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
 
 

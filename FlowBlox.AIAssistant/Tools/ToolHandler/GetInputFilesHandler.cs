@@ -1,12 +1,12 @@
-using FlowBlox.AIAssistant.Models;
+﻿using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.Project;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools
 {
-    internal sealed class GetInputFileTemplatesHandler : ToolHandlerBase
+    internal sealed class GetInputFilesHandler : ToolHandlerBase
     {
-        public override string Name => "GetInputFileTemplates";
+        public override string Name => "GetInputFiles";
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
@@ -16,7 +16,7 @@ namespace FlowBlox.AIAssistant.Tools
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {
             var project = ToolHandlerUtilities.GetProject();
-            var templates = project.InputFiles ?? new List<FlowBloxInputFileTemplate>();
+            var templates = project.InputFiles ?? new List<FlowBloxInputFile>();
 
             var items = new JArray(
                 templates
@@ -36,7 +36,7 @@ namespace FlowBlox.AIAssistant.Tools
             return Task.FromResult(ToolHandlerUtilities.Ok(result));
         }
 
-        private static JObject ToTemplateObject(FlowBloxInputFileTemplate template)
+        private static JObject ToTemplateObject(FlowBloxInputFile template)
         {
             var normalizedKey = NormalizeKey(template.RelativePath);
             var bytes = template.ContentBytes ?? Array.Empty<byte>();
@@ -59,5 +59,6 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
 
 

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace FlowBlox.Core.Models.Project
 {
     [Serializable]
-    public class FlowBloxInputFileTemplate : INotifyPropertyChanged
+    public class FlowBloxInputFile : INotifyPropertyChanged
     {
         private string _relativePath;
         private string _contentBase64;
@@ -154,3 +154,4 @@ namespace FlowBlox.Core.Models.Project
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
+

@@ -1,4 +1,4 @@
-using FlowBlox.Core.Attributes;
+﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Exceptions;
@@ -10,6 +10,7 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Provider.Placeholders.InputFile;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Json;
@@ -114,13 +115,16 @@ namespace FlowBlox.Core.Models.Project
         }
 
         [JsonProperty("InputFiles")]
-        public List<FlowBloxInputFileTemplate> InputFiles { get; set; }
+        public List<FlowBloxInputFile> InputFiles { get; set; }
 
         [JsonProperty("InputTemplates")]
-        public List<FlowBloxInputFileTemplate> InputTemplates
+        private List<FlowBloxInputFile> LegacyInputTemplates
         {
-            get => InputFiles;
-            set => InputFiles = value ?? new List<FlowBloxInputFileTemplate>();
+            set
+            {
+                if (value != null)
+                    InputFiles = value;
+            }
         }
 
         public FlowBloxProject()
@@ -131,7 +135,7 @@ namespace FlowBlox.Core.Models.Project
             FlowBloxRegistry = new FlowBloxRegistry();
             Extensions = new List<FlowBloxProjectExtension>();
             ProjectDependendDataObjects = new List<IProjectDependendData>();
-            InputFiles = new List<FlowBloxInputFileTemplate>();
+            InputFiles = new List<FlowBloxInputFile>();
             _logger.Info("FlowBloxProject instance created.");
         }
 
@@ -183,33 +187,9 @@ namespace FlowBlox.Core.Models.Project
         /// <summary>
         /// Returns available input file placeholders for command editing.
         /// </summary>
-        public IReadOnlyList<FlowBloxInputFilePlaceholderElement> GetInputFilePlaceholderElements(FlowBloxInputFileTemplate inputFile = null)
+        public IReadOnlyList<FlowBloxInputFilePlaceholderElement> GetInputFilePlaceholderElements(FlowBloxInputFile inputFile = null)
         {
-            var relativePath = FlowBloxInputTemplateHelper.NormalizeRelativePath(inputFile?.RelativePath ?? string.Empty);
-            var absolutePath = string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(relativePath) && !string.IsNullOrWhiteSpace(ProjectInputDirectory))
-            {
-                try
-                {
-                    absolutePath = FlowBloxInputTemplateHelper.BuildAbsoluteTargetPath(ProjectInputDirectory, relativePath);
-                }
-                catch
-                {
-                    absolutePath = string.Empty;
-                }
-            }
-
-            return new List<FlowBloxInputFilePlaceholderElement>
-            {
-                new FlowBloxInputFilePlaceholderElement
-                {
-                    Key = "Path",
-                    DisplayName = "Input file path",
-                    Description = "Absolute path to the current managed input file.",
-                    Value = absolutePath
-                }
-            };
+            return FlowBloxInputFilePlaceholderProvider.GetElements(ProjectInputDirectory, inputFile);
         }
 
         /// <summary>
@@ -958,3 +938,4 @@ namespace FlowBlox.Core.Models.Project
         }
     }
 }
+

@@ -278,6 +278,27 @@ namespace FlowBlox.UICore.ViewModels
             if (targets.Count == 0)
                 return;
 
+            foreach (var target in targets)
+            {
+                var testDefinition = target.TestDefinition;
+                if (testDefinition == null)
+                    continue;
+
+                if (!testDefinition.IsDeletable(out var dependencies))
+                {
+                    var dependencyText = string.Join(", ", dependencies
+                        .Select(x => x.Name)
+                        .Where(x => !string.IsNullOrWhiteSpace(x))
+                        .Distinct());
+
+                    _messageBoxService.ShowMessageBox(
+                        string.Format(Resources.TestView.Message_DeleteBlocked_Description, testDefinition.Name, dependencyText),
+                        Resources.TestView.Message_DeleteBlocked_Title,
+                        FlowBloxMessageBoxTypes.Warning);
+                    return;
+                }
+            }
+
             var confirmResult = _messageBoxService.ShowMessageBox(
                 string.Format(Resources.TestView.Message_DeleteConfirm_Description, targets.Count),
                 Resources.TestView.Message_DeleteConfirm_Title,

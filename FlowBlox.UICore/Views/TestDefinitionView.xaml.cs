@@ -1,12 +1,17 @@
 ﻿using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Testing;
+using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Factory.Adapter;
+using FlowBlox.UICore.Models;
+using FlowBlox.UICore.Utilities;
 using FlowBlox.Core.Util;
 using FlowBlox.UICore.ViewModels;
 using MahApps.Metro.Controls;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace FlowBlox.UICore.Views
 {
@@ -67,6 +72,65 @@ namespace FlowBlox.UICore.Views
         {
             DialogResult = false;
             Close();
+        }
+
+        private void InsertFieldPlaceholderButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button)
+                return;
+
+            var parentGrid = FindVisualParent<System.Windows.Controls.Grid>(button);
+            if (parentGrid == null)
+                return;
+
+            var textBox = FindVisualChild<TextBox>(parentGrid, "UserInputTextBox");
+            if (textBox == null)
+                return;
+
+            var args = new FieldSelectionWindowArgs
+            {
+                SelectionMode = FieldSelectionMode.Options,
+                IsRequired = false,
+                HideRequired = true,
+                AllowedFieldSelectionModes = [FieldSelectionMode.ProjectProperties, FieldSelectionMode.Options]
+            };
+
+            var adapter = new WpfTextBoxAdapter(textBox);
+            Utilities.TextBoxHelper.ShowFieldSelectionDialog(target: null, args, adapter, this);
+        }
+
+        private static T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            var current = child;
+            while (current != null)
+            {
+                if (current is T match)
+                    return match;
+
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            return null;
+        }
+
+        private static T FindVisualChild<T>(DependencyObject parent, string elementName = null) where T : FrameworkElement
+        {
+            if (parent == null)
+                return null;
+
+            var count = VisualTreeHelper.GetChildrenCount(parent);
+            for (var i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T typed && (string.IsNullOrWhiteSpace(elementName) || typed.Name == elementName))
+                    return typed;
+
+                var nested = FindVisualChild<T>(child, elementName);
+                if (nested != null)
+                    return nested;
+            }
+
+            return null;
         }
     }
 }

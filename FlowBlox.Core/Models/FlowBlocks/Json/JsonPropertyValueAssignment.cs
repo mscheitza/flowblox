@@ -17,8 +17,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         public string Value { get; set; }
 
         [Display(Name = "JsonPropertyValueAssignment_FieldValue", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ComboBox, SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
-            SelectionFilterMethod = nameof(BaseFlowBlock.GetPossibleFieldElements))]
+        [FlowBlockUI(Factory = UIFactory.ComboBox, 
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
+            SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public FieldElement FieldValue { get; set; }
 
         [Display(Name = "JsonPropertyValueAssignment_IsArray", Description = "JsonPropertyValueAssignment_IsArray_Tooltip", ResourceType = typeof(FlowBloxTexts))]

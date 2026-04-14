@@ -1,9 +1,10 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
 using SkiaSharp;
@@ -13,9 +14,10 @@ using System.Xml;
 namespace FlowBlox.Core.Models.FlowBlocks.Xml
 {
     [Display(Name = "XmlDocumentXPathSelector_DisplayName", Description = "XmlDocumentXPathSelector_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
     public class XmlDocumentXPathSelectorFlowBlock : BaseSingleResultFlowBlock
     {
-        [Display(Name = "XmlDocumentXPathSelector_AssociatedXmlDocument", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "XmlDocumentXPathSelector_AssociatedXmlDocument", Description = "XmlDocumentXPathSelector_AssociatedXmlDocument_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleXmlDocumentFlowBlocks),
@@ -30,7 +32,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         }
 
         [Display(Name = "XmlDocumentXPathSelector_XPath", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(ToolboxCategory = nameof(FlowBloxToolboxCategory.XPath))]
+        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.XPath))]
         [Required]
         public string XPath { get; set; }
 
@@ -65,9 +67,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
                 if (string.IsNullOrEmpty(XPath))
                     throw new InvalidOperationException("No XPath expression provided.");
 
-                var nodes = xmlDoc.SelectNodes(XPath);
+                var resolvedXPath = FlowBloxFieldHelper.ReplaceFieldsInString(XPath);
+                if (string.IsNullOrWhiteSpace(resolvedXPath))
+                    throw new InvalidOperationException("No XPath expression provided.");
+
+                var nodes = xmlDoc.SelectNodes(resolvedXPath);
                 if (nodes == null || nodes.Count == 0)
-                    throw new InvalidOperationException($"No matching nodes found for XPath: '{XPath}'.");
+                    throw new InvalidOperationException($"No matching nodes found for XPath: '{resolvedXPath}'.");
 
                 var contents = new List<string>();
 
@@ -83,3 +89,5 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         }
     }
 }
+
+

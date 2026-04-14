@@ -15,7 +15,7 @@ namespace FlowBlox.UICore.Models
 
         public bool MultiSelect { get; set; } = true;
 
-        public bool IsRequired { get; set; } = false;
+        public bool IsRequired { get; set; } = true;
         
         public bool HideRequired { get; set; } = false;
 
@@ -26,5 +26,7 @@ namespace FlowBlox.UICore.Models
         public IEnumerable<OptionElement> OptionElements { get; set; }
 
         public IEnumerable<FlowBloxInputFilePlaceholderElement> InputFileElements { get; set; }
+
+        public IEnumerable<FlowBloxGenerationStrategyPlaceholderElement> GenerationStrategyDataElements { get; set; }
     }
 }

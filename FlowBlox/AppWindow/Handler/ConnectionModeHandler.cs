@@ -1,5 +1,4 @@
-ï»¿using FlowBlox.Grid.Elements.UserControls;
-using System.ComponentModel;
+using FlowBlox.Grid.Elements.UserControls;
 using System.Drawing;
 using System.Windows.Forms;
 using FlowBlox.Core.Enums;
@@ -7,6 +6,7 @@ using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Grid.Provider;
 using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.UICore.Actions;
+using FlowBlox.AppWindow.Contents;
 
 namespace FlowBlox.AppWindow.Handler
 {
@@ -23,7 +23,8 @@ namespace FlowBlox.AppWindow.Handler
         private FlowBlockUIElement endElement = null;
         private FlowBloxProjectComponentProvider _componentProvider;
 
-        public ConnectionModeHandler(BackgroundWorker backgroundWorker_PrintGrid, int mouseMoveTimeunit) : base(backgroundWorker_PrintGrid, mouseMoveTimeunit)
+        public ConnectionModeHandler(ProjectPanel projectPanel)
+            : base(projectPanel)
         {
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
         }
@@ -64,9 +65,7 @@ namespace FlowBlox.AppWindow.Handler
             if (isConnecting)
             {
                 endLocation = location;
-
-                if (!_backgroundWorker_PrintGrid.IsBusy)
-                    _backgroundWorker_PrintGrid.RunWorkerAsync(new object[] { _mouseMoveTimeunit, false });
+                _projectPanel.SchedulePrintGridForMouseMove();
             }
         }
 
@@ -78,9 +77,7 @@ namespace FlowBlox.AppWindow.Handler
                 isConnecting = false;
 
                 endElement = GetUIElementAtPoint(endLocation);
-
-                if (!_backgroundWorker_PrintGrid.IsBusy)
-                     _backgroundWorker_PrintGrid.RunWorkerAsync();
+                _projectPanel.SchedulePrintGridDefault();
 
                 if (!CanConnect(startElement, endElement))
                     return;
@@ -139,10 +136,10 @@ namespace FlowBlox.AppWindow.Handler
         {
             foreach (var uiElement in _gridUIRegistry.UIElements)
             {
-                // Erstellt ein Rechteck basierend auf der Position und der GrÃ¶ÃŸe des UIElements.
+                // Erstellt ein Rechteck basierend auf der Position und der Größe des UIElements.
                 Rectangle rect = new Rectangle(uiElement.Location, uiElement.Size);
 
-                // ÃœberprÃ¼ft, ob sich der Punkt innerhalb des Rechtecks befindet.
+                // Überprüft, ob sich der Punkt innerhalb des Rechtecks befindet.
                 if (rect.Contains(point))
                 {
                     return uiElement;
@@ -152,4 +149,3 @@ namespace FlowBlox.AppWindow.Handler
         }
     }
 }
-

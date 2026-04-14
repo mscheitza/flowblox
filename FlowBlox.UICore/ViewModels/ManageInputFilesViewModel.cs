@@ -1,4 +1,4 @@
-using FlowBlox.Core.Models.Project;
+﻿using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.ShellExecution;
@@ -22,7 +22,7 @@ namespace FlowBlox.UICore.ViewModels
         private readonly Window _ownerWindow;
         private readonly FlowBloxProject _project;
 
-        private FlowBloxInputFileTemplate _selectedInputFile;
+        private FlowBloxInputFile _selectedInputFile;
 
         public RelayCommand CloseCommand { get; }
         public RelayCommand OpenInputDirectoryCommand { get; }
@@ -34,12 +34,12 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand RemoveInputFileCommand { get; }
         public RelayCommand ExecuteInputFileCommandCommand { get; }
 
-        public ObservableCollection<FlowBloxInputFileTemplate> InputFiles { get; }
+        public ObservableCollection<FlowBloxInputFile> InputFiles { get; }
         public ObservableCollection<FlowBloxInputTemplateSyncMode> SyncModes { get; }
 
         public string ProjectInputDirectory => _project?.ProjectInputDirectory ?? "";
 
-        public FlowBloxInputFileTemplate SelectedInputFile
+        public FlowBloxInputFile SelectedInputFile
         {
             get => _selectedInputFile;
             set
@@ -60,7 +60,7 @@ namespace FlowBlox.UICore.ViewModels
             _ownerWindow = ownerWindow;
             _project = project;
 
-            InputFiles = new ObservableCollection<FlowBloxInputFileTemplate>(_project?.InputFiles ?? new System.Collections.Generic.List<FlowBloxInputFileTemplate>());
+            InputFiles = new ObservableCollection<FlowBloxInputFile>(_project?.InputFiles ?? new System.Collections.Generic.List<FlowBloxInputFile>());
             SyncModes = new ObservableCollection<FlowBloxInputTemplateSyncMode>(
                 Enum.GetValues(typeof(FlowBloxInputTemplateSyncMode)).Cast<FlowBloxInputTemplateSyncMode>());
 
@@ -103,7 +103,7 @@ namespace FlowBlox.UICore.ViewModels
             if (_project == null)
                 return;
 
-            var tpl = new FlowBloxInputFileTemplate
+            var tpl = new FlowBloxInputFile
             {
                 RelativePath = "new-file.txt",
                 ContentBase64 = "",
@@ -114,7 +114,7 @@ namespace FlowBlox.UICore.ViewModels
             InputFiles.Add(tpl);
 
             // Keep project list in sync (no explicit save button needed).
-            _project.InputFiles ??= new System.Collections.Generic.List<FlowBloxInputFileTemplate>();
+            _project.InputFiles ??= new System.Collections.Generic.List<FlowBloxInputFile>();
             _project.InputFiles.Add(tpl);
 
             SelectedInputFile = tpl;
@@ -242,7 +242,7 @@ namespace FlowBlox.UICore.ViewModels
             ExecuteInputFileCommand(SelectedInputFile);
         }
 
-        public void ExecuteInputFileCommand(FlowBloxInputFileTemplate inputFile)
+        public void ExecuteInputFileCommand(FlowBloxInputFile inputFile)
         {
             if (inputFile == null)
                 return;
@@ -286,8 +286,10 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        public IReadOnlyList<FlowBloxInputFilePlaceholderElement> GetInputFilePlaceholderElements(FlowBloxInputFileTemplate inputFile)
-            => _project?.GetInputFilePlaceholderElements(inputFile) ?? Array.Empty<FlowBloxInputFilePlaceholderElement>();
+        public IReadOnlyList<FlowBloxInputFilePlaceholderElement> GetInputFilePlaceholderElements(FlowBloxInputFile inputFile)
+        {
+            return _project?.GetInputFilePlaceholderElements(inputFile) ?? Array.Empty<FlowBloxInputFilePlaceholderElement>();
+        }
 
         private void ShowNotification(string message)
         {
@@ -312,5 +314,6 @@ namespace FlowBlox.UICore.ViewModels
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
+
 
 

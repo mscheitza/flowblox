@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Components;
@@ -13,9 +13,10 @@ using System.Xml;
 namespace FlowBlox.Core.Models.FlowBlocks.Xml
 {
     [Display(Name = "XmlDocumentOutputFlowBlock_DisplayName", Description = "XmlDocumentOutputFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("XmlDocumentOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
     public class XmlDocumentOutputFlowBlock : BaseSingleResultFlowBlock
     {
-        [Display(Name = "XmlDocumentOutputFlowBlock_AssociatedXmlDocument", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "XmlDocumentOutputFlowBlock_AssociatedXmlDocument", Description = "XmlDocumentOutputFlowBlock_AssociatedXmlDocument_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleXmlDocumentFlowBlocks),

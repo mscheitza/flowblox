@@ -1,4 +1,4 @@
-using FlowBlox.Core.Models.Components;
+﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
@@ -10,7 +10,7 @@ namespace FlowBlox.Core.Models.Testing
         public FlowBloxTestDefinition TestDefinition { get; }
         public BaseFlowBlock FlowBlock { get; }
         public FieldElement FieldElement { get; }
-        public FlowBloxTestConfiguration TestConfiguration { get; }
+        public FlowBloxFieldTestConfiguration TestConfiguration { get; }
         public ExpectationCondition FailedCondition { get; }
         public BaseRuntime Runtime { get; }
         public FlowBloxTestResult CurrentResult { get; }
@@ -21,7 +21,7 @@ namespace FlowBlox.Core.Models.Testing
             FlowBloxTestDefinition testDefinition,
             BaseFlowBlock flowBlock,
             FieldElement fieldElement,
-            FlowBloxTestConfiguration testConfiguration,
+            FlowBloxFieldTestConfiguration testConfiguration,
             ExpectationCondition failedCondition,
             BaseRuntime runtime,
             FlowBloxTestResult currentResult)
@@ -36,3 +36,4 @@ namespace FlowBlox.Core.Models.Testing
         }
     }
 }
+

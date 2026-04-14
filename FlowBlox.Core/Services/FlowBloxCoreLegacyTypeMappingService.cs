@@ -30,6 +30,11 @@ namespace FlowBlox.Core.Services
                     typeof(RecursiveCallFlowBlock),
                     [
                         "FlowBlox.Core.Models.FlowBlocks.InvokerFlowBlock, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(FlowBloxFieldTestConfiguration),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxTestConfiguration, FlowBlox.Core"
                     ])
             ];
         }

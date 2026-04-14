@@ -3,18 +3,26 @@ Explaining IterationContext and flow execution (compact):
 - Normal flow: each flow block invokes the next connected flow block.
 - BaseResultFlowBlock fans out: downstream execution runs N times (N = result dataset count).
 
+Result handling basics:
+- A dataset can contain one or more field values; these result fields are defined on the BaseResultFlowBlock.
+- BaseSingleResultFlowBlock has exactly one result field, but can still have multiple input predecessors depending on InputCardinality.
+- BasePipeFlowBlock has exactly one InputField, one referenced predecessor flow block, and one result field.
+
 Multiple predecessors into one target:
 - IterationContext is auto-derived as the first common flow block across predecessor paths.
+- This automatic value can always be overridden by setting AssociatedIterationContext explicitly.
 - During IterationContext:
   - start: clear target inputs and collect incoming datasets
   - finish: combine collected datasets by InputBehavior
 - Default InputBehavior is Combine (cross-product). Per predecessor override is possible (for example First).
 - Target executes once per resulting combined dataset.
 
-Manual IterationContext:
+Manual/Associated IterationContext:
 - Use it to define an explicit aggregation boundary: "within which iteration scope should this target collect datasets?"
 - Typical optimization: run output/writer once after a reader is fully finished.
 - Practical way: set output IterationContext to a parent of the reader, so output executes on parent iteration finish.
+- The current IterationContext can be retrieved at any time via a GetComponentSnapshot.
+- JoinFlowBlock has a special auto-resolution fallback for its predecessor topology, but AssociatedIterationContext still has highest priority and overrides it.
 
 Concrete decision helper (XML from table):
 - Flow: Start -> XmlDocumentFlowBlock -> TableReader -> XmlDocumentNodeWriter -> XmlDocumentOutput -> FileWriter

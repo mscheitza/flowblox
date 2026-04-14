@@ -21,6 +21,7 @@ namespace FlowBlox.Core.Services
                 FlowBlockCategory.ControlFlow,
                 FlowBlockCategory.Communication,
                 FlowBlockCategory.Authorization,
+                FlowBlockCategory.DateOperations,
                 FlowBlockCategory.AI,
                 FlowBlockCategory.ShellExecution,
                 FlowBlockCategory.Compression,

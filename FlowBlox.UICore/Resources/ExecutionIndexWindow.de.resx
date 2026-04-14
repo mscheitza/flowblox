@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title" xml:space="preserve"><value>Ausführungsindex</value></data>
+  <data name="Header_Title" xml:space="preserve"><value>Ausführungsindex</value></data>
+  <data name="Header_Description" xml:space="preserve"><value>Legt die Ausführungsreihenfolge bei mehreren nachgelagerten Flow-Blöcken derselben Quelle fest. Niedrigere Werte werden zuerst ausgeführt (0, 1, 2, ...).</value></data>
+  <data name="Label_ExecutionIndex" xml:space="preserve"><value>Ausführungsindex:</value></data>
+  <data name="Button_Back" xml:space="preserve"><value>Zurück</value></data>
+  <data name="Button_Remove" xml:space="preserve"><value>Ausführungsindex entfernen</value></data>
+  <data name="Button_Apply" xml:space="preserve"><value>Übernehmen</value></data>
+  <data name="Validation_InvalidIndex_Title" xml:space="preserve"><value>Ungültige Eingabe</value></data>
+  <data name="Validation_InvalidIndex_Message" xml:space="preserve"><value>Bitte einen numerischen Wert größer oder gleich 0 eingeben.</value></data>
+</root>

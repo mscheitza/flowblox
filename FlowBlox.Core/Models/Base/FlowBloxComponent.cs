@@ -46,17 +46,15 @@ namespace FlowBlox.Core.Models.Base
         [ActivationCondition(MemberName = nameof(HandleRequirements), Value = true)]
         [Display(Name = "FlowBloxComponent_RequiredFields", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
-            UiOptions = UIOptions.FieldSelectionHideRequired | UIOptions.FieldSelectionDefaultNotRequired,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
+        [FieldSelection(DefaultRequiredValue = false, HideRequiredCheckbox = true)]
         [FlowBlockListView(LVColumnMemberNames = [nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name)])]
         public ObservableCollection<FieldElement> RequiredFields { get; set; } = new ObservableCollection<FieldElement>();
 
         public virtual List<FieldElement> GetPossibleFieldElements()
         {
-            return FlowBloxRegistryProvider.GetRegistry()
-                .GetFieldElements(true)
-                .ToList();
+            return FlowBloxFieldsResolver.GetFieldsOrderedByExecutionFlow();
         }
 
         public void SetFieldRequirement(FieldElement fieldElement, bool isRequired)
@@ -225,17 +223,38 @@ namespace FlowBlox.Core.Models.Base
 
         public virtual void OnBeforeSave()
         {
-            // Ensure RequiredFields only contains fields that are also associated via property definitions
-            var associatedFields = new HashSet<FieldElement>(this.GetAssociatedFields());
+            // Intentionally left blank.
+            // Cleanup of unused required fields is handled by the UI save workflow,
+            // where users can review and select references before removal.
+        }
 
-            var toRemove = this.RequiredFields
-                .Where(required => !associatedFields.Contains(required))
+        public bool HasUnusedFieldElements(out List<FieldElement> unusedFieldElements)
+        {
+            unusedFieldElements = GetUnusedRequiredFieldElements();
+            return unusedFieldElements.Count > 0;
+        }
+
+        public List<FieldElement> GetUnusedRequiredFieldElements()
+        {
+            var associatedFields = new HashSet<FieldElement>(GetAssociatedFields().ExceptNull());
+            return RequiredFields
+                .Where(required => required != null && !associatedFields.Contains(required))
+                .Distinct()
                 .ToList();
+        }
 
+        public void RemoveRequiredFields(IEnumerable<FieldElement> fieldsToRemove)
+        {
+            if (fieldsToRemove == null)
+                return;
+
+            var toRemoveSet = new HashSet<FieldElement>(fieldsToRemove.Where(x => x != null));
+            if (toRemoveSet.Count == 0)
+                return;
+
+            var toRemove = RequiredFields.Where(toRemoveSet.Contains).ToList();
             foreach (var field in toRemove)
-            {
-                this.RequiredFields.Remove(field);
-            }
+                RequiredFields.Remove(field);
         }
 
         public virtual void OnAfterSave()

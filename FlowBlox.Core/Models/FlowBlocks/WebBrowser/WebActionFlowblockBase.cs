@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
@@ -9,9 +9,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 {
+    [FlowBloxSpecialExplanation("WebActionFlowblockBase_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
     public abstract class WebActionFlowblockBase : BaseSingleResultFlowBlock
     {
-        [Display(Name = "WebActionFlowblockBase_AssociatedWebBrowser", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "WebActionFlowblockBase_AssociatedWebBrowser", Description = "WebActionFlowblockBase_AssociatedWebBrowser_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleWebBrowserFlowBlocks),

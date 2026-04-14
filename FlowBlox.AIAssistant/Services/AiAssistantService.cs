@@ -506,7 +506,7 @@ namespace FlowBlox.AIAssistant.Services
 
             return string.Join(
                 ", ",
-                explanations.Select(x => $"{x.Key}:{x.ContentHash}"));
+                explanations.Select(x => $"{x.Key}:{x.ContentHash}{(x.IsIncludedInInitialPrompt ? ":included" : ":on-demand")}"));
         }
 
         private static string BuildCentralGuidelinesText()

@@ -1,4 +1,4 @@
-using FlowBlox.AIAssistant.Models;
+﻿using FlowBlox.AIAssistant.Models;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools
@@ -50,24 +50,28 @@ namespace FlowBlox.AIAssistant.Tools
                 new GetExplanationContentHandler(),
                 new GetRootCategoriesHandler(),
                 new GetCategoryChildrenHandler(),
+                new GetComponentSnapshotHandler(),
                 new CreateFlowBlockHandler(),
                 new UpdateFlowBlockHandler(),
                 new DeleteFlowBlockHandler(),
                 new ConnectFlowBlocksHandler(),
                 new DisconnectFlowBlocksHandler(),
                 new CreateManagedObjectHandler(),
+                new CreateUserFieldHandler(),
                 new UpdateManagedObjectHandler(),
                 new DeleteManagedObjectHandler(),
                 new GetManagedObjectsTypesHandler(),
                 new GetSupportedTypesHandler(),
                 new GetTypeKindsInfoHandler(),
                 new GetManagedObjectKindsInfoHandler(),
+                new ResolveAssociatedFlowBlockHandler(),
                 new GetPlaceholdersHandler(),
-                new GetInputFileTemplatesHandler(),
-                new GetInputFileTemplateContentHandler(),
+                new GetToolboxEntriesHandler(),
+                new GetInputFilesHandler(),
+                new GetInputFileContentHandler(),
                 new CreateFieldHandler(),
-                new CreateOrUpdateInputFileTemplateHandler(),
-                new DeleteInputFileTemplateHandler(),
+                new CreateOrUpdateInputFileHandler(),
+                new DeleteInputFileHandler(),
                 new RunProjectDebugTestHandler(),
                 new GetLastDebugFieldValueChangeHandler(),
                 new BatchExecuteToolRequestsHandler(ExecuteAsync)
@@ -75,3 +79,4 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+

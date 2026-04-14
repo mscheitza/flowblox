@@ -1,7 +1,7 @@
-﻿using FlowBlox.Grid.Elements.UserControls;
-using System.ComponentModel;
+using FlowBlox.Grid.Elements.UserControls;
 using System.Drawing;
 using System.Windows.Forms;
+using FlowBlox.AppWindow.Contents;
 
 namespace FlowBlox.AppWindow.Handler
 {
@@ -15,9 +15,9 @@ namespace FlowBlox.AppWindow.Handler
 
         private bool isMouseCaptured = false;
 
-        public SelectionModeHandler(BackgroundWorker backgroundWorker_PrintGrid, int mouseMoveTimeunit) : base(backgroundWorker_PrintGrid, mouseMoveTimeunit)
+        public SelectionModeHandler(ProjectPanel projectPanel)
+            : base(projectPanel)
         {
-
         }
 
         public override bool Print(Graphics Graphics)
@@ -88,9 +88,7 @@ namespace FlowBlox.AppWindow.Handler
                 if (isMouseCaptured)
                 {
                     RecentCursorLocation = Cursor.Position;
-
-                    if (!_backgroundWorker_PrintGrid.IsBusy)
-                        _backgroundWorker_PrintGrid.RunWorkerAsync(new object[] { _mouseMoveTimeunit, false });
+                    _projectPanel.SchedulePrintGridForMouseMove();
                 }
             }
         }
@@ -100,9 +98,7 @@ namespace FlowBlox.AppWindow.Handler
             if (Button == MouseButtons.Left)
             {
                 isMouseCaptured = false;
-
-                if (!_backgroundWorker_PrintGrid.IsBusy)
-                    _backgroundWorker_PrintGrid.RunWorkerAsync();
+                _projectPanel.SchedulePrintGridDefault();
 
                 int DifferenceX = RecentCursorLocation.X - InitialCursorLocation.X;
                 int DifferenceY = RecentCursorLocation.Y - InitialCursorLocation.Y;

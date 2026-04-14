@@ -471,7 +471,8 @@ namespace FlowBlox.UICore.ViewModels
             var usedIn = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var originalTarget = _registry.GetOriginalRef(target) as IManagedObject ?? target;
 
-            foreach (var flowBlock in _registry.GetFlowBlocks())
+            var flowBlocks = _registry.GetFlowBlocks().ToList();
+            foreach (var flowBlock in flowBlocks)
             {
                 if (ReferencesTarget(flowBlock, originalTarget))
                     usedIn.Add(flowBlock.Name);
@@ -536,7 +537,7 @@ namespace FlowBlox.UICore.ViewModels
 
             _registry.PostProcessManagedObjectCreated(newManagedObject);
 
-            var propertyWindow = new Views.PropertyWindow(new PropertyWindowArgs(newManagedObject, readOnly: false));
+            var propertyWindow = new Views.PropertyWindow(new PropertyWindowArgs(newManagedObject, readOnly: false, isNew: true));
             var result = _dialogService.ShowWPFDialog(propertyWindow, isModal: true);
             if (result == true)
             {

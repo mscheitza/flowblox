@@ -1,8 +1,7 @@
-﻿using FlowBlox.Core.Constants;
-using FlowBlox.Core.Models.FlowBlocks.Base;
+﻿using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 namespace FlowBlox.Core.Attributes
 {
@@ -25,7 +24,7 @@ namespace FlowBlox.Core.Attributes
     {
         public AssociatedFlowBlockResolvableAttribute()
         {
-            
+
         }
 
         private Type ResolvePropertyType(ValidationContext context)
@@ -44,18 +43,11 @@ namespace FlowBlox.Core.Attributes
             if (!typeof(BaseFlowBlock).IsAssignableFrom(requiredFlowBlockType))
                 throw new InvalidOperationException("Type must be assignable to BaseFlowBlock.");
 
-            if (value != null)
-                return ValidationResult.Success;
-
-            var method = typeof(BaseFlowBlock)
-                .GetMethod(GlobalConstants.GetPreviousFlowBlockOnPathMethodName, 
-                    BindingFlags.NonPublic | BindingFlags.Instance, 
-                    [typeof(BaseFlowBlock), typeof(Type[])]);
-
-            if (method != null)
+            var property = validationContext.ObjectType.GetProperty(validationContext.MemberName ?? string.Empty);
+            if (property != null)
             {
-                var result = method.Invoke(validationContext.ObjectInstance, [validationContext.ObjectInstance, new[] { requiredFlowBlockType }]);
-                if (result is BaseFlowBlock)
+                var resolution = AssociatedFlowBlockResolver.Resolve((BaseFlowBlock)validationContext.ObjectInstance, property);
+                if (resolution.Resolved)
                     return ValidationResult.Success;
             }
 

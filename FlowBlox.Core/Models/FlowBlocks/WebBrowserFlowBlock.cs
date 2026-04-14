@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -16,6 +16,9 @@ namespace FlowBlox.Core.Models.FlowBlocks
 {
     [FlowBlockUIGroup("WebBrowserFlowBlock_Groups_Advanced", 0)]
     [Display(Name = "WebBrowserFlowBlock_DisplayName", Description = "WebBrowserFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_ResultBehavior", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_CookieOverlay", Icon = SpecialExplanationIcon.Important)]
     public class WebBrowserFlowBlock : BaseSingleResultFlowBlock
     {
         WebBrowserBase _internalWebBrowser;
@@ -103,7 +106,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             base.OptionsInit(defaults, currentOptions);
         }
 
-        [Display(Name = "WebBrowserFlowBlock_AssociatedWebBrowser", ResourceType = typeof(FlowBloxTexts), 
+        [Display(Name = "WebBrowserFlowBlock_AssociatedWebBrowser", Description = "WebBrowserFlowBlock_AssociatedWebBrowser_Tooltip", ResourceType = typeof(FlowBloxTexts), 
             GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleWebBrowsers), 
@@ -131,7 +134,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
                 .ToList();
         }
 
-        [Display(Name = "WebBrowserFlowBlock_Url", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "WebBrowserFlowBlock_Url", Description = "WebBrowserFlowBlock_Url_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Url { get; set; }
 

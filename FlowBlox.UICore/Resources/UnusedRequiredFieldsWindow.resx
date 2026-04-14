@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title" xml:space="preserve"><value>Unused required fields</value></data>
+  <data name="Header_Title" xml:space="preserve"><value>Unused required fields</value></data>
+  <data name="Header_Description" xml:space="preserve"><value>The current component has required fields that are no longer referenced. Remove references that are no longer needed.</value></data>
+  <data name="Toolbar_SelectAll" xml:space="preserve"><value>Select all</value></data>
+  <data name="Toolbar_DeselectAll" xml:space="preserve"><value>Deselect all</value></data>
+  <data name="Column_Select" xml:space="preserve"><value>All</value></data>
+  <data name="Column_FieldName" xml:space="preserve"><value>Field</value></data>
+  <data name="Column_QualifiedName" xml:space="preserve"><value>Fully qualified field name</value></data>
+  <data name="Column_FieldType" xml:space="preserve"><value>Field type</value></data>
+  <data name="Button_Back" xml:space="preserve"><value>Back</value></data>
+  <data name="Button_Continue" xml:space="preserve"><value>Continue</value></data>
+  <data name="Button_RemoveAndContinue" xml:space="preserve"><value>Remove and continue</value></data>
+</root>

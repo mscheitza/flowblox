@@ -36,6 +36,7 @@ namespace FlowBlox.UICore.Resolver
         public FrameworkElement CreateTextBoxWithOptionalButtons(PropertyInfo property, object target, string displayName, FlowBlockUIAttribute flowBlockUI, Binding binding, bool readOnly)
         {
             var textAttribute = property.GetCustomAttribute<FlowBlockTextBoxAttribute>();
+            var fieldSelectionAttribute = property.GetCustomAttribute<FieldSelectionAttribute>();
             FrameworkElement baseTextBox;
 
             if (textAttribute?.IsCodingMode == true)
@@ -212,7 +213,7 @@ namespace FlowBlox.UICore.Resolver
 
                 fieldButton.Click += (s, e) =>
                 {
-                    Utilities.TextBoxHelper.ShowFieldSelectionDialog(target, flowBlockUI, textBoxControl, _window);
+                    Utilities.TextBoxHelper.ShowFieldSelectionDialog(target, flowBlockUI, fieldSelectionAttribute, textBoxControl, _window);
                 };
 
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });

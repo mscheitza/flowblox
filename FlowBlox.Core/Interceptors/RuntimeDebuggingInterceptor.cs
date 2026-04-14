@@ -16,7 +16,7 @@ namespace FlowBlox.Core.Interceptors
 
         private bool IsEnabled => Runtime?.ExternalDebuggingInformation != null;
 
-        public override void NotifyRuntimeStarted()
+        public override void NotifyBeforeRuntimeStarted()
         {
             if (!IsEnabled)
                 return;
@@ -32,8 +32,7 @@ namespace FlowBlox.Core.Interceptors
                 TargetFlowBlockName = config.TargetFlowBlockName,
                 MaxRuntimeSeconds = Math.Max(1, config.MaxRuntimeSeconds),
                 IncludeTargetExecution = config.IncludeTargetExecution,
-                MaxCapturedFieldValueChanges = Math.Max(0, config.MaxCapturedFieldValueChanges),
-                MaxFieldValueLength = Math.Max(1, config.MaxFieldValueLength)
+                MaxCapturedFieldValueChanges = Math.Max(0, config.MaxCapturedFieldValueChanges)
             };
 
             AppendProtocol("RuntimeStarted", "Runtime started.");
@@ -252,9 +251,19 @@ namespace FlowBlox.Core.Interceptors
             if (!IsEnabled)
                 return;
 
+            var sourceFlowBlockName = fieldElement?.Source?.Name;
+            if (string.IsNullOrWhiteSpace(oldValue) && string.IsNullOrWhiteSpace(newValue))
+            {
+                AppendProtocol(
+                    "FieldValueChanged",
+                    $"Field value changed, old and new values are null or empty",
+                    sourceFlowBlockName);
+
+                return;
+            }
+
             var config = Runtime.ExternalDebuggingInformation;
             var id = Interlocked.Increment(ref _nextFieldChangeId);
-            var sourceFlowBlockName = fieldElement?.Source?.Name;
 
             lock (_sync)
             {
@@ -274,8 +283,8 @@ namespace FlowBlox.Core.Interceptors
                 if (_result.StoredFieldValueChanges < config.MaxCapturedFieldValueChanges)
                 {
                     details.IsStored = true;
-                    details.OldValue = Truncate(oldValue, config.MaxFieldValueLength);
-                    details.NewValue = Truncate(newValue, config.MaxFieldValueLength);
+                    details.OldValue = oldValue;
+                    details.NewValue = newValue;
                     _result.StoredFieldValueChanges++;
                 }
                 else
@@ -319,14 +328,6 @@ namespace FlowBlox.Core.Interceptors
 
             var elapsed = _stopwatch.Elapsed;
             return $"{(int)elapsed.TotalMinutes:D2}:{elapsed.Seconds:D2}.{elapsed.Milliseconds:D3}";
-        }
-
-        private static string Truncate(string value, int maxLength)
-        {
-            if (string.IsNullOrEmpty(value))
-                return value;
-
-            return TextHelper.ShortenString(value, maxLength, false);
         }
 
         private static bool IsTarget(string flowBlockName, string targetFlowBlockName)

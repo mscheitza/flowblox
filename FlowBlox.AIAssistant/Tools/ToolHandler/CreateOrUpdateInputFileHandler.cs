@@ -1,4 +1,4 @@
-using FlowBlox.AIAssistant.Models;
+﻿using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools.ToolHandler.Converter;
 using FlowBlox.Core.Models.Project;
 using Newtonsoft.Json.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FlowBlox.AIAssistant.Tools
 {
-    internal sealed class CreateOrUpdateInputFileTemplateHandler : ToolHandlerBase
+    internal sealed class CreateOrUpdateInputFileHandler : ToolHandlerBase
     {
         private static readonly string[] SupportedConverters =
         [
@@ -14,7 +14,7 @@ namespace FlowBlox.AIAssistant.Tools
             Csv2XlsConverter.Name
         ];
 
-        public override string Name => "CreateOrUpdateInputFileTemplate";
+        public override string Name => "CreateOrUpdateInputFile";
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
@@ -38,7 +38,7 @@ namespace FlowBlox.AIAssistant.Tools
             try
             {
                 var project = ToolHandlerUtilities.GetProject();
-                project.InputFiles ??= new List<FlowBloxInputFileTemplate>();
+                project.InputFiles ??= new List<FlowBloxInputFile>();
 
                 var key = (args.Value<string>("key") ?? string.Empty).Trim();
                 if (string.IsNullOrWhiteSpace(key))
@@ -68,7 +68,7 @@ namespace FlowBlox.AIAssistant.Tools
                         StringComparison.OrdinalIgnoreCase));
 
                 var created = existing == null;
-                var template = existing ?? new FlowBloxInputFileTemplate();
+                var template = existing ?? new FlowBloxInputFile();
                 template.RelativePath = normalizedKey;
                 template.ContentBase64 = contentBase64;
                 template.SyncMode = syncMode;
@@ -136,5 +136,6 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
 
 

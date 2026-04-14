@@ -114,6 +114,17 @@ namespace FlowBlox.Core.Models.Runtime
             HandlePause();
         }
 
+        protected void NotifyBeforeRuntimeStarted()
+        {
+            if (DisableInterceptors)
+                return;
+
+            foreach (var interceptor in _interceptors)
+            {
+                interceptor.NotifyBeforeRuntimeStarted();
+            }
+        }
+
         protected void NotifyRuntimeStarted()
         {
             RuntimeStarted?.Invoke(this);
@@ -467,14 +478,17 @@ namespace FlowBlox.Core.Models.Runtime
             {
                 validationCancelled = true;
                 return;
-            }    
+            }
 
-            var context = new ValidationContext(flowBlock, serviceProvider: null, items: null);
-            var results = new List<ValidationResult>();
-            Validator.TryValidateObject(flowBlock, context, results, true);
+            if (!ShouldSkipValidation(flowBlock))
+            {
+                var context = new ValidationContext(flowBlock, serviceProvider: null, items: null);
+                var results = new List<ValidationResult>();
+                Validator.TryValidateObject(flowBlock, context, results, true);
 
-            if (results.Any())
-                invalidBlocks[flowBlock] = results;
+                if (results.Any())
+                    invalidBlocks[flowBlock] = results;
+            }
 
             if (ShouldCancelValidation(flowBlock, true))
             {
@@ -496,6 +510,11 @@ namespace FlowBlox.Core.Models.Runtime
                 return false;
 
             return _interceptors.Any(x => x.ShouldCancelValidation(flowBlock, validationFinished));
+        }
+
+        protected virtual bool ShouldSkipValidation(BaseFlowBlock flowBlock)
+        {
+            return false;
         }
 
         protected virtual void OnBeforeRuntimeStarted(IEnumerable<BaseFlowBlock> flowBlocks)

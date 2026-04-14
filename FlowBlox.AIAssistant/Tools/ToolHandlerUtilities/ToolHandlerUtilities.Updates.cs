@@ -141,6 +141,7 @@ namespace FlowBlox.AIAssistant.Tools
             }
 
             object current = root;
+            object? currentCollectionOwner = null;
             for (var i = 0; i < pathSegments.Count; i++)
             {
                 var segment = pathSegments[i];
@@ -148,8 +149,9 @@ namespace FlowBlox.AIAssistant.Tools
 
                 if (segment.IsProperty)
                 {
-                    var property = current.GetType().GetProperty(segment.PropertyName!, BindingFlags.Public | BindingFlags.Instance)
-                                   ?? throw new InvalidOperationException($"Property '{segment.PropertyName}' not found on '{current.GetType().FullName}'.");
+                    var property = current.GetType().GetProperty(segment.PropertyName!, BindingFlags.Public | BindingFlags.Instance);
+                    if (property == null)
+                        throw new InvalidOperationException($"Property '{segment.PropertyName}' not found on '{current.GetType().FullName}'.");
 
                     var propertyType = property.PropertyType;
                     var propertyTargetType = GetElementType(propertyType) ?? propertyType;
@@ -157,7 +159,8 @@ namespace FlowBlox.AIAssistant.Tools
                     {
                         throw new InvalidOperationException(
                             $"Path segment '{segment.PropertyName}' targets a {GetReferenceComponentLabel(propertyTargetType)}. " +
-                            "Indirect updates are not allowed. Update the referenced component directly.");
+                            "Indirect updates are not allowed. " +
+                            $"{GetDirectUpdateToolHint(propertyTargetType)}");
                     }
 
                     if (isLast)
@@ -173,6 +176,7 @@ namespace FlowBlox.AIAssistant.Tools
                         property.SetValue(current, propertyValue);
                     }
 
+                    currentCollectionOwner = propertyValue is IList ? current : null;
                     current = propertyValue;
                     continue;
                 }
@@ -188,26 +192,36 @@ namespace FlowBlox.AIAssistant.Tools
                 {
                     throw new InvalidOperationException(
                         $"Path segment '[{segment.Index}]' targets a {GetReferenceComponentLabel(elementType)}. " +
-                        "Indirect updates are not allowed. Update the referenced component directly.");
+                        "Indirect updates are not allowed. " +
+                        $"{GetDirectUpdateToolHint(elementType)}");
                 }
 
                 var explicitElementType = ResolveExplicitCollectionElementType(elementType, segment, path);
 
                 if (isLast)
                 {
-                    ApplyIndexedTerminalOperation(list, elementType, explicitElementType, segment.Index, operation, value, registry, path);
+                    ApplyIndexedTerminalOperation(
+                        list,
+                        elementType,
+                        explicitElementType,
+                        segment.Index,
+                        operation,
+                        value,
+                        registry,
+                        path,
+                        currentCollectionOwner);
                     return;
                 }
 
                 while (list.Count <= segment.Index)
                 {
-                    list.Add(CreateCollectionElementInstance(elementType, explicitElementType));
+                    list.Add(CreateCollectionElementInstance(elementType, explicitElementType, currentCollectionOwner));
                 }
 
                 var indexedValue = list[segment.Index];
                 if (indexedValue == null)
                 {
-                    indexedValue = CreateCollectionElementInstance(elementType, explicitElementType);
+                    indexedValue = CreateCollectionElementInstance(elementType, explicitElementType, currentCollectionOwner);
                     list[segment.Index] = indexedValue;
                 }
 
@@ -219,6 +233,7 @@ namespace FlowBlox.AIAssistant.Tools
                 }
 
                 current = indexedValue;
+                currentCollectionOwner = null;
             }
         }
 
@@ -399,7 +414,8 @@ namespace FlowBlox.AIAssistant.Tools
             TerminalOperation operation,
             JToken value,
             FlowBloxRegistry registry,
-            string path)
+            string path,
+            object? collectionOwner)
         {
             if (operation == TerminalOperation.Delete)
             {
@@ -664,7 +680,8 @@ namespace FlowBlox.AIAssistant.Tools
 
         private static bool IsReferenceComponentType(Type type)
         {
-            return typeof(IManagedObject).IsAssignableFrom(type) || typeof(BaseFlowBlock).IsAssignableFrom(type);
+            return typeof(IManagedObject).IsAssignableFrom(type) || 
+                   typeof(BaseFlowBlock).IsAssignableFrom(type);
         }
 
         private static string GetReferenceComponentLabel(Type type)
@@ -676,6 +693,17 @@ namespace FlowBlox.AIAssistant.Tools
                 return "managed object reference";
 
             return "component reference";
+        }
+
+        private static string GetDirectUpdateToolHint(Type type)
+        {
+            if (typeof(BaseFlowBlock).IsAssignableFrom(type))
+                return "Update the referenced flow block directly via UpdateFlowBlock.";
+
+            if (typeof(IManagedObject).IsAssignableFrom(type))
+                return "Update the referenced managed object directly via UpdateManagedObject.";
+
+            return "Update the referenced component directly via its dedicated update tool (UpdateFlowBlock or UpdateManagedObject).";
         }
 
         private static object? ConvertToken(JToken token, Type targetType, FlowBloxRegistry registry)
@@ -784,11 +812,29 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 var managedObjectName = objToken.Value<string>("resolveManagedObjectByName");
                 if (!string.IsNullOrWhiteSpace(managedObjectName))
-                    return ResolveManagedObjectByName(registry, managedObjectName);
+                {
+                    var resolvedManagedObject = ResolveManagedObjectByName(registry, managedObjectName);
+                    if (resolvedManagedObject == null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Managed object could not be found by name \"{managedObjectName}\".");
+                    }
+
+                    return resolvedManagedObject;
+                }
 
                 var fieldFQName = objToken.Value<string>("resolveFieldElementByFQName");
                 if (!string.IsNullOrWhiteSpace(fieldFQName))
-                    return ResolveFieldElementByFQName(registry, fieldFQName);
+                {
+                    var resolvedFieldElement = ResolveFieldElementByFQName(registry, fieldFQName);
+                    if (resolvedFieldElement == null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Field element could not be found by name \"{fieldFQName}\".");
+                    }
+
+                    return resolvedFieldElement;
+                }
             }
 
             if (token.Type == JTokenType.String)
@@ -826,7 +872,7 @@ namespace FlowBlox.AIAssistant.Tools
             return null;
         }
 
-        private static object CreateInstance(Type type)
+        private static object CreateInstance(Type type, object? parentTarget = null)
         {
             if (type.IsInterface
                 && type.IsGenericType
@@ -842,11 +888,24 @@ namespace FlowBlox.AIAssistant.Tools
                 return Activator.CreateInstance(type)!;
             }
 
+            if (parentTarget != null)
+            {
+                var parentType = parentTarget.GetType();
+                var matchingConstructor = type.GetConstructors()
+                    .Select(x => new { Constructor = x, Parameters = x.GetParameters() })
+                    .Where(x => x.Parameters.Length == 1 && x.Parameters[0].ParameterType.IsAssignableFrom(parentType))
+                    .OrderByDescending(x => x.Parameters[0].ParameterType == parentType)
+                    .FirstOrDefault();
+
+                if (matchingConstructor != null)
+                    return matchingConstructor.Constructor.Invoke([parentTarget]);
+            }
+
             return Activator.CreateInstance(type)
                    ?? throw new InvalidOperationException($"Could not create instance of '{type.FullName}'.");
         }
 
-        private static object CreateCollectionElementInstance(Type elementType, Type? explicitType = null)
+        private static object CreateCollectionElementInstance(Type elementType, Type? explicitType = null, object? collectionOwner = null)
         {
             if (explicitType != null)
             {
@@ -862,12 +921,12 @@ namespace FlowBlox.AIAssistant.Tools
                         $"Explicit element type '{explicitType.FullName}' cannot be abstract/interface.");
                 }
 
-                return CreateInstance(explicitType);
+                return CreateInstance(explicitType, collectionOwner);
             }
 
             if (!elementType.IsAbstract && !elementType.IsInterface)
             {
-                return CreateInstance(elementType);
+                return CreateInstance(elementType, collectionOwner);
             }
 
             if (IsNonComponentReactiveObjectType(elementType))
@@ -882,7 +941,7 @@ namespace FlowBlox.AIAssistant.Tools
                     var resolvedType = ResolveType(supportedTypes[0]!);
                     if (resolvedType != null)
                     {
-                        return CreateInstance(resolvedType);
+                        return CreateInstance(resolvedType, collectionOwner);
                     }
                 }
 

@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using FlowBlox.AppWindow.Handler;
@@ -59,6 +60,9 @@ namespace FlowBlox.AppWindow.Contents
         private System.Threading.Thread RuntimeThread = null;
 
         private bool _blockGridUpdate { get; set; }
+        private bool _isPrintGridDelayPending;
+        private bool _isMoveFinishedDelayPending;
+        private bool _isScrollDelayPending;
 
         internal void EnableGridUpdate() => _blockGridUpdate = false;
 
@@ -144,10 +148,7 @@ namespace FlowBlox.AppWindow.Contents
             {
                 this._blockGridUpdate = false;
 
-                if (!background_Scroll.IsBusy)
-                {
-                    background_Scroll.RunWorkerAsync();
-                }
+                TryScheduleScroll();
             }
         }
 
@@ -234,8 +235,8 @@ namespace FlowBlox.AppWindow.Contents
 
             if (gridUpdate)
             {
-                if (project != null && !background_PrintGrid.IsBusy)
-                    background_PrintGrid.RunWorkerAsync();
+                if (project != null)
+                    TrySchedulePrintGrid(PrintGridTimeunit, true);
             }
 
             if (appWindowUpdate)
@@ -526,26 +527,40 @@ namespace FlowBlox.AppWindow.Contents
             this.mainPanel.Controls.Clear();
         }
 
-        private void Background_PrintGrid_DoWork(object sender, DoWorkEventArgs e)
+        private bool TrySchedulePrintGrid(int timeunit, bool printResult)
         {
-            int timeunit = PrintGridTimeunit;
-            bool result = true;
-            if (e.Argument is object[])
-            {
-                timeunit = (int)((object[])e.Argument)[0];
-                result = (bool)((object[])e.Argument)[1];
-            }
-            System.Threading.Thread.Sleep(timeunit);
-            e.Result = result;
+            if (_isPrintGridDelayPending)
+                return false;
+
+            _isPrintGridDelayPending = true;
+            _ = ExecutePrintGridAsync(timeunit, printResult);
+            return true;
         }
 
-        private void Background_PrintGrid_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private async Task ExecutePrintGridAsync(int timeunit, bool printResult)
         {
-            UpdateExecutionStatus();
-            UpdateGridWarnings();
-            PrintGrid((bool)e.Result);
-            UpdateAllElementBorders();
+            try
+            {
+                await Task.Delay(timeunit);
+                if (IsDisposed || Disposing)
+                    return;
+
+                UpdateExecutionStatus();
+                UpdateGridWarnings();
+                PrintGrid(printResult);
+                UpdateAllElementBorders();
+            }
+            finally
+            {
+                _isPrintGridDelayPending = false;
+            }
         }
+
+        internal bool SchedulePrintGridForMouseMove()
+            => TrySchedulePrintGrid(PrintGridMouseMoveTimeunit, false);
+
+        internal bool SchedulePrintGridDefault()
+            => TrySchedulePrintGrid(PrintGridTimeunit, true);
 
         private void itmStopExecution_Click(object sender, EventArgs e)
         {
@@ -697,23 +712,11 @@ namespace FlowBlox.AppWindow.Contents
             if (_recentFlowBlock != null)
             {
                 var gridElement = _recentFlowBlock.InternalFlowBlock;
-                string value = (gridElement.ElementIndex >= 0) ? gridElement.ElementIndex.ToString() : string.Empty;
-
-                FlowBlox.UICore.Views.EditValueWindow editValueWindow;
-                if (value.Equals(string.Empty))
-                    editValueWindow = new FlowBlox.UICore.Views.EditValueWindow(false, false);
-                else
-                    editValueWindow = new FlowBlox.UICore.Views.EditValueWindow(value, false, false);
-
-                editValueWindow.SetParameterName("Element.Index");
-                editValueWindow.SetMode(EditMode.Developer);
+                var editExecutionIndexWindow = new ExecutionIndexWindow(gridElement.ExecutionIndex);
                 var owner = (Form)AppWindow.Instance ?? ControlHelper.FindParentOfType<Form>(this, true) ?? this;
-                WindowsFormWPFHelper.ShowDialog(editValueWindow, owner);
-                if (!string.IsNullOrEmpty(editValueWindow.GetValue()))
+                if (WindowsFormWPFHelper.ShowDialog(editExecutionIndexWindow, owner) == true)
                 {
-                    int index;
-                    if (int.TryParse(editValueWindow.GetValue(), out index))
-                        gridElement.ElementIndex = index;
+                    gridElement.ExecutionIndex = editExecutionIndexWindow.Result;
                 }
                 _recentFlowBlock.UpdateFlags();
                 _recentFlowBlock.RefreshSize();
@@ -805,19 +808,35 @@ namespace FlowBlox.AppWindow.Contents
             UpdateUI(action is not FlowBloxMoveAction, true);
         }
 
-        private void Background_MoveFinished_DoWork(object sender, DoWorkEventArgs e) { System.Threading.Thread.Sleep(PrintGridTimeunit); }
-
-        private void Background_MoveFinished_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void TryScheduleMoveFinished()
         {
-            if (_latestGridInteraction != GridInteractions.PrintReferenceLines)
+            if (_isMoveFinishedDelayPending)
+                return;
+
+            _isMoveFinishedDelayPending = true;
+            _ = ExecuteMoveFinishedAsync();
+        }
+
+        private async Task ExecuteMoveFinishedAsync()
+        {
+            try
             {
-                this._blockGridUpdate = false;
+                await Task.Delay(PrintGridTimeunit);
+                if (IsDisposed || Disposing)
+                    return;
 
-                if (!background_PrintGrid.IsBusy)
-                    background_PrintGrid.RunWorkerAsync();
+                if (_latestGridInteraction != GridInteractions.PrintReferenceLines)
+                {
+                    this._blockGridUpdate = false;
+                    TrySchedulePrintGrid(PrintGridTimeunit, true);
+                }
+
+                UpdateUI(false, true);
             }
-
-            UpdateUI(false, true);
+            finally
+            {
+                _isMoveFinishedDelayPending = false;
+            }
         }
 
 
@@ -866,21 +885,36 @@ namespace FlowBlox.AppWindow.Contents
             UpdateUI();
         }
 
-        private void background_Scroll_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void TryScheduleScroll()
         {
-            ScrollGrid();
+            if (_isScrollDelayPending)
+                return;
+
+            _isScrollDelayPending = true;
+            _ = ExecuteScrollAsync();
         }
 
-        private void background_Scroll_DoWork(object sender, DoWorkEventArgs e) 
-        { 
-            System.Threading.Thread.Sleep(ScrollGridTimeunit); 
+        private async Task ExecuteScrollAsync()
+        {
+            try
+            {
+                await Task.Delay(ScrollGridTimeunit);
+                if (IsDisposed || Disposing)
+                    return;
+
+                ScrollGrid();
+            }
+            finally
+            {
+                _isScrollDelayPending = false;
+            }
         }
 
         private void itmRemoveIndex_Click(object sender, EventArgs e)
         {
             if (_recentFlowBlock != null)
             {
-                _recentFlowBlock.InternalFlowBlock.ElementIndex = -1;
+                _recentFlowBlock.InternalFlowBlock.ExecutionIndex = -1;
                 _recentFlowBlock.UpdateFlags();
                 _recentFlowBlock.RefreshSize();
                 UpdateUI();
@@ -906,7 +940,7 @@ namespace FlowBlox.AppWindow.Contents
             if (btSelectionMode.Checked)
             {
                 SetFlowBlockSelectionEnabled(true);
-                _modeHandler = new SelectionModeHandler(background_PrintGrid, PrintGridMouseMoveTimeunit);
+                _modeHandler = new SelectionModeHandler(this);
             }
         }
 
@@ -937,7 +971,7 @@ namespace FlowBlox.AppWindow.Contents
             if (btConnectionMode.Checked)
             {
                 SetFlowBlockSelectionEnabled(false);
-                _modeHandler = new ConnectionModeHandler(background_PrintGrid, PrintGridMouseMoveTimeunit);
+                _modeHandler = new ConnectionModeHandler(this);
             }
         }
 

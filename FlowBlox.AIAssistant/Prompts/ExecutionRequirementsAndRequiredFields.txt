@@ -15,7 +15,7 @@ For mapping entries derived from FieldRequiredDefinitionBase (or similar require
 Practical rule:
 - Every time a new field is created or connected, verify whether the consuming block should run on empty/null input.
 - If "no", add a requirement or activation condition immediately.
-- If a source block has multiple downstream blocks, remember that execution order is controlled by BaseFlowBlock.ElementIndex (ascending).
+- If a source block has multiple downstream blocks, remember that execution order is controlled by BaseFlowBlock.ExecutionIndex (ascending, 0 first). Use -1 as unset when order is irrelevant.
 
 Typical chain example:
 Start -> XmlDocument -> TableReader -> XmlNodeWriter -> XmlDocumentOutput -> FileWriter

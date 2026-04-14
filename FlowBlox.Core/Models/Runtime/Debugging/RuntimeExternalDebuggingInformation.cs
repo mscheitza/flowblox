@@ -6,6 +6,5 @@ namespace FlowBlox.Core.Models.Runtime.Debugging
         public string TargetFlowBlockName { get; set; }
         public bool IncludeTargetExecution { get; set; } = false;
         public int MaxCapturedFieldValueChanges { get; set; } = 100;
-        public int MaxFieldValueLength { get; set; } = 2000;
     }
 }

@@ -10,6 +10,7 @@ using FlowBlox.Core.Util.Resources;
 using System.Collections.ObjectModel;
 using FlowBlox.Core.Util.FlowBlocks;
 using SkiaSharp;
+using FlowBlox.Core.Util.Fields;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
@@ -38,10 +39,13 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Display(Name = "JoinFlowBlock_JoinedParameters", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
-            UiOptions = UIOptions.FieldSelectionDefaultNotRequired,
-            SelectionFilterMethod = nameof(GetPossibleFieldElements))]
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
+            SelectionFilterMethod = nameof(GetPossibleJoinedParameters))]
+        [FieldSelection(DefaultRequiredValue = false)]
         [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
         public ObservableCollection<FieldElement> JoinedParameters { get; set; }
+
+        public List<FieldElement> GetPossibleJoinedParameters() => FlowBloxFieldsResolver.GetFieldsOfAssociatedFlowBlocks(this);
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.set_merge, 16, SKColors.DarkOliveGreen);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.set_merge, 32, SKColors.DarkOliveGreen);
@@ -57,17 +61,33 @@ namespace FlowBlox.Core.Models.FlowBlocks
             base.OnAfterCreate();
         }
 
+        public override bool CanDisplayAssociatedIterationContextHint()
+        {
+            if (this.ReferencedFlowBlocks.OfType<BaseResultFlowBlock>().Count() == 1 &&
+                this.AssociatedIterationContext == null)
+            {
+                return true;
+            }
+            else
+            {
+                return base.CanDisplayAssociatedIterationContextHint();
+            }
+        }
+
         public override BaseFlowBlock IterationContext
         {
             get
             {
+                if (AssociatedIterationContext != null)
+                    return AssociatedIterationContext;
+
                 if (this.ReferencedFlowBlocks.OfType<BaseResultFlowBlock>().Count() == 1)
                 {
                     var referencedFlowBlock = this.ReferencedFlowBlocks.Single();
                     if (referencedFlowBlock.ReferencedFlowBlocks.Count == 1)
                         return referencedFlowBlock.ReferencedFlowBlocks.Single();
                     else
-                        return CommonFlowBlockResolver.FindCommonFlowBlock(referencedFlowBlock);
+                        return referencedFlowBlock.IterationContext;
                 }
                 else
                 {

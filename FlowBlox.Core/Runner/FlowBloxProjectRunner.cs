@@ -258,8 +258,7 @@ namespace FlowBlox.Core.Runner
                 MaxRuntimeSeconds = Math.Max(1, debugging.MaxRuntimeSeconds),
                 TargetFlowBlockName = debugging.TargetFlowBlockName,
                 IncludeTargetExecution = debugging.IncludeTargetExecution,
-                MaxCapturedFieldValueChanges = Math.Max(0, debugging.MaxCapturedFieldValueChanges),
-                MaxFieldValueLength = Math.Max(1, debugging.MaxFieldValueLength)
+                MaxCapturedFieldValueChanges = Math.Max(0, debugging.MaxCapturedFieldValueChanges)
             };
         }
 

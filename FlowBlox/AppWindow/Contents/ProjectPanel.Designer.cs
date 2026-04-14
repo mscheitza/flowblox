@@ -72,9 +72,6 @@
             pictureBoxIterationContext = new System.Windows.Forms.PictureBox();
             labelInvoke = new System.Windows.Forms.Label();
             pictureBoxInvoke = new System.Windows.Forms.PictureBox();
-            background_MoveFinished = new System.ComponentModel.BackgroundWorker();
-            background_Scroll = new System.ComponentModel.BackgroundWorker();
-            background_PrintGrid = new System.ComponentModel.BackgroundWorker();
             background_Align = new System.ComponentModel.BackgroundWorker();
             imageList_Grid = new System.Windows.Forms.ImageList(components);
             tableLayoutPanel1.SuspendLayout();
@@ -507,22 +504,6 @@
             pictureBoxInvoke.TabIndex = 0;
             pictureBoxInvoke.TabStop = false;
             // 
-            // background_MoveFinished
-            // 
-            background_MoveFinished.WorkerSupportsCancellation = true;
-            background_MoveFinished.DoWork += Background_MoveFinished_DoWork;
-            background_MoveFinished.RunWorkerCompleted += Background_MoveFinished_RunWorkerCompleted;
-            // 
-            // background_Scroll
-            // 
-            background_Scroll.DoWork += background_Scroll_DoWork;
-            background_Scroll.RunWorkerCompleted += background_Scroll_RunWorkerCompleted;
-            // 
-            // background_PrintGrid
-            // 
-            background_PrintGrid.DoWork += Background_PrintGrid_DoWork;
-            background_PrintGrid.RunWorkerCompleted += Background_PrintGrid_RunWorkerCompleted;
-            // 
             // background_Align
             // 
             background_Align.DoWork += Background_Align_DoWork;
@@ -593,9 +574,6 @@
         private System.Windows.Forms.ToolStripMenuItem itmRefresh;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem itmDeleteElement;
-        private System.ComponentModel.BackgroundWorker background_MoveFinished;
-        private System.ComponentModel.BackgroundWorker background_Scroll;
-        private System.ComponentModel.BackgroundWorker background_PrintGrid;
         private System.ComponentModel.BackgroundWorker background_Align;
         private System.Windows.Forms.ImageList imageList_Grid;
         private System.Windows.Forms.ToolStripMenuItem itmInsightInput;

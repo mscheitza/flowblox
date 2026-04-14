@@ -6,6 +6,7 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Manager;
 using FlowBlox.UICore.Resolver;
 using FlowBlox.UICore.Utilities;
+using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -25,8 +26,9 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         private bool _deepCopy;
         private bool _detached;
         private bool _readOnly;
-        private bool _hasChanges;
+        private bool _isDirty;
         private object _target;
+        private object _parent;
         private string _preselectedProperty;
         private object _preselectedInstance;
         private object _transientTarget;
@@ -36,15 +38,15 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public ICollectionView VisibleTabs { get; }
 
-        public bool HasChanges
+        public bool IsDirty
         {
-            get => _hasChanges;
+            get => _isDirty;
             set
             {
-                if (_hasChanges != value)
+                if (_isDirty != value)
                 {
-                    _hasChanges = value;
-                    OnPropertyChanged(nameof(HasChanges));
+                    _isDirty = value;
+                    OnPropertyChanged(nameof(IsDirty));
                 }
             }
         }
@@ -63,6 +65,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public void Open(
             object target,
+            object parent,
             bool deepCopy,
             bool readOnly,
             string preselectedProperty = "",
@@ -76,6 +79,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             _detached = detached;
             _readOnly = readOnly;
             _target = target;
+            _parent = parent;
             _preselectedProperty = preselectedProperty;
             _preselectedInstance = preselectedInstance;
 
@@ -137,11 +141,11 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
             try
             {
-                var resolver = new PropertyViewSchemaResolver(_window);
+                var resolver = new PropertyViewSchemaResolver(_window, _parent);
                 var tabs = resolver.ResolveTabs(_transientTarget, _readOnly, _preselectedInstance);
                 Tabs.AddRange(tabs);
                 VisibleTabs.Refresh();
-                SubscribeToHasChangesChanged(tabs);
+                SubscribeToIsDirtyChanged(tabs);
             }
             catch (Exception ex)
             {
@@ -155,21 +159,21 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             }
         }
 
-        private void SubscribeToHasChangesChanged(IEnumerable<TabViewModel> tabViewModels)
+        private void SubscribeToIsDirtyChanged(IEnumerable<TabViewModel> tabViewModels)
         {
             foreach (var propertyControlViewModel in tabViewModels.SelectMany(x => x.Controls))
             {
-                SubscribeToHasChangesChanged(propertyControlViewModel);
+                SubscribeToIsDirtyChanged(propertyControlViewModel);
             }
         }
 
-        private void SubscribeToHasChangesChanged(PropertyControlViewModel propertyControlViewModel)
+        private void SubscribeToIsDirtyChanged(PropertyControlViewModel propertyControlViewModel)
         {
             propertyControlViewModel.AllowHasChangesUpdate = true;
             propertyControlViewModel.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(PropertyControlViewModel.HasChanges) && propertyControlViewModel.HasChanges)
-                    this.HasChanges = propertyControlViewModel.HasChanges;
+                    this.IsDirty = propertyControlViewModel.HasChanges;
             };
         }
 
@@ -197,6 +201,21 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                     string.Join("\n", validationMessages)
                 );
                 return false;
+            }
+
+            if (_transientTarget is FlowBloxComponent transientFlowBloxComponent &&
+                transientFlowBloxComponent.HasUnusedFieldElements(out var unusedFieldElements))
+            {
+                var unusedFieldsWindow = new UnusedRequiredFieldsWindow(unusedFieldElements)
+                {
+                    Owner = window
+                };
+
+                if (unusedFieldsWindow.ShowDialog() != true)
+                    return false;
+
+                var selectedFieldElements = unusedFieldsWindow.GetSelectedFieldElements();
+                transientFlowBloxComponent.RemoveRequiredFields(selectedFieldElements);
             }
 
             if (_transientTarget is IFlowBloxComponent transientComponent)

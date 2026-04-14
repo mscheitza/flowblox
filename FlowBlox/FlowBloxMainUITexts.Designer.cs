@@ -2018,6 +2018,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Design and execute flows (based on .NET) ähnelt.
+        /// </summary>
+        internal static string SplashWindow_LabelMessage_Text {
+            get {
+                return ResourceManager.GetString("SplashWindow_LabelMessage_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die An unexpected error occurred while trying to create the view. Please check the log files for more information. ähnelt.
         /// </summary>
         internal static string WindowsFormWPFHelper_ShowDialog_Failure_Message {

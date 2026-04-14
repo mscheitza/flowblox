@@ -110,7 +110,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             dataGrid.ItemsSource = list;
 
             // Merken, welche Column welches FlowBlockUIAttribute hat
-            Dictionary<DataGridColumn, FlowBlockUIAttribute> columnAttributeMap = new();
+            Dictionary<DataGridColumn, FieldSelectionDialogContext> columnAttributeMap = new();
 
             // Spalten aus der Listenelement-Type erstellen
             Type listItemType = _property.PropertyType.GetGenericArguments()[0];
@@ -121,6 +121,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     continue;
 
                 var flowBlockUIAttribute = childProperty.GetCustomAttribute<FlowBlockUIAttribute>();
+                var fieldSelectionAttribute = childProperty.GetCustomAttribute<FieldSelectionAttribute>();
 
                 // Wenn die Grid-Columms automatisch ermittelt wurden, werden nicht sichtbare Member nicht als Spalten angezeigt:
                 if (_dataGridAttribute?.GridColumnMemberNames == null ||
@@ -178,9 +179,14 @@ namespace FlowBlox.UICore.Factory.PropertyView
                             headerText,
                             childProperty.Name,
                             IsPropertyReadOnly(childProperty, flowBlockUIAttribute),
-                            flowBlockUIAttribute);
+                            flowBlockUIAttribute,
+                            fieldSelectionAttribute);
                         dataGrid.Columns.Add(templateColumn);
-                        columnAttributeMap[templateColumn] = flowBlockUIAttribute;
+                        columnAttributeMap[templateColumn] = new FieldSelectionDialogContext
+                        {
+                            UiAttribute = flowBlockUIAttribute,
+                            FieldSelectionAttribute = fieldSelectionAttribute
+                        };
                     }
                     else
                     {
@@ -198,7 +204,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         };
                         ApplyCenteredTextColumnStyles(column);
                         dataGrid.Columns.Add(column);
-                        columnAttributeMap[column] = flowBlockUIAttribute;
+                        columnAttributeMap[column] = new FieldSelectionDialogContext
+                        {
+                            UiAttribute = flowBlockUIAttribute,
+                            FieldSelectionAttribute = fieldSelectionAttribute
+                        };
                     }
                 }
                 else if (propertyType.IsEnum)
@@ -308,7 +318,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         IsReadOnly = IsPropertyReadOnly(childProperty, flowBlockUIAttribute)
                     };
                     dataGrid.Columns.Add(column);
-                    columnAttributeMap[column] = flowBlockUIAttribute;
+                    columnAttributeMap[column] = new FieldSelectionDialogContext
+                    {
+                        UiAttribute = flowBlockUIAttribute,
+                        FieldSelectionAttribute = fieldSelectionAttribute
+                    };
                 }
             }
 
@@ -411,10 +425,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 {
                     // MahApps.Metro.Controls.TextBoxHelper.SetClearTextButton(textBox, false);
 
-                    if (columnAttributeMap.TryGetValue(e.Column, out var attrib) &&
-                        attrib?.UiOptions.HasFlag(UIOptions.EnableFieldSelection) == true)
+                    if (columnAttributeMap.TryGetValue(e.Column, out var context) &&
+                        context?.UiAttribute?.UiOptions.HasFlag(UIOptions.EnableFieldSelection) == true)
                     {
-                        textBox.Tag = attrib;
+                        textBox.Tag = context;
 
                         textBox.PreviewKeyDown -= OnPreviewKeyDownForFieldSelection;
                         textBox.PreviewKeyDown += OnPreviewKeyDownForFieldSelection;
@@ -463,16 +477,21 @@ namespace FlowBlox.UICore.Factory.PropertyView
         {
             if (e.Key == Key.F && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
-                if (sender is TextBox textBox && textBox.Tag is FlowBlockUIAttribute attrib)
+                if (sender is TextBox textBox && textBox.Tag is FieldSelectionDialogContext context)
                 {
                     var textBoxAdapter = new WpfTextBoxAdapter(textBox);
-                    TextBoxHelper.ShowFieldSelectionDialog(_target, attrib, textBoxAdapter, _window);
+                    TextBoxHelper.ShowFieldSelectionDialog(_target, context.UiAttribute, context.FieldSelectionAttribute, textBoxAdapter, _window);
                     e.Handled = true;
                 }
             }
         }
 
-        private DataGridTemplateColumn CreateFieldSelectableTextColumn(string headerText, string propertyName, bool isReadOnly, FlowBlockUIAttribute attribute)
+        private DataGridTemplateColumn CreateFieldSelectableTextColumn(
+            string headerText,
+            string propertyName,
+            bool isReadOnly,
+            FlowBlockUIAttribute attribute,
+            FieldSelectionAttribute fieldSelectionAttribute)
         {
             var cellTextFactory = new FrameworkElementFactory(typeof(TextBlock));
             cellTextFactory.SetValue(TextBlock.VerticalAlignmentProperty, VerticalAlignment.Center);
@@ -493,7 +512,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
             buttonFactory.SetValue(Control.PaddingProperty, new Thickness(0));
             buttonFactory.SetValue(Control.ToolTipProperty, FlowBloxResourceUtil.GetLocalizedString("TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip", typeof(FlowBloxTexts)));
             buttonFactory.SetValue(UIElement.IsEnabledProperty, !isReadOnly);
-            buttonFactory.SetValue(FrameworkElement.TagProperty, attribute);
+            buttonFactory.SetValue(FrameworkElement.TagProperty, new FieldSelectionDialogContext
+            {
+                UiAttribute = attribute,
+                FieldSelectionAttribute = fieldSelectionAttribute
+            });
             buttonFactory.AddHandler(Button.ClickEvent, new RoutedEventHandler(OnFieldSelectionButtonClick));
 
             var buttonIconFactory = new FrameworkElementFactory(typeof(PackIconMaterial));
@@ -529,7 +552,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         private void OnFieldSelectionButtonClick(object sender, RoutedEventArgs e)
         {
-            if (sender is not Button button || button.Tag is not FlowBlockUIAttribute attrib)
+            if (sender is not Button button || button.Tag is not FieldSelectionDialogContext context)
                 return;
 
             TextBox textBox = null;
@@ -540,7 +563,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 return;
 
             var textBoxAdapter = new WpfTextBoxAdapter(textBox);
-            TextBoxHelper.ShowFieldSelectionDialog(_target, attrib, textBoxAdapter, _window);
+            TextBoxHelper.ShowFieldSelectionDialog(_target, context.UiAttribute, context.FieldSelectionAttribute, textBoxAdapter, _window);
             e.Handled = true;
         }
 
@@ -596,6 +619,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     var dataContext = button.DataContext;
 
                     var item = property.GetValue(dataContext, null);
+                    var isNew = false;
                     if (item == null)
                     {
                         var newInstance = CreateNewInstance(_window, property.PropertyType);
@@ -605,8 +629,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         property.SetValue(dataContext, newInstance);
                         FlowBloxComponentHelper.RaisePropertyChanged(dataContext, property.Name);
                         item = newInstance;
+                        isNew = true;
                     }
-                    var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(item, readOnly: false));
+                    var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(item, parent: _target, readOnly: false, isNew: isNew));
                     propertyView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                     propertyView.Owner = _window;
                     if (propertyView.ShowDialog() == true)

@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.FlowBlocks;
@@ -11,6 +12,7 @@ using FlowBlox.UICore.Models.DialogService;
 using FlowBlox.UICore.Enums;
 using FlowBlox.Core.Utilities;
 using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Provider.Placeholders.GenerationStrategy;
 using FlowBlox.UICore.Models;
 
 
@@ -18,20 +20,38 @@ namespace FlowBlox.UICore.Utilities
 {
     public static class TextBoxHelper
     {
-        public static void ShowFieldSelectionDialog(
+        public static FieldSelectionWindowArgs CreateFieldSelectionWindowArgs(
             object target,
-            FlowBlockUIAttribute flowBlockUI,
-            ITextBoxLike textBox,
-            Window ownerWindow)
+            FieldSelectionAttribute fieldSelection)
         {
             var args = new FieldSelectionWindowArgs
             {
                 FlowBlock = target as BaseFlowBlock,
-                SelectionMode = FieldSelectionMode.Fields,
-                IsRequired = !flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionDefaultNotRequired),
-                HideRequired = flowBlockUI.UiOptions.HasFlag(UIOptions.FieldSelectionHideRequired)
+                SelectionMode = FieldSelectionMode.Fields
             };
 
+            if (fieldSelection != null)
+            {
+                args.IsRequired = fieldSelection.DefaultRequiredValue;
+                args.HideRequired = fieldSelection.HideRequiredCheckbox;
+
+                var allowedModes = ConvertAllowedModes(fieldSelection.AllowedFieldSelectionModes);
+                if (allowedModes != null)
+                    args.AllowedFieldSelectionModes = allowedModes;
+            }
+
+            if (args.AllowedFieldSelectionModes != null &&
+                args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.GenerationStrategyData))
+            {
+                args.GenerationStrategyDataElements = FlowBloxGenerationStrategyPlaceholderProvider.GetElements();
+            }
+            return args;
+        }
+
+        public static FieldSelectionWindowResult ShowFieldSelectionDialog(
+            FieldSelectionWindowArgs args,
+            Window ownerWindow)
+        {
             var win = new FieldSelectionWindow(args)
             {
                 Owner = ownerWindow,
@@ -39,9 +59,40 @@ namespace FlowBlox.UICore.Utilities
             };
 
             if (win.ShowDialog() != true || win.Result == null)
-                return;
+                return null;
 
-            var result = win.Result;
+            return win.Result;
+        }
+
+        public static void ShowFieldSelectionDialog(
+            object target,
+            FlowBlockUIAttribute flowBlockUI,
+            FieldSelectionAttribute fieldSelection,
+            ITextBoxLike textBox,
+            Window ownerWindow)
+        {
+            var args = CreateFieldSelectionWindowArgs(target, fieldSelection);
+            ShowFieldSelectionDialog(target, args, textBox, ownerWindow);
+        }
+
+        public static void ShowFieldSelectionDialog(
+            object target,
+            FlowBlockUIAttribute flowBlockUI,
+            ITextBoxLike textBox,
+            Window ownerWindow)
+        {
+            ShowFieldSelectionDialog(target, flowBlockUI, fieldSelection: null, textBox, ownerWindow);
+        }
+
+        public static void ShowFieldSelectionDialog(
+            object target,
+            FieldSelectionWindowArgs args,
+            ITextBoxLike textBox,
+            Window ownerWindow)
+        {
+            var result = ShowFieldSelectionDialog(args, ownerWindow);
+            if (result == null)
+                return;
 
             if (result.SelectionMode == FieldSelectionMode.Fields)
             {
@@ -56,9 +107,41 @@ namespace FlowBlox.UICore.Utilities
             {
                 if (result.SelectionMode == FieldSelectionMode.Options)
                     ApplyOptionElementsToTextBox(result.SelectedOptions, textBox);
-                else
+                else if (result.SelectionMode == FieldSelectionMode.InputFiles)
                     ApplyInputFileElementsToTextBox(result.SelectedInputFiles, textBox);
+                else
+                    ApplyGenerationStrategyDataElementsToTextBox(result.SelectedGenerationStrategyData, textBox);
             }
+        }
+
+        private static FieldSelectionMode[] ConvertAllowedModes(FieldSelectionModes allowedModes)
+        {
+            if (allowedModes == FieldSelectionModes.Default)
+                return null;
+
+            var list = new List<FieldSelectionMode>();
+            if (allowedModes.HasFlag(FieldSelectionModes.Fields))
+                list.Add(FieldSelectionMode.Fields);
+            if (allowedModes.HasFlag(FieldSelectionModes.ProjectProperties))
+                list.Add(FieldSelectionMode.ProjectProperties);
+            if (allowedModes.HasFlag(FieldSelectionModes.Options))
+                list.Add(FieldSelectionMode.Options);
+            if (allowedModes.HasFlag(FieldSelectionModes.InputFiles))
+                list.Add(FieldSelectionMode.InputFiles);
+            if (allowedModes.HasFlag(FieldSelectionModes.GenerationStrategyData))
+                list.Add(FieldSelectionMode.GenerationStrategyData);
+
+            return list.ToArray();
+        }
+
+        public static void ApplyGenerationStrategyDataElementsToTextBox(IEnumerable<FlowBloxGenerationStrategyPlaceholderElement> generationStrategyDataElements, ITextBoxLike textBox)
+        {
+            var defs = (generationStrategyDataElements ?? Enumerable.Empty<FlowBloxGenerationStrategyPlaceholderElement>())
+                .Select(x => x?.Placeholder)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x!);
+
+            ApplyFieldDefinitionsToTextBox(defs, textBox);
         }
 
         public static void ApplyInputFileElementsToTextBox(IEnumerable<FlowBloxInputFilePlaceholderElement> inputFileElements, ITextBoxLike textBox)
@@ -147,7 +230,7 @@ namespace FlowBlox.UICore.Utilities
                 var editValueResult = dialogService.InvokeEditValue(new EditValueRequest()
                 {
                     IsRegex = true,
-                    IsMultiline = true,
+                    IsMultiline = false,
                     ParameterName = parameterName,
                     EditMode = EditMode.Developer
                 }, window);

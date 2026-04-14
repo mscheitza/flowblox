@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Provider;
 using System.ComponentModel.DataAnnotations;
@@ -10,17 +11,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
     {
         [Required]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(
-            Factory = UIFactory.ComboBox,
-            SelectionDisplayMember = nameof(Components.FieldElement.FullyQualifiedName),
-            SelectionFilterMethod = nameof(GetPossibleFieldElements))]
+        [FlowBlockUI(Factory = UIFactory.ComboBox,
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
+            SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public FieldElement FieldElement { get; set; }
-
-        public static List<FieldElement> GetPossibleFieldElements()
-        {
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-            return registry.GetFieldElements(true).ToList();
-        }
 
         public virtual bool Compare() => Compare(FieldElement?.Value);
 

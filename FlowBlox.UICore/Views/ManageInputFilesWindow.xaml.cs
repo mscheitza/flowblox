@@ -1,4 +1,4 @@
-using FlowBlox.Core.Models.Project;
+﻿using FlowBlox.Core.Models.Project;
 using FlowBlox.UICore.Factory.Adapter;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Models;
@@ -30,7 +30,7 @@ namespace FlowBlox.UICore.Views
             if (sender is not TextBox textBox)
                 return;
 
-            if (textBox.DataContext is not FlowBloxInputFileTemplate inputFile)
+            if (textBox.DataContext is not FlowBloxInputFile inputFile)
                 return;
 
             OpenInputFilePlaceholderSelection(textBox, inputFile);
@@ -47,13 +47,13 @@ namespace FlowBlox.UICore.Views
                 textBox = dockPanel.Children.OfType<TextBox>().FirstOrDefault();
 
             textBox ??= FindVisualChild<TextBox>(button);
-            if (textBox == null || textBox.DataContext is not FlowBloxInputFileTemplate inputFile)
+            if (textBox == null || textBox.DataContext is not FlowBloxInputFile inputFile)
                 return;
 
             OpenInputFilePlaceholderSelection(textBox, inputFile);
         }
 
-        private void OpenInputFilePlaceholderSelection(TextBox textBox, FlowBloxInputFileTemplate inputFile)
+        private void OpenInputFilePlaceholderSelection(TextBox textBox, FlowBloxInputFile inputFile)
         {
             if (DataContext is not ManageInputFilesViewModel vm)
                 return;
@@ -99,3 +99,4 @@ namespace FlowBlox.UICore.Views
         }
     }
 }
+

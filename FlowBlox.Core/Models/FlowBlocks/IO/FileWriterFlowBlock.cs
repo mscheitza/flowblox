@@ -6,7 +6,7 @@ using FlowBlox.Core.Models.Components.IO;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
-using FlowBlox.Core.Util.FlowBlocks;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
@@ -56,8 +56,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             get => _inputField;
             set => SetRequiredInputField(ref _inputField, value);
         }
-
-        public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);
 
         public FileWriterFlowBlock()
         {

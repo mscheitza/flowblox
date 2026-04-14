@@ -12,6 +12,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 {
     [FlowBlockUIGroup("WebEventFlowBlock_Groups_Advanced", 0)]
     [Display(Name = "WebEventFlowBlock_DisplayName", Description = "WebEventFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("WebEventFlowBlock_SpecialExplanation_ResultBehavior", Icon = SpecialExplanationIcon.Information)]
     public class WebEventFlowBlock : WebActionFlowblockBase
     {
         public enum WebBrowserEventTypes
@@ -30,30 +31,42 @@ namespace FlowBlox.Core.Models.FlowBlocks
             SwitchToUrl,
             [Display(Name = "WebBrowserEventTypes_ClickAll", ResourceType = typeof(FlowBloxTexts))]
             ClickAll,
+            [Display(Name = "WebBrowserEventTypes_SendSpecialKey", ResourceType = typeof(FlowBloxTexts))]
+            SendSpecialKey
         }
 
-        [Display(Name = "WebEventFlowBlock_WebBrowserEventType", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "WebEventFlowBlock_WebBrowserEventType", Description = "WebEventFlowBlock_WebBrowserEventType_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ComboBox)]
         public WebBrowserEventTypes WebBrowserEventType { get; set; } = WebBrowserEventTypes.Click;
 
-        [Display(Name = "WebEventFlowBlock_XPath", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "WebEventFlowBlock_XPath", Description = "WebEventFlowBlock_XPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public override string XPath { get; set; }
 
-        [Display(Name = "WebEventFlowBlock_CSSSelector", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [Display(Name = "WebEventFlowBlock_CSSSelector", Description = "WebEventFlowBlock_CSSSelector_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public override string CSSSelector { get; set; }
 
-        [Display(Name = "WebEventFlowBlock_InputText", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [Display(Name = "WebEventFlowBlock_InputText", Description = "WebEventFlowBlock_InputText_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBlockTextBox(MultiLine = true)]
         public string InputText { get; set; }
 
-        [Display(Name = "WebEventFlowBlock_WaitingTimeAfterExecution", ResourceType = typeof(FlowBloxTexts), GroupName = "WebEventFlowBlock_Groups_Advanced", Order = 0)]
+        [ActivationCondition(MemberName = nameof(WebBrowserEventType), Values = new object[] { WebBrowserEventTypes.SendSpecialKey })]
+        [Display(Name = "WebEventFlowBlock_SpecialKey", Description = "WebEventFlowBlock_SpecialKey_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        public WebSpecialKey SpecialKey { get; set; } = WebSpecialKey.Enter;
+
+        [ActivationCondition(MemberName = nameof(WebBrowserEventType), Values = new object[] { WebBrowserEventTypes.SendSpecialKey })]
+        [Display(Name = "WebEventFlowBlock_SpecialKeyModifier", Description = "WebEventFlowBlock_SpecialKeyModifier_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
+        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        public WebSpecialKeyModifier SpecialKeyModifier { get; set; } = WebSpecialKeyModifier.None;
+
+        [Display(Name = "WebEventFlowBlock_WaitingTimeAfterExecution", Description = "WebEventFlowBlock_WaitingTimeAfterExecution_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebEventFlowBlock_Groups_Advanced", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Default)]
         public int WaitingTimeAfterExecution { get; set; }
 
-        [Display(Name = "WebEventFlowBlock_ElementDeterminationRequired", ResourceType = typeof(FlowBloxTexts), GroupName = "WebEventFlowBlock_Groups_Advanced", Order = 1)]
+        [Display(Name = "WebEventFlowBlock_ElementDeterminationRequired", Description = "WebEventFlowBlock_ElementDeterminationRequired_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebEventFlowBlock_Groups_Advanced", Order = 1)]
         [FlowBlockUI(Factory = UIFactory.Default)]
         public bool ElementDeterminationRequired { get; set; }
 
@@ -79,6 +92,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
             properties.Add(nameof(XPath));
             properties.Add(nameof(CSSSelector));
             properties.Add(nameof(InputText));
+            properties.Add(nameof(SpecialKey));
+            properties.Add(nameof(SpecialKeyModifier));
             return properties;
         }
 
@@ -222,6 +237,24 @@ namespace FlowBlox.Core.Models.FlowBlocks
                         else
                         {
                             HandleFailure(runtime, switchResult);
+                        }
+                    }
+                }
+                else if (WebBrowserEventType == WebBrowserEventTypes.SendSpecialKey)
+                {
+                    RequireAndGetSelector(out mode, out selector);
+                    var keyResult = webBrowser.SendSpecialKey(selector, mode, SpecialKey, SpecialKeyModifier);
+                    if (runtime != null)
+                    {
+                        if (keyResult.Success)
+                        {
+                            runtime.Report($"Special key action successfully executed for selector \"{selector}\" (Key={SpecialKey}, Modifier={SpecialKeyModifier}).");
+                            WaitAfterExecution();
+                            GenerateResult(runtime, webBrowser.DOMContent);
+                        }
+                        else
+                        {
+                            HandleFailure(runtime, keyResult);
                         }
                     }
                 }

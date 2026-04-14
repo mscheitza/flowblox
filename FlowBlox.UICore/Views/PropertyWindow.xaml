@@ -26,6 +26,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -51,6 +52,33 @@
                TextWrapping="Wrap"
                TextTrimming="CharacterEllipsis" />
         </Border>
+
+        <!-- Special explanations -->
+        <Expander DockPanel.Dock="Top"
+                  Margin="0,8,0,0"
+                  Header="Zusätzliche Informationen"
+                  IsExpanded="False"
+                  Visibility="{Binding SpecialExplanations.Count, Converter={StaticResource CountToVisibilityConverter}}">
+            <Border Background="#F8FBFF" Padding="10" BorderBrush="#D8E1ED" BorderThickness="1" CornerRadius="4">
+                <ItemsControl ItemsSource="{Binding SpecialExplanations}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Margin="0,0,0,6">
+                                <iconPacks:PackIconMaterial Kind="{Binding IconKind}"
+                                                            Width="16"
+                                                            Height="16"
+                                                            Margin="0,0,8,0"
+                                                            VerticalAlignment="Top"
+                                                            Foreground="{Binding IconForeground}"/>
+                                <TextBlock Text="{Binding Explanation}"
+                                           TextWrapping="Wrap"
+                                           Foreground="DarkSlateGray"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </Expander>
 
         <!-- Operations -->
         <Border Background="#DDE7F3"

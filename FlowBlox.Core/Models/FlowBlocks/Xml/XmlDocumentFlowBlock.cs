@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -14,6 +14,7 @@ using System.Xml;
 namespace FlowBlox.Core.Models.FlowBlocks.Xml
 {
     [Display(Name = "XmlDocumentFlowBlock_DisplayName", Description = "XmlDocumentFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("XmlDocumentFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     public class XmlDocumentFlowBlock : BaseFlowBlock
     {
         [JsonIgnore]

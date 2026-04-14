@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Components;
@@ -13,9 +13,10 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.Json
 {
     [Display(Name = "JsonObjectOutputFlowBlock_DisplayName", Description = "JsonObjectOutputFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("JsonObjectOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
     public class JsonObjectOutputFlowBlock : BaseSingleResultFlowBlock
     {
-        [Display(Name = "JsonObjectOutputFlowBlock_AssociatedJsonObject", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "JsonObjectOutputFlowBlock_AssociatedJsonObject", Description = "JsonObjectOutputFlowBlock_AssociatedJsonObject_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleJsonObjectFlowBlocks),

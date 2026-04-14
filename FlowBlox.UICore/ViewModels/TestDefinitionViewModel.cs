@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Enums;
+using FlowBlox.Core;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -6,11 +7,13 @@ using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
+using MahApps.Metro.Controls;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -40,12 +43,15 @@ namespace FlowBlox.UICore.ViewModels
             _testDefinition = new FlowBloxTestDefinition();
             SubscribeToPropertyChangeEvents(_testDefinition);
             _testExecutor = new FlowBloxTestExecutor();
-            Configurations = new ObservableCollection<FlowBloxTestConfiguration>();
+            Configurations = new ObservableCollection<FlowBloxFieldTestConfiguration>();
             SortedEntries = new ObservableCollection<FlowBlockTestDataset>();
             RuntimeLogs = new ObservableCollection<RuntimeLog>();
             BindingOperations.EnableCollectionSynchronization(RuntimeLogs, new object());
             _testDefinitionUsages = new List<BaseFlowBlock>();
         }
+
+        public string HeaderDescription =>
+            FlowBloxResourceUtil.GetLocalizedString("FlowBloxTestDefinition_Description", typeof(FlowBloxTexts));
 
         private void SubscribeToPropertyChangeEvents(FlowBloxTestDefinition testDefinition)
         {
@@ -57,7 +63,7 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     config.PropertyChanged += (s, e) =>
                     {
-                        if (e.PropertyName == nameof(FlowBloxTestConfiguration.SelectionMode))
+                        if (e.PropertyName == nameof(FlowBloxFieldTestConfiguration.SelectionMode))
                         {
                             if (config.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue ||
                                 config.SelectionMode == FlowBloxTestConfigurationSelectionMode.First ||
@@ -246,10 +252,10 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        public ObservableCollection<FlowBloxTestConfiguration> Configurations { get; }
+        public ObservableCollection<FlowBloxFieldTestConfiguration> Configurations { get; }
 
-        private FlowBloxTestConfiguration _selectedConfiguration;
-        public FlowBloxTestConfiguration SelectedConfiguration
+        private FlowBloxFieldTestConfiguration _selectedConfiguration;
+        public FlowBloxFieldTestConfiguration SelectedConfiguration
         {
             get => _selectedConfiguration;
             set
@@ -308,7 +314,26 @@ namespace FlowBlox.UICore.ViewModels
             RuntimeLogs.Clear();
             SelectedResultTabIndex = 1;
 
-            _testExecutor.Initialize(_testDefinition, _currentFlowBlock);
+            var includedFlowBlocks = _testDefinition?.Entries?
+                .Select(x => x.FlowBlock)
+                .ExceptNull()
+                .ToList();
+
+            try
+            {
+                _testExecutor.Initialize(_testDefinition, _currentFlowBlock, includedFlowBlocks);
+            }
+            catch (Exception ex)
+            {
+                var messageTemplate = FlowBloxResourceUtil.GetLocalizedString(
+                    "Message_RuntimeInitializationFailed",
+                    typeof(Resources.TestDefinitionView));
+                var message = string.Format(messageTemplate, ex.Message);
+
+                await MessageBoxHelper.ShowMessageBoxAsync(_ownerWindow as MetroWindow, MessageBoxType.Error, message);
+                return;
+            }
+
             _testExecutor.GetRuntime().LogMessageCreated += TestDefinitionViewModel_LogMessageCreated;
             await _testExecutor.ExecuteTestAsync();
 
@@ -398,7 +423,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void EditConditions(object target)
         {
-            var flowBloxTestConfiguration = target as FlowBloxTestConfiguration;
+            var flowBloxTestConfiguration = target as FlowBloxFieldTestConfiguration;
             if (flowBloxTestConfiguration == null)
                 return;
 
@@ -416,7 +441,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void EditContent(object target)
         {
-            var configuration = target as FlowBloxTestConfiguration;
+            var configuration = target as FlowBloxFieldTestConfiguration;
             if (configuration == null)
                 return;
 

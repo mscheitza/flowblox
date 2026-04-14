@@ -1158,25 +1158,10 @@ namespace FlowBlox.AppWindow
             }
 
             lblNotificationMessage.Text = notification.Message ?? string.Empty;
-            lblNotificationAction.Text = NormalizeNotificationActionText(notification.ActionText);
+            lblNotificationAction.Text = notification.ActionText;
             lblNotificationAction.Visible = !string.IsNullOrWhiteSpace(notification.ActionText)
                                             && notification.ActionType != AppNotificationActionType.None;
             statusStrip.Visible = true;
-        }
-
-        private static string NormalizeNotificationActionText(string actionText)
-        {
-            if (string.IsNullOrWhiteSpace(actionText))
-                return string.Empty;
-
-            var normalized = actionText.Trim();
-            if (string.Equals(normalized, "JUpdate herunterlader", StringComparison.OrdinalIgnoreCase))
-                return "Update herunterladen";
-
-            if (string.Equals(normalized, "Update herunterlader", StringComparison.OrdinalIgnoreCase))
-                return "Update herunterladen";
-
-            return normalized;
         }
 
         private async void lblNotificationAction_Click(object sender, EventArgs e)

@@ -1,12 +1,12 @@
-using FlowBlox.AIAssistant.Models;
+﻿using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.Project;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools
 {
-    internal sealed class DeleteInputFileTemplateHandler : ToolHandlerBase
+    internal sealed class DeleteInputFileHandler : ToolHandlerBase
     {
-        public override string Name => "DeleteInputFileTemplate";
+        public override string Name => "DeleteInputFile";
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
@@ -21,7 +21,7 @@ namespace FlowBlox.AIAssistant.Tools
             try
             {
                 var project = ToolHandlerUtilities.GetProject();
-                project.InputFiles ??= new List<FlowBloxInputFileTemplate>();
+                project.InputFiles ??= new List<FlowBloxInputFile>();
 
                 var key = (args.Value<string>("key") ?? string.Empty).Trim();
                 if (string.IsNullOrWhiteSpace(key))
@@ -59,5 +59,6 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
 
 

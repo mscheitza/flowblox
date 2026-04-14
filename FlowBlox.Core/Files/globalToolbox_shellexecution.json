@@ -29,6 +29,18 @@
       "Name": "Executable",
       "Content": "\"%%ExecutablePath%%\" %%Arguments%%",
       "Description": "Runs an executable file with optional arguments."
+    },
+    {
+      "ToolboxCategory": "ShellExecution",
+      "Name": "Batch XCopy File (Overwrite)",
+      "Content": "cmd.exe /C \"xcopy /Y /I \"\"%%sourceFile%%\"\" \"\"%%destinationFile%%\"\"\"",
+      "Description": "Copies a file with xcopy and overwrites existing targets."
+    },
+    {
+      "ToolboxCategory": "ShellExecution",
+      "Name": "Batch Move File (Overwrite)",
+      "Content": "cmd.exe /C \"move /Y \"\"%%sourceFile%%\"\" \"\"%%destinationFile%%\"\"\"",
+      "Description": "Moves a file and overwrites the target if it already exists."
     }
   ]
 }

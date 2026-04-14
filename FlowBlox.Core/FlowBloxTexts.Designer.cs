@@ -745,9 +745,9 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Defines the flow block whose iteration lifecycle controls this block. 
-        ///When multiple incoming paths exist, the iteration context is automatically set to the first common flow block across all paths and cannot be changed. 
-        ///If only one flow block is connected, the iteration context can be selected manually. 
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines the flow block whose iteration lifecycle controls this block.
+        ///With multiple incoming paths, the IterationContext is auto-resolved to the first common flow block.
+        ///This automatic value can be overridden by setting AssociatedIterationContext explicitly.
         ///All inputs are collected during the referenced block&apos;s iteration and this flow block executes once the iteration has completed. ähnelt.
         /// </summary>
         public static string BaseFlowBlock_AssociatedIterationContext_Tooltip {
@@ -883,7 +883,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Test definitions describe verifiable scenarios for this flow block. For required fields, you can either set constant values or derive expected values from the complete flow chain. The resulting input values are then used to execute tests in a test-driven design workflow. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test definitions describe verifiable scenarios for this flow block. For required fields, you can either set constant values or derive expected values from the complete or partial flow chain. The resulting input values are then used for further test execution. ähnelt.
         /// </summary>
         public static string BaseFlowBlock_TestDefinitions_Tooltip {
             get {
@@ -1324,6 +1324,186 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Copies or moves files and directories and returns the resolved destination path. ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Destination path ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_DestinationPath {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_DestinationPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The destination file or directory path used by the selected mode. ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_DestinationPath_Tooltip {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_DestinationPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Directory overwrite ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_DirectoryOverwrite {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_DirectoryOverwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allows writing into an already existing target directory. ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_DirectoryOverwrite_Tooltip {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_DirectoryOverwrite_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Copy/Move ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die File overwrite ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_FileOverwrite {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_FileOverwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Overwrites existing target files. ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_FileOverwrite_Tooltip {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_FileOverwrite_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mode ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_Mode {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines whether files or directories are copied or moved. ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_Mode_Tooltip {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_Mode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recursive ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_Recursive {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_Recursive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Includes subdirectories when copying directories. ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_Recursive_Tooltip {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_Recursive_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source file ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_SourceFile {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_SourceFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The file that is copied or moved. ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_SourceFile_Tooltip {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_SourceFile_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source folder ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_SourceFolder {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_SourceFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The directory that is copied or moved. ähnelt.
+        /// </summary>
+        public static string CopyMoveFlowBlock_SourceFolder_Tooltip {
+            get {
+                return ResourceManager.GetString("CopyMoveFlowBlock_SourceFolder_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Copy directory ähnelt.
+        /// </summary>
+        public static string CopyMoveMode_CopyDirectory {
+            get {
+                return ResourceManager.GetString("CopyMoveMode_CopyDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Copy file ähnelt.
+        /// </summary>
+        public static string CopyMoveMode_CopyFile {
+            get {
+                return ResourceManager.GetString("CopyMoveMode_CopyFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Move directory ähnelt.
+        /// </summary>
+        public static string CopyMoveMode_MoveDirectory {
+            get {
+                return ResourceManager.GetString("CopyMoveMode_MoveDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Move file ähnelt.
+        /// </summary>
+        public static string CopyMoveMode_MoveFile {
+            get {
+                return ResourceManager.GetString("CopyMoveMode_MoveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Alphanumeric range ähnelt.
         /// </summary>
         public static string CounterFlowBlock_AlphaRange {
@@ -1423,6 +1603,42 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates the current timestamp as DateTime result value. ähnelt.
+        /// </summary>
+        public static string CurrentTimestampFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("CurrentTimestampFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Current Timestamp ähnelt.
+        /// </summary>
+        public static string CurrentTimestampFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("CurrentTimestampFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use UTC ähnelt.
+        /// </summary>
+        public static string CurrentTimestampFlowBlock_UseUtc {
+            get {
+                return ResourceManager.GetString("CurrentTimestampFlowBlock_UseUtc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, UTC is used; otherwise local time is used. ähnelt.
+        /// </summary>
+        public static string CurrentTimestampFlowBlock_UseUtc_Description {
+            get {
+                return ResourceManager.GetString("CurrentTimestampFlowBlock_UseUtc_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Data sources ähnelt.
         /// </summary>
         public static string DataObjectManager_DisplayName {
@@ -1500,6 +1716,222 @@ namespace FlowBlox.Core {
         public static string DataTableManager_Groups_SqlTables {
             get {
                 return ResourceManager.GetString("DataTableManager_Groups_SqlTables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Adds or subtracts date/time units to a DateTime field value. ähnelt.
+        /// </summary>
+        public static string DateTimeArithmeticFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("DateTimeArithmeticFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DateTime Arithmetic ähnelt.
+        /// </summary>
+        public static string DateTimeArithmeticFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("DateTimeArithmeticFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Offset ähnelt.
+        /// </summary>
+        public static string DateTimeArithmeticFlowBlock_Offset {
+            get {
+                return ResourceManager.GetString("DateTimeArithmeticFlowBlock_Offset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Offset value. Use negative numbers to subtract. ähnelt.
+        /// </summary>
+        public static string DateTimeArithmeticFlowBlock_Offset_Description {
+            get {
+                return ResourceManager.GetString("DateTimeArithmeticFlowBlock_Offset_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source date ähnelt.
+        /// </summary>
+        public static string DateTimeArithmeticFlowBlock_SourceDate {
+            get {
+                return ResourceManager.GetString("DateTimeArithmeticFlowBlock_SourceDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DateTime field used as input. ähnelt.
+        /// </summary>
+        public static string DateTimeArithmeticFlowBlock_SourceDate_Description {
+            get {
+                return ResourceManager.GetString("DateTimeArithmeticFlowBlock_SourceDate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unit ähnelt.
+        /// </summary>
+        public static string DateTimeArithmeticFlowBlock_Unit {
+            get {
+                return ResourceManager.GetString("DateTimeArithmeticFlowBlock_Unit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Date/time unit that should be added or subtracted. ähnelt.
+        /// </summary>
+        public static string DateTimeArithmeticFlowBlock_Unit_Description {
+            get {
+                return ResourceManager.GetString("DateTimeArithmeticFlowBlock_Unit_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Absolute value ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_AbsoluteValue {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_AbsoluteValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, the result is always positive. ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_AbsoluteValue_Description {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_AbsoluteValue_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Builds an interval between two DateTime values and returns the difference in a selected unit. ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DateTime Difference ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die End date ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_EndDate {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_EndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die End DateTime field. ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_EndDate_Description {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_EndDate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start date ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_StartDate {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start DateTime field. ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_StartDate_Description {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_StartDate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unit ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_Unit {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_Unit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unit used for the calculated interval. ähnelt.
+        /// </summary>
+        public static string DateTimeDifferenceFlowBlock_Unit_Description {
+            get {
+                return ResourceManager.GetString("DateTimeDifferenceFlowBlock_Unit_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Days ähnelt.
+        /// </summary>
+        public static string DateTimeOperationUnit_Days {
+            get {
+                return ResourceManager.GetString("DateTimeOperationUnit_Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hours ähnelt.
+        /// </summary>
+        public static string DateTimeOperationUnit_Hours {
+            get {
+                return ResourceManager.GetString("DateTimeOperationUnit_Hours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Minutes ähnelt.
+        /// </summary>
+        public static string DateTimeOperationUnit_Minutes {
+            get {
+                return ResourceManager.GetString("DateTimeOperationUnit_Minutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Months ähnelt.
+        /// </summary>
+        public static string DateTimeOperationUnit_Months {
+            get {
+                return ResourceManager.GetString("DateTimeOperationUnit_Months", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Seconds ähnelt.
+        /// </summary>
+        public static string DateTimeOperationUnit_Seconds {
+            get {
+                return ResourceManager.GetString("DateTimeOperationUnit_Seconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Years ähnelt.
+        /// </summary>
+        public static string DateTimeOperationUnit_Years {
+            get {
+                return ResourceManager.GetString("DateTimeOperationUnit_Years", resourceCulture);
             }
         }
         
@@ -1972,11 +2404,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines which value target (first, indexed, any, last, dataset count) is checked. ähnelt.
+        /// </summary>
+        public static string ExpectationCondition_ExpectationConditionTarget_Description {
+            get {
+                return ResourceManager.GetString("ExpectationCondition_ExpectationConditionTarget_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Index ähnelt.
         /// </summary>
         public static string ExpectationCondition_Index {
             get {
                 return ResourceManager.GetString("ExpectationCondition_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Index used when target is &quot;Value at index&quot;. ähnelt.
+        /// </summary>
+        public static string ExpectationCondition_Index_Description {
+            get {
+                return ResourceManager.GetString("ExpectationCondition_Index_Description", resourceCulture);
             }
         }
         
@@ -2314,6 +2764,78 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execute ähnelt.
+        /// </summary>
+        public static string FlowBlockTestDataset_Execute {
+            get {
+                return ResourceManager.GetString("FlowBlockTestDataset_Execute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls whether this flow block is actively executed in the test run. ähnelt.
+        /// </summary>
+        public static string FlowBlockTestDataset_Execute_Description {
+            get {
+                return ResourceManager.GetString("FlowBlockTestDataset_Execute_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field test configurations ähnelt.
+        /// </summary>
+        public static string FlowBlockTestDataset_FieldTestConfigurations {
+            get {
+                return ResourceManager.GetString("FlowBlockTestDataset_FieldTestConfigurations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field-level test configuration entries for this flow block. ähnelt.
+        /// </summary>
+        public static string FlowBlockTestDataset_FieldTestConfigurations_Description {
+            get {
+                return ResourceManager.GetString("FlowBlockTestDataset_FieldTestConfigurations_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow block ähnelt.
+        /// </summary>
+        public static string FlowBlockTestDataset_FlowBlock {
+            get {
+                return ResourceManager.GetString("FlowBlockTestDataset_FlowBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow block represented by this test dataset entry. ähnelt.
+        /// </summary>
+        public static string FlowBlockTestDataset_FlowBlock_Description {
+            get {
+                return ResourceManager.GetString("FlowBlockTestDataset_FlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required for execution ähnelt.
+        /// </summary>
+        public static string FlowBlockTestDataset_UIRequiredForExecution {
+            get {
+                return ResourceManager.GetString("FlowBlockTestDataset_UIRequiredForExecution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die UI-only marker in TestDefinition view indicating this dataset is required because another executed block depends on its associated flow block. ähnelt.
+        /// </summary>
+        public static string FlowBlockTestDataset_UIRequiredForExecution_Description {
+            get {
+                return ResourceManager.GetString("FlowBlockTestDataset_UIRequiredForExecution_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Required fields ähnelt.
         /// </summary>
         public static string FlowBloxComponent_RequiredFields {
@@ -2404,11 +2926,65 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expectation conditions evaluated for this field configuration during test execution. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfiguration_ExpectationConditions_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfiguration_ExpectationConditions_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selection mode ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfiguration_SelectionMode {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfiguration_SelectionMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use automatic selection modes to derive a field value from flow-block execution. Use &quot;User input expected&quot; to combine manual input with an expectation, or &quot;Manual user input&quot; to set a value without execution. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfiguration_SelectionMode_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfiguration_SelectionMode_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required for execution ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfiguration_UIRequiredForExecution {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfiguration_UIRequiredForExecution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die UI-only marker in TestDefinition view indicating this field is required for executable flow blocks. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfiguration_UIRequiredForExecution_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfiguration_UIRequiredForExecution_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automatic selection: first value ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_First {
             get {
                 return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_First", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects the first value from execution results. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfigurationSelectionMode_First_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_First_Description", resourceCulture);
             }
         }
         
@@ -2422,11 +2998,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects the value at the configured index from execution results. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfigurationSelectionMode_Index_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_Index_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Keep current value ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_Keep {
             get {
                 return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_Keep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Keeps the current field value without automatic selection. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfigurationSelectionMode_Keep_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_Keep_Description", resourceCulture);
             }
         }
         
@@ -2440,6 +3034,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects the last value from execution results. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfigurationSelectionMode_Last_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_Last_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manual user input ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_UserInput {
@@ -2449,11 +3052,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses a manually entered value. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfigurationSelectionMode_UserInput_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_UserInput_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die User input expected ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue {
             get {
                 return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses manual input and evaluates it as an expectation. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue_Description", resourceCulture);
             }
         }
         
@@ -2485,6 +3106,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die A test case describes a complete test run from the first executed flow block to the current or last assigned target flow block. If a flow block is executed, its activation requirements must be fulfilled, for example required field values and activation conditions. Required values to be set are marked, and additional guidance is available in the expanders. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestDefinition_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestDefinition_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test Definition ähnelt.
         /// </summary>
         public static string FlowBloxTestDefinition_DisplayName {
@@ -2503,11 +3133,38 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Entries ähnelt.
+        /// </summary>
+        public static string FlowBloxTestDefinition_Entries {
+            get {
+                return ResourceManager.GetString("FlowBloxTestDefinition_Entries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Flow-block-level test datasets from test start to current target flow block. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestDefinition_Entries_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestDefinition_Entries_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Required for execution ähnelt.
         /// </summary>
         public static string FlowBloxTestDefinition_RequiredForExecution {
             get {
                 return ResourceManager.GetString("FlowBloxTestDefinition_RequiredForExecution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, runtime execution requires this test definition to pass. ähnelt.
+        /// </summary>
+        public static string FlowBloxTestDefinition_RequiredForExecution_Description {
+            get {
+                return ResourceManager.GetString("FlowBloxTestDefinition_RequiredForExecution_Description", resourceCulture);
             }
         }
         
@@ -2661,6 +3318,15 @@ namespace FlowBlox.Core {
         public static string FloxBloxCategory_ControlFlow {
             get {
                 return ResourceManager.GetString("FloxBloxCategory_ControlFlow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Date Operations ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_DateOperations {
+            get {
+                return ResourceManager.GetString("FloxBloxCategory_DateOperations", resourceCulture);
             }
         }
         
@@ -3565,7 +4231,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a JSON object from the given JSON text and makes it available to subsequent flow blocks. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a JSON object from the specified content, manages the internal JSON object, and makes it available to other flow blocks. ähnelt.
         /// </summary>
         public static string JsonObjectFlowBlock_Description {
             get {
@@ -3592,11 +4258,47 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal JSON object. The managed object can be used by other flow blocks. ähnelt.
+        /// </summary>
+        public static string JsonObjectFlowBlock_ManagedResource_Explanation0 {
+            get {
+                return ResourceManager.GetString("JsonObjectFlowBlock_ManagedResource_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notes on the internally managed JSON object ähnelt.
+        /// </summary>
+        public static string JsonObjectFlowBlock_ManagedResource_Topic {
+            get {
+                return ResourceManager.GetString("JsonObjectFlowBlock_ManagedResource_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal JSON object. The managed object can be used by other flow blocks. ähnelt.
+        /// </summary>
+        public static string JsonObjectFlowBlock_SpecialExplanation_ManagedResource {
+            get {
+                return ResourceManager.GetString("JsonObjectFlowBlock_SpecialExplanation_ManagedResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Associated JSON object ähnelt.
         /// </summary>
         public static string JsonObjectOutputFlowBlock_AssociatedJsonObject {
             get {
                 return ResourceManager.GetString("JsonObjectOutputFlowBlock_AssociatedJsonObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The JSON object flow block that manages the internal JSON object used for output generation. ähnelt.
+        /// </summary>
+        public static string JsonObjectOutputFlowBlock_AssociatedJsonObject_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonObjectOutputFlowBlock_AssociatedJsonObject_Tooltip", resourceCulture);
             }
         }
         
@@ -3610,7 +4312,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Outputs a JSON object and stores it in the output field. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Outputs a JSON object as text or byte array. This flow block uses the internally managed JSON object from a JSON object flow block. ähnelt.
         /// </summary>
         public static string JsonObjectOutputFlowBlock_Description {
             get {
@@ -3624,6 +4326,24 @@ namespace FlowBlox.Core {
         public static string JsonObjectOutputFlowBlock_DisplayName {
             get {
                 return ResourceManager.GetString("JsonObjectOutputFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed JSON object from a JSON object flow block and outputs it as text or byte array. ähnelt.
+        /// </summary>
+        public static string JsonObjectOutputFlowBlock_ExternalFlowBlocks_Explanation0 {
+            get {
+                return ResourceManager.GetString("JsonObjectOutputFlowBlock_ExternalFlowBlocks_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die How this flow block uses the JSON object ähnelt.
+        /// </summary>
+        public static string JsonObjectOutputFlowBlock_ExternalFlowBlocks_Topic {
+            get {
+                return ResourceManager.GetString("JsonObjectOutputFlowBlock_ExternalFlowBlocks_Topic", resourceCulture);
             }
         }
         
@@ -3646,11 +4366,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed JSON object from a JSON object flow block and outputs it as text or byte array. ähnelt.
+        /// </summary>
+        public static string JsonObjectOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks {
+            get {
+                return ResourceManager.GetString("JsonObjectOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Associated JSON object (via JSON object) ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_AssociatedJsonObject {
             get {
                 return ResourceManager.GetString("JsonObjectWriterFlowBlock_AssociatedJsonObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The JSON object flow block that manages the internal JSON object used by this flow block. ähnelt.
+        /// </summary>
+        public static string JsonObjectWriterFlowBlock_AssociatedJsonObject_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonObjectWriterFlowBlock_AssociatedJsonObject_Tooltip", resourceCulture);
             }
         }
         
@@ -3664,7 +4402,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a new JSON object if needed, or updates an existing one using JSON assignments. To add array elements, set Path to the array property and define element values via JSON assignments. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates or updates nodes in a JSON object. This flow block uses the internally managed JSON object from a JSON object flow block. ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_Description {
             get {
@@ -3678,6 +4416,24 @@ namespace FlowBlox.Core {
         public static string JsonObjectWriterFlowBlock_DisplayName {
             get {
                 return ResourceManager.GetString("JsonObjectWriterFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed JSON object from a JSON object flow block and writes or updates nodes. ähnelt.
+        /// </summary>
+        public static string JsonObjectWriterFlowBlock_ExternalFlowBlocks_Explanation0 {
+            get {
+                return ResourceManager.GetString("JsonObjectWriterFlowBlock_ExternalFlowBlocks_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die How this flow block uses the JSON object ähnelt.
+        /// </summary>
+        public static string JsonObjectWriterFlowBlock_ExternalFlowBlocks_Topic {
+            get {
+                return ResourceManager.GetString("JsonObjectWriterFlowBlock_ExternalFlowBlocks_Topic", resourceCulture);
             }
         }
         
@@ -3732,6 +4488,15 @@ namespace FlowBlox.Core {
         public static string JsonObjectWriterFlowBlock_Path_Tooltip {
             get {
                 return ResourceManager.GetString("JsonObjectWriterFlowBlock_Path_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed JSON object from a JSON object flow block and writes or updates nodes. ähnelt.
+        /// </summary>
+        public static string JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks {
+            get {
+                return ResourceManager.GetString("JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
             }
         }
         
@@ -4316,6 +5081,33 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal ONNX inference session. Other ONNX flow blocks can reuse this managed session via association. ähnelt.
+        /// </summary>
+        public static string OnnxBaseFlowBlock_ManagedResource_Explanation0 {
+            get {
+                return ResourceManager.GetString("OnnxBaseFlowBlock_ManagedResource_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notes on the internally managed ONNX session ähnelt.
+        /// </summary>
+        public static string OnnxBaseFlowBlock_ManagedResource_Topic {
+            get {
+                return ResourceManager.GetString("OnnxBaseFlowBlock_ManagedResource_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal ONNX inference session. Other ONNX flow blocks can reuse this managed session via association. ähnelt.
+        /// </summary>
+        public static string OnnxBaseFlowBlock_SpecialExplanation_ManagedResource {
+            get {
+                return ResourceManager.GetString("OnnxBaseFlowBlock_SpecialExplanation_ManagedResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die AI tokenizer ähnelt.
         /// </summary>
         public static string OnnxGenAIFlowBlock_AiTokenizer {
@@ -4343,6 +5135,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages internal ONNX Runtime GenAI model and tokenizer instances for prompt execution. ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_ManagedResource_Explanation0 {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_ManagedResource_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notes on internally managed ONNX runtime objects ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_ManagedResource_Topic {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_ManagedResource_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Max tokens ähnelt.
         /// </summary>
         public static string OnnxGenAIFlowBlock_MaxTokens {
@@ -4357,6 +5167,15 @@ namespace FlowBlox.Core {
         public static string OnnxGenAIFlowBlock_Prompt {
             get {
                 return ResourceManager.GetString("OnnxGenAIFlowBlock_Prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages internal ONNX Runtime GenAI model and tokenizer instances for prompt execution. ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource", resourceCulture);
             }
         }
         
@@ -4384,6 +5203,15 @@ namespace FlowBlox.Core {
         public static string OnnxQuestionAnsweringFlowBlock_Context {
             get {
                 return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_Context", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Answers questions from a context using an ONNX model. ähnelt.
+        /// </summary>
+        public static string OnnxQuestionAnsweringFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_Description", resourceCulture);
             }
         }
         
@@ -4472,7 +5300,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Runs text generation via ONNX Runtime GenAI (e.g., Phi-3.5) and supports chat templates. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runs text generation with ONNX Runtime GenAI and manages the internal model and tokenizer instances for the configured runtime. ähnelt.
         /// </summary>
         public static string OnnxRuntimeGenAIFlowBlock_Description {
             get {
@@ -4949,6 +5777,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated execute project flow block ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The execute project flow block whose output is used by this iterator. ähnelt.
+        /// </summary>
+        public static string ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock_Tooltip {
+            get {
+                return ResourceManager.GetString("ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Iterates an output group from the runner response JSON and maps output properties to fields to generate one result per dataset. ähnelt.
         /// </summary>
         public static string ProjectOutputIteratorFlowBlock_Description {
@@ -5233,6 +6079,15 @@ namespace FlowBlox.Core {
         public static string RecursiveCallFlowBlock_TargetFlowBlock {
             get {
                 return ResourceManager.GetString("RecursiveCallFlowBlock_TargetFlowBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The target flow block from which execution continues after transferring the configured field values. ähnelt.
+        /// </summary>
+        public static string RecursiveCallFlowBlock_TargetFlowBlock_Tooltip {
+            get {
+                return ResourceManager.GetString("RecursiveCallFlowBlock_TargetFlowBlock_Tooltip", resourceCulture);
             }
         }
         
@@ -6821,6 +7676,42 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The web browser flow block that manages the internal web browser instance used for this action. ähnelt.
+        /// </summary>
+        public static string WebActionFlowblockBase_AssociatedWebBrowser_Tooltip {
+            get {
+                return ResourceManager.GetString("WebActionFlowblockBase_AssociatedWebBrowser_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed web browser instance from a web browser flow block to execute web actions. ähnelt.
+        /// </summary>
+        public static string WebActionFlowblockBase_ExternalFlowBlocks_Explanation0 {
+            get {
+                return ResourceManager.GetString("WebActionFlowblockBase_ExternalFlowBlocks_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die How this flow block uses the web browser instance ähnelt.
+        /// </summary>
+        public static string WebActionFlowblockBase_ExternalFlowBlocks_Topic {
+            get {
+                return ResourceManager.GetString("WebActionFlowblockBase_ExternalFlowBlocks_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed web browser instance from a web browser flow block to execute web actions. ähnelt.
+        /// </summary>
+        public static string WebActionFlowblockBase_SpecialExplanation_ExternalFlowBlocks {
+            get {
+                return ResourceManager.GetString("WebActionFlowblockBase_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die On error ähnelt.
         /// </summary>
         public static string WebBrowserEventAbortionTypes_ByFailure {
@@ -6875,6 +7766,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Send special key ähnelt.
+        /// </summary>
+        public static string WebBrowserEventTypes_SendSpecialKey {
+            get {
+                return ResourceManager.GetString("WebBrowserEventTypes_SendSpecialKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Switch to URL ähnelt.
         /// </summary>
         public static string WebBrowserEventTypes_SwitchToUrl {
@@ -6911,7 +7811,16 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Simulates a simple browser for displaying or analyzing web page content. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Another web browser flow block whose managed internal browser instance is used as source for cookies and state. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_AssociatedWebBrowser_Tooltip {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_AssociatedWebBrowser_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Opens and controls a browser context, manages the internal web browser instance, and makes it available to other flow blocks. Check cookie-consent overlays before automation and handle them with a click action if required. ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_Description {
             get {
@@ -6934,6 +7843,42 @@ namespace FlowBlox.Core {
         public static string WebBrowserFlowBlock_Groups_Advanced {
             get {
                 return ResourceManager.GetString("WebBrowserFlowBlock_Groups_Advanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal web browser instance. The managed instance can be used by other flow blocks. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_ManagedResource_Explanation0 {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_ManagedResource_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notes on the internally managed web browser instance ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_ManagedResource_Topic {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_ManagedResource_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die After successfully opening the URL, the current DOM content is written to the result field. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_ResultBehavior_Explanation0 {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_ResultBehavior_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Return of DOM content on successful action ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_ResultBehavior_Topic {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_ResultBehavior_Topic", resourceCulture);
             }
         }
         
@@ -6974,6 +7919,33 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Check whether a cookie-consent overlay is displayed. If present, add a web event flow block with click action on the accept button. Determine the exact selector or naming from the website DOM content. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_SpecialExplanation_CookieOverlay {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_SpecialExplanation_CookieOverlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal web browser instance. The managed instance can be used by other flow blocks. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_SpecialExplanation_ManagedResource {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_SpecialExplanation_ManagedResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die After successfully opening the URL, the current DOM content is written to the result field. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_SpecialExplanation_ResultBehavior {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_SpecialExplanation_ResultBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (in seconds) ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_Timeout {
@@ -6997,6 +7969,276 @@ namespace FlowBlox.Core {
         public static string WebBrowserFlowBlock_Url {
             get {
                 return ResourceManager.GetString("WebBrowserFlowBlock_Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The URL opened by the web browser flow block. ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_Url_Tooltip {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_Url_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DOM Content ähnelt.
+        /// </summary>
+        public static string WebDownloadDestinations_DOMContent {
+            get {
+                return ResourceManager.GetString("WebDownloadDestinations_DOMContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download path ähnelt.
+        /// </summary>
+        public static string WebDownloadDestinations_DownloadPath {
+            get {
+                return ResourceManager.GetString("WebDownloadDestinations_DownloadPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated web browser ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_AssociatedWebBrowser {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_AssociatedWebBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The web browser flow block whose internal browser instance is used for file download actions. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_AssociatedWebBrowser_Tooltip {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_AssociatedWebBrowser_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die CSS selector ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_CSSSelector {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_CSSSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The CSS selector used to resolve the download element. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_CSSSelector_Tooltip {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_CSSSelector_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Downloads files from web pages by using the associated web browser flow block and returns DOM content and the actual download path. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web download ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download directory ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_DownloadDirectory {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_DownloadDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The target download directory for browser-native downloads. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_DownloadDirectory_Tooltip {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_DownloadDirectory_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download mode ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_DownloadMode {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_DownloadMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines whether the download is executed via browser-native click, direct HTTP request, or automatic fallback. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_DownloadMode_Tooltip {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_DownloadMode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download path ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_DownloadPath {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_DownloadPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The target file or folder path for HTTP-request downloads. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_DownloadPath_Tooltip {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_DownloadPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed web browser instance from a web browser flow block to execute file downloads. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_ExternalFlowBlocks_Explanation0 {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_ExternalFlowBlocks_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Usage of external flow blocks in this flow block ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_ExternalFlowBlocks_Topic {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_ExternalFlowBlocks_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_Groups_Download {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_Groups_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die After execution, this flow block returns the current DOM content and the actual resolved download path in its result fields. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_ResultBehavior_Explanation0 {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_ResultBehavior_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Return of DOM content and download path ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_ResultBehavior_Topic {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_ResultBehavior_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result fields ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_ResultFields {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_ResultFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed web browser instance from a web browser flow block to execute file downloads. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_SpecialExplanation_ExternalFlowBlocks {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die After execution, this flow block returns the current DOM content and the actual resolved download path in its result fields. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_SpecialExplanation_ResultBehavior {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_SpecialExplanation_ResultBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (seconds) ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_TimeoutSeconds {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_TimeoutSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The maximum waiting time in seconds for the download to complete. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_TimeoutSeconds_Tooltip {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_TimeoutSeconds_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_XPath {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_XPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The XPath selector used to resolve the download element. ähnelt.
+        /// </summary>
+        public static string WebDownloadFlowBlock_XPath_Tooltip {
+            get {
+                return ResourceManager.GetString("WebDownloadFlowBlock_XPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Auto ähnelt.
+        /// </summary>
+        public static string WebDownloadMode_Auto {
+            get {
+                return ResourceManager.GetString("WebDownloadMode_Auto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Browser native ähnelt.
+        /// </summary>
+        public static string WebDownloadMode_BrowserNative {
+            get {
+                return ResourceManager.GetString("WebDownloadMode_BrowserNative", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP request ähnelt.
+        /// </summary>
+        public static string WebDownloadMode_HttpRequest {
+            get {
+                return ResourceManager.GetString("WebDownloadMode_HttpRequest", resourceCulture);
             }
         }
         
@@ -7028,7 +8270,16 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Responds to user interactions or events within a web component. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The CSS selector used to resolve the target element for element-based actions. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_CSSSelector_Tooltip {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_CSSSelector_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Executes browser interactions such as click, enter text, scrolling, or DOM updates by using the internally managed web browser instance from a web browser flow block. ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_Description {
             get {
@@ -7055,6 +8306,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Indicates whether element determination is required for this action. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_ElementDeterminationRequired_Tooltip {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_ElementDeterminationRequired_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Advanced settings ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_Groups_Advanced {
@@ -7073,11 +8333,92 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The input text used for Enter, UpdateDOM, or SwitchToUrl actions. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_InputText_Tooltip {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_InputText_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die After a successful web action, the current DOM content is written to the result field. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_ResultBehavior_Explanation0 {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_ResultBehavior_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Return of DOM content on successful action ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_ResultBehavior_Topic {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_ResultBehavior_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die After a successful web action, the current DOM content is written to the result field. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialExplanation_ResultBehavior {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialExplanation_ResultBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Special key ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialKey {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The key that is sent to the resolved target element. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialKey_Tooltip {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialKey_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Modifier ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialKeyModifier {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialKeyModifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional modifier key combination used together with the selected special key. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialKeyModifier_Tooltip {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialKeyModifier_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Waiting time after execution (milliseconds) ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_WaitingTimeAfterExecution {
             get {
                 return ResourceManager.GetString("WebEventFlowBlock_WaitingTimeAfterExecution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The waiting time in milliseconds after a successful action. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_WaitingTimeAfterExecution_Tooltip {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_WaitingTimeAfterExecution_Tooltip", resourceCulture);
             }
         }
         
@@ -7100,6 +8441,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines which browser action is executed. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_WebBrowserEventType_Tooltip {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_WebBrowserEventType_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die X-Path ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_XPath {
@@ -7109,11 +8459,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The XPath selector used to resolve the target element for element-based actions. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_XPath_Tooltip {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_XPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Linked web request ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_AssociatedWebRequest {
             get {
                 return ResourceManager.GetString("WebRequestFlowBlock_AssociatedWebRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Another web request flow block whose managed internal web request instance is reused as request base. ähnelt.
+        /// </summary>
+        public static string WebRequestFlowBlock_AssociatedWebRequest_Tooltip {
+            get {
+                return ResourceManager.GetString("WebRequestFlowBlock_AssociatedWebRequest_Tooltip", resourceCulture);
             }
         }
         
@@ -7136,7 +8504,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Sends an HTTP request to a web server and processes the response. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Executes an HTTP request, manages the internal web request instance, and can reuse request configuration from another web request flow block. ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_Description {
             get {
@@ -7226,6 +8594,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal web request instance. The managed instance can be reused by other web request flow blocks. ähnelt.
+        /// </summary>
+        public static string WebRequestFlowBlock_ManagedResource_Explanation0 {
+            get {
+                return ResourceManager.GetString("WebRequestFlowBlock_ManagedResource_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notes on the internally managed web request instance ähnelt.
+        /// </summary>
+        public static string WebRequestFlowBlock_ManagedResource_Topic {
+            get {
+                return ResourceManager.GetString("WebRequestFlowBlock_ManagedResource_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
         /// </summary>
         public static string WebRequestFlowBlock_Password {
@@ -7276,6 +8662,15 @@ namespace FlowBlox.Core {
         public static string WebRequestFlowBlock_ResultFields {
             get {
                 return ResourceManager.GetString("WebRequestFlowBlock_ResultFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal web request instance. The managed instance can be reused by other web request flow blocks. ähnelt.
+        /// </summary>
+        public static string WebRequestFlowBlock_SpecialExplanation_ManagedResource {
+            get {
+                return ResourceManager.GetString("WebRequestFlowBlock_SpecialExplanation_ManagedResource", resourceCulture);
             }
         }
         
@@ -7370,6 +8765,168 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Arrow Down ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_ArrowDown {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_ArrowDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Arrow Left ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_ArrowLeft {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_ArrowLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Arrow Right ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_ArrowRight {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_ArrowRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Arrow Up ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_ArrowUp {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_ArrowUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Backspace ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_Backspace {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_Backspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_Delete {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enter ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_Enter {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_Enter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Escape ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_Escape {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_Escape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Space ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_Space {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_Space", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tab ähnelt.
+        /// </summary>
+        public static string WebSpecialKey_Tab {
+            get {
+                return ResourceManager.GetString("WebSpecialKey_Tab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Alt ähnelt.
+        /// </summary>
+        public static string WebSpecialKeyModifier_Alt {
+            get {
+                return ResourceManager.GetString("WebSpecialKeyModifier_Alt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ctrl ähnelt.
+        /// </summary>
+        public static string WebSpecialKeyModifier_Ctrl {
+            get {
+                return ResourceManager.GetString("WebSpecialKeyModifier_Ctrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ctrl + Alt ähnelt.
+        /// </summary>
+        public static string WebSpecialKeyModifier_CtrlAlt {
+            get {
+                return ResourceManager.GetString("WebSpecialKeyModifier_CtrlAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ctrl + Shift ähnelt.
+        /// </summary>
+        public static string WebSpecialKeyModifier_CtrlShift {
+            get {
+                return ResourceManager.GetString("WebSpecialKeyModifier_CtrlShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ctrl + Shift + Alt ähnelt.
+        /// </summary>
+        public static string WebSpecialKeyModifier_CtrlShiftAlt {
+            get {
+                return ResourceManager.GetString("WebSpecialKeyModifier_CtrlShiftAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die None ähnelt.
+        /// </summary>
+        public static string WebSpecialKeyModifier_None {
+            get {
+                return ResourceManager.GetString("WebSpecialKeyModifier_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Shift ähnelt.
+        /// </summary>
+        public static string WebSpecialKeyModifier_Shift {
+            get {
+                return ResourceManager.GetString("WebSpecialKeyModifier_Shift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Shift + Alt ähnelt.
+        /// </summary>
+        public static string WebSpecialKeyModifier_ShiftAlt {
+            get {
+                return ResourceManager.GetString("WebSpecialKeyModifier_ShiftAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field ähnelt.
         /// </summary>
         public static string XmlAssignment_FieldValue {
@@ -7397,7 +8954,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Creates a new XML document or loads an existing XML for further processing. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates or loads an XML document, manages the internal XML document, and makes it available to other flow blocks. ähnelt.
         /// </summary>
         public static string XmlDocumentFlowBlock_Description {
             get {
@@ -7411,6 +8968,33 @@ namespace FlowBlox.Core {
         public static string XmlDocumentFlowBlock_DisplayName {
             get {
                 return ResourceManager.GetString("XmlDocumentFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal XML document. The managed document can be used by other flow blocks. ähnelt.
+        /// </summary>
+        public static string XmlDocumentFlowBlock_ManagedResource_Explanation0 {
+            get {
+                return ResourceManager.GetString("XmlDocumentFlowBlock_ManagedResource_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notes on the internally managed XML document ähnelt.
+        /// </summary>
+        public static string XmlDocumentFlowBlock_ManagedResource_Topic {
+            get {
+                return ResourceManager.GetString("XmlDocumentFlowBlock_ManagedResource_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages an internal XML document. The managed document can be used by other flow blocks. ähnelt.
+        /// </summary>
+        public static string XmlDocumentFlowBlock_SpecialExplanation_ManagedResource {
+            get {
+                return ResourceManager.GetString("XmlDocumentFlowBlock_SpecialExplanation_ManagedResource", resourceCulture);
             }
         }
         
@@ -7469,7 +9053,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The linked XML document (via an XmlDocument flow block). If not set, the previous XmlDocument in the flow is used. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The linked XML document flow block that manages the internal XML document. If not set, the previous XML document in the flow is used. ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip {
             get {
@@ -7478,7 +9062,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Adds a new node to an existing XML document. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates or updates XML nodes and writes assignment values into the document. This flow block uses the internally managed XML document from an XML document flow block. ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_Description {
             get {
@@ -7496,6 +9080,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and writes or updates nodes. ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_ExternalFlowBlocks_Explanation0 {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_ExternalFlowBlocks_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Usage of external flow blocks in this flow block ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_ExternalFlowBlocks_Topic {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_ExternalFlowBlocks_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name of the XML node to create or update, e.g. participant.
         ///Optionally, a single-level XPath expression with attribute filter can be used, e.g. participant[@id=&apos;1&apos;].
         ///Multi-level XPath expressions are not allowed here. ähnelt.
@@ -7503,6 +9105,15 @@ namespace FlowBlox.Core {
         public static string XmlDocumentNodeWriterFlowBlock_NodeName_Tooltip {
             get {
                 return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_NodeName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and writes or updates nodes. ähnelt.
+        /// </summary>
+        public static string XmlDocumentNodeWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks {
+            get {
+                return ResourceManager.GetString("XmlDocumentNodeWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
             }
         }
         
@@ -7552,7 +9163,16 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Saves the current XML document to an output field as a byte array or string. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The XML document flow block that manages the internal XML document used for output. ähnelt.
+        /// </summary>
+        public static string XmlDocumentOutputFlowBlock_AssociatedXmlDocument_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentOutputFlowBlock_AssociatedXmlDocument_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Outputs the XML document as text or byte array. This flow block uses the internally managed XML document from an XML document flow block. ähnelt.
         /// </summary>
         public static string XmlDocumentOutputFlowBlock_Description {
             get {
@@ -7566,6 +9186,24 @@ namespace FlowBlox.Core {
         public static string XmlDocumentOutputFlowBlock_DisplayName {
             get {
                 return ResourceManager.GetString("XmlDocumentOutputFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and outputs it as text or byte array. ähnelt.
+        /// </summary>
+        public static string XmlDocumentOutputFlowBlock_ExternalFlowBlocks_Explanation0 {
+            get {
+                return ResourceManager.GetString("XmlDocumentOutputFlowBlock_ExternalFlowBlocks_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die How this flow block uses the XML document ähnelt.
+        /// </summary>
+        public static string XmlDocumentOutputFlowBlock_ExternalFlowBlocks_Topic {
+            get {
+                return ResourceManager.GetString("XmlDocumentOutputFlowBlock_ExternalFlowBlocks_Topic", resourceCulture);
             }
         }
         
@@ -7597,6 +9235,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and outputs it as text or byte array. ähnelt.
+        /// </summary>
+        public static string XmlDocumentOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks {
+            get {
+                return ResourceManager.GetString("XmlDocumentOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die XML document (Flow Block) ähnelt.
         /// </summary>
         public static string XmlDocumentUpdaterFlowBlock_AssociatedXmlDocument {
@@ -7615,7 +9262,16 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Selects one or more XML nodes based on an XPath expression. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The XML document flow block that manages the internal XML document used for XPath selection. ähnelt.
+        /// </summary>
+        public static string XmlDocumentXPathSelector_AssociatedXmlDocument_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentXPathSelector_AssociatedXmlDocument_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects XML node content by XPath. This flow block uses the internally managed XML document from an XML document flow block. ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelector_Description {
             get {
@@ -7647,6 +9303,33 @@ namespace FlowBlox.Core {
         public static string XmlDocumentXPathSelector_XPath {
             get {
                 return ResourceManager.GetString("XmlDocumentXPathSelector_XPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and reads node content by XPath. ähnelt.
+        /// </summary>
+        public static string XmlDocumentXPathSelectorFlowBlock_ExternalFlowBlocks_Explanation0 {
+            get {
+                return ResourceManager.GetString("XmlDocumentXPathSelectorFlowBlock_ExternalFlowBlocks_Explanation0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die How this flow block uses the XML document ähnelt.
+        /// </summary>
+        public static string XmlDocumentXPathSelectorFlowBlock_ExternalFlowBlocks_Topic {
+            get {
+                return ResourceManager.GetString("XmlDocumentXPathSelectorFlowBlock_ExternalFlowBlocks_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and reads node content by XPath. ähnelt.
+        /// </summary>
+        public static string XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks {
+            get {
+                return ResourceManager.GetString("XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
             }
         }
         

@@ -60,4 +60,10 @@
   <data name="Message_DeleteConfirm_Description">
     <value>Do you really want to delete {0} test case(s)?</value>
   </data>
+  <data name="Message_DeleteBlocked_Title">
+    <value>Delete blocked</value>
+  </data>
+  <data name="Message_DeleteBlocked_Description">
+    <value>The test case "{0}" cannot be deleted because it is still used by: {1}</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using FlowBlox.AppWindow.ContentFactories;
 using FlowBlox.AppWindow.Contents;
 using FlowBlox.Core;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -73,24 +74,29 @@ namespace FlowBlox.AppWindow
                 return;
 
             var previouslyActive = dockPanel.ActiveContent as DockContent;
-            var targetRegions = new[] { DockRegion.Left, DockRegion.Right, DockRegion.Bottom };
+            Trace.WriteLine($"[DockInit] Previous active content: {DescribeDockContent(previouslyActive)}");
+            var targetRegions = new[] 
+            { 
+                DockRegion.Left, 
+                DockRegion.Right, 
+                DockRegion.Bottom 
+            };
 
             foreach (var region in targetRegions)
             {
                 var firstVisibleContent = GetFirstVisibleContentByRegion(region);
-                firstVisibleContent?.Activate();
-            }
+                if (firstVisibleContent == null)
+                {
+                    Trace.WriteLine($"[DockInit] Region={region}: no visible dock content found.");
+                    continue;
+                }
 
-            if (previouslyActive != null &&
-                !previouslyActive.IsDisposed &&
-                !previouslyActive.IsHidden &&
-                previouslyActive.DockState != DockState.Hidden &&
-                previouslyActive.DockState != DockState.Unknown)
-            {
-                previouslyActive.Activate();
+                Trace.WriteLine($"[DockInit] Region={region}: activating {DescribeDockContent(firstVisibleContent)}");
+                firstVisibleContent.Activate();
             }
 
             _defaultPaneActivationApplied = true;
+            Trace.WriteLine("[DockInit] Initial dock activation pass completed.");
         }
 
         private DockContent GetFirstVisibleContentByRegion(DockRegion region)
@@ -129,6 +135,14 @@ namespace FlowBlox.AppWindow
                 BeginInvoke(new MethodInvoker(ActivateInitialDockContents));
             else
                 ActivateInitialDockContents();
+        }
+
+        private static string DescribeDockContent(DockContent dockContent)
+        {
+            if (dockContent == null)
+                return "<null>";
+
+            return $"{dockContent.GetType().Name} Name='{dockContent.Name}' Text='{dockContent.Text}' DockState={dockContent.DockState} IsHidden={dockContent.IsHidden}";
         }
 
         private void DockPanel_ContentAdded(object sender, DockContentEventArgs e)

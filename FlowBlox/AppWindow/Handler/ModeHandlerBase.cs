@@ -1,24 +1,22 @@
-﻿using FlowBlox.Grid;
-using System.ComponentModel;
+using FlowBlox.Grid;
 using System.Drawing;
 using System.Windows.Forms;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Grid.Provider;
+using FlowBlox.AppWindow.Contents;
 
 namespace FlowBlox.AppWindow.Handler
 {
     public abstract class ModeHandlerBase
     {
         private FlowBloxProjectComponentProvider _componentProvider;
-        protected BackgroundWorker _backgroundWorker_PrintGrid;
-        protected int _mouseMoveTimeunit;
+        protected readonly ProjectPanel _projectPanel;
         protected FlowBloxUIRegistry _gridUIRegistry;
 
-        protected ModeHandlerBase(BackgroundWorker backgroundWorker_PrintGrid, int mouseMoveTimeunit)
+        protected ModeHandlerBase(ProjectPanel projectPanel)
         {
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
-            _backgroundWorker_PrintGrid = backgroundWorker_PrintGrid;
-            _mouseMoveTimeunit = mouseMoveTimeunit;
+            _projectPanel = projectPanel;
             _gridUIRegistry = _componentProvider.GetCurrentUIRegistry();
         }
 

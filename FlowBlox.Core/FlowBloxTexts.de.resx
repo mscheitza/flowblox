@@ -156,9 +156,9 @@
 		<value>Iterationskontext</value>
 	</data>
   <data name="BaseFlowBlock_AssociatedIterationContext_Tooltip" xml:space="preserve">
-		<value>Definiert den Flow-Block, dessen Iterationszyklus diesen Block steuert. 
-Bei mehreren eingehenden Pfaden wird der Iterationskontext automatisch auf den ersten gemeinsamen Flow-Block aller Pfade gesetzt und kann nicht geändert werden. 
-Ist nur ein Flow-Block verbunden, kann der Iterationskontext manuell ausgewählt werden. 
+		<value>Definiert den Flow-Block, dessen Iterationszyklus diesen Block steuert.
+Bei mehreren eingehenden Pfaden wird der Iterationskontext automatisch auf den ersten gemeinsamen Flow-Block der Pfade gesetzt.
+Dieser automatisch ermittelte Wert kann durch einen explizit gesetzten AssociatedIterationContext überschrieben werden.
 Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesammelt, und dieser Flow-Block wird erst nach Abschluss der Iteration ausgeführt.</value>
 	</data>
   <data name="BaseFlowBlock_DefaultDescription" xml:space="preserve">
@@ -204,7 +204,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>Testfälle</value>
 	</data>
   <data name="BaseFlowBlock_TestDefinitions_Tooltip" xml:space="preserve">
-		<value>Testdefinitionen beschreiben prüfbare Szenarien für diesen Flow-Block. Für erforderliche Felder können konstante Werte hinterlegt oder erwartete Werte aus der kompletten Flow-Chain abgeleitet werden. Die daraus entstehenden InputValues werden anschließend für die Testausführung im Sinne von Test-Driven Design verwendet.</value>
+		<value>Testdefinitionen beschreiben prüfbare Szenarien für diesen Flow-Block. Für erforderliche Felder können konstante Werte gesetzt oder erwartete Werte aus der kompletten oder partiellen Flow-Chain abgeleitet werden. Die daraus entstehenden Eingabewerte werden anschließend für die weitere Testausführung verwendet.</value>
 	</data>
   <data name="BaseResultFlowBlockUIActions_Generate" xml:space="preserve">
 		<value>Generieren</value>
@@ -872,7 +872,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>Es wurde kein Trennzeichen angegeben. Bitte geben Sie entweder ein Trennzeichen oder ein spezielles Trennzeichen an.</value>
 	</data>
   <data name="JsonObjectFlowBlock_Description" xml:space="preserve">
-		<value>Erzeugt ein JSON-Objekt aus einem angegebenen JSON-Text und stellt es nachfolgenden Flow-Blocks zur Verfügung.</value>
+		<value>Erstellt aus dem angegebenen Inhalt ein JSON-Objekt, verwaltet das interne JSON-Objekt und stellt es anderen Flow-Blocks zur Verfügung.</value>
 	</data>
   <data name="JsonObjectFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Objekt</value>
@@ -887,7 +887,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>Datumsformat</value>
 	</data>
   <data name="JsonObjectOutputFlowBlock_Description" xml:space="preserve">
-		<value>Gibt ein JSON-Objekt aus und speichert es im Ausgabefeld.</value>
+		<value>Gibt ein JSON-Objekt als Text oder Byte-Array aus. Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block.</value>
 	</data>
   <data name="JsonObjectOutputFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Objekt-Ausgabe</value>
@@ -905,7 +905,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>JSON-Objekt (über "JSON-Objekt schreiben" Flow-Block)</value>
 	</data>
   <data name="JsonObjectWriterFlowBlock_Description" xml:space="preserve">
-		<value>Erstellt bei Bedarf ein neues JSON-Objekt oder aktualisiert ein bestehendes mit JSON-Zuweisungen. Um Elemente zu einem Array hinzuzufügen: Geben Sie im Pfad den JSON-Pfad zur Array-Property an und beschreiben Sie mittels JSON-Zuweisungen die Eigenschaftswerte.</value>
+		<value>Erstellt oder aktualisiert Knoten in einem JSON-Objekt. Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block.</value>
 	</data>
   <data name="JsonObjectWriterFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Objekt schreiben</value>
@@ -1542,7 +1542,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Verbundener Web-Browser</value>
 	</data>
   <data name="WebBrowserFlowBlock_Description" xml:space="preserve">
-		<value>Simuliert einen einfachen Browser zur Darstellung oder Analyse von Webseiteninhalten.</value>
+		<value>Öffnet und steuert einen Browserkontext, verwaltet die interne WebBrowser-Instanz und stellt sie anderen Flow-Blocks zur Verfügung. Prüfen Sie vor der Automatisierung auf Cookie-Consent-Overlays und behandeln Sie diese bei Bedarf mit einer Klick-Aktion.</value>
 	</data>
   <data name="WebBrowserFlowBlock_DisplayName" xml:space="preserve">
 		<value>Webbrowser</value>
@@ -1563,7 +1563,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>CSS-Selektor</value>
 	</data>
   <data name="WebEventFlowBlock_Description" xml:space="preserve">
-		<value>Reagiert auf Benutzerinteraktionen oder Ereignisse innerhalb einer Webkomponente.</value>
+		<value>Führt Browseraktionen wie Klicken, Texteingabe, Scrollen oder DOM-Updates aus, indem die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block verwendet wird.</value>
 	</data>
   <data name="WebEventFlowBlock_DisplayName" xml:space="preserve">
 		<value>Web-Ereignis</value>
@@ -1599,7 +1599,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Größe des Inhalt-Speichers (in Bytes)</value>
 	</data>
   <data name="WebRequestFlowBlock_Description" xml:space="preserve">
-		<value>Sendet eine HTTP-Anfrage an einen Webserver und verarbeitet die Antwort.</value>
+		<value>Führt eine HTTP-Anfrage aus, verwaltet die interne WebRequest-Instanz und kann Anfragekonfigurationen aus einem anderen WebRequest-Flow-Block wiederverwenden.</value>
 	</data>
   <data name="WebRequestFlowBlock_DisableCache" xml:space="preserve">
 		<value>Cache deaktivieren</value>
@@ -1686,7 +1686,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>XPath</value>
 	</data>
   <data name="XmlDocumentFlowBlock_Description" xml:space="preserve">
-		<value>Erzeugt ein neues XML-Dokument oder lädt ein bestehendes XML zur weiteren Verarbeitung.</value>
+		<value>Erstellt oder lädt ein XML-Dokument, verwaltet das interne XML-Dokument und stellt es anderen Flow-Blocks zur Verfügung.</value>
 	</data>
   <data name="XmlDocumentFlowBlock_DisplayName" xml:space="preserve">
 		<value>XML-Dokument</value>
@@ -1704,7 +1704,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Verknüpftes XML-Dokument (über XML-Dokument Flow-Block)</value>
 	</data>
   <data name="XmlDocumentNodeWriterFlowBlock_Description" xml:space="preserve">
-		<value>Fügt einem bestehenden XML-Dokument einen neuen Knoten hinzu.</value>
+		<value>Erstellt oder aktualisiert XML-Knoten und schreibt Zuweisungen in das Dokument. Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block.</value>
 	</data>
   <data name="XmlDocumentNodeWriterFlowBlock_DisplayName" xml:space="preserve">
 		<value>XML-Knoten schreiben</value>
@@ -1716,7 +1716,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>XML-Dokument (Flow-Block)</value>
 	</data>
   <data name="XmlDocumentOutputFlowBlock_Description" xml:space="preserve">
-		<value>Speichert das aktuelle XML-Dokument in ein Ausgabefeld als Byte-Array oder String.</value>
+		<value>Gibt das XML-Dokument als Text oder Byte-Array aus. Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block.</value>
 	</data>
   <data name="XmlDocumentOutputFlowBlock_DisplayName" xml:space="preserve">
 		<value>XML-Dokument Ausgabe</value>
@@ -1734,7 +1734,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>XML-Dokument (Flow-Block)</value>
 	</data>
   <data name="XmlDocumentXPathSelector_Description" xml:space="preserve">
-		<value>Wählt einen oder mehrere XML-Knoten basierend auf einem XPath-Ausdruck aus.</value>
+		<value>Liest XML-Knoteninhalte per XPath. Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block.</value>
 	</data>
   <data name="XmlDocumentXPathSelector_DisplayName" xml:space="preserve">
 		<value>XPath-Selektor</value>
@@ -1989,7 +1989,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>ONNX GenAI</value>
 	</data>
   <data name="OnnxRuntimeGenAIFlowBlock_Description" xml:space="preserve">
-		<value>Führt Textgenerierung über ONNX Runtime GenAI (z. B. Phi-3.5) aus und unterstützt Chat-Templates.</value>
+		<value>Führt Textgenerierung mit ONNX Runtime GenAI aus und verwaltet interne Modell- und Tokenizer-Instanzen für die konfigurierte Laufzeit.</value>
 	</data>
   <data name="OnnxRuntimeGenAIFlowBlock_ModelFolder" xml:space="preserve">
 		<value>Modellordner</value>
@@ -2209,7 +2209,7 @@ Hinweis: Sobald ein Anbieter geladen ist, kann der Anbieter innerhalb desselben 
 		<value>Wenn aktiviert, wird der erste vorhandene Knoten mit dem angegebenen Namen aktualisiert. Wenn deaktiviert, wird immer ein neuer Knoten hinzugefügt (z. B. für Listeneinträge).</value>
 	</data>
   <data name="XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip" xml:space="preserve">
-		<value>Das verknüpfte XML-Dokument (über einen XmlDocument-FlowBlock). Falls nicht gesetzt, wird das vorherige XmlDocument im Flow verwendet.</value>
+		<value>Der verknüpfte XML-Dokument-Flow-Block, der das interne XML-Dokument verwaltet. Falls nicht gesetzt, wird das vorherige XML-Dokument im Flow verwendet.</value>
 	</data>
   <data name="XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter_Tooltip" xml:space="preserve">
 		<value>Ein verknüpfter XmlDocumentNodeWriter-FlowBlock. Dadurch wird der zuletzt erstellte oder aktualisierte Knoten als neuer Ausgangspunkt verwendet, sodass XPath relativ zu diesem Knoten ausgewertet wird – statt vom Dokument-Root aus.</value>
@@ -2519,6 +2519,9 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
   <data name="FlowBloxTestDefinition_DisplayName" xml:space="preserve">
 		<value>Testdefinition</value>
 	</data>
+  <data name="FlowBloxTestDefinition_Description" xml:space="preserve">
+		<value>Ein Testfall beschreibt einen kompletten Testlauf ausgehend vom ersten ausgeführten Flow-Block bis hin zum aktuellen bzw. zuletzt zugewiesenen Ziel-Flow-Block. Wird ein Flow-Block ausgeführt, müssen seine Aktivierungsanforderungen erfüllt sein, bspw. erforderliche Feldwerte und Aktivierungsbedingungen. Erforderliche Eingaben werden markiert; weitere Hilfestellungen finden Sie in den Expandern.</value>
+	</data>
   <data name="FlowBloxTestDefinition_DisplayName_Plural" xml:space="preserve">
 		<value>Testdefinitionen</value>
 	</data>
@@ -2609,4 +2612,562 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
   <data name="ShellExecuteFlowBlock_ResultFields" xml:space="preserve">
 		<value>Ergebnisfelder</value>
 	</data>
+  <data name="FlowBloxTestDefinition_RequiredForExecution_Description" xml:space="preserve">
+    <value>Wenn aktiviert, darf die Laufzeit nur starten, wenn dieser Testfall erfolgreich ist.</value>
+  </data>
+  <data name="FlowBloxTestConfiguration_UIRequiredForExecution_Description" xml:space="preserve">
+    <value>Nur UI-Markierung in der TestDefinitionsansicht; zeigt an, dass das Feld für ausführbare Flow-Blöcke erforderlich ist.</value>
+  </data>
+  <data name="FlowBlockTestDataset_Execute_Description" xml:space="preserve">
+    <value>Steuert, ob dieser Flow-Block im Testlauf aktiv ausgeführt wird.</value>
+  </data>
+  <data name="FlowBloxTestConfigurationSelectionMode_Keep_Description" xml:space="preserve">
+    <value>Behält den aktuellen Feldwert ohne automatische Auswahl bei.</value>
+  </data>
+  <data name="FlowBlockTestDataset_FieldTestConfigurations" xml:space="preserve">
+    <value>Feld-Testkonfigurationen</value>
+  </data>
+  <data name="FlowBlockTestDataset_FlowBlock_Description" xml:space="preserve">
+    <value>Flow-Block, der durch diesen Testdatensatz-Eintrag abgebildet wird.</value>
+  </data>
+  <data name="FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue_Description" xml:space="preserve">
+    <value>Verwendet eine Benutzereingabe und prüft diese gleichzeitig als Erwartung.</value>
+  </data>
+  <data name="ExpectationCondition_Index_Description" xml:space="preserve">
+    <value>Index, der beim Ziel "Wert an Index" verwendet wird.</value>
+  </data>
+  <data name="FlowBlockTestDataset_Execute" xml:space="preserve">
+    <value>Ausführen</value>
+  </data>
+  <data name="FlowBloxTestConfigurationSelectionMode_Last_Description" xml:space="preserve">
+    <value>Wählt den letzten Wert aus den Ausführungsergebnissen.</value>
+  </data>
+  <data name="FlowBloxTestDefinition_Entries_Description" xml:space="preserve">
+    <value>Flow-Block-bezogene Testdatensätze vom Teststart bis zum aktuellen Ziel-Flow-Block.</value>
+  </data>
+  <data name="FlowBloxTestConfiguration_ExpectationConditions_Description" xml:space="preserve">
+    <value>Erwartungsbedingungen, die für diese Feldkonfiguration während der Testausführung geprüft werden.</value>
+  </data>
+  <data name="FlowBloxTestConfigurationSelectionMode_Index_Description" xml:space="preserve">
+    <value>Wählt den Wert am konfigurierten Index aus den Ausführungsergebnissen.</value>
+  </data>
+  <data name="FlowBlockTestDataset_FlowBlock" xml:space="preserve">
+    <value>Flow-Block</value>
+  </data>
+  <data name="FlowBlockTestDataset_FieldTestConfigurations_Description" xml:space="preserve">
+    <value>Feldbezogene Testkonfigurationen für diesen Flow-Block.</value>
+  </data>
+  <data name="FlowBloxTestConfigurationSelectionMode_First_Description" xml:space="preserve">
+    <value>Wählt den ersten Wert aus den Ausführungsergebnissen.</value>
+  </data>
+  <data name="FlowBloxTestConfiguration_UIRequiredForExecution" xml:space="preserve">
+    <value>Erforderlich für Ausführung</value>
+  </data>
+  <data name="FlowBlockTestDataset_UIRequiredForExecution" xml:space="preserve">
+    <value>Erforderlich für Ausführung</value>
+  </data>
+  <data name="FlowBlockTestDataset_UIRequiredForExecution_Description" xml:space="preserve">
+    <value>Nur UI-Markierung in der TestDefinitionsansicht; zeigt an, dass dieser Testdatensatz erforderlich ist, weil ein ausgeführter Flow-Block auf seinen zugeordneten Flow-Block angewiesen ist.</value>
+  </data>
+  <data name="FlowBloxTestConfiguration_SelectionMode_Description" xml:space="preserve">
+    <value>Um einen Feldwert automatisch aus einer Flow-Block-Ausführung zu ermitteln, nutzen Sie einen Auswahlmodus aus der Kategorie "Automatische Auswahl". Um eine Auswahl und gleichzeitig eine Erwartung festzulegen, nutzen Sie "Benutzereingabe wird erwartet". Um einen Wert manuell (bspw. ohne Ausführung) für ein Feld festzulegen, nutzen Sie "Manuelle Eingabe".</value>
+  </data>
+  <data name="FlowBloxTestConfigurationSelectionMode_UserInput_Description" xml:space="preserve">
+    <value>Verwendet einen manuell eingegebenen Wert.</value>
+  </data>
+  <data name="ExpectationCondition_ExpectationConditionTarget_Description" xml:space="preserve">
+    <value>Legt fest, welches Ziel geprüft wird (erster, indizierter, beliebiger, letzter Wert oder Datensatzanzahl).</value>
+  </data>
+  <data name="FlowBloxTestDefinition_Entries" xml:space="preserve">
+    <value>Einträge</value>
+  </data>
+  <data name="FlowBloxTestConfiguration_SelectionMode" xml:space="preserve">
+    <value>Auswahlmodus</value>
+  </data>
+  <data name="FloxBloxCategory_DateOperations" xml:space="preserve">
+    <value>Datumsoperationen</value>
+  </data>
+  <data name="DateTimeArithmeticFlowBlock_DisplayName" xml:space="preserve">
+    <value>Datum/Zeit berechnen</value>
+  </data>
+  <data name="DateTimeArithmeticFlowBlock_Description" xml:space="preserve">
+    <value>Addiert oder subtrahiert Datum/Zeit-Einheiten zu einem DateTime-Feldwert.</value>
+  </data>
+  <data name="DateTimeArithmeticFlowBlock_SourceDate" xml:space="preserve">
+    <value>Quelldatum</value>
+  </data>
+  <data name="DateTimeArithmeticFlowBlock_SourceDate_Description" xml:space="preserve">
+    <value>DateTime-Feld, das als Eingabe verwendet wird.</value>
+  </data>
+  <data name="DateTimeArithmeticFlowBlock_Unit" xml:space="preserve">
+    <value>Einheit</value>
+  </data>
+  <data name="DateTimeArithmeticFlowBlock_Unit_Description" xml:space="preserve">
+    <value>Datum/Zeit-Einheit, die addiert oder subtrahiert werden soll.</value>
+  </data>
+  <data name="DateTimeArithmeticFlowBlock_Offset" xml:space="preserve">
+    <value>Offset</value>
+  </data>
+  <data name="DateTimeArithmeticFlowBlock_Offset_Description" xml:space="preserve">
+    <value>Offset-Wert. Verwenden Sie negative Werte zum Subtrahieren.</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_DisplayName" xml:space="preserve">
+    <value>Datum/Zeit Differenz</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_Description" xml:space="preserve">
+    <value>Bildet ein Intervall zwischen zwei DateTime-Werten und gibt die Differenz in einer gewählten Einheit zurück.</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_StartDate" xml:space="preserve">
+    <value>Startdatum</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_StartDate_Description" xml:space="preserve">
+    <value>Start-DateTime-Feld.</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_EndDate" xml:space="preserve">
+    <value>Endedatum</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_EndDate_Description" xml:space="preserve">
+    <value>End-DateTime-Feld.</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_Unit" xml:space="preserve">
+    <value>Einheit</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_Unit_Description" xml:space="preserve">
+    <value>Einheit für das berechnete Intervall.</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_AbsoluteValue" xml:space="preserve">
+    <value>Absolutwert</value>
+  </data>
+  <data name="DateTimeDifferenceFlowBlock_AbsoluteValue_Description" xml:space="preserve">
+    <value>Wenn aktiviert, ist das Ergebnis immer positiv.</value>
+  </data>
+  <data name="CurrentTimestampFlowBlock_DisplayName" xml:space="preserve">
+    <value>Aktueller Timestamp</value>
+  </data>
+  <data name="CurrentTimestampFlowBlock_Description" xml:space="preserve">
+    <value>Erzeugt den aktuellen Timestamp als DateTime-Ergebniswert.</value>
+  </data>
+  <data name="CurrentTimestampFlowBlock_UseUtc" xml:space="preserve">
+    <value>UTC verwenden</value>
+  </data>
+  <data name="CurrentTimestampFlowBlock_UseUtc_Description" xml:space="preserve">
+    <value>Wenn aktiviert, wird UTC verwendet, sonst lokale Zeit.</value>
+  </data>
+  <data name="DateTimeOperationUnit_Years" xml:space="preserve">
+    <value>Jahre</value>
+  </data>
+  <data name="DateTimeOperationUnit_Months" xml:space="preserve">
+    <value>Monate</value>
+  </data>
+  <data name="DateTimeOperationUnit_Days" xml:space="preserve">
+    <value>Tage</value>
+  </data>
+  <data name="DateTimeOperationUnit_Hours" xml:space="preserve">
+    <value>Stunden</value>
+  </data>
+  <data name="DateTimeOperationUnit_Minutes" xml:space="preserve">
+    <value>Minuten</value>
+  </data>
+  <data name="DateTimeOperationUnit_Seconds" xml:space="preserve">
+    <value>Sekunden</value>
+  </data>
+  <data name="JsonObjectOutputFlowBlock_AssociatedJsonObject_Tooltip" xml:space="preserve">
+    <value>Der JSON-Objekt-Flow-Block, der das interne JSON-Objekt für die Ausgabe verwaltet.</value>
+  </data>
+  <data name="OnnxGenAIFlowBlock_ManagedResource_Topic" xml:space="preserve">
+    <value>Erläuterungen zu intern verwalteten ONNX-Runtime-Objekten</value>
+  </data>
+  <data name="XmlDocumentOutputFlowBlock_ExternalFlowBlocks_Topic" xml:space="preserve">
+    <value>Verwendung des XML-Dokuments in diesem Flow-Block</value>
+  </data>
+  <data name="WebBrowserFlowBlock_AssociatedWebBrowser_Tooltip" xml:space="preserve">
+    <value>Ein weiterer WebBrowser-Flow-Block, dessen intern verwaltete Browserinstanz als Quelle für Cookies und Status verwendet wird.</value>
+  </data>
+  <data name="WebActionFlowblockBase_AssociatedWebBrowser_Tooltip" xml:space="preserve">
+    <value>Der WebBrowser-Flow-Block, der die interne WebBrowser-Instanz für diese Aktion verwaltet.</value>
+  </data>
+  <data name="WebRequestFlowBlock_ManagedResource_Topic" xml:space="preserve">
+    <value>Erläuterungen zur intern verwalteten WebRequest-Instanz</value>
+  </data>
+  <data name="XmlDocumentFlowBlock_ManagedResource_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet ein internes XML-Dokument. Das verwaltete Dokument kann von anderen Flow-Blocks verwendet werden.</value>
+  </data>
+  <data name="XmlDocumentXPathSelector_AssociatedXmlDocument_Tooltip" xml:space="preserve">
+    <value>Der XML-Dokument-Flow-Block, der das interne XML-Dokument für die XPath-Auswertung verwaltet.</value>
+  </data>
+  <data name="ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock" xml:space="preserve">
+    <value>Zugehöriger Projekt ausführen-Flow-Block</value>
+  </data>
+  <data name="WebActionFlowblockBase_ExternalFlowBlocks_Topic" xml:space="preserve">
+    <value>Verwendung der WebBrowser-Instanz in diesem Flow-Block</value>
+  </data>
+  <data name="OnnxQuestionAnsweringFlowBlock_Description" xml:space="preserve">
+    <value>Beantwortet Fragen zu einem Kontext mit einem ONNX-Modell.</value>
+  </data>
+  <data name="JsonObjectFlowBlock_ManagedResource_Topic" xml:space="preserve">
+    <value>Erläuterungen zum intern verwalteten JSON-Objekt</value>
+  </data>
+  <data name="WebBrowserFlowBlock_ManagedResource_Topic" xml:space="preserve">
+    <value>Erläuterungen zur intern verwalteten WebBrowser-Instanz</value>
+  </data>
+  <data name="JsonObjectFlowBlock_ManagedResource_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet ein internes JSON-Objekt. Das verwaltete Objekt kann von anderen Flow-Blocks verwendet werden.</value>
+  </data>
+  <data name="WebRequestFlowBlock_AssociatedWebRequest_Tooltip" xml:space="preserve">
+    <value>Ein weiterer WebRequest-Flow-Block, dessen intern verwaltete WebRequest-Instanz als Anfragebasis wiederverwendet wird.</value>
+  </data>
+  <data name="XmlDocumentXPathSelectorFlowBlock_ExternalFlowBlocks_Topic" xml:space="preserve">
+    <value>Verwendung des XML-Dokuments in diesem Flow-Block</value>
+  </data>
+  <data name="XmlDocumentXPathSelectorFlowBlock_ExternalFlowBlocks_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und liest Knoteninhalte per XPath.</value>
+  </data>
+  <data name="JsonObjectWriterFlowBlock_ExternalFlowBlocks_Topic" xml:space="preserve">
+    <value>Verwendung des JSON-Objekts in diesem Flow-Block</value>
+  </data>
+  <data name="JsonObjectOutputFlowBlock_ExternalFlowBlocks_Topic" xml:space="preserve">
+    <value>Verwendung des JSON-Objekts in diesem Flow-Block</value>
+  </data>
+  <data name="OnnxGenAIFlowBlock_ManagedResource_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet interne ONNX Runtime GenAI-Modell- und Tokenizer-Instanzen für die Prompt-Ausführung.</value>
+  </data>
+  <data name="JsonObjectWriterFlowBlock_AssociatedJsonObject_Tooltip" xml:space="preserve">
+    <value>Der JSON-Objekt-Flow-Block, der das interne JSON-Objekt für diesen Flow-Block verwaltet.</value>
+  </data>
+  <data name="WebActionFlowblockBase_ExternalFlowBlocks_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block, um Web-Aktionen auszuführen.</value>
+  </data>
+  <data name="WebBrowserFlowBlock_ManagedResource_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet eine interne WebBrowser-Instanz. Die verwaltete Instanz kann von anderen Flow-Blocks verwendet werden.</value>
+  </data>
+  <data name="ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock_Tooltip" xml:space="preserve">
+    <value>Der Projekt ausführen-Flow-Block, dessen Ausgabe von diesem Iterator verwendet wird.</value>
+  </data>
+  <data name="RecursiveCallFlowBlock_TargetFlowBlock_Tooltip" xml:space="preserve">
+    <value>Der Ziel-Flow-Block, ab dem die Ausführung nach der Übertragung der konfigurierten Feldwerte fortgesetzt wird.</value>
+  </data>
+  <data name="XmlDocumentOutputFlowBlock_AssociatedXmlDocument_Tooltip" xml:space="preserve">
+    <value>Der XML-Dokument-Flow-Block, der das interne XML-Dokument für die Ausgabe verwaltet.</value>
+  </data>
+  <data name="JsonObjectOutputFlowBlock_ExternalFlowBlocks_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block und gibt es als Text oder Byte-Array aus.</value>
+  </data>
+  <data name="JsonObjectWriterFlowBlock_ExternalFlowBlocks_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block und erstellt oder aktualisiert Knoten.</value>
+  </data>
+  <data name="XmlDocumentFlowBlock_ManagedResource_Topic" xml:space="preserve">
+    <value>Erläuterungen zum intern verwalteten XML-Dokument</value>
+  </data>
+  <data name="OnnxBaseFlowBlock_ManagedResource_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet eine interne ONNX-Inferenz-Session. Andere ONNX-Flow-Blocks können diese verwaltete Session per Verknüpfung wiederverwenden.</value>
+  </data>
+  <data name="XmlDocumentNodeWriterFlowBlock_ExternalFlowBlocks_Topic" xml:space="preserve">
+    <value>Verwendung externer Flow-Blocks in diesem Flow-Block</value>
+  </data>
+  <data name="XmlDocumentNodeWriterFlowBlock_ExternalFlowBlocks_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und erstellt oder aktualisiert Knoten.</value>
+  </data>
+  <data name="XmlDocumentOutputFlowBlock_ExternalFlowBlocks_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und gibt es als Text oder Byte-Array aus.</value>
+  </data>
+  <data name="WebRequestFlowBlock_ManagedResource_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet eine interne WebRequest-Instanz. Die verwaltete Instanz kann von anderen WebRequest-Flow-Blocks wiederverwendet werden.</value>
+  </data>
+  <data name="OnnxBaseFlowBlock_ManagedResource_Topic" xml:space="preserve">
+    <value>Erläuterungen zur intern verwalteten ONNX-Session</value>
+  </data>
+  <data name="WebEventFlowBlock_WebBrowserEventType_Tooltip" xml:space="preserve">
+    <value>Legt fest, welche Browser-Aktion ausgeführt wird.</value>
+  </data>
+  <data name="WebEventFlowBlock_XPath_Tooltip" xml:space="preserve">
+    <value>Der XPath-Selektor zur Ermittlung des Zielelements für elementbasierte Aktionen.</value>
+  </data>
+  <data name="WebEventFlowBlock_CSSSelector_Tooltip" xml:space="preserve">
+    <value>Der CSS-Selektor zur Ermittlung des Zielelements für elementbasierte Aktionen.</value>
+  </data>
+  <data name="WebEventFlowBlock_InputText_Tooltip" xml:space="preserve">
+    <value>Der Eingabetext für die Aktionen Enter, UpdateDOM oder SwitchToUrl.</value>
+  </data>
+  <data name="WebEventFlowBlock_WaitingTimeAfterExecution_Tooltip" xml:space="preserve">
+    <value>Die Wartezeit in Millisekunden nach einer erfolgreichen Aktion.</value>
+  </data>
+  <data name="WebEventFlowBlock_ElementDeterminationRequired_Tooltip" xml:space="preserve">
+    <value>Gibt an, ob für diese Aktion eine Elementermittlung erforderlich ist.</value>
+  </data>
+  <data name="WebBrowserFlowBlock_Url_Tooltip" xml:space="preserve">
+    <value>Die URL, die vom WebBrowser-Flow-Block geöffnet wird.</value>
+  </data>
+  <data name="WebEventFlowBlock_ResultBehavior_Topic" xml:space="preserve">
+    <value>Rückgabe des DOM-Contents bei erfolgreicher Aktion</value>
+  </data>
+  <data name="WebEventFlowBlock_ResultBehavior_Explanation0" xml:space="preserve">
+    <value>Nach einer erfolgreichen Web-Aktion wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben.</value>
+  </data>
+  <data name="WebBrowserFlowBlock_ResultBehavior_Topic" xml:space="preserve">
+    <value>Rückgabe des DOM-Contents bei erfolgreicher Aktion</value>
+  </data>
+  <data name="WebBrowserFlowBlock_ResultBehavior_Explanation0" xml:space="preserve">
+    <value>Nach dem erfolgreichen Öffnen der URL wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_DisplayName" xml:space="preserve">
+    <value>Web-Download</value>
+  </data>
+  <data name="WebDownloadFlowBlock_Description" xml:space="preserve">
+    <value>Laedt Dateien von Webseiten ueber den zugeordneten WebBrowser-Flow-Block herunter und liefert DOM-Content sowie den tatsaechlichen Downloadpfad zurueck.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_AssociatedWebBrowser" xml:space="preserve">
+    <value>Zugeordneter WebBrowser</value>
+  </data>
+  <data name="WebDownloadFlowBlock_AssociatedWebBrowser_Tooltip" xml:space="preserve">
+    <value>Der WebBrowser-Flow-Block, dessen intern verwaltete Browserinstanz fuer Download-Aktionen verwendet wird.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_DownloadMode" xml:space="preserve">
+    <value>Download-Modus</value>
+  </data>
+  <data name="WebDownloadFlowBlock_DownloadMode_Tooltip" xml:space="preserve">
+    <value>Legt fest, ob der Download per browsernativen Klick, direkter HTTP-Anfrage oder automatischem Fallback ausgefuehrt wird.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_XPath" xml:space="preserve">
+    <value>XPath</value>
+  </data>
+  <data name="WebDownloadFlowBlock_XPath_Tooltip" xml:space="preserve">
+    <value>Der XPath-Selektor zur Ermittlung des Download-Elements.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_CSSSelector" xml:space="preserve">
+    <value>CSS-Selektor</value>
+  </data>
+  <data name="WebDownloadFlowBlock_CSSSelector_Tooltip" xml:space="preserve">
+    <value>Der CSS-Selektor zur Ermittlung des Download-Elements.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_DownloadPath" xml:space="preserve">
+    <value>Download-Pfad</value>
+  </data>
+  <data name="WebDownloadFlowBlock_DownloadPath_Tooltip" xml:space="preserve">
+    <value>Der Ziel-Datei- oder Ziel-Ordnerpfad fuer Downloads per HTTP-Anfrage.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_DownloadDirectory" xml:space="preserve">
+    <value>Download-Verzeichnis</value>
+  </data>
+  <data name="WebDownloadFlowBlock_DownloadDirectory_Tooltip" xml:space="preserve">
+    <value>Das Ziel-Download-Verzeichnis fuer browsernative Downloads.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_TimeoutSeconds" xml:space="preserve">
+    <value>Timeout (Sekunden)</value>
+  </data>
+  <data name="WebDownloadFlowBlock_TimeoutSeconds_Tooltip" xml:space="preserve">
+    <value>Die maximale Wartezeit in Sekunden, bis der Download abgeschlossen sein muss.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_ResultFields" xml:space="preserve">
+    <value>Ergebnisfelder</value>
+  </data>
+  <data name="WebDownloadFlowBlock_Groups_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="WebDownloadFlowBlock_ExternalFlowBlocks_Topic" xml:space="preserve">
+    <value>Verwendung externer Flow-Blocks in diesem Flow-Block</value>
+  </data>
+  <data name="WebDownloadFlowBlock_ExternalFlowBlocks_Explanation0" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block, um Datei-Downloads auszufuehren.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_ResultBehavior_Topic" xml:space="preserve">
+    <value>Rueckgabe von DOM-Content und Downloadpfad</value>
+  </data>
+  <data name="WebDownloadFlowBlock_ResultBehavior_Explanation0" xml:space="preserve">
+    <value>Nach der Ausfuehrung liefert dieser Flow-Block den aktuellen DOM-Content und den tatsaechlich aufgeloesten Downloadpfad in seinen Ergebnisfeldern zurueck.</value>
+  </data>
+  <data name="OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet interne ONNX Runtime GenAI-Modell- und Tokenizer-Instanzen für die Prompt-Ausführung.</value>
+  </data>
+  <data name="XmlDocumentOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und gibt es als Text oder Byte-Array aus.</value>
+  </data>
+  <data name="WebRequestFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet eine interne WebRequest-Instanz. Die verwaltete Instanz kann von anderen WebRequest-Flow-Blocks wiederverwendet werden.</value>
+  </data>
+  <data name="WebActionFlowblockBase_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block, um Web-Aktionen auszuführen.</value>
+  </data>
+  <data name="JsonObjectFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet ein internes JSON-Objekt. Das verwaltete Objekt kann von anderen Flow-Blocks verwendet werden.</value>
+  </data>
+  <data name="WebBrowserFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet eine interne WebBrowser-Instanz. Die verwaltete Instanz kann von anderen Flow-Blocks verwendet werden.</value>
+  </data>
+  <data name="WebBrowserFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
+    <value>Nach dem erfolgreichen Öffnen der URL wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben.</value>
+  </data>
+  <data name="WebBrowserFlowBlock_SpecialExplanation_CookieOverlay" xml:space="preserve">
+    <value>Prüfen Sie, ob ein Cookie-Consent-Overlay angezeigt wird. Falls ja, fügen Sie einen Web-Event-Flow-Block mit Klick-Aktion auf den Akzeptieren-Button hinzu. Ermitteln Sie den genauen Selektor bzw. Namen aus dem DOM-Content der Website.</value>
+  </data>
+  <data name="XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und liest Knoteninhalte per XPath.</value>
+  </data>
+  <data name="JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block und erstellt oder aktualisiert Knoten.</value>
+  </data>
+  <data name="JsonObjectOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block und gibt es als Text oder Byte-Array aus.</value>
+  </data>
+  <data name="XmlDocumentFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet ein internes XML-Dokument. Das verwaltete Dokument kann von anderen Flow-Blocks verwendet werden.</value>
+  </data>
+  <data name="OnnxBaseFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
+    <value>Dieser Flow-Block verwaltet eine interne ONNX-Inferenz-Session. Andere ONNX-Flow-Blocks können diese verwaltete Session per Verknüpfung wiederverwenden.</value>
+  </data>
+  <data name="XmlDocumentNodeWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und erstellt oder aktualisiert Knoten.</value>
+  </data>
+  <data name="WebEventFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
+    <value>Nach einer erfolgreichen Web-Aktion wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
+    <value>Dieser Flow-Block verwendet die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block, um Datei-Downloads auszufuehren.</value>
+  </data>
+  <data name="WebDownloadFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
+    <value>Nach der Ausfuehrung liefert dieser Flow-Block den aktuellen DOM-Content und den tatsaechlich aufgeloesten Downloadpfad in seinen Ergebnisfeldern zurueck.</value>
+  </data>
+  <data name="WebDownloadMode_Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="WebDownloadMode_BrowserNative" xml:space="preserve">
+    <value>Browsernativ</value>
+  </data>
+  <data name="WebDownloadMode_HttpRequest" xml:space="preserve">
+    <value>HTTP-Anfrage</value>
+  </data>
+  <data name="WebDownloadDestinations_DOMContent" xml:space="preserve">
+    <value>DOM-Content</value>
+  </data>
+  <data name="WebDownloadDestinations_DownloadPath" xml:space="preserve">
+    <value>Download-Pfad</value>
+  </data>
+  <data name="WebBrowserEventTypes_SendSpecialKey" xml:space="preserve">
+    <value>Sondertaste senden</value>
+  </data>
+  <data name="WebEventFlowBlock_SpecialKey" xml:space="preserve">
+    <value>Sondertaste</value>
+  </data>
+  <data name="WebEventFlowBlock_SpecialKey_Tooltip" xml:space="preserve">
+    <value>Die Taste, die an das ermittelte Zielelement gesendet wird.</value>
+  </data>
+  <data name="WebEventFlowBlock_SpecialKeyModifier" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="WebEventFlowBlock_SpecialKeyModifier_Tooltip" xml:space="preserve">
+    <value>Optionale Modifier-Kombination, die zusammen mit der ausgewaehlten Sondertaste gesendet wird.</value>
+  </data>
+  <data name="WebSpecialKey_Enter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
+  <data name="WebSpecialKey_Tab" xml:space="preserve">
+    <value>Tab</value>
+  </data>
+  <data name="WebSpecialKey_Escape" xml:space="preserve">
+    <value>Escape</value>
+  </data>
+  <data name="WebSpecialKey_Backspace" xml:space="preserve">
+    <value>Backspace</value>
+  </data>
+  <data name="WebSpecialKey_Delete" xml:space="preserve">
+    <value>Entf</value>
+  </data>
+  <data name="WebSpecialKey_ArrowUp" xml:space="preserve">
+    <value>Pfeil hoch</value>
+  </data>
+  <data name="WebSpecialKey_ArrowDown" xml:space="preserve">
+    <value>Pfeil runter</value>
+  </data>
+  <data name="WebSpecialKey_ArrowLeft" xml:space="preserve">
+    <value>Pfeil links</value>
+  </data>
+  <data name="WebSpecialKey_ArrowRight" xml:space="preserve">
+    <value>Pfeil rechts</value>
+  </data>
+  <data name="WebSpecialKey_Space" xml:space="preserve">
+    <value>Leertaste</value>
+  </data>
+  <data name="WebSpecialKeyModifier_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="WebSpecialKeyModifier_Ctrl" xml:space="preserve">
+    <value>Strg</value>
+  </data>
+  <data name="WebSpecialKeyModifier_Shift" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="WebSpecialKeyModifier_Alt" xml:space="preserve">
+    <value>Alt</value>
+  </data>
+  <data name="WebSpecialKeyModifier_CtrlShift" xml:space="preserve">
+    <value>Strg + Shift</value>
+  </data>
+  <data name="WebSpecialKeyModifier_CtrlAlt" xml:space="preserve">
+    <value>Strg + Alt</value>
+  </data>
+  <data name="WebSpecialKeyModifier_ShiftAlt" xml:space="preserve">
+    <value>Shift + Alt</value>
+  </data>
+  <data name="WebSpecialKeyModifier_CtrlShiftAlt" xml:space="preserve">
+    <value>Strg + Shift + Alt</value>
+  </data>
+  <data name="CopyMoveFlowBlock_DisplayName" xml:space="preserve">
+    <value>Kopieren/Verschieben</value>
+  </data>
+  <data name="CopyMoveFlowBlock_Description" xml:space="preserve">
+    <value>Kopiert oder verschiebt Dateien und Ordner und liefert den aufgeloesten Zielpfad zurueck.</value>
+  </data>
+  <data name="CopyMoveFlowBlock_Mode" xml:space="preserve">
+    <value>Modus</value>
+  </data>
+  <data name="CopyMoveFlowBlock_Mode_Tooltip" xml:space="preserve">
+    <value>Legt fest, ob Dateien oder Ordner kopiert oder verschoben werden.</value>
+  </data>
+  <data name="CopyMoveFlowBlock_SourceFile" xml:space="preserve">
+    <value>Quelldatei</value>
+  </data>
+  <data name="CopyMoveFlowBlock_SourceFile_Tooltip" xml:space="preserve">
+    <value>Die Datei, die kopiert oder verschoben wird.</value>
+  </data>
+  <data name="CopyMoveFlowBlock_SourceFolder" xml:space="preserve">
+    <value>Quellordner</value>
+  </data>
+  <data name="CopyMoveFlowBlock_SourceFolder_Tooltip" xml:space="preserve">
+    <value>Das Verzeichnis, das kopiert oder verschoben wird.</value>
+  </data>
+  <data name="CopyMoveFlowBlock_DestinationPath" xml:space="preserve">
+    <value>Zielpfad</value>
+  </data>
+  <data name="CopyMoveFlowBlock_DestinationPath_Tooltip" xml:space="preserve">
+    <value>Der Ziel-Datei- oder Ziel-Verzeichnispfad fuer den ausgewaehlten Modus.</value>
+  </data>
+  <data name="CopyMoveFlowBlock_Recursive" xml:space="preserve">
+    <value>Rekursiv</value>
+  </data>
+  <data name="CopyMoveFlowBlock_Recursive_Tooltip" xml:space="preserve">
+    <value>Bezieht Unterverzeichnisse beim Kopieren von Verzeichnissen ein.</value>
+  </data>
+  <data name="CopyMoveFlowBlock_FileOverwrite" xml:space="preserve">
+    <value>Dateien ueberschreiben</value>
+  </data>
+  <data name="CopyMoveFlowBlock_FileOverwrite_Tooltip" xml:space="preserve">
+    <value>Ueberschreibt vorhandene Zieldateien.</value>
+  </data>
+  <data name="CopyMoveFlowBlock_DirectoryOverwrite" xml:space="preserve">
+    <value>Verzeichnisse ueberschreiben</value>
+  </data>
+  <data name="CopyMoveFlowBlock_DirectoryOverwrite_Tooltip" xml:space="preserve">
+    <value>Erlaubt das Schreiben in ein bereits vorhandenes Zielverzeichnis.</value>
+  </data>
+  <data name="CopyMoveMode_CopyFile" xml:space="preserve">
+    <value>Datei kopieren</value>
+  </data>
+  <data name="CopyMoveMode_MoveFile" xml:space="preserve">
+    <value>Datei verschieben</value>
+  </data>
+  <data name="CopyMoveMode_CopyDirectory" xml:space="preserve">
+    <value>Verzeichnis kopieren</value>
+  </data>
+  <data name="CopyMoveMode_MoveDirectory" xml:space="preserve">
+    <value>Verzeichnis verschieben</value>
+  </data>
 </root>

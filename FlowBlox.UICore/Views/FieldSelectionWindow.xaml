@@ -249,9 +249,47 @@
                                             <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyDescription}"
                                                             DisplayMemberBinding="{Binding Description}"
                                                             Width="320"/>
-                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyValue}"
-                                                            DisplayMemberBinding="{Binding Value}"
-                                                            Width="160"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- Generation strategy data -->
+                        <TabItem Header="{x:Static resources:FieldSelectionWindow.Tab_GenerationStrategyData}"
+                                 Visibility="{Binding CanSelectGenerationStrategyData, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TabItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                        <iconPacks:PackIconMaterial Kind="Brain"
+                                        Width="16"
+                                        Height="16"
+                                        Margin="0,0,8,0"
+                                        VerticalAlignment="Center"
+                                        Foreground="#EF6C00"/>
+                                        <TextBlock Text="{Binding}"
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Padding="0,5"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabItem.HeaderTemplate>
+
+                            <Grid>
+                                <ListView x:Name="GenerationStrategyDataListView"
+                                          ItemsSource="{Binding GenerationStrategyDataRows}"
+                                          MouseDoubleClick="GenerationStrategyDataListView_MouseDoubleClick">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyName}"
+                                                            DisplayMemberBinding="{Binding Name}"
+                                                            Width="260"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyKey}"
+                                                            DisplayMemberBinding="{Binding Key}"
+                                                            Width="220"/>
+                                            <GridViewColumn Header="{x:Static resources:FieldSelectionWindow.Col_ProjectPropertyDescription}"
+                                                            DisplayMemberBinding="{Binding Description}"
+                                                            Width="320"/>
                                         </GridView>
                                     </ListView.View>
                                 </ListView>

@@ -24,6 +24,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
     [FlowBlockUIGroup("WebRequestFlowBlock_Groups_Payload", 1)]
     [FlowBlockUIGroup("WebRequestFlowBlock_Groups_Authentication", 2)]
     [Display(Name = "WebRequestFlowBlock_DisplayName", Description = "WebRequestFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("WebRequestFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     public class WebRequestFlowBlock : BaseResultFlowBlock
     {
         [Display(Name = "WebRequestFlowBlock_Url", ResourceType = typeof(FlowBloxTexts), Order = 0)]
@@ -70,7 +71,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         [FlowBlockUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ResultFieldByEnumValue<WebRequestDestinations>> ResultFields { get; set; }
 
-        [Display(Name = "WebRequestFlowBlock_AssociatedWebRequest", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 0)]
+        [Display(Name = "WebRequestFlowBlock_AssociatedWebRequest", Description = "WebRequestFlowBlock_AssociatedWebRequest_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleWebRequests), SelectionDisplayMember = nameof(Name),
             Operations = UIOperations.Link | UIOperations.Unlink)]
         public WebRequestFlowBlock AssociatedWebRequest { get; set; }

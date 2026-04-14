@@ -18,7 +18,8 @@ namespace FlowBlox.Core.Interfaces
 
         void NotifyFieldChange(FieldElement fieldElement);
         void NotifyFieldChange(FieldElement fieldElement, string oldValue, string newValue);
-        
+
+        void NotifyBeforeRuntimeStarted();
         void NotifyRuntimeStarted();
         void NotifyRuntimeFinished();
         void NotifyRuntimeCancelled(RuntimeCancellationContext cancellationContext);

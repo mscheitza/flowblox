@@ -16,8 +16,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private System.Windows.Controls.Grid _mainGrid;
         private TextBlock _noSelectionText;
 
-        public ListViewSplitModeFactory(Window window, PropertyInfo property, object target, bool readOnly)
-            : base(window, property, target, readOnly)
+        public ListViewSplitModeFactory(Window window, PropertyInfo property, object target, bool readOnly, object parent = null)
+            : base(window, property, target, readOnly, parent)
         {
             window.Closing += Window_Closing;
         }
@@ -67,7 +67,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 if (_window is MahApps.Metro.Controls.MetroWindow metro)
                 {
                     if (await _propertyViewModel.SaveAsync(metro) == true)
-                        _propertyViewModel.Open(_listView.SelectedItem, deepCopy: true, readOnly: false);
+                        _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: false);
                 }
             };
 
@@ -113,7 +113,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 _noSelectionText.Visibility = Visibility.Collapsed;
                 _propertyView.Visibility = Visibility.Visible;
-                _propertyViewModel.Open(_listView.SelectedItem, deepCopy: true, readOnly: false);
+                _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: false);
             }
             else if (_propertyViewModel != null)
             {
@@ -137,7 +137,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
         protected override void ExecuteEdit(object item)
         {
             if (item != null)
-                _propertyViewModel.Open(item, deepCopy: true, readOnly: false);
+                _propertyViewModel.Open(item, _target, deepCopy: true, readOnly: false);
         }
     }
 }

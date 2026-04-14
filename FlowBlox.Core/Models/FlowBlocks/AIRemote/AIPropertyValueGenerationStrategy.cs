@@ -44,6 +44,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
         [Required]
         [Display(Name = "AIPropertyValueGenerationStrategy_PromptTemplate", Description = "AIPropertyValueGenerationStrategy_PromptTemplate_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPropertyValueGenerationPrompts))]
+        [FieldSelection(AllowedFieldSelectionModes =
+            FieldSelectionModes.Fields |
+            FieldSelectionModes.ProjectProperties |
+            FieldSelectionModes.Options |
+            FieldSelectionModes.GenerationStrategyData)]
         [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
         public string PromptTemplate { get; set; }
 
@@ -184,9 +189,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
             var resolved = template;
 
-            resolved = resolved.Replace("$GenerationStrategy.Input", BuildGenerationInputText(testResults));
-            resolved = resolved.Replace("$TestDefinition::TestExpectations", BuildTestExpectationsText(testResults));
-            resolved = resolved.Replace("$TestDefinition::TestResults", BuildTestResultsText(testResults));
+            resolved = resolved.Replace("$GenerationStrategy::InputFieldValue", BuildGenerationInputText(testResults));
+            resolved = resolved.Replace("$GenerationStrategy::TestExpectations", BuildTestExpectationsText(testResults));
+            resolved = resolved.Replace("$GenerationStrategy::TestResults", BuildTestResultsText(testResults));
 
             resolved = ReplaceFieldTokensWithTestValues(resolved, testResults);
             resolved = FlowBloxFieldHelper.ReplaceFieldsInString(resolved);

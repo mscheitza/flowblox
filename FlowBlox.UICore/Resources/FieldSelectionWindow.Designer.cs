@@ -232,6 +232,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generation strategy data ähnelt.
+        /// </summary>
+        public static string Tab_GenerationStrategyData {
+            get {
+                return ResourceManager.GetString("Tab_GenerationStrategyData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Input files ähnelt.
         /// </summary>
         public static string Tab_InputFiles {

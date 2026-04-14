@@ -225,6 +225,9 @@ namespace FlowBlox.Core.Models.Components
 
         [ActivationCondition(MemberName = nameof(UserFieldType), Values = [ UserFieldTypes.Input, UserFieldTypes.Memory])]
         [Display(Name = "FieldElement_StringValue", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FieldSelection(DefaultRequiredValue = false, HideRequiredCheckbox = true, 
+                        AllowedFieldSelectionModes = FieldSelectionModes.ProjectProperties | FieldSelectionModes.Options)]
         [FlowBlockTextBox(MultiLine = true)]
         public string StringValue
         {
@@ -311,7 +314,6 @@ namespace FlowBlox.Core.Models.Components
 
         private BaseResultFlowBlock _source;
 
-        [JsonIgnore()]
         public virtual BaseResultFlowBlock Source
         {
             get

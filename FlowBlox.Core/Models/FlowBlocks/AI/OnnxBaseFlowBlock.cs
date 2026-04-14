@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.AI.Enums;
@@ -14,6 +14,7 @@ using System.Text.Json.Serialization;
 namespace FlowBlox.Core.Models.FlowBlocks.AI
 {
     [FlowBlockUIGroup("OnnxBaseFlowBlock_Groups_ExtendedSettings", 10)]
+    [FlowBloxSpecialExplanation("OnnxBaseFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     public abstract class OnnxBaseFlowBlock : BaseSingleResultFlowBlock
     {
         #region Tab: Default
@@ -158,3 +159,4 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         }
     }
 }
+

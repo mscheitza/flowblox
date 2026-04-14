@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Threading;
+using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox
 {
@@ -12,6 +13,7 @@ namespace FlowBlox
         public SplashWindow()
         {
             InitializeComponent();
+            labelMessage.Text = FlowBloxResourceUtil.GetLocalizedString("SplashWindow_LabelMessage_Text", typeof(FlowBloxMainUITexts));
         }
 
         void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

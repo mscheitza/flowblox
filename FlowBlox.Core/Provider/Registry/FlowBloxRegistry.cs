@@ -203,7 +203,7 @@ namespace FlowBlox.Core.Provider.Registry
                 throw new ArgumentNullException(nameof(type));
 
             if (!typeof(IManagedObject).IsAssignableFrom(type))
-                throw new ArgumentException($"Der Typ {type.FullName} implementiert nicht IManagedObject.", nameof(type));
+                throw new ArgumentException($"Type {type.FullName} does not implement IManagedObject.", nameof(type));
 
             return _managedObjects.Where(obj => type.IsInstanceOfType(obj));
         }

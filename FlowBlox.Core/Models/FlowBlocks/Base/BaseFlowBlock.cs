@@ -14,11 +14,14 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.FlowBlocks;
+using FlowBlox.Core.Models.Testing;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Reflection;
+using FlowBlox.Core.Util.Fields;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
@@ -205,7 +208,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public Point Location { get; set; }
 
-        public int ElementIndex { get; set; } = -1;
+        public int ExecutionIndex { get; set; } = -1;
+
+        [JsonProperty("ElementIndex")]
+        private int LegacyElementIndex
+        {
+            set => ExecutionIndex = value;
+        }
 
         public bool IsNotExecuted { get; set; }
 
@@ -228,11 +237,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             this.InheritRequirementsNotMet = true;
 
             this.OverriddenNotificationEntries = new ObservableCollection<OverriddenNotificationEntry>();
-        }
-
-        public override void OnAfterLoad()
-        {
-            base.OnAfterLoad();
         }
 
         private string _name;
@@ -407,7 +411,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             Description = "BaseFlowBlock_AssociatedIterationContext_Tooltip", 
             ResourceType = typeof(FlowBloxTexts), 
             GroupName = "BaseFlowBlock_Groups_Input", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, ReadOnlyMethod = nameof(GetInputReferenceReadonly), 
+        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
             SelectionFilterMethod = nameof(GetPossibleInputReference), 
             SelectionDisplayMember = nameof(Name))]
         [AssociatedFlowBlockResolvableCustom(nameof(IterationContext), nameof(CanDisplayAssociatedIterationContextHint))]
@@ -424,20 +428,25 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
         }
 
-        public bool CanDisplayAssociatedIterationContextHint() => this.ReferencedFlowBlocks.Count() > 1;
+        public virtual bool CanDisplayAssociatedIterationContextHint()
+        {
+            return this.ReferencedFlowBlocks.Count() > 1 && 
+                   this.AssociatedIterationContext == null;
+        }
 
         public virtual BaseFlowBlock IterationContext
         {
             get
             {
+                if (AssociatedIterationContext != null)
+                    return AssociatedIterationContext;
+
                 if (this.ReferencedFlowBlocks.Count() > 1)
                     return CommonFlowBlockResolver.FindCommonFlowBlock(this);
 
-                return AssociatedIterationContext;
+                return null;
             }
         }
-
-        public bool GetInputReferenceReadonly() => this.ReferencedFlowBlocks.OfType<BaseResultFlowBlock>().Count() > 1;
 
         [Display(Name = "BaseFlowBlock_InputIgnoreDuplicates", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 1)]
         public bool InputIgnoreDuplicates { get; set; }
@@ -462,13 +471,56 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             ])]
         public ObservableCollection<LogicalCondition> ActivationConditions { get; set; } = new ObservableCollection<LogicalCondition>();
 
+        private readonly FlowBloxTestDefinitionAppender _testDefinitionAppender = new();
+        private ObservableCollection<FlowBloxTestDefinition> _testDefinitions = new();
+
         [Display(Name = "BaseFlowBlock_TestDefinitions", Description = "BaseFlowBlock_TestDefinitions_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ListView, 
             Operations = UIOperations.Link | UIOperations.Unlink | UIOperations.Create | UIOperations.Edit | UIOperations.Delete,
             SelectionFilterMethod = nameof(GetPossibleTestDefinitions),
             SelectionDisplayMember = nameof(FlowBloxTestDefinition.Name))]
         [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FlowBloxTestDefinition.Name) })]
-        public ObservableCollection<FlowBloxTestDefinition> TestDefinitions { get; set; }
+        public ObservableCollection<FlowBloxTestDefinition> TestDefinitions
+        {
+            get => _testDefinitions;
+            set
+            {
+                if (value == null)
+                    throw new NotSupportedException($"Setting {nameof(TestDefinitions)} to null is not supported.");
+
+                if (_testDefinitions != null)
+                    _testDefinitions.CollectionChanged -= TestDefinitions_CollectionChanged;
+
+                _testDefinitions = value;
+
+                // ensure a single subscription even when the same collection instance is assigned repeatedly
+                _testDefinitions.CollectionChanged -= TestDefinitions_CollectionChanged;
+                _testDefinitions.CollectionChanged += TestDefinitions_CollectionChanged;
+
+                OnPropertyChanged();
+            }
+        }
+
+        private void TestDefinitions_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
+            {
+                foreach (var item in e.NewItems.OfType<FlowBloxTestDefinition>())
+                {
+                    EnsureTestDefinitionSynchronized(item);
+                }
+            }
+
+            OnPropertyChanged(nameof(TestDefinitions));
+        }
+
+        private void EnsureTestDefinitionSynchronized(FlowBloxTestDefinition? testDefinition)
+        {
+            if (!IsLoaded || testDefinition == null)
+                return;
+
+            _testDefinitionAppender.Append(testDefinition, this);
+        }
 
         [Display(Name = "BaseFlowBlock_GenerationStrategies", Description = "BaseFlowBlock_GenerationStrategies_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 1)]
         [ActivationCondition(ActivationMethod = nameof(IsGenerationStrategiesVisible))]
@@ -585,13 +637,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         }
 
         public override List<FieldElement> GetPossibleFieldElements()
-        { 
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-            var fieldElements = registry.GetFieldElements(true)
-                .OrderByDescending(x => this.ReferencedFlowBlocks.Contains(x.Source))
-                .ToList();
-
-            return fieldElements;
+        {
+            return FlowBloxFieldsResolver.GetFieldsOrderedByReferencedFlowBlocks(this);
         }
 
         public static string GetValidIdentifier(string identifier)
@@ -632,7 +679,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         {
             return FlowBloxRegistryProvider.GetRegistry().GetInputFlowBlocks()
                 .Where(x => x.ReferencedFlowBlocks.Contains(this))
-                .OrderBy(x => x.ElementIndex)
+                .OrderBy(x => x.ExecutionIndex < 0 ? 1 : 0)
+                .ThenBy(x => x.ExecutionIndex)
                 .ToList();
         }
 

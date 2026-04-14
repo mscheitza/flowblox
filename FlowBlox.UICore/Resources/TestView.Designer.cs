@@ -97,6 +97,24 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The test case &quot;{0}&quot; cannot be deleted because it is still used by: {1} ähnelt.
+        /// </summary>
+        public static string Message_DeleteBlocked_Description {
+            get {
+                return ResourceManager.GetString("Message_DeleteBlocked_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete blocked ähnelt.
+        /// </summary>
+        public static string Message_DeleteBlocked_Title {
+            get {
+                return ResourceManager.GetString("Message_DeleteBlocked_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to delete {0} test case(s)? ähnelt.
         /// </summary>
         public static string Message_DeleteConfirm_Description {

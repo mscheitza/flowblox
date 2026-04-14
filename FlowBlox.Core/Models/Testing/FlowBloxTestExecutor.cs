@@ -28,7 +28,7 @@ namespace FlowBlox.Core.Models.Testing
         public void Initialize(
             FlowBloxTestDefinition testDefinition,
             BaseFlowBlock currentFlowBlock,
-            BaseFlowBlock? validationTargetFlowBlock = null)
+            IEnumerable<BaseFlowBlock>? includedFlowBlocks = null)
         {
             _testDefinition = testDefinition;
 
@@ -36,7 +36,7 @@ namespace FlowBlox.Core.Models.Testing
             flowBloxCapture.CreateCapture(_registry.GetStartFlowBlock(), currentFlowBlock);
             _capturedFlowBlocks = flowBloxCapture.GetCapturedFlowBlocks();
 
-            InitializeTransientRuntime(validationTargetFlowBlock?.Name);
+            InitializeTransientRuntime(includedFlowBlocks);
         }
 
         public void Shutdown()
@@ -44,10 +44,13 @@ namespace FlowBlox.Core.Models.Testing
             _localRuntime.ShutdownRuntime(_capturedFlowBlocks);
         }
 
-        private void InitializeTransientRuntime(string? targetFlowBlockName)
+        private void InitializeTransientRuntime(IEnumerable<BaseFlowBlock>? includedFlowBlocks)
         {
             _localRuntime = new TransientRuntime(FlowBloxProjectManager.Instance.ActiveProject);
-            _localRuntime.TargetFlowBlockName = targetFlowBlockName;
+            _localRuntime.IncludedFlowBlocks = includedFlowBlocks?
+                .Where(x => x != null)
+                .Distinct()
+                .ToList() ?? new List<BaseFlowBlock>();
             _localRuntime.InitializeRuntime(_capturedFlowBlocks);
         }
 
@@ -119,8 +122,8 @@ namespace FlowBlox.Core.Models.Testing
                     var resultFlowBlock = ((BaseResultFlowBlock)capturedFlowBlock);
                     foreach (var field in resultFlowBlock.Fields)
                     {
-                        var FlowBloxTestConfiguration = flowBloxTestConfigurations.SingleOrDefault(x => x.FieldElement == field);
-                        if (FlowBloxTestConfiguration == null)
+                        var FlowBloxFieldTestConfiguration = flowBloxTestConfigurations.SingleOrDefault(x => x.FieldElement == field);
+                        if (FlowBloxFieldTestConfiguration == null)
                         {
                             _localRuntime.Report($"Test case: No field configuration was found for the field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Warning);
                             continue;
@@ -133,13 +136,13 @@ namespace FlowBlox.Core.Models.Testing
                                 .Where(x => x.Field == field)
                                 .Select(x => x.Value);
 
-                            if (!EvaluateExpectationConditions(field, FlowBloxTestConfiguration, fieldValues, out var failedCondition))
+                            if (!EvaluateExpectationConditions(field, FlowBloxFieldTestConfiguration, fieldValues, out var failedCondition))
                             {
                                 var eventArgs = new TestExpectationConditionFailedEventArgs(
                                     _testDefinition,
                                     capturedFlowBlock,
                                     field,
-                                    FlowBloxTestConfiguration,
+                                    FlowBloxFieldTestConfiguration,
                                     failedCondition!,
                                     _localRuntime,
                                     new FlowBloxTestResult(false, new Dictionary<string, string>(fieldValueAssignments)));
@@ -166,58 +169,58 @@ namespace FlowBlox.Core.Models.Testing
                                     .Where(x => x.Field == field)
                                     .Select(x => x.Value);
 
-                                if (!EvaluateExpectationConditions(field, FlowBloxTestConfiguration, fieldValues, out _))
+                                if (!EvaluateExpectationConditions(field, FlowBloxFieldTestConfiguration, fieldValues, out _))
                                     return new FlowBloxTestResult(false, fieldValueAssignments);
                             }
 
-                            if (FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.First)
+                            if (FlowBloxFieldTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.First)
                             {
                                 var fieldValue = fieldValues.FirstOrDefault();
                                 field.SetValue(_localRuntime, fieldValue);
                                 fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
                             }
 
-                            if (FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.Index)
+                            if (FlowBloxFieldTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.Index)
                             {
-                                if (!FlowBloxTestConfiguration.Index.HasValue)
+                                if (!FlowBloxFieldTestConfiguration.Index.HasValue)
                                 {
                                     _localRuntime.Report($"Test case: No index was defined in the test data for field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
                                     new FlowBloxTestResult(false, fieldValueAssignments);
                                 }
 
-                                var fieldValue = fieldValues.ElementAtOrDefault(new Index(FlowBloxTestConfiguration.Index.Value));
+                                var fieldValue = fieldValues.ElementAtOrDefault(new Index(FlowBloxFieldTestConfiguration.Index.Value));
                                 field.SetValue(_localRuntime, fieldValue);
                                 fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
                             }
 
 
-                            if (FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.Last)
+                            if (FlowBloxFieldTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.Last)
                             {
                                 var fieldValue = fieldValues.LastOrDefault();
                                 field.SetValue(_localRuntime, fieldValue);
                                 fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
                             }   
 
-                            if (FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue)
+                            if (FlowBloxFieldTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue)
                             {
-                                if (!string.IsNullOrWhiteSpace(FlowBloxTestConfiguration.UserInput))
+                                if (!string.IsNullOrWhiteSpace(FlowBloxFieldTestConfiguration.UserInput))
                                 {
-                                    if (!fieldValues.Any(x => x == FlowBloxTestConfiguration.UserInput))
+                                    if (!fieldValues.Any(x => x == FlowBloxFieldTestConfiguration.UserInput))
                                     {
-                                        _localRuntime.Report($"Test case: There is no value \"{TextHelper.ShortenString(FlowBloxTestConfiguration.UserInput, 100, true)}\" in field values from field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
+                                        _localRuntime.Report($"Test case: There is no value \"{TextHelper.ShortenString(FlowBloxFieldTestConfiguration.UserInput, 100, true)}\" in field values from field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
                                         return new FlowBloxTestResult(false, fieldValueAssignments);
                                     }
 
-                                    var fieldValue = FlowBloxTestConfiguration.UserInput;
+                                    var fieldValue = FlowBloxFieldTestConfiguration.UserInput;
                                     field.SetValue(_localRuntime, fieldValue);
                                     fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
                                 }
                             }
                         }
 
-                        var userInput = FlowBloxTestConfiguration.UserInput;
+                        var userInput = FlowBloxFieldTestConfiguration.UserInput;
                         if (!string.IsNullOrEmpty(userInput) && 
-                            FlowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput)
+                            FlowBloxFieldTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput)
                         {
                             var fieldValue = userInput;
                             field.SetValue(_localRuntime, fieldValue);
@@ -234,7 +237,7 @@ namespace FlowBlox.Core.Models.Testing
 
         private bool EvaluateExpectationConditions(
             FieldElement field,
-            FlowBloxTestConfiguration flowBloxTestConfiguration,
+            FlowBloxFieldTestConfiguration flowBloxTestConfiguration,
             IEnumerable<string> fieldValues,
             out ExpectationCondition? failedCondition)
         {
@@ -292,3 +295,4 @@ namespace FlowBlox.Core.Models.Testing
         public BaseRuntime GetRuntime() => _localRuntime;
     }
 }
+

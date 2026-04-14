@@ -1,34 +1,38 @@
-{
+﻿{
   "ToolboxElements": [
     {
       "ToolboxCategory": "AIPropertyValueGenerationPrompts",
       "Name": "XPath Generator (XML)",
-      "Content": "You are an XPath generator.\n\nGoal:\nGenerate exactly one XPath that meets the tester's expectations.\n\nInput:\n$GenerationStrategy.Input\n\nTest expectations:\n$TestDefinition::TestExpectations\n\nRules:\n- Return only the XPath expression, without explanation, Markdown, or code block.\n- The expression should be robust against minor text variations.\n- Do not use /text() in the XPath. Return the element node, not the text node.\n- Do not include the ExpectedValue or any part inside the XPath.\n- When the XPath is evaluated against the provided XML input, its resulting text content must equal the ExpectedValue.",
+      "Content": "You are an XPath generator.\n\nGoal:\nGenerate exactly one XPath that meets the tester's expectations.\n\nInput:\n$GenerationStrategy::InputFieldValue\n\nTest expectations:\n$GenerationStrategy::TestExpectations\n\nRules:\n- Return only the XPath expression, without explanation, Markdown, or code block.\n- The expression should be robust against minor text variations.\n- Do not use /text() in the XPath. Return the element node, not the text node.\n- Do not include the ExpectedValue or any part inside the XPath.\n- When the XPath is evaluated against the provided XML input, its resulting text content must equal the ExpectedValue.",
       "Description": "Generates a robust XPath expression from test input and expectations."
     },
     {
       "ToolboxCategory": "AIPropertyValueGenerationPrompts",
       "Name": "Regex Generator",
-      "Content": "You are a regular expression generator.\n\nGoal:\nGenerate exactly one regex that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy.Input\n\nTest expectations:\n$TestDefinition::TestExpectations\n\nRules:\n- Return only the regex pattern, without explanation, Markdown, or delimiters.\n- The regex should generalize and avoid overfitting to literal example values.\n- Do not hardcode ExpectedValue text inside the pattern unless unavoidable.\n- Keep the pattern readable and robust.",
+      "Content": "You are a regular expression generator.\n\nGoal:\nGenerate exactly one regex that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy::InputFieldValue\n\nTest expectations:\n$GenerationStrategy::TestExpectations\n\nRules:\n- Return only the regex pattern, without explanation, Markdown, or delimiters.\n- The regex should generalize and avoid overfitting to literal example values.\n- Do not hardcode ExpectedValue text inside the pattern unless unavoidable.\n- Keep the pattern readable and robust.",
       "Description": "Generates one regex pattern based on test-driven expectations."
     },
     {
       "ToolboxCategory": "AIPropertyValueGenerationPrompts",
       "Name": "SQL Query Generator (%%dbType%%)",
-      "Content": "You are an SQL query generator for %%dbType%%.\n\nGoal:\nGenerate exactly one SQL query that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy.Input\n\nTest expectations:\n$TestDefinition::TestExpectations\n\nRules:\n- Return only the SQL query, without explanation or code block.\n- Use SQL syntax that is valid for %%dbType%%.\n- Use placeholders where required by %%dbType%% conventions.\n- Keep the query deterministic and minimal.",
+      "Content": "You are an SQL query generator for %%dbType%%.\n\nGoal:\nGenerate exactly one SQL query that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy::InputFieldValue\n\nTest expectations:\n$GenerationStrategy::TestExpectations\n\nRules:\n- Return only the SQL query, without explanation or code block.\n- Use SQL syntax that is valid for %%dbType%%.\n- Use placeholders where required by %%dbType%% conventions.\n- Keep the query deterministic and minimal.",
       "Description": "Generates one SQL query for a selected DB type (click %%dbType%% to set a value)."
     },
     {
       "ToolboxCategory": "AIPropertyValueGenerationPrompts",
       "Name": "JSONPath Generator",
-      "Content": "You are a JSONPath generator.\n\nGoal:\nGenerate exactly one JSONPath expression that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy.Input\n\nTest expectations:\n$TestDefinition::TestExpectations\n\nRules:\n- Return only the JSONPath expression, without explanation or code block.\n- Keep the path robust to minor value changes.\n- Do not hardcode ExpectedValue text in the path.",
+      "Content": "You are a JSONPath generator.\n\nGoal:\nGenerate exactly one JSONPath expression that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy::InputFieldValue\n\nTest expectations:\n$GenerationStrategy::TestExpectations\n\nRules:\n- Return only the JSONPath expression, without explanation or code block.\n- Keep the path robust to minor value changes.\n- Do not hardcode ExpectedValue text in the path.",
       "Description": "Generates one JSONPath expression from test input and expectations."
     },
     {
       "ToolboxCategory": "AIPropertyValueGenerationPrompts",
       "Name": "CSS Selector Generator",
-      "Content": "You are a CSS selector generator.\n\nGoal:\nGenerate exactly one CSS selector that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy.Input\n\nTest expectations:\n$TestDefinition::TestExpectations\n\nRules:\n- Return only the CSS selector, without explanation, Markdown, or code block.\n- Prefer stable structural selectors over volatile classes or dynamic IDs.\n- Do not embed ExpectedValue text in the selector.\n- The selected element's text content must match ExpectedValue.",
+      "Content": "You are a CSS selector generator.\n\nGoal:\nGenerate exactly one CSS selector that satisfies the tester's expectations.\n\nInput:\n$GenerationStrategy::InputFieldValue\n\nTest expectations:\n$GenerationStrategy::TestExpectations\n\nRules:\n- Return only the CSS selector, without explanation, Markdown, or code block.\n- Prefer stable structural selectors over volatile classes or dynamic IDs.\n- Do not embed ExpectedValue text in the selector.\n- The selected element's text content must match ExpectedValue.",
       "Description": "Generates one stable CSS selector for test-driven extraction."
     }
   ]
 }
+
+
+
+

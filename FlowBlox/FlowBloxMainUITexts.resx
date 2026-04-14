@@ -575,7 +575,7 @@ The application will now restart to restore a clean environment.</value>
 		<value>&amp;Breakpoint</value>
 	</data>
   <data name="ProjectPanel_itmDefineIndex_Text" xml:space="preserve">
-		<value>&amp;Set index</value>
+		<value>&amp;Set execution index</value>
 	</data>
   <data name="ProjectPanel_itmDeleteConnection_Text" xml:space="preserve">
 		<value>&amp;Delete connection</value>
@@ -593,7 +593,7 @@ The application will now restart to restore a clean environment.</value>
 		<value>&amp;View properties</value>
 	</data>
   <data name="ProjectPanel_itmIndex_Text" xml:space="preserve">
-		<value>Manage &amp;index</value>
+		<value>Manage execution &amp;index</value>
 	</data>
   <data name="ProjectPanel_itmInsightInput_Text" xml:space="preserve">
 		<value>Inspect input records</value>
@@ -608,7 +608,10 @@ The application will now restart to restore a clean environment.</value>
 		<value>&amp;Refresh</value>
 	</data>
   <data name="ProjectPanel_itmRemoveIndex_Text" xml:space="preserve">
-		<value>&amp;Remove index</value>
+		<value>&amp;Remove execution index</value>
+	</data>
+  <data name="FlowBlockUIElement_ExecutionIndex_Text" xml:space="preserve">
+		<value>Execution index: {0}</value>
 	</data>
   <data name="ProjectPanel_Warning_NotExecutedElements_Text" xml:space="preserve">
 		<value>There are grid elements that are never executed. Affected elements: {0}</value>
@@ -778,4 +781,7 @@ The application will now restart to restore a clean environment.</value>
   <data name="ProjectPanel_labelIterationContext_Text" xml:space="preserve">
 		<value>Iteration Context</value>
 	</data>
+  <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
+    <value>Design and execute flows (based on .NET)</value>
+  </data>
 </root>

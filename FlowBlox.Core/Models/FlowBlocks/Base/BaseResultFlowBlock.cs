@@ -21,7 +21,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private string _startValue;
 
         [Display(Name = "BaseResultFlowBlock_StartValue", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection | UIOptions.FieldSelectionDefaultNotRequired)]
+        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FieldSelection(DefaultRequiredValue = false)]
         public string StartValue
         {
             get => _startValue;
@@ -99,10 +100,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public override List<FieldElement> GetPossibleFieldElements()
         {
-            var fieldElements = base.GetPossibleFieldElements();
-            return fieldElements
-                .Except(this.Fields)
-                .ToList();
+            return FlowBloxFieldsResolver.GetFieldsOrderedByReferencedFlowBlocksExcluding(this);
         }
 
         public override List<IManagedObject> DefinedManagedObjects

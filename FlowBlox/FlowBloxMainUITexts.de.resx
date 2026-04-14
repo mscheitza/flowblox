@@ -560,7 +560,7 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
 		<value>Haltepunkt &amp;setzten</value>
 	</data>
   <data name="ProjectPanel_itmDefineIndex_Text" xml:space="preserve">
-		<value>Index &amp;festlegen</value>
+		<value>Ausführungsindex &amp;festlegen</value>
 	</data>
   <data name="ProjectPanel_itmDeleteConnection_Text" xml:space="preserve">
 		<value>Verbindung e&amp;ntfernen</value>
@@ -578,7 +578,7 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
 		<value>Eigenschaften &amp;betrachten</value>
 	</data>
   <data name="ProjectPanel_itmIndex_Text" xml:space="preserve">
-		<value>&amp;Index verwalten</value>
+		<value>Ausführungs&amp;index verwalten</value>
 	</data>
   <data name="ProjectPanel_itmInsightInput_Text" xml:space="preserve">
 		<value>Eingangsdatensätze einsehen</value>
@@ -593,7 +593,10 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
 		<value>A&amp;ktualisieren</value>
 	</data>
   <data name="ProjectPanel_itmRemoveIndex_Text" xml:space="preserve">
-		<value>Index &amp;entfernen</value>
+		<value>Ausführungsindex &amp;entfernen</value>
+	</data>
+  <data name="FlowBlockUIElement_ExecutionIndex_Text" xml:space="preserve">
+		<value>Ausführungsindex: {0}</value>
 	</data>
   <data name="ProjectPanel_Warning_NotExecutedElements_Text" xml:space="preserve">
 		<value>Es existieren Grid-Elemente, die niemals ausgeführt werden. Betroffene Elemente: {0}</value>
@@ -778,6 +781,7 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   <data name="AppWindow_Notification_UpdateInstallDownloaded_Action_Text" xml:space="preserve">
     <value>Update installieren</value>
   </data>
+  <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
+    <value>Design and execute flows (based on .NET)</value>
+  </data>
 </root>
-
-

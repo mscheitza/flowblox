@@ -1,4 +1,6 @@
-﻿using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Enums;
+using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
@@ -8,6 +10,7 @@ using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.PropertyWindow;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
+using MahApps.Metro.IconPacks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -18,7 +21,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
     public class PropertyWindowViewModel : INotifyPropertyChanged
     {
         private readonly MetroWindow _window;
-        
+
         public bool DisplaySaveButton { get; }
 
         public RelayCommand SaveCommand { get; }
@@ -34,7 +37,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         public string HeaderDescription { get; }
 
         private bool _canSave = true;
-        public bool CanSaveChanges() => PropertyViewModel?.HasChanges == true;
+        public bool CanSaveChanges() => PropertyViewModel?.IsDirty == true;
 
         private PropertyViewModel _propertyViewModel;
         public PropertyViewModel PropertyViewModel
@@ -52,6 +55,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public ObservableCollection<UIActionViewModel> UIActions { get; }
 
+        public ObservableCollection<PropertyWindowSpecialExplanationEntryViewModel> SpecialExplanations { get; } = new();
+
         public PropertyWindowViewModel()
         {
             SaveCommand = new RelayCommand(Save, CanSaveChanges);
@@ -66,35 +71,91 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
             var propertyViewModel = new PropertyViewModel(window);
             propertyViewModel.Open(
-                propertyWindowArgs.Target, 
-                propertyWindowArgs.DeepCopy, 
-                propertyWindowArgs.ReadOnly, 
+                propertyWindowArgs.Target,
+                propertyWindowArgs.Parent,
+                propertyWindowArgs.DeepCopy,
+                propertyWindowArgs.ReadOnly,
                 propertyWindowArgs.PreselectedProperty,
                 propertyWindowArgs.PreselectedInstance,
                 propertyWindowArgs.Detached);
 
             this.PropertyViewModel = propertyViewModel;
 
-            SubscribeToHasChangesChanged(propertyViewModel);
+            SubscribeToIsDirtyChanged(propertyViewModel);
+
+            if (propertyWindowArgs.IsNew)
+                propertyViewModel.IsDirty = true;
 
             HeaderTitle = FlowBloxComponentHelper.GetDisplayName(propertyWindowArgs.Target);
             HeaderDescription = FlowBloxComponentHelper.GetDescription(propertyWindowArgs.Target);
             var headerIcon = FlowBloxComponentHelper.GetIcon32(propertyWindowArgs.Target);
             HeaderIcon = SkiaWpfImageHelper.ConvertToImageSource(headerIcon);
             DisplaySaveButton = propertyWindowArgs.CanSave;
+            LoadSpecialExplanations(propertyWindowArgs.Target);
             _ = LoadUIActions(propertyWindowArgs.Target);
         }
 
-        private void SubscribeToHasChangesChanged(PropertyViewModel propertyViewModel)
+        private void LoadSpecialExplanations(object target)
+        {
+            SpecialExplanations.Clear();
+            if (target == null)
+                return;
+
+            var explanationEntries = target.GetType()
+                .GetCustomAttributes(typeof(FlowBloxSpecialExplanationAttribute), true)
+                .OfType<FlowBloxSpecialExplanationAttribute>()
+                .Select(x => new
+                {
+                    SpecialExplanation = x.GetResolvedSpecialExplanation(),
+                    x.Icon,
+                    x.Color
+                })
+                .Where(x => !string.IsNullOrWhiteSpace(x.SpecialExplanation))
+                .ToList();
+
+            foreach (var x in explanationEntries)
+            {
+                var (iconKind, iconForeground) = ResolveSpecialExplanationIcon(x.Icon, x.Color);
+                SpecialExplanations.Add(new PropertyWindowSpecialExplanationEntryViewModel
+                {
+                    Explanation = x.SpecialExplanation,
+                    IconKind = iconKind,
+                    IconForeground = iconForeground
+                });
+            }
+        }
+
+        private static (PackIconMaterialKind IconKind, string Foreground) ResolveSpecialExplanationIcon(
+            SpecialExplanationIcon icon,
+            string color)
+        {
+            var defaultValue = icon switch
+            {
+                SpecialExplanationIcon.Hint => (PackIconMaterialKind.LightbulbOnOutline, "#D97706"),
+                SpecialExplanationIcon.Warning => (PackIconMaterialKind.AlertCircleOutline, "#B91C1C"),
+                SpecialExplanationIcon.Success => (PackIconMaterialKind.CheckCircleOutline, "#2E7D32"),
+                SpecialExplanationIcon.Important => (PackIconMaterialKind.AlertOctagonOutline, "#C2410C"),
+                _ => (PackIconMaterialKind.InformationOutline, "#3A6EA5")
+            };
+
+            if (!string.IsNullOrWhiteSpace(color))
+            {
+                return (defaultValue.Item1, color);
+            }
+
+            return defaultValue;
+        }
+
+        private void SubscribeToIsDirtyChanged(PropertyViewModel propertyViewModel)
         {
             propertyViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == nameof(PropertyViewModel.HasChanges) && propertyViewModel.HasChanges)
+                if (e.PropertyName == nameof(PropertyViewModel.IsDirty) && propertyViewModel.IsDirty)
                 {
                     SaveCommand.Invalidate();
                     SaveWithoutVerificationCommand.Invalidate();
                 }
-                    
+
             };
         }
 
@@ -121,7 +182,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
                 return;
             }
-            
+
             UIActions.Clear();
             foreach (var action in actions)
                 UIActions.Add(action);
@@ -163,3 +224,4 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         }
     }
 }
+

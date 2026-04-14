@@ -12,10 +12,10 @@ namespace FlowBlox.UICore.Resolver
         private readonly PropertyControlResolver _controlResolver;
         private Window _window;
 
-        public PropertyViewSchemaResolver(Window window)
+        public PropertyViewSchemaResolver(Window window, object parent = null)
         {
             this._window = window;
-            this._controlResolver = new PropertyControlResolver(window);
+            this._controlResolver = new PropertyControlResolver(window, parent);
         }
 
         public IEnumerable<TabViewModel> ResolveTabs(object target, bool readOnly, object preselectedInstance)

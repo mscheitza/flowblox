@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title" xml:space="preserve"><value>Nicht verwendete erforderliche Felder</value></data>
+  <data name="Header_Title" xml:space="preserve"><value>Nicht verwendete erforderliche Felder</value></data>
+  <data name="Header_Description" xml:space="preserve"><value>Die aktuelle Komponente hat erforderliche Felder, die nicht oder nicht mehr referenziert werden. Entfernen Sie nicht mehr benötigte Referenzen.</value></data>
+  <data name="Toolbar_SelectAll" xml:space="preserve"><value>Alle auswählen</value></data>
+  <data name="Toolbar_DeselectAll" xml:space="preserve"><value>Alle abwählen</value></data>
+  <data name="Column_Select" xml:space="preserve"><value>Alle</value></data>
+  <data name="Column_FieldName" xml:space="preserve"><value>Feld</value></data>
+  <data name="Column_QualifiedName" xml:space="preserve"><value>Vollqualifizierter Feldname</value></data>
+  <data name="Column_FieldType" xml:space="preserve"><value>Feldtyp</value></data>
+  <data name="Button_Back" xml:space="preserve"><value>Zurück</value></data>
+  <data name="Button_Continue" xml:space="preserve"><value>Fortfahren</value></data>
+  <data name="Button_RemoveAndContinue" xml:space="preserve"><value>Entfernen und fortfahren</value></data>
+</root>

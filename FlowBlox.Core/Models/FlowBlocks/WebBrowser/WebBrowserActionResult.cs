@@ -23,7 +23,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 
         [FlowBlockNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "Unknown browser error")]
-        UnknownError
+        UnknownError,
+
+        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [Display(Name = "Download URL could not be determined")]
+        DownloadUrlMissing,
+
+        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [Display(Name = "File download failed")]
+        FileDownloadFailed
     }
 
     public class WebBrowserActionResult
@@ -36,5 +44,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
     public class WebBrowserContentActionResult : WebBrowserActionResult
     {
         public string Content;
+    }
+
+    public class WebBrowserDownloadActionResult : WebBrowserActionResult
+    {
+        public string DownloadPath { get; set; }
     }
 }

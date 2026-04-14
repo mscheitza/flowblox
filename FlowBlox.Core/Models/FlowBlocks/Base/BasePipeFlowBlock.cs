@@ -2,7 +2,7 @@
 using FlowBlox.Core.Attributes;
 using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Util.FlowBlocks;
+using FlowBlox.Core.Util.Fields;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
@@ -11,7 +11,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private FieldElement _inputField;
         
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleFieldElements), SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
+        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleInputFields), SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
         [Required()]
         public FieldElement InputField
         {
@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             set => SetRequiredInputField(ref _inputField, value);
         }
 
-        public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);
+        public virtual List<FieldElement> GetPossibleInputFields() => FlowBloxFieldsResolver.GetFieldsOfAssociatedFlowBlocks(this);
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;
     }

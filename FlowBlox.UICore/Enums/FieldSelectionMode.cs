@@ -5,6 +5,7 @@
         Fields,
         ProjectProperties,
         Options,
-        InputFiles
+        InputFiles,
+        GenerationStrategyData
     }
 }

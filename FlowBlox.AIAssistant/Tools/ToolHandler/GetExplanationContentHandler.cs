@@ -40,6 +40,7 @@ namespace FlowBlox.AIAssistant.Tools
                     ["key"] = entry.Key,
                     ["title"] = entry.Title,
                     ["hint"] = entry.Hint,
+                    ["isIncludedInInitialPrompt"] = entry.IsIncludedInInitialPrompt,
                     ["contentHash"] = entry.ContentHash,
                     ["unchanged"] = true
                 }));
@@ -50,6 +51,7 @@ namespace FlowBlox.AIAssistant.Tools
                 ["key"] = entry.Key,
                 ["title"] = entry.Title,
                 ["hint"] = entry.Hint,
+                ["isIncludedInInitialPrompt"] = entry.IsIncludedInInitialPrompt,
                 ["contentHash"] = entry.ContentHash,
                 ["unchanged"] = false,
                 ["content"] = entry.Content

@@ -505,10 +505,7 @@ namespace FlowBlox.AppWindow.Contents
             {
                 if (_latestGridInteraction != GridInteractions.Scroll)
                 {
-                    if (!background_MoveFinished.IsBusy)
-                    {
-                        background_MoveFinished.RunWorkerAsync();
-                    }
+                    TryScheduleMoveFinished();
                 }
             }
         }

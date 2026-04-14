@@ -16,8 +16,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         public string Value { get; set; }
 
         [Display(Name = "XmlAssignment_FieldValue", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ComboBox, SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
-            SelectionFilterMethod = nameof(BaseFlowBlock.GetPossibleFieldElements))]
+        [FlowBlockUI(Factory = UIFactory.ComboBox,
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
+            SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public FieldElement FieldValue { get; set; }
     }
 }

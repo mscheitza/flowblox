@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -57,7 +57,7 @@ namespace FlowBlox.Core.Models.Project
             return fullTarget;
         }
 
-        public static string ReplaceInputTemplatePlaceholders(string input, FlowBloxProject project, FlowBloxInputFileTemplate template)
+        public static string ReplaceInputTemplatePlaceholders(string input, FlowBloxProject project, FlowBloxInputFile template)
         {
             if (input == null)
                 return null;
@@ -81,16 +81,13 @@ namespace FlowBlox.Core.Models.Project
             }
 
             var replaced = input;
+            // Canonical single-colon placeholders.
             replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile:Path", absolutePath);
-            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile::Path", absolutePath);
             replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile:RelativePath", relativePath);
-            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile::RelativePath", relativePath);
 
-            // Backward compatibility for legacy placeholder naming.
-            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputTemplate:Path", absolutePath);
-            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputTemplate::Path", absolutePath);
-            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputTemplate:RelativePath", relativePath);
-            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputTemplate::RelativePath", relativePath);
+            // Backward-compatible double-colon placeholders.
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile::Path", absolutePath);
+            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile::RelativePath", relativePath);
             return replaced;
         }
 
@@ -169,5 +166,6 @@ namespace FlowBlox.Core.Models.Project
         }
     }
 }
+
 
 

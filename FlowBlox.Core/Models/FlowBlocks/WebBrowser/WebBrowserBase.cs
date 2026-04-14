@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using Cookie = OpenQA.Selenium.Cookie;
 
@@ -17,7 +18,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 
         protected void InitWebDriverWait()
         {
-            this.webDriverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(WebBrowserConstants.DefaultTimeout));
+            var timeout = TimeSpan.FromSeconds(WebBrowserConstants.DefaultTimeout);
+            this.webDriverWait = new WebDriverWait(driver, timeout);
         }
 
         /// <summary>
@@ -208,9 +210,74 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
             });
         }
 
+        public virtual WebBrowserActionResult SendSpecialKey(
+            string selector,
+            WebEventSelectionMode mode,
+            WebSpecialKey key,
+            WebSpecialKeyModifier modifier)
+        {
+            return this.Invoke(() =>
+            {
+                var element = FindElement(selector, mode);
+                var keyToken = GetSeleniumKey(key);
+                var modifierKeys = GetModifierKeys(modifier);
+
+                var actions = new Actions(driver);
+                actions.MoveToElement(element).Click(element);
+
+                foreach (var modifierKey in modifierKeys)
+                    actions.KeyDown(modifierKey);
+
+                actions.SendKeys(element, keyToken);
+
+                foreach (var modifierKey in modifierKeys.Reverse())
+                    actions.KeyUp(modifierKey);
+
+                actions.Perform();
+
+                return new WebBrowserActionResult
+                {
+                    Success = true
+                };
+            });
+        }
+
         public virtual void DeleteAllCookies()
         {
             this.driver.Manage().Cookies.DeleteAllCookies();
+        }
+
+        private static string GetSeleniumKey(WebSpecialKey key)
+        {
+            return key switch
+            {
+                WebSpecialKey.Enter => Keys.Enter,
+                WebSpecialKey.Tab => Keys.Tab,
+                WebSpecialKey.Escape => Keys.Escape,
+                WebSpecialKey.Backspace => Keys.Backspace,
+                WebSpecialKey.Delete => Keys.Delete,
+                WebSpecialKey.ArrowUp => Keys.ArrowUp,
+                WebSpecialKey.ArrowDown => Keys.ArrowDown,
+                WebSpecialKey.ArrowLeft => Keys.ArrowLeft,
+                WebSpecialKey.ArrowRight => Keys.ArrowRight,
+                WebSpecialKey.Space => Keys.Space,
+                _ => Keys.Enter
+            };
+        }
+
+        private static IReadOnlyList<string> GetModifierKeys(WebSpecialKeyModifier modifier)
+        {
+            return modifier switch
+            {
+                WebSpecialKeyModifier.Ctrl => [Keys.Control],
+                WebSpecialKeyModifier.Shift => [Keys.Shift],
+                WebSpecialKeyModifier.Alt => [Keys.Alt],
+                WebSpecialKeyModifier.CtrlShift => [Keys.Control, Keys.Shift],
+                WebSpecialKeyModifier.CtrlAlt => [Keys.Control, Keys.Alt],
+                WebSpecialKeyModifier.ShiftAlt => [Keys.Shift, Keys.Alt],
+                WebSpecialKeyModifier.CtrlShiftAlt => [Keys.Control, Keys.Shift, Keys.Alt],
+                _ => []
+            };
         }
 
         public virtual List<Cookie> GetAllCookies()
@@ -260,13 +327,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
             {
                 IWebElement fileInput = null;
                 if (mode == WebEventSelectionMode.CssSelector)
-                {
                     fileInput = driver.FindElement(By.CssSelector(selector));
-                }
                 else if (mode == WebEventSelectionMode.XPath)
-                {
                     fileInput = driver.FindElement(By.XPath(selector));
-                }
 
                 if (fileInput != null && fileInput.GetAttribute("type") == "file")
                 {
@@ -285,6 +348,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
                     };
                 }
             });
+        }
+
+        public virtual WebBrowserDownloadActionResult DownloadFile(
+            string selector,
+            WebEventSelectionMode mode,
+            WebDownloadMode downloadMode,
+            string downloadPath,
+            string downloadDirectory,
+            int timeoutSeconds)
+        {
+            var handler = new WebBrowserDownloadFileHandler(driver, timeoutSeconds);
+            return handler.DownloadFile(selector, mode, downloadMode, downloadPath, downloadDirectory);
         }
 
         public virtual WebBrowserActionResult SwitchToUrl(string url)

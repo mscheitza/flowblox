@@ -43,7 +43,7 @@ namespace FlowBlox.UICore.Views
             ValueTextBox.HorizontalScrollBarVisibility = isMultiline ? ScrollBarVisibility.Disabled : ScrollBarVisibility.Auto;
             ValueTextBox.Height = isMultiline ? 180 : 32;
             SuggestionsComboBox.Height = isMultiline ? 36 : 32;
-            Height = isMultiline ? 420 : 240;
+            Height = isMultiline ? 420 : 200;
         }
 
         public string GetValue() => _value;

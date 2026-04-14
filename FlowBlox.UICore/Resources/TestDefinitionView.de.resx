@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,91 +117,147 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-	<data name="Title" xml:space="preserve">
+  <data name="Title" xml:space="preserve">
     <value>Test Definition</value>
   </data>
-	<data name="Label_Name" xml:space="preserve">
+  <data name="Label_Name" xml:space="preserve">
     <value>Name:</value>
   </data>
-	<data name="Label_RequiredForExecution" xml:space="preserve">
+  <data name="Label_RequiredForExecution" xml:space="preserve">
     <value>Erforderlich für Laufzeit-Ausführung</value>
   </data>
-	<data name="Text_FlowBlock" xml:space="preserve">
+  <data name="Text_FlowBlock" xml:space="preserve">
     <value>FlowBlock</value>
   </data>
-	<data name="Text_Execute" xml:space="preserve">
+  <data name="Text_Execute" xml:space="preserve">
     <value>Ausführen</value>
   </data>
-	<data name="Text_FieldLabel" xml:space="preserve">
+  <data name="Text_FieldLabel" xml:space="preserve">
     <value>Feldbezeichnung</value>
   </data>
-	<data name="Text_SelectionMode" xml:space="preserve">
+  <data name="Text_SelectionMode" xml:space="preserve">
     <value>Auswahlmodus</value>
   </data>
-	<data name="Text_UserInputFieldValue" xml:space="preserve">
+  <data name="Text_UserInputFieldValue" xml:space="preserve">
     <value>Benutzereingabe / Feldwert</value>
   </data>
-	<data name="Text_TestExpectations" xml:space="preserve">
+  <data name="Text_TestExpectations" xml:space="preserve">
     <value>Testerwartungen</value>
   </data>
-	<data name="TabItem_TestResults" xml:space="preserve">
+  <data name="TabItem_TestResults" xml:space="preserve">
     <value>Test Results</value>
   </data>
-	<data name="TabItem_RuntimeLogs" xml:space="preserve">
+  <data name="TabItem_RuntimeLogs" xml:space="preserve">
     <value>Runtime Logs</value>
   </data>
-	<data name="MenuItem_OpenInEditor" xml:space="preserve">
+  <data name="MenuItem_OpenInEditor" xml:space="preserve">
     <value>Open in editor</value>
   </data>
-	<data name="GridViewColumn_Timestamp" xml:space="preserve">
+  <data name="GridViewColumn_Timestamp" xml:space="preserve">
     <value>Timestamp</value>
   </data>
-	<data name="GridViewColumn_LogLevel" xml:space="preserve">
+  <data name="GridViewColumn_LogLevel" xml:space="preserve">
     <value>Log-Level</value>
   </data>
-	<data name="GridViewColumn_Message" xml:space="preserve">
+  <data name="GridViewColumn_Message" xml:space="preserve">
     <value>Message</value>
   </data>
-	<data name="Button_Back" xml:space="preserve">
+  <data name="Button_Back" xml:space="preserve">
     <value>Zurück</value>
   </data>
-	<data name="Button_Save" xml:space="preserve">
+  <data name="Button_Save" xml:space="preserve">
     <value>Übernehmen</value>
   </data>
-	<data name="Button_Execute" xml:space="preserve">
+  <data name="Button_Execute" xml:space="preserve">
     <value>Ausführen</value>
   </data>
-	<data name="Text_SelectionMode_Index_Watermark" xml:space="preserve">
+  <data name="Text_SelectionMode_Index_Watermark" xml:space="preserve">
     <value>Bitte geben Sie den Index an...</value>
   </data>
-	<data name="Column_ExpectationTarget" xml:space="preserve">
+  <data name="Column_ExpectationTarget" xml:space="preserve">
     <value>Erwartungsziel</value>
   </data>
-	<data name="Column_Index" xml:space="preserve">
+  <data name="Column_Index" xml:space="preserve">
     <value>Index</value>
   </data>
-	<data name="Column_Operator" xml:space="preserve">
+  <data name="Column_Operator" xml:space="preserve">
     <value>Vergleichsoperator</value>
   </data>
-	<data name="Column_Value" xml:space="preserve">
+  <data name="Column_Value" xml:space="preserve">
     <value>Wert</value>
   </data>
-	<data name="Icon_RequiredForExecution_Tooltip" xml:space="preserve">
-    <value>Diese Testfall-Konfiguration ist für die Ausführung erforderlich.</value>
+  <data name="Icon_UIRequiredForExecution_FieldConfiguration_Tooltip" xml:space="preserve">
+    <value>Diese Testkonfiguration ist für die Ausführung erforderlich.</value>
   </data>
-	<data name="Label_SelectedConfiguration" xml:space="preserve">
+  <data name="Icon_UIRequiredForExecution_TestDataset_Tooltip" xml:space="preserve">
+    <value>Dieser Testdatensatz ist für die Ausführung erforderlich.</value>
+  </data>
+  <data name="Label_SelectedConfiguration" xml:space="preserve">
     <value>Ausgewählte Testkonfiguration</value>
   </data>
-	<data name="StackPanel_SelectedConfiguration_Tooltip" xml:space="preserve">
+  <data name="StackPanel_SelectedConfiguration_Tooltip" xml:space="preserve">
     <value>Für jedes Feld kann eine Testkonfiguration festgelegt werden.</value>
   </data>
-	<data name="TabItem_Expectations" xml:space="preserve">
+  <data name="TabItem_Expectations" xml:space="preserve">
     <value>Testerwartungen</value>
   </data>
-	<data name="Toolbar_Add" xml:space="preserve">
+  <data name="Toolbar_Add" xml:space="preserve">
     <value>Hinzufügen</value>
   </data>
-	<data name="Toolbar_Delete" xml:space="preserve">
+  <data name="Toolbar_Delete" xml:space="preserve">
     <value>Entfernen</value>
+  </data>
+  <data name="Header_Title_Main" xml:space="preserve">
+    <value>Testfall-Konfiguration</value>
+  </data>
+  <data name="Header_Description_Main" xml:space="preserve">
+    <value>Ein Testfall beschreibt einen kompletten Testlauf ausgehend vom ersten ausgeführten Flow-Block bis hin zum aktuellen bzw. zuletzt zugewiesenen Ziel-Flow-Block. Wird ein Flow-Block ausgeführt, müssen seine Aktivierungsanforderungen erfüllt sein, bspw. erforderliche Feldwerte und Aktivierungsbedingungen. Erforderliche Eingaben werden markiert; weitere Hilfestellungen finden Sie in den Expandern.</value>
+  </data>
+  <data name="Expander_GeneratorHints_Header" xml:space="preserve">
+    <value>Hinweise zu Generatoren</value>
+  </data>
+  <data name="Expander_GeneratorHints_Text" xml:space="preserve">
+    <value>Testfälle bzw. Testerwartungen können außerdem von Generatoren verwendet werden, um auf Basis eines fehlgeschlagenen Testfalls gezielt Werte zu erzeugen. Dadurch lassen sich fehlgeschlagene Erwartungen kontrolliert behandeln und Ergebnisse für den betroffenen Kontext ableiten.</value>
+  </data>
+  <data name="Expander_GeneratorHints_Note2" xml:space="preserve">
+    <value>Minimum am Ziel-Flow-Block: Definieren Sie mindestens zwei Testerwartungen, eine für den Wert und eine für die Anzahl der Datensätze.</value>
+  </data>
+  <data name="Expander_GeneratorHints_Note3" xml:space="preserve">
+    <value>Empfehlung für die Werterwartung: Verwenden Sie als Ziel entweder „Erster Wert“ oder „Beliebiger Wert“ und als Vergleich „ist gleich“ mit dem erwarteten Wert.</value>
+  </data>
+  <data name="Expander_GeneratorHints_Note4" xml:space="preserve">
+    <value>Erforderliche Mengenerwartung: Verwenden Sie als Ziel „Anzahl der Datensätze“ und als Vergleich „ist gleich“ mit der erwarteten Anzahl. Mehr Erwartungsbedingungen verbessern i. d. R. die Ergebnisqualität.</value>
+  </data>
+  <data name="Expander_GeneratorHints_Note5" xml:space="preserve">
+    <value>Tipp: Statt „Beliebiger Wert“ kann der Auswahlmodus „Benutzereingabe wird erwartet“ genutzt werden. So werden Erwartung und Auswahl in einem Schritt abgedeckt, falls nachfolgende Flow-Blöcke ausgeführt werden sollen.</value>
+  </data>
+  <data name="Text_SelectionMode_InfoTooltip" xml:space="preserve">
+    <value>Um einen Feldwert automatisch aus einer Flow-Block-Ausführung zu ermitteln, nutzen Sie einen Auswahlmodus aus der Kategorie "Automatische Auswahl". Um eine Auswahl und gleichzeitig eine Erwartung festzulegen, nutzen Sie "Benutzereingabe wird erwartet". Um einen Wert manuell (bspw. ohne Ausführung) für ein Feld festzulegen, nutzen Sie "Manuelle Eingabe".</value>
+  </data>
+  <data name="Expander_TestCaseHelp_Header" xml:space="preserve">
+    <value>Hilfestellungen zu Testfällen</value>
+    
+  </data>
+  <data name="Expander_TestCaseHelp_Note1" xml:space="preserve">
+    <value>Ein Testfall kann sowohl im Kontext eines Flow-Blocks als auch aus der Testfall-Ansicht ausgeführt werden. Wenn kein aktueller Flow-Block übergeben wird, wird der zuletzt zugewiesene Ziel-Flow-Block verwendet.</value>
+    
+  </data>
+  <data name="Expander_TestCaseHelp_Note2" xml:space="preserve">
+    <value>Wichtig: Wenn vorangegangene Flow-Blöcke nicht ausgeführt werden, müssen erforderliche Feldwerte manuell gesetzt werden, damit nachgelagerte Prüfungen zuverlässig laufen.</value>
+    
+  </data>
+  <data name="Expander_TestCaseHelp_Note3" xml:space="preserve">
+    <value>Nutzen Sie einen automatischen Auswahlmodus, wenn Feldwerte aus der Flow-Block-Ausführung ermittelt werden sollen.</value>
+    
+  </data>
+  <data name="Expander_TestCaseHelp_Note4" xml:space="preserve">
+    <value>Testerwartungen werden pro Feld geprüft. Sobald eine Erwartung nicht erfüllt ist, gilt der Test als fehlgeschlagen.</value>
+    
+  </data>
+  <data name="Message_RuntimeInitializationFailed" xml:space="preserve">
+    <value>Die Laufzeit konnte nicht gestartet werden.
+
+Meldung(en):
+{0}</value>
   </data>
 </root>

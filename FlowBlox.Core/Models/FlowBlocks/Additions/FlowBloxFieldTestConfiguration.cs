@@ -1,37 +1,40 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Additions
 {
     [Display(Name = "FlowBloxTestConfiguration", ResourceType = typeof(FlowBloxTexts))]
-    public class FlowBloxTestConfiguration : INotifyPropertyChanged
+    public class FlowBloxFieldTestConfiguration : FlowBloxReactiveObject
     {
-        private bool _requiredForExecution;
+        private bool _uIRequiredForExecution;
         private FieldElement _fieldElement;
         private FlowBloxTestConfigurationSelectionMode? _selectionMode;
         private ObservableCollection<ExpectationCondition> _expectationConditions;
         private string _userInput;
         private int? _index;
 
-        public FlowBloxTestConfiguration()
+        public FlowBloxFieldTestConfiguration()
         {
             this.ExpectationConditions = new ObservableCollection<ExpectationCondition>();
         }
 
-        public bool RequiredForExecution
+        [JsonIgnore]
+        [Display(Name = "FlowBloxTestConfiguration_UIRequiredForExecution", Description = "FlowBloxTestConfiguration_UIRequiredForExecution_Description", ResourceType = typeof(FlowBloxTexts))]
+        public bool UIRequiredForExecution
         {
-            get => _requiredForExecution;
+            get => _uIRequiredForExecution;
             set
             {
-                if (_requiredForExecution != value)
+                if (_uIRequiredForExecution != value)
                 {
-                    _requiredForExecution = value;
+                    _uIRequiredForExecution = value;
                     OnPropertyChanged();
                 }
             }
@@ -60,6 +63,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
                 _selectionMode = PossibleSelectionModes.First();
         }
 
+        [Display(Name = "FlowBloxTestConfiguration_SelectionMode", Description = "FlowBloxTestConfiguration_SelectionMode_Description", ResourceType = typeof(FlowBloxTexts))]
         public FlowBloxTestConfigurationSelectionMode? SelectionMode
         {
             get => _selectionMode;
@@ -107,7 +111,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             }
         }
 
-        [Display(Name = "FlowBloxTestConfiguration_ExpectationConditions", ResourceType = typeof(FlowBloxTexts))]
+        [Display(Name = "FlowBloxTestConfiguration_ExpectationConditions", Description = "FlowBloxTestConfiguration_ExpectationConditions_Description", ResourceType = typeof(FlowBloxTexts))]
         [FlowBlockUI(Factory = UIFactory.GridView)]
         [FlowBlockDataGrid(
             GridColumnMemberNames = new[]
@@ -133,7 +137,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
 
         private void SubscribeToExpectationConditions(ObservableCollection<ExpectationCondition> collection)
         {
-            if (collection == null) 
+            if (collection == null)
                 return;
 
             collection.CollectionChanged += ExpectationConditions_CollectionChanged;
@@ -188,12 +192,5 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         }
 
         public bool IsIndexVisible => SelectionMode == FlowBloxTestConfigurationSelectionMode.Index;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

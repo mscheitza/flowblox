@@ -18,7 +18,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
-            SelectionFilterMethod = nameof(BaseFlowBlock.GetPossibleFieldElements))]
+            SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public override FieldElement Field { get; set; }
 
         [Display(Name = "ProjectOutputMappingEntry_IsRequired", ResourceType = typeof(FlowBloxTexts), Order = 1)]

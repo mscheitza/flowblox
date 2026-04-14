@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.AI.TokenSelector;
@@ -17,6 +17,7 @@ using System.Text;
 namespace FlowBlox.Core.Models.FlowBlocks.AI
 {
     [Display(Name = "OnnxRuntimeGenAIFlowBlock_DisplayName", Description = "OnnxRuntimeGenAIFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     public class OnnxGenAIFlowBlock : BaseSingleResultFlowBlock
     {
         private Model _model;

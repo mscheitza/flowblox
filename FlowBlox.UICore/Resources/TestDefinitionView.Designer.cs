@@ -124,6 +124,105 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generator notes ähnelt.
+        /// </summary>
+        public static string Expander_GeneratorHints_Header {
+            get {
+                return ResourceManager.GetString("Expander_GeneratorHints_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Minimum at the target flow block: define at least two expectations, one for the value and one for the dataset count. ähnelt.
+        /// </summary>
+        public static string Expander_GeneratorHints_Note2 {
+            get {
+                return ResourceManager.GetString("Expander_GeneratorHints_Note2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recommended value expectation: use target &quot;First value&quot; or &quot;Any value&quot; and comparison &quot;equals&quot; with the expected value. ähnelt.
+        /// </summary>
+        public static string Expander_GeneratorHints_Note3 {
+            get {
+                return ResourceManager.GetString("Expander_GeneratorHints_Note3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required count expectation: use target &quot;Number of datasets&quot; and comparison &quot;equals&quot; with the expected count. More expectation conditions usually improve generator output quality. ähnelt.
+        /// </summary>
+        public static string Expander_GeneratorHints_Note4 {
+            get {
+                return ResourceManager.GetString("Expander_GeneratorHints_Note4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tip: Instead of &quot;Any value&quot;, you can use selection mode &quot;User input expected&quot;. This combines expectation and selection when downstream flow blocks should be executed. ähnelt.
+        /// </summary>
+        public static string Expander_GeneratorHints_Note5 {
+            get {
+                return ResourceManager.GetString("Expander_GeneratorHints_Note5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Tests and expectations can also be used by generators to derive values after a failed test case. This makes it possible to react to failed expectations in a controlled way and generate values specifically for the affected context. ähnelt.
+        /// </summary>
+        public static string Expander_GeneratorHints_Text {
+            get {
+                return ResourceManager.GetString("Expander_GeneratorHints_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test case guidance ähnelt.
+        /// </summary>
+        public static string Expander_TestCaseHelp_Header {
+            get {
+                return ResourceManager.GetString("Expander_TestCaseHelp_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die A test case can be executed in the flow block context and from the test view. If no current flow block is passed, the last assigned target flow block is used. ähnelt.
+        /// </summary>
+        public static string Expander_TestCaseHelp_Note1 {
+            get {
+                return ResourceManager.GetString("Expander_TestCaseHelp_Note1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Important: If a preceding flow block is not executed, set required field values manually so downstream checks can run reliably. ähnelt.
+        /// </summary>
+        public static string Expander_TestCaseHelp_Note2 {
+            get {
+                return ResourceManager.GetString("Expander_TestCaseHelp_Note2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use an automatic selection mode when values should be determined from flow block execution. ähnelt.
+        /// </summary>
+        public static string Expander_TestCaseHelp_Note3 {
+            get {
+                return ResourceManager.GetString("Expander_TestCaseHelp_Note3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expectations are evaluated per field. If an expectation is not met, the test fails. ähnelt.
+        /// </summary>
+        public static string Expander_TestCaseHelp_Note4 {
+            get {
+                return ResourceManager.GetString("Expander_TestCaseHelp_Note4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Log level ähnelt.
         /// </summary>
         public static string GridViewColumn_LogLevel {
@@ -151,11 +250,38 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This test case configuration is required for execution. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die A test case describes a complete test run from the first executed flow block to the current or last assigned target flow block. If a flow block is executed, its activation requirements must be fulfilled, for example required field values and activation conditions. Required values to be set are marked, and additional guidance is available in the expanders below. ähnelt.
         /// </summary>
-        public static string Icon_RequiredForExecution_Tooltip {
+        public static string Header_Description_Main {
             get {
-                return ResourceManager.GetString("Icon_RequiredForExecution_Tooltip", resourceCulture);
+                return ResourceManager.GetString("Header_Description_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test case configuration ähnelt.
+        /// </summary>
+        public static string Header_Title_Main {
+            get {
+                return ResourceManager.GetString("Header_Title_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This test configuration is required for execution. ähnelt.
+        /// </summary>
+        public static string Icon_UIRequiredForExecution_FieldConfiguration_Tooltip {
+            get {
+                return ResourceManager.GetString("Icon_UIRequiredForExecution_FieldConfiguration_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This test dataset is required for execution. ähnelt.
+        /// </summary>
+        public static string Icon_UIRequiredForExecution_TestDataset_Tooltip {
+            get {
+                return ResourceManager.GetString("Icon_UIRequiredForExecution_TestDataset_Tooltip", resourceCulture);
             }
         }
         
@@ -192,6 +318,18 @@ namespace FlowBlox.UICore.Resources {
         public static string MenuItem_OpenInEditor {
             get {
                 return ResourceManager.GetString("MenuItem_OpenInEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The runtime could not be started.
+        ///
+        ///Message(s):
+        ///{0} ähnelt.
+        /// </summary>
+        public static string Message_RuntimeInitializationFailed {
+            get {
+                return ResourceManager.GetString("Message_RuntimeInitializationFailed", resourceCulture);
             }
         }
         
@@ -273,6 +411,15 @@ namespace FlowBlox.UICore.Resources {
         public static string Text_SelectionMode_Index_Watermark {
             get {
                 return ResourceManager.GetString("Text_SelectionMode_Index_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die To determine a field value automatically from a flow block execution, use a selection mode from the &quot;Automatic selection&quot; category. To define a selection and an expectation at the same time, use &quot;User input expected&quot;. To set a value manually (for example without execution) for a field, use &quot;Manual input&quot;. ähnelt.
+        /// </summary>
+        public static string Text_SelectionMode_InfoTooltip {
+            get {
+                return ResourceManager.GetString("Text_SelectionMode_InfoTooltip", resourceCulture);
             }
         }
         

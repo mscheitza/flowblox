@@ -1,17 +1,21 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Base;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Additions
 {
-    public class FlowBlockTestDataset : INotifyPropertyChanged
+    public class FlowBlockTestDataset : FlowBloxReactiveObject
     {
         private BaseFlowBlock _flowBlock;
         private bool _execute;
-        private List<FlowBloxTestConfiguration> _flowBloxTestConfigurations;
+        private bool _uIRequiredForExecution;
+        private List<FlowBloxFieldTestConfiguration> _flowBloxTestConfigurations;
 
+        [JsonIgnore]
         public FlowBloxTestDefinition ParentTestDefinition { get; set; }
 
+        [Display(Name = "FlowBlockTestDataset_FlowBlock", Description = "FlowBlockTestDataset_FlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
         public BaseFlowBlock FlowBlock
         {
             get => _flowBlock;
@@ -25,6 +29,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             }
         }
 
+        [Display(Name = "FlowBlockTestDataset_Execute", Description = "FlowBlockTestDataset_Execute_Description", ResourceType = typeof(FlowBloxTexts))]
         public bool Execute
         {
             get => _execute;
@@ -39,7 +44,23 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             }
         }
 
-        public List<FlowBloxTestConfiguration> FlowBloxTestConfigurations
+        [JsonIgnore]
+        [Display(Name = "FlowBlockTestDataset_UIRequiredForExecution", Description = "FlowBlockTestDataset_UIRequiredForExecution_Description", ResourceType = typeof(FlowBloxTexts))]
+        public bool UIRequiredForExecution
+        {
+            get => _uIRequiredForExecution;
+            set
+            {
+                if (_uIRequiredForExecution != value)
+                {
+                    _uIRequiredForExecution = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [Display(Name = "FlowBlockTestDataset_FieldTestConfigurations", Description = "FlowBlockTestDataset_FieldTestConfigurations_Description", ResourceType = typeof(FlowBloxTexts))]
+        public List<FlowBloxFieldTestConfiguration> FlowBloxTestConfigurations
         {
             get => _flowBloxTestConfigurations;
             set
@@ -54,15 +75,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
 
         public FlowBlockTestDataset()
         {
-            FlowBloxTestConfigurations = new List<FlowBloxTestConfiguration>();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            FlowBloxTestConfigurations = new List<FlowBloxFieldTestConfiguration>();
         }
     }
-
 }

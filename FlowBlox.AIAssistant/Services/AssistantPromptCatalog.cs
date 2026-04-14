@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -13,7 +13,10 @@ namespace FlowBlox.AIAssistant.Services
         public const string EditAndDeleteKey = "explaining_edit_and_delete";
         public const string NamingConventionsKey = "naming_conventions";
         public const string ExecutionRequirementsKey = "execution_requirements_and_required_fields";
-        public const string InputFileTemplatesKey = "explaining_input_file_templates";
+        public const string InputFilesKey = "explaining_input_file_templates";
+        public const string SpecialTestDefinitionsKey = "explaining_test_definitions";
+        public const string SpecialGeneratorsKey = "explaining_generators";
+        public const string SpecialTestDrivenUnknownResourcesKey = "explaining_test_driven_unknown_resources";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
             new Dictionary<string, PromptEntryDefinition>(StringComparer.OrdinalIgnoreCase)
@@ -22,42 +25,68 @@ namespace FlowBlox.AIAssistant.Services
                     SystemMessageKey,
                     "System Message",
                     "FlowBlox.AIAssistant.Prompts.SystemMessage.txt",
-                    "Core response contract and finalization rules."),
+                    "Core response contract and finalization rules.",
+                    true),
                 [SessionBootstrapKey] = new PromptEntryDefinition(
                     SessionBootstrapKey,
                     "Session Bootstrap",
                     "FlowBlox.AIAssistant.Prompts.SessionBootstrap.txt",
-                    "Editing rules, tool usage policy, and workflow guardrails."),
+                    "Editing rules, tool usage policy, and workflow guardrails.",
+                    true),
                 [IterationContextKey] = new PromptEntryDefinition(
                     IterationContextKey,
                     "Explaining IterationContext",
                     "FlowBlox.AIAssistant.Prompts.ExplainingIterationContext.txt",
-                    "Important for understanding FlowBlox flow execution logic."),
+                    "Important for understanding FlowBlox flow execution logic.",
+                    true),
                 [FlowBlocksManagingObjectKey] = new PromptEntryDefinition(
                     FlowBlocksManagingObjectKey,
                     "Explaining FlowBlocks Managing an Object",
                     "FlowBlox.AIAssistant.Prompts.ExplainingFlowBlocksManagingAnObject.txt",
-                    "How object-managing flow blocks define object lifecycle per dataset or per run."),
+                    "How object-managing flow blocks define object lifecycle per dataset or per run.",
+                    true),
                 [EditAndDeleteKey] = new PromptEntryDefinition(
                     EditAndDeleteKey,
                     "Explaining Edit and Delete",
                     "FlowBlox.AIAssistant.Prompts.ExplainingEditAndDelete.txt",
-                    "How to update, link/unlink, and delete safely (including dependency order)."),
+                    "How to update, link/unlink, and delete safely (including dependency order).",
+                    true),
                 [NamingConventionsKey] = new PromptEntryDefinition(
                     NamingConventionsKey,
                     "Naming Conventions",
                     "FlowBlox.AIAssistant.Prompts.NamingConventions.txt",
-                    "Consistent naming rules for FlowBlocks and result-field descriptors."),
+                    "Consistent naming rules for FlowBlocks and result-field descriptors.",
+                    true),
                 [ExecutionRequirementsKey] = new PromptEntryDefinition(
                     ExecutionRequirementsKey,
                     "Execution Requirements and Required Fields",
                     "FlowBlox.AIAssistant.Prompts.ExecutionRequirementsAndRequiredFields.txt",
-                    "How to ensure downstream execution is guarded when upstream result datasets are empty."),
-                [InputFileTemplatesKey] = new PromptEntryDefinition(
-                    InputFileTemplatesKey,
+                    "How to ensure downstream execution is guarded when upstream result datasets are empty.",
+                    true),
+                [InputFilesKey] = new PromptEntryDefinition(
+                    InputFilesKey,
                     "Explaining Managed Input Files",
                     "FlowBlox.AIAssistant.Prompts.ExplainingInputFiles.txt",
-                    "How managed input files are used for schemas, mock data, helper scripts and command execution.")
+                    "How managed input files are used for schemas, mock data, helper scripts and command execution.",
+                    false),
+                [SpecialTestDefinitionsKey] = new PromptEntryDefinition(
+                    SpecialTestDefinitionsKey,
+                    "Explaining Test Definitions",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingTestDefinitions.txt",
+                    "Special: on-demand guidance for creating/linking/configuring test definitions via tool calls.",
+                    false),
+                [SpecialGeneratorsKey] = new PromptEntryDefinition(
+                    SpecialGeneratorsKey,
+                    "Explaining Generators",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingGenerators.txt",
+                    "Special: on-demand guidance for creating/configuring generation strategies from test results.",
+                    false),
+                [SpecialTestDrivenUnknownResourcesKey] = new PromptEntryDefinition(
+                    SpecialTestDrivenUnknownResourcesKey,
+                    "Test-Driven Approach for Unknown/Inaccessible Resources",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingTestDrivenUnknownResources.txt",
+                    "Special: on-demand guidance for iterative flow construction when content is unknown or inaccessible.",
+                    false)
             };
 
         private static readonly Lazy<IReadOnlyDictionary<string, PromptEntry>> Entries = new(LoadEntries, isThreadSafe: true);
@@ -109,7 +138,8 @@ namespace FlowBlox.AIAssistant.Services
                     definition.Title,
                     definition.Hint,
                     normalized,
-                    ComputeSha256Hex(normalized));
+                    ComputeSha256Hex(normalized),
+                    definition.IsIncludedInInitialPrompt);
             }
 
             return result;
@@ -135,8 +165,9 @@ namespace FlowBlox.AIAssistant.Services
             return sb.ToString();
         }
 
-        private sealed record PromptEntryDefinition(string Key, string Title, string ResourceName, string Hint);
+        private sealed record PromptEntryDefinition(string Key, string Title, string ResourceName, string Hint, bool IsIncludedInInitialPrompt);
 
-        internal sealed record PromptEntry(string Key, string Title, string Hint, string Content, string ContentHash);
+        internal sealed record PromptEntry(string Key, string Title, string Hint, string Content, string ContentHash, bool IsIncludedInInitialPrompt);
     }
 }
+

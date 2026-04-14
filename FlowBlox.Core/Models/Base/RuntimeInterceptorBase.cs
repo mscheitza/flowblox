@@ -38,6 +38,11 @@ namespace FlowBlox.Core.Models.Base
 
         }
 
+        public virtual void NotifyBeforeRuntimeStarted()
+        {
+            
+        }
+
         public virtual void NotifyRuntimeStarted()
         {
             

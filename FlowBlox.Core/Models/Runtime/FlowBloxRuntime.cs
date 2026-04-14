@@ -143,7 +143,7 @@ namespace FlowBlox.Core.Models.Runtime
                 if (pauseContinue)
                     this.RaisePauseContinue(this.Pause);
             }
-            
+
             base.HandlePause();
         }
 
@@ -217,6 +217,7 @@ namespace FlowBlox.Core.Models.Runtime
             try
             {
                 this.Running = true;
+                this.NotifyBeforeRuntimeStarted();
                 this.OnBeforeRuntimeStarted();
                 this.NotifyRuntimeStarted();
                 this.Report("StepwiseExecution: " + StepwiseExecution.ToString().ToLower());
@@ -244,7 +245,7 @@ namespace FlowBlox.Core.Models.Runtime
                 this.OnAfterRuntimeFinished();
                 this.NotifyRuntimeFinished();
             }
-            catch(RuntimeCancellationException e)
+            catch (RuntimeCancellationException e)
             {
                 this.Running = false;
                 this.OnAfterRuntimeFinished();

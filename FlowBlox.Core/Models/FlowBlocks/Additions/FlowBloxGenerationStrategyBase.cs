@@ -1,9 +1,10 @@
-using FlowBlox.Core.Attributes;
+﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
+using FlowBlox.Core.Util.Fields;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -40,9 +41,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         public string Name { get; set; }
 
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleFieldElements), 
-            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
-            Operations = UIOperations.Link | UIOperations.Unlink)]
+        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
+            SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         [Required()]
         public virtual FieldElement InputField { get; set; }
 
@@ -78,7 +79,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             }
         }
 
-        private void pipeFlowBlock_PropertyChange(object sender, PropertyChangedEventArgs e)
+        private void pipeFlowBlock_PropertyChange(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(SequenceDetectionFlowBlock.InputField))
             {
@@ -89,14 +90,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
 
         public abstract bool CanExecute(out Dictionary<FlowBloxTestDefinition, List<string>> testDefinitionToMessages, out List<string> messages);
 
-        public List<FieldElement> GetPossibleFieldElements()
-        {
-            return this.Source.GetPossibleFieldElements();
-        }
 
         public abstract object Execute(BaseRuntime runtime, Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults);
 
         public abstract void Assign(object value);
     }
 }
-

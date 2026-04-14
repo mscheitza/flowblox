@@ -1,5 +1,6 @@
-﻿using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Util.Json.Converters;
 using FlowBlox.Core.Util.Json.ContractResolver;
 using FlowBlox.Core.Util.Json.SerializationBinder;
 using Newtonsoft.Json;
@@ -76,6 +77,27 @@ namespace FlowBlox.Core.Util.Json
             jsonSettings.NullValueHandling = NullValueHandling.Ignore;
             jsonSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
             jsonSettings.ContractResolver = new AiAssistantProjectContractResolver();
+            return jsonSettings;
+        }
+
+        public static JsonSerializerSettings ComponentSnapshotExport()
+        {
+            var jsonSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.None,
+                NullValueHandling = NullValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                TypeNameHandling = TypeNameHandling.None,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new ComponentSnapshotContractResolver()
+            };
+
+            jsonSettings.Converters.Add(new ComponentReferenceJsonConverter());
+            jsonSettings.Converters.Add(new StringEnumConverter
+            {
+                AllowIntegerValues = true
+            });
+
             return jsonSettings;
         }
 

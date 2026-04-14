@@ -2,7 +2,7 @@
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Util.FlowBlocks;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
 using System.Collections.ObjectModel;
@@ -17,7 +17,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
         private FieldElement _inputField;
 
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleFieldElements), 
+        [FlowBlockUI(Factory = UIFactory.Association, 
+            SelectionFilterMethod = nameof(GetPossibleInputFields), 
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
         [Required()]
         public FieldElement InputField 
@@ -26,11 +27,10 @@ namespace FlowBlox.Core.Models.FlowBlocks
             set => SetRequiredInputField(ref _inputField, value);
         }
 
-        public override List<FieldElement> GetPossibleFieldElements() => FlowBlockHelper.GetFieldElementsOfAccoiatedFlowBlocks(this);
+        public List<FieldElement> GetPossibleInputFields() => FlowBloxFieldsResolver.GetFieldsOfAssociatedFlowBlocks(this);
 
         [Display(Name = "DistributorFlowBlock_DisributedFields", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Delete,
-            SelectionFilterMethod = nameof(GetPossibleFieldElements))]
+        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Delete)]
         [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
         public ObservableCollection<FieldElement> DisributedFields { get; set; }
 

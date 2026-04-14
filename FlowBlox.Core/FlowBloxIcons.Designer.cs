@@ -103,6 +103,26 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] calendar_clock {
+            get {
+                object obj = ResourceManager.GetObject("calendar_clock", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] calendar_plus {
+            get {
+                object obj = ResourceManager.GetObject("calendar_plus", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] call_merge {
             get {
                 object obj = ResourceManager.GetObject("call_merge", resourceCulture);
@@ -626,6 +646,16 @@ namespace FlowBlox.Core {
         public static byte[] text_long {
             get {
                 object obj = ResourceManager.GetObject("text_long", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] timeline_clock {
+            get {
+                object obj = ResourceManager.GetObject("timeline_clock", resourceCulture);
                 return ((byte[])(obj));
             }
         }

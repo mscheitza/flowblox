@@ -1,0 +1,18 @@
+Use this only when the user asks for a flow but content is unknown or inaccessible to the assistant
+(for example local-network sites, local files, restricted systems, missing access rights).
+
+Goal:
+- Build the flow incrementally and validate after each step.
+- Use runtime outputs (especially `DOMContent`) to discover selectors/next actions.
+
+Lean sequence:
+1. Create the first access block (for web: `WebBrowserFlowBlock` with target URL).
+2. Execute/debug and read current result fields (for web: `DOMContent`).
+3. Derive concrete selectors/paths from observed content.
+4. Add the next action block (for web: `WebEventFlowBlock` input/click).
+5. Execute/debug again, inspect new outputs, continue step-by-step.
+
+Rules:
+- Prefer this test-driven approach only for unknown/inaccessible content.
+- If the required behavior is clear and accessible, create the final flow directly.
+- Keep each iteration small and verifiable.

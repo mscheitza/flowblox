@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Enums;
+using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
@@ -34,11 +35,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             try
             {
                 foreach (var testDefinition in _scope == TestScope.All ?
-                     FlowBlock.TestDefinitions :
-                    FlowBlock.TestDefinitions.Where(x => x.RequiredForExecution))
+                     FlowBlock.TestDefinitions : 
+                     FlowBlock.TestDefinitions.Where(x => x.RequiredForExecution))
                 {
+                    var includedFlowBlocks = testDefinition.Entries
+                        .Select(x => x.FlowBlock)
+                        .ExceptNull()
+                        .Where(x => !ReferenceEquals(x, FlowBlock))
+                        .ToList();
+
                     var testExecutor = new FlowBloxTestExecutor();
-                    testExecutor.Initialize(testDefinition, FlowBlock, validationTargetFlowBlock: FlowBlock);
+                    testExecutor.Initialize(testDefinition, FlowBlock, includedFlowBlocks);
                     var runtime = testExecutor.GetRuntime();
                     runtime.LogMessageCreated += Runtime_LogMessageCreated;
 
@@ -69,8 +76,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
                     foreach (var testDefinition in FlowBlock.TestDefinitions)
                     {
+                        var includedFlowBlocks = testDefinition.Entries
+                            .Select(x => x.FlowBlock)
+                            .Where(x => x != null && !ReferenceEquals(x, FlowBlock))
+                            .Distinct()
+                            .ToList();
+
                         var testExecutor = new FlowBloxTestExecutor();
-                        testExecutor.Initialize(testDefinition, FlowBlock, validationTargetFlowBlock: FlowBlock);
+                        testExecutor.Initialize(testDefinition, FlowBlock, includedFlowBlocks);
 
                         var testResult1 = await testExecutor.ExecuteTestAsync();
                         testExecutor.Shutdown();

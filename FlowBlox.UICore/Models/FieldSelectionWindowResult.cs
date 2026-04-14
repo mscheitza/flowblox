@@ -16,6 +16,8 @@ namespace FlowBlox.UICore.Models
 
         public List<FlowBloxInputFilePlaceholderElement> SelectedInputFiles { get; set; } = new List<FlowBloxInputFilePlaceholderElement>();
 
+        public List<FlowBloxGenerationStrategyPlaceholderElement> SelectedGenerationStrategyData { get; set; } = new List<FlowBloxGenerationStrategyPlaceholderElement>();
+
         public bool IsRequired { get; set; }
     }
 }

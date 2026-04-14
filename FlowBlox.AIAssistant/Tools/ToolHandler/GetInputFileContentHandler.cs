@@ -1,4 +1,4 @@
-using FlowBlox.AIAssistant.Helper;
+﻿using FlowBlox.AIAssistant.Helper;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools.ToolHandler.Converter;
 using FlowBlox.Core.Models.Project;
@@ -7,9 +7,9 @@ using System.Text;
 
 namespace FlowBlox.AIAssistant.Tools
 {
-    internal sealed class GetInputFileTemplateContentHandler : ToolHandlerBase
+    internal sealed class GetInputFileContentHandler : ToolHandlerBase
     {
-        public override string Name => "GetInputFileTemplateContent";
+        public override string Name => "GetInputFileContent";
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
@@ -25,7 +25,7 @@ namespace FlowBlox.AIAssistant.Tools
             try
             {
                 var project = ToolHandlerUtilities.GetProject();
-                var templates = project.InputFiles ?? new List<FlowBloxInputFileTemplate>();
+                var templates = project.InputFiles ?? new List<FlowBloxInputFile>();
 
                 var key = (args.Value<string>("key") ?? string.Empty).Trim();
                 if (string.IsNullOrWhiteSpace(key))
@@ -134,5 +134,6 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
+
 
 

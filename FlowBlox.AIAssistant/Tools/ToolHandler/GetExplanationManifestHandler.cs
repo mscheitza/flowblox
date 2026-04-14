@@ -22,6 +22,7 @@ namespace FlowBlox.AIAssistant.Tools
                         ["key"] = x.Key,
                         ["title"] = x.Title,
                         ["hint"] = x.Hint,
+                        ["isIncludedInInitialPrompt"] = x.IsIncludedInInitialPrompt,
                         ["contentHash"] = x.ContentHash,
                         ["contentLength"] = x.Content.Length
                     }));

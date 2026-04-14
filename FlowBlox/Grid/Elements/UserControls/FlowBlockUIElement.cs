@@ -23,6 +23,7 @@ using FlowBlox.Actions;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
+using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox.Grid.Elements.UserControls
 {
@@ -223,10 +224,12 @@ namespace FlowBlox.Grid.Elements.UserControls
             else
                 labelHeader.Image = null;
 
-            if (_flowBlock.ElementIndex >= 0)
-                labelIndexInfo.Text = "Execute at position " + _flowBlock.ElementIndex.ToString();
+            if (_flowBlock.ExecutionIndex >= 0)
+                labelIndexInfo.Text = string.Format(
+                    FlowBloxResourceUtil.GetLocalizedString("FlowBlockUIElement_ExecutionIndex_Text", typeof(FlowBloxMainUITexts)),
+                    _flowBlock.ExecutionIndex);
 
-            flpIndexInfo.Visible = (_flowBlock.ElementIndex >= 0);
+            flpIndexInfo.Visible = (_flowBlock.ExecutionIndex >= 0);
 
             var warningOccured = !string.IsNullOrEmpty(warningMessage);
             var errorOccured = !string.IsNullOrEmpty(errorMessage);
@@ -347,7 +350,7 @@ namespace FlowBlox.Grid.Elements.UserControls
                 }
             }
 
-            if (_flowBlock.ElementIndex >= 0)
+            if (_flowBlock.ExecutionIndex >= 0)
                 this.Height += NotificationHeight;
 
             if (!string.IsNullOrEmpty(warningMessage))

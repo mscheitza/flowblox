@@ -1,0 +1,32 @@
+Use this only when the user explicitly asks to create/configure test cases.
+
+Goal:
+- Create a `FlowBloxTestDefinition` managed object.
+- Link it to a target flow block.
+- Inspect generated test rows/entries.
+- Apply focused updates to test configuration.
+
+Recommended tool-call order:
+1. `CreateManagedObject` with type `FlowBloxTestDefinition`.
+2. `UpdateFlowBlock` to connect the created test definition in `TestDefinitions` (exact property name).
+   Use standard link operation, for example `path=/TestDefinitions/Link` with value `{"resolveManagedObjectByName":"<testDefinitionName>"}`.
+3. `GetComponentSnapshot` with `kind=managedObject` and `name=<testDefinitionName>` to inspect generated `Entries`.
+4. Before any write updates, call kind info tools (prefer `GetTypeKindsInfo`, optionally `GetManagedObjectKindsInfo`) for `FlowBloxTestDefinition` and nested types to confirm paths/options.
+5. `UpdateManagedObject` with precise path updates to configure:
+- per-entry execution behavior,
+- field selection mode,
+- user input / expected values,
+- expectation conditions.
+6. Optionally run `Execute` / debug test tools when the user requests execution.
+
+Important behavior:
+- Linking a test definition to a flow block auto-synchronizes rows from start to target flow block.
+- Linked target flow blocks are executed within the test context.
+- If opened from TestView (without current flow block), the last linked target flow block is used.
+- For each entry with `Execute=true`, activation prerequisites must be satisfied:
+  - activation conditions of the flow block,
+  - required fields must have a valid value strategy (at least manual input or an automatic selection mode),
+  - for properties marked with `AssociatedFlowBlockResolvableAttribute`, resolve required associated flow blocks with `ResolveAssociatedFlowBlock` and ensure they are covered by the test setup.
+- If the test case should guard runtime execution (and allow generators during runtime start), set `RequiredForExecution=true` on the test definition.
+
+Do not create test definitions proactively. Only do it when the user asks.

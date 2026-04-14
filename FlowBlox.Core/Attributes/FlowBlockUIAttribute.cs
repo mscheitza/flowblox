@@ -25,11 +25,20 @@
     [Flags]
     public enum UIOptions
     {
+        /// <summary>
+        /// Enables field/placeholder selection for text-like editors.
+        /// </summary>
         EnableFieldSelection = 1,
+
+        /// <summary>
+        /// Enables file selection button for text-like editors.
+        /// </summary>
         EnableFileSelection = 2,
-        FieldSelectionDefaultNotRequired = 4,
-        FieldSelectionHideRequired = 8,
-        EnableFolderSelection = 16
+
+        /// <summary>
+        /// Enables folder selection button for text-like editors.
+        /// </summary>
+        EnableFolderSelection = 4
     }
 
     [AttributeUsage(AttributeTargets.Property)]

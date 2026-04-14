@@ -2,6 +2,7 @@
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Placeholders.GenerationStrategy;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
@@ -17,6 +18,9 @@ namespace FlowBlox.UICore.ViewModels
 {
     public sealed class FieldSelectionWindowViewModel : INotifyPropertyChanged
     {
+        private static readonly FieldSelectionMode[] DefaultAllowedModes =
+            [FieldSelectionMode.Fields, FieldSelectionMode.ProjectProperties, FieldSelectionMode.Options];
+
         private readonly Window _ownerWindow;
         private readonly FlowBloxRegistry _registry;
         private readonly FieldSelectionWindowArgs _args;
@@ -40,6 +44,7 @@ namespace FlowBlox.UICore.ViewModels
                 OnPropertyChanged(nameof(IsProjectPropertiesMode));
                 OnPropertyChanged(nameof(IsOptionsMode));
                 OnPropertyChanged(nameof(IsInputFilesMode));
+                OnPropertyChanged(nameof(IsGenerationStrategyDataMode));
                 OnPropertyChanged(nameof(ShowRequired));
             }
         }
@@ -63,6 +68,7 @@ namespace FlowBlox.UICore.ViewModels
         public bool IsProjectPropertiesMode => SelectionMode == FieldSelectionMode.ProjectProperties;
         public bool IsOptionsMode => SelectionMode == FieldSelectionMode.Options;
         public bool IsInputFilesMode => SelectionMode == FieldSelectionMode.InputFiles;
+        public bool IsGenerationStrategyDataMode => SelectionMode == FieldSelectionMode.GenerationStrategyData;
 
         public bool ShowRequired => IsFieldsMode && !HideRequired;
 
@@ -75,35 +81,34 @@ namespace FlowBlox.UICore.ViewModels
                 _selectedTabIndex = value;
                 OnPropertyChanged();
 
-                // Tab order: 0 = Fields, 1 = ProjectProperties, 2 = Options, 3 = InputFiles
-                SelectionMode =
-                    _selectedTabIndex == 0 ? FieldSelectionMode.Fields :
-                    _selectedTabIndex == 1 ? FieldSelectionMode.ProjectProperties :
-                    _selectedTabIndex == 2 ? FieldSelectionMode.Options :
-                    FieldSelectionMode.InputFiles;
+                // Tab order: 0 = Fields, 1 = ProjectProperties, 2 = Options, 3 = InputFiles, 4 = GenerationStrategyData
+                SelectionMode = _selectedTabIndex switch
+                {
+                    0 => FieldSelectionMode.Fields,
+                    1 => FieldSelectionMode.ProjectProperties,
+                    2 => FieldSelectionMode.Options,
+                    3 => FieldSelectionMode.InputFiles,
+                    4 => FieldSelectionMode.GenerationStrategyData,
+                    _ => FieldSelectionMode.Fields
+                };
             }
         }
 
-        public bool CanSelectFields =>
-            _args.AllowedFieldSelectionModes != null &&
-            _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.Fields);
+        public bool CanSelectFields => IsModeAllowed(FieldSelectionMode.Fields);
 
-        public bool CanSelectProjectProperties =>
-            _args.AllowedFieldSelectionModes != null &&
-            _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.ProjectProperties);
+        public bool CanSelectProjectProperties => IsModeAllowed(FieldSelectionMode.ProjectProperties);
 
-        public bool CanSelectOptions =>
-            _args.AllowedFieldSelectionModes != null &&
-            _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.Options);
+        public bool CanSelectOptions => IsModeAllowed(FieldSelectionMode.Options);
 
-        public bool CanSelectInputFiles =>
-            _args.AllowedFieldSelectionModes != null &&
-            _args.AllowedFieldSelectionModes.Contains(FieldSelectionMode.InputFiles);
+        public bool CanSelectInputFiles => IsModeAllowed(FieldSelectionMode.InputFiles);
+
+        public bool CanSelectGenerationStrategyData => IsModeAllowed(FieldSelectionMode.GenerationStrategyData);
 
         public List<FieldRowViewModel> FieldRows { get; private set; } = new List<FieldRowViewModel>();
         public List<ProjectPropertyRowViewModel> ProjectPropertyRows { get; private set; } = new List<ProjectPropertyRowViewModel>();
         public List<OptionRowViewModel> OptionRows { get; private set; } = new List<OptionRowViewModel>();
         public List<InputFileRowViewModel> InputFileRows { get; private set; } = new List<InputFileRowViewModel>();
+        public List<GenerationStrategyDataRowViewModel> GenerationStrategyDataRows { get; private set; } = new List<GenerationStrategyDataRowViewModel>();
 
         public FieldSelectionWindowViewModel(Window ownerWindow, FieldSelectionWindowArgs args)
         {
@@ -118,7 +123,8 @@ namespace FlowBlox.UICore.ViewModels
                 _args.SelectionMode == FieldSelectionMode.Fields ? 0 :
                 _args.SelectionMode == FieldSelectionMode.ProjectProperties ? 1 :
                 _args.SelectionMode == FieldSelectionMode.Options ? 2 :
-                3;
+                _args.SelectionMode == FieldSelectionMode.InputFiles ? 3 :
+                4;
 
             // Normalize tab selection based on allowed modes.
             NormalizeSelectedTabIndex();
@@ -145,7 +151,8 @@ namespace FlowBlox.UICore.ViewModels
                 (SelectedTabIndex == 0 && CanSelectFields) ||
                 (SelectedTabIndex == 1 && CanSelectProjectProperties) ||
                 (SelectedTabIndex == 2 && CanSelectOptions) ||
-                (SelectedTabIndex == 3 && CanSelectInputFiles);
+                (SelectedTabIndex == 3 && CanSelectInputFiles) ||
+                (SelectedTabIndex == 4 && CanSelectGenerationStrategyData);
 
             if (tabAllowed)
                 return;
@@ -154,6 +161,16 @@ namespace FlowBlox.UICore.ViewModels
             else if (CanSelectProjectProperties) SelectedTabIndex = 1;
             else if (CanSelectOptions) SelectedTabIndex = 2;
             else if (CanSelectInputFiles) SelectedTabIndex = 3;
+            else if (CanSelectGenerationStrategyData) SelectedTabIndex = 4;
+        }
+
+        private bool IsModeAllowed(FieldSelectionMode mode)
+        {
+            var allowedModes = _args.AllowedFieldSelectionModes;
+            if (allowedModes == null)
+                return DefaultAllowedModes.Contains(mode);
+
+            return allowedModes.Contains(mode);
         }
 
         private void LoadRows()
@@ -162,6 +179,7 @@ namespace FlowBlox.UICore.ViewModels
             LoadProjectPropertyRows();
             LoadOptionRows();
             LoadInputFileRows();
+            LoadGenerationStrategyDataRows();
         }
 
         private void LoadFieldRows()
@@ -262,6 +280,21 @@ namespace FlowBlox.UICore.ViewModels
                 .ToList();
 
             OnPropertyChanged(nameof(InputFileRows));
+        }
+
+        private void LoadGenerationStrategyDataRows()
+        {
+            IEnumerable<FlowBloxGenerationStrategyPlaceholderElement> generationStrategyDataElements = _args.GenerationStrategyDataElements
+                ?? FlowBloxGenerationStrategyPlaceholderProvider.GetElements()
+                ?? Enumerable.Empty<FlowBloxGenerationStrategyPlaceholderElement>();
+
+            GenerationStrategyDataRows = generationStrategyDataElements
+                .OrderBy(x => x?.DisplayName ?? string.Empty)
+                .ThenBy(x => x?.Key ?? string.Empty)
+                .Select(x => new GenerationStrategyDataRowViewModel(x))
+                .ToList();
+
+            OnPropertyChanged(nameof(GenerationStrategyDataRows));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

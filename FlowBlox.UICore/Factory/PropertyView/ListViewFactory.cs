@@ -9,8 +9,10 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters;
+using FlowBlox.UICore.Converters.PropertyView;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
+using FlowBlox.UICore.PropertyView.Resolver;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
@@ -28,15 +30,18 @@ namespace FlowBlox.UICore.Factory.PropertyView
 {
     public class ListViewFactory : ListFactoryBase
     {
+        private static readonly FlowBloxComponentIcon16Converter Icon16Converter = new();
         protected readonly FlowBlockListViewAttribute _listViewAttribute;
         protected IList _list;
         protected Type _listItemType;
+        protected readonly object _parent;
         private IDialogService _dialogService;
         protected FrameworkElement _emptyMessage;
 
-        public ListViewFactory(Window window, PropertyInfo property, object target, bool readOnly)
+        public ListViewFactory(Window window, PropertyInfo property, object target, bool readOnly, object parent = null)
             : base(window, property, target, readOnly)
         {
+            _parent = parent;
             _listViewAttribute = property.GetCustomAttribute<FlowBlockListViewAttribute>()
                 ?? throw new InvalidOperationException("Missing FlowBlockListViewAttribute.");
 
@@ -57,6 +62,28 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             var gridView = new GridView();
             listView.View = gridView;
+
+            var iconFactory = new FrameworkElementFactory(typeof(Image));
+            iconFactory.SetValue(Image.WidthProperty, 16.0);
+            iconFactory.SetValue(Image.HeightProperty, 16.0);
+            iconFactory.SetValue(Image.MarginProperty, new Thickness(0, 0, 6, 0));
+            iconFactory.SetValue(Image.VerticalAlignmentProperty, VerticalAlignment.Center);
+            iconFactory.SetBinding(Image.SourceProperty, new Binding(".")
+            {
+                Converter = Icon16Converter
+            });
+
+            var iconTemplate = new DataTemplate
+            {
+                VisualTree = iconFactory
+            };
+
+            gridView.Columns.Add(new GridViewColumn
+            {
+                Header = string.Empty,
+                Width = 32,
+                CellTemplate = iconTemplate
+            });
 
             var listViewProperties = _listItemType
                 .GetProperties()
@@ -246,7 +273,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var newInstance = CreateNewInstance(_window, _listItemType);
             if (newInstance != null)
             {
-                var success = WpfPropertyWindowProvider.CreatePropertyWindowAndShowDialog(_window, _target, newInstance, _readOnly);
+                var success = WpfPropertyWindowProvider.CreatePropertyWindowAndShowDialog(_window, _target, newInstance, _readOnly, isNew: true);
                 if (success)
                 {
                     _list.Add(newInstance);
@@ -271,11 +298,15 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 return;
             }
 
-            var filterMethod = GetSelectionFilterMethod(_target, _flowBlockUIAttribute.SelectionFilterMethod);
-            if (filterMethod == null) 
+            var selectionMethodResolution = SelectionMethodResolver.ResolveSelectionFilterMethodFromTargetOrParent(
+                _target,
+                _parent,
+                _flowBlockUIAttribute.SelectionFilterMethod);
+
+            if (selectionMethodResolution?.Method == null)
                 return;
 
-            var items = filterMethod.Invoke(_target, null) as IList;
+            var items = selectionMethodResolution.Method.Invoke(selectionMethodResolution.InvocationTarget, null) as IList;
             if (items == null || items.Count == 0)
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
@@ -287,7 +318,13 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             if (_listItemType == typeof(FieldElement))
             {
-                var fieldSelectionResult = DialogHelper.InvokeFieldSelectionWindow(_target, _flowBlockUIAttribute, items, _window, [FieldSelectionMode.Fields]);
+                var fieldSelectionAttribute = _property.GetCustomAttribute<FieldSelectionAttribute>();
+                var args = Utilities.TextBoxHelper.CreateFieldSelectionWindowArgs(_target, fieldSelectionAttribute);
+                args.FieldElements = items.OfType<FieldElement>();
+                args.SelectionMode = FieldSelectionMode.Fields;
+                args.AllowedFieldSelectionModes = [FieldSelectionMode.Fields];
+
+                var fieldSelectionResult = Utilities.TextBoxHelper.ShowFieldSelectionDialog(args, _window);
                 if (fieldSelectionResult != null)
                 {
                     FlowBlockHelper.ApplyFieldSelectionRequiredOption((BaseFlowBlock)_target, fieldSelectionResult.SelectedFields, fieldSelectionResult.IsRequired);
@@ -346,11 +383,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 _property.SetValue(_target, _list);
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
             }
-        }
-
-        private MethodInfo GetSelectionFilterMethod(object target, string methodName)
-        {
-            return target.GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
         private void MoveItem(ListView listView, int direction)

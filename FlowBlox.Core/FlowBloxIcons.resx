@@ -130,6 +130,12 @@
   <data name="calculator_variant" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\calculator-variant.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="calendar_clock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\calendar-clock.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="calendar_plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\calendar-plus.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="call_merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\call-merge.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -288,6 +294,9 @@
   </data>
   <data name="text_long" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\text-long.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="timeline_clock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\timeline-clock.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tray_arrow_up" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\tray-arrow-up.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

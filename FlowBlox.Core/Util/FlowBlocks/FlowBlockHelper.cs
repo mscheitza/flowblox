@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Resources;
@@ -10,15 +10,6 @@ namespace FlowBlox.Core.Util.FlowBlocks
 {
     public class FlowBlockHelper
     {
-        public static List<FieldElement> GetFieldElementsOfAccoiatedFlowBlocks(BaseFlowBlock flowBlock)
-        {
-            var result = new List<FieldElement>();
-            var referendedFlowBlock = flowBlock.ReferencedFlowBlocks.SingleOrDefault();
-            if (referendedFlowBlock is BaseResultFlowBlock)
-                result.AddRange(((BaseResultFlowBlock)referendedFlowBlock).Fields);
-            return result;
-        }
-
         public static string GetDescription(BaseFlowBlock flowBlock)
         {
             var type = flowBlock.GetType();

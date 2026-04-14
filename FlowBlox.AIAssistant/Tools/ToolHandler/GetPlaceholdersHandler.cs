@@ -1,6 +1,8 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Provider.Placeholders.GenerationStrategy;
+using FlowBlox.Core.Provider.Placeholders.InputFile;
 using FlowBlox.Core.Util;
 using Newtonsoft.Json.Linq;
 
@@ -12,7 +14,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns available placeholders for EnableFieldSelection-capable string properties. Includes field placeholders ($FlowBlock::FieldName / $User::FieldName), $Project:: / $Options:: placeholders and $InputFile:* placeholders.",
+            "Returns available placeholders for EnableFieldSelection-capable string properties. Includes field placeholders ($FlowBlock::FieldName / $User::FieldName), $Project:: / $Options:: placeholders, $InputFile:* placeholders and $GenerationStrategy::* placeholders.",
             new JObject());
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -42,10 +44,16 @@ namespace FlowBlox.AIAssistant.Tools
                 .OrderBy(x => x.Value<string>("placeholder"), StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            var inputFilePlaceholders = project.GetInputFilePlaceholderElements()
+            var inputFilePlaceholders = FlowBloxInputFilePlaceholderProvider.GetElements(project.ProjectInputDirectory)
                 .Where(x => x != null && !string.IsNullOrWhiteSpace(x.Placeholder))
                 .OrderBy(x => x.Placeholder, StringComparer.OrdinalIgnoreCase)
                 .Select(ToInputFilePlaceholderInfo)
+                .ToList();
+
+            var generationStrategyPlaceholders = FlowBloxGenerationStrategyPlaceholderProvider.GetElements()
+                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.Placeholder))
+                .OrderBy(x => x.Placeholder, StringComparer.OrdinalIgnoreCase)
+                .Select(ToGenerationStrategyPlaceholderInfo)
                 .ToList();
 
             return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
@@ -54,6 +62,7 @@ namespace FlowBlox.AIAssistant.Tools
                 ["projectPlaceholders"] = new JArray(projectPlaceholders),
                 ["optionPlaceholders"] = new JArray(optionPlaceholders),
                 ["inputFilePlaceholders"] = new JArray(inputFilePlaceholders),
+                ["generationStrategyPlaceholders"] = new JArray(generationStrategyPlaceholders),
                 ["summary"] = new JObject
                 {
                     ["fieldPlaceholderCount"] = fieldPlaceholders.Count,
@@ -61,7 +70,8 @@ namespace FlowBlox.AIAssistant.Tools
                     ["runtimeFieldCount"] = fieldPlaceholders.Count(x => x.Value<bool?>("isUserField") != true),
                     ["projectPlaceholderCount"] = projectPlaceholders.Count,
                     ["optionPlaceholderCount"] = optionPlaceholders.Count,
-                    ["inputFilePlaceholderCount"] = inputFilePlaceholders.Count
+                    ["inputFilePlaceholderCount"] = inputFilePlaceholders.Count,
+                    ["generationStrategyPlaceholderCount"] = generationStrategyPlaceholders.Count
                 },
                 ["hint"] = "Use these placeholders only in properties whose type metadata indicates EnableFieldSelection."
             }));
@@ -118,6 +128,18 @@ namespace FlowBlox.AIAssistant.Tools
                 ["displayName"] = inputFileElement.DisplayName ?? string.Empty,
                 ["description"] = inputFileElement.Description ?? string.Empty,
                 ["origin"] = "InputFile"
+            };
+        }
+
+        private static JObject ToGenerationStrategyPlaceholderInfo(FlowBloxGenerationStrategyPlaceholderElement generationStrategyElement)
+        {
+            return new JObject
+            {
+                ["placeholder"] = generationStrategyElement.Placeholder,
+                ["key"] = generationStrategyElement.Key ?? string.Empty,
+                ["displayName"] = generationStrategyElement.DisplayName ?? string.Empty,
+                ["description"] = generationStrategyElement.Description ?? string.Empty,
+                ["origin"] = "GenerationStrategyData"
             };
         }
     }

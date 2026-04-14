@@ -115,6 +115,9 @@
 	<data name="Tab_InputFiles" xml:space="preserve">
 		<value>Eingabedateien</value>
 	</data>
+	<data name="Tab_GenerationStrategyData" xml:space="preserve">
+		<value>Generierungsstrategie-Daten</value>
+	</data>
 	<data name="Col_Source" xml:space="preserve">
 		<value>Quelle</value>
 	</data>

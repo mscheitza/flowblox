@@ -47,7 +47,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         private BaseFlowBlock _targetFlowBlock;
 
         [Required]
-        [Display(Name = "RecursiveCallFlowBlock_TargetFlowBlock", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "RecursiveCallFlowBlock_TargetFlowBlock", Description = "RecursiveCallFlowBlock_TargetFlowBlock_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleReferencedElements),
             SelectionDisplayMember = nameof(Name))]

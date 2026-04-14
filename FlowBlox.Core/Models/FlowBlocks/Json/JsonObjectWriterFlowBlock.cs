@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -16,9 +16,10 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.Json
 {
     [Display(Name = "JsonObjectWriterFlowBlock_DisplayName", Description = "JsonObjectWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
     public class JsonObjectWriterFlowBlock : BaseFlowBlock
     {
-        [Display(Name = "JsonObjectWriterFlowBlock_AssociatedJsonObject", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "JsonObjectWriterFlowBlock_AssociatedJsonObject", Description = "JsonObjectWriterFlowBlock_AssociatedJsonObject_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleJsonObjectFlowBlocks),
@@ -32,7 +33,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                 .ToList();
         }
 
-        [Display(Name = "JsonObjectWriterFlowBlock_AssociatedJsonObjectWriter", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "JsonObjectWriterFlowBlock_AssociatedJsonObjectWriter", Description = "JsonObjectWriterFlowBlock_AssociatedJsonObjectWriter_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
            SelectionFilterMethod = nameof(GetPossibleJsonObjectWriters),
            SelectionDisplayMember = nameof(BaseFlowBlock.Name))]

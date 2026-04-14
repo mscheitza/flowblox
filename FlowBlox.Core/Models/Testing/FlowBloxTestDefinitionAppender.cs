@@ -7,17 +7,17 @@ namespace FlowBlox.Core.Models.Testing
 {
     public class FlowBloxTestDefinitionAppender
     {
-        private readonly FlowBloxRegistry _registry;
+        private readonly Lazy<FlowBloxRegistry> _registry;
 
         public FlowBloxTestDefinitionAppender()
         {
-            _registry = FlowBloxRegistryProvider.GetRegistry();
+            _registry = new Lazy<FlowBloxRegistry>(FlowBloxRegistryProvider.GetRegistry);
         }
 
         public void Append(FlowBloxTestDefinition testDefinition, BaseFlowBlock currentFlowBlock)
         {
             FlowBloxTestCapture flowBloxCapture = new FlowBloxTestCapture();
-            flowBloxCapture.CreateCapture(_registry.GetStartFlowBlock(), currentFlowBlock);
+            flowBloxCapture.CreateCapture(_registry.Value.GetStartFlowBlock(), currentFlowBlock);
             var capturedFlowBlocks = flowBloxCapture.GetCapturedFlowBlocks();
 
             AppendUserFields(testDefinition);
@@ -26,7 +26,7 @@ namespace FlowBlox.Core.Models.Testing
 
         private void AppendUserFields(FlowBloxTestDefinition testDefinition)
         {
-            foreach(var userField in _registry.GetUserFields())
+            foreach(var userField in _registry.Value.GetUserFields())
             {
                 var entry = testDefinition.Entries.SingleOrDefault(x => x.FlowBlock == null);
                 if (entry == null)
@@ -34,7 +34,7 @@ namespace FlowBlox.Core.Models.Testing
                     entry = new FlowBlockTestDataset()
                     {
                         ParentTestDefinition = testDefinition,
-                        FlowBloxTestConfigurations = new List<FlowBloxTestConfiguration>()
+                        FlowBloxTestConfigurations = new List<FlowBloxFieldTestConfiguration>()
                     };
 
                     testDefinition.Entries.Add(entry);
@@ -42,7 +42,7 @@ namespace FlowBlox.Core.Models.Testing
 
                 if (!entry.FlowBloxTestConfigurations.Any(x => x.FieldElement == userField))
                 {
-                    entry.FlowBloxTestConfigurations.Add(new FlowBloxTestConfiguration()
+                    entry.FlowBloxTestConfigurations.Add(new FlowBloxFieldTestConfiguration()
                     {
                         FieldElement = userField
                     });
@@ -63,7 +63,7 @@ namespace FlowBlox.Core.Models.Testing
                         ParentTestDefinition = testDefinition,
                         FlowBlock = flowBlock,
                         Execute = capturedFlowBlockIndex == capturedFlowBlocks.Count - 1,
-                        FlowBloxTestConfigurations = new List<FlowBloxTestConfiguration>()
+                        FlowBloxTestConfigurations = new List<FlowBloxFieldTestConfiguration>()
                     };
 
                     testDefinition.Entries.Add(entry);
@@ -76,7 +76,7 @@ namespace FlowBlox.Core.Models.Testing
                     {
                         if (!entry.FlowBloxTestConfigurations.Any(x => x.FieldElement == field))
                         {
-                            entry.FlowBloxTestConfigurations.Add(new FlowBloxTestConfiguration()
+                            entry.FlowBloxTestConfigurations.Add(new FlowBloxFieldTestConfiguration()
                             {
                                 FieldElement = field
                             });
@@ -89,3 +89,4 @@ namespace FlowBlox.Core.Models.Testing
         }
     }
 }
+

@@ -6,6 +6,7 @@ using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters.PropertyView;
 using FlowBlox.UICore.Factory.PropertyView.HintTextResolver;
+using FlowBlox.UICore.PropertyView.Resolver;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
@@ -26,12 +27,14 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private readonly RelayCommand _unlinkCommand;
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _deleteCommand;
+        private readonly object _parent;
 
         private TextBox _textBox;
 
-        public AssociationControlFactory(Window window, PropertyInfo property, object target, bool readOnly)
+        public AssociationControlFactory(Window window, PropertyInfo property, object target, bool readOnly, object parent = null)
             : base(window, property, target, readOnly)
         {
+            _parent = parent;
             _createCommand = new RelayCommand(ExecuteCreate, CanCreate);
             _linkCommand = new RelayCommand(ExecuteLink, CanLink);
             _unlinkCommand = new RelayCommand(ExecuteUnlink, CanUnlink);
@@ -190,7 +193,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var newInstance = CreateNewInstance(_window);
             if (newInstance != null)
             {
-                var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(newInstance, readOnly: false))
+                var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(newInstance, parent: _target, readOnly: false, isNew: true))
                 {
                     Owner = _window,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner
@@ -223,9 +226,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 return;
             }
 
+            var selectionMethodResolution = SelectionMethodResolver.ResolveSelectionFilterMethodFromTargetOrParent(
+                _target,
+                _parent,
+                _flowBlockUIAttribute.SelectionFilterMethod);
 
-            var filterMethod = GetSelectionFilterMethod(_target, _flowBlockUIAttribute.SelectionFilterMethod);
-            if (filterMethod == null)
+            if (selectionMethodResolution?.Method == null)
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
                     (MetroWindow)_window,
@@ -239,7 +245,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 return;
             }
 
-            var items = filterMethod.Invoke(_target, null) as IEnumerable<object>;
+            var items = selectionMethodResolution.Method.Invoke(selectionMethodResolution.InvocationTarget, null) as IEnumerable<object>;
             if (items == null || !items.Any())
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
@@ -280,7 +286,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var item = _property.GetValue(_target);
             if (item != null)
             {
-                var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(item, readOnly: _readOnly))
+                var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(item, parent: _target, readOnly: _readOnly))
                 {
                     Owner = _window,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner
