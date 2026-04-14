@@ -1,7 +1,7 @@
 ﻿namespace FlowBlox.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class FlowBlockListViewAttribute : Attribute
+    public class FlowBloxListViewAttribute : Attribute
     {
         public string[] LVColumnMemberNames { get; set; }
 
@@ -9,7 +9,7 @@
 
         public bool IsMovable { get; set; }
 
-        public FlowBlockListViewAttribute()
+        public FlowBloxListViewAttribute()
         {
             LVColumnMemberNames = [];
             LVItemFactory = null;

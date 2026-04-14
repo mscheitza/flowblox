@@ -16,7 +16,7 @@ namespace FlowBloxSampleExtension
     public class SampleExtensionFlowBlock : BaseSingleResultFlowBlock
     {
         [Display(Name = "SampleExtensionFlowBlock_OutputText", ResourceType = typeof(SampleExtensionResources), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         [Required()]
         public string OutputText { get; set; }
 

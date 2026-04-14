@@ -31,8 +31,8 @@ namespace FlowBlox.Core.Models.ObjectManager
     }
 
     [Display(Name = "UserFieldObjectManager_DisplayName", Description = "UserFieldObjectManager_Description", ResourceType = typeof(FlowBloxTexts))]
-    [FlowBlockUIGroup(Name = "UserFieldObjectManager_InputFields", ControlAlignment = ControlAlignment.Fill)]
-    [FlowBlockUIGroup(Name = "UserFieldObjectManager_MemoryFields", ControlAlignment = ControlAlignment.Fill)]
+    [FlowBloxUIGroup(Name = "UserFieldObjectManager_InputFields", ControlAlignment = ControlAlignment.Fill)]
+    [FlowBloxUIGroup(Name = "UserFieldObjectManager_MemoryFields", ControlAlignment = ControlAlignment.Fill)]
     public class UserFieldObjectManager : IObjectManager
     {
         private readonly FlowBloxRegistry _registry;
@@ -62,13 +62,13 @@ namespace FlowBlox.Core.Models.ObjectManager
         }
 
         [Display(Name = "UserFieldObjectManager_InputFields", GroupName = "UserFieldObjectManager_InputFields", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ListViewSplitMode, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FieldElement.Name) }, LVItemFactory = typeof(UserFieldInputItemFactory))]
+        [FlowBloxUI(Factory = UIFactory.ListViewSplitMode, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(FieldElement.Name) }, LVItemFactory = typeof(UserFieldInputItemFactory))]
         public ObservableCollection<FieldElement> InputFields { get; set; }
 
         [Display(Name = "UserFieldObjectManager_MemoryFields", GroupName = "UserFieldObjectManager_MemoryFields", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ListViewSplitMode, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FieldElement.Name) }, LVItemFactory = typeof(UserFieldMemoryItemFactory))]
+        [FlowBloxUI(Factory = UIFactory.ListViewSplitMode, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(FieldElement.Name) }, LVItemFactory = typeof(UserFieldMemoryItemFactory))]
         public ObservableCollection<FieldElement> MemoryFields { get; set; }
     }
 }

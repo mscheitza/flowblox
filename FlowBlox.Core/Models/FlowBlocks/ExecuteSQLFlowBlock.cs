@@ -20,14 +20,14 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public DbTypes DbType { get; set; }
 
         [Display(Name = "ExecuteSQLFlowBlock_ConnectionString", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.DBConnection))]
-        [FlowBlockTextBox(IsCodingMode = true, MultiLine = true)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.DBConnection))]
+        [FlowBloxTextBox(IsCodingMode = true, MultiLine = true)]
         [Required]
         public string SQLConnectionstring { get; set; }
 
         [Display(Name = "ExecuteSQLFlowBlock_SQLStatement", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.SQL))]
-        [FlowBlockTextBox(IsCodingMode = true, MultiLine = true, SyntaxHighlighting = "FlowBlox.UICore.Resources.Highlighting.SQL.xshd")]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.SQL))]
+        [FlowBloxTextBox(IsCodingMode = true, MultiLine = true, SyntaxHighlighting = "FlowBlox.UICore.Resources.Highlighting.SQL.xshd")]
         [Required]
         public string SQLStatement { get; set; }
 

@@ -29,7 +29,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         private string _formatExpression;
 
         [Display(Name = "FormatFlowBlock_FormatExpression", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
+        [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         [CustomValidation(typeof(FormatFlowBlock), nameof(ValidateFormatExpression))]
         [Required()]
         public string FormatExpression { get; set; }
@@ -37,7 +37,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         private ObservableCollection<FormatParameterDefinition> _formatParameterDefinitions;
 
         [Display(Name = "FormatFlowBlock_FormatParameters", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<FormatParameterDefinition> FormatParameterDefinitions
         {
             get

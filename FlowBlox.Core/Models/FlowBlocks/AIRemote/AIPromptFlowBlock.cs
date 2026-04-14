@@ -13,31 +13,31 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 {
-    [FlowBlockUIGroup("AIPromptFlowBlock_Groups_Request", 0)]
-    [FlowBlockUIGroup("AIPromptFlowBlock_Groups_Output", 1)]
+    [FlowBloxUIGroup("AIPromptFlowBlock_Groups_Request", 0)]
+    [FlowBloxUIGroup("AIPromptFlowBlock_Groups_Output", 1)]
     [Display(Name = "AIPromptFlowBlock_DisplayName", Description = "AIPromptFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class AIPromptFlowBlock : BaseSingleResultFlowBlock
     {
         [Required]
         [Display(Name = "AIPromptFlowBlock_Provider", Description = "AIPromptFlowBlock_Provider_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association,
+        [FlowBloxUI(Factory = UIFactory.Association,
             SelectionFilterMethod = nameof(GetPossibleProviders),
             SelectionDisplayMember = nameof(ManagedObject.Name))]
         public AIProviderBase Provider { get; set; }
 
         [Required]
         [Display(Name = "AIPromptFlowBlock_PromptTemplate", Description = "AIPromptFlowBlock_PromptTemplate_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPromptFlowBlock_Groups_Request", Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         public string PromptTemplate { get; set; }
 
         [Display(Name = "AIPromptFlowBlock_SystemInstruction", Description = "AIPromptFlowBlock_SystemInstruction_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPromptFlowBlock_Groups_Request", Order = 2)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string SystemInstruction { get; set; }
 
         [Display(Name = "AIPromptFlowBlock_ModelOverride", Description = "AIPromptFlowBlock_ModelOverride_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPromptFlowBlock_Groups_Request", Order = 3)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string ModelOverride { get; set; }
 
         [Display(Name = "AIPromptFlowBlock_Temperature", Description = "AIPromptFlowBlock_Temperature_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPromptFlowBlock_Groups_Request", Order = 4)]
@@ -126,7 +126,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
         public enum AIPromptNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "AI prompt execution failed")]
             AIPromptExecutionFailed
         }

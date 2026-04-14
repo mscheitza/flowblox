@@ -16,20 +16,20 @@ namespace FlowBlox.Core.Models.FlowBlocks
     {
         [Required()]
         [Display(Name = "InvocationFieldTransferConfig_TransferFrom", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox,
+        [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(RecursiveCallFlowBlock.GetPossibleTransferFromFieldElements))]
         public FieldElement TransferFrom { get; set; }
 
         [Required()]
         [Display(Name = "InvocationFieldTransferConfig_TransferTo", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox,
+        [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
             SelectionFilterMethod = nameof(RecursiveCallFlowBlock.GetPossibleTransferToFieldElements))]
         public FieldElement TransferTo { get; set; }
     }
 
-    [FlowBlockUIGroup("RecursiveCallFlowBlock_Groups_Transferrations", 0)]
+    [FlowBloxUIGroup("RecursiveCallFlowBlock_Groups_Transferrations", 0)]
     [Display(Name = "RecursiveCallFlowBlock_DisplayName", Description = "RecursiveCallFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class RecursiveCallFlowBlock : BaseFlowBlock
     {
@@ -48,7 +48,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Required]
         [Display(Name = "RecursiveCallFlowBlock_TargetFlowBlock", Description = "RecursiveCallFlowBlock_TargetFlowBlock_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleReferencedElements),
             SelectionDisplayMember = nameof(Name))]
         [CustomValidation(typeof(RecursiveCallFlowBlock), nameof(ValidateTargetFlowBlock))]
@@ -104,7 +104,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
 
         [Display(Name = "RecursiveCallFlowBlock_FieldTransferConfigs", ResourceType = typeof(FlowBloxTexts), GroupName = "RecursiveCallFlowBlock_Groups_Transferrations", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Delete,
+        [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Delete,
             SelectionFilterMethod = nameof(GetPossibleReferencedElements),
             SelectionDisplayMember = nameof(Name))]
         [CustomValidation(typeof(RecursiveCallFlowBlock), nameof(ValidateFieldTransferConfigs))]

@@ -38,7 +38,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
 
         [Display(Name = "SequenceDetectionFlowBlock_MaxSequenceGenerationRuntimeSeconds", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         [Range(1, int.MaxValue, 
             ErrorMessageResourceName = "SequenceDetectionFlowBlock_Validation_MaxSequenceGenerationRuntimeSeconds", 
             ErrorMessageResourceType = typeof(FlowBloxTexts))]
@@ -47,7 +47,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         private string _sequenceDetectionPattern;
 
         [Display(Name = "SequenceDetectionFlowBlock_SequenceDetectionPattern", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true, SyntaxHighlighting = "JSON")]
+        [FlowBloxTextBox(MultiLine = true, IsCodingMode = true, SyntaxHighlighting = "JSON")]
         public string SequenceDetectionPattern
         {
             get => _sequenceDetectionPattern;
@@ -113,11 +113,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public enum SequenceDetectionNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Pattern returned no matches")]
             ReturnedNoMatches,
 
-            [FlowBlockNotification(NotificationType = NotificationType.Error)]
+            [FlowBloxNotification(NotificationType = NotificationType.Error)]
             [Display(Name = "No sequence pattern specified")]
             NoSequencePatternSpecified
         }

@@ -46,9 +46,9 @@ namespace FlowBlox.UICore.Resolver
                 throw new ArgumentNullException(nameof(target));
 
             var displayAttribute = property.GetCustomAttribute<DisplayAttribute>();
-            var flowBlockUI = property.GetCustomAttribute<FlowBlockUIAttribute>();
+            var uiAttribute = property.GetCustomAttribute<FlowBloxUIAttribute>();
 
-            if (displayAttribute == null || (flowBlockUI != null && !flowBlockUI.Visible))
+            if (displayAttribute == null || (uiAttribute != null && !uiAttribute.Visible))
                 return null;
 
             var displayName = FlowBloxResourceUtil.GetDisplayName(displayAttribute, false) ?? property.Name;
@@ -58,17 +58,17 @@ namespace FlowBlox.UICore.Resolver
                 description = FlowBloxResourceUtil.GetLocalizedString(displayAttribute.Description, displayAttribute.ResourceType);
 
             var readOnly = contextIsReadOnly ||
-                flowBlockUI?.ReadOnly == true ||
+                uiAttribute?.ReadOnly == true ||
                 !property.CanWrite;
 
-            FrameworkElement control = CreateControl(property, target, displayName, flowBlockUI, readOnly, preselectedInstance);
+            FrameworkElement control = CreateControl(property, target, displayName, uiAttribute, readOnly, preselectedInstance);
 
             bool isActive = true;
             var activationAttr = property.GetCustomAttribute<ActivationConditionAttribute>();
             if (activationAttr != null)
                 isActive = activationAttr.IsActive(target);
 
-            var labelSettings = GetLabelSettings(property, displayName, flowBlockUI);
+            var labelSettings = GetLabelSettings(property, displayName, uiAttribute);
 
             var propertyControlViewModel = new PropertyControlViewModel()
             {
@@ -78,7 +78,7 @@ namespace FlowBlox.UICore.Resolver
                 Label = labelSettings.LabelText,
                 Value = property.GetValue(target),
                 ValueType = property.PropertyType,
-                IsEnabled = !FlowBlockUIAttributeHelper.IsDynamicallyReadOnly(target, flowBlockUI),
+                IsEnabled = !FlowBlockUIAttributeHelper.IsDynamicallyReadOnly(target, uiAttribute),
                 Control = control,
                 IsActive = isActive,
                 TooltipText = description
@@ -92,10 +92,10 @@ namespace FlowBlox.UICore.Resolver
         private (bool UseLabel, string LabelText) GetLabelSettings(
             PropertyInfo property,
             string displayName,
-            FlowBlockUIAttribute flowBlockUI)
+            FlowBloxUIAttribute uiAttribute)
         {
             // If DisplayLabel is explicitly set to false, never show a label.
-            bool displayLabel = flowBlockUI?.DisplayLabel ?? true;
+            bool displayLabel = uiAttribute?.DisplayLabel ?? true;
             if (!displayLabel)
                 return (false, string.Empty);
 
@@ -106,7 +106,7 @@ namespace FlowBlox.UICore.Resolver
             PropertyInfo property, 
             object target, 
             string displayName, 
-            FlowBlockUIAttribute flowBlockUI, 
+            FlowBloxUIAttribute uiAttribute, 
             bool readOnly, 
             object preselectedInstance)
         {
@@ -181,12 +181,12 @@ namespace FlowBlox.UICore.Resolver
             }
 
             // Selection-Filter
-            if (flowBlockUI?.Factory == UIFactory.ComboBox)
+            if (uiAttribute?.Factory == UIFactory.ComboBox)
             {
                 var selectionMethodResolution = SelectionMethodResolver.ResolveSelectionFilterMethodFromTargetOrParent(
                     target,
                     _parent,
-                    flowBlockUI?.SelectionFilterMethod);
+                    uiAttribute?.SelectionFilterMethod);
 
                 if (selectionMethodResolution?.Method != null)
                 {
@@ -211,7 +211,7 @@ namespace FlowBlox.UICore.Resolver
                     var comboBox = new ComboBox
                     {
                         ItemsSource = items,
-                        DisplayMemberPath = flowBlockUI?.SelectionDisplayMember
+                        DisplayMemberPath = uiAttribute?.SelectionDisplayMember
                     };
 
                     comboBox.SelectionChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
@@ -245,33 +245,33 @@ namespace FlowBlox.UICore.Resolver
                 return textBox;
             }
 
-            if (flowBlockUI?.Factory == UIFactory.Association)
+            if (uiAttribute?.Factory == UIFactory.Association)
             {
                 AssociationControlFactory associationControlFactory = new AssociationControlFactory(_window, property, target, readOnly, _parent);
                 return associationControlFactory.Create();
             }
 
-            if (flowBlockUI?.Factory == UIFactory.GridView)
+            if (uiAttribute?.Factory == UIFactory.GridView)
             {
                 DataGridFactory dataGridFactory = new DataGridFactory(_window, property, target, readOnly);
                 dataGridFactory.SetPreselectedInstance(preselectedInstance);
                 return dataGridFactory.Create();
             }
 
-            if (flowBlockUI?.Factory == UIFactory.ListView)
+            if (uiAttribute?.Factory == UIFactory.ListView)
             {
                 ListViewFactory listViewFactory = new ListViewFactory(_window, property, target, readOnly, _parent);
                 listViewFactory.SetPreselectedInstance(preselectedInstance);
                 return listViewFactory.Create();
             }
 
-            if (flowBlockUI?.Factory == UIFactory.ListViewSplitMode)
+            if (uiAttribute?.Factory == UIFactory.ListViewSplitMode)
             {
                 ListViewSplitModeFactory listViewSplitModeFactory = new ListViewSplitModeFactory(_window, property, target, readOnly, _parent);
                 return listViewSplitModeFactory.Create();
             }
 
-            return _textBoxWithOptionalButtonsCreator.CreateTextBoxWithOptionalButtons(property, target, displayName, flowBlockUI, binding, readOnly);
+            return _textBoxWithOptionalButtonsCreator.CreateTextBoxWithOptionalButtons(property, target, displayName, uiAttribute, binding, readOnly);
         }
 
         private void Toggle_Toggled(object sender, RoutedEventArgs e)

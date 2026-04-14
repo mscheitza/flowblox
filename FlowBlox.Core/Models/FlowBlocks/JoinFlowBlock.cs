@@ -22,7 +22,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public string Separator { get; set; }
 
         [Display(Name = "JoinFlowBlock_SpecialSeparator", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         [CustomValidation(typeof(JoinFlowBlock), nameof(ValidateSeparators))]
         public SpecialSeparator? SpecialSeparator { get; set; }
 
@@ -38,11 +38,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
 
         [Display(Name = "JoinFlowBlock_JoinedParameters", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(GetPossibleJoinedParameters))]
-        [FieldSelection(DefaultRequiredValue = false)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
+        [FlowBloxFieldSelection(DefaultRequiredValue = false)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
         public ObservableCollection<FieldElement> JoinedParameters { get; set; }
 
         public List<FieldElement> GetPossibleJoinedParameters() => FlowBloxFieldsResolver.GetFieldsOfAssociatedFlowBlocks(this);

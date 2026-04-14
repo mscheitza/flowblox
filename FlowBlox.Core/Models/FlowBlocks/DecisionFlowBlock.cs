@@ -12,14 +12,14 @@ using SkiaSharp;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    [FlowBlockUIGroup("DecisionFlowBlock_Groups_Decisions", 0)]
+    [FlowBloxUIGroup("DecisionFlowBlock_Groups_Decisions", 0)]
     [Display(Name = "DecisionFlowBlock_DisplayName", Description = "DecisionFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class DecisionFlowBlock : BaseSingleResultFlowBlock
     {
         [Display(Name = "DecisionFlowBlock_Decisions", ResourceType = typeof(FlowBloxTexts), GroupName = "DecisionFlowBlock_Groups_Decisions", Order = 0)]
         [CustomValidation(typeof(DecisionFlowBlock), nameof(ValidateDecisions))]
-        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        [FlowBlockDataGrid(
+        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxDataGrid(
             GridColumnMemberNames = new[]
             {
                 nameof(FieldComparisonCondition.FieldElement),

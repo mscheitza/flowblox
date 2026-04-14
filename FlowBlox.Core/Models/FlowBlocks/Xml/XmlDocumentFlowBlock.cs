@@ -22,8 +22,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         public XmlDocument InternalXmlDocument { get; protected set; }
 
         [Display(Name = "XmlDocumentFlowBlock_XmlContent", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(IsCodingMode = true, MultiLine = true, SyntaxHighlighting = "XML")]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(IsCodingMode = true, MultiLine = true, SyntaxHighlighting = "XML")]
         [Required]
         public string XmlContent { get; set; }
 

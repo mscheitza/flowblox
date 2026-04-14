@@ -12,11 +12,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         public string XPath { get; set; }
 
         [Display(Name = "XmlAssignment_Value", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public string Value { get; set; }
 
         [Display(Name = "XmlAssignment_FieldValue", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ComboBox,
+        [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public FieldElement FieldValue { get; set; }

@@ -10,7 +10,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         where TEnum : struct, Enum
     {
         [Display(Name = "Global_ResultField", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(
+        [FlowBloxUI(
             Factory = UIFactory.Association,
             SelectionDisplayMember = nameof(FieldElement.Name),
             Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         [Required()]
         [Display(Name = "ResultFieldByEnumValue_EnumValue", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public TEnum? EnumValue { get; set; }
 
         public bool IsDeletable(out List<IFlowBloxComponent> dependencies)

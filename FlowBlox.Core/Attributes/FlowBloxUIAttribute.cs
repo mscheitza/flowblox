@@ -42,9 +42,9 @@
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class FlowBlockUIAttribute : Attribute
+    public class FlowBloxUIAttribute : Attribute
     {
-        public FlowBlockUIAttribute()
+        public FlowBloxUIAttribute()
         {
             this.DisplayLabel = true;
             this.Operations = UIOperations.All;

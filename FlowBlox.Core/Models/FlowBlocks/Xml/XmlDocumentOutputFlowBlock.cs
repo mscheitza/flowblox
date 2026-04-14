@@ -18,7 +18,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
     {
         [Display(Name = "XmlDocumentOutputFlowBlock_AssociatedXmlDocument", Description = "XmlDocumentOutputFlowBlock_AssociatedXmlDocument_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleXmlDocumentFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public XmlDocumentFlowBlock AssociatedXmlDocument { get; set; }
@@ -32,7 +32,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
 
         [Required]
         [Display(Name = "PropertyNames_EncodingName", Description = "PropertyNames_EncodingName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DotNetEncodingNames EncodingName { get; set; }
 
         [Display(Name = "XmlDocumentOutputFlowBlock_Indent", ResourceType = typeof(FlowBloxTexts))]

@@ -13,19 +13,19 @@ using System.Text.Json.Serialization;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AI
 {
-    [FlowBlockUIGroup("OnnxBaseFlowBlock_Groups_ExtendedSettings", 10)]
+    [FlowBloxUIGroup("OnnxBaseFlowBlock_Groups_ExtendedSettings", 10)]
     [FlowBloxSpecialExplanation("OnnxBaseFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     public abstract class OnnxBaseFlowBlock : BaseSingleResultFlowBlock
     {
         #region Tab: Default
 
         [Display(Name = "OnnxTextGenerationFlowBlock_ModelPath", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFileSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFileSelection)]
         [Required]
         public string ModelPath { get; set; }
 
         [Display(Name = "OnnxBaseFlowBlock_AssociatedOnnxFlowBlock", Description = "OnnxBaseFlowBlock_AssociatedOnnxFlowBlock_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleOnnxFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public OnnxBaseFlowBlock AssociatedOnnxFlowBlock { get; set; }
@@ -48,7 +48,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             Description = "OnnxBaseFlowBlock_AiExecutionProvider_Tooltip",
             GroupName = "OnnxBaseFlowBlock_Groups_ExtendedSettings",
             ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
         [Required]
         public AiExecutionProviders AiExecutionProvider
         {

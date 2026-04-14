@@ -24,19 +24,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.robot_outline, 32, new SKColor(3, 105, 161));
         [Required]
         [Display(Name = "AIProvider_ApiKey", Description = "AIProvider_ApiKey_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox]
         public string ApiKey { get; set; }
 
         [Display(Name = "AIProvider_DefaultModel", Description = "AIProvider_DefaultModel_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string DefaultModel { get; set; }
 
         [Display(Name = "AIProvider_TimeoutSeconds", Description = "AIProvider_TimeoutSeconds_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         public int TimeoutSeconds { get; set; }
 
         [Display(Name = "AIProvider_BaseUrl", Description = "AIProvider_BaseUrl_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string BaseUrl { get; set; }
 
         public abstract string ProviderType { get; }

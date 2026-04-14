@@ -14,7 +14,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
     {
         [Display(Name = "WebActionFlowblockBase_AssociatedWebBrowser", Description = "WebActionFlowblockBase_AssociatedWebBrowser_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleWebBrowserFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public WebBrowserFlowBlock AssociatedWebBrowser { get; set; }

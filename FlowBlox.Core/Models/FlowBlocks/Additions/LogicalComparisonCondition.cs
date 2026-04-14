@@ -37,8 +37,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         }
 
         [Display(Name = "ComparisonCondition_Value", ResourceType = typeof(FlowBloxTexts), Order = 20)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string Value
         {
             get => _value;

@@ -31,12 +31,12 @@ namespace FlowBlox.Core.Models.Components.Modifier
     {
         [Required]
         [Display(Name = "HttpEncodeDecodeModifier_Mode", Order = 0, ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public HttpEncodeMode Mode { get; set; }
 
         [Required]
         [Display(Name = "HttpEncodeDecodeModifier_Direction", Order = 1, ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public Direction Direction { get; set; }
 
         public override string Modify(BaseRuntime runtime, string value)

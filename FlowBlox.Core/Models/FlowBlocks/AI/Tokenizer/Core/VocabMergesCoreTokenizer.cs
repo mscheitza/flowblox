@@ -19,21 +19,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.Core
         [ConditionallyRequired(CheckReadOnly = true)]
         [DependsOnProperty(MemberNames = [nameof(VocabFile), nameof(MergesFile)])]
         [Display(Name = "VocabMergesConfiguration_TokenizerDirectory", Description = "VocabMergesConfiguration_TokenizerDirectory_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection,
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection,
             ReadOnlyMethod = nameof(IsTokenizerDirectoryReadOnly))]
         public string TokenizerDirectory { get; set; }
 
         [ConditionallyRequired(CheckReadOnly = true)]
         [DependsOnProperty(MemberName = nameof(TokenizerDirectory))]
         [Display(Name = "VocabMergesConfiguration_VocabFile", Description = "VocabMergesConfiguration_VocabFile_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection,
+        [FlowBloxUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection,
             ReadOnlyMethod = nameof(IsVocabAndMergesReadOnly))]
         public string VocabFile { get; set; }
 
         [ConditionallyRequired(CheckReadOnly = true)]
         [DependsOnProperty(MemberName = nameof(TokenizerDirectory))]
         [Display(Name = "VocabMergesConfiguration_MergesFile", Description = "VocabMergesConfiguration_MergesFile_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection,
+        [FlowBloxUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection,
             ReadOnlyMethod = nameof(IsVocabAndMergesReadOnly))]
         public string MergesFile { get; set; }
 

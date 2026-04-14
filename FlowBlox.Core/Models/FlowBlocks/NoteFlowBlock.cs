@@ -12,7 +12,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
     public class NoteFlowBlock : BaseFlowBlock
     {
         [Display(Name = "NoteFlowBlock_Note", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockTextBox(MultiLine = true)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string Note { get; set; }
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.note_text, 16, SKColors.Gold);

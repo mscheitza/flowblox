@@ -33,10 +33,10 @@ namespace FlowBlox.UICore.Resolver
 
         private const double IconSize = 10;
 
-        public FrameworkElement CreateTextBoxWithOptionalButtons(PropertyInfo property, object target, string displayName, FlowBlockUIAttribute flowBlockUI, Binding binding, bool readOnly)
+        public FrameworkElement CreateTextBoxWithOptionalButtons(PropertyInfo property, object target, string displayName, FlowBloxUIAttribute uiAttribute, Binding binding, bool readOnly)
         {
-            var textAttribute = property.GetCustomAttribute<FlowBlockTextBoxAttribute>();
-            var fieldSelectionAttribute = property.GetCustomAttribute<FieldSelectionAttribute>();
+            var textAttribute = property.GetCustomAttribute<FlowBloxTextBoxAttribute>();
+            var fieldSelectionAttribute = property.GetCustomAttribute<FlowBloxFieldSelectionAttribute>();
             FrameworkElement baseTextBox;
 
             if (textAttribute?.IsCodingMode == true)
@@ -93,9 +93,9 @@ namespace FlowBlox.UICore.Resolver
             int columnIndex = 1;
 
             // File Selection
-            if (flowBlockUI?.UiOptions.HasFlag(UIOptions.EnableFileSelection) == true)
+            if (uiAttribute?.UiOptions.HasFlag(UIOptions.EnableFileSelection) == true)
             {
-                var fileSelectionAttribute = property.GetCustomAttribute<FlowBlockUIFileSelectionAttribute>();
+                var fileSelectionAttribute = property.GetCustomAttribute<FlowBloxUIFileSelectionAttribute>();
                 var filter = fileSelectionAttribute?.Filter ?? "All files (*.*)|*.*";
 
                 var fileButton = new Button
@@ -145,7 +145,7 @@ namespace FlowBlox.UICore.Resolver
             }
 
             // Folder Selection
-            if (flowBlockUI?.UiOptions.HasFlag(UIOptions.EnableFolderSelection) == true)
+            if (uiAttribute?.UiOptions.HasFlag(UIOptions.EnableFolderSelection) == true)
             {
                 var folderButton = new Button
                 {
@@ -193,7 +193,7 @@ namespace FlowBlox.UICore.Resolver
             }
 
             // Field Selection
-            if (flowBlockUI?.UiOptions.HasFlag(UIOptions.EnableFieldSelection) == true)
+            if (uiAttribute?.UiOptions.HasFlag(UIOptions.EnableFieldSelection) == true)
             {
                 var fieldButton = new Button
                 {
@@ -213,7 +213,7 @@ namespace FlowBlox.UICore.Resolver
 
                 fieldButton.Click += (s, e) =>
                 {
-                    Utilities.TextBoxHelper.ShowFieldSelectionDialog(target, flowBlockUI, fieldSelectionAttribute, textBoxControl, _window);
+                    Utilities.TextBoxHelper.ShowFieldSelectionDialog(target, uiAttribute, fieldSelectionAttribute, textBoxControl, _window);
                 };
 
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
@@ -222,7 +222,7 @@ namespace FlowBlox.UICore.Resolver
             }
 
             // Toolbox
-            if (flowBlockUI?.ToolboxCategory != null && !string.IsNullOrEmpty(flowBlockUI.ToolboxCategory))
+            if (uiAttribute?.ToolboxCategory != null && !string.IsNullOrEmpty(uiAttribute.ToolboxCategory))
             {
                 var toolboxButton = new Button
                 {
@@ -241,16 +241,16 @@ namespace FlowBlox.UICore.Resolver
 
                 toolboxButton.Click += (s, e) =>
                 {
-                    Utilities.TextBoxHelper.ShowToolboxDialog(textBoxControl, flowBlockUI.ToolboxCategory, _window);
+                    Utilities.TextBoxHelper.ShowToolboxDialog(textBoxControl, uiAttribute.ToolboxCategory, _window);
                 };
 
                 if (!readOnly)
                 {
-                    if (flowBlockUI.ToolboxCategory == nameof(FlowBloxToolboxCategory.Regex))
+                    if (uiAttribute.ToolboxCategory == nameof(FlowBloxToolboxCategory.Regex))
                     {
                         Utilities.TextBoxHelper.RegisterRegexOnParameterSelectedAction(textBoxControl, _window);
                     }
-                    else if (flowBlockUI.UiOptions.HasFlag(UIOptions.EnableFieldSelection))
+                    else if (uiAttribute.UiOptions.HasFlag(UIOptions.EnableFieldSelection))
                     {
                         Utilities.TextBoxHelper.RegisterOnParameterSelectedAction(target, textBoxControl, _window);
                     }

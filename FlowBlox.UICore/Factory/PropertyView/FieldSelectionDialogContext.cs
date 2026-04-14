@@ -9,8 +9,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
 {
     public sealed class FieldSelectionDialogContext
     {
-        public FlowBlockUIAttribute UiAttribute { get; init; }
+        public FlowBloxUIAttribute UiAttribute { get; init; }
 
-        public FieldSelectionAttribute FieldSelectionAttribute { get; init; }
+        public FlowBloxFieldSelectionAttribute FieldSelectionAttribute { get; init; }
     }
 }

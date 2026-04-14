@@ -16,7 +16,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Format
 
         [Required()]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox,
+        [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
             SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public override FieldElement Field { get; set; }

@@ -11,7 +11,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private FieldElement _inputField;
         
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleInputFields), SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
+        [FlowBloxUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleInputFields), SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
         [Required()]
         public FieldElement InputField
         {

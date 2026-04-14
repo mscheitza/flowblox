@@ -29,7 +29,7 @@ namespace FlowBlox.Core.Models.Components.Modifier
     {
         [Required()]
         [Display(Name = "PropertyNames_Name", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Visible = false)]
+        [FlowBloxUI(Visible = false)]
         public string ObjectDisplayName => this.ToString();
 
         public abstract string Modify(BaseRuntime runtime, string value);

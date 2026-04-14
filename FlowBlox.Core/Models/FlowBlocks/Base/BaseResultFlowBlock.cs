@@ -11,7 +11,7 @@ using FlowBlox.Core.Interfaces;
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
     [Serializable()]
-    [FlowBlockUIGroup("BaseResultFlowBlock_Groups_Output", 25)]
+    [FlowBloxUIGroup("BaseResultFlowBlock_Groups_Output", 25)]
     public abstract class BaseResultFlowBlock : BaseFlowBlock
     {
         [Display(Name = "BaseResultFlowBlock_OutputBehavior", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
@@ -21,8 +21,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private string _startValue;
 
         [Display(Name = "BaseResultFlowBlock_StartValue", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FieldSelection(DefaultRequiredValue = false)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxFieldSelection(DefaultRequiredValue = false)]
         public string StartValue
         {
             get => _startValue;

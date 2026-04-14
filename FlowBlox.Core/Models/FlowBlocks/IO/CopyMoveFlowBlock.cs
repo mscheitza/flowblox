@@ -14,23 +14,23 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
     public class CopyMoveFlowBlock : BaseSingleResultFlowBlock
     {
         [Display(Name = "CopyMoveFlowBlock_Mode", Description = "CopyMoveFlowBlock_Mode_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public CopyMoveMode Mode { get; set; } 
 
         [ActivationCondition(MemberName = nameof(Mode), Values = new object[] { CopyMoveMode.CopyFile, CopyMoveMode.MoveFile })]
         [ConditionallyRequired]
         [Display(Name = "CopyMoveFlowBlock_SourceFile", Description = "CopyMoveFlowBlock_SourceFile_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection)]
         public string SourceFile { get; set; }
 
         [ActivationCondition(MemberName = nameof(Mode), Values = new object[] { CopyMoveMode.CopyDirectory, CopyMoveMode.MoveDirectory })]
         [ConditionallyRequired]
         [Display(Name = "CopyMoveFlowBlock_SourceFolder", Description = "CopyMoveFlowBlock_SourceFolder_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
         public string SourceFolder { get; set; }
 
         [Display(Name = "CopyMoveFlowBlock_DestinationPath", Description = "CopyMoveFlowBlock_DestinationPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
         [Required]
         public string DestinationPath { get; set; }
 

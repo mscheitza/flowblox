@@ -3,11 +3,11 @@
     namespace FlowBlox.Core.Attributes
     {
         [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-        public class FlowBlockUIFileSelectionAttribute : Attribute
+        public class FlowBloxUIFileSelectionAttribute : Attribute
         {
             public string Filter { get; set; }
 
-            public FlowBlockUIFileSelectionAttribute(string filter)
+            public FlowBloxUIFileSelectionAttribute(string filter)
             {
                 Filter = filter;
             }

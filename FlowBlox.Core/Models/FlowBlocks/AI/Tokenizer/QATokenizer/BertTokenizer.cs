@@ -27,7 +27,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.QATokenizer
         }
 
         [Display(Name = "BertTokenizer_VocabFile", Description = "BertTokenizer_VocabFile_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFileSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFileSelection)]
         [Required]
         public string VocabFile { get; set; }
 

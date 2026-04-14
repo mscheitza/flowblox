@@ -16,7 +16,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
     {
         [Required()]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox,
+        [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public override FieldElement Field { get; set; }
@@ -29,15 +29,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
         public string OutputPropertyName { get; set; }
     }
 
-    [FlowBlockUIGroup("ProjectOutputFlowBlock_Groups_Mapping", 0)]
+    [FlowBloxUIGroup("ProjectOutputFlowBlock_Groups_Mapping", 0)]
     [Display(Name = "ProjectOutputFlowBlock_DisplayName", Description = "ProjectOutputFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class ProjectOutputFlowBlock : BaseFlowBlock
     {
         private ObservableCollection<ProjectOutputMappingEntry> _mappingEntries;
 
         [Display(Name = "ProjectOutputFlowBlock_MappingEntries", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputFlowBlock_Groups_Mapping", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        [FlowBlockDataGrid]
+        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxDataGrid]
         public ObservableCollection<ProjectOutputMappingEntry> MappingEntries
         {
             get

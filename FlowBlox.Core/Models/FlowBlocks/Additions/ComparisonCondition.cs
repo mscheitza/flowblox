@@ -37,8 +37,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         }
 
         [Display(Name = "ComparisonCondition_Value", ResourceType = typeof(FlowBloxTexts), Order = 20)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string Value
         {
             get => _value;
@@ -58,7 +58,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         public virtual bool Compare(object leftValue) => Comparison.Check(Operator, Value, leftValue);
 
         [Display(Name = "PropertyNames_Name", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Visible = false, ReadOnly = true)]
+        [FlowBloxUI(Visible = false, ReadOnly = true)]
         public virtual string DisplayName
         {
             get

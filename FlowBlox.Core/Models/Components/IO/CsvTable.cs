@@ -18,7 +18,7 @@ namespace FlowBlox.Core.Models.Components.IO
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_delimited_outline, 32, new SKColor(37, 99, 235));
         [Required()]
         [Display(Name = "PropertyNames_EncodingName", Description = "PropertyNames_EncodingName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DotNetEncodingNames EncodingName { get; set; }
 
         [Required()]

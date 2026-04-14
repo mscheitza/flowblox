@@ -17,7 +17,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         private FieldElement _inputField;
 
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, 
+        [FlowBloxUI(Factory = UIFactory.Association, 
             SelectionFilterMethod = nameof(GetPossibleInputFields), 
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), Operations = UIOperations.Link | UIOperations.Unlink)]
         [Required()]
@@ -30,8 +30,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public List<FieldElement> GetPossibleInputFields() => FlowBloxFieldsResolver.GetFieldsOfAssociatedFlowBlocks(this);
 
         [Display(Name = "DistributorFlowBlock_DisributedFields", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
+        [FlowBloxUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
         public ObservableCollection<FieldElement> DisributedFields { get; set; }
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.source_merge, 16, SKColors.SaddleBrown);

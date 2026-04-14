@@ -15,15 +15,15 @@ using System.Text.Json;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    [FlowBlockUIGroup("ProjectOutputIteratorFlowBlock_Groups_Source", 0)]
-    [FlowBlockUIGroup("ProjectOutputIteratorFlowBlock_Groups_Mapping", 1)]
+    [FlowBloxUIGroup("ProjectOutputIteratorFlowBlock_Groups_Source", 0)]
+    [FlowBloxUIGroup("ProjectOutputIteratorFlowBlock_Groups_Mapping", 1)]
     [Display(Name = "ProjectOutputIteratorFlowBlock_DisplayName", Description = "ProjectOutputIteratorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class ProjectOutputIteratorFlowBlock : BaseResultFlowBlock
     {
         private FieldElement _inputField;
 
         [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleInputFields), 
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName))]
         [Required()]
@@ -37,7 +37,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Display(Name = "ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock", Description = "ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 1)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(
+        [FlowBloxUI(
             Factory = UIFactory.Association,
             Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleExecuteProjectFlowBlocks),
@@ -52,13 +52,13 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Required]
         [Display(Name = "ProjectOutputIteratorFlowBlock_OutputName", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Source", Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
-        [FlowBlockTextBox(Suggestions = true, SuggestionMember = nameof(GetOutputNames))]
+        [FlowBloxUI(Factory = UIFactory.Default)]
+        [FlowBloxTextBox(Suggestions = true, SuggestionMember = nameof(GetOutputNames))]
         public string OutputName { get; set; }
 
         [Display(Name = "ProjectOutputIteratorFlowBlock_OutputMappings", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputIteratorFlowBlock_Groups_Mapping", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        [FlowBlockDataGrid(IsMovable = true)]
+        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxDataGrid(IsMovable = true)]
         public ObservableCollection<ExecuteProjectOutputMappingEntry> OutputMappings { get; set; }
 
         public ProjectOutputIteratorFlowBlock()

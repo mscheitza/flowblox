@@ -31,7 +31,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
     public class ListViewFactory : ListFactoryBase
     {
         private static readonly FlowBloxComponentIcon16Converter Icon16Converter = new();
-        protected readonly FlowBlockListViewAttribute _listViewAttribute;
+        protected readonly FlowBloxListViewAttribute _listViewAttribute;
         protected IList _list;
         protected Type _listItemType;
         protected readonly object _parent;
@@ -42,7 +42,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             : base(window, property, target, readOnly)
         {
             _parent = parent;
-            _listViewAttribute = property.GetCustomAttribute<FlowBlockListViewAttribute>()
+            _listViewAttribute = property.GetCustomAttribute<FlowBloxListViewAttribute>()
                 ?? throw new InvalidOperationException("Missing FlowBlockListViewAttribute.");
 
             if (!(_property.GetValue(_target) is IList list))
@@ -161,19 +161,19 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var unlinkCommand = new RelayCommand(() => ExecuteUnlink(listView.SelectedItem), () => CanUnlink(listView.SelectedItem));
             var linkCommand = new RelayCommand(async () => await ExecuteLink(), CanLink);
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Create) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Create) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.Plus, FlowBloxResourceUtil.GetLocalizedString("Buttons_Add"), addCommand, Brushes.Green));
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Link) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Link) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.Link, FlowBloxResourceUtil.GetLocalizedString("Buttons_Link"), linkCommand, Brushes.Blue));
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.Pencil, FlowBloxResourceUtil.GetLocalizedString("Buttons_Edit"), editCommand, Brushes.Orange));
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.Delete, FlowBloxResourceUtil.GetLocalizedString("Buttons_Remove"), deleteCommand, Brushes.DarkRed));
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Unlink) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Unlink) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.LinkOff, FlowBloxResourceUtil.GetLocalizedString("Buttons_Unlink"), unlinkCommand, Brushes.DarkRed));
 
             var moveUpCommand = new RelayCommand(() => MoveItem(listView, -1), () => CanMoveUp(listView.SelectedIndex));
@@ -289,7 +289,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         private async Task ExecuteLink()
         {
-            if (string.IsNullOrEmpty(_flowBlockUIAttribute?.SelectionFilterMethod))
+            if (string.IsNullOrEmpty(_uiAttribute?.SelectionFilterMethod))
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
                     (MetroWindow)_window,
@@ -301,7 +301,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var selectionMethodResolution = SelectionMethodResolver.ResolveSelectionFilterMethodFromTargetOrParent(
                 _target,
                 _parent,
-                _flowBlockUIAttribute.SelectionFilterMethod);
+                _uiAttribute.SelectionFilterMethod);
 
             if (selectionMethodResolution?.Method == null)
                 return;
@@ -318,7 +318,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             if (_listItemType == typeof(FieldElement))
             {
-                var fieldSelectionAttribute = _property.GetCustomAttribute<FieldSelectionAttribute>();
+                var fieldSelectionAttribute = _property.GetCustomAttribute<FlowBloxFieldSelectionAttribute>();
                 var args = Utilities.TextBoxHelper.CreateFieldSelectionWindowArgs(_target, fieldSelectionAttribute);
                 args.FieldElements = items.OfType<FieldElement>();
                 args.SelectionMode = FieldSelectionMode.Fields;

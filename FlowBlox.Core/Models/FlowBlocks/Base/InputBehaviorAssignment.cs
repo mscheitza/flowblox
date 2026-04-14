@@ -14,7 +14,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         [Required()]
         [Display(Name = "Global_FlowBlock", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
         public BaseFlowBlock FlowBlock { get; set; }
 
 

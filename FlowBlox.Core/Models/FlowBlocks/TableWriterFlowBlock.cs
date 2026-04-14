@@ -15,7 +15,7 @@ using SkiaSharp;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    [FlowBlockUIGroup("TableWriterFlowBlock_Groups_Schema", 0)]
+    [FlowBloxUIGroup("TableWriterFlowBlock_Groups_Schema", 0)]
     [Display(Name = "TableWriterFlowBlock_DisplayName", Description = "TableWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class TableWriterFlowBlock : BaseFlowBlock
     {
@@ -27,15 +27,15 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Required()]
         [Display(Name = "TableWriterFlowBlock_ReferencedTable", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleWritableTables), SelectionDisplayMember = nameof(IWritableTable.Name))]
+        [FlowBloxUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleWritableTables), SelectionDisplayMember = nameof(IWritableTable.Name))]
         public IWritableTable ReferencedTable { get; set; }
 
         [Display(Name = "TableWriterFlowBlock_CreateNewDatasets", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public bool CreateNewDatasets { get; set; } = true;
 
         [Display(Name = "TableWriterFlowBlock_UpdateExistingDatasets", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public bool UpdateExistingDatasets { get; set; } = true;
 
         public List<IWritableTable> GetPossibleWritableTables()
@@ -47,8 +47,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Display(Name = "TableWriterFlowBlock_TableColumnDefinitions", ResourceType = typeof(FlowBloxTexts), GroupName = "TableWriterFlowBlock_Groups_Schema", Order = 0)]
         [CustomValidation(typeof(TableWriterFlowBlock), nameof(ValidateTableColumnDefinitions))]
-        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        [FlowBlockDataGrid(IsMovable = true)]
+        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxDataGrid(IsMovable = true)]
         public ObservableCollection<TableColumnDefinition> TableColumnDefinitions
         {
             get

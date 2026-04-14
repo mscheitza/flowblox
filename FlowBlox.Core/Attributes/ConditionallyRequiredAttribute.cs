@@ -14,7 +14,7 @@ namespace FlowBlox.Core.Attributes
         }
 
         /// <summary>
-        /// If enabled, the <see cref="FlowBlockUIAttribute.ReadOnlyMethod"/> is evaluated:
+        /// If enabled, the <see cref="FlowBloxUIAttribute.ReadOnlyMethod"/> is evaluated:
         /// Required-check only applies if the property is currently editable.
         /// </summary>
         public bool CheckReadOnly { get; set; }
@@ -65,8 +65,8 @@ namespace FlowBlox.Core.Attributes
 
         private static bool IsDynamicallyReadOnly(object target, PropertyInfo property)
         {
-            var uiAttr = property.GetCustomAttributes(typeof(FlowBlockUIAttribute), true)
-                                 .Cast<FlowBlockUIAttribute>()
+            var uiAttr = property.GetCustomAttributes(typeof(FlowBloxUIAttribute), true)
+                                 .Cast<FlowBloxUIAttribute>()
                                  .FirstOrDefault();
 
             if (uiAttr == null)

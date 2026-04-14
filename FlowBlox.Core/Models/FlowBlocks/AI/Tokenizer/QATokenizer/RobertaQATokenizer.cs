@@ -31,7 +31,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer.QATokenizer
 
 
         [Display(Name = "RobertaQATokenizer_TokenizerConfiguration", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.All, SelectionFilterMethod = nameof(GetPossibleTokenizerConfigurations))]
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.All, SelectionFilterMethod = nameof(GetPossibleTokenizerConfigurations))]
         [Required]
         public VocabMergesConfiguration TokenizerConfiguration { get; set; }
 

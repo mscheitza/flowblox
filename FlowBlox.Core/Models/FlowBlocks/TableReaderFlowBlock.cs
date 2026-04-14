@@ -24,7 +24,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Required()]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public FieldElement Field { get; set; }
 
         public bool IsDeletable(out List<IFlowBloxComponent> dependencies)
@@ -46,18 +46,18 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public string ColumnName { get; set; }
     }
 
-    [FlowBlockUIGroup("TableReaderFlowBlock_Groups_FieldColumnMapping", 0)]
-    [FlowBlockUIGroup("TableReaderFlowBlock_Groups_DatasetColumnConditions", 1)]
+    [FlowBloxUIGroup("TableReaderFlowBlock_Groups_FieldColumnMapping", 0)]
+    [FlowBloxUIGroup("TableReaderFlowBlock_Groups_DatasetColumnConditions", 1)]
     [Display(Name = "TableReaderFlowBlock_DisplayName", Description = "TableReaderFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class TableReaderFlowBlock : BaseResultFlowBlock
     {
         [Display(Name = "TableReaderFlowBlock_MappingEntries", ResourceType = typeof(FlowBloxTexts), GroupName = "TableReaderFlowBlock_Groups_FieldColumnMapping", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
         public ObservableCollection<TableSelectorMappingEntry> MappingEntries { get; set; }
 
         [Display(Name = "TableReaderFlowBlock_DatasetColumnConditions", ResourceType = typeof(FlowBloxTexts), GroupName = "TableReaderFlowBlock_Groups_DatasetColumnConditions", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        [FlowBlockDataGrid(
+        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxDataGrid(
             GridColumnMemberNames = new[]
             {
                 nameof(TableSelectorColumnCondition.ColumnName),
@@ -67,7 +67,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public ObservableCollection<TableSelectorColumnCondition> ColumnConditions { get; set; }
 
         [Display(Name = "TableReaderFlowBlock_ReferencedTable", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleReadableTables), SelectionDisplayMember = nameof(IReadableTable.Name))]
+        [FlowBloxUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleReadableTables), SelectionDisplayMember = nameof(IReadableTable.Name))]
         public IReadableTable ReferencedTable { get; set; }
 
         public List<IReadableTable> GetPossibleReadableTables()
@@ -186,7 +186,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public enum TableReaderNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Underlying table not ready to read data")]
             TableNotReady
         }

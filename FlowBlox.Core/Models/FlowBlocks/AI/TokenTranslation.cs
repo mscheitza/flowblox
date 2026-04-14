@@ -20,7 +20,7 @@ namespace Models.FlowBlocks.AI
         public string DestinationCharacter { get; set; }
 
         [Display(Name = "TokenTranslation_SpecialCharacter", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public SpecialCharacter? SpecialCharacter { get; set; }
     }
 }

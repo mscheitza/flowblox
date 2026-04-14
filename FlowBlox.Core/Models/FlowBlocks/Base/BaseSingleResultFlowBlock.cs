@@ -34,7 +34,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private FieldElement _resultField;
 
         [Display(Name = "Global_ResultField", ResourceType = typeof(FlowBloxTexts), Order = 100)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionDisplayMember = nameof(Name), Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxUI(Factory = UIFactory.Association, SelectionDisplayMember = nameof(Name), Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         [Required()]
         public FieldElement ResultField
         {
@@ -48,7 +48,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         }
 
         [Display(Name = "BaseSingleResultFlowBlock_ResultFieldFieldType", ResourceType = typeof(FlowBloxTexts), Order = 101)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public FieldTypes ResultFieldFieldType
         {
             get => ResultField?.FieldType?.FieldType ?? DefaultResultFieldType;

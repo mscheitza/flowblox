@@ -10,9 +10,9 @@ namespace FlowBlox.Core.Models.ObjectManager
 {
     [Display(Name = "DataTableManager_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     [UIMetadataDefinitions(typeof(FlowBloxIcons), nameof(FlowBloxIcons.table_arrow_down), "#0D9488", 16)]
-    [FlowBlockUIGroup(Name = "DataTableManager_Groups_CsvTables", ControlAlignment = ControlAlignment.Fill)]
-    [FlowBlockUIGroup(Name = "DataTableManager_Groups_SqlTables", ControlAlignment = ControlAlignment.Fill)]
-    [FlowBlockUIGroup(Name = "DataTableManager_Groups_ExcelTables", ControlAlignment = ControlAlignment.Fill)]
+    [FlowBloxUIGroup(Name = "DataTableManager_Groups_CsvTables", ControlAlignment = ControlAlignment.Fill)]
+    [FlowBloxUIGroup(Name = "DataTableManager_Groups_SqlTables", ControlAlignment = ControlAlignment.Fill)]
+    [FlowBloxUIGroup(Name = "DataTableManager_Groups_ExcelTables", ControlAlignment = ControlAlignment.Fill)]
     public class DataTableManager : IDockableObjectManager
     {
         private FlowBloxRegistry _registry;
@@ -46,18 +46,18 @@ namespace FlowBlox.Core.Models.ObjectManager
         }
 
         [Display(ResourceType = typeof(FlowBloxTexts), GroupName = "DataTableManager_Groups_CsvTables")]
-        [FlowBlockUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(CsvTable.Name), nameof(CsvTable.DataSource) })]
+        [FlowBloxUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(CsvTable.Name), nameof(CsvTable.DataSource) })]
         public ObservableCollection<CsvTable> CsvTables { get; set; }
 
         [Display(ResourceType = typeof(FlowBloxTexts), GroupName = "DataTableManager_Groups_SqlTables")]
-        [FlowBlockUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(SQLTable.Name), nameof(SQLTable.DbType) })]
+        [FlowBloxUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(SQLTable.Name), nameof(SQLTable.DbType) })]
         public ObservableCollection<SQLTable> SqlTables { get; set; }
 
         [Display(ResourceType = typeof(FlowBloxTexts), GroupName = "DataTableManager_Groups_ExcelTables")]
-        [FlowBlockUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(ExcelTable.Name), nameof(ExcelTable.DataSource) })]
+        [FlowBloxUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(ExcelTable.Name), nameof(ExcelTable.DataSource) })]
         public ObservableCollection<ExcelTable> ExcelTables { get; set; }
     }
 }

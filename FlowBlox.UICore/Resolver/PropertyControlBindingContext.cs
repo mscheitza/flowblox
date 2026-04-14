@@ -95,7 +95,7 @@ namespace FlowBlox.UICore.Resolver
 
         private void UpdateIsEnabled(PropertyInfo property, PropertyControlViewModel viewModel)
         {
-            var uiAttr = property.GetCustomAttribute<FlowBlockUIAttribute>();
+            var uiAttr = property.GetCustomAttribute<FlowBloxUIAttribute>();
             if (uiAttr == null)
                 return;
 

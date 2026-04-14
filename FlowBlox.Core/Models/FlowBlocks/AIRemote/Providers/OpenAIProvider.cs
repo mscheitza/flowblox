@@ -21,15 +21,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
     public sealed class OpenAIProvider : AIProviderBase
     {
         [Display(Name = "OpenAIProvider_OrganizationId", Description = "OpenAIProvider_OrganizationId_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 10)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public string OrganizationId { get; set; }
 
         [Display(Name = "OpenAIProvider_ProjectId", Description = "OpenAIProvider_ProjectId_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 11)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public string ProjectId { get; set; }
 
         [Display(Name = "OpenAIProvider_StoreResponses", Description = "OpenAIProvider_StoreResponses_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 12)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public bool StoreResponses { get; set; } = false;
 
         public override string ProviderType => "OpenAI";

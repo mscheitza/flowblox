@@ -33,7 +33,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private bool _updatingToModel;
         private bool _initialized;
 
-        public FrameworkElement Create(FlowBlockTextBoxAttribute textAttr)
+        public FrameworkElement Create(FlowBloxTextBoxAttribute textAttr)
         {
             var editor = new TextEditor
             {

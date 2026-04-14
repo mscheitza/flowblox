@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
     {
         [Display(Name = "XmlDocumentXPathSelector_AssociatedXmlDocument", Description = "XmlDocumentXPathSelector_AssociatedXmlDocument_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleXmlDocumentFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public XmlDocumentFlowBlock AssociatedXmlDocument { get; set; }
@@ -32,7 +32,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         }
 
         [Display(Name = "XmlDocumentXPathSelector_XPath", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.XPath))]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.XPath))]
         [Required]
         public string XPath { get; set; }
 

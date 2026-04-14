@@ -16,8 +16,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     public class JsonPathSelectorFlowBlock : BaseSingleResultFlowBlock
     {
         [Display(Name = "JsonPathSelectorFlowBlock_JsonContent", Description = "JsonPathSelectorFlowBlock_JsonContent_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(IsCodingMode = true, MultiLine = true, SyntaxHighlighting = "JSON")]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(IsCodingMode = true, MultiLine = true, SyntaxHighlighting = "JSON")]
         [Required]
         public string JsonContent { get; set; }
 

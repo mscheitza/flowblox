@@ -18,7 +18,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
     {
         [Required]
         [Display(Name = "ZipArchiveFileAppenderFlowBlock_ZipArchiveObject", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleZipArchiveObjects),
             SelectionDisplayMember = nameof(Name))]
         public ZipArchiveObject ZipArchiveObject { get; set; }
@@ -29,24 +29,24 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
         }
 
         [Display(Name = "ZipArchiveFileAppenderFlowBlock_ArchivePath", Description = "ZipArchiveFileAppenderFlowBlock_ArchivePath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string ArchivePath { get; set; }
 
         [Required]
         [Display(Name = "ZipArchiveFileAppenderFlowBlock_FileName", Description = "ZipArchiveFileAppenderFlowBlock_FileName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string FileName { get; set; }
 
         [Display(Name = "ZipArchiveFileAppenderFlowBlock_Password", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox]
         public string Password { get; set; }
 
         private FieldElement _contentField;
 
         [Required]
         [Display(Name = "ZipArchiveFileAppenderFlowBlock_ContentField", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        [FlowBlockUI(Factory = UIFactory.Association,
+        [FlowBloxUI(Factory = UIFactory.Association,
             SelectionFilterMethod = nameof(GetPossibleFieldElements),
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             Operations = UIOperations.Link | UIOperations.Unlink)]
@@ -59,7 +59,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
         [ActivationCondition(MemberName = nameof(ContentField), ActivationMethod = nameof(IsEncodingNameActive))]
         [ConditionallyRequired]
         [Display(Name = "PropertyNames_EncodingName", Description = "PropertyNames_EncodingName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DotNetEncodingNames EncodingName { get; set; }
 
         private bool IsEncodingNameActive()
@@ -174,7 +174,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
 
         public enum ZipArchiveFileAppenderNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Failed to append file to ZIP archive")]
             FailedToAppendFile
         }

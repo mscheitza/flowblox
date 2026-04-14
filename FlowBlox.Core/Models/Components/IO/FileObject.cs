@@ -19,8 +19,8 @@ namespace FlowBlox.Core.Models.Components.IO
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_document_outline, 32, new SKColor(2, 132, 199));
         [Required()]
         [Display(Name = "PropertyNames_FilePath", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection)]
-        [FlowBlockUIFileSelection("All files (*.*)|*.*")]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection)]
+        [FlowBloxUIFileSelection("All files (*.*)|*.*")]
         public string FilePath { get; set; }
 
         [JsonIgnore()]

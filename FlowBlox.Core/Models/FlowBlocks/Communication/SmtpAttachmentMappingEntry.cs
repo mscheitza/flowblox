@@ -12,18 +12,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
     {
         [Required]
         [Display(Name = "SmtpAttachmentMappingEntry_FileName", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string FileName { get; set; }
 
         [Required]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox,
+        [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public FieldElement Field { get; set; }
 
         [Display(Name = "PropertyNames_EncodingName", Description = "PropertyNames_EncodingName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DotNetEncodingNames EncodingName { get; set; } = DotNetEncodingNames.Default;
     }
 }

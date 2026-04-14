@@ -21,11 +21,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.ShellExecution
     {
         [Required]
         [Display(Name = "ShellExecuteFlowBlock_Command", Description = "ShellExecuteFlowBlock_Command_Description", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.ShellExecution))]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.ShellExecution))]
         public string Command { get; set; }
 
         [Display(Name = "ShellExecuteFlowBlock_WorkingDirectory", Description = "ShellExecuteFlowBlock_WorkingDirectory_Description", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
         public string WorkingDirectory { get; set; }
 
         [Display(Name = "ShellExecuteFlowBlock_TimeoutMilliseconds", Description = "ShellExecuteFlowBlock_TimeoutMilliseconds_Description", ResourceType = typeof(FlowBloxTexts), Order = 2)]
@@ -38,7 +38,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.ShellExecution
         public bool ReportStandardOutput { get; set; } = false;
 
         [Display(Name = "ShellExecuteFlowBlock_ResultFields", ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ResultFieldByEnumValue<ShellExecuteDestinations>> ResultFields { get; set; } = new();
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.code_tags, 16, SKColors.DarkSlateBlue);

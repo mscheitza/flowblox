@@ -18,9 +18,9 @@ using System.Text.RegularExpressions;
 namespace FlowBlox.Core.Models.Components
 {
     [Display(Name = "FieldElement_DisplayName", ResourceType = typeof(FlowBloxTexts))]
-    [FlowBlockUIGroup("Global_Groups_Default", 0, ControlAlignment.Top)]
-    [FlowBlockUIGroup("FieldElement_Groups_Conditions", 10, ControlAlignment.Fill)]
-    [FlowBlockUIGroup("FieldElement_Groups_Modifiers", 20, ControlAlignment.Fill)]
+    [FlowBloxUIGroup("Global_Groups_Default", 0, ControlAlignment.Top)]
+    [FlowBloxUIGroup("FieldElement_Groups_Conditions", 10, ControlAlignment.Fill)]
+    [FlowBloxUIGroup("FieldElement_Groups_Modifiers", 20, ControlAlignment.Fill)]
     [Serializable()]
     public class FieldElement : ManagedObject
     {
@@ -201,7 +201,7 @@ namespace FlowBlox.Core.Models.Components
         }
 
         [Display(Name = "FieldElement_FieldType", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public TypeElement FieldType { get; set; }
 
         public bool UserField { get; set; }
@@ -225,10 +225,10 @@ namespace FlowBlox.Core.Models.Components
 
         [ActivationCondition(MemberName = nameof(UserFieldType), Values = [ UserFieldTypes.Input, UserFieldTypes.Memory])]
         [Display(Name = "FieldElement_StringValue", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FieldSelection(DefaultRequiredValue = false, HideRequiredCheckbox = true, 
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxFieldSelection(DefaultRequiredValue = false, HideRequiredCheckbox = true, 
                         AllowedFieldSelectionModes = FieldSelectionModes.ProjectProperties | FieldSelectionModes.Options)]
-        [FlowBlockTextBox(MultiLine = true)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string StringValue
         {
             get
@@ -309,7 +309,7 @@ namespace FlowBlox.Core.Models.Components
 
         [ActivationCondition(MemberName = nameof(UserFieldType), Value = UserFieldTypes.Input)]
         [Display(Name = "FieldElement_ListOfValues", ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ValueItem> ListOfValues { get; set; }
 
         private BaseResultFlowBlock _source;
@@ -331,8 +331,8 @@ namespace FlowBlox.Core.Models.Components
 
         [ActivationCondition(ActivationMethod = nameof(IsRegularField))]
         [Display(Name = "FieldElement_Conditions", ResourceType = typeof(FlowBloxTexts), GroupName = "FieldElement_Groups_Conditions", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        [FlowBlockDataGrid(
+        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxDataGrid(
             GridColumnMemberNames = new[]
             {
                 nameof(ComparisonCondition.Operator),
@@ -342,8 +342,8 @@ namespace FlowBlox.Core.Models.Components
 
         [ActivationCondition(ActivationMethod = nameof(IsRegularField))]
         [Display(Name = "FieldElement_Modifiers", ResourceType = typeof(FlowBloxTexts), GroupName = "FieldElement_Groups_Modifiers", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete, DisplayLabel = false)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(ModifierBase.ObjectDisplayName) })]
+        [FlowBloxUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete, DisplayLabel = false)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(ModifierBase.ObjectDisplayName) })]
         public ObservableCollection<ModifierBase> Modifiers { get; set; }
 
         public string FullyQualifiedName => GetFullyQualifiedName(Source, UserField, Name);

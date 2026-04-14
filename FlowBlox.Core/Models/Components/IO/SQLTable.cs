@@ -28,23 +28,23 @@ namespace FlowBlox.Core.Models.Components.IO
         [Display(Name = "SQLTable_DbType",
                  Description = "SQLTable_DbType_Tooltip",
                  ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DbTypes DbType { get; set; }
 
         [Required()]
         [Display(Name = "SQLTable_SQLConnectionstring",
                  Description = "SQLTable_SQLConnectionstring_Tooltip",
                  ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.DBConnection))]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.DBConnection))]
+        [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         public string SQLConnectionstring { get; set; }
 
         [Required()]
         [Display(Name = "SQLTable_SQLStatement",
                  Description = "SQLTable_SQLStatement_Tooltip",
                  ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true, SyntaxHighlighting = "SQL")]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true, IsCodingMode = true, SyntaxHighlighting = "SQL")]
         public string SQLStatement { get; set; }
 
         public bool CanRead()

@@ -25,7 +25,7 @@ namespace FlowBlox.Core.Models.Components.IO
 
         [Required()]
         [Display(Name = "Global_FieldElement", Description = "MemoryObject_Field_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
         public FieldElement Field 
@@ -41,7 +41,7 @@ namespace FlowBlox.Core.Models.Components.IO
         [ActivationCondition(MemberName = nameof(Field), ActivationMethod = nameof(IsEncodingNameActive))]
         [ConditionallyRequired()]
         [Display(Name = "PropertyNames_Encoding", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DotNetEncodingNames EncodingName { get; set; }
 
         private bool IsEncodingNameActive()

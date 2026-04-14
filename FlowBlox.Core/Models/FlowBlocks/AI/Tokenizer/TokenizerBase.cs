@@ -22,7 +22,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI.Tokenizer
         }
 
         [Display(Name = "TokenizerBase_TokenTranslations", Description = "TokenizerBase_TokenTranslations_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public ObservableCollection<TokenTranslation> TokenTranslations { get; set; }
 
         public abstract void Initialize();

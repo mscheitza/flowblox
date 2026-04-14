@@ -16,7 +16,7 @@ using System.Runtime.CompilerServices;
 
 namespace FlowBlox.Core.Models.Base
 {
-    [FlowBlockUIGroup("Global_Groups_Requirements", 50)]
+    [FlowBloxUIGroup("Global_Groups_Requirements", 50)]
     public abstract class FlowBloxComponent : FlowBloxReactiveObject, IFlowBloxComponent
     {
         private string _name;
@@ -45,11 +45,11 @@ namespace FlowBlox.Core.Models.Base
 
         [ActivationCondition(MemberName = nameof(HandleRequirements), Value = true)]
         [Display(Name = "FlowBloxComponent_RequiredFields", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
-        [FieldSelection(DefaultRequiredValue = false, HideRequiredCheckbox = true)]
-        [FlowBlockListView(LVColumnMemberNames = [nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name)])]
+        [FlowBloxFieldSelection(DefaultRequiredValue = false, HideRequiredCheckbox = true)]
+        [FlowBloxListView(LVColumnMemberNames = [nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name)])]
         public ObservableCollection<FieldElement> RequiredFields { get; set; } = new ObservableCollection<FieldElement>();
 
         public virtual List<FieldElement> GetPossibleFieldElements()

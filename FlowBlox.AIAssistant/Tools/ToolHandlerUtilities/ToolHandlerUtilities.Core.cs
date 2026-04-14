@@ -40,11 +40,10 @@ namespace FlowBlox.AIAssistant.Tools
         private static readonly HashSet<Type> ExcludedAttributeTypesForKindsInfo = new()
         {
             typeof(DisplayAttribute),
-            typeof(FlowBlockUIAttribute),
-            typeof(FlowBlockListViewAttribute),
-            typeof(FlowBlockDataGridAttribute),
-            typeof(FlowBlockTextBoxAttribute),
-            typeof(FlowBlockCheckboxAttribute)
+            typeof(FlowBloxUIAttribute),
+            typeof(FlowBloxListViewAttribute),
+            typeof(FlowBloxDataGridAttribute),
+            typeof(FlowBloxTextBoxAttribute)
         };
 
         public static ToolDefinition CreateDefinition(string name, string description, JObject? argumentsSchema = null)

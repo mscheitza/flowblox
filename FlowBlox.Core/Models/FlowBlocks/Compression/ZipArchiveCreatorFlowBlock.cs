@@ -17,7 +17,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
     {
         [Required]
         [Display(Name = "ZipArchiveCreatorFlowBlock_ZipArchiveObject", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association,
+        [FlowBloxUI(Factory = UIFactory.Association,
                      SelectionFilterMethod = nameof(GetPossibleZipArchiveObjects),
                      SelectionDisplayMember = nameof(Name))]
         public ZipArchiveObject ZipArchiveObject { get; set; }
@@ -28,12 +28,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
         }
 
         [Display(Name = "ZipArchiveCreatorFlowBlock_CompressionStrength", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public ZipCompressionStrength CompressionStrength { get; set; }
 
         [Display(Name = "ZipArchiveCreatorFlowBlock_Password", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox]
         public string Password { get; set; }
 
         public ZipArchiveCreatorFlowBlock()
@@ -93,7 +93,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
 
         public enum ZipArchiveCreatorNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Failed to create ZIP archive")]
             FailedToCreateArchive
         }

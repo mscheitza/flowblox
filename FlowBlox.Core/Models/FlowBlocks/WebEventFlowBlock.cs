@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    [FlowBlockUIGroup("WebEventFlowBlock_Groups_Advanced", 0)]
+    [FlowBloxUIGroup("WebEventFlowBlock_Groups_Advanced", 0)]
     [Display(Name = "WebEventFlowBlock_DisplayName", Description = "WebEventFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("WebEventFlowBlock_SpecialExplanation_ResultBehavior", Icon = SpecialExplanationIcon.Information)]
     public class WebEventFlowBlock : WebActionFlowblockBase
@@ -36,38 +36,38 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
 
         [Display(Name = "WebEventFlowBlock_WebBrowserEventType", Description = "WebEventFlowBlock_WebBrowserEventType_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public WebBrowserEventTypes WebBrowserEventType { get; set; } = WebBrowserEventTypes.Click;
 
         [Display(Name = "WebEventFlowBlock_XPath", Description = "WebEventFlowBlock_XPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public override string XPath { get; set; }
 
         [Display(Name = "WebEventFlowBlock_CSSSelector", Description = "WebEventFlowBlock_CSSSelector_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public override string CSSSelector { get; set; }
 
         [Display(Name = "WebEventFlowBlock_InputText", Description = "WebEventFlowBlock_InputText_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string InputText { get; set; }
 
         [ActivationCondition(MemberName = nameof(WebBrowserEventType), Values = new object[] { WebBrowserEventTypes.SendSpecialKey })]
         [Display(Name = "WebEventFlowBlock_SpecialKey", Description = "WebEventFlowBlock_SpecialKey_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public WebSpecialKey SpecialKey { get; set; } = WebSpecialKey.Enter;
 
         [ActivationCondition(MemberName = nameof(WebBrowserEventType), Values = new object[] { WebBrowserEventTypes.SendSpecialKey })]
         [Display(Name = "WebEventFlowBlock_SpecialKeyModifier", Description = "WebEventFlowBlock_SpecialKeyModifier_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public WebSpecialKeyModifier SpecialKeyModifier { get; set; } = WebSpecialKeyModifier.None;
 
         [Display(Name = "WebEventFlowBlock_WaitingTimeAfterExecution", Description = "WebEventFlowBlock_WaitingTimeAfterExecution_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebEventFlowBlock_Groups_Advanced", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public int WaitingTimeAfterExecution { get; set; }
 
         [Display(Name = "WebEventFlowBlock_ElementDeterminationRequired", Description = "WebEventFlowBlock_ElementDeterminationRequired_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebEventFlowBlock_Groups_Advanced", Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public bool ElementDeterminationRequired { get; set; }
 
         public int LatestScrollRectangleHeight { get; private set; }
@@ -277,7 +277,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public enum WebEventNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Further scroll actions not possible")]
             FurtherScrollActionsNotPossible
         }

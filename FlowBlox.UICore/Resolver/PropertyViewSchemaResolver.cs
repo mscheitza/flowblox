@@ -23,7 +23,7 @@ namespace FlowBlox.UICore.Resolver
             var bindingContext = new PropertyControlBindingContext(target);
 
             var groupAttributes = target.GetType()
-                .GetCustomAttributes<FlowBlockUIGroupAttribute>(true)
+                .GetCustomAttributes<FlowBloxUIGroupAttribute>(true)
                 .OrderBy(x => x.Order)
                 .ToList();
 

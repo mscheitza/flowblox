@@ -10,8 +10,8 @@ namespace FlowBlox.Core.Models.ObjectManager
 {
     [Display(Name = "DataObjectManager_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     [UIMetadataDefinitions(typeof(FlowBloxIcons), nameof(FlowBloxIcons.database_cog), "#7C3AED", 16)]
-    [FlowBlockUIGroup(Name = "DataObjectManager_Groups_FileObjects", ControlAlignment = ControlAlignment.Fill)]
-    [FlowBlockUIGroup(Name = "DataObjectManager_Groups_MemoryObjects", ControlAlignment = ControlAlignment.Fill)]
+    [FlowBloxUIGroup(Name = "DataObjectManager_Groups_FileObjects", ControlAlignment = ControlAlignment.Fill)]
+    [FlowBloxUIGroup(Name = "DataObjectManager_Groups_MemoryObjects", ControlAlignment = ControlAlignment.Fill)]
     public class DataObjectManager : IDockableObjectManager
     {
         private FlowBloxRegistry _registry;
@@ -41,13 +41,13 @@ namespace FlowBlox.Core.Models.ObjectManager
         }
 
         [Display(ResourceType = typeof(FlowBloxTexts), GroupName = "DataObjectManager_Groups_FileObjects")]
-        [FlowBlockUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FileObject.FilePath) })]
+        [FlowBloxUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(FileObject.FilePath) })]
         public ObservableCollection<FileObject> FileObjects { get; set; }
 
         [Display(ResourceType = typeof(FlowBloxTexts), GroupName = "DataObjectManager_Groups_MemoryObjects")]
-        [FlowBlockUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(MemoryObject.Field), nameof(MemoryObject.FileName) })]
+        [FlowBloxUI(Factory = UIFactory.ListView, DisplayLabel = false, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(MemoryObject.Field), nameof(MemoryObject.FileName) })]
         public ObservableCollection<MemoryObject> MemoryObjects { get; set; }
     }
 }

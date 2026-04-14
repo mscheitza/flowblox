@@ -3,7 +3,7 @@ using FlowBlox.Core.Enums;
 namespace FlowBlox.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class FieldSelectionAttribute : Attribute
+    public sealed class FlowBloxFieldSelectionAttribute : Attribute
     {
         public bool DefaultRequiredValue { get; set; } = true;
 

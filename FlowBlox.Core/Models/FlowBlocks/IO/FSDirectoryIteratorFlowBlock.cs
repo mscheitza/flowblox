@@ -22,18 +22,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
     {
         [Required]
         [Display(Name = "FSDirectoryIteratorFlowBlock_DirectoryPath", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
         public string DirectoryPath { get; set; }
 
         [Display(Name = "FSDirectoryIteratorFlowBlock_Recursive", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         public bool Recursive { get; set; }
 
         [Display(Name = "FSDirectoryIteratorFlowBlock_FilterExpression", Description = "FSDirectoryIteratorFlowBlock_FilterExpression_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public string FilterExpression { get; set; }
 
         [Display(Name = "FSDirectoryIteratorFlowBlock_ResultFields", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ResultFieldByEnumValue<FSDirectoryIteratorDestinations>> ResultFields { get; set; }
 
         public FSDirectoryIteratorFlowBlock()

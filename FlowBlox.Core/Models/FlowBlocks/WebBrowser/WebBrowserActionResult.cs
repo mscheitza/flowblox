@@ -5,31 +5,31 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 {
     public enum WebBrowserActionStatus
     {
-        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [FlowBloxNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "Element not found")]
         ElementNotFound,
 
-        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [FlowBloxNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "Element is not applicable")]
         ElementNotApplicable,
 
-        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [FlowBloxNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "URL could not be accessed")]
         UrlNotAccessible,
 
-        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [FlowBloxNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "Element is stale (DOM changed)")]
         ElementStale,
 
-        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [FlowBloxNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "Unknown browser error")]
         UnknownError,
 
-        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [FlowBloxNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "Download URL could not be determined")]
         DownloadUrlMissing,
 
-        [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+        [FlowBloxNotification(NotificationType = NotificationType.Warning)]
         [Display(Name = "File download failed")]
         FileDownloadFailed
     }

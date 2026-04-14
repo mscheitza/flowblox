@@ -10,7 +10,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         private ExpectationConditionTarget _expectationConditionTarget;
 
         [Display(Name = "ExpectationCondition_ExpectationConditionTarget", Description = "ExpectationCondition_ExpectationConditionTarget_Description", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public ExpectationConditionTarget ExpectationConditionTarget
         {
             get => _expectationConditionTarget;
@@ -27,7 +27,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         private int _index;
 
         [Display(Name = "ExpectationCondition_Index", Description = "ExpectationCondition_Index_Description", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public int Index
         {
             get => _index;

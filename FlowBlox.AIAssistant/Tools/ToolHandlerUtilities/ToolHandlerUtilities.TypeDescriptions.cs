@@ -220,7 +220,7 @@ namespace FlowBlox.AIAssistant.Tools
             else if (isReactiveObject)
                 majorTypeDescriptor = "ReactiveObject";
 
-            var flowBlockUi = property.GetCustomAttribute<FlowBlockUIAttribute>();
+            var flowBlockUi = property.GetCustomAttribute<FlowBloxUIAttribute>();
             var uiOptions = flowBlockUi != null
                 ? Enum.GetValues(typeof(UIOptions))
                     .Cast<UIOptions>()

@@ -27,7 +27,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         /// If not set, the index is global for the whole runtime execution (never reset).
         /// </summary>
         [Display(Name = "IndexFlowBlock_Context", Description = "IndexFlowBlock_Context_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleContextFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public BaseFlowBlock AssociatedContextualObject { get; set; }

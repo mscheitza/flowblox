@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
     {
         [Required]
         [Display(Name = "ZipArchiveFileIteratorFlowBlock_ZipArchiveObject", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleZipArchiveObjects),
             SelectionDisplayMember = nameof(Name))]
         public ZipArchiveObject ZipArchiveObject { get; set; }
@@ -30,18 +30,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
         }
 
         [Display(Name = "ZipArchiveFileIteratorFlowBlock_Password", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox]
         public string Password { get; set; }
 
         [Display(Name = "ZipArchiveFileIteratorFlowBlock_ResultFields", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ResultFieldByEnumValue<ZipArchiveIteratorDestinations>> ResultFields { get; set; }
 
         [ActivationCondition(MemberName = nameof(ResultFields), ActivationMethod = nameof(IsEncodingNameActive))]
         [ConditionallyRequired]
         [Display(Name = "PropertyNames_EncodingName", Description = "PropertyNames_EncodingName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DotNetEncodingNames EncodingName { get; set; }
 
         public ZipArchiveFileIteratorFlowBlock()
@@ -187,11 +187,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
 
         public enum ZipArchiveFileIteratorNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Failed to read ZIP archive")]
             FailedToReadArchive,
 
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "No files found in ZIP archive")]
             NoFilesFound
         }

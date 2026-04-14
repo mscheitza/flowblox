@@ -17,30 +17,30 @@ namespace FlowBlox.Core.Models.FlowBlocks.Authorization
     {
         [Required]
         [Display(Name = "OAuthFlowBlock_TokenEndpoint", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string TokenEndpoint { get; set; }
 
         [Required]
         [Display(Name = "OAuthFlowBlock_ClientId", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string ClientId { get; set; }
 
         [Required]
         [Display(Name = "OAuthFlowBlock_ClientSecret", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox]
         public string ClientSecret { get; set; }
 
         [Display(Name = "OAuthFlowBlock_Scope", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Scope { get; set; }
 
         [Display(Name = "OAuthFlowBlock_Audience", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Audience { get; set; }
 
         [Display(Name = "OAuthFlowBlock_GrantType", ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string GrantType { get; set; } = "client_credentials";
 
         [Display(Name = "OAuthFlowBlock_SendClientCredentialsInBody", ResourceType = typeof(FlowBloxTexts), Order = 6)]
@@ -171,7 +171,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Authorization
 
         public enum OAuthNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Error)]
+            [FlowBloxNotification(NotificationType = NotificationType.Error)]
             [Display(Name = "OAuthFlowBlock_Notification_AuthorizationFailed")]
             AuthorizationFailed
         }

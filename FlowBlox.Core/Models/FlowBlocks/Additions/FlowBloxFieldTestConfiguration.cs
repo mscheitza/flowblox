@@ -112,8 +112,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         }
 
         [Display(Name = "FlowBloxTestConfiguration_ExpectationConditions", Description = "FlowBloxTestConfiguration_ExpectationConditions_Description", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
-        [FlowBlockDataGrid(
+        [FlowBloxUI(Factory = UIFactory.GridView)]
+        [FlowBloxDataGrid(
             GridColumnMemberNames = new[]
             {
                 nameof(ExpectationCondition.ExpectationConditionTarget),

@@ -14,7 +14,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    [FlowBlockUIGroup("WebDownloadFlowBlock_Groups_Download", 0)]
+    [FlowBloxUIGroup("WebDownloadFlowBlock_Groups_Download", 0)]
     [Display(Name = "WebDownloadFlowBlock_DisplayName", Description = "WebDownloadFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("WebDownloadFlowBlock_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
     [FlowBloxSpecialExplanation("WebDownloadFlowBlock_SpecialExplanation_ResultBehavior", Icon = SpecialExplanationIcon.Information)]
@@ -22,7 +22,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
     {
         [Display(Name = "WebDownloadFlowBlock_AssociatedWebBrowser", Description = "WebDownloadFlowBlock_AssociatedWebBrowser_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleWebBrowserFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public WebBrowserFlowBlock AssociatedWebBrowser { get; set; }
@@ -35,35 +35,35 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
 
         [Display(Name = "WebDownloadFlowBlock_DownloadMode", Description = "WebDownloadFlowBlock_DownloadMode_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebDownloadFlowBlock_Groups_Download", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public WebDownloadMode DownloadMode { get; set; } = WebDownloadMode.Auto;
 
         [Display(Name = "WebDownloadFlowBlock_XPath", Description = "WebDownloadFlowBlock_XPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.XPath))]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.XPath))]
         public string XPath { get; set; }
 
         [Display(Name = "WebDownloadFlowBlock_CSSSelector", Description = "WebDownloadFlowBlock_CSSSelector_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public string CSSSelector { get; set; }
 
         [Display(Name = "WebDownloadFlowBlock_DownloadPath", Description = "WebDownloadFlowBlock_DownloadPath_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebDownloadFlowBlock_Groups_Download", Order = 1)]
         [ActivationCondition(MemberName = nameof(DownloadMode), Values = new object[] { WebDownloadMode.HttpRequest, WebDownloadMode.Auto })]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox]
         public string DownloadPath { get; set; }
 
         [Display(Name = "WebDownloadFlowBlock_DownloadDirectory", Description = "WebDownloadFlowBlock_DownloadDirectory_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebDownloadFlowBlock_Groups_Download", Order = 2)]
         [ActivationCondition(MemberName = nameof(DownloadMode), Values = new object[] { WebDownloadMode.BrowserNative, WebDownloadMode.Auto })]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection | UIOptions.EnableFolderSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection | UIOptions.EnableFolderSelection)]
+        [FlowBloxTextBox]
         public string DownloadDirectory { get; set; }
 
         [Display(Name = "WebDownloadFlowBlock_TimeoutSeconds", Description = "WebDownloadFlowBlock_TimeoutSeconds_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebDownloadFlowBlock_Groups_Download", Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public int TimeoutSeconds { get; set; } = 120;
 
         [Display(Name = "WebDownloadFlowBlock_ResultFields", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ResultFieldByEnumValue<WebDownloadDestinations>> ResultFields { get; set; } = new();
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.download, 16, SKColors.DodgerBlue);

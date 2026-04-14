@@ -22,8 +22,8 @@ using FlowBlox.Core.Logging;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    [FlowBlockUIGroup("ExecuteProjectFlowBlock_Groups_Project", 0)]
-    [FlowBlockUIGroup("ExecuteProjectFlowBlock_Groups_Parameters", 1)]
+    [FlowBloxUIGroup("ExecuteProjectFlowBlock_Groups_Project", 0)]
+    [FlowBloxUIGroup("ExecuteProjectFlowBlock_Groups_Parameters", 1)]
     [Display(Name = "ExecuteProjectFlowBlock_DisplayName", Description = "ExecuteProjectFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class ExecuteProjectFlowBlock : BaseSingleResultFlowBlock
     {
@@ -39,8 +39,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
             ResourceType = typeof(FlowBloxTexts),
             GroupName = "ExecuteProjectFlowBlock_Groups_Project",
             Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection)]
-        [FlowBlockUIFileSelection("FlowBlox project (*.fbprj)|*.fbprj|All files (*.*)|*.*")]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFileSelection | UIOptions.EnableFieldSelection)]
+        [FlowBloxUIFileSelection("FlowBlox project (*.fbprj)|*.fbprj|All files (*.*)|*.*")]
         public string ProjectFile { get; set; }
 
         private bool IsProjectFileVisible() => string.IsNullOrWhiteSpace(ProjectSpaceGuid);
@@ -53,7 +53,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             ResourceType = typeof(FlowBloxTexts),
             GroupName = "ExecuteProjectFlowBlock_Groups_Project",
             Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string ProjectSpaceGuid { get; set; }
 
         private bool IsProjectSpaceGuidVisible() => string.IsNullOrWhiteSpace(ProjectFile);
@@ -65,7 +65,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             ResourceType = typeof(FlowBloxTexts),
             GroupName = "ExecuteProjectFlowBlock_Groups_Project",
             Order = 2)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public int? ProjectSpaceVersion { get; set; }
 
         [Display(
@@ -74,7 +74,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             ResourceType = typeof(FlowBloxTexts),
             GroupName = "ExecuteProjectFlowBlock_Groups_Project",
             Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public bool AbortOnError { get; set; } = true;
 
         [Display(
@@ -83,7 +83,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
             ResourceType = typeof(FlowBloxTexts),
             GroupName = "ExecuteProjectFlowBlock_Groups_Project",
             Order = 4)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public bool AbortOnWarning { get; set; } = false;
 
         [Display(
@@ -92,8 +92,8 @@ namespace FlowBlox.Core.Models.FlowBlocks
             ResourceType = typeof(FlowBloxTexts),
             GroupName = "ExecuteProjectFlowBlock_Groups_Parameters",
             Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.GridView, DisplayLabel = false)]
-        [FlowBlockDataGrid(IsMovable = true)]
+        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxDataGrid(IsMovable = true)]
         public ObservableCollection<ExecuteProjectParameterMappingEntry> ParameterMappings { get; set; } = new();
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.play_box_outline, 16, SKColors.MediumPurple);

@@ -25,11 +25,11 @@ using FlowBlox.Core.Util.Fields;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
-    [FlowBlockUIGroup("Global_Groups_Default", -10, ControlAlignment.Top)]
-    [FlowBlockUIGroup("BaseFlowBlock_Groups_Dependencies", 10)]
-    [FlowBlockUIGroup("BaseFlowBlock_Groups_Input", 20)]
-    [FlowBlockUIGroup("Global_Groups_Requirements", 30)]
-    [FlowBlockUIGroup("BaseFlowBlock_Groups_Tests", 40)]
+    [FlowBloxUIGroup("Global_Groups_Default", -10, ControlAlignment.Top)]
+    [FlowBloxUIGroup("BaseFlowBlock_Groups_Dependencies", 10)]
+    [FlowBloxUIGroup("BaseFlowBlock_Groups_Input", 20)]
+    [FlowBloxUIGroup("Global_Groups_Requirements", 30)]
+    [FlowBloxUIGroup("BaseFlowBlock_Groups_Tests", 40)]
     [Serializable()]
     public abstract class BaseFlowBlock : FlowBloxComponent
     {
@@ -69,10 +69,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             string message = notificationEnumValue.GetDisplayName();
 
             var memberInfo = notificationEnumValue.GetType().GetMember(notificationEnumValue.ToString()).Single();
-            var attribute = memberInfo.GetCustomAttribute<FlowBlockNotificationAttribute>();
+            var attribute = memberInfo.GetCustomAttribute<FlowBloxNotificationAttribute>();
             if (attribute == null)
                 throw new InvalidOperationException(
-                    $"Missing {nameof(FlowBlockNotificationAttribute)} on enum value '{notificationEnumValue}'. " +
+                    $"Missing {nameof(FlowBloxNotificationAttribute)} on enum value '{notificationEnumValue}'. " +
                      "Please annotate the enum with [FlowBlockNotification(...)] to define its NotificationType.");
 
             var notificationType = attribute.NotificationType;
@@ -122,7 +122,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 return overridden;
 
             var memberInfo = enumType.GetMember(enumValue.ToString()).Single();
-            var attribute = memberInfo.GetCustomAttribute<FlowBlockNotificationAttribute>();
+            var attribute = memberInfo.GetCustomAttribute<FlowBloxNotificationAttribute>();
             if (attribute == null)
                 throw new InvalidOperationException($"Missing FlowBlockNotificationAttribute on {enumValue}");
 
@@ -160,7 +160,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private NotificationType GetDefaultNotificationType(Enum enumValue)
         {
             var memberInfo = enumValue.GetType().GetMember(enumValue.ToString()).Single();
-            var attribute = memberInfo.GetCustomAttribute<FlowBlockNotificationAttribute>();
+            var attribute = memberInfo.GetCustomAttribute<FlowBloxNotificationAttribute>();
             if (attribute == null)
                 throw new InvalidOperationException($"Missing FlowBlockNotificationAttribute on {enumValue}");
 
@@ -280,10 +280,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         /// Does not include flow blocks that are associated via property definitions — use <see cref="GetAssociatedFlowBlocks"/> for that.
         /// </summary>
         [Display(Name = "BaseFlowBlock_ReferencedElements", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Dependencies", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(BaseFlowBlock.GetPossibleReferencedElements),
             SelectionDisplayMember = nameof(Name))]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(BaseFlowBlock.Name) })]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(BaseFlowBlock.Name) })]
         public virtual ObservableCollection<BaseFlowBlock> ReferencedFlowBlocks
         {
             get => _referencedFlowBlocks;
@@ -411,7 +411,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             Description = "BaseFlowBlock_AssociatedIterationContext_Tooltip", 
             ResourceType = typeof(FlowBloxTexts), 
             GroupName = "BaseFlowBlock_Groups_Input", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
             SelectionFilterMethod = nameof(GetPossibleInputReference), 
             SelectionDisplayMember = nameof(Name))]
         [AssociatedFlowBlockResolvableCustom(nameof(IterationContext), nameof(CanDisplayAssociatedIterationContextHint))]
@@ -452,20 +452,20 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public bool InputIgnoreDuplicates { get; set; }
 
         [Display(Name = "BaseFlowBlock_InputBehaviorAssignments", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.GridView, Operations = UIOperations.Edit)]
+        [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.Edit)]
         public ObservableCollection<InputBehaviorAssignment> InputBehaviorAssignments { get; set; }
 
         [Display(Name = "BaseFlowBlock_InheritRequirementsNotMet", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 0)]
         public bool InheritRequirementsNotMet { get; set; }
 
         [Display(Name = "BaseFlowBlock_ActivationConditions", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 2)]
-        [FlowBlockUI(
+        [FlowBloxUI(
             Factory = UIFactory.GridView,
             UiOptions = UIOptions.EnableFieldSelection,
             CreatableTypes = new[] { 
                 typeof(FieldLogicalComparisonCondition), 
                 typeof(LogicalGroupCondition) })]
-        [FlowBlockDataGrid(GridColumnMemberNames = [
+        [FlowBloxDataGrid(GridColumnMemberNames = [
             nameof(LogicalCondition.LogicalOperator),
             nameof(LogicalCondition.DisplayName)
             ])]
@@ -475,11 +475,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private ObservableCollection<FlowBloxTestDefinition> _testDefinitions = new();
 
         [Display(Name = "BaseFlowBlock_TestDefinitions", Description = "BaseFlowBlock_TestDefinitions_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.ListView, 
+        [FlowBloxUI(Factory = UIFactory.ListView, 
             Operations = UIOperations.Link | UIOperations.Unlink | UIOperations.Create | UIOperations.Edit | UIOperations.Delete,
             SelectionFilterMethod = nameof(GetPossibleTestDefinitions),
             SelectionDisplayMember = nameof(FlowBloxTestDefinition.Name))]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FlowBloxTestDefinition.Name) })]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(FlowBloxTestDefinition.Name) })]
         public ObservableCollection<FlowBloxTestDefinition> TestDefinitions
         {
             get => _testDefinitions;
@@ -524,8 +524,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         [Display(Name = "BaseFlowBlock_GenerationStrategies", Description = "BaseFlowBlock_GenerationStrategies_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 1)]
         [ActivationCondition(ActivationMethod = nameof(IsGenerationStrategiesVisible))]
-        [FlowBlockUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
-        [FlowBlockListView(LVColumnMemberNames = new[] { nameof(FlowBloxGenerationStrategyBase.Name) })]
+        [FlowBloxUI(Factory = UIFactory.ListView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxListView(LVColumnMemberNames = new[] { nameof(FlowBloxGenerationStrategyBase.Name) })]
         [CustomValidation(typeof(BaseFlowBlock), nameof(ValidateGenerationStrategies))]
         public ObservableCollection<FlowBloxGenerationStrategyBase> GenerationStrategies { get; set; }
 
@@ -872,7 +872,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public enum BaseFlowBlockNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Error)]
+            [FlowBloxNotification(NotificationType = NotificationType.Error)]
             [Display(Name = "An unexpected error has occurred.")]
             UnexpectedError
         }

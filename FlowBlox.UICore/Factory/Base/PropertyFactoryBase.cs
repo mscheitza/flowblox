@@ -15,14 +15,14 @@ namespace FlowBlox.UICore.Factory.Base
     {
         protected readonly object _target;
         protected readonly PropertyInfo _property;
-        protected readonly FlowBlockUIAttribute _flowBlockUIAttribute;
+        protected readonly FlowBloxUIAttribute _uiAttribute;
         protected readonly FlowBloxRegistry _registry;
         protected readonly bool _readOnly;
 
         protected PropertyViewControlFactoryBase(PropertyInfo property, object target, bool readOnly)
         {
             _property = property;
-            _flowBlockUIAttribute = property.GetCustomAttribute<FlowBlockUIAttribute>();
+            _uiAttribute = property.GetCustomAttribute<FlowBloxUIAttribute>();
             _target = target;
             _registry = FlowBloxRegistryProvider.GetRegistry();
             _readOnly = readOnly;
@@ -35,12 +35,12 @@ namespace FlowBlox.UICore.Factory.Base
             IList<Type> types;
             if (propertyType.IsInterface || propertyType.IsAbstract)
             {
-                if (_flowBlockUIAttribute?.CreatableTypes != null && _flowBlockUIAttribute.CreatableTypes.Length > 0)
+                if (_uiAttribute?.CreatableTypes != null && _uiAttribute.CreatableTypes.Length > 0)
                 {
                     types = FlowBloxSupportedTypesResolver.ResolveSupportedTypes(
                         _target,
                         propertyType,
-                        _flowBlockUIAttribute.CreatableTypes);
+                        _uiAttribute.CreatableTypes);
                 }
                 else
                 {
@@ -146,8 +146,8 @@ namespace FlowBlox.UICore.Factory.Base
                 if (!property.CanRead || property.GetIndexParameters().Length > 0)
                     continue;
 
-                var flowBlockUIAttribute = property.GetCustomAttribute<FlowBlockUIAttribute>();
-                if (!IsRowManagedAssociation(flowBlockUIAttribute))
+                var uiAttribute = property.GetCustomAttribute<FlowBloxUIAttribute>();
+                if (!IsRowManagedAssociation(uiAttribute))
                     continue;
 
                 object propertyValue = property.GetValue(instance);
@@ -167,12 +167,12 @@ namespace FlowBlox.UICore.Factory.Base
             }
         }
 
-        private static bool IsRowManagedAssociation(FlowBlockUIAttribute flowBlockUIAttribute)
+        private static bool IsRowManagedAssociation(FlowBloxUIAttribute uiAttribute)
         {
-            if (flowBlockUIAttribute?.Factory != UIFactory.Association)
+            if (uiAttribute?.Factory != UIFactory.Association)
                 return false;
 
-            var operations = flowBlockUIAttribute.Operations;
+            var operations = uiAttribute.Operations;
             var supportsCreate = operations.HasFlag(UIOperations.Create);
             var supportsDelete = operations.HasFlag(UIOperations.Delete);
             var supportsLink = operations.HasFlag(UIOperations.Link);

@@ -27,7 +27,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         public abstract bool Check();
 
         [Display(Name = "PropertyNames_Name", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Visible = false, ReadOnly = true)]
+        [FlowBloxUI(Visible = false, ReadOnly = true)]
         public abstract string DisplayName { get; }
 
         public abstract string ShortDisplayName { get; }

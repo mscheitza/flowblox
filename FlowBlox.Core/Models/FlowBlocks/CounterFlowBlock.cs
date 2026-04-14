@@ -24,16 +24,16 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public CounterTypes CounterType { get; set; }
 
         [Display(Name = "CounterFlowBlock_Format", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default, ToolboxCategory = nameof(FlowBloxToolboxCategory.CounterFormat))]
+        [FlowBloxUI(Factory = UIFactory.Default, ToolboxCategory = nameof(FlowBloxToolboxCategory.CounterFormat))]
         public string Format { get; set; }
 
         [Display(Name = "CounterFlowBlock_StartValue", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         [CustomValidation(typeof(CounterFlowBlock), nameof(ValidateStartValue))]
         public new string StartValue { get; set; }
 
         [Display(Name = "CounterFlowBlock_FinalValue", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         [CustomValidation(typeof(CounterFlowBlock), nameof(ValidateEndValue))]
         public string FinalValue { get; set; }
 

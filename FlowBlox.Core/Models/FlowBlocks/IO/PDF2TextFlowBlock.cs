@@ -20,7 +20,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
     {
         [Required]
         [Display(Name = "PropertyNames_DataSource", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association,
+        [FlowBloxUI(Factory = UIFactory.Association,
                      SelectionFilterMethod = nameof(GetPossibleDataSources),
                      SelectionDisplayMember = nameof(DataObjectBase.Name))]
         public DataObjectBase DataSource { get; set; }
@@ -92,7 +92,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
 
         public enum PDF2TextNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Failed to extract PDF text")]
             FailedToExtractText
         }

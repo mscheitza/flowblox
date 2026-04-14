@@ -13,15 +13,15 @@ namespace FlowBlox.Core.Models.FlowBlocks
     public class WebSelectorFlowBlock : WebActionFlowblockBase
     {
         [Display(Name = "WebSelectorFlowBlock_XPath", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public override string XPath { get; set; }
 
         [Display(Name = "WebSelectorFlowBlock_CSSSelector", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public override string CSSSelector { get; set; }
 
         [Display(Name = "WebSelectorFlowBlock_InnerContent", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Default)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
         public bool InnerContent { get; set; } = true;
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.cursor_default_click, 16, SKColors.DeepSkyBlue);

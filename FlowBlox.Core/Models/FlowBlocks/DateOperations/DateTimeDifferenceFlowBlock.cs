@@ -16,7 +16,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
     {
         [Required]
         [Display(Name = "DateTimeDifferenceFlowBlock_StartDate", Description = "DateTimeDifferenceFlowBlock_StartDate_Description", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(
+        [FlowBloxUI(
             Factory = UIFactory.Association,
             SelectionFilterMethod = nameof(GetPossibleDateTimeFields),
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
@@ -25,7 +25,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
 
         [Required]
         [Display(Name = "DateTimeDifferenceFlowBlock_EndDate", Description = "DateTimeDifferenceFlowBlock_EndDate_Description", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(
+        [FlowBloxUI(
             Factory = UIFactory.Association,
             SelectionFilterMethod = nameof(GetPossibleDateTimeFields),
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),

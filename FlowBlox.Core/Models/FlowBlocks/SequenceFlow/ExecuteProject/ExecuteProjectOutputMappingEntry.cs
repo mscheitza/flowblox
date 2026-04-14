@@ -11,12 +11,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow.ExecuteProject
     {
         [Required]
         [Display(Name = "ExecuteProjectOutputMappingEntry_OutputPropertyName", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockTextBox(Suggestions = true, SuggestionMember = nameof(ProjectOutputIteratorFlowBlock.GetOutputPropertyNames))]
+        [FlowBloxTextBox(Suggestions = true, SuggestionMember = nameof(ProjectOutputIteratorFlowBlock.GetOutputPropertyNames))]
         public string OutputPropertyName { get; set; }
 
         [Required]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Association,  Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxUI(Factory = UIFactory.Association,  Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public FieldElement Field { get; set; }
 
         public bool IsDeletable(out List<IFlowBloxComponent> dependencies)

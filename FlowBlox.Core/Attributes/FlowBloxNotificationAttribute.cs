@@ -13,9 +13,9 @@ namespace FlowBlox.Core.Attributes
     }
 
     [AttributeUsage(AttributeTargets.Field)]
-    public class FlowBlockNotificationAttribute : Attribute
+    public class FlowBloxNotificationAttribute : Attribute
     {
-        public FlowBlockNotificationAttribute()
+        public FlowBloxNotificationAttribute()
         {
             
         }

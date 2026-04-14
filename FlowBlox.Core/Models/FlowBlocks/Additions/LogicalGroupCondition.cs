@@ -26,13 +26,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         }
 
         [Display(Name = "LogicalGroupCondition_Conditions", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(
+        [FlowBloxUI(
             Factory = UIFactory.GridView,
             UiOptions = UIOptions.EnableFieldSelection,
             CreatableTypes = new[] { 
                 typeof(FieldLogicalComparisonCondition), 
                 typeof(LogicalGroupCondition) })]
-        [FlowBlockDataGrid(GridColumnMemberNames = [
+        [FlowBloxDataGrid(GridColumnMemberNames = [
             nameof(LogicalCondition.LogicalOperator),
             nameof(LogicalCondition.DisplayName)
             ])]

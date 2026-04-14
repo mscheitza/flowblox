@@ -24,8 +24,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Calculation
 
         [Required]
         [Display(Name = "MathFlowBlock_Expression", Description = "MathFlowBlock_Expression_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(IsCodingMode = true, MultiLine = true)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(IsCodingMode = true, MultiLine = true)]
         public string MathExpression { get; set; }
 
         public override bool Execute(BaseRuntime runtime, object data)
@@ -95,19 +95,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.Calculation
 
         public enum MathFlowBlockNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Math expression is empty")]
             ExpressionEmpty,
 
-            [FlowBlockNotification(NotificationType = NotificationType.Error)]
+            [FlowBloxNotification(NotificationType = NotificationType.Error)]
             [Display(Name = "Math expression evaluation failed")]
             EvaluationFailed,
 
-            [FlowBlockNotification(NotificationType = NotificationType.Error)]
+            [FlowBloxNotification(NotificationType = NotificationType.Error)]
             [Display(Name = "Unsupported field type used in math expression")]
             UnsupportedFieldType,
 
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Math expression produced an invalid result")]
             InvalidResult
         }

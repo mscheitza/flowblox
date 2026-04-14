@@ -28,12 +28,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
     public class StartEndPatternSelectorFlowBlock : BasePipeFlowBlock
     {
         [Display(Name = "StartEndPatternSelectorFlowBlock_StartEndPatterns", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
-        [FlowBlockDataGrid(IsMovable = true)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
+        [FlowBloxDataGrid(IsMovable = true)]
         public ObservableCollection<StartEndPattern> StartEndPatterns { get; set; }
 
         [Display(Name = "StartEndPatternSelectorFlowBlock_IncludePatternInResult", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockCheckbox(HeaderLabel = "StartEndPatternSelectorFlowBlock_ReturnOptions")]
         public bool IncludePatternInResult { get; set; }
 
         public override SKImage Icon16 => base.Icon16;
@@ -115,7 +114,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         
         public enum StartEndPatternSelectorNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "The pattern selector returned no matches.")]
             ReturnedNoMatches
         }

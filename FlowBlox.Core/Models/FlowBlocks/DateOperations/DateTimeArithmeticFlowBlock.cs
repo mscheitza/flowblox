@@ -16,7 +16,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
     {
         [Required]
         [Display(Name = "DateTimeArithmeticFlowBlock_SourceDate", Description = "DateTimeArithmeticFlowBlock_SourceDate_Description", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(
+        [FlowBloxUI(
             Factory = UIFactory.Association,
             SelectionFilterMethod = nameof(GetPossibleDateTimeFields),
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),

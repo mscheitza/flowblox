@@ -22,7 +22,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         [Display(Name = "XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument", Description = "XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip",
             ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
             SelectionFilterMethod = nameof(GetPossibleXmlDocumentFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public XmlDocumentFlowBlock AssociatedXmlDocument { get; set; }
@@ -36,7 +36,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
 
         [Display(Name = "XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter", Description = "XmlDocumentNodeWriterFlowBlock_AssociatedNodeWriter_Tooltip",
             ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
            SelectionFilterMethod = nameof(GetPossibleSourceNodes),
            SelectionDisplayMember = nameof(BaseFlowBlock.Name))]
         public XmlDocumentNodeWriterFlowBlock AssociatedNodeWriter { get; set; }
@@ -50,7 +50,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
 
         [Display(Name = "XmlDocumentNodeWriterFlowBlock_XPath", Description = "XmlDocumentNodeWriterFlowBlock_XPath_Tooltip",
             ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string XPath { get; set; }
 
 
@@ -65,7 +65,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
 
         [Display(Name = "XmlDocumentNodeWriterFlowBlock_Assignments", Description = "XmlDocumentNodeWriterFlowBlock_Assignments_Tooltip",
             ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBlockUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public ObservableCollection<XmlAssignment> Assignments { get; set; }
 
         public XmlDocumentNodeWriterFlowBlock()

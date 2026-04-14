@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Models.Components.IO
 
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.folder_zip_outline, 32, new SKColor(14, 116, 144));
         [Display(Name = "PropertyNames_DataSource", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association,
+        [FlowBloxUI(Factory = UIFactory.Association,
                      SelectionFilterMethod = nameof(GetPossibleDataSources),
                      SelectionDisplayMember = nameof(DataObjectBase.Name))]
         public DataObjectBase DataSource { get; set; }

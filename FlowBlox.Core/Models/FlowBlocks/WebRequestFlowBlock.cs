@@ -20,26 +20,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    [FlowBlockUIGroup("WebRequestFlowBlock_Groups_Advanced", 0)]
-    [FlowBlockUIGroup("WebRequestFlowBlock_Groups_Payload", 1)]
-    [FlowBlockUIGroup("WebRequestFlowBlock_Groups_Authentication", 2)]
+    [FlowBloxUIGroup("WebRequestFlowBlock_Groups_Advanced", 0)]
+    [FlowBloxUIGroup("WebRequestFlowBlock_Groups_Payload", 1)]
+    [FlowBloxUIGroup("WebRequestFlowBlock_Groups_Authentication", 2)]
     [Display(Name = "WebRequestFlowBlock_DisplayName", Description = "WebRequestFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("WebRequestFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     public class WebRequestFlowBlock : BaseResultFlowBlock
     {
         [Display(Name = "WebRequestFlowBlock_Url", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(IsCodingMode = true)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(IsCodingMode = true)]
         public string Url { get; set; }
 
         [Display(Name = "WebRequestFlowBlock_HTTPAction", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public HttpActions? HTTPAction { get; set; } = HttpActions.GET;
 
         private ResponseBodyKind _responseBodyKind;
 
         [Display(Name = "WebRequestFlowBlock_ResponseBodyKind", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public ResponseBodyKind ResponseBodyKind
         {
             get => _responseBodyKind;
@@ -68,11 +68,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
 
         [Display(Name = "WebRequestFlowBlock_ResultFields", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ResultFieldByEnumValue<WebRequestDestinations>> ResultFields { get; set; }
 
         [Display(Name = "WebRequestFlowBlock_AssociatedWebRequest", Description = "WebRequestFlowBlock_AssociatedWebRequest_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Advanced", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleWebRequests), SelectionDisplayMember = nameof(Name),
+        [FlowBloxUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleWebRequests), SelectionDisplayMember = nameof(Name),
             Operations = UIOperations.Link | UIOperations.Unlink)]
         public WebRequestFlowBlock AssociatedWebRequest { get; set; }
 
@@ -95,24 +95,24 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public string Payload_ContentType { get; set; }
 
         [Display(Name = "WebRequestFlowBlock_Payload", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Payload", Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         public string Payload { get; set; }
 
         [Display(Name = "WebRequestFlowBlock_PostParameters", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Payload", Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.GridView, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.GridView, UiOptions = UIOptions.EnableFieldSelection)]
         public ObservableCollection<WebRequestParameter> PostParameters { get; set; }
 
         [Display(Name = "WebRequestFlowBlock_HeaderParameters", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Payload", Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.GridView, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.GridView, UiOptions = UIOptions.EnableFieldSelection)]
         public ObservableCollection<WebRequestParameter> HeaderParameters { get; set; }
 
         [Display(Name = "WebRequestFlowBlock_UserName", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Authentication", Order = 0)]
         public string UserName { get; set; }
 
         [Display(Name = "WebRequestFlowBlock_Password", ResourceType = typeof(FlowBloxTexts), GroupName = "WebRequestFlowBlock_Groups_Authentication", Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox]
         public string Password { get; set; }
 
         [JsonIgnore()]
@@ -449,7 +449,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         public enum WebRequestNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Web request invocation failed")]
             WebRequestInvocationFailed
         }

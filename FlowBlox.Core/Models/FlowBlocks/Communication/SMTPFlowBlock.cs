@@ -20,7 +20,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
     {
         [Required]
         [Display(Name = "SMTPFlowBlock_Host", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Host { get; set; }
 
         [Display(Name = "SMTPFlowBlock_Port", ResourceType = typeof(FlowBloxTexts), Order = 1)]
@@ -33,47 +33,47 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
         public bool UseAuthentication { get; set; }
 
         [Display(Name = "SMTPFlowBlock_UserName", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string UserName { get; set; }
 
         [Display(Name = "SMTPFlowBlock_Password", ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox]
         public string Password { get; set; }
 
         [Required]
         [Display(Name = "SMTPFlowBlock_FromAddress", ResourceType = typeof(FlowBloxTexts), Order = 6)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string FromAddress { get; set; }
 
         [Required]
         [Display(Name = "SMTPFlowBlock_ToAddresses", Description = "SMTPFlowBlock_ToAddresses_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 7)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string ToAddresses { get; set; }
 
         [Display(Name = "SMTPFlowBlock_CcAddresses", Description = "SMTPFlowBlock_CcAddresses_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 8)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string CcAddresses { get; set; }
 
         [Display(Name = "SMTPFlowBlock_BccAddresses", Description = "SMTPFlowBlock_BccAddresses_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 9)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string BccAddresses { get; set; }
 
         [Display(Name = "SMTPFlowBlock_Subject", ResourceType = typeof(FlowBloxTexts), Order = 10)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Subject { get; set; }
 
         [Display(Name = "SMTPFlowBlock_Body", ResourceType = typeof(FlowBloxTexts), Order = 11)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         public string Body { get; set; }
 
         [Display(Name = "SMTPFlowBlock_IsBodyHtml", ResourceType = typeof(FlowBloxTexts), Order = 12)]
         public bool IsBodyHtml { get; set; }
 
         [Display(Name = "SMTPFlowBlock_Attachments", ResourceType = typeof(FlowBloxTexts), Order = 13)]
-        [FlowBlockUI(Factory = UIFactory.GridView)]
-        [FlowBlockDataGrid]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
+        [FlowBloxDataGrid]
         public ObservableCollection<SmtpAttachmentMappingEntry> Attachments { get; set; } = new();
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.cube_send, 16, SKColors.CadetBlue);
@@ -241,7 +241,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
 
         public enum SMTPNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Mail send failure")]
             MailSendFailure
         }

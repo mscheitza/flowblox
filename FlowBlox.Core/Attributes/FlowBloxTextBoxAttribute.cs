@@ -1,7 +1,7 @@
 namespace FlowBlox.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class FlowBlockTextBoxAttribute : Attribute
+    public class FlowBloxTextBoxAttribute : Attribute
     {
         public bool MultiLine { get; set; }
 
@@ -28,7 +28,7 @@ namespace FlowBlox.Core.Attributes
         /// </summary>
         public string SyntaxHighlighting { get; set; }
 
-        public FlowBlockTextBoxAttribute()
+        public FlowBloxTextBoxAttribute()
         {
             MultiLine = false;
             IsCodingMode = false;

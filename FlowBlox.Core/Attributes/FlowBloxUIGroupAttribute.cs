@@ -1,7 +1,7 @@
 ﻿namespace FlowBlox.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class FlowBlockUIGroupAttribute : Attribute
+    public class FlowBloxUIGroupAttribute : Attribute
     {
         public string Name { get; set; }
 
@@ -9,12 +9,12 @@
 
         public ControlAlignment ControlAlignment { get; set; }
 
-        public FlowBlockUIGroupAttribute()
+        public FlowBloxUIGroupAttribute()
         {
 
         }
 
-        public FlowBlockUIGroupAttribute(string name, int order, ControlAlignment controlAlignment = ControlAlignment.Fill)
+        public FlowBloxUIGroupAttribute(string name, int order, ControlAlignment controlAlignment = ControlAlignment.Fill)
         {
             Name = name;
             Order = order;

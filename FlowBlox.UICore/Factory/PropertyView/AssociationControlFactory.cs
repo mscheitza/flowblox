@@ -151,19 +151,19 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             stackPanel.Children.Add(_textBox);
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Create) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Create) == true)
                 stackPanel.Children.Add(CreateButton(PackIconMaterialKind.Plus, _createCommand));
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Link) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Link) == true)
                 stackPanel.Children.Add(CreateButton(PackIconMaterialKind.Link, _linkCommand));
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Unlink) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Unlink) == true)
                 stackPanel.Children.Add(CreateButton(PackIconMaterialKind.LinkOff, _unlinkCommand));
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
                 stackPanel.Children.Add(CreateButton(PackIconMaterialKind.Pencil, _editCommand));
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
                 stackPanel.Children.Add(CreateButton(PackIconMaterialKind.Delete, _deleteCommand));
 
             AppendResolvedFlowBlockHint(stackPanel);
@@ -213,7 +213,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         private async void ExecuteLink()
         {
-            if (string.IsNullOrEmpty(_flowBlockUIAttribute?.SelectionFilterMethod))
+            if (string.IsNullOrEmpty(_uiAttribute?.SelectionFilterMethod))
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
                         (MetroWindow)_window,
@@ -229,7 +229,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var selectionMethodResolution = SelectionMethodResolver.ResolveSelectionFilterMethodFromTargetOrParent(
                 _target,
                 _parent,
-                _flowBlockUIAttribute.SelectionFilterMethod);
+                _uiAttribute.SelectionFilterMethod);
 
             if (selectionMethodResolution?.Method == null)
             {
@@ -238,7 +238,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     FlowBloxResourceUtil.GetLocalizedString("Global_FilterMethodNotFound_Title"),
                     string.Format(
                         FlowBloxResourceUtil.GetLocalizedString("Global_FilterMethodNotFound_Message"),
-                        _flowBlockUIAttribute.SelectionFilterMethod,
+                        _uiAttribute.SelectionFilterMethod,
                         _target.GetType().Name)
                 );
 

@@ -25,7 +25,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
     {
         private const double DefaultTextColumnMinWidth = 140;
 
-        private readonly FlowBlockDataGridAttribute _dataGridAttribute;
+        private readonly FlowBloxDataGridAttribute _dataGridAttribute;
 
         private RelayCommand _addCommand;
         private RelayCommand _deleteCommand;
@@ -36,7 +36,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
         public DataGridFactory(Window window, PropertyInfo property, object target, bool readOnly)
             : base(window, property, target, readOnly)
         {
-            _dataGridAttribute = _property.GetCustomAttribute<FlowBlockDataGridAttribute>();
+            _dataGridAttribute = _property.GetCustomAttribute<FlowBloxDataGridAttribute>();
         }
 
         private void SetCellStyle(DataGrid dataGrid)
@@ -78,11 +78,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 yield return p;
         }
 
-        private bool IsPropertyReadOnly(PropertyInfo propertyInfo, FlowBlockUIAttribute flowBlockUIAttribute)
+        private bool IsPropertyReadOnly(PropertyInfo propertyInfo, FlowBloxUIAttribute uiAttribute)
         {
             return _readOnly ||
                    !propertyInfo.CanWrite ||
-                   flowBlockUIAttribute?.ReadOnly == true;
+                   uiAttribute?.ReadOnly == true;
         }
 
         public FrameworkElement Create()
@@ -95,9 +95,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var dataGrid = new DataGrid
             {
                 AutoGenerateColumns = false,
-                IsReadOnly = _flowBlockUIAttribute?.ReadOnly ?? false,
+                IsReadOnly = _uiAttribute?.ReadOnly ?? false,
                 CanUserAddRows = false,
-                CanUserDeleteRows = _flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Delete) ?? false,
+                CanUserDeleteRows = _uiAttribute?.Operations.HasFlag(UIOperations.Delete) ?? false,
                 CanUserSortColumns = _dataGridAttribute?.IsMovable != true,
                 SelectionMode = DataGridSelectionMode.Extended,
                 ColumnWidth = DataGridLength.Auto
@@ -120,14 +120,14 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 if (displayAttr == null)
                     continue;
 
-                var flowBlockUIAttribute = childProperty.GetCustomAttribute<FlowBlockUIAttribute>();
-                var fieldSelectionAttribute = childProperty.GetCustomAttribute<FieldSelectionAttribute>();
+                var uiAttribute = childProperty.GetCustomAttribute<FlowBloxUIAttribute>();
+                var fieldSelectionAttribute = childProperty.GetCustomAttribute<FlowBloxFieldSelectionAttribute>();
 
                 // Wenn die Grid-Columms automatisch ermittelt wurden, werden nicht sichtbare Member nicht als Spalten angezeigt:
                 if (_dataGridAttribute?.GridColumnMemberNames == null ||
                     _dataGridAttribute.GridColumnMemberNames.Length == 0)
                 {
-                    if (flowBlockUIAttribute?.Visible == false)
+                    if (uiAttribute?.Visible == false)
                         continue;
                 }
 
@@ -136,7 +136,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 // Standard-Datentypen (inklusive Nullable<int>, Nullable<long>, etc.)
                 var underlyingType = Nullable.GetUnderlyingType(childProperty.PropertyType);
                 var propertyType = underlyingType ?? childProperty.PropertyType;
-                var textAttribute = childProperty.GetCustomAttribute<FlowBlockTextBoxAttribute>();
+                var textAttribute = childProperty.GetCustomAttribute<FlowBloxTextBoxAttribute>();
 
                 if (propertyType == typeof(string) &&
                     textAttribute?.Suggestions == true &&
@@ -154,11 +154,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         ItemsSource = suggestionItems,
                         SelectedItemBinding = new Binding(childProperty.Name)
                         {
-                            Mode = IsPropertyReadOnly(childProperty, flowBlockUIAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
+                            Mode = IsPropertyReadOnly(childProperty, uiAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
                             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                             TargetNullValue = string.Empty
                         },
-                        IsReadOnly = IsPropertyReadOnly(childProperty, flowBlockUIAttribute),
+                        IsReadOnly = IsPropertyReadOnly(childProperty, uiAttribute),
                         EditingElementStyle = comboStyle
                     };
 
@@ -172,19 +172,19 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     propertyType == typeof(double) ||
                     propertyType == typeof(string))
                 {
-                    var hasFieldSelection = flowBlockUIAttribute?.UiOptions.HasFlag(UIOptions.EnableFieldSelection) == true;
+                    var hasFieldSelection = uiAttribute?.UiOptions.HasFlag(UIOptions.EnableFieldSelection) == true;
                     if (hasFieldSelection)
                     {
                         var templateColumn = CreateFieldSelectableTextColumn(
                             headerText,
                             childProperty.Name,
-                            IsPropertyReadOnly(childProperty, flowBlockUIAttribute),
-                            flowBlockUIAttribute,
+                            IsPropertyReadOnly(childProperty, uiAttribute),
+                            uiAttribute,
                             fieldSelectionAttribute);
                         dataGrid.Columns.Add(templateColumn);
                         columnAttributeMap[templateColumn] = new FieldSelectionDialogContext
                         {
-                            UiAttribute = flowBlockUIAttribute,
+                            UiAttribute = uiAttribute,
                             FieldSelectionAttribute = fieldSelectionAttribute
                         };
                     }
@@ -196,17 +196,17 @@ namespace FlowBlox.UICore.Factory.PropertyView
                             MinWidth = DefaultTextColumnMinWidth,
                             Binding = new Binding(childProperty.Name)
                             {
-                                Mode = IsPropertyReadOnly(childProperty, flowBlockUIAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
+                                Mode = IsPropertyReadOnly(childProperty, uiAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
                                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                                 TargetNullValue = string.Empty
                             },
-                            IsReadOnly = IsPropertyReadOnly(childProperty, flowBlockUIAttribute)
+                            IsReadOnly = IsPropertyReadOnly(childProperty, uiAttribute)
                         };
                         ApplyCenteredTextColumnStyles(column);
                         dataGrid.Columns.Add(column);
                         columnAttributeMap[column] = new FieldSelectionDialogContext
                         {
-                            UiAttribute = flowBlockUIAttribute,
+                            UiAttribute = uiAttribute,
                             FieldSelectionAttribute = fieldSelectionAttribute
                         };
                     }
@@ -235,10 +235,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     dataGrid.Columns.Add(column);
                 }
                 // Selection-Filter
-                else if (flowBlockUIAttribute?.Factory == UIFactory.ComboBox)
+                else if (uiAttribute?.Factory == UIFactory.ComboBox)
                 {
-                    var filterMethod = !string.IsNullOrEmpty(flowBlockUIAttribute?.SelectionFilterMethod) ?
-                        _target.GetType().GetMethod(flowBlockUIAttribute?.SelectionFilterMethod) :
+                    var filterMethod = !string.IsNullOrEmpty(uiAttribute?.SelectionFilterMethod) ?
+                        _target.GetType().GetMethod(uiAttribute?.SelectionFilterMethod) :
                         null;
 
                     if (filterMethod != null)
@@ -268,7 +268,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                             SelectedValueBinding = new Binding(childProperty.Name) { 
                                 Mode = BindingMode.TwoWay 
                             },
-                            DisplayMemberPath = flowBlockUIAttribute.SelectionDisplayMember
+                            DisplayMemberPath = uiAttribute.SelectionDisplayMember
                         };
                         dataGrid.Columns.Add(column);
                     }
@@ -290,7 +290,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 }
 
                 // Association (Create/Edit Button)
-                else if (flowBlockUIAttribute?.Factory == UIFactory.Association)
+                else if (uiAttribute?.Factory == UIFactory.Association)
                 {
                     var buttonColumn = new DataGridTemplateColumn
                     {
@@ -312,15 +312,15 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         Header = headerText,
                         Binding = new Binding(childProperty.Name)
                         {
-                            Mode = IsPropertyReadOnly(childProperty, flowBlockUIAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
+                            Mode = IsPropertyReadOnly(childProperty, uiAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
                             UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                         },
-                        IsReadOnly = IsPropertyReadOnly(childProperty, flowBlockUIAttribute)
+                        IsReadOnly = IsPropertyReadOnly(childProperty, uiAttribute)
                     };
                     dataGrid.Columns.Add(column);
                     columnAttributeMap[column] = new FieldSelectionDialogContext
                     {
-                        UiAttribute = flowBlockUIAttribute,
+                        UiAttribute = uiAttribute,
                         FieldSelectionAttribute = fieldSelectionAttribute
                     };
                 }
@@ -372,19 +372,19 @@ namespace FlowBlox.UICore.Factory.PropertyView
             // Toolbar for Create, Delete, MoveUp, MoveDown
             var toolBar = new ToolBar();
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Create) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Create) == true)
             {
                 var addButton = CreateButton(PackIconMaterialKind.Plus, FlowBloxResourceUtil.GetLocalizedString("Buttons_Add"), _addCommand, Brushes.Green);
                 toolBar.Items.Add(addButton);
             }
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
             {
                 var editButton = CreateButton(PackIconMaterialKind.Pencil, FlowBloxResourceUtil.GetLocalizedString("Buttons_Edit"), _editCommand, Brushes.Orange);
                 toolBar.Items.Add(editButton);
             }
 
-            if (_flowBlockUIAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
+            if (_uiAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
             {
                 var removeButton = CreateButton(PackIconMaterialKind.Delete, FlowBloxResourceUtil.GetLocalizedString("Buttons_Remove"), _deleteCommand, Brushes.DarkRed);
                 toolBar.Items.Add(removeButton);
@@ -490,8 +490,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
             string headerText,
             string propertyName,
             bool isReadOnly,
-            FlowBlockUIAttribute attribute,
-            FieldSelectionAttribute fieldSelectionAttribute)
+            FlowBloxUIAttribute attribute,
+            FlowBloxFieldSelectionAttribute fieldSelectionAttribute)
         {
             var cellTextFactory = new FrameworkElementFactory(typeof(TextBlock));
             cellTextFactory.SetValue(TextBlock.VerticalAlignmentProperty, VerticalAlignment.Center);

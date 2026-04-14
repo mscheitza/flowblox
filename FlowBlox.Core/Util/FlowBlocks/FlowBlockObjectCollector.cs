@@ -191,7 +191,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
                     continue;
                 }
 
-                var uiAttr = prop.GetCustomAttribute<FlowBlockUIAttribute>();
+                var uiAttr = prop.GetCustomAttribute<FlowBloxUIAttribute>();
                 if (uiAttr != null &&
                     uiAttr.UiOptions.HasFlag(UIOptions.EnableFieldSelection) &&
                     propValue is string strValue)
@@ -234,7 +234,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
                 if (!prop.TryGetValue(obj, out var propValue) || propValue is not string strValue)
                     continue;
 
-                var uiAttr = prop.GetCustomAttribute<FlowBlockUIAttribute>();
+                var uiAttr = prop.GetCustomAttribute<FlowBloxUIAttribute>();
                 if (uiAttr == null || !uiAttr.UiOptions.HasFlag(UIOptions.EnableFieldSelection))
                     continue;
 

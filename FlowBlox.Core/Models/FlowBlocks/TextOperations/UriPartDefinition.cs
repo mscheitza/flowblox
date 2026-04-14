@@ -11,8 +11,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
     public sealed class UriPartDefinition : FlowBloxReactiveObject
     {
         [Display(Name = "ConcatUriFlowBlock_UriPart_Value", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(IsCodingMode = true)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(IsCodingMode = true)]
         public string Value { get; set; }
     }
 }

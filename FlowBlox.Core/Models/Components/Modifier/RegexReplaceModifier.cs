@@ -11,7 +11,7 @@ namespace FlowBlox.Core.Models.Components.Modifier
     public class RegexReplaceModifier : RegexModifierBase
     {
         [Display(Name = "RegexMatchModifier_Replace", Order = 1, ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(ToolboxCategory = nameof(FlowBloxToolboxCategory.Regex), UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(ToolboxCategory = nameof(FlowBloxToolboxCategory.Regex), UiOptions = UIOptions.EnableFieldSelection)]
         public string Replace { get; set; }
 
         public override string Modify(BaseRuntime runtime, string value)

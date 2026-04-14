@@ -36,29 +36,29 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
         [Required]
         [Display(Name = "AIPropertyValueGenerationStrategy_Provider", Description = "AIPropertyValueGenerationStrategy_Provider_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Association,
+        [FlowBloxUI(Factory = UIFactory.Association,
             SelectionFilterMethod = nameof(GetPossibleProviders),
             SelectionDisplayMember = nameof(ManagedObject.Name))]
         public AIProviderBase Provider { get; set; }
 
         [Required]
         [Display(Name = "AIPropertyValueGenerationStrategy_PromptTemplate", Description = "AIPropertyValueGenerationStrategy_PromptTemplate_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPropertyValueGenerationPrompts))]
-        [FieldSelection(AllowedFieldSelectionModes =
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPropertyValueGenerationPrompts))]
+        [FlowBloxFieldSelection(AllowedFieldSelectionModes =
             FieldSelectionModes.Fields |
             FieldSelectionModes.ProjectProperties |
             FieldSelectionModes.Options |
             FieldSelectionModes.GenerationStrategyData)]
-        [FlowBlockTextBox(MultiLine = true, IsCodingMode = true)]
+        [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         public string PromptTemplate { get; set; }
 
         [Display(Name = "AIPropertyValueGenerationStrategy_SystemInstruction", Description = "AIPropertyValueGenerationStrategy_SystemInstruction_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string SystemInstruction { get; set; }
 
         [Display(Name = "AIPropertyValueGenerationStrategy_ModelOverride", Description = "AIPropertyValueGenerationStrategy_ModelOverride_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string ModelOverride { get; set; }
 
         [Display(Name = "AIPropertyValueGenerationStrategy_Temperature", Description = "AIPropertyValueGenerationStrategy_Temperature_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 6)]
@@ -72,7 +72,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
         [Required]
         [Display(Name = "AIPropertyValueGenerationStrategy_TargetPropertyName", Description = "AIPropertyValueGenerationStrategy_TargetPropertyName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 9)]
-        [FlowBlockTextBox(Suggestions = true, SuggestionMember = nameof(GetPossibleTargetPropertyNames))]
+        [FlowBloxTextBox(Suggestions = true, SuggestionMember = nameof(GetPossibleTargetPropertyNames))]
         public string TargetPropertyName { get; set; }
 
         public List<AIProviderBase> GetPossibleProviders()

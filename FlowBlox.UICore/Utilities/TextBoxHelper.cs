@@ -22,7 +22,7 @@ namespace FlowBlox.UICore.Utilities
     {
         public static FieldSelectionWindowArgs CreateFieldSelectionWindowArgs(
             object target,
-            FieldSelectionAttribute fieldSelection)
+            FlowBloxFieldSelectionAttribute fieldSelection)
         {
             var args = new FieldSelectionWindowArgs
             {
@@ -66,8 +66,8 @@ namespace FlowBlox.UICore.Utilities
 
         public static void ShowFieldSelectionDialog(
             object target,
-            FlowBlockUIAttribute flowBlockUI,
-            FieldSelectionAttribute fieldSelection,
+            FlowBloxUIAttribute uiAttribute,
+            FlowBloxFieldSelectionAttribute fieldSelection,
             ITextBoxLike textBox,
             Window ownerWindow)
         {
@@ -77,11 +77,11 @@ namespace FlowBlox.UICore.Utilities
 
         public static void ShowFieldSelectionDialog(
             object target,
-            FlowBlockUIAttribute flowBlockUI,
+            FlowBloxUIAttribute uiAttribute,
             ITextBoxLike textBox,
             Window ownerWindow)
         {
-            ShowFieldSelectionDialog(target, flowBlockUI, fieldSelection: null, textBox, ownerWindow);
+            ShowFieldSelectionDialog(target, uiAttribute, fieldSelection: null, textBox, ownerWindow);
         }
 
         public static void ShowFieldSelectionDialog(

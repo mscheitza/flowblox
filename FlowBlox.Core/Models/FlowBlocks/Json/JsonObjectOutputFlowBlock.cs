@@ -18,7 +18,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     {
         [Display(Name = "JsonObjectOutputFlowBlock_AssociatedJsonObject", Description = "JsonObjectOutputFlowBlock_AssociatedJsonObject_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleJsonObjectFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public JsonObjectFlowBlock AssociatedJsonObject { get; set; }
@@ -32,18 +32,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
         [Required]
         [Display(Name = "PropertyNames_EncodingName", Description = "PropertyNames_EncodingName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DotNetEncodingNames EncodingName { get; set; } = DotNetEncodingNames.Default;
 
         [Display(Name = "JsonObjectOutputFlowBlock_Indented", ResourceType = typeof(FlowBloxTexts))]
         public bool Indented { get; set; } = true;
 
         [Display(Name = "JsonObjectOutputFlowBlock_NullValueHandling", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public NullValueHandling NullValueHandling { get; set; } = NullValueHandling.Include;
 
         [Display(Name = "JsonObjectOutputFlowBlock_DateFormatHandling", ResourceType = typeof(FlowBloxTexts))]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DateFormatHandling DateFormatHandling { get; set; } = DateFormatHandling.IsoDateFormat;
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.code_braces, 16, SKColors.Orange);

@@ -25,13 +25,13 @@ This file summarizes core project conventions for AI/coding agents working in th
 - FlowBlox UI annotations:
   - `FlowBlox.Core.Attributes`
   - Commonly used:
-    - `FlowBlockUIAttribute`
-    - `FlowBlockTextBoxAttribute`
-    - `FlowBlockDataGridAttribute`
-    - `FlowBlockListViewAttribute`
-    - `FlowBlockUIGroupAttribute`
+    - `FlowBloxUIAttribute`
+    - `FlowBloxTextBoxAttribute`
+    - `FlowBloxDataGridAttribute`
+    - `FlowBloxListViewAttribute`
+    - `FlowBloxUIGroupAttribute`
     - `FlowBloxSupportedTypesAttribute`
-    - `FlowBlockUIFileSelectionAttribute`
+    - `FlowBloxUIFileSelectionAttribute`
 - Display/localization annotation:
   - `System.ComponentModel.DataAnnotations`
   - Use `DisplayAttribute` with `ResourceType = typeof(FlowBloxTexts)`
@@ -66,7 +66,7 @@ This file summarizes core project conventions for AI/coding agents working in th
 
 ## FlowBlock Notifications
 - For concise, flow-block-local error/warning messages shown directly in the FlowBlock UI, use the Notifications model.
-- Define a block-specific enum with `FlowBlockNotificationAttribute` on each entry.
+- Define a block-specific enum with `FlowBloxNotificationAttribute` on each entry.
 - Register it via `NotificationTypes` override in the FlowBlock.
 - Trigger it with `CreateNotification(runtime, ...)`.
 - Keep notification display texts short and action-oriented.

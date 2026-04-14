@@ -9,12 +9,12 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.AIAssistant.Models
 {
     [Display(Name = "AssistantConfiguration_DisplayName", Description = "AssistantConfiguration_Description", ResourceType = typeof(FlowBloxTexts))]
-    [FlowBlockUIGroup("AssistantConfiguration_Groups_General", 0)]
+    [FlowBloxUIGroup("AssistantConfiguration_Groups_General", 0)]
     public class AssistantConfiguration : FlowBloxReactiveObject
     {
         [Required]
         [Display(Name = "AssistantConfiguration_Provider", Description = "AssistantConfiguration_Provider_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public AIProviderBase Provider { get; set; }
 
         [Display(Name = "AssistantConfiguration_Temperature", Description = "AssistantConfiguration_Temperature_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 1)]

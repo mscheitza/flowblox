@@ -21,7 +21,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         #region Tab: Default
 
         [Display(Name = "OnnxQuestionAnsweringFlowBlock_QATokenizer", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.All, SelectionFilterMethod = nameof(GetPossibleQATokenizers))]
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.All, SelectionFilterMethod = nameof(GetPossibleQATokenizers))]
         [Required]
         public QATokenizerBase QATokenizer { get; set; }
 
@@ -32,14 +32,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         }
 
         [Display(Name = "OnnxQuestionAnsweringFlowBlock_Question", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = false)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = false)]
         [Required]
         public string Question { get; set; }
 
         [Display(Name = "OnnxQuestionAnsweringFlowBlock_Context", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBlockTextBox(MultiLine = true)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
         [Required]
         public string Context { get; set; }
 
@@ -51,7 +51,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             Description = "OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy_Tooltip",
             GroupName = "OnnxBaseFlowBlock_Groups_ExtendedSettings",
             ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public PositionSelectionStrategy PositionSelectionStrategy { get; set; }
 
         #endregion

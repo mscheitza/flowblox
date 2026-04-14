@@ -3,9 +3,9 @@
 namespace FlowBlox.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class FlowBlockDataGridAttribute : Attribute
+    public class FlowBloxDataGridAttribute : Attribute
     {
-        public FlowBlockDataGridAttribute()
+        public FlowBloxDataGridAttribute()
         {
             GridColumnMemberNames = Array.Empty<string>();
         }

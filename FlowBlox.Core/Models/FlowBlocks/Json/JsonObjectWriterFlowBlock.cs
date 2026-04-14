@@ -21,7 +21,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     {
         [Display(Name = "JsonObjectWriterFlowBlock_AssociatedJsonObject", Description = "JsonObjectWriterFlowBlock_AssociatedJsonObject_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleJsonObjectFlowBlocks),
             SelectionDisplayMember = nameof(Name))]
         public JsonObjectFlowBlock AssociatedJsonObject { get; set; }
@@ -34,7 +34,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         }
 
         [Display(Name = "JsonObjectWriterFlowBlock_AssociatedJsonObjectWriter", Description = "JsonObjectWriterFlowBlock_AssociatedJsonObjectWriter_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
            SelectionFilterMethod = nameof(GetPossibleJsonObjectWriters),
            SelectionDisplayMember = nameof(BaseFlowBlock.Name))]
         public JsonObjectWriterFlowBlock AssociatedJsonObjectWriter { get; set; }
@@ -46,7 +46,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         }
 
         [Display(Name = "JsonObjectWriterFlowBlock_JsonAssignments", Description = "JsonObjectWriterFlowBlock_JsonAssignments_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 10)]
-        [FlowBlockUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
+        [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public ObservableCollection<JsonPropertyValueAssignment> Assignments { get; set; } = new();
 
 

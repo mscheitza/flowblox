@@ -14,7 +14,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks
 {
-    [FlowBlockUIGroup("WebBrowserFlowBlock_Groups_Advanced", 0)]
+    [FlowBloxUIGroup("WebBrowserFlowBlock_Groups_Advanced", 0)]
     [Display(Name = "WebBrowserFlowBlock_DisplayName", Description = "WebBrowserFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_ResultBehavior", Icon = SpecialExplanationIcon.Information)]
@@ -108,14 +108,14 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Display(Name = "WebBrowserFlowBlock_AssociatedWebBrowser", Description = "WebBrowserFlowBlock_AssociatedWebBrowser_Tooltip", ResourceType = typeof(FlowBloxTexts), 
             GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleWebBrowsers), 
             SelectionDisplayMember = nameof(Name))]
         public WebBrowserFlowBlock AssociatedWebBrowser { get; set; }
 
         [Display(Name = "WebBrowserFlowBlock_Timeout", Description = "WebBrowserFlowBlock_Timeout_Tooltip", ResourceType = typeof(FlowBloxTexts), 
             GroupName = "WebBrowserFlowBlock_Groups_Advanced", Order = 1)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public int Timeout { get; set; }
 
         [Display(Name = "WebBrowserFlowBlock_RetryLimit", Description = "WebBrowserFlowBlock_RetryLimit_Tooltip", ResourceType = typeof(FlowBloxTexts),
@@ -135,7 +135,7 @@ namespace FlowBlox.Core.Models.FlowBlocks
         }
 
         [Display(Name = "WebBrowserFlowBlock_Url", Description = "WebBrowserFlowBlock_Url_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Url { get; set; }
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.web, 16, SKColors.DeepSkyBlue);

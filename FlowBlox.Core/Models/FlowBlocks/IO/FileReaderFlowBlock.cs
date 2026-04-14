@@ -17,7 +17,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
     {
         [Required]
         [Display(Name = "PropertyNames_DataSource", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBlockUI(Factory = UIFactory.Association,
+        [FlowBloxUI(Factory = UIFactory.Association,
                      SelectionFilterMethod = nameof(GetPossibleDataSources),
                      SelectionDisplayMember = nameof(DataObjectBase.Name))]
         public DataObjectBase DataSource { get; set; }
@@ -25,7 +25,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         [ActivationCondition(MemberName = nameof(ResultField), ActivationMethod = nameof(IsEncodingNameActive))]
         [ConditionallyRequired()]
         [Display(Name = "PropertyNames_EncodingName", Description = "PropertyNames_EncodingName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBlockUI(Factory = UIFactory.ComboBox)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public DotNetEncodingNames EncodingName { get; set; }
 
         private bool IsEncodingNameActive()
@@ -112,7 +112,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
 
         public enum FileReaderNotifications
         {
-            [FlowBlockNotification(NotificationType = NotificationType.Warning)]
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Failed to read the file")]
             FailedToReadFile
         }
