@@ -11,40 +11,69 @@ namespace FlowBlox.Core.Models.Testing
 
         public FlowBloxTestCapture()
         {
-            this._registry = FlowBloxRegistryProvider.GetRegistry();
+            _registry = FlowBloxRegistryProvider.GetRegistry();
         }
 
         public List<BaseFlowBlock> GetCapturedFlowBlocks() => _capturedFlowBlocks;
 
-        public bool CreateCapture(BaseFlowBlock startFlowBlock, BaseFlowBlock currentFlowBlock)
+        public bool CreateCapture(BaseFlowBlock startFlowBlock, BaseFlowBlock targetFlowBlock)
         {
+            if (startFlowBlock == null)
+                throw new ArgumentNullException(nameof(startFlowBlock));
+
+            if (targetFlowBlock == null)
+                throw new ArgumentNullException(nameof(targetFlowBlock));
+
             _capturedFlowBlocks = new List<BaseFlowBlock>();
-            return CaptureFlowBlocks(startFlowBlock, currentFlowBlock, ref _capturedFlowBlocks);
+            var visited = new HashSet<BaseFlowBlock>();
+
+            return CaptureFlowBlocks(startFlowBlock, targetFlowBlock, _capturedFlowBlocks, visited);
         }
 
-        private bool CaptureFlowBlocks(BaseFlowBlock flowBlock, BaseFlowBlock targetFlowBlock, ref List<BaseFlowBlock> capturedFlowBlocks)
+        private bool CaptureFlowBlocks(
+            BaseFlowBlock flowBlock,
+            BaseFlowBlock targetFlowBlock,
+            List<BaseFlowBlock> capturedFlowBlocks,
+            HashSet<BaseFlowBlock> visited)
         {
-            if (capturedFlowBlocks == null)
-                capturedFlowBlocks = new List<BaseFlowBlock>();
+            if (!visited.Add(flowBlock))
+                return false;
 
             bool targetCaptured = false;
-            var nextFlowBlocks = flowBlock.GetNextFlowBlocks();
-            if (nextFlowBlocks.Any(nextFlowBlock => nextFlowBlock == targetFlowBlock))
-            {
-                capturedFlowBlocks.Add(targetFlowBlock);
-                targetCaptured = true;
-            }
-            else
-            {
-                foreach (var nextFlowBlock in nextFlowBlocks)
-                {
-                    capturedFlowBlocks.Add(nextFlowBlock);
 
-                    if (CaptureFlowBlocks(nextFlowBlock, targetFlowBlock, ref capturedFlowBlocks))
+            foreach (var nextFlowBlock in flowBlock.GetNextFlowBlocks())
+            {
+                if (nextFlowBlock == targetFlowBlock)
+                {
+                    AddIfMissing(capturedFlowBlocks, nextFlowBlock);
+                    targetCaptured = true;
+                    continue;
+                }
+
+                if (nextFlowBlock.ReferencedFlowBlocks.Count == 1)
+                {
+                    AddIfMissing(capturedFlowBlocks, nextFlowBlock);
+
+                    if (CaptureFlowBlocks(nextFlowBlock, targetFlowBlock, capturedFlowBlocks, visited))
+                        targetCaptured = true;
+                }
+                else if (nextFlowBlock.ReferencedFlowBlocks.Count > 1 &&
+                         nextFlowBlock.ReferencedFlowBlocks.All(x => visited.Contains(x)))
+                {
+                    AddIfMissing(capturedFlowBlocks, nextFlowBlock);
+
+                    if (CaptureFlowBlocks(nextFlowBlock, targetFlowBlock, capturedFlowBlocks, visited))
                         targetCaptured = true;
                 }
             }
+
             return targetCaptured;
+        }
+
+        private static void AddIfMissing(List<BaseFlowBlock> capturedFlowBlocks, BaseFlowBlock flowBlock)
+        {
+            if (!capturedFlowBlocks.Contains(flowBlock))
+                capturedFlowBlocks.Add(flowBlock);
         }
     }
 }

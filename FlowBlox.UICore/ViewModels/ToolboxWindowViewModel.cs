@@ -9,7 +9,7 @@ using FlowBlox.Core.Util;
 using System.Windows;
 using FlowBlox.UICore.Resources;
 using FlowBlox.UICore.Models.Toolbox;
-using FlowBlox.UICore.Models;
+using FlowBlox.UICore.Events;
 
 namespace FlowBlox.UICore.ViewModels
 {

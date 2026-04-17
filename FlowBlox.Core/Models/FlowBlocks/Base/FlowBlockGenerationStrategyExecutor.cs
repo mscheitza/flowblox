@@ -6,16 +6,12 @@ using FlowBlox.Core.Models.Testing;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
-    
-
     public class FlowBlockGenerationStrategyExecutor : FlowBlockGenerationStrategyExecutorBase
     {
-        private readonly TestScope _scope;
-
-        public FlowBlockGenerationStrategyExecutor(BaseFlowBlock flowBlock, TestScope scope = TestScope.RequiredForExecution)
+        public FlowBlockGenerationStrategyExecutor(BaseFlowBlock flowBlock)
             : base(flowBlock)
         {
-            _scope = scope;
+
         }
 
         public bool ExecuteGeneration()
@@ -34,9 +30,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             var success = true;
             try
             {
-                foreach (var testDefinition in _scope == TestScope.All ?
-                     FlowBlock.TestDefinitions : 
-                     FlowBlock.TestDefinitions.Where(x => x.RequiredForExecution))
+                foreach (var testDefinition in FlowBlock.TestDefinitions)
                 {
                     var includedFlowBlocks = testDefinition.Entries
                         .Select(x => x.FlowBlock)

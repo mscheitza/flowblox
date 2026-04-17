@@ -209,7 +209,45 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
         private string BuildGenerationInputText(Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)
         {
-            return InputField?.StringValue ?? string.Empty;
+            if (InputField == null || testResults == null || testResults.Count == 0)
+                return string.Empty;
+
+            var inputFieldFQName = InputField.FullyQualifiedName;
+            if (string.IsNullOrWhiteSpace(inputFieldFQName))
+                return string.Empty;
+
+            var valuesByTestCase = testResults
+                .OrderBy(x => x.Key.Name, StringComparer.Ordinal)
+                .Select(x =>
+                {
+                    var value = string.Empty;
+                    var hasValue = x.Value?.FieldValueAssignments != null
+                        && x.Value.FieldValueAssignments.TryGetValue(inputFieldFQName, out value);
+                    return new
+                    {
+                        TestCaseName = x.Key.Name,
+                        HasValue = hasValue,
+                        Value = value
+                    };
+                })
+                .Where(x => x.HasValue)
+                .ToList();
+
+            if (valuesByTestCase.Count == 0)
+                return string.Empty;
+
+            var distinctValues = valuesByTestCase
+                .Select(x => x.Value ?? string.Empty)
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+
+            if (distinctValues.Count == 1)
+                return distinctValues[0];
+
+            var lines = valuesByTestCase
+                .Select(x => $"[{x.TestCaseName}] {x.Value ?? string.Empty}")
+                .ToList();
+            return string.Join(Environment.NewLine, lines);
         }
 
         private string ReplaceFieldTokensWithTestValues(string input, Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)

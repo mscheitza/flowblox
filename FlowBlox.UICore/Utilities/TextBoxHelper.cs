@@ -13,7 +13,7 @@ using FlowBlox.UICore.Enums;
 using FlowBlox.Core.Utilities;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Placeholders.GenerationStrategy;
-using FlowBlox.UICore.Models;
+using FlowBlox.UICore.Models.FieldSelection;
 
 
 namespace FlowBlox.UICore.Utilities

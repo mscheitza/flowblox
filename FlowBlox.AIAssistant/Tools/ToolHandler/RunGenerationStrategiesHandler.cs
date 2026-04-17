@@ -44,7 +44,7 @@ namespace FlowBlox.AIAssistant.Tools
                 ct.ThrowIfCancellationRequested();
 
                 var protocolEntries = new List<JObject>();
-                var generationExecutor = new FlowBlockGenerationStrategyExecutor(flowBlock, TestScope.All);
+                var generationExecutor = new FlowBlockGenerationStrategyExecutor(flowBlock);
 
                 void OnLogCreated(object? sender, LogCreatedEventArgs eventArgs)
                 {

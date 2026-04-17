@@ -2,6 +2,7 @@
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Util.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
@@ -31,6 +32,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
 
             return ResultField.IsDeletable(out dependencies);
+        }
+
+        public override string ToString()
+        {
+            var notSetText = FlowBloxResourceUtil.GetLocalizedString("ResultFieldByEnumValue_NotSet", typeof(FlowBloxTexts));
+            var format = FlowBloxResourceUtil.GetLocalizedString("ResultFieldByEnumValue_ObjectDisplayName", typeof(FlowBloxTexts));
+
+            var enumValue = EnumValue?.ToString() ?? notSetText;
+            var resultField = ResultField?.FullyQualifiedName ?? notSetText;
+
+            return string.Format(format, enumValue, resultField);
         }
     }
 }

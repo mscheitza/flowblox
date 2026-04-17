@@ -1,5 +1,6 @@
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Concurrent;
 using System.Reflection;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Attributes;
@@ -19,6 +20,10 @@ namespace FlowBlox.AIAssistant.Tools
 {
     internal static partial class ToolHandlerUtilities
     {
+        private static readonly ConcurrentDictionary<string, ConcurrentDictionary<PropertyCacheKey, string>> PropertyDescriptionCacheBySession =
+            new(StringComparer.Ordinal);
+        private static volatile string? _currentSessionGuid;
+
         private static readonly NullabilityInfoContext _nullabilityInfoContext = new();
 
         private static readonly HashSet<string> ExcludedBaseFlowBlockProperties = new(StringComparer.Ordinal)
@@ -73,6 +78,60 @@ namespace FlowBlox.AIAssistant.Tools
                 Error = error,
                 Result = result ?? new JObject()
             };
+        }
+
+        public static void SetCurrentSessionGuid(string? sessionGuid)
+        {
+            _currentSessionGuid = string.IsNullOrWhiteSpace(sessionGuid)
+                ? null
+                : sessionGuid.Trim();
+        }
+
+        public static void ClearSessionCache(string? sessionGuid = null)
+        {
+            var key = string.IsNullOrWhiteSpace(sessionGuid)
+                ? _currentSessionGuid
+                : sessionGuid.Trim();
+
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                PropertyDescriptionCacheBySession.Clear();
+                return;
+            }
+
+            PropertyDescriptionCacheBySession.TryRemove(key, out _);
+        }
+
+        private static string GetCurrentSessionCacheKey()
+        {
+            if (!string.IsNullOrWhiteSpace(_currentSessionGuid))
+                return _currentSessionGuid!;
+
+            return "default-session";
+        }
+
+        private static bool TryGetAlreadyDescribedInType(PropertyInfo property, out string describedInType)
+        {
+            describedInType = string.Empty;
+
+            var sessionKey = GetCurrentSessionCacheKey();
+            if (!PropertyDescriptionCacheBySession.TryGetValue(sessionKey, out var sessionCache))
+                return false;
+
+            return sessionCache.TryGetValue(PropertyCacheKey.FromProperty(property), out describedInType);
+        }
+
+        private static void MarkPropertyAsDescribed(PropertyInfo property, string describedInType)
+        {
+            if (string.IsNullOrWhiteSpace(describedInType))
+                return;
+
+            var sessionKey = GetCurrentSessionCacheKey();
+            var sessionCache = PropertyDescriptionCacheBySession.GetOrAdd(
+                sessionKey,
+                _ => new ConcurrentDictionary<PropertyCacheKey, string>());
+
+            sessionCache.TryAdd(PropertyCacheKey.FromProperty(property), describedInType);
         }
 
         public static FlowBloxRegistry GetRegistry()
@@ -205,6 +264,34 @@ namespace FlowBlox.AIAssistant.Tools
         {
             public string Path { get; set; } = string.Empty;
             public JToken Value { get; set; } = JValue.CreateNull();
+        }
+
+        private sealed class PropertyCacheKey : IEquatable<PropertyCacheKey>
+        {
+            public string PropertyName { get; init; } = string.Empty;
+            public string DeclaringTypeName { get; init; } = string.Empty;
+
+            public static PropertyCacheKey FromProperty(PropertyInfo property)
+            {
+                return new PropertyCacheKey
+                {
+                    PropertyName = property.Name ?? string.Empty,
+                    DeclaringTypeName = property.DeclaringType?.FullName ?? property.DeclaringType?.Name ?? string.Empty
+                };
+            }
+
+            public bool Equals(PropertyCacheKey? other)
+            {
+                if (other == null)
+                    return false;
+
+                return string.Equals(PropertyName, other.PropertyName, StringComparison.Ordinal) && 
+                       string.Equals(DeclaringTypeName, other.DeclaringTypeName, StringComparison.Ordinal);
+            }
+
+            public override bool Equals(object? obj) => Equals(obj as PropertyCacheKey);
+
+            public override int GetHashCode() => HashCode.Combine(PropertyName, DeclaringTypeName);
         }
     }
 }

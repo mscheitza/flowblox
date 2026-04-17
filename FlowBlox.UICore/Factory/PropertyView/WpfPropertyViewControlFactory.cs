@@ -1,14 +1,17 @@
 ﻿using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.UICore.Events;
+using FlowBlox.UICore.Factory.Base;
+using FlowBlox.UICore.Models.PropertyView;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
+using Mysqlx.Crud;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using System.Windows;
-using FlowBlox.UICore.Factory.Base;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace FlowBlox.UICore.Factory.PropertyView
 {
@@ -18,9 +21,29 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public event EventHandler<AssociationBeforeLinkEventArgs> AssociationBeforeLink;
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual AssociationBeforeLinkResult ProcessAssociationBeforeLink(string propertyName, object linkedObject)
+        {
+            if (string.IsNullOrWhiteSpace(propertyName))
+                throw new ArgumentException("Property name must not be null, empty, or whitespace.", nameof(propertyName));
+
+            if (linkedObject == null)
+                throw new ArgumentNullException(nameof(linkedObject));
+
+            var eventArgs = new AssociationBeforeLinkEventArgs(propertyName, linkedObject);
+            AssociationBeforeLink?.Invoke(this, eventArgs);
+
+            return new AssociationBeforeLinkResult
+            {
+                Cancel = eventArgs.Cancel,
+                LinkedObject = eventArgs.LinkedObject
+            };
         }
 
         public WpfPropertyViewControlFactory(Window window, PropertyInfo property, object target, bool readOnly)

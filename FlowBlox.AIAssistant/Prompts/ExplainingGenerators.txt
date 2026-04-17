@@ -1,4 +1,5 @@
 Use this only when the user explicitly asks to generate values from test results.
+If generator/test setup is unclear, load deep-dive test catalog key `explaining_test_definitions_deep_dive` for compact end-to-end examples.
 Terminology note:
 - "Generator" means a value-generation strategy under `GenerationStrategies` (test-driven), not a dedicated generator flow block type.
 
@@ -8,7 +9,7 @@ Purpose of generators:
 - Write the generated value to the configured target property (one-shot assignment).
 
 Preconditions:
-- Required test cases exist and are marked `RequiredForExecution=true`.
+- Suitable test cases exist for the target flow block.
 - A compatible generation strategy exists in the target flow block's `GenerationStrategies`.
 - Input field and target property are configured.
 - At the target flow block, define at least two expectations: one value expectation and one dataset-count expectation.
@@ -19,7 +20,9 @@ Setup order:
    - Inspect selected strategy details with `GetTypeKindsInfo`.
 1. Ensure test definitions exist and are connected/configured.
    Link test definitions via standard update logic, for example `UpdateFlowBlock` with `path=/TestDefinitions/Link` and value `{"resolveManagedObjectByName":"<testDefinitionName>"}`.
-2. For runtime-start test execution / generator application, explicitly set `RequiredForExecution=true` on the used test definitions.
+2. For runtime-start test execution with automatic regeneration, set `RequiredForExecution=true` on the used test definitions.
+   Default AI behavior: do not set this flag automatically; set it only on explicit user request.
+   Ask for enabling auto-regeneration only when generation strategies exist on the affected flow block.
 3. Create/update generation strategy on the target flow block via `UpdateFlowBlock` at `GenerationStrategies` (exact property name).
    Important: `GenerationStrategies` is a FlowBloxReactiveObject collection (not a ManagedObject reference list), so do not use `/GenerationStrategies/Link`.
    Use path-based creation/update with typed index when needed, e.g. `/GenerationStrategies/0:FlowBlox.Core.Models.FlowBlocks.AIRemote.AIPropertyValueGenerationStrategy/...`.
@@ -34,6 +37,7 @@ Hint for `AIPropertyValueGenerationStrategy` prompt design:
 - For `AIPropertyValueGenerationStrategy`, prefer toolbox templates first; do not invent prompt-template assumptions when a fitting toolbox template exists.
 - For structured target properties (for example Start/End pattern lists), require JSON-only output and include `$GenerationStrategy::TargetPropertyDescription` in the prompt template.
 6. Execute tests / runtime as requested by the user.
+   Preferred troubleshooting sequence: run `RunGenerationStrategies` first; only run `RunTestDefinition` when detailed test protocol/results are needed.
 
 Minimum expectations at target flow block:
 - Value expectation: target `FirstValue` or `AnyValue`, operator `ComparisonOperator.Equals`, expected value provided.
@@ -44,6 +48,16 @@ Minimum expectations at target flow block:
 Minimum test-case requirements:
 - `AIPropertyValueGenerationStrategy`: at least 1 suitable test case.
 - `SequenceDetectionGenerationStrategy`: at least 2 automatically executable test cases.
+
+Sequence detection tip (complex hierarchical content such as hard-to-read DOM/web content):
+- Use `SequenceDetectionFlowBlock` with `SequenceDetectionGenerationStrategy` when XPath/CSS/Regex/Start-End approaches are unstable or hard to maintain.
+- `SequenceDetectionGenerationStrategy` is supported only on `SequenceDetectionFlowBlock` (`FlowBloxSupportedTypes`).
+- Practical setup:
+  1. Ensure at least 2 linked test definitions exist on the same `SequenceDetectionFlowBlock`.
+  2. Ensure these test definitions contain expected value + `NumberOfDatasets` expectation for the block result.
+  3. Create/configure `SequenceDetectionGenerationStrategy` and run `RunGenerationStrategies`.
+- Runtime-start auto-regeneration (`FlowBloxTestDefinition.RequiredForExecution=true`) is optional and can be expensive for WebBrowser/WebEvent chains.
+- Default behavior: do not enable `RequiredForExecution` automatically; inform the user and enable only on explicit request.
 
 Use-Cases / Examples:
 1. Happy path (simple target property):

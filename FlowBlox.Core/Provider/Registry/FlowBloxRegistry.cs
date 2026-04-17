@@ -208,6 +208,43 @@ namespace FlowBlox.Core.Provider.Registry
             return _managedObjects.Where(obj => type.IsInstanceOfType(obj));
         }
 
+        public IEnumerable<BaseFlowBlock> GetFlowBlocksRecursiveOrderedByExecutionFlow(BaseFlowBlock baseFlowBlock)
+        {
+            if (baseFlowBlock == null)
+                throw new ArgumentNullException(nameof(baseFlowBlock));
+
+            return GetFlowBlocksRecursiveOrderedByExecutionFlow(baseFlowBlock, new HashSet<BaseFlowBlock>());
+        }
+
+        private IEnumerable<BaseFlowBlock> GetFlowBlocksRecursiveOrderedByExecutionFlow(
+            BaseFlowBlock baseFlowBlock,
+            HashSet<BaseFlowBlock> visited)
+        {
+            if (baseFlowBlock == null)
+                throw new ArgumentNullException(nameof(baseFlowBlock));
+
+            if (!visited.Add(baseFlowBlock))
+                yield break;
+
+            yield return baseFlowBlock;
+
+            foreach (var nextFlowBlock in baseFlowBlock.GetNextFlowBlocks())
+            {
+                if (nextFlowBlock.ReferencedFlowBlocks.Count == 1)
+                {
+                    foreach (var flowBlock in GetFlowBlocksRecursiveOrderedByExecutionFlow(nextFlowBlock, visited))
+                        yield return flowBlock;
+                }
+
+                if (nextFlowBlock.ReferencedFlowBlocks.Count > 1 &&
+                    nextFlowBlock.ReferencedFlowBlocks.All(x => visited.Contains(x)))
+                {
+                    foreach (var flowBlock in GetFlowBlocksRecursiveOrderedByExecutionFlow(nextFlowBlock, visited))
+                        yield return flowBlock;
+                }
+            }
+        }
+
         private IEnumerable<FieldElement> GetFieldElementsRecursiveOrderedByExecutionFlow(BaseFlowBlock baseFlowBlock)
         {
             HashSet<BaseFlowBlock> visited = new HashSet<BaseFlowBlock>();

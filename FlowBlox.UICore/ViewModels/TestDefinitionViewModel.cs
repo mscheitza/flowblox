@@ -29,7 +29,6 @@ namespace FlowBlox.UICore.ViewModels
         private FlowBloxTestDefinition _testDefinition;
         private BaseFlowBlock _currentFlowBlock;
         private FlowBloxTestExecutor _testExecutor;
-        private List<BaseFlowBlock> _testDefinitionUsages;
         private Window _ownerWindow;
 
         public TestDefinitionViewModel()
@@ -47,7 +46,6 @@ namespace FlowBlox.UICore.ViewModels
             SortedEntries = new ObservableCollection<FlowBlockTestDataset>();
             RuntimeLogs = new ObservableCollection<RuntimeLog>();
             BindingOperations.EnableCollectionSynchronization(RuntimeLogs, new object());
-            _testDefinitionUsages = new List<BaseFlowBlock>();
         }
 
         public string HeaderDescription =>
@@ -210,16 +208,26 @@ namespace FlowBlox.UICore.ViewModels
 
         public ObservableCollection<FlowBlockTestDataset> SortedEntries { get; }
 
+        
+
         public BaseFlowBlock CurrentFlowBlock
         {
             get => _currentFlowBlock;
             set
             {
                 _currentFlowBlock = value;
-                LoadCurrentCondfigurations(_testDefinition, _currentFlowBlock);
-                LoadCapturedFlowBlocks(_currentFlowBlock);
+                LoadCurrentOrLatestFlowBlock();
                 OnPropertyChanged(nameof(CurrentFlowBlock));
             }
+        }
+
+        private readonly FlowBloxTestDefinitionLatestFlowBlockResolver _latestResolver = new FlowBloxTestDefinitionLatestFlowBlockResolver();
+
+        private void LoadCurrentOrLatestFlowBlock()
+        {
+            var targetFlowBlock = CurrentFlowBlock ?? _latestResolver.ResolveLatestFlowBlock(_testDefinition);
+            LoadCurrentCondfigurations(_testDefinition, targetFlowBlock);
+            LoadCapturedFlowBlocks(targetFlowBlock);
         }
 
         private void LoadCapturedFlowBlocks(BaseFlowBlock currentFlowBlock)
@@ -239,16 +247,6 @@ namespace FlowBlox.UICore.ViewModels
             {
                 _capturedFlowBlocks = value;
                 OnPropertyChanged(nameof(CapturedFlowBlocks));
-            }
-        }
-
-        public List<BaseFlowBlock> TestDefinitionUsages
-        {
-            get => _testDefinitionUsages;
-            set
-            {
-                _testDefinitionUsages = value;
-                OnPropertyChanged(nameof(TestDefinitionUsages));
             }
         }
 
@@ -339,7 +337,7 @@ namespace FlowBlox.UICore.ViewModels
 
             _testExecutor.Shutdown();
 
-            if (_currentFlowBlock is BaseResultFlowBlock resultFlowBlock && resultFlowBlock.GridElementResult.ResultCount > 0)
+            if (_currentFlowBlock is BaseResultFlowBlock resultFlowBlock && resultFlowBlock.GridElementResult?.ResultCount > 0)
             {
                 TestResults = new ObservableCollection<FlowBlockOutDataset>(resultFlowBlock.GridElementResult.Results);
                 TestResultsColumnNames = resultFlowBlock.GridElementResult.Results

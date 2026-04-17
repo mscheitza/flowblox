@@ -67,7 +67,7 @@ namespace FlowBlox.UICore.ViewModels
         public async Task Generate()
         {
             RuntimeLogs.Clear();
-            FlowBlockGenerationStrategyExecutor generationStrategyExecutor = new FlowBlockGenerationStrategyExecutor(CurrentFlowBlock, TestScope.All);
+            FlowBlockGenerationStrategyExecutor generationStrategyExecutor = new FlowBlockGenerationStrategyExecutor(CurrentFlowBlock);
             generationStrategyExecutor.LogCreated += GenerationStrategyExecutor_LogCreated;
             await generationStrategyExecutor.ExecuteGenerationAsync();
         }

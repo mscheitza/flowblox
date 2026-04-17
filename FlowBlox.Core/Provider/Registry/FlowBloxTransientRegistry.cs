@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Models.Base;
 
 namespace FlowBlox.Core.Provider.Registry
 {
@@ -65,7 +66,7 @@ namespace FlowBlox.Core.Provider.Registry
             }
             foreach (var obj in _unregisteredManagedObjects)
             {
-                _parentRegistry.RemoveManagedbject(obj);
+                _parentRegistry.RemoveManagedbject((ManagedObject)GetOriginalRef(obj));
             }
 
             _transientManagedObjects.Clear();

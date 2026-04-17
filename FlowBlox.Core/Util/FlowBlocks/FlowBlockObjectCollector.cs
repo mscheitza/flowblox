@@ -49,7 +49,8 @@ namespace FlowBlox.Core.Util.FlowBlocks
 
             if (parentObj is BaseFlowBlock flowBlock && obj is ManagedObject managedObject)
             {
-                return flowBlock.IsManaged(managedObject);
+                return flowBlock.DefinedManagedObjects != null &&
+                       flowBlock.DefinedManagedObjects.Contains(managedObject);
             }
 
             return false;
@@ -163,6 +164,9 @@ namespace FlowBlox.Core.Util.FlowBlocks
                 new HashSet<object>(),
                 excludedTypes: [typeof(ManagedObject), typeof(BaseFlowBlock)],
                 customNavigator: NavigateReferencedFieldsFromString);
+
+            if (root is FieldElement rootFieldElement)
+                reactiveObjects = reactiveObjects.Except([rootFieldElement]);
 
             return reactiveObjects
                 .OfType<FieldElement>()

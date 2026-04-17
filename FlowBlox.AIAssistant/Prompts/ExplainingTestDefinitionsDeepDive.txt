@@ -1,0 +1,75 @@
+Use this deep dive only when test setup is non-trivial, uncertain, or explicitly requested.
+Primary reference remains `explaining_test_definitions`; this catalog adds compact examples and scope strategy.
+
+Core model (exact types/properties):
+- Managed object type: `FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxTestDefinition`
+- Rows: `FlowBloxTestDefinition.Entries` (`FlowBlockTestDataset`)
+- Per-row execution flag: `FlowBlockTestDataset.Execute`
+- Field-level config: `FlowBlockTestDataset.FlowBloxTestConfigurations` (`FlowBloxFieldTestConfiguration`)
+- Selection: `FlowBloxFieldTestConfiguration.SelectionMode`
+- Expected/manual value: `FlowBloxFieldTestConfiguration.UserInput`
+- Index for index selection: `FlowBloxFieldTestConfiguration.Index`
+- Assertions: `FlowBloxFieldTestConfiguration.ExpectationConditions` (`ExpectationCondition`)
+- Count assertion target: `ExpectationCondition.ExpectationConditionTarget=NumberOfDatasets`
+
+Link/scope semantics:
+- Linking a test definition to a flow block synchronizes `Entries` from start flow block up to that linked target.
+- You do not need to link every flow block.
+- Link the latest flow block you want to test end-to-end.
+- Linking is additionally important when the test should be used for generation strategies.
+
+Execution-result semantics:
+- Use `RunTestDefinition` to execute test definitions via AI tools.
+- It returns protocol logs and serialized `testResults` for the target flow block.
+- `targetFlowBlockName` is optional; if omitted, latest linked flow block is used.
+
+Validity rules (must enforce):
+- `ExpectationConditions` are evaluated only when `FlowBlockTestDataset.Execute=true`.
+- `ExpectationConditions` are evaluated before final field selection assignment for `SelectionMode` (`First`/`Index`/`Last`/`UserInput_ExpectedValue`).
+- Warning scenario: `SelectionMode=UserInput_ExpectedValue` with non-empty `UserInput` while `Execute=false`.
+- Warning scenario: `Execute=true` and `SelectionMode=UserInput_ExpectedValue`, but `UserInput` is empty and no `ExpectationConditions` exist.
+
+Use case A: WebRequest -> PatternSelector -> WebRequest -> PatternSelector
+Goal: from first web request, select first link, then validate extracted value + dataset count at second selector.
+Minimal setup:
+1. Entry(WebRequest#1): `Execute=true`
+2. Entry(PatternSelector#1): set the relevant `FlowBloxFieldTestConfiguration` (the result field that feeds the next step, for example link URL) to `SelectionMode=First`.
+3. Entry(WebRequest#2): set the relevant `FlowBloxFieldTestConfiguration` (the field consumed by the next selector, for example HTML/content) to `SelectionMode=First` where required by field semantics.
+4. Entry(PatternSelector#2): configure expectations:
+   - value expectation (`FirstValue` or `AnyValue`)
+   - count expectation (`NumberOfDatasets`)
+
+Use case B: WebBrowser scraping chain with cookie gate
+Flow: `WebBrowser -> WebEvent(Accept Cookies) -> XPathSelector(Links) -> WebEvent(Open Link) -> XPathSelector(Target Value)`
+Recommended setup:
+1. Execute upstream prerequisites:
+   - `WebBrowser.Execute=true`
+   - `Accept Cookies WebEvent.Execute=true`
+2. Add basic readiness checks for relevant output fields:
+   - `ExpectationCondition.ExpectationConditionTarget=AnyValue`
+   - `ExpectationCondition.Operator=ComparisonOperator.HasValue`
+3. Link selection on link selector:
+   - use `SelectionMode=Index`, `Index=5` (if 6th item is intended)
+   - plus `NumberOfDatasets` expectation.
+4. Link-open `WebEvent`: `Execute=true`, commonly `SelectionMode=First` for consumed input.
+5. Final XPath selector: expected value + `NumberOfDatasets=1`.
+
+Scope strategy:
+- Full-flow test: cover complete chain from first acquisition to final output.
+- Focused test: execute only required dependencies and inject manual values for required fields on intermediate steps.
+- If scope is unclear, ask user whether they want:
+  - full regression coverage, or
+  - minimal focused validation for one flow block/generator target.
+
+Minimal procedure example (focused):
+- For the second `WebRequest` path, set the required link field manually (`SelectionMode=UserInput`) and run only required predecessor initialization.
+- This reduces test overhead while keeping downstream behavior testable.
+
+Iterative best practice:
+- Start small, run, inspect protocol/test results, then extend.
+- Each refinement should keep the previous working state intact.
+- Prefer incremental extension over one-shot large test definitions when flow behavior is uncertain.
+
+Generator interplay:
+- For generator tasks, first run `RunGenerationStrategies`.
+- If generation still fails or results are unclear, run `RunTestDefinition` to inspect protocol + `testResults` and adjust test configuration precisely.

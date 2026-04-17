@@ -8,7 +8,7 @@ using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
-using FlowBlox.UICore.Models;
+using FlowBlox.UICore.Models.FieldSelection;
 using FlowBlox.UICore.ViewModels.FieldSelection;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

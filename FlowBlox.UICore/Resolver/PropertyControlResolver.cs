@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resolver
                 uiAttribute?.ReadOnly == true ||
                 !property.CanWrite;
 
-            FrameworkElement control = CreateControl(property, target, displayName, uiAttribute, readOnly, preselectedInstance);
+            var controlResult = CreateControl(property, target, displayName, uiAttribute, readOnly, preselectedInstance);
 
             bool isActive = true;
             var activationAttr = property.GetCustomAttribute<ActivationConditionAttribute>();
@@ -79,10 +79,13 @@ namespace FlowBlox.UICore.Resolver
                 Value = property.GetValue(target),
                 ValueType = property.PropertyType,
                 IsEnabled = !FlowBlockUIAttributeHelper.IsDynamicallyReadOnly(target, uiAttribute),
-                Control = control,
+                Control = controlResult.FrameworkElement,
                 IsActive = isActive,
                 TooltipText = description
             };
+
+            if (controlResult.PropertyViewControlFactory != null)
+                controlResult.PropertyViewControlFactory.AssociationBeforeLink += propertyControlViewModel.RelayAssociationBeforeLink;
 
             bindingContext.Register(property, propertyControlViewModel);
 
@@ -102,7 +105,7 @@ namespace FlowBlox.UICore.Resolver
             return (true, displayName);
         }
 
-        private FrameworkElement CreateControl(
+        private PropertyControlWithFactoryResult CreateControl(
             PropertyInfo property, 
             object target, 
             string displayName, 
@@ -136,7 +139,7 @@ namespace FlowBlox.UICore.Resolver
                 toggle.Toggled += (s, e) =>
                     FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
 
-                return toggle;
+                return new PropertyControlWithFactoryResult(toggle);
             }
 
 
@@ -173,11 +176,11 @@ namespace FlowBlox.UICore.Resolver
                 comboBox.SelectionChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
 
                 comboBox.SetBinding(ComboBox.SelectedValueProperty, binding);
-                return new Border 
-                { 
+                return new PropertyControlWithFactoryResult(new Border
+                {
                     Child = comboBox,
                     Background = Brushes.Transparent
-                };
+                });
             }
 
             // Selection-Filter
@@ -219,11 +222,11 @@ namespace FlowBlox.UICore.Resolver
                     SetComboBoxReadOnly(comboBox, readOnly);
 
                     comboBox.SetBinding(ComboBox.SelectedValueProperty, binding);
-                    return new Border
+                    return new PropertyControlWithFactoryResult(new Border
                     {
                         Child = comboBox,
                         Background = Brushes.Transparent
-                    };
+                    });
                 }
             }
 
@@ -242,36 +245,38 @@ namespace FlowBlox.UICore.Resolver
                 };
                 textBox.TextChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
                 textBox.SetBinding(TextBox.TextProperty, binding);
-                return textBox;
+                return new PropertyControlWithFactoryResult(textBox);
             }
 
             if (uiAttribute?.Factory == UIFactory.Association)
             {
                 AssociationControlFactory associationControlFactory = new AssociationControlFactory(_window, property, target, readOnly, _parent);
-                return associationControlFactory.Create();
+                return new PropertyControlWithFactoryResult(associationControlFactory.Create(), associationControlFactory);
             }
 
             if (uiAttribute?.Factory == UIFactory.GridView)
             {
                 DataGridFactory dataGridFactory = new DataGridFactory(_window, property, target, readOnly);
                 dataGridFactory.SetPreselectedInstance(preselectedInstance);
-                return dataGridFactory.Create();
+                return new PropertyControlWithFactoryResult(dataGridFactory.Create(), dataGridFactory);
             }
 
             if (uiAttribute?.Factory == UIFactory.ListView)
             {
                 ListViewFactory listViewFactory = new ListViewFactory(_window, property, target, readOnly, _parent);
                 listViewFactory.SetPreselectedInstance(preselectedInstance);
-                return listViewFactory.Create();
+                return new PropertyControlWithFactoryResult(listViewFactory.Create(), listViewFactory);
             }
 
             if (uiAttribute?.Factory == UIFactory.ListViewSplitMode)
             {
                 ListViewSplitModeFactory listViewSplitModeFactory = new ListViewSplitModeFactory(_window, property, target, readOnly, _parent);
-                return listViewSplitModeFactory.Create();
+                return new PropertyControlWithFactoryResult(listViewSplitModeFactory.Create(), listViewSplitModeFactory);
             }
 
-            return _textBoxWithOptionalButtonsCreator.CreateTextBoxWithOptionalButtons(property, target, displayName, uiAttribute, binding, readOnly);
+            return new PropertyControlWithFactoryResult(
+                _textBoxWithOptionalButtonsCreator
+                    .CreateTextBoxWithOptionalButtons(property, target, displayName, uiAttribute, binding, readOnly));
         }
 
         private void Toggle_Toggled(object sender, RoutedEventArgs e)

@@ -60,7 +60,7 @@ namespace FlowBlox.Core.Util.DeepCopier
                 return true;
 
             if (target is BaseFlowBlock)
-                return ((BaseFlowBlock)target).IsManaged((IManagedObject)managedObject);
+                return ((BaseFlowBlock)target).HasBackReference((IManagedObject)managedObject);
 
             return false;
         }

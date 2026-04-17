@@ -1,4 +1,5 @@
 Use this only when the user explicitly asks to create/configure test cases.
+If setup complexity is high or scope is unclear, load deep-dive catalog key `explaining_test_definitions_deep_dive`.
 
 Goal:
 - Create a `FlowBloxTestDefinition` managed object.
@@ -17,7 +18,7 @@ Recommended tool-call order:
 - field selection mode,
 - user input / expected values,
 - expectation conditions.
-6. Optionally run `Execute` / debug test tools when the user requests execution.
+6. Optionally run `RunTestDefinition` when the user requests execution or when generator troubleshooting requires test protocol/test results.
 
 Important behavior:
 - Linking a test definition to a flow block auto-synchronizes rows from start to target flow block.
@@ -27,6 +28,25 @@ Important behavior:
   - activation conditions of the flow block,
   - required fields must have a valid value strategy (at least manual input or an automatic selection mode),
   - for properties marked with `AssociatedFlowBlockResolvableAttribute`, resolve required associated flow blocks with `ResolveAssociatedFlowBlock` and ensure they are covered by the test setup.
-- If the test case should guard runtime execution (and allow generators during runtime start), set `RequiredForExecution=true` on the test definition.
+- `RequiredForExecution=true` means this test definition is executed automatically at runtime start. If an expectation fails, FlowBlox can run generation strategies on the affected flow block and repeat the step once.
+- Do not set `FlowBloxTestDefinition.RequiredForExecution=true` by default. Only set it when the user explicitly wants runtime-start test guarding / automatic regeneration. Ask about auto-regeneration only if generation strategies exist on the affected flow block.
+- `ExpectationConditions` are evaluated only for entries where `FlowBlockTestDataset.Execute=true`.
+
+Examples:
+1. WebRequestFlowBlock -> StartEndPatternSelectorFlowBlock
+- In `FlowBloxTestDefinition.Entries`, set `Execute=true` for the `FlowBlockTestDataset` of `WebRequestFlowBlock` (must run first).
+- In the selector entry, configure the relevant `FlowBloxFieldTestConfiguration` with `SelectionMode=First` (for the web request content field).
+- Add `ExpectationConditions` for the selector output, typically:
+  - one condition for expected extracted value,
+  - one condition with `ExpectationConditionTarget=NumberOfDatasets` for expected result count.
+
+2. WebRequest -> PatternSelector -> WebRequest -> PatternSelector
+- Entry 1 (`WebRequestFlowBlock`): `Execute=true`.
+- Entry 2 (first selector): read link candidates from entry 1, usually via `SelectionMode=First` on the relevant field configuration.
+- Entry 3 (second `WebRequestFlowBlock`): use selected link from entry 2; for returned HTML/content field use the first value (again via `SelectionMode=First` where applicable).
+- Entry 4 (second selector): define `ExpectationConditions` for extracted value and dataset count (`ExpectationConditionTarget=NumberOfDatasets`).
+
+Invalid configuration (must avoid):
+- Configuring expected outcomes (`FlowBloxFieldTestConfiguration.ExpectationConditions`) while parent `FlowBlockTestDataset.Execute=false` is logically invalid for that entry, because the flow block is not executed in the test run.
 
 Do not create test definitions proactively. Only do it when the user asks.

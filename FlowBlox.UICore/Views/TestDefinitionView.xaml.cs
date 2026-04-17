@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using FlowBlox.UICore.Models.FieldSelection;
 
 namespace FlowBlox.UICore.Views
 {
@@ -25,20 +26,12 @@ namespace FlowBlox.UICore.Views
             InitializeComponent();
             var viewModel = (TestDefinitionViewModel)DataContext;
 
-            var testConfigurationUsageResolver = new FlowBloxTestDefinitionUsageResolver();
-            var usages = testConfigurationUsageResolver.ResolveUsages(testDefinition);
-
-            if (currentFlowBlock != null)
-            {
-                var testConfigurationAppender = new FlowBloxTestDefinitionAppender();
-                testConfigurationAppender.Append(testDefinition, currentFlowBlock);
-                usages.AddIfNotExists(currentFlowBlock);
-            }
+            var testConfigurationSynchronizer = new FlowBloxTestDefinitionSynchronizer();
+            testConfigurationSynchronizer.Synchronize(testDefinition, currentFlowBlock);
 
             viewModel.OwnerWindow = this;
             viewModel.TestDefinition = testDefinition;
             viewModel.CurrentFlowBlock = currentFlowBlock;
-            viewModel.TestDefinitionUsages = usages;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
 

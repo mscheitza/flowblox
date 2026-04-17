@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using FlowBlox.UICore.Events;
+using System.ComponentModel;
 using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels.PropertyView
@@ -66,6 +67,18 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public event EventHandler<AssociationBeforeLinkEventArgs> AssociationBeforeLink;
+
+        protected virtual void RaiseAssociationBeforeLink(object? sender, AssociationBeforeLinkEventArgs e)
+        {
+            AssociationBeforeLink?.Invoke(sender, e);
+        }
+
+        public void RelayAssociationBeforeLink(object? sender, AssociationBeforeLinkEventArgs e)
+        {
+            RaiseAssociationBeforeLink(sender, e);
         }
     }
 }

@@ -226,13 +226,16 @@
   <value>Use an automatic selection mode when values should be determined from flow block execution.</value>
 </data>
   <data name="Expander_TestCaseHelp_Note4" xml:space="preserve">
-  <value>Expectations are evaluated per field. If an expectation is not met, the test fails.</value>
+  <value>Expectations are evaluated per field. If an expectation is not met, the test fails. Set "Required for runtime execution" only when this test should run automatically at runtime start.</value>
 </data>
 	<data name="Expander_GeneratorHints_Header" xml:space="preserve">
   <value>Generator notes</value>
 </data>
 	<data name="Expander_GeneratorHints_Text" xml:space="preserve">
-  <value>Tests and expectations can also be used by generators to derive values after a failed test case. This makes it possible to react to failed expectations in a controlled way and generate values specifically for the affected context.</value>
+  <value>Test cases and test expectations can be used by generators to derive targeted values based on a failed test case.</value>
+</data>
+	<data name="Expander_GeneratorHints_Note1" xml:space="preserve">
+  <value>Automatic regeneration during runtime start is only performed when this test case is marked as "Required for runtime execution" and generation strategies exist on the affected flow block.</value>
 </data>
 	<data name="Expander_GeneratorHints_Note2" xml:space="preserve">
   <value>Minimum at the target flow block: define at least two expectations, one for the value and one for the dataset count.</value>

@@ -4,6 +4,7 @@ using FlowBlox.Core.Enums;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
@@ -22,6 +23,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Reflection;
 using FlowBlox.Core.Util.Fields;
+using System.Transactions;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
@@ -309,6 +313,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             OnAfterReferencedFlowBlocksChanged();
         }
 
+        /// <summary>
+        /// Can be overridden to define managed objects that are defined by this flow block.
+        /// </summary>
         public virtual List<IManagedObject> DefinedManagedObjects
         {
             get
@@ -317,20 +324,56 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
         }
 
-        public virtual bool IsManaged(IManagedObject managedObject)
+        /// <summary>
+        /// Returns the names of properties that may contain managed objects
+        /// with a back reference to this flow block.
+        /// </summary>
+        /// <returns>A sequence of property names.</returns>
+        public virtual IEnumerable<string> GetBackReferencedPropertyNames()
         {
-            if (this.TestDefinitions.Contains(managedObject))
-                return true;
+            yield return nameof(TestDefinitions);
+            yield return nameof(DefinedManagedObjects);
+        }
 
-            if (this.DefinedManagedObjects.Contains(managedObject))
-                return true;
+        /// <summary>
+        /// Determines whether the specified managed object is referenced
+        /// by one of the configured back reference properties.
+        /// </summary>
+        /// <param name="managedObject">The managed object to check.</param>
+        /// <returns><c>true</c> if a back reference exists; otherwise <c>false</c>.</returns>
+        public virtual bool HasBackReference(IManagedObject managedObject)
+        {
+            if (managedObject == null)
+                return false;
+
+            var type = GetType();
+
+            foreach (var propertyName in GetBackReferencedPropertyNames() ?? Enumerable.Empty<string>())
+            {
+                if (string.IsNullOrWhiteSpace(propertyName))
+                    continue;
+
+                var property = type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                if (property == null || !property.CanRead)
+                    continue;
+
+                var value = property.GetValue(this);
+                if (value is not IEnumerable enumerable)
+                    continue;
+
+                foreach (var item in enumerable)
+                {
+                    if (ReferenceEquals(item, managedObject) || object.Equals(item, managedObject))
+                        return true;
+                }
+            }
 
             return false;
         }
 
-        public virtual bool IsDeletable(out List<BaseFlowBlock> dependencies)
+        public override bool IsDeletable(out List<IFlowBloxComponent> dependencies)
         {
-            dependencies = new List<BaseFlowBlock>();
+            dependencies = new List<IFlowBloxComponent>();
 
             var registry = FlowBloxRegistryProvider.GetRegistry();
 
@@ -343,7 +386,20 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     dependencies.AddIfNotExists(flowBlock);
             }
 
+            foreach (var testDefinition in registry.GetManagedObjects().OfType<FlowBloxTestDefinition>())
+            {
+                if (testDefinition.Entries.Any(x => x.FlowBlock == this || x.FlowBlock == registry.GetOriginalRef(this)))
+                    dependencies.AddIfNotExists(testDefinition);
+            }
+
+            EnsureDeletable(dependencies);
+            FlowBloxTestDefinitionDependencyFilter.FilterDependencies(dependencies);
             return !dependencies.Any();
+        }
+
+        protected override bool EnsureDeletable(List<IFlowBloxComponent> dependencies)
+        {
+            return new FlowBloxTestDeletionEnsurer().EnsureFlowBlockDeletable(this, dependencies);
         }
 
         protected virtual void OnAfterReferencedFlowBlocksChanged()
@@ -471,7 +527,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             ])]
         public ObservableCollection<LogicalCondition> ActivationConditions { get; set; } = new ObservableCollection<LogicalCondition>();
 
-        private readonly FlowBloxTestDefinitionAppender _testDefinitionAppender = new();
         private ObservableCollection<FlowBloxTestDefinition> _testDefinitions = new();
 
         [Display(Name = "BaseFlowBlock_TestDefinitions", Description = "BaseFlowBlock_TestDefinitions_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 0)]
@@ -514,12 +569,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             OnPropertyChanged(nameof(TestDefinitions));
         }
 
+        private readonly FlowBloxTestDefinitionSynchronizer _testDefinitionSynchronizer = new FlowBloxTestDefinitionSynchronizer();
+
         private void EnsureTestDefinitionSynchronized(FlowBloxTestDefinition? testDefinition)
         {
             if (!IsLoaded || testDefinition == null)
                 return;
 
-            _testDefinitionAppender.Append(testDefinition, this);
+            _testDefinitionSynchronizer.Synchronize(testDefinition, this);
         }
 
         [Display(Name = "BaseFlowBlock_GenerationStrategies", Description = "BaseFlowBlock_GenerationStrategies_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Tests", Order = 1)]

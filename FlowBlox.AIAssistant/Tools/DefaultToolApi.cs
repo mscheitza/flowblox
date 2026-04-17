@@ -74,6 +74,7 @@ namespace FlowBlox.AIAssistant.Tools
                 new CreateOrUpdateInputFileHandler(),
                 new DeleteInputFileHandler(),
                 new RunProjectDebugTestHandler(),
+                new RunTestDefinitionHandler(),
                 new RunGenerationStrategiesHandler(),
                 new GetLastDebugArtefactHandler(),
                 new BatchExecuteToolRequestsHandler(ExecuteAsync)

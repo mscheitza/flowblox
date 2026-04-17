@@ -1,6 +1,6 @@
 ﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.Project;
-using FlowBlox.UICore.Models;
+using FlowBlox.UICore.Models.FieldSelection;
 using FlowBlox.UICore.ViewModels;
 using FlowBlox.UICore.ViewModels.FieldSelection;
 using MahApps.Metro.Controls;

@@ -327,31 +327,55 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 var fieldSelectionResult = Utilities.TextBoxHelper.ShowFieldSelectionDialog(args, _window);
                 if (fieldSelectionResult != null)
                 {
-                    FlowBlockHelper.ApplyFieldSelectionRequiredOption((BaseFlowBlock)_target, fieldSelectionResult.SelectedFields, fieldSelectionResult.IsRequired);
+                    FlowBlockHelper.ApplyFieldSelectionRequiredOption(
+                        (BaseFlowBlock)_target,
+                        fieldSelectionResult.SelectedFields,
+                        fieldSelectionResult.IsRequired);
+
                     var inst = fieldSelectionResult.SelectedFields.Single();
-                    _list.Add(inst);
-                    _property.SetValue(_target, _list);
-                    FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+                    TryAddLinkedObject(_property.Name, inst);
                 }
             }
             else
             {
                 var dialog = new MultiValueSelectionDialog(
-                   FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Title"),
-                   FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Text"),
-                   new GenericSelectionHandler<object>(items.Cast<object>(), x => x.ToString()))
-                    {
-                        Owner = _window,
-                        WindowStartupLocation = WindowStartupLocation.CenterOwner
-                    };
+                    FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Title"),
+                    FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Text"),
+                    new GenericSelectionHandler<object>(items.Cast<object>(), x => x.ToString()))
+                {
+                    Owner = _window,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                };
 
                 if (dialog.ShowDialog() == true)
                 {
-                    _list.Add(dialog.SelectedItem.Value);
-                    _property.SetValue(_target, _list);
-                    FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+                    TryAddLinkedObject(_property.Name, dialog.SelectedItem.Value);
                 }
             }
+        }
+
+        protected virtual bool TryAddLinkedObject(string propertyName, object selectedObject)
+        {
+            var beforeLinkResult = ProcessAssociationBeforeLink(propertyName, selectedObject);
+            if (beforeLinkResult.Cancel)
+                return false;
+
+            var linkedObject = beforeLinkResult.LinkedObject;
+            if (linkedObject == null)
+                return false;
+
+            if (!_listItemType.IsInstanceOfType(linkedObject))
+            {
+                throw new InvalidOperationException(
+                    $"AssociationBeforeLink returned an object of type '{linkedObject.GetType().FullName}', " +
+                    $"but the list expects instances of type '{_listItemType.FullName}'.");
+            }
+
+            _list.Add(linkedObject);
+            _property.SetValue(_target, _list);
+            FlowBloxComponentHelper.RaisePropertyChanged(_target, propertyName);
+
+            return true;
         }
 
         protected virtual void ExecuteEdit(object item)

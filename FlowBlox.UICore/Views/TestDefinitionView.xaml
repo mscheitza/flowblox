@@ -25,10 +25,10 @@
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/PropertyViewStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <converters:ExecuteEnabledMultiConverter x:Key="ExecuteEnabledMultiConverter"/>
             <globalConverters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter"/>
             <converters:ExpectationConditionConverter x:Key="ExpectationConditionConverter"/>
             <converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter"/>
+            <converters:LogLevelToBrushConverter x:Key="LogLevelToBrushConverter"/>
             <converters:RuntimeLogsToVisibilityConverter x:Key="RuntimeLogsToVisibilityConverter"/>
             <converters:TestResultsToVisibilityConverter x:Key="TestResultsToVisibilityConverter"/>
             <converters:UserInputEnabledConverter x:Key="UserInputEnabledConverter"/>
@@ -145,6 +145,16 @@
                             <iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,8,0" VerticalAlignment="Top"/>
                             <TextBlock Grid.Column="1"
                                        Text="{x:Static resources:TestDefinitionView.Expander_GeneratorHints_Text}"
+                                       TextWrapping="Wrap"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <iconPacks:PackIconMaterial Kind="LightbulbOnOutline" Margin="0,0,8,0" VerticalAlignment="Top" Foreground="#D97706"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{x:Static resources:TestDefinitionView.Expander_GeneratorHints_Note1}"
                                        TextWrapping="Wrap"/>
                         </Grid>
                         <Grid Margin="0,0,0,6">
@@ -295,13 +305,6 @@
                                               VerticalAlignment="Top" 
                                               Visibility="{Binding FlowBlock, Converter={StaticResource FlowBlockToVisibilityConverter}}" 
                                               Margin="0 5 0 0">
-                                        <CheckBox.IsEnabled>
-                                            <MultiBinding Converter="{StaticResource ExecuteEnabledMultiConverter}">
-                                                <Binding Path="DataContext.CurrentFlowBlock" RelativeSource="{RelativeSource AncestorType={x:Type Window}}" />
-                                                <Binding />
-                                                <Binding Path="DataContext.TestDefinitionUsages" RelativeSource="{RelativeSource AncestorType={x:Type Window}}" />
-                                            </MultiBinding>
-                                        </CheckBox.IsEnabled>
                                     </CheckBox>
                                     <ItemsControl ItemsSource="{Binding FlowBloxTestConfigurations}" Grid.Column="2" Grid.ColumnSpan="4">
                                         <ItemsControl.ItemTemplate>
@@ -611,7 +614,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabItem.HeaderTemplate>
-                <ListView ItemsSource="{Binding RuntimeLogs}">
+                <ListView ItemsSource="{Binding RuntimeLogs}" Background="White">
                     <ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="{x:Static resources:TestDefinitionView.MenuItem_OpenInEditor}" 
@@ -630,8 +633,13 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <iconPacks:PackIconModern Kind="{Binding LogLevel, Converter={StaticResource LogLevelToIconConverter}}" Width="16" Height="16" Margin="0,0,5,0"/>
-                                            <TextBlock Text="{Binding LogLevel}"/>
+                                            <iconPacks:PackIconModern Kind="{Binding LogLevel, Converter={StaticResource LogLevelToIconConverter}}"
+                                                                      Foreground="{Binding LogLevel, Converter={StaticResource LogLevelToBrushConverter}}"
+                                                                      Width="16"
+                                                                      Height="16"
+                                                                      Margin="0,0,5,0"/>
+                                            <TextBlock Text="{Binding LogLevel}"
+                                                       Foreground="{Binding LogLevel, Converter={StaticResource LogLevelToBrushConverter}}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

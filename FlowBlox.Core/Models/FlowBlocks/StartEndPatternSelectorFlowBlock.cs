@@ -22,6 +22,9 @@ namespace FlowBlox.Core.Models.FlowBlocks
 
         [Display(Name = "StartEndPattern_Index", ResourceType = typeof(FlowBloxTexts))]
         public int? Index { get; set; }
+
+        [Display(Name = "StartEndPattern_ReturnOptions", Description = "StartEndPattern_ReturnOptions_Tooltip", ResourceType = typeof(FlowBloxTexts))]
+        public StartEndPatternReturnOptions? ReturnOptions { get; set; }
     }
 
     [Display(Name = "StartEndPatternSelectorFlowBlock_DisplayName", Description = "StartEndPatternSelectorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
@@ -29,13 +32,10 @@ namespace FlowBlox.Core.Models.FlowBlocks
     [FlowBloxSpecialExplanation("StartEndPatternSelectorFlowBlock_SpecialExplanation_PatternEntryBehavior", Icon = SpecialExplanationIcon.Information)]
     public class StartEndPatternSelectorFlowBlock : BasePipeFlowBlock
     {
-        [Display(Name = "StartEndPatternSelectorFlowBlock_StartEndPatterns", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "StartEndPatternSelectorFlowBlock_StartEndPatterns", Description = "StartEndPatternSelectorFlowBlock_StartEndPatterns_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(Factory = UIFactory.GridView)]
         [FlowBloxDataGrid(IsMovable = true)]
         public ObservableCollection<StartEndPattern> StartEndPatterns { get; set; }
-
-        [Display(Name = "StartEndPatternSelectorFlowBlock_IncludePatternInResult", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        public bool IncludePatternInResult { get; set; }
 
         public override SKImage Icon16 => base.Icon16;
         public override SKImage Icon32 => base.Icon32;
@@ -95,11 +95,10 @@ namespace FlowBlox.Core.Models.FlowBlocks
                         }
                     }
 
-                    if (this.IncludePatternInResult)
-                    {
-                        results = results.Select(val => string.Concat(startEndPattern.StartPattern, val, startEndPattern.EndPattern)).ToList();
-                    }
                 }
+
+                var lastPattern = StartEndPatterns.LastOrDefault();
+                results = ApplyReturnOptions(results, lastPattern);
 
                 if (results.Count == 0)
                     CreateNotification(runtime, StartEndPatternSelectorNotifications.ReturnedNoMatches);
@@ -123,6 +122,26 @@ namespace FlowBlox.Core.Models.FlowBlocks
             [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "The pattern selector returned no matches.")]
             ReturnedNoMatches
+        }
+
+        private static List<string> ApplyReturnOptions(IEnumerable<string> values, StartEndPattern startEndPattern)
+        {
+            if (startEndPattern?.ReturnOptions == null)
+                return values.ToList();
+
+            return startEndPattern.ReturnOptions.Value switch
+            {
+                StartEndPatternReturnOptions.StartPattern => values
+                    .Select(val => string.Concat(startEndPattern.StartPattern, val))
+                    .ToList(),
+                StartEndPatternReturnOptions.EndPattern => values
+                    .Select(val => string.Concat(val, startEndPattern.EndPattern))
+                    .ToList(),
+                StartEndPatternReturnOptions.StartAndEndPattern => values
+                    .Select(val => string.Concat(startEndPattern.StartPattern, val, startEndPattern.EndPattern))
+                    .ToList(),
+                _ => values.ToList()
+            };
         }
     }
 }

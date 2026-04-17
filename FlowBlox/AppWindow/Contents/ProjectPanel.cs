@@ -428,11 +428,11 @@ namespace FlowBlox.AppWindow.Contents
 
                 foreach (var selectedFlowBlock in selectedFlowBlocks)
                 {
-                    if (!selectedFlowBlock.IsDeletable(out List<BaseFlowBlock> dependendFlowBlocks))
+                    if (!selectedFlowBlock.IsDeletable(out List<IFlowBloxComponent> flowBlockDependendComponents))
                     {
-                        dependendFlowBlocks.RemoveAll(x => selectedFlowBlocks.Contains(x));
-                        if (dependendFlowBlocks.Any())
-                            dependendFlowBlocks.ForEach(flowBlock => allReferences.Add(
+                        flowBlockDependendComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
+                        if (flowBlockDependendComponents.Any())
+                            flowBlockDependendComponents.ForEach(flowBlock => allReferences.Add(
                                 string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"), 
                                     selectedFlowBlock, 
                                     flowBlock)));
@@ -440,12 +440,12 @@ namespace FlowBlox.AppWindow.Contents
 
                     foreach (var managedObject in selectedFlowBlock.DefinedManagedObjects)
                     {
-                        if (!managedObject.IsDeletable(out List<IFlowBloxComponent> dependendComponents))
+                        if (!managedObject.IsDeletable(out List<IFlowBloxComponent> managedObjectDependendComponents))
                         {
-                            dependendComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
-                            dependendComponents.RemoveAll(x => selectedDefinedManagedObjects.Contains(x));
-                            if (dependendComponents.Any())
-                                dependendComponents.ForEach(comp => allReferences.Add(
+                            managedObjectDependendComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
+                            managedObjectDependendComponents.RemoveAll(x => selectedDefinedManagedObjects.Contains(x));
+                            if (managedObjectDependendComponents.Any())
+                                managedObjectDependendComponents.ForEach(comp => allReferences.Add(
                                     string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"), 
                                         managedObject, 
                                         comp)));

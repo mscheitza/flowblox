@@ -7,6 +7,7 @@ using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
@@ -97,7 +98,7 @@ namespace FlowBlox.Core.Models.Components
 
             var registry = FlowBloxRegistryProvider.GetRegistry();
 
-            foreach(var flowBlock in registry.GetFlowBlocks())
+            foreach (var flowBlock in registry.GetFlowBlocks())
             {
                 if (flowBlock.GetAssociatedFields().Contains(registry.GetOriginalRef(this)))
                     dependencies.AddIfNotExists(flowBlock);
@@ -109,10 +110,17 @@ namespace FlowBlox.Core.Models.Components
                     managedObject.GetAssociatedFields().Contains(registry.GetOriginalRef(this)))
                 {
                     dependencies.AddIfNotExists(managedObject);
-                }        
+                }
             }
 
+            EnsureDeletable(dependencies);
+            FlowBloxTestDefinitionDependencyFilter.FilterDependencies(dependencies);
             return !dependencies.Any();
+        }
+
+        protected override bool EnsureDeletable(List<IFlowBloxComponent> dependencies)
+        {
+            return new FlowBloxTestDeletionEnsurer().EnsureFieldElementDeletable(this, dependencies);
         }
 
         private static string GetDefaultFieldName(

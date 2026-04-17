@@ -15,6 +15,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string ExecutionRequirementsKey = "execution_requirements_and_required_fields";
         public const string InputFilesKey = "explaining_input_file_templates";
         public const string SpecialTestDefinitionsKey = "explaining_test_definitions";
+        public const string SpecialTestDefinitionsDeepDiveKey = "explaining_test_definitions_deep_dive";
         public const string SpecialGeneratorsKey = "explaining_generators";
         public const string SpecialTestDrivenUnknownResourcesKey = "explaining_test_driven_unknown_resources";
 
@@ -74,6 +75,12 @@ namespace FlowBlox.AIAssistant.Services
                     "Explaining Test Definitions",
                     "FlowBlox.AIAssistant.Prompts.ExplainingTestDefinitions.txt",
                     "Special: on-demand guidance for creating/linking/configuring test definitions via tool calls.",
+                    false),
+                [SpecialTestDefinitionsDeepDiveKey] = new PromptEntryDefinition(
+                    SpecialTestDefinitionsDeepDiveKey,
+                    "Explaining Test Definitions (Deep Dive)",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingTestDefinitionsDeepDive.txt",
+                    "Special: on-demand deep-dive catalog with compact use cases, scope strategies, and advanced test-definition setup guidance.",
                     false),
                 [SpecialGeneratorsKey] = new PromptEntryDefinition(
                     SpecialGeneratorsKey,

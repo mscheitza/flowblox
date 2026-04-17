@@ -47,7 +47,9 @@ For update and delete behavior, prefer explanation key: explaining_edit_and_dele
 For object lifecycle and aggregation/per-row behavior, prefer explanation key: explaining_flow_blocks_managing_an_object.
 Terminology rule: "Generator" means test-driven value generation via `GenerationStrategies`
 For on-demand testing/generator guidance, use GetExplanationContent keys exactly: explaining_test_definitions and explaining_generators.
+For advanced test setup/use-case catalogs, use GetExplanationContent key: explaining_test_definitions_deep_dive.
 Quick generator overview: call `GetSupportedTypes` with `baseTypeFullName="FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxGenerationStrategyBase"` and inspect returned types via `GetTypeKindsInfo`.
+For complex hierarchical content (for example difficult DOM/web content), `SequenceDetectionFlowBlock` + `SequenceDetectionGenerationStrategy` can be an effective pattern-generation approach; see explanation key `explaining_generators` for setup details.
 For missing access to sites/files (for example local network or local computer resources), use explanation key: explaining_test_driven_unknown_resources.
 Important: Before creating or configuring test definitions/generators, load these on-demand explanations first (do not proceed without them).
 Available tools:

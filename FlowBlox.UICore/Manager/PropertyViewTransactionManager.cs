@@ -17,6 +17,7 @@ namespace FlowBlox.UICore.Manager
 		private FlowBloxRegistry _registry;
 		private Dictionary<object, object> _refMappings = new Dictionary<object, object>();
         private IFlowBloxProjectComponentProvider _componentProvider;
+        private string _transactionProtocolFilePath;
 
         public PropertyViewTransactionManager()
 		{
@@ -67,7 +68,27 @@ namespace FlowBlox.UICore.Manager
 			};
 		}
 
-		public void Cancel()
+        /// <summary>
+        /// Adds a new object to the transaction by converting it into a transient object.
+        /// </summary>
+        /// <param name="sourceObject"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public object Append(object sourceObject)
+        {
+            if (sourceObject == null)
+                throw new ArgumentNullException(nameof(sourceObject));
+
+            var copiedObject = _deepCopier.Copy(sourceObject);
+            var protocol = _deepCopier.GetProtocol();
+
+			if (!string.IsNullOrWhiteSpace(_transactionProtocolFilePath))
+				StoreProtocol(protocol, _transactionProtocolFilePath);
+
+            return copiedObject;
+        }
+
+        public void Cancel()
 		{
 			FlowBloxRegistryProvider.CancelTransaction();
 		}
@@ -101,6 +122,14 @@ namespace FlowBlox.UICore.Manager
 			FlowBloxRegistryProvider.CommitTransaction();
 		}
 
+		private void StoreProtocol(string protocol, string filePath)
+		{
+			if (string.IsNullOrWhiteSpace(filePath))
+				throw new ArgumentException("Property name must not be null, empty, or whitespace.", nameof(filePath));
+
+            File.WriteAllText(filePath, protocol);
+        }
+
 		private void StoreProtocol(object target, string protocol, bool recopy = false)
 		{
 			var protocolDirectory = FlowBloxOptions.GetOptionInstance().GetOption("Paths.DeepCopierProtocolDir").Value;
@@ -109,7 +138,8 @@ namespace FlowBlox.UICore.Manager
 				Directory.CreateDirectory(protocolDirectory);
 
 			string fileName = target.GetType().Name + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + (recopy ? "_recopy" : "") + ".txt";
-			File.WriteAllText(protocolDirectory + "\\" + fileName, protocol);
-		}
+            _transactionProtocolFilePath = protocolDirectory + "\\" + fileName;
+			StoreProtocol(protocol, _transactionProtocolFilePath);
+        }
 	}
 }

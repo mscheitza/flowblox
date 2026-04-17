@@ -216,12 +216,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
             if (string.IsNullOrEmpty(_uiAttribute?.SelectionFilterMethod))
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
-                        (MetroWindow)_window,
-                        FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Title"),
-                        string.Format(
-                            FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Message"),
-                            _property.Name)
-                    );
+                    (MetroWindow)_window,
+                    FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Title"),
+                    string.Format(
+                        FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Message"),
+                        _property.Name));
 
                 return;
             }
@@ -239,8 +238,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     string.Format(
                         FlowBloxResourceUtil.GetLocalizedString("Global_FilterMethodNotFound_Message"),
                         _uiAttribute.SelectionFilterMethod,
-                        _target.GetType().Name)
-                );
+                        _target.GetType().Name));
 
                 return;
             }
@@ -249,10 +247,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
             if (items == null || !items.Any())
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
-                        (MetroWindow)_window,
-                        FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Title"),
-                        FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Message")
-                    );
+                    (MetroWindow)_window,
+                    FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Title"),
+                    FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Message"));
 
                 return;
             }
@@ -268,10 +265,32 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             if (dialog.ShowDialog() == true)
             {
-                _property.SetValue(_target, dialog.SelectedItem.Value);
-                FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-                InvalidateAll();
+                if (TrySetLinkedObject(_property.Name, dialog.SelectedItem.Value))
+                    InvalidateAll();
             }
+        }
+
+        protected virtual bool TrySetLinkedObject(string propertyName, object selectedObject)
+        {
+            var beforeLinkResult = ProcessAssociationBeforeLink(propertyName, selectedObject);
+            if (beforeLinkResult.Cancel)
+                return false;
+
+            var linkedObject = beforeLinkResult.LinkedObject;
+            if (linkedObject == null)
+                return false;
+
+            if (!_property.PropertyType.IsInstanceOfType(linkedObject))
+            {
+                throw new InvalidOperationException(
+                    $"AssociationBeforeLink returned an object of type '{linkedObject.GetType().FullName}', " +
+                    $"but property '{propertyName}' expects type '{_property.PropertyType.FullName}'.");
+            }
+
+            _property.SetValue(_target, linkedObject);
+            FlowBloxComponentHelper.RaisePropertyChanged(_target, propertyName);
+
+            return true;
         }
 
         private void ExecuteUnlink()

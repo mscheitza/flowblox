@@ -199,6 +199,15 @@ namespace FlowBlox.Core.Models.Base
         public virtual bool IsDeletable(out List<IFlowBloxComponent> dependencies)
         {
             dependencies = new List<IFlowBloxComponent>();
+            EnsureDeletable(dependencies);
+            return !dependencies.Any();
+        }
+
+        protected virtual bool EnsureDeletable(List<IFlowBloxComponent> dependencies)
+        {
+            if (dependencies == null)
+                throw new ArgumentNullException(nameof(dependencies));
+
             return true;
         }
 

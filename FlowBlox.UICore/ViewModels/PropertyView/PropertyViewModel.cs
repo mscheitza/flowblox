@@ -2,6 +2,7 @@
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Manager;
 using FlowBlox.UICore.Resolver;
@@ -11,6 +12,7 @@ using MahApps.Metro.Controls;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -142,10 +144,10 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             try
             {
                 var resolver = new PropertyViewSchemaResolver(_window, _parent);
-                var tabs = resolver.ResolveTabs(_transientTarget, _readOnly, _preselectedInstance);
+                var tabs = resolver.ResolveTabs(_transientTarget, _readOnly, _preselectedInstance).ToList();
                 Tabs.AddRange(tabs);
                 VisibleTabs.Refresh();
-                SubscribeToIsDirtyChanged(tabs);
+                SubscribeToPropertyViewModelEvents(tabs);
             }
             catch (Exception ex)
             {
@@ -159,15 +161,15 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             }
         }
 
-        private void SubscribeToIsDirtyChanged(IEnumerable<TabViewModel> tabViewModels)
+        private void SubscribeToPropertyViewModelEvents(IEnumerable<TabViewModel> tabViewModels)
         {
             foreach (var propertyControlViewModel in tabViewModels.SelectMany(x => x.Controls))
             {
-                SubscribeToIsDirtyChanged(propertyControlViewModel);
+                SubscribeToPropertyViewModelEvents(propertyControlViewModel);
             }
         }
 
-        private void SubscribeToIsDirtyChanged(PropertyControlViewModel propertyControlViewModel)
+        private void SubscribeToPropertyViewModelEvents(PropertyControlViewModel propertyControlViewModel)
         {
             propertyControlViewModel.AllowHasChangesUpdate = true;
             propertyControlViewModel.PropertyChanged += (s, e) =>
@@ -175,6 +177,32 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 if (e.PropertyName == nameof(PropertyControlViewModel.HasChanges) && propertyControlViewModel.HasChanges)
                     this.IsDirty = propertyControlViewModel.HasChanges;
             };
+            Trace.TraceInformation(propertyControlViewModel.PropertyName);
+            propertyControlViewModel.AssociationBeforeLink += PropertyControlViewModel_AssociationBeforeLink;
+        }
+
+        private void PropertyControlViewModel_AssociationBeforeLink(object? sender, Events.AssociationBeforeLinkEventArgs e)
+        {
+            if (!_deepCopy)
+                return;
+
+            if (_transientTarget is not BaseFlowBlock flowBlock)
+                return;
+
+            if (!IsBackReferencedProperty(flowBlock, e.PropertyName))
+                return;
+
+            e.LinkedObject = _transactionManager.Append(e.OriginalLinkedObject);
+        }
+
+        private static bool IsBackReferencedProperty(BaseFlowBlock flowBlock, string propertyName)
+        {
+            if (string.IsNullOrWhiteSpace(propertyName))
+                return false;
+
+            return flowBlock
+                .GetBackReferencedPropertyNames()
+                .Contains(propertyName);
         }
 
         private void InitTargetAndTransientTarget()

@@ -1,8 +1,10 @@
-﻿using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -145,8 +147,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
             var root = new JObject
             {
                 ["name"] = targetProperty.Name,
+                ["nullable"] = IsNullable(targetProperty.PropertyType),
                 ["schema"] = BuildTargetPropertyDescription(targetProperty.PropertyType, 0, new HashSet<string>(StringComparer.Ordinal))
             };
+            AppendDisplayMetadata(root, targetProperty.GetCustomAttribute<DisplayAttribute>());
 
             return root.ToString(Formatting.Indented);
         }
@@ -227,13 +231,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
             var nonNullableType = Nullable.GetUnderlyingType(type) ?? type;
             var descriptor = new JObject
             {
-                ["type"] = GetTypeName(type)
+                ["type"] = GetTypeName(type),
+                ["nullable"] = IsNullable(type)
             };
 
             if (nonNullableType.IsEnum)
             {
                 descriptor["kind"] = "enum";
                 descriptor["enumValues"] = new JArray(Enum.GetNames(nonNullableType));
+                descriptor["enumEntries"] = BuildEnumEntries(nonNullableType);
                 return descriptor;
             }
 
@@ -281,10 +287,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
                         ["type"] = GetTypeName(propertyType),
                         ["nullable"] = IsNullable(propertyType)
                     };
+                    AppendDisplayMetadata(propertyDescriptor, property.GetCustomAttribute<DisplayAttribute>());
 
                     if (propertyNonNullableType.IsEnum)
                     {
                         propertyDescriptor["enumValues"] = new JArray(Enum.GetNames(propertyNonNullableType));
+                        propertyDescriptor["enumEntries"] = BuildEnumEntries(propertyNonNullableType);
                     }
 
                     if (propertyNonNullableType.IsInterface || propertyNonNullableType.IsAbstract)
@@ -351,5 +359,38 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
             return deserialized;
         }
+
+        private static JArray BuildEnumEntries(Type enumType)
+        {
+            var entries = new JArray();
+            foreach (var enumName in Enum.GetNames(enumType))
+            {
+                var enumValue = enumType.GetField(enumName);
+                var entry = new JObject
+                {
+                    ["name"] = enumName
+                };
+
+                AppendDisplayMetadata(entry, enumValue?.GetCustomAttribute<DisplayAttribute>());
+                entries.Add(entry);
+            }
+
+            return entries;
+        }
+
+        private static void AppendDisplayMetadata(JObject target, DisplayAttribute displayAttribute)
+        {
+            if (target == null || displayAttribute == null)
+                return;
+
+            var displayName = FlowBloxResourceUtil.GetDisplayName(displayAttribute, requireDisplayName: false);
+            if (!string.IsNullOrWhiteSpace(displayName))
+                target["displayName"] = displayName;
+
+            var description = FlowBloxResourceUtil.GetDescription(displayAttribute);
+            if (!string.IsNullOrWhiteSpace(description))
+                target["description"] = description;
+        }
     }
 }
+

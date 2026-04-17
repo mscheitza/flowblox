@@ -28,7 +28,7 @@ namespace FlowBlox.UICore.ViewModels
         private readonly SynchronizationContext? _uiContext;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
         private readonly IDialogService _dialogService;
-
+        private readonly FlowBloxTestDefinitionLatestFlowBlockResolver _targetResolver;
         private readonly List<TestCaseEntryViewModel> _selectedEntries = new();
         private FlowBloxRegistry? _registry;
         private bool _isReadOnly;
@@ -78,6 +78,7 @@ namespace FlowBlox.UICore.ViewModels
             _uiContext = SynchronizationContext.Current;
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
+            _targetResolver = new FlowBloxTestDefinitionLatestFlowBlockResolver();
 
             RefreshCommand = new RelayCommand(Refresh);
             CreateCommand = new RelayCommand(CreateTestCase, CanCreateTestCase);

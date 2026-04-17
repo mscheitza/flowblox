@@ -1,6 +1,4 @@
 using FlowBlox.AIAssistant.Models;
-using FlowBlox.Core.Models.Base;
-using FlowBlox.Core.Models.FlowBlocks.Base;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools
@@ -15,19 +13,15 @@ namespace FlowBlox.AIAssistant.Tools
             new JObject
             {
                 ["typeFullName"] = "string",
-                ["excludeBaseTypes"] = "optional: string[] (base type full names to skip inherited members)",
-                ["usageHint"] =
-                    $"Best practice for traffic reduction: fetch base kinds first (FlowBlock: '{typeof(BaseFlowBlock).FullName}', Managed Object: '{typeof(ManagedObject).FullName}'), " +
-                    $"then call specific kinds with excludeBaseTypes to skip already known inherited members."
+                ["includeAlreadySent"] = "optional: bool (default: false). If true, properties that were already described in this session are returned with full details again."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {
-            var excludedBaseTypes = ToolHandlerUtilities.ResolveExcludedBaseTypes(
-                args["excludeBaseTypes"] ?? args["excludeBaseType"]);
+            var includeAlreadySent = args.Value<bool?>("includeAlreadySent") ?? false;
             var response = ToolHandlerUtilities.CreateUnifiedTypeInfoResponse(
                 args.Value<string>("typeFullName"),
-                excludedBaseTypes);
+                includeAlreadySent);
 
             return Task.FromResult(response);
         }

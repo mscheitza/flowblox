@@ -171,7 +171,7 @@ All inputs are collected during the referenced block's iteration and this flow b
 		<value>Generations</value>
 	</data>
   <data name="BaseFlowBlock_GenerationStrategies_Tooltip" xml:space="preserve">
-		<value>Generation strategies automatically derive values or configuration settings for this flow block. They run on test datasets, build concrete input from the current flow chain, and validate the generated result against the defined test expectations.</value>
+		<value>Generation strategies derive values or configuration settings for this flow block based on linked test definitions and expectations. They can be run manually (for example via Generate/AI tools) and are also used for automatic regeneration during runtime-start checks when required test definitions fail.</value>
 	</data>
   <data name="BaseFlowBlock_Groups_ActivationConditions" xml:space="preserve">
 		<value>Activation</value>
@@ -204,7 +204,7 @@ All inputs are collected during the referenced block's iteration and this flow b
 		<value>Test cases</value>
 	</data>
   <data name="BaseFlowBlock_TestDefinitions_Tooltip" xml:space="preserve">
-		<value>Test definitions describe verifiable scenarios for this flow block. For required fields, you can either set constant values or derive expected values from the complete or partial flow chain. The resulting input values are then used for further test execution.</value>
+		<value>Test definitions describe verifiable scenarios for this flow block. For required fields, values can be set manually or derived from the flow chain. Set "Required for execution" only when this test definition should run automatically at runtime start.</value>
 	</data>
   <data name="BaseResultFlowBlockUIActions_Generate" xml:space="preserve">
 		<value>Generate</value>
@@ -1212,6 +1212,12 @@ Use the "+" button to add entries to the table.</value>
   <data name="ResultFieldByEnumValue_EnumValue" xml:space="preserve">
 		<value>Data key</value>
 	</data>
+  <data name="ResultFieldByEnumValue_ObjectDisplayName" xml:space="preserve">
+		<value>Result field configuration {0} -> {1}</value>
+	</data>
+  <data name="ResultFieldByEnumValue_NotSet" xml:space="preserve">
+		<value>not set</value>
+	</data>
   <data name="RobertaQATokenizer_Description" xml:space="preserve">
 		<value>Tokenizes text for question-answering models using Byte Pair Encoding (BPE) based on vocab.json and merges.txt, following the sentence format typical for RoBERTa models.</value>
 	</data>
@@ -1299,11 +1305,20 @@ Use the "+" button to add entries to the table.</value>
   <data name="StartEndPatternSelectorFlowBlock_StartEndPatterns" xml:space="preserve">
 		<value>Start/End patterns</value>
 	</data>
+  <data name="StartEndPatternSelectorFlowBlock_StartEndPatterns_Tooltip" xml:space="preserve">
+		<value>Start/end patterns are processed hierarchically from top to bottom. By default, the value between start and end pattern is returned. You can optionally include start and/or end pattern in the output using Return options. Return options only apply to the last entry.</value>
+	</data>
   <data name="StartEndPattern_EndPattern" xml:space="preserve">
 		<value>End pattern</value>
 	</data>
   <data name="StartEndPattern_Index" xml:space="preserve">
 		<value>Index</value>
+	</data>
+  <data name="StartEndPattern_ReturnOptions" xml:space="preserve">
+		<value>Return options</value>
+	</data>
+  <data name="StartEndPattern_ReturnOptions_Tooltip" xml:space="preserve">
+		<value>Controls whether start and/or end pattern are included in the output value. Empty means only the value between start and end pattern. This setting only applies to the last start/end pattern entry.</value>
 	</data>
   <data name="StartEndPattern_StartPattern" xml:space="preserve">
 		<value>Start pattern</value>
@@ -1770,8 +1785,14 @@ Use the "+" button to add entries to the table.</value>
   <data name="StartEndPatternSelectorFlowBlock_IncludePatternInResult" xml:space="preserve">
 		<value>Include pattern in output value</value>
 	</data>
-  <data name="StartEndPatternSelectorFlowBlock_ReturnOptions" xml:space="preserve">
-		<value>Return options</value>
+  <data name="StartEndPatternReturnOptions_StartPattern" xml:space="preserve">
+		<value>Include start pattern in output value</value>
+	</data>
+  <data name="StartEndPatternReturnOptions_EndPattern" xml:space="preserve">
+		<value>Include end pattern in output value</value>
+	</data>
+  <data name="StartEndPatternReturnOptions_StartAndEndPattern" xml:space="preserve">
+		<value>Include start and end patterns in output value</value>
 	</data>
   <data name="WebBrowserFlowBlock_RetryLimit" xml:space="preserve">
 		<value>Maximum number of retry attempts</value>
@@ -2779,7 +2800,7 @@ Multi-level XPath expressions are not allowed here.</value>
     <value>Authorization failed</value>
   </data>
   <data name="FlowBloxTestDefinition_RequiredForExecution_Description" xml:space="preserve">
-    <value>If enabled, runtime execution requires this test definition to pass.</value>
+    <value>If enabled, this test definition is executed automatically when runtime starts. If an expectation fails, generation strategies of the affected flow block can run, then the test step is repeated once.</value>
   </data>
   <data name="FlowBloxTestConfiguration_UIRequiredForExecution_Description" xml:space="preserve">
     <value>UI-only marker in TestDefinition view indicating this field is required for executable flow blocks.</value>

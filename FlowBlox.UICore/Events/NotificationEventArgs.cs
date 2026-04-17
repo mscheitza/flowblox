@@ -1,4 +1,4 @@
-﻿namespace FlowBlox.UICore.Models
+﻿namespace FlowBlox.UICore.Events
 {
     public class NotificationEventArgs
     {

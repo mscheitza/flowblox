@@ -784,7 +784,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Generation strategies automatically derive values or configuration settings for this flow block. They run on test datasets, build concrete input from the current flow chain, and validate the generated result against the defined test expectations. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generation strategies derive values or configuration settings for this flow block based on linked test definitions and expectations. They can be run manually (for example via Generate/AI tools) and are also used for automatic regeneration during runtime-start checks when required test definitions fail. ähnelt.
         /// </summary>
         public static string BaseFlowBlock_GenerationStrategies_Tooltip {
             get {
@@ -883,7 +883,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Test definitions describe verifiable scenarios for this flow block. For required fields, you can either set constant values or derive expected values from the complete or partial flow chain. The resulting input values are then used for further test execution. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test definitions describe verifiable scenarios for this flow block. For required fields, values can be set manually or derived from the flow chain. Set &quot;Required for execution&quot; only when this test definition should run automatically at runtime start. ähnelt.
         /// </summary>
         public static string BaseFlowBlock_TestDefinitions_Tooltip {
             get {
@@ -3160,7 +3160,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, runtime execution requires this test definition to pass. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, this test definition is executed automatically when runtime starts. If an expectation fails, generation strategies of the affected flow block can run, then the test step is repeated once. ähnelt.
         /// </summary>
         public static string FlowBloxTestDefinition_RequiredForExecution_Description {
             get {
@@ -6308,6 +6308,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die not set ähnelt.
+        /// </summary>
+        public static string ResultFieldByEnumValue_NotSet {
+            get {
+                return ResourceManager.GetString("ResultFieldByEnumValue_NotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result field configuration {0} -&gt; {1} ähnelt.
+        /// </summary>
+        public static string ResultFieldByEnumValue_ObjectDisplayName {
+            get {
+                return ResourceManager.GetString("ResultFieldByEnumValue_ObjectDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tokenizes text for question-answering models using Byte Pair Encoding (BPE) based on vocab.json and merges.txt, following the sentence format typical for RoBERTa models. ähnelt.
         /// </summary>
         public static string RobertaQATokenizer_Description {
@@ -6902,6 +6920,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Return options ähnelt.
+        /// </summary>
+        public static string StartEndPattern_ReturnOptions {
+            get {
+                return ResourceManager.GetString("StartEndPattern_ReturnOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls whether start and/or end pattern are included in the output value. Empty means only the value between start and end pattern. This setting only applies to the last start/end pattern entry. ähnelt.
+        /// </summary>
+        public static string StartEndPattern_ReturnOptions_Tooltip {
+            get {
+                return ResourceManager.GetString("StartEndPattern_ReturnOptions_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Start pattern ähnelt.
         /// </summary>
         public static string StartEndPattern_StartPattern {
@@ -6911,7 +6947,34 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Selects content between defined start and end patterns from a text. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Include end pattern in output value ähnelt.
+        /// </summary>
+        public static string StartEndPatternReturnOptions_EndPattern {
+            get {
+                return ResourceManager.GetString("StartEndPatternReturnOptions_EndPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Include start and end patterns in output value ähnelt.
+        /// </summary>
+        public static string StartEndPatternReturnOptions_StartAndEndPattern {
+            get {
+                return ResourceManager.GetString("StartEndPatternReturnOptions_StartAndEndPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Include start pattern in output value ähnelt.
+        /// </summary>
+        public static string StartEndPatternReturnOptions_StartPattern {
+            get {
+                return ResourceManager.GetString("StartEndPatternReturnOptions_StartPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extracts text between Start/End pattern pairs. Pattern entries are applied sequentially and hierarchically: first on the input text, then on the results of the previous entry, until the last entry. The final entry results are returned. EndPattern should usually be set to capture between a clear start and end marker. ähnelt.
         /// </summary>
         public static string StartEndPatternSelectorFlowBlock_Description {
             get {
@@ -6938,11 +7001,20 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Return options ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Each Start/End pattern entry defines one parsing level. Every level splits the current input into matching segments and passes these segments to the next level. ähnelt.
         /// </summary>
-        public static string StartEndPatternSelectorFlowBlock_ReturnOptions {
+        public static string StartEndPatternSelectorFlowBlock_SpecialExplanation_HierarchicalParsing {
             get {
-                return ResourceManager.GetString("StartEndPatternSelectorFlowBlock_ReturnOptions", resourceCulture);
+                return ResourceManager.GetString("StartEndPatternSelectorFlowBlock_SpecialExplanation_HierarchicalParsing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die EndPattern is optional, but should usually be set. If empty, matching continues until the end of the current segment. Index is optional and selects one specific match (0-based) at the current level. ähnelt.
+        /// </summary>
+        public static string StartEndPatternSelectorFlowBlock_SpecialExplanation_PatternEntryBehavior {
+            get {
+                return ResourceManager.GetString("StartEndPatternSelectorFlowBlock_SpecialExplanation_PatternEntryBehavior", resourceCulture);
             }
         }
         
@@ -6952,6 +7024,15 @@ namespace FlowBlox.Core {
         public static string StartEndPatternSelectorFlowBlock_StartEndPatterns {
             get {
                 return ResourceManager.GetString("StartEndPatternSelectorFlowBlock_StartEndPatterns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start/end patterns are processed hierarchically from top to bottom. By default, the value between start and end pattern is returned. You can optionally include start and/or end pattern in the output using Return options. Return options only apply to the last entry. ähnelt.
+        /// </summary>
+        public static string StartEndPatternSelectorFlowBlock_StartEndPatterns_Tooltip {
+            get {
+                return ResourceManager.GetString("StartEndPatternSelectorFlowBlock_StartEndPatterns_Tooltip", resourceCulture);
             }
         }
         

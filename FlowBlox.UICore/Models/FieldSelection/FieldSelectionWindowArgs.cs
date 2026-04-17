@@ -3,7 +3,7 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.UICore.Enums;
 
-namespace FlowBlox.UICore.Models
+namespace FlowBlox.UICore.Models.FieldSelection
 {
     public sealed class FieldSelectionWindowArgs
     {

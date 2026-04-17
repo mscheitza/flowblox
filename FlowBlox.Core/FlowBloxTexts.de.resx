@@ -171,7 +171,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>Generierungen</value>
 	</data>
   <data name="BaseFlowBlock_GenerationStrategies_Tooltip" xml:space="preserve">
-		<value>Generierungsstrategien dienen dazu, Werte oder Einstellungen für diesen Flow-Block automatisiert abzuleiten. Sie arbeiten mit Testdatensätzen, erzeugen entlang der aktuellen Flow-Chain einen konkreten Input und gleichen das Ergebnis mit den definierten Testerwartungen ab.</value>
+		<value>Generierungsstrategien leiten Werte oder Einstellungen für diesen Flow-Block auf Basis verknüpfter Testdefinitionen und Testerwartungen ab. Sie können manuell ausgeführt werden (z. B. über Generieren/KI-Tools) und werden bei Laufzeit-Startprüfungen für automatische Regenerierung genutzt, wenn erforderliche Testdefinitionen fehlschlagen.</value>
 	</data>
   <data name="BaseFlowBlock_Groups_ActivationConditions" xml:space="preserve">
 		<value>Aktivierung</value>
@@ -204,7 +204,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>Testfälle</value>
 	</data>
   <data name="BaseFlowBlock_TestDefinitions_Tooltip" xml:space="preserve">
-		<value>Testdefinitionen beschreiben prüfbare Szenarien für diesen Flow-Block. Für erforderliche Felder können konstante Werte gesetzt oder erwartete Werte aus der kompletten oder partiellen Flow-Chain abgeleitet werden. Die daraus entstehenden Eingabewerte werden anschließend für die weitere Testausführung verwendet.</value>
+		<value>Testdefinitionen beschreiben prüfbare Szenarien für diesen Flow-Block. Für erforderliche Felder können Werte manuell gesetzt oder aus der Flow-Chain abgeleitet werden. „Erforderlich für Ausführung“ nur setzen, wenn dieser Testfall beim Laufzeitstart automatisch ausgeführt werden soll.</value>
 	</data>
   <data name="BaseResultFlowBlockUIActions_Generate" xml:space="preserve">
 		<value>Generieren</value>
@@ -1211,6 +1211,12 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="ResultFieldByEnumValue_EnumValue" xml:space="preserve">
 		<value>Datenschlüssel</value>
 	</data>
+  <data name="ResultFieldByEnumValue_ObjectDisplayName" xml:space="preserve">
+		<value>Ergebnisfeld-Konfiguration {0} -> {1}</value>
+	</data>
+  <data name="ResultFieldByEnumValue_NotSet" xml:space="preserve">
+		<value>nicht gesetzt</value>
+	</data>
   <data name="RobertaQATokenizer_Description" xml:space="preserve">
 		<value>Tokenisiert Text für Frage-Antwort-Modelle mithilfe von Byte Pair Encoding (BPE) basierend auf vocab.json und merges.txt. Verwendet dabei das für RoBERTa-Modelle typische Satzformat.</value>
 	</data>
@@ -1295,11 +1301,20 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="StartEndPatternSelectorFlowBlock_StartEndPatterns" xml:space="preserve">
 		<value>Start-/Endmuster</value>
 	</data>
+  <data name="StartEndPatternSelectorFlowBlock_StartEndPatterns_Tooltip" xml:space="preserve">
+		<value>Die Start-/Endmuster werden hierarchisch von oben nach unten verarbeitet. Standardmäßig wird der Wert zwischen Start- und Endmuster zurückgegeben. Über die Rückgabeoptionen kann der Ergebniswert optional um Start- und/oder Endmuster erweitert werden. Die Rückgabeoptionen wirken nur beim letzten Eintrag.</value>
+	</data>
   <data name="StartEndPattern_EndPattern" xml:space="preserve">
 		<value>Endmuster</value>
 	</data>
   <data name="StartEndPattern_Index" xml:space="preserve">
 		<value>Index</value>
+	</data>
+  <data name="StartEndPattern_ReturnOptions" xml:space="preserve">
+		<value>Rückgabeoptionen</value>
+	</data>
+  <data name="StartEndPattern_ReturnOptions_Tooltip" xml:space="preserve">
+		<value>Steuert, ob Start- und/oder Endmuster im Ausgabewert enthalten sind. Wenn leer, wird nur der Wert zwischen Start- und Endmuster zurückgegeben. Diese Einstellung wirkt nur beim letzten Start-/Endmuster-Eintrag.</value>
 	</data>
   <data name="StartEndPattern_StartPattern" xml:space="preserve">
 		<value>Startmuster</value>
@@ -1763,8 +1778,14 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
   <data name="StartEndPatternSelectorFlowBlock_IncludePatternInResult" xml:space="preserve">
 		<value>Muster in Ausgabewert einschließen</value>
 	</data>
-  <data name="StartEndPatternSelectorFlowBlock_ReturnOptions" xml:space="preserve">
-		<value>Rückgabeoptionen</value>
+  <data name="StartEndPatternReturnOptions_StartPattern" xml:space="preserve">
+		<value>Startmuster in Ausgabewert einschließen</value>
+	</data>
+  <data name="StartEndPatternReturnOptions_EndPattern" xml:space="preserve">
+		<value>Endmuster in Ausgabewert einschließen</value>
+	</data>
+  <data name="StartEndPatternReturnOptions_StartAndEndPattern" xml:space="preserve">
+		<value>Start- und Endmuster in Ausgabewert einschließen</value>
 	</data>
   <data name="WebBrowserFlowBlock_RetryLimit" xml:space="preserve">
 		<value>Maximale Anzahl der Wiederholungsversuche</value>
@@ -2619,7 +2640,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 		<value>Ergebnisfelder</value>
 	</data>
   <data name="FlowBloxTestDefinition_RequiredForExecution_Description" xml:space="preserve">
-    <value>Wenn aktiviert, darf die Laufzeit nur starten, wenn dieser Testfall erfolgreich ist.</value>
+    <value>Wenn aktiviert, wird dieser Testfall beim Laufzeitstart automatisch ausgeführt. Schlägt eine Erwartung fehl, können Generierungsstrategien am betroffenen Flow-Block ausgeführt und der Testschritt einmal wiederholt werden.</value>
   </data>
   <data name="FlowBloxTestConfiguration_UIRequiredForExecution_Description" xml:space="preserve">
     <value>Nur UI-Markierung in der TestDefinitionsansicht; zeigt an, dass das Feld für ausführbare Flow-Blöcke erforderlich ist.</value>

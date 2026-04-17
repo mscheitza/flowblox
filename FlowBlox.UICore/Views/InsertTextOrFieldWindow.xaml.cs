@@ -2,6 +2,7 @@
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Models;
+using FlowBlox.UICore.Models.FieldSelection;
 using MahApps.Metro.Controls;
 using System.Windows;
 using System.Windows.Controls;

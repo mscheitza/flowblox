@@ -9,6 +9,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Models;
 using WpfFieldSelectionWindow = FlowBlox.UICore.Views.FieldSelectionWindow;
+using FlowBlox.UICore.Models.FieldSelection;
 
 namespace FlowBlox.Views
 {

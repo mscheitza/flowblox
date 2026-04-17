@@ -217,7 +217,10 @@
     <value>Hinweise zu Generatoren</value>
   </data>
   <data name="Expander_GeneratorHints_Text" xml:space="preserve">
-    <value>Testfälle bzw. Testerwartungen können außerdem von Generatoren verwendet werden, um auf Basis eines fehlgeschlagenen Testfalls gezielt Werte zu erzeugen. Dadurch lassen sich fehlgeschlagene Erwartungen kontrolliert behandeln und Ergebnisse für den betroffenen Kontext ableiten.</value>
+    <value>Testfälle bzw. Testerwartungen können von Generatoren verwendet werden, um auf Basis eines fehlgeschlagenen Testfalls gezielt Werte zu erzeugen.</value>
+  </data>
+  <data name="Expander_GeneratorHints_Note1" xml:space="preserve">
+    <value>Eine automatische Regenerierung beim Laufzeitstart wird nur durchgeführt, wenn dieser Testfall als „Erforderlich für Laufzeit-Ausführung“ festgelegt wurde und am betroffenen Flow-Block Generierungsstrategien vorhanden sind.</value>
   </data>
   <data name="Expander_GeneratorHints_Note2" xml:space="preserve">
     <value>Minimum am Ziel-Flow-Block: Definieren Sie mindestens zwei Testerwartungen, eine für den Wert und eine für die Anzahl der Datensätze.</value>
@@ -251,7 +254,7 @@
     
   </data>
   <data name="Expander_TestCaseHelp_Note4" xml:space="preserve">
-    <value>Testerwartungen werden pro Feld geprüft. Sobald eine Erwartung nicht erfüllt ist, gilt der Test als fehlgeschlagen.</value>
+    <value>Testerwartungen werden pro Feld geprüft. Sobald eine Erwartung nicht erfüllt ist, gilt der Test als fehlgeschlagen. „Erforderlich für Laufzeit-Ausführung“ nur setzen, wenn dieser Test beim Laufzeitstart automatisch ausgeführt werden soll.</value>
     
   </data>
   <data name="Message_RuntimeInitializationFailed" xml:space="preserve">

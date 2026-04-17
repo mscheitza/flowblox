@@ -17,12 +17,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         }
     }
 
-    public enum TestScope
-    {
-        All,
-        RequiredForExecution
-    }
-
     public abstract class FlowBlockGenerationStrategyExecutorBase
     {
         protected readonly BaseFlowBlock FlowBlock;

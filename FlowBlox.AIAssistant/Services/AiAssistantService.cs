@@ -42,6 +42,9 @@ namespace FlowBlox.AIAssistant.Services
         {
             lock (_sessionSync)
             {
+                if (_session != null)
+                    ToolHandlerUtilities.ClearSessionCache(_session.SessionId);
+
                 _session = null;
             }
         }
@@ -123,6 +126,7 @@ namespace FlowBlox.AIAssistant.Services
 
             var maxRounds = Math.Clamp(config.MaxToolRounds, 1, 200);
             var session = GetOrCreateSession();
+            ToolHandlerUtilities.SetCurrentSessionGuid(session.SessionId);
             var isConversationStart = string.IsNullOrWhiteSpace(session.LastResponseId);
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = BuildSystemPrompt();

@@ -181,13 +181,6 @@ namespace FlowBlox.UICore.Factory.Base
             return supportsCreate && supportsDelete && !supportsLink && !supportsUnlink;
         }
 
-        public bool IsDeletable(object instance, TOwner owner, object excludeTarget = null)
-        {
-            return Task.Run(async () => await IsDeletableAsync(instance, owner, excludeTarget))
-                .GetAwaiter()
-                .GetResult();
-        }
-
         public async Task<bool> IsDeletableAsync(object instance, TOwner owner, object excludeTarget = null)
         {
             var methodInfo = instance.GetType().GetMethod(GlobalConstants.IsDeletableMethodName);

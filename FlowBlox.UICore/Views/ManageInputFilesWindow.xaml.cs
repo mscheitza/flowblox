@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using UICoreTextBoxHelper = FlowBlox.UICore.Utilities.TextBoxHelper;
+using FlowBlox.UICore.Models.FieldSelection;
 
 namespace FlowBlox.UICore.Views
 {

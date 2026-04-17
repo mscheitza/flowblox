@@ -25,6 +25,8 @@ namespace FlowBlox.Core.Models.Testing
             this._registry = FlowBloxRegistryProvider.GetRegistry();
         }
 
+        private readonly FlowBloxTestDefinitionLatestFlowBlockResolver _latestResolver = new FlowBloxTestDefinitionLatestFlowBlockResolver();
+
         public void Initialize(
             FlowBloxTestDefinition testDefinition,
             BaseFlowBlock currentFlowBlock,
@@ -33,7 +35,8 @@ namespace FlowBlox.Core.Models.Testing
             _testDefinition = testDefinition;
 
             FlowBloxTestCapture flowBloxCapture = new FlowBloxTestCapture();
-            flowBloxCapture.CreateCapture(_registry.GetStartFlowBlock(), currentFlowBlock);
+            var targetFlowBlock = currentFlowBlock ?? _latestResolver.ResolveLatestFlowBlock(_testDefinition);
+            flowBloxCapture.CreateCapture(_registry.GetStartFlowBlock(), targetFlowBlock);
             _capturedFlowBlocks = flowBloxCapture.GetCapturedFlowBlocks();
 
             InitializeTransientRuntime(includedFlowBlocks);
@@ -128,6 +131,9 @@ namespace FlowBlox.Core.Models.Testing
                             _localRuntime.Report($"Test case: No field configuration was found for the field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Warning);
                             continue;
                         }
+
+                        ReportExpectedValueConfiguredButNotExecuted(testDataset, FlowBloxFieldTestConfiguration);
+                        ReportMissingExpectedValueForExecutedDataset(testDataset, FlowBloxFieldTestConfiguration);
 
                         if (testDataset.Execute)
                         {
@@ -233,6 +239,53 @@ namespace FlowBlox.Core.Models.Testing
             _localRuntime.Report($"The test \"{_testDefinition.Name}\" was completed successfully.");
 
             return new FlowBloxTestResult(true, fieldValueAssignments);
+        }
+
+        private void ReportExpectedValueConfiguredButNotExecuted(
+            FlowBlockTestDataset testDataset,
+            FlowBloxFieldTestConfiguration fieldTestConfiguration)
+        {
+            if (testDataset.Execute || testDataset.FlowBlock == null)
+                return;
+
+            var selectionMode = fieldTestConfiguration.SelectionMode;
+            var hasExpectedValueSelectionMode = selectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue;
+            var hasExpectedValue = !string.IsNullOrWhiteSpace(fieldTestConfiguration.UserInput);
+
+            if (!hasExpectedValueSelectionMode || !hasExpectedValue)
+                return;
+
+            var fieldName = fieldTestConfiguration.FieldElement?.FullyQualifiedName;
+            var flowBlockName = testDataset.FlowBlock.Name;
+
+            _localRuntime.Report(
+                $"Test case: Warning - an expected value is configured for field \"{fieldName}\", but flow block \"{flowBlockName}\" is not executed.",
+                FlowBloxLogLevel.Warning);
+        }
+
+        private void ReportMissingExpectedValueForExecutedDataset(
+            FlowBlockTestDataset testDataset,
+            FlowBloxFieldTestConfiguration fieldTestConfiguration)
+        {
+            if (!testDataset.Execute || testDataset.FlowBlock == null)
+                return;
+
+            if (fieldTestConfiguration.SelectionMode != FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue)
+                return;
+
+            if (!string.IsNullOrWhiteSpace(fieldTestConfiguration.UserInput))
+                return;
+
+            var hasTestExpectations = fieldTestConfiguration.ExpectationConditions?.Any() == true;
+            if (hasTestExpectations)
+                return;
+
+            var fieldName = fieldTestConfiguration.FieldElement?.FullyQualifiedName ?? string.Empty;
+            var flowBlockName = testDataset.FlowBlock.Name;
+
+            _localRuntime.Report(
+                $"Test case: Warning - flow block \"{flowBlockName}\" is executed with selection mode \"{FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue}\", but no expected value and no test expectations are configured for field \"{fieldName}\". No result is selected or fixed by expected value, and no expectation validation is defined.",
+                FlowBloxLogLevel.Warning);
         }
 
         private bool EvaluateExpectationConditions(

@@ -23,6 +23,7 @@
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter"/>
+            <converters:LogLevelToBrushConverter x:Key="LogLevelToBrushConverter"/>
             <viewModel:GenerationViewModel x:Key="GenerationViewModel"/>
         </ResourceDictionary>
     </Window.Resources>
@@ -33,7 +34,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ListView Grid.Row="0" ItemsSource="{Binding RuntimeLogs}">
+        <ListView Grid.Row="0" ItemsSource="{Binding RuntimeLogs}" Background="White">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="{x:Static resources:GenerationView.ContextMenu_OpenInEditor}" 
@@ -52,8 +53,13 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconModern Kind="{Binding LogLevel, Converter={StaticResource LogLevelToIconConverter}}" Width="16" Height="16" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{Binding LogLevel}"/>
+                                    <iconPacks:PackIconModern Kind="{Binding LogLevel, Converter={StaticResource LogLevelToIconConverter}}"
+                                                              Foreground="{Binding LogLevel, Converter={StaticResource LogLevelToBrushConverter}}"
+                                                              Width="16"
+                                                              Height="16"
+                                                              Margin="0,0,5,0"/>
+                                    <TextBlock Text="{Binding LogLevel}"
+                                               Foreground="{Binding LogLevel, Converter={StaticResource LogLevelToBrushConverter}}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

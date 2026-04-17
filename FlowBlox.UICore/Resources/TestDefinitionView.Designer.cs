@@ -133,6 +133,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic regeneration during runtime start is only performed when this test case is marked as &quot;Required for runtime execution&quot; and generation strategies exist on the affected flow block. ähnelt.
+        /// </summary>
+        public static string Expander_GeneratorHints_Note1 {
+            get {
+                return ResourceManager.GetString("Expander_GeneratorHints_Note1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Minimum at the target flow block: define at least two expectations, one for the value and one for the dataset count. ähnelt.
         /// </summary>
         public static string Expander_GeneratorHints_Note2 {
@@ -169,7 +178,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Tests and expectations can also be used by generators to derive values after a failed test case. This makes it possible to react to failed expectations in a controlled way and generate values specifically for the affected context. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Test cases and test expectations can be used by generators to derive targeted values based on a failed test case. ähnelt.
         /// </summary>
         public static string Expander_GeneratorHints_Text {
             get {
@@ -214,7 +223,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Expectations are evaluated per field. If an expectation is not met, the test fails. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expectations are evaluated per field. If an expectation is not met, the test fails. Set &quot;Required for runtime execution&quot; only when this test should run automatically at runtime start. ähnelt.
         /// </summary>
         public static string Expander_TestCaseHelp_Note4 {
             get {
