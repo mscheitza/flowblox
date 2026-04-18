@@ -6,8 +6,8 @@ namespace FlowBlox.Core
     {
         public FlowBloxProfessionalStyle() : base()
         {
-            this.ItemSelectedBeginColor = Color.Orange;
-            this.ItemSelectedEndColor = Color.OrangeRed;
+            this.ItemSelectedBeginColor = Color.SteelBlue;
+            this.ItemSelectedEndColor = Color.DodgerBlue;
             this.ItemPressedMiddleColor = Color.WhiteSmoke;
             this.ItemBorderColor = Color.FromArgb(210, 210, 210);
             this.MenuBorderColor = Color.White;

@@ -18,6 +18,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
+using FlowBlox.Core.Models.Base;
 
 namespace FlowBlox.UICore.Factory.PropertyView
 {
@@ -108,6 +110,18 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             // Binding an die Liste setzen
             dataGrid.ItemsSource = list;
+
+            // Set selection to preselectedInstance (if available)
+            var preselectedInstance = ResolvePreselectedInstanceInCurrentTransaction(list);
+            if (preselectedInstance != null && list.Contains(preselectedInstance))
+            {
+                dataGrid.SelectedItem = preselectedInstance;
+                dataGrid.CurrentItem = preselectedInstance;
+                dataGrid.Dispatcher.InvokeAsync(() =>
+                {
+                    dataGrid.ScrollIntoView(preselectedInstance);
+                }, DispatcherPriority.ApplicationIdle);
+            }
 
             // Merken, welche Column welches FlowBlockUIAttribute hat
             Dictionary<DataGridColumn, FieldSelectionDialogContext> columnAttributeMap = new();

@@ -126,6 +126,12 @@
   <data name="Label_RequiredForExecution" xml:space="preserve">
     <value>Erforderlich für Laufzeit-Ausführung</value>
   </data>
+  <data name="Label_HideLastLayerNeighbours" xml:space="preserve">
+    <value>Andere Flow-Blöcke in letzter Ebene ausblenden</value>
+  </data>
+  <data name="Label_HideLastLayerNeighbours_Tooltip" xml:space="preserve">
+    <value>Blendet im Flow-Block-Kontext benachbarte Flow-Blöcke in der Zielebene aus. In der Test-Ansicht ohne Flow-Block-Kontext bleiben alle Flow-Blöcke sichtbar.</value>
+  </data>
   <data name="Text_FlowBlock" xml:space="preserve">
     <value>FlowBlock</value>
   </data>
@@ -191,6 +197,9 @@
   </data>
   <data name="Icon_UIRequiredForExecution_TestDataset_Tooltip" xml:space="preserve">
     <value>Dieser Testdatensatz ist für die Ausführung erforderlich.</value>
+  </data>
+  <data name="Icon_TargetFlowBlock_Tooltip" xml:space="preserve">
+    <value>Dies ist der aktuelle Ziel-Flow-Block. Hier endet der Test, und die Testergebnisse werden von diesem Flow-Block gelesen. Dieser Flow-Block muss bei der Testausführung in diesem Kontext ausgeführt werden.</value>
   </data>
   <data name="Label_SelectedConfiguration" xml:space="preserve">
     <value>Ausgewählte Testkonfiguration</value>

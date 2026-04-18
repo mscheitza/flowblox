@@ -152,6 +152,17 @@ namespace FlowBlox.Core.Models.Runtime
             }
         }
 
+        protected void NotifyRuntimeAborted(Exception exception)
+        {
+            if (DisableInterceptors)
+                return;
+
+            foreach (var interceptor in _interceptors)
+            {
+                interceptor.NotifyRuntimeAborted(exception);
+            }
+        }
+
         internal void NotifyInvocationStarted(BaseFlowBlock flowBlock)
         {
             Report($"Invocation started for flow block: \"{flowBlock.Name}\"", FlowBloxLogLevel.Info);

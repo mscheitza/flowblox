@@ -2295,7 +2295,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 		<value>KI-Propertywert-Generierung</value>
 	</data>
   <data name="AIPropertyValueGenerationStrategy_Description" xml:space="preserve">
-		<value>Erzeugt den Wert einer beschreibbaren String-Property (z. B. XPath, CSS-Selektor, Regex) per KI-Prompt anhand von Testfällen. Benötigt mindestens einen Testfall für den Ziel-FlowBlock mit Erwartungsankern (Expected Value) und erwarteter Ergebnisdatensatz-Anzahl.</value>
+		<value>Erzeugt beschreibbare einfache und strukturierte Ziel-Properties per KI-Prompt anhand von Testfällen. Für strukturierte Ziel-Properties nutzt die KI die interne JSON-Schemabeschreibung ($GenerationStrategy::TargetPropertyDescription), erzeugt JSON-Ausgabe und FlowBlox deserialisiert diese in den Ziel-Property-Typ. Benötigt mindestens einen Testfall für den Ziel-FlowBlock mit Erwartungsankern (Expected Value) und erwarteter Ergebnisdatensatz-Anzahl.</value>
 	</data>
   <data name="SequenceDetectionGenerationStrategy_DisplayName" xml:space="preserve">
 		<value>Sequenzerkennungs-Generierung</value>

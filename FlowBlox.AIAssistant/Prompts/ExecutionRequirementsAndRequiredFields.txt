@@ -1,4 +1,7 @@
-﻿When adding fields or mappings in a flow, always decide whether downstream execution must be guarded.
+When adding fields or mappings in a flow, always decide whether downstream execution must be guarded.
+This decision is mandatory (not optional): if a referenced field is required for correct execution, it must be linked in the consumer's RequiredFields.
+Decision helper: ask "Can this flow block work correctly without this field/parameter in this context?" If the answer is no, link it to RequiredFields.
+Example: a WebRequestFlowBlock that receives the target link via placeholder cannot work correctly without that link value -> the link field must be in RequiredFields.
 
 Core behavior to remember:
 - A BaseResultFlowBlock can still emit exactly one iteration with empty/null result-field values when no real data was produced.
@@ -9,12 +12,14 @@ How to guard execution correctly:
 For mapping entries derived from FieldRequiredDefinitionBase (or similar required-field entries), set IsRequired correctly so execution is blocked when mapped values are missing.
 
 2) If no required mapping exists, configure RequiredFields / requirement handling on the target block.
+For field references this means: explicitly link the field to RequiredFields on the consuming component/flow block.
+Apply the same rule to all execution-critical parameters in the flow block context, not only classic input-link fields.
 
 3) If execution depends on value logic, use ActivationConditions (for example FieldLogicalComparisonCondition / LogicalGroupCondition).
 
 Practical rule:
 - Every time a new field is created or connected, verify whether the consuming block should run on empty/null input.
-- If "no", add a requirement or activation condition immediately.
+- If "no", add a requirement immediately (prefer RequiredFields; use ActivationConditions for additional value-logic constraints).
 - If a source block has multiple downstream blocks, remember that execution order is controlled by BaseFlowBlock.ExecutionIndex (ascending, 0 first). Use -1 as unset when order is irrelevant.
 
 Typical chain example:

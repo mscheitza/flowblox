@@ -10,6 +10,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         private BaseFlowBlock _flowBlock;
         private bool _execute;
         private bool _uIRequiredForExecution;
+        private bool _uIIsTargetFlowBlock;
+        private bool _uIIsTargetNeighbour;
+        private bool _uIIsVisibleInCurrentContext = true;
         private List<FlowBloxFieldTestConfiguration> _flowBloxTestConfigurations;
 
         [JsonIgnore]
@@ -54,6 +57,48 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
                 if (_uIRequiredForExecution != value)
                 {
                     _uIRequiredForExecution = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public bool UIIsTargetFlowBlock
+        {
+            get => _uIIsTargetFlowBlock;
+            set
+            {
+                if (_uIIsTargetFlowBlock != value)
+                {
+                    _uIIsTargetFlowBlock = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public bool UIIsTargetNeighbour
+        {
+            get => _uIIsTargetNeighbour;
+            set
+            {
+                if (_uIIsTargetNeighbour != value)
+                {
+                    _uIIsTargetNeighbour = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public bool UIIsVisibleInCurrentContext
+        {
+            get => _uIIsVisibleInCurrentContext;
+            set
+            {
+                if (_uIIsVisibleInCurrentContext != value)
+                {
+                    _uIIsVisibleInCurrentContext = value;
                     OnPropertyChanged();
                 }
             }

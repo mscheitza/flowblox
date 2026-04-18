@@ -10,6 +10,7 @@ Type model:
 
 Update rules:
 - Always use path-based updates: /Property/0/Nested.
+- Never guess/invent property names or nested paths; inspect target metadata first with `GetTypeKindsInfo` (or `GetManagedObjectKindsInfo` for managed objects) before write operations.
 - For FlowBloxReactiveObject-only values:
   - never assign direct JSON object/array blobs to parent properties
   - set sub-properties by path

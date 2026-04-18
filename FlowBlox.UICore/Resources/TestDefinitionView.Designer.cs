@@ -277,6 +277,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This is the current target flow block. The test ends here and the test results are read from this flow block. This flow block must be executed for test execution in this context. ähnelt.
+        /// </summary>
+        public static string Icon_TargetFlowBlock_Tooltip {
+            get {
+                return ResourceManager.GetString("Icon_TargetFlowBlock_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die This test configuration is required for execution. ähnelt.
         /// </summary>
         public static string Icon_UIRequiredForExecution_FieldConfiguration_Tooltip {
@@ -291,6 +300,24 @@ namespace FlowBlox.UICore.Resources {
         public static string Icon_UIRequiredForExecution_TestDataset_Tooltip {
             get {
                 return ResourceManager.GetString("Icon_UIRequiredForExecution_TestDataset_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hide other flow blocks in the last layer ähnelt.
+        /// </summary>
+        public static string Label_HideLastLayerNeighbours {
+            get {
+                return ResourceManager.GetString("Label_HideLastLayerNeighbours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hides sibling flow blocks in the target layer in flow-block context. In the test view without flow-block context, all flow blocks remain visible. ähnelt.
+        /// </summary>
+        public static string Label_HideLastLayerNeighbours_Tooltip {
+            get {
+                return ResourceManager.GetString("Label_HideLastLayerNeighbours_Tooltip", resourceCulture);
             }
         }
         

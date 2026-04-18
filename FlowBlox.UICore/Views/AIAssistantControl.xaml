@@ -58,7 +58,7 @@
                         <Setter Property="Background" Value="#FFEAF8EE" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolError}">
-                        <Setter Property="Background" Value="#FFFDECEC" />
+                        <Setter Property="Background" Value="#FFFFF7DB" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -88,8 +88,8 @@
                         <Setter Property="Foreground" Value="#FF2E7D32" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolError}">
-                        <Setter Property="Kind" Value="CloseCircleOutline" />
-                        <Setter Property="Foreground" Value="#FFC62828" />
+                        <Setter Property="Kind" Value="AlertBoxOutline" />
+                        <Setter Property="Foreground" Value="#FF8A6D1F" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

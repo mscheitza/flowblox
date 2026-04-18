@@ -1,0 +1,36 @@
+Use this on-demand when extracted field values need post-processing or validation without adding extra flow blocks.
+
+Scope:
+- `FieldElement.Modifiers` (`Automatic adjustments`): transform output values after extraction.
+- `FieldElement.Conditions` (`Conditions`): validate/filter output values.
+
+Execution order per field value:
+1. Modifiers are applied in list order.
+2. Conditions are evaluated.
+3. If any condition fails, the field value is set to `null` for that dataset.
+
+Modifier use-cases (compact):
+- Trim trailing whitespace/newlines:
+  - Add `RegexReplaceModifier` to the field.
+  - Example: `Search="\\s*$"`, `Replace=""`.
+- Extract a specific sub-value from noisy text:
+  - Use `RegexMatchModifier` with `Search` and `Behavior` (`First`, `Distinct`, `All`).
+- Decode Base64 payload to readable text:
+  - Use `Base64ToTextModifier` and set `EncodingName`.
+- Encode/decode HTML/URL/JavaScript strings:
+  - Use `HttpEncodeDecodeModifier` with `Mode` and `Direction`.
+
+Other available modifiers:
+- `ReplaceModifier`
+- `SubstringModifier`
+- `LineExtractorModifier`
+
+Practical guidance:
+- Prefer modifiers before creating additional pipe/processing flow blocks for simple value cleanup.
+- Keep modifier chains short and deterministic.
+- Use conditions when you need validity checks or lightweight filtering:
+  - Conditions are `ComparisonCondition` entries (`Operator`, `Value`) evaluated against the final modified value.
+  - Failed conditions do not throw; they null the field value in the output dataset.
+
+AI usage note:
+- For field-level cleanup/filtering, prefer `UpdateManagedObject` on the `FieldElement` (`Modifiers`, `Conditions`) over flow expansion.

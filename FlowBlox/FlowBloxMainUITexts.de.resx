@@ -782,6 +782,6 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
     <value>Update installieren</value>
   </data>
   <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
-    <value>Design and execute flows (based on .NET)</value>
+    <value>Build, Test, and Run Flows (based on .NET)</value>
   </data>
 </root>

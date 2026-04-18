@@ -150,7 +150,7 @@ namespace FlowBlox.Grid.Elements.UserControls.Renderer
                         continue;
 
                     var itemDisplayName = FlowBloxResourceUtil.GetDisplayName(itemDisplayAttribute, true);
-                    AddPropertyRow(itemDisplayName, $"{propertyName}[{index}].{itemProperty.Name}", itemPropertyValue.ToString());
+                    AddPropertyRow(itemDisplayName, $"{propertyName}[{index}].{itemProperty.Name}", itemPropertyValue.ToString(), item);
                 }
 
                 index++;
@@ -178,7 +178,7 @@ namespace FlowBlox.Grid.Elements.UserControls.Renderer
             this.RenderedEntries++;
         }
 
-        private void AddPropertyRow(string displayName, string propertyName, string propertyValue)
+        private void AddPropertyRow(string displayName, string propertyName, string propertyValue, object propertyInstance = null)
         {
             var icon = new PictureBox { Image = FlowBloxMainUIImages.property_small_12, Size = new Size(12, 12), SizeMode = PictureBoxSizeMode.CenterImage, Dock = DockStyle.Left };
             var label = new Label { Text = displayName, Font = _font, TextAlign = ContentAlignment.MiddleLeft, Dock = DockStyle.Left, AutoSize = true };
@@ -193,7 +193,10 @@ namespace FlowBlox.Grid.Elements.UserControls.Renderer
 
             RegisterDblClickAction(labelValue, () =>
             {
-                _flowBlockUIElement.RaisePropertyDoubleClick(propertyName);
+                if (propertyInstance != null)
+                    _flowBlockUIElement.RaiseListPropertyDoubleClick(propertyName, propertyInstance);
+                else
+                    _flowBlockUIElement.RaisePropertyDoubleClick(propertyName);
             });
 
             _toolTip.SetToolTip(labelValue, propertyValue);

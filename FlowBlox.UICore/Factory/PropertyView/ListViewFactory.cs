@@ -128,12 +128,13 @@ namespace FlowBlox.UICore.Factory.PropertyView
             listView.ItemsSource = _list;
 
             // Set selection to preselectedInstance (if available)
-            if (_preselectedInstance != null && _list.Contains(_preselectedInstance))
+            var preselectedInstance = ResolvePreselectedInstanceInCurrentTransaction(_list);
+            if (preselectedInstance != null && _list.Contains(preselectedInstance))
             {
-                listView.SelectedItem = _preselectedInstance;
+                listView.SelectedItem = preselectedInstance;
                 listView.Dispatcher.InvokeAsync(() =>
                 {
-                    listView.ScrollIntoView(_preselectedInstance);
+                    listView.ScrollIntoView(preselectedInstance);
                 }, DispatcherPriority.ApplicationIdle);
             }
 

@@ -138,7 +138,10 @@ namespace FlowBlox.Core.Util.FlowBlocks
 
         public static IEnumerable<BaseFlowBlock> CollectFlowBlocks(object root)
         {
-            return CollectObjects<BaseFlowBlock>(root, new HashSet<object>(), recursive: false);
+            var flowBlocks = CollectObjects<BaseFlowBlock>(root, new HashSet<object>(), recursive: false);
+            if (root is BaseFlowBlock rootFlowBlock)
+                flowBlocks = flowBlocks.Except([rootFlowBlock]);
+            return flowBlocks;
         }
 
         public static IEnumerable<RequiredFieldContext> CollectRequiredFieldContextsRecursive(object root)

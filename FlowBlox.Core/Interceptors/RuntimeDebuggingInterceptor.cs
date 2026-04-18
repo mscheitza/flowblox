@@ -70,6 +70,20 @@ namespace FlowBlox.Core.Interceptors
             AppendProtocol("RuntimeCancelled", reason);
         }
 
+        public override void NotifyRuntimeAborted(Exception exception)
+        {
+            if (!IsEnabled)
+                return;
+
+            var exceptionMessage = string.IsNullOrWhiteSpace(exception?.Message)
+                ? "No exception message available."
+                : exception.Message;
+
+            AppendProtocol(
+                "RuntimeAborted",
+                $"Runtime aborted due to an unexpected exception: {exceptionMessage}");
+        }
+
         public override void NotifyInvocationStarted(BaseFlowBlock flowBlock)
         {
             if (!IsEnabled)

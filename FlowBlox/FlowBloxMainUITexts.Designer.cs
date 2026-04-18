@@ -2018,7 +2018,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Design and execute flows (based on .NET) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Build, Test, and Run Flows (based on .NET) ähnelt.
         /// </summary>
         internal static string SplashWindow_LabelMessage_Text {
             get {

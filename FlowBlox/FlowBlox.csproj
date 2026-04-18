@@ -7,7 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <AssemblyTitle>FlowBlox</AssemblyTitle>
-    <Description>Design and execute flows (based on .NET)</Description>
+    <Description>Build, Test, and Run Flows (based on .NET)</Description>
     <Company>FlowBlox and contributors</Company>
     <Product>FlowBlox</Product>
     <Authors>FlowBlox and contributors</Authors>

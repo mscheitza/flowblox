@@ -8,6 +8,7 @@ using FlowBlox.UICore.Utilities;
 using FlowBlox.Core.Util;
 using FlowBlox.UICore.ViewModels;
 using MahApps.Metro.Controls;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,10 +30,24 @@ namespace FlowBlox.UICore.Views
             var testConfigurationSynchronizer = new FlowBloxTestDefinitionSynchronizer();
             testConfigurationSynchronizer.Synchronize(testDefinition, currentFlowBlock);
 
+            var latestFlowBlockResolver = new FlowBloxTestDefinitionLatestFlowBlockResolver();
+            var effectiveCurrentFlowBlock = currentFlowBlock ?? latestFlowBlockResolver.ResolveLatestFlowBlock(testDefinition);
+
             viewModel.OwnerWindow = this;
+            viewModel.HasExplicitFlowBlockContext = currentFlowBlock != null;
             viewModel.TestDefinition = testDefinition;
-            viewModel.CurrentFlowBlock = currentFlowBlock;
+            viewModel.CurrentFlowBlock = effectiveCurrentFlowBlock;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            Loaded += TestDefinitionView_Loaded;
+        }
+
+        private void TestDefinitionView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                datasetsScrollViewer?.UpdateLayout();
+                datasetsScrollViewer?.ScrollToBottom();
+            }), System.Windows.Threading.DispatcherPriority.Background);
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

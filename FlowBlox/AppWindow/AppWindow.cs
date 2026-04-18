@@ -1,5 +1,6 @@
 using FlowBlox.AppWindow.ContentFactories;
 using FlowBlox.AppWindow.Contents;
+using FlowBlox.AppWindow.Handler;
 using FlowBlox.AppWindow.RecentProjects;
 using FlowBlox.Core;
 using FlowBlox.Core.Authentication;
@@ -87,6 +88,7 @@ namespace FlowBlox.AppWindow
         private bool _isNotificationActionRunning;
         private string _downloadedInstallerPath;
         private string _installerPathToLaunchOnClose;
+        private NotificationActionLabelStyleHandler _notificationActionLabelStyleHandler;
 
         private FlowBloxProjectComponentProvider _componentProvider;
 
@@ -100,11 +102,19 @@ namespace FlowBlox.AppWindow
             _appNotificationService = FlowBloxServiceLocator.Instance.GetService<IAppNotificationService>();
             _flowBloxInstallerService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxInstallerService>();
             _appNotificationService.NotificationsChanged += AppNotificationService_NotificationsChanged;
+            _notificationActionLabelStyleHandler = new NotificationActionLabelStyleHandler(lblNotificationAction, statusStrip);
+            _notificationActionLabelStyleHandler.Register();
             this.Resize += (_, __) => PositionProjectLoadingOverlay();
             this.Move += (_, __) => PositionProjectLoadingOverlay();
 
             RefreshRecentProjectsMenu();
             this.UpdateUI();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            _notificationActionLabelStyleHandler?.Dispose();
+            base.OnFormClosed(e);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -867,8 +877,8 @@ namespace FlowBlox.AppWindow
 
         private void itmAbout_Click(object sender, EventArgs e)
         {
-            About AboutWindow = new About();
-            AboutWindow.ShowDialog(this);
+            About aboutWindow = new About();
+            aboutWindow.ShowDialog(this);
             UpdateUI();
         }
 

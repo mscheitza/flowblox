@@ -23,6 +23,7 @@ namespace FlowBlox.Core.Interfaces
         void NotifyRuntimeStarted();
         void NotifyRuntimeFinished();
         void NotifyRuntimeCancelled(RuntimeCancellationContext cancellationContext);
+        void NotifyRuntimeAborted(Exception exception);
 
         void NotifyInvocationStarted(BaseFlowBlock flowBlock);
         void NotifyInvocationFinished(BaseFlowBlock flowBlock);

@@ -272,8 +272,8 @@ namespace FlowBlox.AIAssistant.Services
                         {
                             toolExecutionFailed = true;
                             failedToolNames.Add(request.ToolName);
-                            result.Warnings.Add($"Tool '{request.ToolName}' failed: {response.Error}");
-                            _logger?.Warn($"Assistant tool call failed. Tool={request.ToolName}, Error={response.Error}");
+                            result.Warnings.Add($"Tool '{request.ToolName}' reported a problem: {response.Error}");
+                            _logger?.Warn($"Assistant tool call reported a problem. Tool={request.ToolName}, Error={response.Error}");
                         }
 
                         knownFlowBlocksByName = NotifyFlowBlockChanges(knownFlowBlocksByName);
@@ -290,7 +290,7 @@ namespace FlowBlox.AIAssistant.Services
                         result,
                         toolExecutionFailed ? AssistantTranscriptKind.ToolError : AssistantTranscriptKind.ToolSuccess,
                         toolExecutionFailed
-                            ? "Requested operations could not be executed successfully."
+                            ? "There was a problem with one or more requested operations. A problem report was included."
                             : "Requested operations were executed successfully.",
                         internalStatus);
                 }
@@ -686,7 +686,7 @@ namespace FlowBlox.AIAssistant.Services
             var sb = new StringBuilder();
             sb.AppendLine($"Requested operations: {requestedOperationCount}");
             sb.AppendLine($"Executed operations: {executedToolCalls?.Count ?? 0}");
-            sb.AppendLine($"Status: {(hasFailures ? "failed" : "success")}");
+            sb.AppendLine($"Status: {(hasFailures ? "issues detected" : "success")}");
 
             if (hasFailures && failedToolNames?.Count > 0)
                 sb.AppendLine("Failed tools: " + string.Join(", ", failedToolNames.Distinct(StringComparer.OrdinalIgnoreCase)));

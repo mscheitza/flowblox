@@ -254,6 +254,7 @@ namespace FlowBlox.Core.Models.Runtime
             catch (Exception e)
             {
                 this.Running = false;
+                this.NotifyRuntimeAborted(e);
                 this.Report("Runtime execution has aborted due to an critical error.", FlowBloxLogLevel.Error, e);
                 this.OnAfterRuntimeFinished();
                 this.NotifyRuntimeFinished();

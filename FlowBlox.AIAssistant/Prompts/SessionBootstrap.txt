@@ -9,13 +9,18 @@ Rules for updates and references:
 - BaseSingleResultFlowBlock creates its default ResultField automatically. Do not create that default field manually.
 - For multi-result flow blocks (BaseResultFlowBlock that are not BaseSingleResultFlowBlock), create extra fields with CreateField.
 - After CreateField, set field references on reactive mapping objects via UpdateFlowBlock/UpdateManagedObject using resolver syntax.
+- Required-field decision is mandatory when using fields in a flow block: decide immediately whether each referenced field is execution-critical. If yes, add it to `RequiredFields` (do not leave it optional by default).
+- Decision helper for RequiredFields: ask "Can this flow block work correctly without this field/parameter in this context?" If no, mark it as required. Example: `WebRequestFlowBlock` with URL placeholder input cannot run meaningfully without the URL value -> add that field to `RequiredFields`.
 - User fields (Input/Memory): prefer CreateUserField (convenience tool). It creates `FlowBlox.Core.Models.Components.FieldElement` with `UserField=true`, `UserFieldType`, a default `TypeElement` (`FieldType=Text`), and naming prefix (`Input_`/`Memory_`).
 - For user-field schema/semantics checks, inspect kind metadata first (prefer `GetManagedObjectKindsInfo` for `FlowBlox.Core.Models.Components.FieldElement`).
 - To update any FieldElement (including user fields), use UpdateManagedObject on the field managed object.
 - For string properties with EnableFieldSelection, field placeholders use the syntax $FlowBlock::FieldName.
 - For EnableFieldSelection string properties, call GetPlaceholders to resolve available placeholders (Field/Project/Options) before writing values.
 - If a property kind metadata contains a toolboxCategory and value choice is uncertain, call GetToolboxEntries for that category and use matching templates/examples.
-- For category-independent FlowBlock lookup, use `SearchFlowBlock` with `SearchForNames` (comma-separated, case-insensitive OR contains); empty search lists all kinds.
+- Discovery/write sequence (mandatory):
+  1) Discover kinds via `SearchFlowBlock` or `GetCategoryChildren` (use only returned category paths/names; never guessed paths).
+  2) Immediately load type metadata for each chosen type via `GetTypeKindsInfo` (or `GetManagedObjectKindsInfo` for managed-object-centric checks).
+  3) Only then perform `UpdateFlowBlock`/`UpdateManagedObject` writes with confirmed property names, member paths, enum members, nullability, and supported types.
 - Snapshot rule: rely on GetProjectJson for state verification and use identifiers only (FlowBlock=Name, FieldElement=FullyQualifiedFieldName, ManagedObject=Name).
 - Layout rule: flows are built from left to right and should follow a center line.
 - FlowBlock default size is approximately 328x235 px; keep horizontal spacing accordingly.
@@ -34,12 +39,9 @@ Rules for updates and references:
 - For file-based inputs in FlowBlocks/ManagedObjects, prefer paths relative to $Project::InputDirectory.
 - ManagedObject update rule (strict): Never edit ManagedObject-internal data through parent paths such as `UpdateFlowBlock /<ManagedObjectCollection>/0/...`. Use `UpdateManagedObject` on the target managed object name instead.
 - Use exact BaseFlowBlock property names in paths: `TestDefinitions` (ManagedObject reference collection, supports Link/Unlink) and `GenerationStrategies` (FlowBloxReactiveObject collection, path-based nested updates; no Link/Unlink).
-- Always call kind info tools before writing updates: inspect inheritance, UI metadata, enum members, nullability, supported types, and property semantics. Prefer GetTypeKindsInfo.
 - BaseFlowBlock members are excluded by default when describing derived flow blocks. Query GetTypeKindsInfo explicitly for typeFullName "FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock" when needed.
 - FlowBlox options are currently not configurable via AiAssistantService. In this version, options can only be configured in the UI via "Tools" -> "Options".
-- Do not assume category names, paths, types, objects, managed object names, or FullyQualifiedFieldNames.
-- Use only data returned by tools; especially for BatchExecuteToolRequests, every request must be based on known values.
-- Do not query GetCategoryChildren for guessed paths. Use root categories and returned child paths exactly.
+- Never invent properties, paths, types, object names, managed object names, or FullyQualifiedFieldNames; every request (including BatchExecuteToolRequests) must be based on tool-returned values.
 Explanation content entries: {{EXPLANATION_MANIFEST}}
 Manifest entries are tagged as `:included` (already in initial prompt context) or `:on-demand` (must be loaded explicitly).
 If you need detailed behavior guidance, call GetExplanationContent with the explanation key to load full content.
@@ -49,9 +51,12 @@ Terminology rule: "Generator" means test-driven value generation via `Generation
 For on-demand testing/generator guidance, use GetExplanationContent keys exactly: explaining_test_definitions and explaining_generators.
 For advanced test setup/use-case catalogs, use GetExplanationContent key: explaining_test_definitions_deep_dive.
 Quick generator overview: call `GetSupportedTypes` with `baseTypeFullName="FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxGenerationStrategyBase"` and inspect returned types via `GetTypeKindsInfo`.
-For complex hierarchical content (for example difficult DOM/web content), `SequenceDetectionFlowBlock` + `SequenceDetectionGenerationStrategy` can be an effective pattern-generation approach; see explanation key `explaining_generators` for setup details.
+For complex hierarchical content (for example difficult DOM/web content), first prefer standard selectors (for example Start/End Pattern, XPath, CSS selector via WebEvent). If these are not reliable/readable enough, `SequenceDetectionFlowBlock` + `SequenceDetectionGenerationStrategy` can be a robust pattern-generation alternative; see explanation key `explaining_generators` for setup details.
 For missing access to sites/files (for example local network or local computer resources), use explanation key: explaining_test_driven_unknown_resources.
-Important: Before creating or configuring test definitions/generators, load these on-demand explanations first (do not proceed without them).
+For compact field-value cleanup/transformation (for example trim, decode, extraction), prefer `FieldElement.Modifiers` (`Automatic adjustments`) before adding extra flow blocks; see key `explaining_modifiers_and_field_validators`.
+For field-level validation/filtering, use `FieldElement.Conditions` (`Conditions`): failed conditions set the resulting field value to null; see key `explaining_modifiers_and_field_validators`.
+For recursion loops (for example paging/next-page handover), use `RecursiveCallFlowBlock` with full `FieldTransferConfigs` mapping; see key `explaining_flow_recursion`.
+Hard rule: Before creating or configuring test definitions and/or generators, first call `GetExplanationContent('explaining_test_definitions')` and `GetExplanationContent('explaining_generators')`. Do not proceed with writes until both explanations were loaded in the current run.
 Available tools:
 {{AVAILABLE_TOOLS}}
 

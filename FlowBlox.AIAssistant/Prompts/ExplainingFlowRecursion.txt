@@ -1,0 +1,32 @@
+Use this on-demand when you need repeated flow execution with dynamic handover (for example next-page loops).
+
+Core block:
+- `RecursiveCallFlowBlock` (`Recursive call`)
+
+What it does:
+- Calls a configured target flow block and transfers field values via explicit mappings.
+- Transfers are defined in `FieldTransferConfigs` (`Field transfers`) with:
+  - `TransferFrom`
+  - `TransferTo`
+- During execution, each mapped source value is copied to the mapped target field, then the target flow block's next flow blocks are executed.
+
+Required setup:
+1. Set `TargetFlowBlock`.
+2. Configure `FieldTransferConfigs` so all target result fields are mapped.
+   - Validation requires full target-field coverage.
+3. Ensure target is reachable on the upstream path (validated by the block).
+
+Paging-style recursion pattern (compact):
+- Typical chain:
+  - initial request block (page N)
+  - extraction blocks
+  - next-page request block (page N+1 link)
+  - `RecursiveCallFlowBlock`
+- Map `TransferFrom` fields from the next-page request output to the initial request target fields (`TransferTo`).
+- Result: downstream flow continues with next-page content as if it came from the original request branch.
+- Recursion naturally stops when no usable next-page value is produced for the mapped chain.
+
+Important notes:
+- `RecursiveCallFlowBlock` itself has one incoming execution path (`ReferencedFlowBlocks` expected as single source for transfer candidates).
+- Prefer recursion for controlled loop handover; use normal linear flow when one-pass processing is sufficient.
+- Keep mappings explicit and stable; avoid ambiguous field semantics between source and target.

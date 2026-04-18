@@ -33,6 +33,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         private readonly Color backColorNotExecuted = Color.Red;
 
         public delegate void PropertyDoubleClickEventHandler(FlowBlockUIElement sender, string propertyName);
+        public delegate void ListPropertyDoubleClickEventHandler(FlowBlockUIElement sender, string propertyName, object propertyInstance);
         public delegate void ResultFieldDoubleClickEventHandler(FlowBlockUIElement sender, FieldElement fieldElement);
         public delegate void RequiredFieldDoubleClickEventHandler(FlowBlockUIElement sender, FlowBloxComponent component, FieldElement fieldElement);
         public delegate void ConditionDoubleClickEventHandler(FlowBlockUIElement sender, FlowBloxReactiveObject condition);
@@ -57,6 +58,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         public new event DoubleClickEventHandler DoubleClick;
 
         public event PropertyDoubleClickEventHandler PropertyDoubleClick;
+        public event ListPropertyDoubleClickEventHandler ListPropertyDoubleClick;
         public event RequiredFieldDoubleClickEventHandler RequiredFieldDoubleClick;
         public event ResultFieldDoubleClickEventHandler ResultFieldDoubleClick;
         public event ConditionDoubleClickEventHandler ConditionDoubleClick;
@@ -66,6 +68,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         private readonly Dictionary<EventHandler, ElementSelectedChangedEventHandler> _uiElementSelectionChangedByUserHandlerMap = new();
 
         public void RaisePropertyDoubleClick(string propertyName) => PropertyDoubleClick?.Invoke(this, propertyName);
+        public void RaiseListPropertyDoubleClick(string propertyName, object propertyInstance) => ListPropertyDoubleClick?.Invoke(this, propertyName, propertyInstance);
         public void RaiseResultFieldDoubleClick(FieldElement fieldElement) => ResultFieldDoubleClick?.Invoke(this, fieldElement);
         public void RaiseRequiredFieldDoubleClick(FlowBloxComponent target, FieldElement fieldElement) => RequiredFieldDoubleClick?.Invoke(this, target, fieldElement);
         public void RaiseConditionDoubleClick(FlowBloxReactiveObject condition) => ConditionDoubleClick?.Invoke(this, condition);

@@ -543,7 +543,7 @@ namespace FlowBlox.AppWindow
             // lblNotificationAction
             // 
             lblNotificationAction.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold);
-            lblNotificationAction.IsLink = true;
+            lblNotificationAction.IsLink = false;
             lblNotificationAction.LinkColor = System.Drawing.Color.LightSkyBlue;
             lblNotificationAction.Name = "lblNotificationAction";
             lblNotificationAction.Size = new System.Drawing.Size(60, 17);

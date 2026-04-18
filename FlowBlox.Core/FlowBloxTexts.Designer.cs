@@ -250,7 +250,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Generates a writable string property value (for example XPath, CSS selector, regex) using an AI prompt and test-driven expectations. Requires at least one test case for the target flow block, including expected value anchors and expected dataset count. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Generates writable simple and structured target properties using an AI prompt and test-driven expectations. For structured targets, AI uses the internal JSON schema description ($GenerationStrategy::TargetPropertyDescription) to generate JSON output, and FlowBlox deserializes it into the target property type. Requires at least one test case for the target flow block, including expected value anchors and expected dataset count. ähnelt.
         /// </summary>
         public static string AIPropertyValueGenerationStrategy_Description {
             get {
@@ -367,7 +367,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Name of the writable string property on the flow block that should receive the generated value. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Name of the writable target property on the flow block that should receive the generated value (simple or structured type). For structured targets, JSON is only the AI output format; FlowBlox deserializes it into the property type. ähnelt.
         /// </summary>
         public static string AIPropertyValueGenerationStrategy_TargetPropertyName_Tooltip {
             get {

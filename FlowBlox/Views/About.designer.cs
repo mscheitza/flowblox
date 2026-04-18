@@ -36,15 +36,19 @@
             pbLogo = new System.Windows.Forms.PictureBox();
             groupBoxProductInformation = new System.Windows.Forms.GroupBox();
             labelDescription = new System.Windows.Forms.Label();
+            tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             groupBoxProductInformation.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // btOk
             // 
             btOk.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
             btOk.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            btOk.Location = new System.Drawing.Point(405, 349);
+            btOk.Location = new System.Drawing.Point(355, 3);
             btOk.Name = "btOk";
             btOk.Size = new System.Drawing.Size(75, 25);
             btOk.TabIndex = 25;
@@ -84,10 +88,11 @@
             // pbLogo
             // 
             pbLogo.BackColor = System.Drawing.Color.FromArgb(53, 53, 53);
+            pbLogo.Dock = System.Windows.Forms.DockStyle.Fill;
             pbLogo.Image = (System.Drawing.Image)resources.GetObject("pbLogo.Image");
-            pbLogo.Location = new System.Drawing.Point(12, 8);
+            pbLogo.Location = new System.Drawing.Point(8, 8);
             pbLogo.Name = "pbLogo";
-            pbLogo.Size = new System.Drawing.Size(468, 116);
+            pbLogo.Size = new System.Drawing.Size(433, 114);
             pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             pbLogo.TabIndex = 33;
             pbLogo.TabStop = false;
@@ -98,10 +103,11 @@
             groupBoxProductInformation.Controls.Add(labelTitle);
             groupBoxProductInformation.Controls.Add(labelVersion);
             groupBoxProductInformation.Controls.Add(labelCopyright);
+            groupBoxProductInformation.Dock = System.Windows.Forms.DockStyle.Fill;
             groupBoxProductInformation.Font = new System.Drawing.Font("Calibri", 9F);
-            groupBoxProductInformation.Location = new System.Drawing.Point(15, 130);
+            groupBoxProductInformation.Location = new System.Drawing.Point(8, 128);
             groupBoxProductInformation.Name = "groupBoxProductInformation";
-            groupBoxProductInformation.Size = new System.Drawing.Size(464, 212);
+            groupBoxProductInformation.Size = new System.Drawing.Size(433, 173);
             groupBoxProductInformation.TabIndex = 34;
             groupBoxProductInformation.TabStop = false;
             groupBoxProductInformation.Text = "groupBoxProductInformation_Text";
@@ -116,16 +122,42 @@
             labelDescription.TabIndex = 33;
             labelDescription.Text = "labelDescription_Text";
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(pbLogo, 0, 0);
+            tableLayoutPanel1.Controls.Add(groupBoxProductInformation, 0, 1);
+            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 0, 2);
+            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(5);
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(449, 344);
+            tableLayoutPanel1.TabIndex = 35;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(btOk);
+            flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            flowLayoutPanel1.Location = new System.Drawing.Point(8, 307);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new System.Drawing.Size(433, 29);
+            flowLayoutPanel1.TabIndex = 35;
+            // 
             // About
             // 
             AcceptButton = btOk;
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = btOk;
-            ClientSize = new System.Drawing.Size(489, 386);
-            Controls.Add(groupBoxProductInformation);
-            Controls.Add(pbLogo);
-            Controls.Add(btOk);
+            ClientSize = new System.Drawing.Size(449, 344);
+            Controls.Add(tableLayoutPanel1);
             Font = new System.Drawing.Font("Calibri", 9F);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
@@ -137,6 +169,8 @@
             ((System.ComponentModel.ISupportInitialize)pbLogo).EndInit();
             groupBoxProductInformation.ResumeLayout(false);
             groupBoxProductInformation.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -149,6 +183,8 @@
         private System.Windows.Forms.PictureBox pbLogo;
         private System.Windows.Forms.GroupBox groupBoxProductInformation;
         private System.Windows.Forms.Label labelDescription;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
 

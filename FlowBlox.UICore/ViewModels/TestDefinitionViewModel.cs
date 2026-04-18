@@ -7,6 +7,8 @@ using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Logging;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters;
@@ -17,19 +19,24 @@ using MahApps.Metro.Controls;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using FlowBlox.Core.Models.Components;
 
 namespace FlowBlox.UICore.ViewModels
 {
     public class TestDefinitionViewModel : INotifyPropertyChanged
     {
+        private const string HideLastLayerNeighboursOptionName = "TestDefinitionView.HideLastLayerNeighbours";
         private bool _isDirty;
         private FlowBloxTestDefinition _testDefinition;
         private BaseFlowBlock _currentFlowBlock;
         private FlowBloxTestExecutor _testExecutor;
         private Window _ownerWindow;
+        private bool _hasExplicitFlowBlockContext;
+        private bool _hideLastLayerNeighbours;
 
         public TestDefinitionViewModel()
         {
@@ -45,6 +52,7 @@ namespace FlowBlox.UICore.ViewModels
             Configurations = new ObservableCollection<FlowBloxFieldTestConfiguration>();
             SortedEntries = new ObservableCollection<FlowBlockTestDataset>();
             RuntimeLogs = new ObservableCollection<RuntimeLog>();
+            _hideLastLayerNeighbours = ResolveHideLastLayerNeighboursOption();
             BindingOperations.EnableCollectionSynchronization(RuntimeLogs, new object());
         }
 
@@ -204,11 +212,10 @@ namespace FlowBlox.UICore.ViewModels
                 SortedEntries.Add(entry);
 
             OnPropertyChanged(nameof(SortedEntries));
+            UpdateDatasetUiState(CurrentFlowBlock);
         }
 
         public ObservableCollection<FlowBlockTestDataset> SortedEntries { get; }
-
-        
 
         public BaseFlowBlock CurrentFlowBlock
         {
@@ -216,18 +223,16 @@ namespace FlowBlox.UICore.ViewModels
             set
             {
                 _currentFlowBlock = value;
-                LoadCurrentOrLatestFlowBlock();
+                LoadCurrentFlowBlock();
                 OnPropertyChanged(nameof(CurrentFlowBlock));
             }
         }
 
-        private readonly FlowBloxTestDefinitionLatestFlowBlockResolver _latestResolver = new FlowBloxTestDefinitionLatestFlowBlockResolver();
-
-        private void LoadCurrentOrLatestFlowBlock()
+        private void LoadCurrentFlowBlock()
         {
-            var targetFlowBlock = CurrentFlowBlock ?? _latestResolver.ResolveLatestFlowBlock(_testDefinition);
-            LoadCurrentCondfigurations(_testDefinition, targetFlowBlock);
-            LoadCapturedFlowBlocks(targetFlowBlock);
+            LoadCurrentCondfigurations(_testDefinition, CurrentFlowBlock);
+            LoadCapturedFlowBlocks(CurrentFlowBlock);
+            UpdateDatasetUiState(CurrentFlowBlock);
         }
 
         private void LoadCapturedFlowBlocks(BaseFlowBlock currentFlowBlock)
@@ -247,6 +252,38 @@ namespace FlowBlox.UICore.ViewModels
             {
                 _capturedFlowBlocks = value;
                 OnPropertyChanged(nameof(CapturedFlowBlocks));
+            }
+        }
+
+        public bool HasExplicitFlowBlockContext
+        {
+            get => _hasExplicitFlowBlockContext;
+            set
+            {
+                if (_hasExplicitFlowBlockContext == value)
+                    return;
+
+                _hasExplicitFlowBlockContext = value;
+                OnPropertyChanged(nameof(HasExplicitFlowBlockContext));
+                OnPropertyChanged(nameof(CanToggleHideLastLayerNeighbours));
+                UpdateDatasetUiState(CurrentFlowBlock);
+            }
+        }
+
+        public bool CanToggleHideLastLayerNeighbours => HasExplicitFlowBlockContext;
+
+        public bool HideLastLayerNeighbours
+        {
+            get => _hideLastLayerNeighbours;
+            set
+            {
+                if (_hideLastLayerNeighbours == value)
+                    return;
+
+                _hideLastLayerNeighbours = value;
+                OnPropertyChanged(nameof(HideLastLayerNeighbours));
+                SaveHideLastLayerNeighboursOption(value);
+                UpdateDatasetUiState(CurrentFlowBlock);
             }
         }
 
@@ -319,7 +356,7 @@ namespace FlowBlox.UICore.ViewModels
 
             try
             {
-                _testExecutor.Initialize(_testDefinition, _currentFlowBlock, includedFlowBlocks);
+                _testExecutor.Initialize(_testDefinition, CurrentFlowBlock, includedFlowBlocks);
             }
             catch (Exception ex)
             {
@@ -337,7 +374,7 @@ namespace FlowBlox.UICore.ViewModels
 
             _testExecutor.Shutdown();
 
-            if (_currentFlowBlock is BaseResultFlowBlock resultFlowBlock && resultFlowBlock.GridElementResult?.ResultCount > 0)
+            if (CurrentFlowBlock is BaseResultFlowBlock resultFlowBlock && resultFlowBlock.GridElementResult?.ResultCount > 0)
             {
                 TestResults = new ObservableCollection<FlowBlockOutDataset>(resultFlowBlock.GridElementResult.Results);
                 TestResultsColumnNames = resultFlowBlock.GridElementResult.Results
@@ -488,6 +525,76 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void UpdateDatasetUiState(BaseFlowBlock targetFlowBlock)
+        {
+            var entries = _testDefinition?.Entries?.ToList() ?? new List<FlowBlockTestDataset>();
+            var neighbourFlowBlocks = ResolveTargetNeighbours(targetFlowBlock);
+            var capturedFlowBlocks = CapturedFlowBlocks?.ToHashSet() ?? new HashSet<BaseFlowBlock>();
+
+            foreach (var entry in entries)
+            {
+                bool isTarget = entry.FlowBlock != null && entry.FlowBlock == targetFlowBlock;
+                bool isNeighbour = entry.FlowBlock != null && neighbourFlowBlocks.Contains(entry.FlowBlock);
+                bool isCaptured = entry.FlowBlock == null || capturedFlowBlocks.Count == 0 || capturedFlowBlocks.Contains(entry.FlowBlock);
+                bool hideNeighbour = HasExplicitFlowBlockContext && HideLastLayerNeighbours && isNeighbour;
+
+                entry.UIIsTargetFlowBlock = isTarget;
+                entry.UIIsTargetNeighbour = isNeighbour;
+                entry.UIIsVisibleInCurrentContext = HasExplicitFlowBlockContext ? (isCaptured && !hideNeighbour) : true;
+            }
+        }
+
+        private static HashSet<BaseFlowBlock> ResolveTargetNeighbours(BaseFlowBlock targetFlowBlock)
+        {
+            var neighbours = new HashSet<BaseFlowBlock>();
+            if (targetFlowBlock == null)
+                return neighbours;
+
+            foreach (var predecessor in targetFlowBlock.ReferencedFlowBlocks ?? new ObservableCollection<BaseFlowBlock>())
+            {
+                if (predecessor == null)
+                    continue;
+
+                foreach (var nextFlowBlock in predecessor.GetNextFlowBlocks())
+                {
+                    if (nextFlowBlock != null && nextFlowBlock != targetFlowBlock)
+                        neighbours.Add(nextFlowBlock);
+                }
+            }
+
+            return neighbours;
+        }
+
+        private static bool ResolveHideLastLayerNeighboursOption()
+        {
+            var option = FlowBloxOptions.GetOptionInstance().GetOption(HideLastLayerNeighboursOptionName);
+            if (option?.Type == OptionElement.OptionType.Boolean && bool.TryParse(option.Value, out var parsed))
+                return parsed;
+
+            return true;
+        }
+
+        private static void SaveHideLastLayerNeighboursOption(bool value)
+        {
+            var options = FlowBloxOptions.GetOptionInstance();
+            var option = options.GetOption(HideLastLayerNeighboursOptionName);
+            if (option?.Type != OptionElement.OptionType.Boolean)
+                return;
+
+            option.Value = value.ToString().ToLowerInvariant();
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    options.Save();
+                }
+                catch (Exception e)
+                {
+                    FlowBloxLogManager.Instance.GetLogger().Error($"Failed to persist option '{HideLastLayerNeighboursOptionName}'.", e);
+                }
+            });
+        }
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

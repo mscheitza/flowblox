@@ -18,6 +18,8 @@ namespace FlowBlox.AIAssistant.Services
         public const string SpecialTestDefinitionsDeepDiveKey = "explaining_test_definitions_deep_dive";
         public const string SpecialGeneratorsKey = "explaining_generators";
         public const string SpecialTestDrivenUnknownResourcesKey = "explaining_test_driven_unknown_resources";
+        public const string SpecialModifiersAndFieldValidatorsKey = "explaining_modifiers_and_field_validators";
+        public const string SpecialFlowRecursionKey = "explaining_flow_recursion";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
             new Dictionary<string, PromptEntryDefinition>(StringComparer.OrdinalIgnoreCase)
@@ -93,6 +95,18 @@ namespace FlowBlox.AIAssistant.Services
                     "Test-Driven Approach for Unknown/Inaccessible Resources",
                     "FlowBlox.AIAssistant.Prompts.ExplainingTestDrivenUnknownResources.txt",
                     "Special: on-demand guidance for iterative flow construction when content is unknown or inaccessible.",
+                    false),
+                [SpecialModifiersAndFieldValidatorsKey] = new PromptEntryDefinition(
+                    SpecialModifiersAndFieldValidatorsKey,
+                    "Explaining Modifiers and Field Validators",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingModifiersAndFieldValidators.txt",
+                    "Special: on-demand guidance for compact field-value post-processing and validation/filtering.",
+                    false),
+                [SpecialFlowRecursionKey] = new PromptEntryDefinition(
+                    SpecialFlowRecursionKey,
+                    "Explaining Flow Recursion",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingFlowRecursion.txt",
+                    "Special: on-demand guidance for RecursiveCallFlowBlock setup and paging-style recursion loops.",
                     false)
             };
 

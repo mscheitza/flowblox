@@ -113,6 +113,7 @@ namespace FlowBlox.AppWindow.Contents
             gridUIElement.MoveFinished += new MoveFinishedEventHandler(baseGridElement_MoveFinished);
             gridUIElement.DoubleClick += new DoubleClickEventHandler(baseGridElement_DoubleClick);
             gridUIElement.PropertyDoubleClick += baseGridElement_PropertyDoubleClick;
+            gridUIElement.ListPropertyDoubleClick += baseGridElement_ListPropertyDoubleClick;
             gridUIElement.ResultFieldDoubleClick += baseGridElement_ResultFieldDoubleClick;
             gridUIElement.RequiredFieldDoubleClick += baseGridElement_RequiredFieldDoubleClick;
             gridUIElement.ConditionDoubleClick += baseGridElement_ConditionDoubleClick;
@@ -148,6 +149,11 @@ namespace FlowBlox.AppWindow.Contents
         private void baseGridElement_PropertyDoubleClick(FlowBlockUIElement sender, string propertyName)
         {
             EditFlowBlock(sender, propertyName);
+        }
+
+        private void baseGridElement_ListPropertyDoubleClick(FlowBlockUIElement sender, string propertyName, object propertyInstance)
+        {
+            EditFlowBlock(sender, propertyName, propertyInstance);
         }
 
         private void baseGridElement_DoubleClick(object sender)

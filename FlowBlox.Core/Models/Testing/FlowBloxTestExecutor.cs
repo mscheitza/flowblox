@@ -35,8 +35,8 @@ namespace FlowBlox.Core.Models.Testing
             _testDefinition = testDefinition;
 
             FlowBloxTestCapture flowBloxCapture = new FlowBloxTestCapture();
-            var targetFlowBlock = currentFlowBlock ?? _latestResolver.ResolveLatestFlowBlock(_testDefinition);
-            flowBloxCapture.CreateCapture(_registry.GetStartFlowBlock(), targetFlowBlock);
+            var effectiveTargetFlowBlock = currentFlowBlock ?? _latestResolver.ResolveLatestFlowBlock(_testDefinition);
+            flowBloxCapture.CreateCapture(_registry.GetStartFlowBlock(), effectiveTargetFlowBlock);
             _capturedFlowBlocks = flowBloxCapture.GetCapturedFlowBlocks();
 
             InitializeTransientRuntime(includedFlowBlocks);

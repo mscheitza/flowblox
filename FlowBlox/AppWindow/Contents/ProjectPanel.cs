@@ -365,10 +365,12 @@ namespace FlowBlox.AppWindow.Contents
 
         private void EditFlowBlock(FlowBlockUIElement flowBlockUIElement, string propertyName = null, object selectedInstance = null)
         {
+            var preselectedInstance = selectedInstance as FlowBloxReactiveObject;
             var propertyWindowArgs = new PropertyWindowArgs(
                 flowBlockUIElement.InternalFlowBlock,
                 readOnly: IsRuntimeActive,
-                preselectedProperty: propertyName);
+                preselectedProperty: propertyName,
+                preselectedInstance: preselectedInstance);
 
             var propertyViewWpf = new UICore.Views.PropertyWindow(propertyWindowArgs);
             var owner = ControlHelper.FindParentOfType<Form>(this, true);

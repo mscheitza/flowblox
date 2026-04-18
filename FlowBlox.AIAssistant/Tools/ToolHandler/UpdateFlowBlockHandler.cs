@@ -17,7 +17,7 @@ namespace FlowBlox.AIAssistant.Tools
                 ["value"] = "any?",
                 ["updates"] = "[{path,value}]?",
                 ["contractHint"] = "Path-based updates with Link/Unlink/Delete terminals. Typed index '/Collection/<index>:<FullTypeName>/...' is optional and mainly needed for abstract/base or polymorphic FlowBloxReactiveObject-only collections (see kind/supportedTypes). Create ManagedObjects/FlowBlocks via CreateManagedObject/CreateFlowBlock, then assign via Update.",
-                ["explanationHint"] = "For full update/delete semantics and dependency-order rules use GetExplanationContent('explaining_edit_and_delete').",
+                ["explanationHint"] = "For full update/delete semantics and dependency-order rules use GetExplanationContent('explaining_edit_and_delete'). Hard rule for test/generator work: before writing TestDefinitions and/or GenerationStrategies, first load GetExplanationContent('explaining_test_definitions') and GetExplanationContent('explaining_generators').",
                 ["resolverExamples"] = new JArray
                 {
                     new JObject { ["resolveFlowBlockByName"] = "FlowBlockName" },

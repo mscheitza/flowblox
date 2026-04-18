@@ -15,6 +15,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private PropertyViewModel _propertyViewModel;
         private System.Windows.Controls.Grid _mainGrid;
         private TextBlock _noSelectionText;
+        private Button _saveButton;
+        private bool _enableSaveForNextSelection;
 
         public ListViewSplitModeFactory(Window window, PropertyInfo property, object target, bool readOnly, object parent = null)
             : base(window, property, target, readOnly, parent)
@@ -41,6 +43,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             // Prepare PropertyView
             _propertyViewModel = new PropertyViewModel(_window);
+            _propertyViewModel.PropertyChanged += PropertyViewModel_PropertyChanged;
             _propertyView = new Views.PropertyView
             {
                 DataContext = _propertyViewModel
@@ -66,14 +69,21 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 Margin = new Thickness(10),
                 Padding = new Thickness(10, 5, 10, 5),
                 Background = Brushes.LightGreen,
-                HorizontalAlignment = HorizontalAlignment.Right
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Visibility = listView.SelectedItem != null ? Visibility.Visible : Visibility.Collapsed,
+                IsEnabled = false
             };
+            _saveButton = saveButton;
             saveButton.Click += async (s, e) =>
             {
                 if (_window is MahApps.Metro.Controls.MetroWindow metro)
                 {
                     if (await _propertyViewModel.SaveAsync(metro) == true)
+                    {
                         _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: false);
+                        _propertyViewModel.IsDirty = false;
+                        UpdateSaveButtonState();
+                    }
                 }
             };
 
@@ -101,6 +111,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             // Now put everything in the main horizontal Grid (2 Columns)
             _mainGrid = new System.Windows.Controls.Grid();
+            _mainGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+            _mainGrid.VerticalAlignment = VerticalAlignment.Stretch;
             _mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); // List
             _mainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) }); // Property
 
@@ -162,14 +174,48 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 _noSelectionText.Visibility = Visibility.Collapsed;
                 _propertyView.Visibility = Visibility.Visible;
+                if (_saveButton != null)
+                    _saveButton.Visibility = Visibility.Visible;
                 _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: false);
+                _propertyViewModel.IsDirty = _enableSaveForNextSelection;
+                _enableSaveForNextSelection = false;
+                UpdateSaveButtonState();
             }
             else if (_propertyViewModel != null)
             {
                 _propertyViewModel.Cancel(keepComponent: true);
+                _enableSaveForNextSelection = false;
                 _propertyView.Visibility = Visibility.Collapsed;
                 _noSelectionText.Visibility = Visibility.Visible;
+                if (_saveButton != null)
+                {
+                    _saveButton.Visibility = Visibility.Collapsed;
+                    _saveButton.IsEnabled = false;
+                }
             }
+        }
+
+        private void PropertyViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(PropertyViewModel.IsDirty))
+            {
+                UpdateSaveButtonState();
+            }
+        }
+
+        private void UpdateSaveButtonState()
+        {
+            if (_saveButton == null)
+                return;
+
+            var hasSelection = _listView?.SelectedItem != null;
+            if (!hasSelection)
+            {
+                _saveButton.IsEnabled = false;
+                return;
+            }
+
+            _saveButton.IsEnabled = _propertyViewModel?.IsDirty == true;
         }
 
         protected override void ExecuteCreate()
@@ -180,6 +226,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 _list.Add(newInstance);
                 _property.SetValue(_target, _list);
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+
+                _enableSaveForNextSelection = true;
+                if (_listView != null)
+                    _listView.SelectedItem = newInstance;
+
+                UpdateSaveButtonState();
             }
         }
 

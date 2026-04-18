@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Util.Resources;
 using MahApps.Metro.IconPacks;
 using System.Collections;
 using System.Collections.Specialized;
@@ -14,7 +15,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
         public ListFactoryBase(Window window, PropertyInfo property, object target, bool readOnly)
             : base(window, property, target, readOnly)
         {
-            
+
         }
 
         protected object _preselectedInstance;
@@ -22,6 +23,30 @@ namespace FlowBlox.UICore.Factory.PropertyView
         public void SetPreselectedInstance(object instance)
         {
             _preselectedInstance = instance;
+        }
+
+        protected object ResolvePreselectedInstanceInCurrentTransaction(IList currentList)
+        {
+            if (_preselectedInstance == null || currentList == null || currentList.Count == 0)
+            {
+                return null;
+            }
+
+            if (_target is not FlowBloxComponent flowBloxComponent)
+            {
+                return currentList.Contains(_preselectedInstance) ? _preselectedInstance : null;
+            }
+
+            var originalTarget = _registry.GetOriginalRef(flowBloxComponent) as FlowBloxComponent;
+            var originalList = originalTarget != null ? _property.GetValue(originalTarget) as IList : null;
+            var originalIndex = originalList?.IndexOf(_preselectedInstance) ?? -1;
+
+            if (originalIndex >= 0 && originalIndex < currentList.Count)
+            {
+                return currentList[originalIndex];
+            }
+
+            return currentList.Contains(_preselectedInstance) ? _preselectedInstance : null;
         }
 
         protected void UpdateEmptyMessageVisibilityOnCollectionChanged(FrameworkElement emptyMessage, IList list)
@@ -32,7 +57,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 var weakList = new WeakReference<IList>(list);
                 NotifyCollectionChangedEventHandler handler = (s, e) =>
                 {
-                    if (!weakEmptyMessage.TryGetTarget(out var emptyMessage) || 
+                    if (!weakEmptyMessage.TryGetTarget(out var emptyMessage) ||
                         !weakList.TryGetTarget(out var list))
                     {
                         return;

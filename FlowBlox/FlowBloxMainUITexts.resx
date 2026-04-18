@@ -782,6 +782,6 @@ The application will now restart to restore a clean environment.</value>
 		<value>Iteration Context</value>
 	</data>
   <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
-    <value>Design and execute flows (based on .NET)</value>
+    <value>Build, Test, and Run Flows (based on .NET)</value>
   </data>
 </root>

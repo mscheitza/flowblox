@@ -246,9 +246,7 @@ namespace FlowBlox.UICore.ViewModels
             var view = new TestDefinitionView(newTestDefinition, currentFlowBlock: null);
             var result = _dialogService.ShowWPFDialog(view, isModal: true);
             if (result == true)
-            {
                 _registry.RegisterManagedObject(newTestDefinition);
-            }
         }
 
         private bool CanCreateTestCase() => !IsReadOnly;

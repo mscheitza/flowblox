@@ -79,6 +79,7 @@ namespace FlowBlox.Core.Util
                 new OptionElement("FieldView.MaxDisplayLength", "3000", "Maximum number of characters displayed per field value in the FieldView UI. Full content remains available when opening/editing the field value.", OptionElement.OptionType.Integer),
                 new OptionElement("FieldView.ShowFlowBlock", "false", "Show or hide the Flow Block column in the FieldView.", OptionElement.OptionType.Boolean, "FieldView: Show Flow Block"),
                 new OptionElement("FieldView.SingleLineFieldValues", "false", "Show field values in single-line mode in the FieldView.", OptionElement.OptionType.Boolean, "FieldView: 1 Line Values"),
+                new OptionElement("TestDefinitionView.HideLastLayerNeighbours", "true", "Hide sibling flow blocks in the target flow block layer when editing a test definition in flow-block context.", OptionElement.OptionType.Boolean),
 
                 new OptionElement("Paths.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "Toolbox directory path.", OptionElement.OptionType.Text),
                 new OptionElement("Paths.ToolboxUserFile", @"%userprofile%\Documents\FlowBlox\toolbox\userToolbox.json", "Toolbox user file path.", OptionElement.OptionType.Text),

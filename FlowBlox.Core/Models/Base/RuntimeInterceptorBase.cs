@@ -38,6 +38,11 @@ namespace FlowBlox.Core.Models.Base
 
         }
 
+        public virtual void NotifyRuntimeAborted(Exception exception)
+        {
+
+        }
+
         public virtual void NotifyBeforeRuntimeStarted()
         {
             
