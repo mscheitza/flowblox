@@ -32,7 +32,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             {
                 foreach (var testDefinition in FlowBlock.TestDefinitions)
                 {
-                    var includedFlowBlocks = testDefinition.Entries
+                    var includedFlowBlocks = testDefinition.Entries?
+                        .Where(x => x.Execute)
                         .Select(x => x.FlowBlock)
                         .ExceptNull()
                         .Where(x => !ReferenceEquals(x, FlowBlock))
@@ -70,9 +71,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
                     foreach (var testDefinition in FlowBlock.TestDefinitions)
                     {
-                        var includedFlowBlocks = testDefinition.Entries
+                        var includedFlowBlocks = testDefinition.Entries?
+                            .Where(x => x.Execute)
                             .Select(x => x.FlowBlock)
-                            .Where(x => x != null && !ReferenceEquals(x, FlowBlock))
+                            .ExceptNull()
+                            .Where(x => !ReferenceEquals(x, FlowBlock))
                             .Distinct()
                             .ToList();
 

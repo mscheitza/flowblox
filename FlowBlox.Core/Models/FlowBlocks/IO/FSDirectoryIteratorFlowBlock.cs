@@ -84,6 +84,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.IO;
 
+        public override List<Type> NotificationTypes
+        {
+            get
+            {
+                var notificationTypes = base.NotificationTypes;
+                notificationTypes.Add(typeof(FSDirectoryIteratorNotifications));
+                return notificationTypes;
+            }
+        }
+
         public override List<string> GetDisplayableProperties()
         {
             var properties = base.GetDisplayableProperties();
@@ -177,10 +187,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
 
                 var directoryPath = FlowBloxFieldHelper.ReplaceFieldsInString(DirectoryPath ?? string.Empty);
                 if (string.IsNullOrWhiteSpace(directoryPath))
-                    throw new InvalidOperationException("No directory path was provided.");
+                {
+                    CreateNotification(runtime, FSDirectoryIteratorNotifications.DirectoryPathIsEmpty);
+                    GenerateResult(runtime);
+                    return;
+                }
 
                 if (!Directory.Exists(directoryPath))
-                    throw new DirectoryNotFoundException($"The directory \"{directoryPath}\" could not be found.");
+                {
+                    CreateNotification(runtime, FSDirectoryIteratorNotifications.DirectoryDoesNotExist);
+                    GenerateResult(runtime);
+                    return;
+                }
 
                 var options = new EnumerationOptions
                 {
@@ -211,8 +229,26 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
                     resultMap.Add(row);
                 }
 
+                if (resultMap.Count == 0)
+                    CreateNotification(runtime, FSDirectoryIteratorNotifications.NoFilesFound);
+
                 GenerateResult(runtime, resultMap);
             });
+        }
+
+        public enum FSDirectoryIteratorNotifications
+        {
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "Directory path is empty")]
+            DirectoryPathIsEmpty,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "Directory does not exist")]
+            DirectoryDoesNotExist,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "No files found")]
+            NoFilesFound
         }
     }
 }

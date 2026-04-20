@@ -9,6 +9,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Json;
 using Newtonsoft.Json;
@@ -241,8 +242,16 @@ namespace FlowBlox.AIAssistant.Services
                     var toolExecutionFailed = false;
                     var failedToolNames = new List<string>();
 
-                    foreach (var toolCall in instruction.ToolCalls)
+                    var processingStatus = BuildToolProcessingTranscript(instruction.ToolCalls);
+                    AddTranscript(
+                        result,
+                        AssistantTranscriptKind.ToolProcessing,
+                        "Processing requested operations...",
+                        processingStatus);
+
+                    for (var toolCallIndex = 0; toolCallIndex < instruction.ToolCalls.Count; toolCallIndex++)
                     {
+                        var toolCall = instruction.ToolCalls[toolCallIndex];
                         ct.ThrowIfCancellationRequested();
 
                         var request = new ToolRequest
@@ -252,7 +261,14 @@ namespace FlowBlox.AIAssistant.Services
                             CorrelationId = Guid.NewGuid().ToString("N")
                         };
 
+                        AddTranscript(
+                            result,
+                            AssistantTranscriptKind.ToolProcessing,
+                            $"Processing tool request {toolCallIndex + 1}/{instruction.ToolCalls.Count}: {request.ToolName}",
+                            (request.Arguments ?? new JObject()).ToString(Formatting.Indented));
+
                         var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
+
                         protocolWriter?.AppendToolCall(round, request, response);
 
                         roundToolTranscript.Add(JsonConvert.SerializeObject(new
@@ -548,7 +564,12 @@ namespace FlowBlox.AIAssistant.Services
             if (string.IsNullOrWhiteSpace(text))
                 return text ?? string.Empty;
 
-            return text.Replace("{{FLOWBLOX_VERSION}}", GetFlowBloxApplicationVersion(), StringComparison.Ordinal);
+            return text
+                .Replace("{{FLOWBLOX_VERSION}}", GetFlowBloxApplicationVersion(), StringComparison.Ordinal)
+                .Replace("{{FLOWBLOX_GITHUB_REPOSITORY_URL}}", GlobalUrls.FlowBloxGitHubRepository, StringComparison.Ordinal)
+                .Replace("{{FLOWBLOX_SAMPLE_EXTENSION_REPOSITORY_URL}}", GlobalUrls.FlowBloxSampleExtensionRepository, StringComparison.Ordinal)
+                .Replace("{{FLOWBLOX_WEBSITE_URL}}", GlobalUrls.FlowBloxWebsite, StringComparison.Ordinal)
+                .Replace("{{FLOWBLOX_REPORT_PROBLEM_URL}}", GlobalUrls.FlowBloxReportProblem, StringComparison.Ordinal);
         }
 
         private static string GetFlowBloxApplicationVersion()
@@ -727,6 +748,27 @@ namespace FlowBlox.AIAssistant.Services
 
                 if (i < executedToolCalls.Count - 1)
                     sb.AppendLine();
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
+        private static string BuildToolProcessingTranscript(IReadOnlyList<AssistantToolCall> toolCalls)
+        {
+            var sb = new StringBuilder();
+            var calls = toolCalls ?? Array.Empty<AssistantToolCall>();
+            sb.AppendLine($"Requested operations: {calls.Count}");
+
+            if (calls.Count == 0)
+                return sb.ToString().TrimEnd();
+
+            for (var i = 0; i < calls.Count; i++)
+            {
+                var call = calls[i];
+                sb.AppendLine();
+                sb.AppendLine($"[{i + 1}] {call.ToolName}");
+                sb.AppendLine("arguments:");
+                sb.AppendLine((call.Arguments ?? new JObject()).ToString(Formatting.Indented));
             }
 
             return sb.ToString().TrimEnd();

@@ -174,4 +174,10 @@
   <data name="Message_ResetCommunicationState_Title" xml:space="preserve">
     <value>Kommunikationszustand zurücksetzen</value>
   </data>
+  <data name="Message_ExecuteInputFileCommand_Confirm_Title" xml:space="preserve">
+    <value>Skriptausführung bestätigen</value>
+  </data>
+  <data name="Message_ExecuteInputFileCommand_Confirm_Description" xml:space="preserve">
+    <value>Der KI-Assistent möchte das Input-File-Skript für '{0}' ausführen. Möchten Sie fortfahren?</value>
+  </data>
 </root>

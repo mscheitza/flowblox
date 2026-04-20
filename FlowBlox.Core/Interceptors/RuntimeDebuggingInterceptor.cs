@@ -75,13 +75,10 @@ namespace FlowBlox.Core.Interceptors
             if (!IsEnabled)
                 return;
 
-            var exceptionMessage = string.IsNullOrWhiteSpace(exception?.Message)
-                ? "No exception message available."
-                : exception.Message;
-
             AppendProtocol(
                 "RuntimeAborted",
-                $"Runtime aborted due to an unexpected exception: {exceptionMessage}");
+                "Runtime aborted due to an unexpected exception.",
+                details: exception?.ToString());
         }
 
         public override void NotifyInvocationStarted(BaseFlowBlock flowBlock)
@@ -280,7 +277,7 @@ namespace FlowBlox.Core.Interceptors
                 });
             }
 
-            AppendProtocol("Error", text, flowBlockName);
+            AppendProtocol("Error", text, flowBlockName, details: exception?.ToString());
         }
 
         public override void NotifyFieldChange(FieldElement fieldElement, string oldValue, string newValue)
@@ -345,7 +342,8 @@ namespace FlowBlox.Core.Interceptors
             string message,
             string flowBlockName = null,
             int? fieldValueChangeId = null,
-            int? generatedResultId = null)
+            int? generatedResultId = null,
+            string details = null)
         {
             lock (_sync)
             {
@@ -357,6 +355,7 @@ namespace FlowBlox.Core.Interceptors
                     Elapsed = GetElapsed(),
                     EventType = eventType ?? string.Empty,
                     Message = message ?? string.Empty,
+                    Details = details,
                     FlowBlockName = flowBlockName,
                     FieldValueChangeId = fieldValueChangeId,
                     GeneratedResultId = generatedResultId

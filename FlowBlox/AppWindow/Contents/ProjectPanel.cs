@@ -43,9 +43,6 @@ namespace FlowBlox.AppWindow.Contents
 {
     public partial class ProjectPanel : DockContent
     {
-        private const int GridCenterY = 360;
-        private const int GridStepX = 350;
-        private const int GridStepY = 160;
         private const int DefaultGridWidth = 2000;
         private const int DefaultGridHeight = 1000;
 
@@ -359,7 +356,7 @@ namespace FlowBlox.AppWindow.Contents
             var owner = ControlHelper.FindParentOfType<Form>(this, true);
             WindowsFormWPFHelper.ShowDialog(propertyViewWpf, owner);
 
-            flowBlockUIElement.RefreshSize();
+            flowBlockUIElement.RefreshSizeAndLocation();
             UpdateUI(appWindowUpdate: true);
         }
 
@@ -376,7 +373,7 @@ namespace FlowBlox.AppWindow.Contents
             var owner = ControlHelper.FindParentOfType<Form>(this, true);
             WindowsFormWPFHelper.ShowDialog(propertyViewWpf, owner);
 
-            flowBlockUIElement.RefreshSize();
+            flowBlockUIElement.RefreshSizeAndLocation();
             UpdateUI(appWindowUpdate: true);
         }
 
@@ -655,10 +652,6 @@ namespace FlowBlox.AppWindow.Contents
 
         private void Runtime_Started(BaseRuntime runtime)
         {
-            foreach (var uiElement in FlowBloxUIRegistry.UIElements)
-            {
-                uiElement.AnchorSize = uiElement.Size;
-            }
         }
 
         void Runtime_Finish(object result)
@@ -672,7 +665,6 @@ namespace FlowBlox.AppWindow.Contents
             foreach (var uiElement in this.FlowBloxUIRegistry.UIElements)
             {
                 uiElement.InternalFlowBlock.ResetNotifications(this.Runtime);
-                uiElement.AnchorSize = null;
             }
 
             if (result is Exception)
@@ -721,7 +713,7 @@ namespace FlowBlox.AppWindow.Contents
                     gridElement.ExecutionIndex = editExecutionIndexWindow.Result;
                 }
                 _recentFlowBlock.UpdateFlags();
-                _recentFlowBlock.RefreshSize();
+                _recentFlowBlock.RefreshSizeAndLocation();
                 UpdateUI();
             }
         }
@@ -772,7 +764,7 @@ namespace FlowBlox.AppWindow.Contents
             {
                 _recentFlowBlock.BreakPoint = !_recentFlowBlock.BreakPoint;
                 _recentFlowBlock.UpdateFlags();
-                _recentFlowBlock.RefreshSize();
+                _recentFlowBlock.RefreshSizeAndLocation();
             }
             UpdateUI();
         }
@@ -918,7 +910,7 @@ namespace FlowBlox.AppWindow.Contents
             {
                 _recentFlowBlock.InternalFlowBlock.ExecutionIndex = -1;
                 _recentFlowBlock.UpdateFlags();
-                _recentFlowBlock.RefreshSize();
+                _recentFlowBlock.RefreshSizeAndLocation();
                 UpdateUI();
             }
         }

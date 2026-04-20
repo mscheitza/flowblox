@@ -301,7 +301,7 @@ namespace FlowBlox.Core.Models.Runtime
 
         protected virtual void OnBeforeRuntimeStarted(BaseFlowBlock startFlowBlock, IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<IManagedObject> managedObjects)
         {
-            ExecuteInputTemplateStartupCommands();
+            ExecuteInputFileStartupCommands();
             Report($"Initializing runtime for managed objects...");
             foreach (var managedObject in managedObjects)
             {
@@ -318,45 +318,45 @@ namespace FlowBlox.Core.Models.Runtime
             Report($"Runtime initialization completed.");
         }
 
-        protected virtual bool ShouldExecuteInputTemplateStartupCommands() => true;
-        private bool _inputTemplateStartupCommandsExecuted;
+        protected virtual bool ShouldExecuteInputFileStartupCommands() => true;
+        private bool _inputFileStartupCommandsExecuted;
 
-        protected void ExecuteInputTemplateStartupCommands()
+        protected void ExecuteInputFileStartupCommands()
         {
-            if (_inputTemplateStartupCommandsExecuted)
+            if (_inputFileStartupCommandsExecuted)
                 return;
 
-            _inputTemplateStartupCommandsExecuted = true;
+            _inputFileStartupCommandsExecuted = true;
 
-            if (!ShouldExecuteInputTemplateStartupCommands())
+            if (!ShouldExecuteInputFileStartupCommands())
                 return;
 
             if (Project?.InputFiles == null || Project.InputFiles.Count == 0)
                 return;
 
             // Keep managed input files in sync before optional startup commands are executed.
-            FlowBloxInputTemplateHelper.SynchronizeInputFiles(Project);
+            FlowBloxInputFileHelper.SynchronizeInputFiles(Project);
 
-            var templatesWithCommands = Project.InputFiles
+            var inputFilesWithCommands = Project.InputFiles
                 .Where(x => x != null
                     && x.ExecuteBeforeRuntime
                     && !string.IsNullOrWhiteSpace(x.Command))
                 .ToList();
 
-            if (!templatesWithCommands.Any())
+            if (!inputFilesWithCommands.Any())
                 return;
 
             Report("Executing input file startup commands...");
 
-            foreach (var inputFile in templatesWithCommands)
+            foreach (var inputFile in inputFilesWithCommands)
             {
-                var resolvedCommand = FlowBloxInputTemplateHelper.ReplaceInputTemplatePlaceholders(inputFile.Command ?? string.Empty, Project, inputFile);
+                var resolvedCommand = FlowBloxInputFileHelper.ReplaceInputFilePlaceholders(inputFile.Command ?? string.Empty, Project, inputFile);
                 resolvedCommand = FlowBloxFieldHelper.ReplaceFieldsInString(resolvedCommand ?? string.Empty);
 
                 if (string.IsNullOrWhiteSpace(resolvedCommand))
                     continue;
 
-                var relativePath = FlowBloxInputTemplateHelper.NormalizeRelativePath(inputFile.RelativePath ?? string.Empty);
+                var relativePath = FlowBloxInputFileHelper.NormalizeRelativePath(inputFile.RelativePath ?? string.Empty);
                 Report($"Executing startup command for input file \"{relativePath}\": {resolvedCommand}");
 
                 var result = FlowBloxShellExecutor.Execute(new FlowBloxShellExecutionRequest

@@ -2,7 +2,7 @@ Use this deep dive only when test setup is non-trivial, uncertain, or explicitly
 Primary reference remains `explaining_test_definitions`; this catalog adds compact examples and scope strategy.
 
 Core model (exact types/properties):
-- Managed object type: `FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxTestDefinition`
+- Managed object type: `FlowBlox.Core.Models.Testing.FlowBloxTestDefinition`
 - Rows: `FlowBloxTestDefinition.Entries` (`FlowBlockTestDataset`)
 - Per-row execution flag: `FlowBlockTestDataset.Execute`
 - Field-level config: `FlowBlockTestDataset.FlowBloxTestConfigurations` (`FlowBloxFieldTestConfiguration`)

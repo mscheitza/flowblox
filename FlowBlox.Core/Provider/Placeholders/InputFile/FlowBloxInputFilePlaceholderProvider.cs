@@ -8,14 +8,14 @@ namespace FlowBlox.Core.Provider.Placeholders.InputFile
             string projectInputDirectory,
             FlowBloxInputFile inputFile = null)
         {
-            var relativePath = FlowBloxInputTemplateHelper.NormalizeRelativePath(inputFile?.RelativePath ?? string.Empty);
+            var relativePath = FlowBloxInputFileHelper.NormalizeRelativePath(inputFile?.RelativePath ?? string.Empty);
             var absolutePath = string.Empty;
 
             if (!string.IsNullOrWhiteSpace(relativePath) && !string.IsNullOrWhiteSpace(projectInputDirectory))
             {
                 try
                 {
-                    absolutePath = FlowBloxInputTemplateHelper.BuildAbsoluteTargetPath(projectInputDirectory, relativePath);
+                    absolutePath = FlowBloxInputFileHelper.BuildAbsoluteTargetPath(projectInputDirectory, relativePath);
                 }
                 catch
                 {

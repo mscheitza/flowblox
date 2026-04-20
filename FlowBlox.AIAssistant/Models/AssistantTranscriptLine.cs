@@ -6,6 +6,7 @@ namespace FlowBlox.AIAssistant.Models
         Assistant,
         Error,
         Status,
+        ToolProcessing,
         ToolSuccess,
         ToolError
     }

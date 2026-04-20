@@ -12,7 +12,7 @@ namespace FlowBlox.Core.Models.Project
         private string _contentBase64;
         private string _command;
         private bool _executeBeforeRuntime;
-        private FlowBloxInputTemplateSyncMode _syncMode = FlowBloxInputTemplateSyncMode.CreateIfNotExists;
+        private FlowBloxInputFileSyncMode _syncMode = FlowBloxInputFileSyncMode.CreateIfNotExists;
 
         /// <summary>
         /// Relative path inside the project's input directory.
@@ -52,7 +52,7 @@ namespace FlowBlox.Core.Models.Project
         /// <summary>
         /// Controls how template content is synchronized to project input directory.
         /// </summary>
-        public FlowBloxInputTemplateSyncMode SyncMode
+        public FlowBloxInputFileSyncMode SyncMode
         {
             get => _syncMode;
             set

@@ -69,8 +69,7 @@ namespace FlowBlox.AIAssistant.Tools
                 ["kind"] = normalizedKind,
                 ["name"] = componentName,
                 ["typeFullName"] = component.GetType().FullName,
-                ["snapshot"] = snapshotToken,
-                ["snapshotJson"] = snapshotJson
+                ["snapshot"] = snapshotToken
             }));
         }
     }

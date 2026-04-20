@@ -329,7 +329,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 if (fieldSelectionResult != null)
                 {
                     FlowBlockHelper.ApplyFieldSelectionRequiredOption(
-                        (BaseFlowBlock)_target,
+                        _target,
                         fieldSelectionResult.SelectedFields,
                         fieldSelectionResult.IsRequired);
 

@@ -41,6 +41,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.Xml;
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;
 
+        public override List<Type> NotificationTypes
+        {
+            get
+            {
+                var notificationTypes = base.NotificationTypes;
+                notificationTypes.Add(typeof(XmlDocumentXPathSelectorNotifications));
+                return notificationTypes;
+            }
+        }
+
         public override List<string> GetDisplayableProperties()
         {
             var props = base.GetDisplayableProperties();
@@ -64,16 +74,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
                 if (xmlDoc == null)
                     throw new InvalidOperationException("The XML document in the source flow block is null or has not been initialized.");
 
-                if (string.IsNullOrEmpty(XPath))
-                    throw new InvalidOperationException("No XPath expression provided.");
-
                 var resolvedXPath = FlowBloxFieldHelper.ReplaceFieldsInString(XPath);
                 if (string.IsNullOrWhiteSpace(resolvedXPath))
-                    throw new InvalidOperationException("No XPath expression provided.");
+                {
+                    CreateNotification(runtime, XmlDocumentXPathSelectorNotifications.XPathExpressionIsEmpty);
+                    GenerateResult(runtime);
+                    return;
+                }
 
                 var nodes = xmlDoc.SelectNodes(resolvedXPath);
                 if (nodes == null || nodes.Count == 0)
-                    throw new InvalidOperationException($"No matching nodes found for XPath: '{resolvedXPath}'.");
+                {
+                    CreateNotification(runtime, XmlDocumentXPathSelectorNotifications.NoMatchingNodesFound);
+                    GenerateResult(runtime);
+                    return;
+                }
 
                 var contents = new List<string>();
 
@@ -84,8 +99,26 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
                         contents.Add(text);
                 }
 
+                if (contents.Count == 0)
+                {
+                    CreateNotification(runtime, XmlDocumentXPathSelectorNotifications.NoMatchingNodesFound);
+                    GenerateResult(runtime);
+                    return;
+                }
+
                 GenerateResult(runtime, contents);
             });
+        }
+
+        public enum XmlDocumentXPathSelectorNotifications
+        {
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "XPath expression is empty")]
+            XPathExpressionIsEmpty,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Error)]
+            [Display(Name = "No matching nodes found")]
+            NoMatchingNodesFound
         }
     }
 }

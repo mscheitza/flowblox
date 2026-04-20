@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.DependencyInjection;
 using FlowBlox.UICore.Interfaces;
+using FlowBloxSampleExtension.Models.FlowBlocks.SampleCategory;
 using FlowBloxSampleExtension.UI.Views;
 using System.ComponentModel.DataAnnotations;
 

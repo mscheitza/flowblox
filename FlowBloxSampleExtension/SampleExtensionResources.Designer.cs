@@ -80,7 +80,7 @@ namespace FlowBloxSampleExtension {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This is a customized description. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Demo flow block that returns an output value from an input field and applies configured value replacement mappings. ähnelt.
         /// </summary>
         public static string SampleExtensionFlowBlock_Description {
             get {
@@ -89,7 +89,7 @@ namespace FlowBloxSampleExtension {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Extension Flow-Block (Sample) ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sample Extension Flow Block ähnelt.
         /// </summary>
         public static string SampleExtensionFlowBlock_DisplayName {
             get {
@@ -107,11 +107,56 @@ namespace FlowBloxSampleExtension {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value replacements ähnelt.
+        /// </summary>
+        public static string SampleExtensionFlowBlock_ValueReplacements {
+            get {
+                return ResourceManager.GetString("SampleExtensionFlowBlock_ValueReplacements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Configured value replacement mappings that are applied in order before the result is emitted. ähnelt.
+        /// </summary>
+        public static string SampleExtensionFlowBlock_ValueReplacements_Tooltip {
+            get {
+                return ResourceManager.GetString("SampleExtensionFlowBlock_ValueReplacements_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Sample action ähnelt.
         /// </summary>
         public static string SampleExtensionFlowBlockUIActions_SampleAction {
             get {
                 return ResourceManager.GetString("SampleExtensionFlowBlockUIActions_SampleAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value replacement mapping ähnelt.
+        /// </summary>
+        public static string SampleExtensionMappingEntry_DisplayName {
+            get {
+                return ResourceManager.GetString("SampleExtensionMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replacement value ähnelt.
+        /// </summary>
+        public static string SampleExtensionMappingEntry_ReplacementValue {
+            get {
+                return ResourceManager.GetString("SampleExtensionMappingEntry_ReplacementValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source value ähnelt.
+        /// </summary>
+        public static string SampleExtensionMappingEntry_SourceValue {
+            get {
+                return ResourceManager.GetString("SampleExtensionMappingEntry_SourceValue", resourceCulture);
             }
         }
     }

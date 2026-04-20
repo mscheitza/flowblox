@@ -4,7 +4,6 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Grid.Elements.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -27,8 +26,7 @@ namespace FlowBlox.AIAssistant.Tools
                 ["kind"] = kind,
                 ["name"] = name,
                 ["typeFullName"] = typeFullName,
-                ["snapshot"] = snapshot,
-                ["snapshotJson"] = snapshot.ToString(Formatting.Indented)
+                ["snapshot"] = snapshot
             };
         }
 

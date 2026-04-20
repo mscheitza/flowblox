@@ -13,7 +13,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string EditAndDeleteKey = "explaining_edit_and_delete";
         public const string NamingConventionsKey = "naming_conventions";
         public const string ExecutionRequirementsKey = "execution_requirements_and_required_fields";
-        public const string InputFilesKey = "explaining_input_file_templates";
+        public const string InputFilesKey = "explaining_input_files";
         public const string SpecialTestDefinitionsKey = "explaining_test_definitions";
         public const string SpecialTestDefinitionsDeepDiveKey = "explaining_test_definitions_deep_dive";
         public const string SpecialGeneratorsKey = "explaining_generators";

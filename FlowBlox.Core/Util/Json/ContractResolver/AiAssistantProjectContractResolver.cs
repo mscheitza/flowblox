@@ -13,7 +13,7 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
 
             if (member.DeclaringType == typeof(FlowBloxProject) &&
                 (string.Equals(property.PropertyName, "InputFiles", StringComparison.Ordinal) ||
-                 string.Equals(property.PropertyName, "InputTemplates", StringComparison.Ordinal)))
+                 string.Equals(property.PropertyName, "InputFiles", StringComparison.Ordinal)))
             {
                 property.Ignored = true;
             }

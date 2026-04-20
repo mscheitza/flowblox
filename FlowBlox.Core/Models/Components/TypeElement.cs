@@ -5,6 +5,7 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Models.Base;
 using System.Globalization;
 using FlowBlox.Core.Extensions;
+using Newtonsoft.Json;
 
 namespace FlowBlox.Core.Models.Components
 {
@@ -66,6 +67,7 @@ namespace FlowBlox.Core.Models.Components
             return true;
         }
 
+        [JsonIgnore]
         public bool? ValueBoolean
         {
             get
@@ -98,6 +100,7 @@ namespace FlowBlox.Core.Models.Components
             };
         }
 
+        [JsonIgnore]
         public int? ValueInteger
         {
             get
@@ -112,6 +115,7 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
+        [JsonIgnore]
         public long? ValueLong
         {
             get
@@ -126,6 +130,7 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
+        [JsonIgnore]
         public float? ValueFloat
         {
             get
@@ -141,6 +146,7 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
+        [JsonIgnore]
         public double? ValueDouble
         {
             get
@@ -156,6 +162,7 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
+        [JsonIgnore]
         public DateTime? ValueDateTime
         {
             get
@@ -174,6 +181,7 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
+        [JsonIgnore]
         public byte[] ValueByteArray
         {
             get
@@ -192,6 +200,7 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
+        [JsonIgnore]
         public bool HasNullableInfo
         {
             get

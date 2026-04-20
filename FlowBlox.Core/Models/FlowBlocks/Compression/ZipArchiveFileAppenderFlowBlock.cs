@@ -138,11 +138,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
                 Wait(runtime);
                 SetParentElement(data);
 
+                if (ZipArchiveObject == null)
+                    throw new InvalidOperationException("No ZIP archive object is assigned to the flow block.");
+
                 try
                 {
-                    if (ZipArchiveObject == null)
-                        throw new InvalidOperationException("No ZIP archive object is assigned to the flow block.");
-
                     var entryPath = BuildEntryPath(
                         FlowBloxFieldHelper.ReplaceFieldsInString(ArchivePath ?? string.Empty),
                         FlowBloxFieldHelper.ReplaceFieldsInString(FileName ?? string.Empty));

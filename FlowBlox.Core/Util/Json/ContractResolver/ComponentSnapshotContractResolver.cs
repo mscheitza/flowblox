@@ -4,6 +4,7 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Drawing;
 using System.Collections;
 using System.Reflection;
 
@@ -47,6 +48,9 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
             if (nonNullable.IsPrimitive || nonNullable.IsEnum || nonNullable == typeof(decimal) || nonNullable == typeof(DateTime) || nonNullable == typeof(DateTimeOffset) || nonNullable == typeof(Guid) || nonNullable == typeof(TimeSpan))
                 return true;
 
+            if (nonNullable == typeof(Point) || nonNullable == typeof(Size))
+                return true;
+
             if (typeof(FieldElement).IsAssignableFrom(nonNullable) ||
                 typeof(BaseFlowBlock).IsAssignableFrom(nonNullable) ||
                 typeof(IManagedObject).IsAssignableFrom(nonNullable))
@@ -64,4 +68,3 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
         }
     }
 }
-

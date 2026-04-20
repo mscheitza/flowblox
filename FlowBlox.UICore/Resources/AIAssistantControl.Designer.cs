@@ -61,7 +61,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Stop ähnelt.
         /// </summary>
         public static string Button_Cancel {
             get {
@@ -147,6 +147,24 @@ namespace FlowBlox.UICore.Resources {
         public static string Message_CommunicationProtocolDirectory_OpenFailed_Title {
             get {
                 return ResourceManager.GetString("Message_CommunicationProtocolDirectory_OpenFailed_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The AI Assistant requested execution of the input-file script for &apos;{0}&apos;. Do you want to continue? ähnelt.
+        /// </summary>
+        public static string Message_ExecuteInputFileCommand_Confirm_Description {
+            get {
+                return ResourceManager.GetString("Message_ExecuteInputFileCommand_Confirm_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Confirm Script Execution ähnelt.
+        /// </summary>
+        public static string Message_ExecuteInputFileCommand_Confirm_Title {
+            get {
+                return ResourceManager.GetString("Message_ExecuteInputFileCommand_Confirm_Title", resourceCulture);
             }
         }
         

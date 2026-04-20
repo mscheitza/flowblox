@@ -26,6 +26,7 @@ using FlowBlox.Core.Util.Fields;
 using System.Transactions;
 using System.Collections.Generic;
 using System.Collections;
+using FlowBlox.Core.Models.Generators;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
@@ -210,7 +211,37 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [JsonIgnore()]
         public virtual bool CreateNumericNameSuffix => true;
 
-        public Point Location { get; set; }
+        private Point _location;
+        public Point Location
+        {
+            get => _location;
+            set
+            {
+                if (_location == value)
+                    return;
+
+                _location = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Runtime/UI-measured element size metadata for diagnostics and tooling.
+        /// This value is not used to render or layout the UI.
+        /// </summary>
+        private Size _size;
+        public Size Size
+        {
+            get => _size;
+            set
+            {
+                if (_size == value)
+                    return;
+
+                _size = value;
+                OnPropertyChanged();
+            }
+        }
 
         public int ExecutionIndex { get; set; } = -1;
 

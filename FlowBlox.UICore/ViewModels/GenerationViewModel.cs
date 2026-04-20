@@ -2,11 +2,13 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Commands;
 using System.Windows.Input;
+using FlowBlox.Core.Models.Testing;
+using MahApps.Metro.Controls;
+using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels
 {
@@ -15,6 +17,7 @@ namespace FlowBlox.UICore.ViewModels
         private FlowBloxTestDefinition _testDefinition;
         private BaseFlowBlock _currentFlowBlock;
         private ObservableCollection<RuntimeLog> _runtimeLogs;
+        private Window _ownerWindow;
 
         public GenerationViewModel()
         {
@@ -24,6 +27,12 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public ICommand OpenInEditorCommand { get; }
+
+        public Window OwnerWindow
+        {
+            get => _ownerWindow;
+            set => _ownerWindow = value;
+        }
 
         public FlowBloxTestDefinition TestDefinition
         {
@@ -69,7 +78,22 @@ namespace FlowBlox.UICore.ViewModels
             RuntimeLogs.Clear();
             FlowBlockGenerationStrategyExecutor generationStrategyExecutor = new FlowBlockGenerationStrategyExecutor(CurrentFlowBlock);
             generationStrategyExecutor.LogCreated += GenerationStrategyExecutor_LogCreated;
-            await generationStrategyExecutor.ExecuteGenerationAsync();
+
+            try
+            {
+                await generationStrategyExecutor.ExecuteGenerationAsync();
+            }
+            catch (Exception ex)
+            {
+                await MessageBoxHelper.ShowMessageBoxAsync(
+                    _ownerWindow as MetroWindow,
+                    MessageBoxType.Error,
+                    ex.Message);
+            }
+            finally
+            {
+                generationStrategyExecutor.LogCreated -= GenerationStrategyExecutor_LogCreated;
+            }
         }
 
         private void OpenInEditor(object target)

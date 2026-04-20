@@ -118,7 +118,7 @@ namespace FlowBlox.Core.Models.Project
         public List<FlowBloxInputFile> InputFiles { get; set; }
 
         [JsonProperty("InputTemplates")]
-        private List<FlowBloxInputFile> LegacyInputTemplates
+        private List<FlowBloxInputFile> LegacyInputFiles
         {
             set
             {
@@ -434,7 +434,7 @@ namespace FlowBlox.Core.Models.Project
             // Managed input files -> materialize input files if missing
             try
             {
-                FlowBloxInputTemplateHelper.EnsureInputFilesExist(this);
+                FlowBloxInputFileHelper.EnsureInputFilesExist(this);
             }
             catch (Exception ex)
             {

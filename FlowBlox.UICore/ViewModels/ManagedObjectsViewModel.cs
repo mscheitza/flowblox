@@ -4,7 +4,6 @@ using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
@@ -29,6 +28,7 @@ using System.Windows.Media;
 using MahApps.Metro.IconPacks;
 using FlowBlox.Core.Provider;
 using System.IO;
+using FlowBlox.Core.Models.Testing;
 
 namespace FlowBlox.UICore.ViewModels
 {

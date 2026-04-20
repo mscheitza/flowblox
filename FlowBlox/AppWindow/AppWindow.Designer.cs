@@ -33,7 +33,7 @@ namespace FlowBlox.AppWindow
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AppWindow));
             mnItmMisc = new System.Windows.Forms.ToolStripMenuItem();
-            itmManageInputTemplates = new System.Windows.Forms.ToolStripMenuItem();
+            itmManageInputFiles = new System.Windows.Forms.ToolStripMenuItem();
             itmUserFields = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             itmFbProjects = new System.Windows.Forms.ToolStripMenuItem();
@@ -104,19 +104,19 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmMisc
             // 
-            mnItmMisc.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmManageInputTemplates, itmUserFields, toolStripSeparator5, itmFbProjects, itmFbExtensions, toolStripSeparator1, itmOptions });
+            mnItmMisc.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmManageInputFiles, itmUserFields, toolStripSeparator5, itmFbProjects, itmFbExtensions, toolStripSeparator1, itmOptions });
             mnItmMisc.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmMisc.Name = "mnItmMisc";
             mnItmMisc.Size = new System.Drawing.Size(106, 19);
             mnItmMisc.Text = "mnItmMisc_Text";
             // 
-            // itmManageInputTemplates
+            // itmManageInputFiles
             // 
-            itmManageInputTemplates.Image = (System.Drawing.Image)resources.GetObject("itmManageInputTemplates.Image");
-            itmManageInputTemplates.Name = "itmManageInputTemplates";
-            itmManageInputTemplates.Size = new System.Drawing.Size(243, 22);
-            itmManageInputTemplates.Text = "itmManageInputTemplates_Text";
-            itmManageInputTemplates.Click += itmManageInputTemplates_Click;
+            itmManageInputFiles.Image = (System.Drawing.Image)resources.GetObject("itmManageInputFiles.Image");
+            itmManageInputFiles.Name = "itmManageInputFiles";
+            itmManageInputFiles.Size = new System.Drawing.Size(243, 22);
+            itmManageInputFiles.Text = "itmManageInputFiles_Text";
+            itmManageInputFiles.Click += itmManageInputFiles_Click;
             // 
             // itmUserFields
             // 
@@ -693,7 +693,7 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripMenuItem itmFbProjects;
         private System.Windows.Forms.ToolStripMenuItem itmFbExtensions;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem itmManageInputTemplates;
+        private System.Windows.Forms.ToolStripMenuItem itmManageInputFiles;
         private System.Windows.Forms.ToolStripMenuItem itmOpenInputDir;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem itmRecentProjects;

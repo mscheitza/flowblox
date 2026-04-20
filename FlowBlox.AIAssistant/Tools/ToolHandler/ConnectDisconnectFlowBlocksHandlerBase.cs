@@ -1,7 +1,7 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.ControlFlow;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools

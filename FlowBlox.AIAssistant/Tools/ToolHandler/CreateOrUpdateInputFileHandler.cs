@@ -44,8 +44,8 @@ namespace FlowBlox.AIAssistant.Tools
                 if (string.IsNullOrWhiteSpace(key))
                     return Task.FromResult(ToolHandlerUtilities.Fail("key is required."));
 
-                FlowBloxInputTemplateHelper.ValidateRelativePathOrThrow(key);
-                var normalizedKey = FlowBloxInputTemplateHelper.NormalizeRelativePath(key);
+                FlowBloxInputFileHelper.ValidateRelativePathOrThrow(key);
+                var normalizedKey = FlowBloxInputFileHelper.NormalizeRelativePath(key);
 
                 var generatedTemplate = args["generatedTemplate"] as JObject;
                 if (generatedTemplate == null)
@@ -63,24 +63,24 @@ namespace FlowBlox.AIAssistant.Tools
                 var syncMode = ParseSyncMode(args.Value<string>("syncMode"));
                 var existing = project.InputFiles.FirstOrDefault(x =>
                     string.Equals(
-                        FlowBloxInputTemplateHelper.NormalizeRelativePath(x?.RelativePath ?? string.Empty),
+                        FlowBloxInputFileHelper.NormalizeRelativePath(x?.RelativePath ?? string.Empty),
                         normalizedKey,
                         StringComparison.OrdinalIgnoreCase));
 
                 var created = existing == null;
-                var template = existing ?? new FlowBloxInputFile();
-                template.RelativePath = normalizedKey;
-                template.ContentBase64 = contentBase64;
-                template.SyncMode = syncMode;
-                template.Command = args.Value<string>("command") ?? template.Command;
-                template.ExecuteBeforeRuntime = args.Value<bool?>("executeBeforeRuntime") ?? template.ExecuteBeforeRuntime;
+                var inputFile = existing ?? new FlowBloxInputFile();
+                inputFile.RelativePath = normalizedKey;
+                inputFile.ContentBase64 = contentBase64;
+                inputFile.SyncMode = syncMode;
+                inputFile.Command = args.Value<string>("command") ?? inputFile.Command;
+                inputFile.ExecuteBeforeRuntime = args.Value<bool?>("executeBeforeRuntime") ?? inputFile.ExecuteBeforeRuntime;
 
                 if (created)
-                    project.InputFiles.Add(template);
+                    project.InputFiles.Add(inputFile);
 
-                FlowBloxInputTemplateHelper.EnsureInputFilesExist(project);
+                FlowBloxInputFileHelper.EnsureInputFilesExist(project);
 
-                var materializedPath = FlowBloxInputTemplateHelper.BuildAbsoluteTargetPath(
+                var materializedPath = FlowBloxInputFileHelper.BuildAbsoluteTargetPath(
                     project.ProjectInputDirectory,
                     normalizedKey);
 
@@ -93,9 +93,9 @@ namespace FlowBlox.AIAssistant.Tools
                     ["contentSource"] = "generatedTemplate",
                     ["converterUsed"] = string.IsNullOrWhiteSpace(converter) ? "None" : converter,
                     ["supportedConverters"] = new JArray(SupportedConverters),
-                    ["sizeBytes"] = template.ContentBytes?.LongLength ?? 0,
-                    ["command"] = template.Command ?? string.Empty,
-                    ["executeBeforeRuntime"] = template.ExecuteBeforeRuntime,
+                    ["sizeBytes"] = inputFile.ContentBytes?.LongLength ?? 0,
+                    ["command"] = inputFile.Command ?? string.Empty,
+                    ["executeBeforeRuntime"] = inputFile.ExecuteBeforeRuntime,
                     ["placeholderHint"] = "$InputFile:Path",
                     ["materializedPath"] = materializedPath,
                     ["projectInputDirectory"] = project.ProjectInputDirectory ?? string.Empty
@@ -124,15 +124,15 @@ namespace FlowBlox.AIAssistant.Tools
                 $"Unsupported converter '{converter}'. Supported converters: {string.Join(", ", SupportedConverters)}.");
         }
 
-        private static FlowBloxInputTemplateSyncMode ParseSyncMode(string value)
+        private static FlowBloxInputFileSyncMode ParseSyncMode(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                return FlowBloxInputTemplateSyncMode.CreateIfNotExists;
+                return FlowBloxInputFileSyncMode.CreateIfNotExists;
 
-            if (Enum.TryParse<FlowBloxInputTemplateSyncMode>(value.Trim(), true, out var parsed))
+            if (Enum.TryParse<FlowBloxInputFileSyncMode>(value.Trim(), true, out var parsed))
                 return parsed;
 
-            return FlowBloxInputTemplateSyncMode.CreateIfNotExists;
+            return FlowBloxInputFileSyncMode.CreateIfNotExists;
         }
     }
 }

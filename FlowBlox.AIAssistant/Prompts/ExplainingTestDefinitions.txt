@@ -27,6 +27,7 @@ Important behavior:
 - For each entry with `Execute=true`, activation prerequisites must be satisfied:
   - activation conditions of the flow block,
   - required fields must have a valid value strategy (at least manual input or an automatic selection mode),
+  - for user fields (`UserFieldType=Input` or `UserFieldType=Memory`), prefer `SelectionMode=Keep` to preserve the current project value; use another mode only when there is a clear reason,
   - for properties marked with `AssociatedFlowBlockResolvableAttribute`, resolve required associated flow blocks with `ResolveAssociatedFlowBlock` and ensure they are covered by the test setup.
 - `RequiredForExecution=true` means this test definition is executed automatically at runtime start. If an expectation fails, FlowBlox can run generation strategies on the affected flow block and repeat the step once.
 - Do not set `FlowBloxTestDefinition.RequiredForExecution=true` by default. Only set it when the user explicitly wants runtime-start test guarding / automatic regeneration. Ask about auto-regeneration only if generation strategies exist on the affected flow block.

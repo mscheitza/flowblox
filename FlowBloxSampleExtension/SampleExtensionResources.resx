@@ -128,12 +128,27 @@
     <value>Sample action</value>
   </data>
   <data name="SampleExtensionFlowBlock_Description" xml:space="preserve">
-    <value>This is a customized description.</value>
+    <value>Demo flow block that returns an output value from an input field and applies configured value replacement mappings.</value>
   </data>
   <data name="SampleExtensionFlowBlock_DisplayName" xml:space="preserve">
-    <value>Extension Flow-Block (Sample)</value>
+    <value>Sample Extension Flow Block</value>
   </data>
   <data name="SampleExtensionFlowBlock_OutputText" xml:space="preserve">
     <value>Output text</value>
+  </data>
+  <data name="SampleExtensionFlowBlock_ValueReplacements" xml:space="preserve">
+    <value>Value replacements</value>
+  </data>
+  <data name="SampleExtensionFlowBlock_ValueReplacements_Tooltip" xml:space="preserve">
+    <value>Configured value replacement mappings that are applied in order before the result is emitted.</value>
+  </data>
+  <data name="SampleExtensionMappingEntry_DisplayName" xml:space="preserve">
+    <value>Value replacement mapping</value>
+  </data>
+  <data name="SampleExtensionMappingEntry_SourceValue" xml:space="preserve">
+    <value>Source value</value>
+  </data>
+  <data name="SampleExtensionMappingEntry_ReplacementValue" xml:space="preserve">
+    <value>Replacement value</value>
   </data>
 </root>

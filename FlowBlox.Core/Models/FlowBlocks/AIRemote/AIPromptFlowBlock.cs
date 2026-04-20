@@ -77,6 +77,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
                 SetParentElement(data);
 
                 var promptResolved = FlowBloxFieldHelper.ReplaceFieldsInString(this.PromptTemplate);
+                if (string.IsNullOrWhiteSpace(promptResolved))
+                {
+                    CreateNotification(runtime, AIPromptNotifications.PromptMissing);
+                    return;
+                }
 
                 var req = new AIRequest
                 {
@@ -126,6 +131,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
         public enum AIPromptNotifications
         {
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "Prompt is empty")]
+            PromptMissing,
+
             [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "AI prompt execution failed")]
             AIPromptExecutionFailed

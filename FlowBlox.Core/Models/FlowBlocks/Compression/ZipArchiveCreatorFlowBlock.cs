@@ -63,11 +63,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
                 runtime.Focus(this);
                 Wait(runtime);
 
+                if (ZipArchiveObject == null)
+                    throw new InvalidOperationException("No ZIP archive object is assigned.");
+
                 try
                 {
-                    if (ZipArchiveObject == null)
-                        throw new InvalidOperationException("No ZIP archive object is assigned.");
-
                     var password = FlowBloxFieldHelper.ReplaceFieldsInString(Password ?? string.Empty);
                     ZipArchiveObject.CreateNewArchive(CompressionStrength, password);
                 }

@@ -270,9 +270,9 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage input files ähnelt.
         /// </summary>
-        internal static string AppWindow_itmManageInputTemplates_Text {
+        internal static string AppWindow_itmManageInputFiles_Text {
             get {
-                return ResourceManager.GetString("AppWindow_itmManageInputTemplates_Text", resourceCulture);
+                return ResourceManager.GetString("AppWindow_itmManageInputFiles_Text", resourceCulture);
             }
         }
         

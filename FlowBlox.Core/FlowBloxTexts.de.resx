@@ -2594,10 +2594,10 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
   <data name="VocabMergesConfiguration_DisplayName_Plural" xml:space="preserve">
 		<value>Vokabular-/Merges-Konfigurationen</value>
 	</data>
-  <data name="FlowBloxInputTemplateSyncMode_CreateIfNotExists" xml:space="preserve">
+  <data name="FlowBloxInputFileSyncMode_CreateIfNotExists" xml:space="preserve">
 		<value>Erstellen, falls nicht vorhanden</value>
 	</data>
-  <data name="FlowBloxInputTemplateSyncMode_Overwrite" xml:space="preserve">
+  <data name="FlowBloxInputFileSyncMode_Overwrite" xml:space="preserve">
 		<value>Überschreiben</value>
 	</data>
   <data name="ShellExecuteFlowBlock_DisplayName" xml:space="preserve">

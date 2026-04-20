@@ -93,9 +93,9 @@ namespace FlowBlox.Core.Util
                 new OptionElement("Paths.DeepCopierProtocolDir", @"%localappdata%\FlowBlox\copy_protocols", "Deep copier protocol directory.", OptionElement.OptionType.Text),
                 new OptionElement("Paths.ToolboxCacheDir", @"%localappdata%\FlowBlox\toolbox", "Global toolbox cache directory path.", OptionElement.OptionType.Text),
 
-                new OptionElement("Api.ExtensionServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the extension management system.", OptionElement.OptionType.Text),
-                new OptionElement("Api.ProjectServiceBaseUrl", "https://www.flowblox.net/api/", "The URL for the REST API of the project space.", OptionElement.OptionType.Text),
-                new OptionElement("Updates.InstallerManifestUrl", "https://flowblox.net/app/FlowBloxInstallerUpdates.xml", "The URL of the installer update manifest XML used by the desktop updater notifications.", OptionElement.OptionType.Text, "Updates: Installer Manifest URL"),
+                new OptionElement("Api.ExtensionServiceBaseUrl", GlobalUrls.FlowBloxPublicApiBaseUrl, "The URL for the REST API of the extension management system.", OptionElement.OptionType.Text),
+                new OptionElement("Api.ProjectServiceBaseUrl", GlobalUrls.FlowBloxPublicApiBaseUrl, "The URL for the REST API of the project space.", OptionElement.OptionType.Text),
+                new OptionElement("Updates.InstallerManifestUrl", GlobalUrls.FlowBloxInstallerManifestUrl, "The URL of the installer update manifest XML used by the desktop updater notifications.", OptionElement.OptionType.Text, "Updates: Installer Manifest URL"),
 
                 new OptionElement("Runtime.AutoRestart", "false", "Should the runtime automatically restart once execution is completed?", OptionElement.OptionType.Boolean, "Auto Restart"),
                 new OptionElement("Runtime.AutoRestart.CacheMode", "Keep", "Should the cache be cleared or kept in case of an automatic restart? Possible values: \"Keep\" or \"Clear\" Note: This option can also be changed after runtime start.", OptionElement.OptionType.Text),

@@ -112,7 +112,7 @@ namespace FlowBlox.Core.Models.Runtime
 
         protected override void OnBeforeRuntimeStarted(BaseFlowBlock startFlowBlock, IEnumerable<BaseFlowBlock> flowBlocks, IEnumerable<IManagedObject> managedObjects)
         {
-            ExecuteInputTemplateStartupCommands();
+            ExecuteInputFileStartupCommands();
             ExecuteRequiredTestDefinitions();
 
             base.OnBeforeRuntimeStarted(startFlowBlock, flowBlocks, managedObjects);

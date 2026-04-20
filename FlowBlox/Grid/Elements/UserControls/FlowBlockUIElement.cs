@@ -24,6 +24,7 @@ using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Util.Resources;
+using System.ComponentModel;
 
 namespace FlowBlox.Grid.Elements.UserControls
 {
@@ -84,6 +85,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         private string errorMessage;
         private string warningMessage;
         private FlowBlockFlags currentFlags;
+        private bool _suppressFlowBlockLocationSync;
 
         private bool _elementSelected;
         public bool ElementSelected
@@ -162,6 +164,7 @@ namespace FlowBlox.Grid.Elements.UserControls
             this._flowBlock.OnError += _baseGridElement_OnError;
             this._flowBlock.OnFlagsChanged += _flowBlock_OnFlagsChanged;
             this._flowBlock.OnPropertyValuesChanged += _baseGridElement_OnPropertyValuesChanged;
+            this._flowBlock.PropertyChanged += FlowBlock_PropertyChanged;
 
             this.Name = _flowBlock.Name;
             this.Location = _flowBlock.Location;
@@ -169,21 +172,91 @@ namespace FlowBlox.Grid.Elements.UserControls
             this.labelHeader.Text = FlowBloxComponentHelper.GetDisplayName(_flowBlock);
 
             this.Move += GridUIElement_Move;
+            this.Disposed += FlowBlockUIElement_Disposed;
 
             this.UpdateContent();
         }
 
+        private void FlowBlockUIElement_Disposed(object sender, EventArgs e)
+        {
+            if (_flowBlock == null)
+                return;
+
+            _flowBlock.PropertyChanged -= FlowBlock_PropertyChanged;
+        }
+
+        private void FlowBlock_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!string.Equals(e.PropertyName, nameof(BaseFlowBlock.Location), StringComparison.Ordinal))
+                return;
+
+            if (IsDisposed || Disposing)
+                return;
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => FlowBlock_PropertyChanged(sender, e)));
+                return;
+            }
+
+            var targetUiLocation = TranslateModelToUiLocation(
+                _flowBlock.Location,
+                Parent as Panel);
+
+            if (Location == targetUiLocation)
+                return;
+
+            _suppressFlowBlockLocationSync = true;
+            try
+            {
+                Location = targetUiLocation;
+                BufferedLocation = targetUiLocation;
+            }
+            finally
+            {
+                _suppressFlowBlockLocationSync = false;
+            }
+        }
+
         private void GridUIElement_Move(object sender, EventArgs e)
         {
+            StoreLocation();
+        }
+
+        private void StoreLocation()
+        {
+            if (_suppressFlowBlockLocationSync)
+                return;
+
             if (this.Parent == null)
                 return;
 
-            Point location = new Point(
-                this.Location.X - ((Panel)this.Parent).AutoScrollPosition.X,
-                this.Location.Y - ((Panel)this.Parent).AutoScrollPosition.Y
-            );
+            Point location = TranslateUiToModelLocation(this.Location, (Panel)this.Parent);
 
-            this._flowBlock.Location = location;
+            if (this._flowBlock != null)
+                this._flowBlock.Location = location;
+        }
+
+        private static Point TranslateUiToModelLocation(Point uiLocation, Panel parentPanel)
+        {
+            var autoScroll = parentPanel?.AutoScrollPosition ?? Point.Empty;
+            return new Point(
+                uiLocation.X - autoScroll.X,
+                uiLocation.Y - autoScroll.Y);
+        }
+
+        private static Point TranslateModelToUiLocation(Point modelLocation, Panel parentPanel)
+        {
+            var autoScroll = parentPanel?.AutoScrollPosition ?? Point.Empty;
+            return new Point(
+                modelLocation.X + autoScroll.X,
+                modelLocation.Y + autoScroll.Y);
+        }
+
+        private void StoreSize()
+        {
+            if (_flowBlock != null)
+                _flowBlock.Size = this.Size;
         }
 
         private void _baseGridElement_OnPropertyValuesChanged()
@@ -197,7 +270,7 @@ namespace FlowBlox.Grid.Elements.UserControls
                 return;
             }
 
-            this.UpdateContent(true);
+            this.UpdateContent();
         }
 
         private void EnableDoubleBuffer()
@@ -341,7 +414,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         private const int NotificationHeight = 25;
         private const int RenderedEntryHeight = 25;
 
-        public virtual void RefreshSize()
+        protected virtual void RefreshSizeInternal()
         {
             this.Height = 30;
 
@@ -356,17 +429,19 @@ namespace FlowBlox.Grid.Elements.UserControls
             if (_flowBlock.ExecutionIndex >= 0)
                 this.Height += NotificationHeight;
 
-            if (!string.IsNullOrEmpty(warningMessage))
+            if (HasVisibleNotification())
                 this.Height += NotificationHeight;
 
             if (this.Height > MaxHeight)
                 this.Height = MaxHeight;
 
+            StoreSize();
+
             UpdateBackColor();
         }
 
         private FlowBlockUIElementRenderer _renderer;
-        public virtual void UpdateContent(bool keepAnchor = false)
+        public virtual void UpdateContent()
         {
             _renderer = new FlowBlockUIElementRenderer(this);
             var innerPanel = _renderer.Render();
@@ -391,21 +466,30 @@ namespace FlowBlox.Grid.Elements.UserControls
             innerPanel.Height = _renderer.RenderedEntries * RenderedEntryHeight;
 
             UpdateFlags();
-            RefreshSize(keepAnchor);
+            RefreshSizeAndLocation();
         }
 
-        public void RefreshSize(bool keepAnchor = false)
+        public void RefreshSizeAndLocation()
         {
             var currentHeight = this.Size.Height;
-            RefreshSize();
-            var newHeight = this.Size.Height;
+            var centerY = this.Top + (currentHeight / 2d);
 
-            if (keepAnchor && currentHeight != newHeight)
-            {
-                var heightDifference = newHeight - currentHeight;
-                var adjustment = heightDifference / 2;
-                this.Location = new Point(this.Location.X, this.Location.Y - adjustment);
-            }
+            RefreshSizeInternal();
+
+            var newHeight = this.Size.Height;
+            if (currentHeight == newHeight)
+                return;
+
+            var newTop = (int)Math.Round(centerY - (newHeight / 2d), MidpointRounding.AwayFromZero);
+            this.Location = new Point(this.Location.X, newTop);
+
+            StoreLocation();
+        }
+
+        private bool HasVisibleNotification()
+        {
+            return !string.IsNullOrWhiteSpace(warningMessage)
+                || !string.IsNullOrWhiteSpace(errorMessage);
         }
 
         public new BorderStyle BorderStyle
@@ -671,7 +755,7 @@ namespace FlowBlox.Grid.Elements.UserControls
             if (recent?.Equals(message) == false)
             {
                 UpdateCoreFlags();
-                RefreshSize();
+                RefreshSizeAndLocation();
             }
         }
 
@@ -688,7 +772,7 @@ namespace FlowBlox.Grid.Elements.UserControls
             if (recent?.Equals(message) == false)
             {
                 UpdateCoreFlags();
-                RefreshSize();
+                RefreshSizeAndLocation();
             }
         }
 
@@ -720,7 +804,7 @@ namespace FlowBlox.Grid.Elements.UserControls
             if (!string.IsNullOrEmpty(recentWarning))
             {
                 UpdateCoreFlags();
-                RefreshSize();
+                RefreshSizeAndLocation();
             }
         }
 
@@ -741,8 +825,6 @@ namespace FlowBlox.Grid.Elements.UserControls
                 .ExceptNull()
                 .ToList();
         }
-
-        public Size? AnchorSize { get; set; }
 
         event EventHandler IFlowBloxUIElement.ElementSelectedChangedByUser
         {

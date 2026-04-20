@@ -14,6 +14,7 @@ namespace FlowBlox.UICore.Views
         {
             InitializeComponent();
             var viewModel = (GenerationViewModel)DataContext;
+            viewModel.OwnerWindow = this;
             viewModel.CurrentFlowBlock = currentFlowBlock;
             _ = viewModel.Generate();
         }

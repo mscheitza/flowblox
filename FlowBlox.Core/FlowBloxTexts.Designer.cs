@@ -2883,18 +2883,18 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die CreateIfNotExists ähnelt.
         /// </summary>
-        public static string FlowBloxInputTemplateSyncMode_CreateIfNotExists {
+        public static string FlowBloxInputFileSyncMode_CreateIfNotExists {
             get {
-                return ResourceManager.GetString("FlowBloxInputTemplateSyncMode_CreateIfNotExists", resourceCulture);
+                return ResourceManager.GetString("FlowBloxInputFileSyncMode_CreateIfNotExists", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Overwrite ähnelt.
         /// </summary>
-        public static string FlowBloxInputTemplateSyncMode_Overwrite {
+        public static string FlowBloxInputFileSyncMode_Overwrite {
             get {
-                return ResourceManager.GetString("FlowBloxInputTemplateSyncMode_Overwrite", resourceCulture);
+                return ResourceManager.GetString("FlowBloxInputFileSyncMode_Overwrite", resourceCulture);
             }
         }
         

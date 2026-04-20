@@ -13,6 +13,7 @@ using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.ObjectManager;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Services;
@@ -170,7 +171,7 @@ namespace FlowBlox.AppWindow
             itmRecentProjects.Enabled = !isRuntimeActive && itmRecentProjects.DropDownItems.Count > 0;
             itmCloseProject.Enabled = isProjectActive && !isRuntimeActive;
             itmUserFields.Enabled = isProjectActive && !isRuntimeActive;
-            itmManageInputTemplates.Enabled = isProjectActive && !isRuntimeActive;
+            itmManageInputFiles.Enabled = isProjectActive && !isRuntimeActive;
 
             itmEditProject.Enabled = isProjectActive && (!isRuntimeActive);
             itmSaveProject.Enabled = isProjectActive && (!isRuntimeActive);
@@ -185,9 +186,6 @@ namespace FlowBlox.AppWindow
 
             itmSaveToProjectSpace.Enabled = isProjectActive;
 
-            if (isRuntimeActive && !_runtimeViewPanel.IsHidden)
-                _runtimeViewPanel.Activate();
-
             var changelist = _componentProvider.GetCurrentChangelist();
             this.itmUndo.Enabled = (changelist != null) && (!isRuntimeActive) && (changelist.ChangeIndex > -1);
             this.itmRedo.Enabled = (changelist != null) && (!isRuntimeActive) && (changelist.ChangeIndex < changelist.Changes.Count - 1);
@@ -196,6 +194,20 @@ namespace FlowBlox.AppWindow
             this._componentLibraryPanel?.UpdateUI();
             this._managedObjectsViewPanel?.UpdateUI();
             this._testViewPanel?.UpdateUI();
+
+            if (isRuntimeActive)
+                BeginInvoke(new MethodInvoker(ActivateRuntimeViewPanel));
+        }
+
+        private void ActivateRuntimeViewPanel()
+        {
+            if (_runtimeViewPanel == null || _runtimeViewPanel.IsDisposed)
+                return;
+
+            if (_runtimeViewPanel.IsHidden)
+                _runtimeViewPanel.Show();
+
+			_runtimeViewPanel.Activate();
         }
 
         private void UpdateUI_ProjectName()
@@ -1027,9 +1039,9 @@ namespace FlowBlox.AppWindow
         }
 
 
-        private void itmVisitOnline_Click(object sender, EventArgs e) => OpenUrl("https://www.flowblox.net/");
+        private void itmVisitOnline_Click(object sender, EventArgs e) => OpenUrl(GlobalUrls.FlowBloxWebsite);
 
-        private void itmGitHub_Click(object sender, EventArgs e) => OpenUrl("https://github.com/mscheitza/flowblox");
+        private void itmGitHub_Click(object sender, EventArgs e) => OpenUrl(GlobalUrls.FlowBloxGitHubRepository);
 
         private async void itmCheckForNewVersion_Click(object sender, EventArgs e)
         {
@@ -1232,7 +1244,7 @@ namespace FlowBlox.AppWindow
             }
         }
 
-        private void itmReportProblem_Click(object sender, EventArgs e) => OpenUrl("https://www.flowblox.net/reportproblem");
+        private void itmReportProblem_Click(object sender, EventArgs e) => OpenUrl(GlobalUrls.FlowBloxReportProblem);
 
         /// <summary>
         /// Opens a URL in the default browser.
@@ -1362,7 +1374,7 @@ namespace FlowBlox.AppWindow
             WindowsFormWPFHelper.ShowDialog(dialog, this);
         }
 
-        private void itmManageInputTemplates_Click(object sender, EventArgs e)
+        private void itmManageInputFiles_Click(object sender, EventArgs e)
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;
             if (project == null)

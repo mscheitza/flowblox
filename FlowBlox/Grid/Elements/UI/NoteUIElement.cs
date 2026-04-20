@@ -38,19 +38,19 @@ namespace FlowBlox.Grid.Elements.UI
             Initialize();
         }
 
-        public override void RefreshSize()
+        protected override void RefreshSizeInternal()
         {
             this.Height = NoteElementHeight;
             UpdateBackColor();
         }
 
-        public override void UpdateContent(bool keepAnchor = false)
+        public override void UpdateContent()
         {
             this.tbNote.Text =((NoteFlowBlock)this.InternalFlowBlock).Note;
             this.Name = this.InternalFlowBlock.Name;
             FlowBloxStyle.ApplyStyle(this);
             UpdateFlags();
-            base.RefreshSize(keepAnchor);
+            base.RefreshSizeAndLocation();
         }
     }
 }

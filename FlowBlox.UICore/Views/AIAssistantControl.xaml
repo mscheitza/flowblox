@@ -54,6 +54,9 @@
                     <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Error}">
                         <Setter Property="Background" Value="#FFFDECEC" />
                     </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolProcessing}">
+                        <Setter Property="Background" Value="#FFE8F3FF" />
+                    </DataTrigger>
                     <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolSuccess}">
                         <Setter Property="Background" Value="#FFEAF8EE" />
                     </DataTrigger>
@@ -82,6 +85,10 @@
                     <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Error}">
                         <Setter Property="Kind" Value="AlertCircleOutline" />
                         <Setter Property="Foreground" Value="#FFB71C1C" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolProcessing}">
+                        <Setter Property="Kind" Value="ProgressClock" />
+                        <Setter Property="Foreground" Value="#FF1565C0" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolSuccess}">
                         <Setter Property="Kind" Value="CheckCircleOutline" />

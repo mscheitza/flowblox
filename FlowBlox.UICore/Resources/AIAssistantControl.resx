@@ -154,4 +154,10 @@
   <data name="Message_ResetCommunicationState_Title">
     <value>Reset Communication State</value>
   </data>
+  <data name="Message_ExecuteInputFileCommand_Confirm_Title">
+    <value>Confirm Script Execution</value>
+  </data>
+  <data name="Message_ExecuteInputFileCommand_Confirm_Description">
+    <value>The AI Assistant requested execution of the input-file script for '{0}'. Do you want to continue?</value>
+  </data>
 </root>

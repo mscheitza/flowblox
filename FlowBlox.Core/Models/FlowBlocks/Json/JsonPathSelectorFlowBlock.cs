@@ -31,6 +31,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.Json;
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
 
+        public override List<Type> NotificationTypes
+        {
+            get
+            {
+                var notificationTypes = base.NotificationTypes;
+                notificationTypes.Add(typeof(JsonPathSelectorNotifications));
+                return notificationTypes;
+            }
+        }
+
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>
@@ -40,6 +50,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
                 var jsonText = FlowBloxFieldHelper.ReplaceFieldsInString(JsonContent);
                 var path = FlowBloxFieldHelper.ReplaceFieldsInString(Path);
+                if (string.IsNullOrWhiteSpace(jsonText))
+                {
+                    CreateNotification(runtime, JsonPathSelectorNotifications.JsonContentIsEmpty);
+                    GenerateResult(runtime);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    CreateNotification(runtime, JsonPathSelectorNotifications.PathIsEmpty);
+                    GenerateResult(runtime);
+                    return;
+                }
 
                 var rootToken = JToken.Parse(jsonText);
                 if (rootToken is not JObject rootObj)
@@ -47,7 +70,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
                 var resultToken = JsonPathSelector.GetJToken(rootObj, path, out _, out _);
                 if (resultToken == null)
-                    throw new InvalidOperationException($"Path '{path}' does not exist in the JSON structure.");
+                {
+                    CreateNotification(runtime, JsonPathSelectorNotifications.JsonTokenCouldNotBeResolved);
+                    GenerateResult(runtime);
+                    return;
+                }
 
                 var results = new List<string>();
 
@@ -72,8 +99,30 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                         break;
                 }
 
+                if (results.Count == 0)
+                    CreateNotification(runtime, JsonPathSelectorNotifications.ReturnedNoMatches);
+
                 GenerateResult(runtime, results);
             });
+        }
+
+        public enum JsonPathSelectorNotifications
+        {
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "JSON content is empty")]
+            JsonContentIsEmpty,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "JSON path is empty")]
+            PathIsEmpty,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "JSON token could not be resolved by path")]
+            JsonTokenCouldNotBeResolved,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "JSON path returned no matches")]
+            ReturnedNoMatches
         }
     }
 }

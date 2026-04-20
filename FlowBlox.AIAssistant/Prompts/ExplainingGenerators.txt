@@ -16,7 +16,7 @@ Preconditions:
 
 Setup order:
 0. Discover available generator types when unclear:
-   - Call `GetSupportedTypes` with `baseTypeFullName="FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxGenerationStrategyBase"`.
+   - Call `GetSupportedTypes` with `baseTypeFullName="FlowBlox.Core.Models.Generators.FlowBloxGenerationStrategyBase"`.
    - Inspect selected strategy details with `GetTypeKindsInfo`.
 1. Ensure test definitions exist and are connected/configured.
    Link test definitions via standard update logic, for example `UpdateFlowBlock` with `path=/TestDefinitions/Link` and value `{"resolveManagedObjectByName":"<testDefinitionName>"}`.
@@ -25,7 +25,7 @@ Setup order:
    Ask for enabling auto-regeneration only when generation strategies exist on the affected flow block.
 3. Create/update generation strategy on the target flow block via `UpdateFlowBlock` at `GenerationStrategies` (exact property name).
    Important: `GenerationStrategies` is a FlowBloxReactiveObject collection (not a ManagedObject reference list), so do not use `/GenerationStrategies/Link`.
-   Use path-based creation/update with typed index when needed, e.g. `/GenerationStrategies/0:FlowBlox.Core.Models.FlowBlocks.AIRemote.AIPropertyValueGenerationStrategy/...`.
+   Use path-based creation/update with typed index when needed, e.g. `/GenerationStrategies/0:FlowBlox.Core.Models.Generators.AIPropertyValueGenerationStrategy/...`.
 4. Before detailed updates, call kind/type info tools (for example `GetTypeKindsInfo`) to confirm valid paths/options.
 5. Configure strategy details via `UpdateFlowBlock` (nested strategy path):
 - provider,

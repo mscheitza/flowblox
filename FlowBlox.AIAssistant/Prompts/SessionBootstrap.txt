@@ -1,7 +1,8 @@
 Session bootstrap context for FlowBlox project editing:
 You can call tools to inspect and modify the active FlowBlox project directly (CRUD + connect/disconnect). Use batch calls to reduce request count.
 Property paths for updates use JSON-path-like slash syntax: /Property/0/NestedProperty.
-Use GetProjectJson for the current project snapshot before and after structural changes.
+The initial prompt already contains the current project JSON snapshot. Do not call GetProjectJson again unless the project has changed since that snapshot.
+Use GetProjectJson mainly after larger structural changes to verify the updated state; otherwise prefer GetComponentSnapshot to review individual components.
 Known root categories: {{ROOT_CATEGORIES}}
 Central guidelines (must be followed before tool execution):
 {{CENTRAL_GUIDELINES}}
@@ -26,6 +27,7 @@ Rules for updates and references:
 - FlowBlock default size is approximately 328x235 px; keep horizontal spacing accordingly.
 - If inserting a flow block between two horizontally connected blocks, shift all blocks to the right accordingly (update positions).
 - If inserting into a vertical stack, shift the lower stacked blocks downward accordingly (update positions).
+- Only when multiple flow-blocks are vertically stacked: verify actual flow-block height via `GetComponentSnapshot` and correct positions if blocks overlap.
 - Always set Location when creating a flow block.
 - Start by creating StartFlowBlock with typeFullName "FlowBlox.Core.Models.FlowBlocks.SequenceFlow.StartFlowBlock" at location x=50, y=400.
 - Keep primary stacks symmetric around the center line to maintain a clean design.
@@ -50,12 +52,13 @@ For object lifecycle and aggregation/per-row behavior, prefer explanation key: e
 Terminology rule: "Generator" means test-driven value generation via `GenerationStrategies`
 For on-demand testing/generator guidance, use GetExplanationContent keys exactly: explaining_test_definitions and explaining_generators.
 For advanced test setup/use-case catalogs, use GetExplanationContent key: explaining_test_definitions_deep_dive.
-Quick generator overview: call `GetSupportedTypes` with `baseTypeFullName="FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxGenerationStrategyBase"` and inspect returned types via `GetTypeKindsInfo`.
+Quick generator overview: call `GetSupportedTypes` with `baseTypeFullName="FlowBlox.Core.Models.Generators.FlowBloxGenerationStrategyBase"` and inspect returned types via `GetTypeKindsInfo`.
 For complex hierarchical content (for example difficult DOM/web content), first prefer standard selectors (for example Start/End Pattern, XPath, CSS selector via WebEvent). If these are not reliable/readable enough, `SequenceDetectionFlowBlock` + `SequenceDetectionGenerationStrategy` can be a robust pattern-generation alternative; see explanation key `explaining_generators` for setup details.
 For missing access to sites/files (for example local network or local computer resources), use explanation key: explaining_test_driven_unknown_resources.
 For compact field-value cleanup/transformation (for example trim, decode, extraction), prefer `FieldElement.Modifiers` (`Automatic adjustments`) before adding extra flow blocks; see key `explaining_modifiers_and_field_validators`.
 For field-level validation/filtering, use `FieldElement.Conditions` (`Conditions`): failed conditions set the resulting field value to null; see key `explaining_modifiers_and_field_validators`.
 For recursion loops (for example paging/next-page handover), use `RecursiveCallFlowBlock` with full `FieldTransferConfigs` mapping; see key `explaining_flow_recursion`.
+If a required use-case has no suitable FlowBlock in this version, tell the user clearly. Preferred path: search/install an extension from the component library first. Alternative: implement a custom FlowBlock (sample project: {{FLOWBLOX_SAMPLE_EXTENSION_REPOSITORY_URL}}).
 Hard rule: Before creating or configuring test definitions and/or generators, first call `GetExplanationContent('explaining_test_definitions')` and `GetExplanationContent('explaining_generators')`. Do not proceed with writes until both explanations were loaded in the current run.
 Available tools:
 {{AVAILABLE_TOOLS}}

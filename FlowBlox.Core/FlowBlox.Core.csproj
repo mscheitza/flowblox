@@ -27,7 +27,7 @@
     <None Remove="Files\globalToolbox_sql_oracle.json" />
     <None Remove="Files\globalToolbox_shellexecution.json" />
     <None Remove="Files\globalToolbox_xpath.json" />
-    <None Remove="Models\FlowBlocks\WebBrowser\duplicate_tab_shortcut_1.5.1.0.crx" />
+    <None Remove="Models\FlowBlocks\Web\duplicate_tab_shortcut_1.5.1.0.crx" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CoreCLR-NCalc" Version="3.1.253" />
@@ -102,5 +102,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FlowBlox.SequenceDetection\FlowBlox.SequenceDetection.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\FlowBlocks\SequenceDetection\" />
+    <Folder Include="Models\FlowBlocks\WebRequest\" />
   </ItemGroup>
 </Project>

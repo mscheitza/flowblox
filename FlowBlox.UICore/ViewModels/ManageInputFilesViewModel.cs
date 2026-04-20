@@ -35,7 +35,7 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand ExecuteInputFileCommandCommand { get; }
 
         public ObservableCollection<FlowBloxInputFile> InputFiles { get; }
-        public ObservableCollection<FlowBloxInputTemplateSyncMode> SyncModes { get; }
+        public ObservableCollection<FlowBloxInputFileSyncMode> SyncModes { get; }
 
         public string ProjectInputDirectory => _project?.ProjectInputDirectory ?? "";
 
@@ -61,8 +61,8 @@ namespace FlowBlox.UICore.ViewModels
             _project = project;
 
             InputFiles = new ObservableCollection<FlowBloxInputFile>(_project?.InputFiles ?? new System.Collections.Generic.List<FlowBloxInputFile>());
-            SyncModes = new ObservableCollection<FlowBloxInputTemplateSyncMode>(
-                Enum.GetValues(typeof(FlowBloxInputTemplateSyncMode)).Cast<FlowBloxInputTemplateSyncMode>());
+            SyncModes = new ObservableCollection<FlowBloxInputFileSyncMode>(
+                Enum.GetValues(typeof(FlowBloxInputFileSyncMode)).Cast<FlowBloxInputFileSyncMode>());
 
             CloseCommand = new RelayCommand(() => _ownerWindow?.Close());
 
@@ -191,7 +191,7 @@ namespace FlowBlox.UICore.ViewModels
                 if (string.IsNullOrWhiteSpace(inputDir))
                     return;
 
-                var targetPath = FlowBloxInputTemplateHelper.BuildAbsoluteTargetPath(inputDir, SelectedInputFile.RelativePath);
+                var targetPath = FlowBloxInputFileHelper.BuildAbsoluteTargetPath(inputDir, SelectedInputFile.RelativePath);
 
                 if (!File.Exists(targetPath))
                 {
@@ -256,7 +256,7 @@ namespace FlowBlox.UICore.ViewModels
                     return;
                 }
 
-                var command = FlowBloxInputTemplateHelper.ReplaceInputTemplatePlaceholders(rawCommand, _project, inputFile);
+                var command = FlowBloxInputFileHelper.ReplaceInputFilePlaceholders(rawCommand, _project, inputFile);
                 command = FlowBloxFieldHelper.ReplaceFieldsInString(command);
 
                 var result = FlowBloxShellExecutor.Execute(new FlowBloxShellExecutionRequest

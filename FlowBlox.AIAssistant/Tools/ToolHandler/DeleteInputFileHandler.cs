@@ -27,12 +27,12 @@ namespace FlowBlox.AIAssistant.Tools
                 if (string.IsNullOrWhiteSpace(key))
                     return Task.FromResult(ToolHandlerUtilities.Fail("key is required."));
 
-                FlowBloxInputTemplateHelper.ValidateRelativePathOrThrow(key);
-                var normalizedKey = FlowBloxInputTemplateHelper.NormalizeRelativePath(key);
+                FlowBloxInputFileHelper.ValidateRelativePathOrThrow(key);
+                var normalizedKey = FlowBloxInputFileHelper.NormalizeRelativePath(key);
 
                 var existing = project.InputFiles.FirstOrDefault(x =>
                     string.Equals(
-                        FlowBloxInputTemplateHelper.NormalizeRelativePath(x?.RelativePath ?? string.Empty),
+                        FlowBloxInputFileHelper.NormalizeRelativePath(x?.RelativePath ?? string.Empty),
                         normalizedKey,
                         StringComparison.OrdinalIgnoreCase));
 
@@ -42,7 +42,7 @@ namespace FlowBlox.AIAssistant.Tools
                 project.InputFiles.Remove(existing);
 
                 // Keep behavior aligned with project-load synchronization path.
-                FlowBloxInputTemplateHelper.EnsureInputFilesExist(project);
+                FlowBloxInputFileHelper.EnsureInputFilesExist(project);
 
                 return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
                 {

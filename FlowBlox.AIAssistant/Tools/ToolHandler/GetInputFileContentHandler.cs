@@ -25,25 +25,25 @@ namespace FlowBlox.AIAssistant.Tools
             try
             {
                 var project = ToolHandlerUtilities.GetProject();
-                var templates = project.InputFiles ?? new List<FlowBloxInputFile>();
+                var inputFiles = project.InputFiles ?? new List<FlowBloxInputFile>();
 
                 var key = (args.Value<string>("key") ?? string.Empty).Trim();
                 if (string.IsNullOrWhiteSpace(key))
                     return Task.FromResult(ToolHandlerUtilities.Fail("key is required."));
 
-                FlowBloxInputTemplateHelper.ValidateRelativePathOrThrow(key);
-                var normalizedKey = FlowBloxInputTemplateHelper.NormalizeRelativePath(key);
+                FlowBloxInputFileHelper.ValidateRelativePathOrThrow(key);
+                var normalizedKey = FlowBloxInputFileHelper.NormalizeRelativePath(key);
 
-                var template = templates.FirstOrDefault(x =>
+                var inputFile = inputFiles.FirstOrDefault(x =>
                     string.Equals(
-                        FlowBloxInputTemplateHelper.NormalizeRelativePath(x?.RelativePath ?? string.Empty),
+                        FlowBloxInputFileHelper.NormalizeRelativePath(x?.RelativePath ?? string.Empty),
                         normalizedKey,
                         StringComparison.OrdinalIgnoreCase));
 
-                if (template == null)
+                if (inputFile == null)
                     return Task.FromResult(ToolHandlerUtilities.Fail($"Input file '{normalizedKey}' was not found."));
 
-                var bytes = template.ContentBytes ?? Array.Empty<byte>();
+                var bytes = inputFile.ContentBytes ?? Array.Empty<byte>();
                 var extension = Path.GetExtension(normalizedKey) ?? string.Empty;
                 var mimeType = MimeTypeResolver.ResolveFromExtension(extension);
 

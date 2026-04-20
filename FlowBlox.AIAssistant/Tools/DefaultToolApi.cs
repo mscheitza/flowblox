@@ -5,8 +5,10 @@ namespace FlowBlox.AIAssistant.Tools
 {
     public class DefaultToolApi : IFlowBloxAIToolApi
     {
+        private const string ExecuteInputFileCommandToolName = "ExecuteInputFileCommand";
         private readonly Dictionary<string, IToolHandler> _handlers;
         private readonly List<ToolDefinition> _definitions;
+        public Func<ToolRequest, bool>? ToolExecutionConfirmationCallback { get; set; }
 
         public DefaultToolApi()
         {
@@ -38,7 +40,41 @@ namespace FlowBlox.AIAssistant.Tools
             if (!_handlers.TryGetValue(request.ToolName, out var handler))
                 return Task.FromResult(ToolHandlerUtilities.Fail($"Tool '{request.ToolName}' is not registered."));
 
+            if (RequiresUserConfirmation(request) && !IsToolExecutionApproved(request))
+            {
+                return Task.FromResult(ToolHandlerUtilities.Fail(
+                    $"Execution for tool '{request.ToolName}' was cancelled by user confirmation.",
+                    new JObject
+                    {
+                        ["cancelledByUser"] = true,
+                        ["toolName"] = request.ToolName
+                    }));
+            }
+
             return handler.HandleAsync(request.Arguments ?? new JObject(), ct);
+        }
+
+        private static bool RequiresUserConfirmation(ToolRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.ToolName))
+                return false;
+
+            return string.Equals(
+                request.ToolName,
+                ExecuteInputFileCommandToolName,
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+        private bool IsToolExecutionApproved(ToolRequest request)
+        {
+            try
+            {
+                return ToolExecutionConfirmationCallback?.Invoke(request) == true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private List<IToolHandler> CreateHandlers()
@@ -72,6 +108,7 @@ namespace FlowBlox.AIAssistant.Tools
                 new GetInputFileContentHandler(),
                 new CreateFieldHandler(),
                 new CreateOrUpdateInputFileHandler(),
+                new ExecuteInputFileCommandHandler(),
                 new DeleteInputFileHandler(),
                 new RunProjectDebugTestHandler(),
                 new RunTestDefinitionHandler(),

@@ -24,8 +24,8 @@ namespace FlowBlox.AIAssistant.Tools
                 ["includeTargetExecution"] = "bool? (default: false, only relevant when target is set)",
                 ["maxCapturedFieldValueChanges"] = "int? (default: 100)",
                 ["maxFieldValueLength"] = "int? (default: 2000)",
-                ["maxProtocolPreviewEntries"] = "int? (default: 250)",
-                ["usageHint"] = "Use this call for protocol output only. Read FieldValueChanges/GeneratedResults via GetLastDebugArtefact. Prefer one optimistic debug run first (usually includeTargetExecution=false). Tune maxProtocolPreviewEntries as needed."
+                ["maxProtocolEntries"] = "int? (default: 250)",
+                ["usageHint"] = "Use this call for protocol output only. Read FieldValueChanges/GeneratedResults via GetLastDebugArtefact. Prefer one optimistic debug run first (usually includeTargetExecution=false). Tune maxProtocolEntries as needed."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -40,7 +40,11 @@ namespace FlowBlox.AIAssistant.Tools
                 var targetFlowBlockName = (args.Value<string>("targetFlowBlockName") ?? string.Empty).Trim();
                 var maxCapturedChanges = Math.Max(0, args.Value<int?>("maxCapturedFieldValueChanges") ?? 100);
                 var maxFieldValueLength = Math.Max(1, args.Value<int?>("maxFieldValueLength") ?? 2000);
-                var maxProtocolPreviewEntries = Math.Max(1, args.Value<int?>("maxProtocolPreviewEntries") ?? 250);
+                var maxProtocolEntries = Math.Max(
+                    1,
+                    args.Value<int?>("maxProtocolEntries")
+                    ?? args.Value<int?>("maxProtocolPreviewEntries")
+                    ?? 250);
 
                 if (!string.IsNullOrWhiteSpace(targetFlowBlockName))
                 {
@@ -118,7 +122,7 @@ namespace FlowBlox.AIAssistant.Tools
                 var protocol = GetArrayIgnoreCase(debuggingResult, "Protocol", "protocol");
                 var warnings = GetArrayIgnoreCase(debuggingResult, "Warnings", "warnings");
                 var errors = GetArrayIgnoreCase(debuggingResult, "Errors", "errors");
-                var previewProtocol = BuildProtocolPreview(protocol, maxProtocolPreviewEntries);
+                var protocolLimited = BuildProtocol(protocol, maxProtocolEntries);
 
                 var payload = new JObject
                 {
@@ -132,12 +136,12 @@ namespace FlowBlox.AIAssistant.Tools
                     ["cancellationReason"] = response.CancellationReason ?? string.Empty,
                     ["includeTargetExecution"] = includeTargetExecution,
                     ["debuggingResultFilePath"] = response.DebuggingResultFilePath ?? debuggingResultFile,
-                    ["protocolEntryCount"] = protocol.Count,
-                    ["maxProtocolPreviewEntries"] = maxProtocolPreviewEntries,
+                    ["protocolEntryCount"] = protocolLimited.Count,
+                    ["protocolEntryCountTotal"] = protocol.Count,
+                    ["maxProtocolEntries"] = maxProtocolEntries,
                     ["warningCount"] = warnings.Count,
                     ["errorCount"] = errors.Count,
-                    ["protocol"] = protocol,
-                    ["protocolPreview"] = previewProtocol,
+                    ["protocol"] = protocolLimited,
                     ["outputSummary"] = BuildOutputSummary(response)
                 };
 
@@ -152,15 +156,15 @@ namespace FlowBlox.AIAssistant.Tools
             }
         }
 
-        private static JArray BuildProtocolPreview(JArray protocol, int maxEntries)
+        private static JArray BuildProtocol(JArray protocol, int maxEntries)
         {
-            var preview = new JArray();
+            var result = new JArray();
             foreach (var entry in protocol.Take(maxEntries))
             {
-                preview.Add(entry);
+                result.Add(entry);
             }
 
-            return preview;
+            return result;
         }
 
         private static JArray GetArrayIgnoreCase(JObject root, params string[] keys)

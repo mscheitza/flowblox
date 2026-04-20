@@ -1,7 +1,12 @@
 using FlowBlox.Core.Interfaces;
-using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
+using FlowBlox.Core.Models.Generators;
+using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Models.Serialization;
+using FlowBlox.Core.Models.FlowBlocks.ControlFlow;
+using FlowBlox.Core.Models.FlowBlocks.Selection;
+using FlowBlox.Core.Models.FlowBlocks.Web.InternalWebRequest;
+using FlowBlox.Core.Models.FlowBlocks.IO;
 
 namespace FlowBlox.Core.Services
 {
@@ -34,7 +39,89 @@ namespace FlowBlox.Core.Services
                 new FlowBloxLegacyTypeMapping(
                     typeof(FlowBloxFieldTestConfiguration),
                     [
+                        "FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxFieldTestConfiguration, FlowBlox.Core",
                         "FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxTestConfiguration, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(FlowBloxTestDefinition),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxTestDefinition, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(FlowBlockTestDataset),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.Additions.FlowBlockTestDataset, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(ExpectationCondition),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.Additions.ExpectationCondition, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(AIPropertyValueGenerationStrategy),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.AIRemote.AIPropertyValueGenerationStrategy, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(SequenceDetectionGenerationStrategy),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.SequenceDetection.SequenceDetectionGenerationStrategy, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(FlowBloxGenerationStrategyBase),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxGenerationStrategyBase, FlowBlox.Core",
+                        "FlowBlox.Core.Models.FlowBlocks.Additions.GenerationStrategyBase, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(WebRequestDestinations),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.WebRequest.WebRequestDestinations, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(ConfigurableWebRequest),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.WebRequest.ConfigurableWebRequest, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(ConfigurableWebRequestResult),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.WebRequest.ConfigurableWebRequestResult, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(ResponseBodyKind),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.WebRequest.ResponseBodyKind, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(WebRequestInvocationResult),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.WebRequest.WebRequestInvocationResult, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(WebRequestParameter),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.WebRequest.WebRequestParameter, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(StartEndPattern),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.StartEndPattern, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(TableColumnDefinition),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.TableWriter.TableColumnDefinition, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(TableSelectorMappingEntry),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.TableSelectorMappingEntry, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(TableSelectorColumnCondition),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.TableSelectorColumnCondition, FlowBlox.Core"
                     ])
             ];
         }

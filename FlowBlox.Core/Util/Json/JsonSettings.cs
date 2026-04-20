@@ -43,7 +43,8 @@ namespace FlowBlox.Core.Util.Json
                 Formatting = Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore,
                 TypeNameHandling = TypeNameHandling.All,
-                SerializationBinder = new FlowBloxSerializationBinder(loadContexts, legacyTypeMappings)
+                SerializationBinder = new FlowBloxSerializationBinder(loadContexts, legacyTypeMappings),
+                ContractResolver = new ProjectImportContractResolver()
             };
             jsonSettings.Converters.Add(new StringEnumConverter
             {

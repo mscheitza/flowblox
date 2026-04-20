@@ -24,6 +24,7 @@ using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Components.Modifier;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Constants;
+using FlowBlox.Core.Models.FlowBlocks.ControlFlow;
 
 namespace FlowBlox.AppWindow.Contents
 {
@@ -37,11 +38,7 @@ namespace FlowBlox.AppWindow.Contents
 
     public partial class ProjectPanel
     {
-        public const int DefaultGridElementSizeX = 314;
-        public const int DefaultGridElementSizeY = 0;
-
         private const int PrintGridTimeunit = 40;
-        private const int PrintGridMoveTimeunit = 5;
         private const int PrintGridMouseMoveTimeunit = 15;
         private const int ScrollGridTimeunit = 25;
 
@@ -85,8 +82,12 @@ namespace FlowBlox.AppWindow.Contents
             if (gridElement == null)
                 throw new ArgumentNullException(nameof(gridElement));
 
+            var usesStoredFlowBlockLocation = false;
             if ((location.X == 0) && (location.Y == 0))
+            {
                 location = gridElement.Location;
+                usesStoredFlowBlockLocation = true;
+            }
 
             if (location.X < 0)
                 location.X = 0;
@@ -122,10 +123,17 @@ namespace FlowBlox.AppWindow.Contents
             mainPanel.Controls.Add(gridUIElement);
 
             gridUIElement.BorderStyle = BorderStyle.FixedSingle;
+            if (usesStoredFlowBlockLocation)
+            {
+                var autoScroll = mainPanel.AutoScrollPosition;
+                location = new Point(
+                    location.X + autoScroll.X,
+                    location.Y + autoScroll.Y);
+            }
+
             gridUIElement.Location = location;
             gridUIElement.Name = string.IsNullOrEmpty(gridElement.Name) ? gridElement.GetType().Name + GetCreationIndex(gridElement).ToString() : gridElement.Name;
-            gridUIElement.Size = new Size(DefaultGridElementSizeX, DefaultGridElementSizeY);
-            gridUIElement.RefreshSize();
+            gridUIElement.RefreshSizeAndLocation();
 
             gridUIElement.ApplicationWindowRef = AppWindow.Instance;
 

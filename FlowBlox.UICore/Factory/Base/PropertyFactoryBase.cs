@@ -6,7 +6,6 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
-using System.Collections;
 using System.Reflection;
 
 namespace FlowBlox.UICore.Factory.Base
@@ -107,128 +106,40 @@ namespace FlowBlox.UICore.Factory.Base
 
         protected virtual void DeleteInstance(object instance)
         {
-            if (instance == null)
-                return;
-
-            var deletedInstances = new HashSet<object>(ReferenceEqualityComparer.Instance);
-            DeleteInstanceRecursive(instance, deletedInstances);
-        }
-
-        private void DeleteInstanceRecursive(object instance, ISet<object> deletedInstances)
-        {
-            if (instance == null || !deletedInstances.Add(instance))
-                return;
-
-            if (IsNestedRowDeleteScope(instance))
-            {
-                foreach (var nestedManagedObject in GetNestedManagedObjects(instance))
-                {
-                    DeleteInstanceRecursive(nestedManagedObject, deletedInstances);
-                }
-            }
-
-            _registry.Unregister(instance);
-        }
-
-        private static bool IsNestedRowDeleteScope(object instance)
-        {
-            return instance is FlowBloxReactiveObject && 
-                   instance is not FlowBloxComponent;
-        }
-
-        private static IEnumerable<IManagedObject> GetNestedManagedObjects(object instance)
-        {
-            var instanceType = instance.GetType();
-            var properties = instanceType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            foreach (var property in properties)
-            {
-                if (!property.CanRead || property.GetIndexParameters().Length > 0)
-                    continue;
-
-                var uiAttribute = property.GetCustomAttribute<FlowBloxUIAttribute>();
-                if (!IsRowManagedAssociation(uiAttribute))
-                    continue;
-
-                object propertyValue = property.GetValue(instance);
-                if (propertyValue is IManagedObject managedObject)
-                {
-                    yield return managedObject;
-                    continue;
-                }
-
-                if (propertyValue is IEnumerable enumerable && property.PropertyType != typeof(string))
-                {
-                    foreach (var childManagedObject in enumerable.OfType<IManagedObject>())
-                    {
-                        yield return childManagedObject;
-                    }
-                }
-            }
-        }
-
-        private static bool IsRowManagedAssociation(FlowBloxUIAttribute uiAttribute)
-        {
-            if (uiAttribute?.Factory != UIFactory.Association)
-                return false;
-
-            var operations = uiAttribute.Operations;
-            var supportsCreate = operations.HasFlag(UIOperations.Create);
-            var supportsDelete = operations.HasFlag(UIOperations.Delete);
-            var supportsLink = operations.HasFlag(UIOperations.Link);
-            var supportsUnlink = operations.HasFlag(UIOperations.Unlink);
-
-            return supportsCreate && supportsDelete && !supportsLink && !supportsUnlink;
+            FlowBloxDeletionHelper.DeleteInstance(_registry, instance);
         }
 
         public async Task<bool> IsDeletableAsync(object instance, TOwner owner, object excludeTarget = null)
         {
-            var methodInfo = instance.GetType().GetMethod(GlobalConstants.IsDeletableMethodName);
-            if (methodInfo != null)
+            var isDeletable = FlowBloxDeletionHelper.IsDeletable(instance, out var dependencies);
+            if (isDeletable || dependencies == null)
+                return true;
+
+            var excludedTargets = new HashSet<object>(ReferenceEqualityComparer.Instance)
             {
-                var parameters = methodInfo.GetParameters();
-                if (methodInfo.ReturnType == typeof(bool) &&
-                    parameters.Length == 1 &&
-                    parameters[0].ParameterType == typeof(List<IFlowBloxComponent>).MakeByRefType())
-                {
-                    var arguments = new object[] { null };
-                    bool isDeletable = (bool)methodInfo.Invoke(instance, arguments);
-                    var dependencies = (List<IFlowBloxComponent>)arguments[0];
+                instance
+            };
 
-                    if (!isDeletable && dependencies != null)
-                    {
-                        var excludedTargets = new HashSet<object>(ReferenceEqualityComparer.Instance)
-                        {
-                            instance
-                        };
+            if (_target != null)
+                excludedTargets.Add(_target);
 
-                        if (_target != null)
-                            excludedTargets.Add(_target);
+            if (excludeTarget != null)
+                excludedTargets.Add(excludeTarget);
 
-                        if (excludeTarget != null)
-                            excludedTargets.Add(excludeTarget);
-
-                        var allReferences = new List<string>();
-                        foreach (var dependency in dependencies.Where(x => !excludedTargets.Contains(x)))
-                        {
-                            allReferences.Add(string.Format(
-                                FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),
-                                instance,
-                                dependency));
-                        }
-
-                        if (allReferences.Any())
-                        {
-                            await ShowDependencyViolationDialogAsync(owner, allReferences, dependencies);
-                            return false;
-                        }
-                    }
-
-                    return true;
-                }
+            var allReferences = new List<string>();
+            foreach (var dependency in dependencies.Where(x => !excludedTargets.Contains(x)))
+            {
+                allReferences.Add(string.Format(
+                    FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),
+                    instance,
+                    dependency));
             }
 
-            return true;
+            if (!allReferences.Any())
+                return true;
+
+            await ShowDependencyViolationDialogAsync(owner, allReferences, dependencies);
+            return false;
         }
 
         public MethodInfo GetSelectionFilterMethod(object target, string methodName, Type listType = null)

@@ -109,9 +109,13 @@ namespace FlowBlox.UICore.ViewModels
         {
             _uiContext = SynchronizationContext.Current;
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
+            var toolApi = new DefaultToolApi
+            {
+                ToolExecutionConfirmationCallback = ConfirmToolExecutionRequest
+            };
             _service = new AiAssistantService(
                 new AiProviderExecutor(),
-                new DefaultToolApi(),
+                toolApi,
                 FlowBloxLogManager.Instance.GetLogger());
             _service.FlowBlocksChanged += Service_FlowBlocksChanged;
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
@@ -236,6 +240,22 @@ namespace FlowBlox.UICore.ViewModels
         private void Service_TranscriptLineAdded(object? sender, AssistantTranscriptLine line)
         {
             AddTranscriptLine(line);
+        }
+
+        private bool ConfirmToolExecutionRequest(ToolRequest request)
+        {
+            if (request == null || !string.Equals(request.ToolName, "ExecuteInputFileCommand", StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            var key = request.Arguments?.Value<string>("key") ?? string.Empty;
+            var message = string.Format(
+                FlowBloxResourceUtil.GetLocalizedString("Message_ExecuteInputFileCommand_Confirm_Description", typeof(AIAssistantControl)),
+                key);
+
+            var title = FlowBloxResourceUtil.GetLocalizedString("Message_ExecuteInputFileCommand_Confirm_Title", typeof(AIAssistantControl));
+            var decision = _messageBoxService?.ShowMessageBox(message, title, FlowBloxMessageBoxTypes.Question);
+
+            return decision == FlowBloxMessageBoxDialogResult.Yes;
         }
 
         private void CopyTranscriptEntry(object parameter)

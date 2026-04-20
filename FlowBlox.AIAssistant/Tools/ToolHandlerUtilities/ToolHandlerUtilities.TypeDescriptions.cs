@@ -597,6 +597,11 @@ namespace FlowBlox.AIAssistant.Tools
             return defaultMajorTypeDescriptor;
         }
 
+        public static string GetMajorTypeDescriptorForType(Type type, string defaultMajorTypeDescriptor = "ReactiveObject")
+        {
+            return GetMajorTypeDescriptor(type, defaultMajorTypeDescriptor) ?? defaultMajorTypeDescriptor;
+        }
+
         private static bool ShouldIncludeProperty(
             Type ownerType,
             PropertyInfo property)

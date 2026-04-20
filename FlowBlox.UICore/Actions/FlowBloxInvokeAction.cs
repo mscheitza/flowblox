@@ -1,5 +1,5 @@
-﻿using FlowBlox.Core.Models.FlowBlocks;
-using FlowBlox.Core.Models.FlowBlocks.Base;
+﻿using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.ControlFlow;
 
 namespace FlowBlox.UICore.Actions
 {

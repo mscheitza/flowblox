@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,13 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             JsonProperty property = base.CreateProperty(member, memberSerialization);
+
+            if (member.DeclaringType == typeof(BaseFlowBlock) && 
+                string.Equals(property.PropertyName, nameof(BaseFlowBlock.Size), StringComparison.Ordinal))
+            {
+                property.Ignored = true;
+                return property;
+            }
 
             if (!property.Writable)
                 property.Ignored = true;

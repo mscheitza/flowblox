@@ -4,6 +4,7 @@ using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Registry;
+using FlowBlox.Core.Util;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools
@@ -483,7 +484,20 @@ namespace FlowBlox.AIAssistant.Tools
                 {
                     throw new InvalidOperationException(
                         $"Path '{path}' delete operation is only supported for FlowBloxReactiveObject-only (non-reference component) values. " +
-                        "Use /.../Unlink for ManagedObject/FieldElement/FlowBlock references.");
+                        "Use /.../Unlink for ManagedObject/FieldElement/FlowBlock references. " +
+                        $"{GetDirectDeleteToolHint(actualType)}");
+                }
+
+                var elements = listValue.Cast<object?>()
+                    .Where(x => x != null)
+                    .Cast<object>()
+                    .Distinct(ReferenceEqualityComparer.Instance)
+                    .ToList();
+
+                foreach (var element in elements)
+                {
+                    EnsureReactiveDeleteAllowed(element, path);
+                    FlowBloxDeletionHelper.DeleteInstance(GetRegistry(), element);
                 }
 
                 listValue.Clear();
@@ -494,7 +508,15 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 throw new InvalidOperationException(
                     $"Path '{path}' delete operation is only supported for FlowBloxReactiveObject-only (non-reference component) values. " +
-                    "Use DeleteFlowBlock/DeleteManagedObject for permanent component deletion or /.../Unlink for references.");
+                    "Use DeleteFlowBlock/DeleteManagedObject for permanent component deletion or /.../Unlink for references. " +
+                    $"{GetDirectDeleteToolHint(actualType)}");
+            }
+
+            var propertyValue = property.GetValue(current);
+            if (propertyValue != null)
+            {
+                EnsureReactiveDeleteAllowed(propertyValue, path);
+                FlowBloxDeletionHelper.DeleteInstance(GetRegistry(), propertyValue);
             }
 
             property.SetValue(current, null);
@@ -507,11 +529,31 @@ namespace FlowBlox.AIAssistant.Tools
                 throw new InvalidOperationException(
                     $"Path '{path}' delete operation targets '{elementType.FullName}'. " +
                     "Only FlowBloxReactiveObject-only (non-reference component) list elements can be deleted here. " +
-                    "For references use /.../Unlink. For permanent deletion use DeleteFlowBlock/DeleteManagedObject.");
+                    "For references use /.../Unlink. For permanent deletion use DeleteFlowBlock/DeleteManagedObject. " +
+                    $"{GetDirectDeleteToolHint(elementType)}");
             }
 
             if (index >= 0 && index < list.Count)
+            {
+                var item = list[index];
+                if (item != null)
+                {
+                    EnsureReactiveDeleteAllowed(item, path);
+                    FlowBloxDeletionHelper.DeleteInstance(GetRegistry(), item);
+                }
+
                 list.RemoveAt(index);
+            }
+        }
+
+        private static void EnsureReactiveDeleteAllowed(object instance, string path)
+        {
+            if (FlowBloxDeletionHelper.IsDeletable(instance, out var dependencies))
+                return;
+
+            var blockedBy = BuildBlockedBy(dependencies);
+            throw new InvalidOperationException(
+                $"Path '{path}' delete operation is blocked by existing references: {blockedBy.ToString(Newtonsoft.Json.Formatting.None)}");
         }
 
         private static void UnlinkIndexedValue(IList list, int index)
@@ -704,6 +746,17 @@ namespace FlowBlox.AIAssistant.Tools
                 return "Update the referenced managed object directly via UpdateManagedObject.";
 
             return "Update the referenced component directly via its dedicated update tool (UpdateFlowBlock or UpdateManagedObject).";
+        }
+
+        private static string GetDirectDeleteToolHint(Type type)
+        {
+            if (typeof(BaseFlowBlock).IsAssignableFrom(type))
+                return "Delete the flow block via DeleteFlowBlock after dependencies are removed.";
+
+            if (typeof(IManagedObject).IsAssignableFrom(type))
+                return "Delete the managed object via DeleteManagedObject after dependencies are removed.";
+
+            return "Delete reference components via DeleteFlowBlock/DeleteManagedObject after dependencies are removed.";
         }
 
         private static object? ConvertToken(JToken token, Type targetType, FlowBloxRegistry registry)

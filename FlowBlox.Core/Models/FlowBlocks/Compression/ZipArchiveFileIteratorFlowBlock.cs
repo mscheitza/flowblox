@@ -125,14 +125,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
 
                 var resultMap = new List<Dictionary<FieldElement, string>>();
 
+                if (!ResultFields.Any())
+                    throw new InvalidOperationException("No result fields have been configured.");
+
+                if (ZipArchiveObject == null)
+                    throw new InvalidOperationException("No ZIP archive object is assigned to the flow block.");
+
                 try
                 {
-                    if (!ResultFields.Any())
-                        throw new InvalidOperationException("No result fields have been configured.");
-
-                    if (ZipArchiveObject == null)
-                        throw new InvalidOperationException("No ZIP archive object is assigned to the flow block.");
-
                     var password = FlowBloxFieldHelper.ReplaceFieldsInString(Password ?? string.Empty);
                     var contentFieldType = ResultFields
                         .FirstOrDefault(x => x?.EnumValue == ZipArchiveIteratorDestinations.Content)

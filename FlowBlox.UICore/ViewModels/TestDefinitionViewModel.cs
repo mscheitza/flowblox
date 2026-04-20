@@ -350,6 +350,7 @@ namespace FlowBlox.UICore.ViewModels
             SelectedResultTabIndex = 1;
 
             var includedFlowBlocks = _testDefinition?.Entries?
+                .Where(x => x.Execute)
                 .Select(x => x.FlowBlock)
                 .ExceptNull()
                 .ToList();

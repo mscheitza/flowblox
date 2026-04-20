@@ -114,10 +114,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                 var resolvedBody = FlowBloxFieldHelper.ReplaceFieldsInString(Body ?? string.Empty) ?? string.Empty;
 
                 if (string.IsNullOrWhiteSpace(resolvedHost))
-                    throw new ValidationException("SMTP host is empty.");
+                {
+                    CreateNotification(runtime, SMTPNotifications.HostIsEmpty);
+                    return;
+                }
 
                 if (string.IsNullOrWhiteSpace(resolvedFrom))
-                    throw new ValidationException("From address is empty.");
+                {
+                    CreateNotification(runtime, SMTPNotifications.FromAddressIsEmpty);
+                    return;
+                }
 
                 using var message = new MailMessage
                 {
@@ -127,9 +133,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                     IsBodyHtml = IsBodyHtml
                 };
 
-                AddAddresses(message.To, resolvedTo, true, "To");
-                AddAddresses(message.CC, resolvedCc, false, "Cc");
-                AddAddresses(message.Bcc, resolvedBcc, false, "Bcc");
+                if (!AddAddresses(message.To, resolvedTo, true))
+                {
+                    CreateNotification(runtime, SMTPNotifications.ToAddressesAreEmpty);
+                    return;
+                }
+
+                AddAddresses(message.CC, resolvedCc, false);
+                AddAddresses(message.Bcc, resolvedBcc, false);
 
                 var disposableAttachments = BuildAttachments();
                 try
@@ -174,7 +185,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
             });
         }
 
-        private static void AddAddresses(MailAddressCollection target, string addressesRaw, bool isRequired, string label)
+        private static bool AddAddresses(MailAddressCollection target, string addressesRaw, bool isRequired)
         {
             var entries = (addressesRaw ?? string.Empty)
                 .Split([',', ';', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries)
@@ -184,10 +195,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                 .ToList();
 
             if (isRequired && entries.Count == 0)
-                throw new ValidationException($"No {label} addresses configured.");
+                return false;
 
             foreach (var address in entries)
                 target.Add(new MailAddress(address));
+
+            return true;
         }
 
         private List<Attachment> BuildAttachments()
@@ -241,6 +254,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
 
         public enum SMTPNotifications
         {
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "SMTP host is empty")]
+            HostIsEmpty,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "From address is empty")]
+            FromAddressIsEmpty,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "No To addresses configured")]
+            ToAddressesAreEmpty,
+
             [FlowBloxNotification(NotificationType = NotificationType.Warning)]
             [Display(Name = "Mail send failure")]
             MailSendFailure

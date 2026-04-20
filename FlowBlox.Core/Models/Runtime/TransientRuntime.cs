@@ -31,13 +31,13 @@ namespace FlowBlox.Core.Models.Runtime
             if (flowBlock == null)
                 return true;
 
-            if (IncludedFlowBlocks == null || IncludedFlowBlocks.Count == 0)
+            if (IncludedFlowBlocks == null)
                 return false;
 
             return !IncludedFlowBlocks.ExceptNull().Any(x =>
                 string.Equals(x.Name, flowBlock.Name, StringComparison.OrdinalIgnoreCase));
         }
 
-        protected override bool ShouldExecuteInputTemplateStartupCommands() => false;
+        protected override bool ShouldExecuteInputFileStartupCommands() => false;
     }
 }

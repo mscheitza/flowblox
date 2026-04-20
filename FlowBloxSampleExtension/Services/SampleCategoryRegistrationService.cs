@@ -1,6 +1,6 @@
 ﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Services.Base;
-using FlowBloxSampleExtension.Model;
+using FlowBloxSampleExtension.Models.Components;
 
 namespace FlowBloxSampleExtension.Services
 {

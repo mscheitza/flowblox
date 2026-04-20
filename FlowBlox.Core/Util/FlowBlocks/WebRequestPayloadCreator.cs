@@ -1,6 +1,6 @@
 ﻿using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Fields;
-using FlowBlox.Core.Models.FlowBlocks;
+using FlowBlox.Core.Models.FlowBlocks.Web;
 
 namespace FlowBlox.Core.Util.FlowBlocks
 {

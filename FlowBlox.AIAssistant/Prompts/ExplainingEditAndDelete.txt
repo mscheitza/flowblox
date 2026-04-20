@@ -43,9 +43,12 @@ Delete rules:
 - Context delete via Update path:
   - /Path/Delete
   - /Collection/<index>/Delete
+  - Applies only to FlowBloxReactiveObject-only (non-reference component) values in the current parent context.
+  - Before reactive delete, the runtime checks IsDeletable; if blocked, remove blocking references first.
 - Permanent delete for reference components:
   - DeleteFlowBlock / DeleteManagedObject
-- Reference dependencies must be removed first (leaf-to-root), otherwise delete throws.
+- Reference dependencies must be removed first (leaf-to-root), otherwise delete fails and returns blockedBy entries.
+- blockedBy semantics: these are components that still hold references to the target object or its field elements.
 
 Examples:
 - Fb1 => Mo1 => Mo2: remove Fb1->Mo1 reference before deleting Mo1.

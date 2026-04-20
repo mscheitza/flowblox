@@ -16,10 +16,10 @@ namespace FlowBlox.AIAssistant.Tools
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {
             var project = ToolHandlerUtilities.GetProject();
-            var templates = project.InputFiles ?? new List<FlowBloxInputFile>();
+            var inputFiles = project.InputFiles ?? new List<FlowBloxInputFile>();
 
             var items = new JArray(
-                templates
+                inputFiles
                     .Where(x => x != null)
                     .OrderBy(x => NormalizeKey(x.RelativePath), StringComparer.OrdinalIgnoreCase)
                     .Select(ToTemplateObject));
@@ -30,24 +30,24 @@ namespace FlowBlox.AIAssistant.Tools
                 ["placeholderHint"] = "$Project::InputDirectory",
                 ["commandPlaceholderHint"] = "$InputFile:Path",
                 ["count"] = items.Count,
-                ["templates"] = items
+                ["inputFiles"] = items
             };
 
             return Task.FromResult(ToolHandlerUtilities.Ok(result));
         }
 
-        private static JObject ToTemplateObject(FlowBloxInputFile template)
+        private static JObject ToTemplateObject(FlowBloxInputFile inputFile)
         {
-            var normalizedKey = NormalizeKey(template.RelativePath);
-            var bytes = template.ContentBytes ?? Array.Empty<byte>();
+            var normalizedKey = NormalizeKey(inputFile.RelativePath);
+            var bytes = inputFile.ContentBytes ?? Array.Empty<byte>();
 
             return new JObject
             {
                 ["key"] = normalizedKey,
                 ["relativePath"] = normalizedKey,
-                ["syncMode"] = template.SyncMode.ToString(),
-                ["command"] = template.Command ?? string.Empty,
-                ["executeBeforeRuntime"] = template.ExecuteBeforeRuntime,
+                ["syncMode"] = inputFile.SyncMode.ToString(),
+                ["command"] = inputFile.Command ?? string.Empty,
+                ["executeBeforeRuntime"] = inputFile.ExecuteBeforeRuntime,
                 ["sizeBytes"] = bytes.LongLength,
                 ["hasContent"] = bytes.LongLength > 0
             };
@@ -55,7 +55,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         private static string NormalizeKey(string key)
         {
-            return FlowBloxInputTemplateHelper.NormalizeRelativePath(key ?? string.Empty);
+            return FlowBloxInputFileHelper.NormalizeRelativePath(key ?? string.Empty);
         }
     }
 }

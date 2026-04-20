@@ -1,4 +1,5 @@
 using FlowBlox.AIAssistant.Models;
+using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Testing;
@@ -61,9 +62,10 @@ namespace FlowBlox.AIAssistant.Tools
                         $"Test definition '{testDefinition.Name}' has no linked flow block. " +
                         "Provide targetFlowBlockName or link the test definition to a flow block first.");
 
-                var includedFlowBlocks = testDefinition.Entries
+                var includedFlowBlocks = testDefinition.Entries?
+                    .Where(x => x.Execute)
                     .Select(x => x.FlowBlock)
-                    .Where(x => x != null)
+                    .ExceptNull()
                     .Cast<BaseFlowBlock>()
                     .Distinct()
                     .ToList();
