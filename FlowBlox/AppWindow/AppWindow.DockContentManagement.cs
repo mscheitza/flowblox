@@ -1,6 +1,8 @@
 ﻿using FlowBlox.AppWindow.ContentFactories;
 using FlowBlox.AppWindow.Contents;
 using FlowBlox.Core;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -61,6 +63,109 @@ namespace FlowBlox.AppWindow
             ApplyDefaultPaneActivationOnce();
         }
 
+        private bool _isStepThroughActivationRunning;
+        private readonly HashSet<DockContent> _initializedDockContents = new HashSet<DockContent>();
+
+        private List<DockContent> GetRelevantPaneContents(DockPane pane)
+        {
+            if (pane == null)
+                return new List<DockContent>();
+
+            return pane.Contents
+                .OfType<DockContent>()
+                .Where(x =>
+                    !x.IsDisposed &&
+                    !x.IsHidden &&
+                    x.DockState != DockState.Hidden &&
+                    x.DockState != DockState.Unknown)
+                .ToList();
+        }
+
+        private bool ShouldUseStepThrough(DockContent target, out DockPane pane, out List<DockContent> paneContents)
+        {
+            pane = target?.Pane;
+            paneContents = GetRelevantPaneContents(pane);
+
+            if (target == null || pane == null)
+                return false;
+
+            if (paneContents.Count <= 2)
+                return false;
+
+            if (!paneContents.Contains(target))
+                return false;
+
+            return true;
+        }
+
+        private void ActivateDockContentWithStepThrough(DockContent target)
+        {
+            if (_isStepThroughActivationRunning)
+                return;
+
+            if (!ShouldUseStepThrough(target, out var pane, out var paneContents))
+                return;
+
+            if (_initializedDockContents.Contains(target))
+            {
+                target.Activate();
+                return;
+            }
+
+            var targetIndex = paneContents.IndexOf(target);
+            if (targetIndex < 0)
+                return;
+
+            _isStepThroughActivationRunning = true;
+
+            dockPanel.SuspendLayout();
+            pane.SuspendLayout();
+            try
+            {
+                for (int i = 0; i <= targetIndex; i++)
+                {
+                    var content = paneContents[i];
+
+                    if (_initializedDockContents.Contains(content))
+                        continue;
+
+                    content.Activate();
+                    Application.DoEvents();
+
+                    _initializedDockContents.Add(content);
+                }
+
+                _initializedDockContents.Add(target);
+            }
+            finally
+            {
+                pane.ResumeLayout(true);
+                dockPanel.ResumeLayout(true);
+
+                _isStepThroughActivationRunning = false;
+            }
+        }
+
+        private void DockPanel_ActiveContentChanged(object sender, EventArgs e)
+        {
+            if (!_defaultPaneActivationApplied)
+                return;
+
+            if (_isStepThroughActivationRunning)
+                return;
+
+            if (dockPanel.ActiveContent is not DockContent dockContent)
+                return;
+
+            if (!ShouldUseStepThrough(dockContent, out _, out _))
+                return;
+
+            BeginInvoke(new MethodInvoker(() =>
+            {
+                ActivateDockContentWithStepThrough(dockContent);
+            }));
+        }
+
         private enum DockRegion
         {
             Left,
@@ -93,6 +198,9 @@ namespace FlowBlox.AppWindow
 
                 Trace.WriteLine($"[DockInit] Region={region}: activating {DescribeDockContent(firstVisibleContent)}");
                 firstVisibleContent.Activate();
+
+                Trace.WriteLine($"[DockInit] Region={region}: initializedDockContents add {DescribeDockContent(firstVisibleContent)}");
+                _initializedDockContents.Add(firstVisibleContent);
             }
 
             _defaultPaneActivationApplied = true;

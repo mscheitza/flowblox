@@ -207,7 +207,7 @@ namespace FlowBlox.AppWindow
             if (_runtimeViewPanel.IsHidden)
                 _runtimeViewPanel.Show();
 
-			_runtimeViewPanel.Activate();
+            ActivateDockContentWithStepThrough(_runtimeViewPanel);
         }
 
         private void UpdateUI_ProjectName()

@@ -602,6 +602,7 @@ namespace FlowBlox.AppWindow
             dockPanel.TabIndex = 8;
             dockPanel.ContentAdded += DockPanel_ContentAdded;
             dockPanel.ContentRemoved += DockPanel_ContentRemoved;
+            dockPanel.ActiveContentChanged += DockPanel_ActiveContentChanged;
             // 
             // AppWindow
             // 
@@ -633,6 +634,8 @@ namespace FlowBlox.AppWindow
             ResumeLayout(false);
             PerformLayout();
         }
+
+       
 
         #endregion
         private System.Windows.Forms.SaveFileDialog saveProjectDialog;
