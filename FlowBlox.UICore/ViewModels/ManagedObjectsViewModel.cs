@@ -29,6 +29,7 @@ using MahApps.Metro.IconPacks;
 using FlowBlox.Core.Provider;
 using System.IO;
 using FlowBlox.Core.Models.Testing;
+using FlowBlox.Core.Util.Fields;
 
 namespace FlowBlox.UICore.ViewModels
 {
@@ -175,7 +176,8 @@ namespace FlowBlox.UICore.ViewModels
 
         private void Registry_OnManagedObjectAdded(ManagedObjectAddedEventArgs eventArgs)
         {
-            if (eventArgs?.AddedObject is FieldElement)
+            if (eventArgs?.AddedObject is not IManagedObject addedManagedObject ||
+                !IsSupportedManagedObjectType(addedManagedObject.GetType()))
                 return;
 
             PostToUi(() =>
@@ -187,7 +189,8 @@ namespace FlowBlox.UICore.ViewModels
 
         private void Registry_OnManagedObjectRemoved(ManagedObjectRemovedEventArgs eventArgs)
         {
-            if (eventArgs?.RemovedObject is FieldElement)
+            if (eventArgs?.RemovedObject is not IManagedObject removedManagedObject ||
+                !IsSupportedManagedObjectType(removedManagedObject.GetType()))
                 return;
 
             PostToUi(() =>
@@ -207,6 +210,7 @@ namespace FlowBlox.UICore.ViewModels
         private void RebuildTypeTree()
         {
             var previouslySelectedType = SelectedTypeNode?.ManagedObjectType;
+            var wasAllManagedObjectsRootSelected = SelectedTypeNode?.IsAllManagedObjectsRoot == true;
 
             var concreteManagedObjectTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(GetLoadableTypes)
@@ -268,13 +272,26 @@ namespace FlowBlox.UICore.ViewModels
                 parentNode.Children.Add(node);
             }
 
+            var managedObjectsRootNode = new ManagedObjectTypeNodeViewModel(
+                typeof(ManagedObject),
+                Resources.ManagedObjectsView.Title,
+                WpfIconHelper.CreateMaterialIcon(PackIconMaterialKind.FolderOutline, 16),
+                canCreateInstance: false,
+                isCategoryOnly: false,
+                isAllManagedObjectsRoot: true,
+                isExpanded: true);
+
             foreach (var node in categorizedRootNodes.OrderBy(x => x.DisplayName, StringComparer.CurrentCultureIgnoreCase))
-                TypeNodes.Add(node);
+                managedObjectsRootNode.Children.Add(node);
 
             foreach (var node in uncategorizedRootNodes.OrderBy(x => x.DisplayName, StringComparer.CurrentCultureIgnoreCase))
-                TypeNodes.Add(node);
+                managedObjectsRootNode.Children.Add(node);
 
-            var selected = FindNodeByType(previouslySelectedType)
+            TypeNodes.Add(managedObjectsRootNode);
+
+            var selected = wasAllManagedObjectsRootSelected
+                ? TypeNodes.FirstOrDefault(x => x.IsAllManagedObjectsRoot)
+                : FindNodeByType(previouslySelectedType)
                 ?? TypeNodes.FirstOrDefault(x => !x.IsCategoryOnly)
                 ?? TypeNodes.FirstOrDefault();
 
@@ -331,11 +348,23 @@ namespace FlowBlox.UICore.ViewModels
 
             var selectedObjectRef = SelectedEntry?.ManagedObject;
 
-            var items = _registry.GetManagedObjects(selectedType)
-                .Where(x => x is not FieldElement)
-                .OfType<IManagedObject>()
-                .OrderBy(x => x.Name)
-                .ToList();
+            List<IManagedObject> items;
+            if (selectedTypeNode.IsAllManagedObjectsRoot)
+            {
+                items = _registry.GetManagedObjects()
+                    .OfType<IManagedObject>()
+                    .Where(x => IsSupportedManagedObjectType(x.GetType()))
+                    .OrderBy(x => x.Name)
+                    .ToList();
+            }
+            else
+            {
+                items = _registry.GetManagedObjects(selectedType)
+                    .OfType<IManagedObject>()
+                    .Where(x => IsSupportedManagedObjectType(x.GetType()))
+                    .OrderBy(x => x.Name)
+                    .ToList();
+            }
 
             ManagedObjects.Clear();
             foreach (var managedObject in items)
@@ -403,7 +432,7 @@ namespace FlowBlox.UICore.ViewModels
                 if (property == null)
                     continue;
 
-                var propertyValue = property.GetValue(managedObject);
+                var propertyValue = FlowBloxFieldHelper.GetPropertyValueOrSelectedField(managedObject, property);
                 var propertyText = FormatDisplayablePropertyValue(propertyValue);
                 if (string.IsNullOrWhiteSpace(propertyText))
                     continue;
@@ -478,7 +507,9 @@ namespace FlowBlox.UICore.ViewModels
                     usedIn.Add(flowBlock.Name);
             }
 
-            foreach (var managedObject in _registry.GetManagedObjects().Where(x => x is not FieldElement))
+            foreach (var managedObject in _registry.GetManagedObjects()
+                .OfType<IManagedObject>()
+                .Where(x => IsSupportedManagedObjectType(x.GetType())))
             {
                 if (ReferenceEquals(managedObject, target))
                     continue;

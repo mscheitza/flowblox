@@ -69,8 +69,7 @@ namespace FlowBlox.Grid.Elements.UserControls
             imageList_BaseFlowBlock.Images.SetKeyName(1, "breakpoint");
             imageList_BaseFlowBlock.Images.SetKeyName(2, "error");
             imageList_BaseFlowBlock.Images.SetKeyName(3, "warning");
-            imageList_BaseFlowBlock.Images.SetKeyName(4, "suppressedWarnings");
-            imageList_BaseFlowBlock.Images.SetKeyName(5, "suppressNotifications");
+            imageList_BaseFlowBlock.Images.SetKeyName(4, "overriddenNotifications");
             // 
             // labelHeader
             // 

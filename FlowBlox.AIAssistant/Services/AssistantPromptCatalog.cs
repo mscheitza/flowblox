@@ -20,6 +20,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string SpecialTestDrivenUnknownResourcesKey = "explaining_test_driven_unknown_resources";
         public const string SpecialModifiersAndFieldValidatorsKey = "explaining_modifiers_and_field_validators";
         public const string SpecialFlowRecursionKey = "explaining_flow_recursion";
+        public const string VersionNotesKey = "explaining_version_notes";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
             new Dictionary<string, PromptEntryDefinition>(StringComparer.OrdinalIgnoreCase)
@@ -107,6 +108,12 @@ namespace FlowBlox.AIAssistant.Services
                     "Explaining Flow Recursion",
                     "FlowBlox.AIAssistant.Prompts.ExplainingFlowRecursion.txt",
                     "Special: on-demand guidance for RecursiveCallFlowBlock setup and paging-style recursion loops.",
+                    false),
+                [VersionNotesKey] = new PromptEntryDefinition(
+                    VersionNotesKey,
+                    "Version Notes",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingVersionNotes.txt",
+                    "Current release limitations and implementation-status hints for AI Assistant editing.",
                     false)
             };
 

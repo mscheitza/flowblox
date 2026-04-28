@@ -286,6 +286,15 @@ namespace FlowBlox.Core.Interceptors
                 return;
 
             var sourceFlowBlockName = fieldElement?.Source?.Name;
+            if (fieldElement?.IsPassword == true)
+            {
+                AppendProtocol(
+                    "FieldValueChanged",
+                    $"Field value change for '{fieldElement.FullyQualifiedName}' was not recorded because the field is marked as password.",
+                    sourceFlowBlockName);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(oldValue) && string.IsNullOrWhiteSpace(newValue))
             {
                 AppendProtocol(

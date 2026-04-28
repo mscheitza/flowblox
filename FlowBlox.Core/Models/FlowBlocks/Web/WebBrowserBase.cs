@@ -1,7 +1,6 @@
 using FlowBlox.Core.Models.FlowBlocks.Web.InternalWebBrowser;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using Cookie = OpenQA.Selenium.Cookie;
 
@@ -223,7 +222,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
                 var keyToken = GetSeleniumKey(key);
                 var modifierKeys = GetModifierKeys(modifier);
 
-                var actions = new Actions(driver);
+                var actions = new OpenQA.Selenium.Interactions.Actions(driver);
                 actions.MoveToElement(element).Click(element);
 
                 foreach (var modifierKey in modifierKeys)

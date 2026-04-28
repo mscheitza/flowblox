@@ -3,7 +3,6 @@ using FlowBlox.Grid;
 using FlowBlox.Views;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -16,6 +15,7 @@ using FlowBlox.Core.Util;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.DeepCopier;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Grid.Elements.UserControls;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.UICore.Views;
@@ -32,9 +32,8 @@ using FlowBlox.Core.Models.Drawing;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Actions;
-using FlowBlox.UICore.Actions;
+using FlowBlox.Core.Actions;
 using FlowBlox.UICore.Models;
-using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Utilities;
 using SkiaSharp;
 using FlowBlox.Core.Constants;
@@ -45,6 +44,7 @@ namespace FlowBlox.AppWindow.Contents
     {
         private const int DefaultGridWidth = 2000;
         private const int DefaultGridHeight = 1000;
+        private const string ResetNotificationsOnRuntimeFinishOptionName = "Grid.ResetNotificationsOnRuntimeFinish";
 
         private FlowBloxProjectComponentProvider _componentProvider;
 
@@ -112,7 +112,7 @@ namespace FlowBlox.AppWindow.Contents
             pictureBoxInvoke.Image = CreateLegendArrowImage(FlowBloxArrowColors.InvokeArrow);
             pictureBoxRecursiveCall.Image = CreateLegendArrowImage(FlowBloxArrowColors.RecursiveCallArrow);
             pictureBoxIterationContext.Image = CreateLegendArrowImage(FlowBloxArrowColors.IterationContextArrow);
-            
+
             _shortcutManager = new ShortcutManager(toolStrip_Mode);
             _shortcutManager.RegisterShortcut(Keys.Control | Keys.Shift, btConnectionMode);
 
@@ -201,6 +201,7 @@ namespace FlowBlox.AppWindow.Contents
             BackColor = (project != null) ? Color.FromKnownColor(KnownColor.Control) : Color.FromArgb(70, 70, 70);
             btExecute.Enabled = (project != null) && (!IsRuntimeActive || Runtime.Pause);
             btGridSettings.Enabled = (project != null) && (!IsRuntimeActive || Runtime.Pause);
+            btAutoAdjustFlowLayout.Enabled = (project != null) && (!IsRuntimeActive);
             btStopExecution.Enabled = (project != null) && IsRuntimeActive;
             btPause.Enabled = (project != null) && IsRuntimeActive && !Runtime.Pause;
             itmEditElement.Enabled = (_recentFlowBlock != null);
@@ -432,8 +433,8 @@ namespace FlowBlox.AppWindow.Contents
                         flowBlockDependendComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
                         if (flowBlockDependendComponents.Any())
                             flowBlockDependendComponents.ForEach(flowBlock => allReferences.Add(
-                                string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"), 
-                                    selectedFlowBlock, 
+                                string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),
+                                    selectedFlowBlock,
                                     flowBlock)));
                     }
 
@@ -445,8 +446,8 @@ namespace FlowBlox.AppWindow.Contents
                             managedObjectDependendComponents.RemoveAll(x => selectedDefinedManagedObjects.Contains(x));
                             if (managedObjectDependendComponents.Any())
                                 managedObjectDependendComponents.ForEach(comp => allReferences.Add(
-                                    string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"), 
-                                        managedObject, 
+                                    string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),
+                                        managedObject,
                                         comp)));
                         }
                     }
@@ -662,9 +663,15 @@ namespace FlowBlox.AppWindow.Contents
                 return;
             }
 
-            foreach (var uiElement in this.FlowBloxUIRegistry.UIElements)
+            var resetNotificationsOnRuntimeFinish =
+                FlowBloxOptions.GetOptionInstance().GetOption(ResetNotificationsOnRuntimeFinishOptionName)?.GetValueBoolean() ?? true;
+
+            if (resetNotificationsOnRuntimeFinish)
             {
-                uiElement.InternalFlowBlock.ResetNotifications(this.Runtime);
+                foreach (var uiElement in this.FlowBloxUIRegistry.UIElements)
+                {
+                    uiElement.InternalFlowBlock.ResetNotifications(this.Runtime);
+                }
             }
 
             if (result is Exception)
@@ -695,10 +702,17 @@ namespace FlowBlox.AppWindow.Contents
 
         private void btGridSettings_Click(object sender, EventArgs e)
         {
-            GridView GridView = new GridView(mainPanel.AutoScrollMinSize.Width, mainPanel.AutoScrollMinSize.Height);
-            GridView.ShowDialog(this);
-            mainPanel.AutoScrollMinSize = new Size(GridView.Width, GridView.Height);
-            UpdateUI();
+            var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
+            if (activeProject == null)
+                return;
+
+            var settingsWindow = new ProjectPanelGridSettingsWindow(activeProject);
+            var owner = (Form)AppWindow.Instance ?? ControlHelper.FindParentOfType<Form>(this, true) ?? this;
+            if (WindowsFormWPFHelper.ShowDialog(settingsWindow, owner) == true)
+            {
+                mainPanel.AutoScrollMinSize = new Size(activeProject.GridSizeX, activeProject.GridSizeY);
+                UpdateUI();
+            }
         }
 
         private void itmDefineIndex_Click(object sender, EventArgs e)
@@ -1054,7 +1068,7 @@ namespace FlowBlox.AppWindow.Contents
 
         private void itmDeleteConnection_Click(object sender, EventArgs e)
         {
-            foreach(var selectedArrow in _selectedArrows)
+            foreach (var selectedArrow in _selectedArrows)
             {
                 var disconnectAction = new FlowBloxDisconnectAction()
                 {
@@ -1068,6 +1082,37 @@ namespace FlowBlox.AppWindow.Contents
 
                 UpdateUI(true);
             }
+        }
+
+        private void btAutoAdjustFlowLayout_Click(object sender, EventArgs e)
+        {
+            ExecuteAutoAdjustFlowLayout();
+        }
+
+        public FlowBlockAutoLayoutResult ExecuteAutoAdjustFlowLayout()
+        {
+            var registry = FlowBloxRegistry;
+            var startFlowBlock = registry?.GetStartFlowBlock();
+            if (startFlowBlock == null)
+            {
+                FlowBloxMessageBox.Show(
+                    this,
+                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_AutoAdjust_NoStart_Message", typeof(FlowBloxMainUITexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_AutoAdjust_NoStart_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Info);
+
+                return new FlowBlockAutoLayoutResult();
+            }
+
+            var result = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
+            var moveActions = FlowBlockAutoLayoutAdjuster.GetRecordedMoveActions();
+            FlowBloxServiceLocator.Instance
+                .GetService<IFlowBloxActionHistoryService>()
+                ?.RegisterAutoLayoutMoves(moveActions);
+
+            UpdateUI(gridUpdate: true, appWindowUpdate: true);
+            return result;
         }
     }
 }

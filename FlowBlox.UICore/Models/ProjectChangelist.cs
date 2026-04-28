@@ -1,4 +1,4 @@
-﻿using FlowBlox.UICore.Actions;
+using FlowBlox.Core.Actions;
 
 namespace FlowBlox.UICore.Models
 {
@@ -10,7 +10,7 @@ namespace FlowBlox.UICore.Models
 
         public ProjectChangelist()
         {
-            this.Changes = new List<FlowBloxBaseAction>();
+            Changes = new List<FlowBloxBaseAction>();
         }
 
         public void ClearChanges()
@@ -22,11 +22,10 @@ namespace FlowBlox.UICore.Models
         public void AddChange(FlowBloxBaseAction action)
         {
             var removeAt = ChangeIndex + 1;
-            if (ChangeIndex < this.Changes.Count - 1)
-                this.Changes.RemoveRange(removeAt, this.Changes.Count - removeAt);
+            if (ChangeIndex < Changes.Count - 1)
+                Changes.RemoveRange(removeAt, Changes.Count - removeAt);
 
-            this.Changes.Add(action);
-
+            Changes.Add(action);
             ChangeIndex++;
         }
     }

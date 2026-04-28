@@ -36,7 +36,7 @@
             </StackPanel>
         </Border>
 
-        <Border Background="#EDF3F9"
+        <Border Background="#FFF8E1"
                 DockPanel.Dock="Top"
                 Padding="12"
                 CornerRadius="4"

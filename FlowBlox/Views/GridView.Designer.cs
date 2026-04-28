@@ -204,7 +204,7 @@
             // 
             label1.AutoSize = true;
             label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
             label1.Location = new System.Drawing.Point(55, 0);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(487, 56);
@@ -216,7 +216,7 @@
             // 
             lbDescription.AutoSize = true;
             lbDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            lbDescription.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lbDescription.Font = new System.Drawing.Font("Calibri", 9F);
             lbDescription.Location = new System.Drawing.Point(55, 56);
             lbDescription.Name = "lbDescription";
             lbDescription.Size = new System.Drawing.Size(487, 48);
@@ -232,7 +232,7 @@
             CancelButton = btCancel;
             ClientSize = new System.Drawing.Size(545, 280);
             Controls.Add(tableLayoutPanel1);
-            Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            Font = new System.Drawing.Font("Calibri", 9F);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "GridView";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

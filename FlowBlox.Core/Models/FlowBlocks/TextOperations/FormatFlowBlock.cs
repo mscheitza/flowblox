@@ -3,12 +3,12 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using System.Data;
 using FlowBlox.Core.Attributes;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.Format;
 using System.Collections.ObjectModel;
 using SkiaSharp;
+using System.Text;
 
 namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
 {
@@ -51,16 +51,30 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
             }
         }
 
-        private static Regex _regexGetParameters = new Regex(@"\{[0-9]+\}", RegexOptions.Compiled);
-
         public static ValidationResult ValidateFormatExpression(string formatExpression, ValidationContext validationContext)
         {
             var block = (FormatFlowBlock)validationContext.ObjectInstance;
-            int placeholderCount = _regexGetParameters.Matches(formatExpression).Count;
+            if (string.IsNullOrWhiteSpace(formatExpression))
+                return ValidationResult.Success;
 
-            if (placeholderCount != block.FormatParameterDefinitions.Count)
+            CompositeFormat compositeFormat;
+            try
             {
-                var errorMessage = string.Format(FlowBloxResourceUtil.GetLocalizedString("FormatFlowBlock_Validation_InvalidFieldElementCount"), placeholderCount, block.FormatParameterDefinitions.Count);
+                compositeFormat = CompositeFormat.Parse(formatExpression);
+            }
+            catch (FormatException)
+            {
+                var invalidFormatMessage = FlowBloxResourceUtil.GetLocalizedString("FormatFlowBlock_Validation_InvalidFormatExpression");
+                return new ValidationResult(invalidFormatMessage, [validationContext.MemberName]);
+            }
+
+            var placeholderCount = compositeFormat.MinimumArgumentCount;
+
+            var linkedFieldCount = block.FormatParameterDefinitions?.Count ?? 0;
+
+            if (placeholderCount != linkedFieldCount)
+            {
+                var errorMessage = string.Format(FlowBloxResourceUtil.GetLocalizedString("FormatFlowBlock_Validation_InvalidFieldElementCount"), placeholderCount, linkedFieldCount);
                 return new ValidationResult(errorMessage, [validationContext.MemberName]);
             }
 

@@ -189,6 +189,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         internal const string Regex_FullyQualifiedFieldNames = "\\$[A-Za-z0-9_-öäüÖÄÜ]*::[A-Za-z0-9_-öäüÖÄÜ]*";
         internal const string Regex_ValidateIdentifier = "^[A-Za-z0-9_-öäüÖÄÜ]*$";
+        private const string PreviousFlowBlocksActivationConditionsNotMetMessage = "The activation conditions of the previous FlowBlocks were not met.";
 
         [JsonIgnore()]
         public virtual string NamePrefix
@@ -896,7 +897,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 ReferencedFlowBlocks.Any() &&
                 ReferencedFlowBlocks.All(x => x.CurrentFlags.HasFlag(FlowBlockFlags.RequirementsNotMet)))
             {
-                messages.Add("The activation conditions of the previous FlowBlocks were not met.");
+                messages.Add(PreviousFlowBlocksActivationConditionsNotMetMessage);
                 return false;
             }
 
@@ -960,6 +961,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public enum BaseFlowBlockNotifications
         {
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "Preconditions not met")]
+            PreconditionsNotMet,
+
             [FlowBloxNotification(NotificationType = NotificationType.Error)]
             [Display(Name = "An unexpected error has occurred.")]
             UnexpectedError
@@ -975,6 +980,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
             if (!this.ValidateRequirements(out var requirementMessages))
             {
+                var suppressWarningLogAndNotification = requirementMessages?.Count == 1 &&
+                    string.Equals(requirementMessages[0], PreviousFlowBlocksActivationConditionsNotMetMessage, StringComparison.Ordinal);
+
+                if (!suppressWarningLogAndNotification)
+                {
+                    var details = requirementMessages != null && requirementMessages.Count > 0
+                        ? string.Join(Environment.NewLine, requirementMessages)
+                        : "No details provided.";
+
+                    runtime.Report($"Preconditions not met: {details}", FlowBloxLogLevel.Warning);
+                    CreateNotification(runtime, BaseFlowBlockNotifications.PreconditionsNotMet);
+                }
+
                 runtime.NotifyPreconditionsNotMet(this, requirementMessages);
                 Flag(runtime, FlowBlockFlags.RequirementsNotMet);
                 return false;

@@ -14,10 +14,31 @@ namespace FlowBlox.Core.Models.Components
     {
         public TypeElement()
         {
-            var culture = CultureInfo.CurrentCulture.NumberFormat;
-            DecimalSeparator = culture.NumberDecimalSeparator;
-            GroupSeparator = culture.NumberGroupSeparator;
+            var culture = CultureInfo.CurrentCulture;
+            DecimalSeparator = culture.NumberFormat.NumberDecimalSeparator;
+            GroupSeparator = culture.NumberFormat.NumberGroupSeparator;
+            DateFormat = GetDefaultDateTimeFormat(culture);
             IsNullable = true;
+        }
+
+        private static string GetDefaultDateTimeFormat(CultureInfo culture)
+        {
+            if (culture == null)
+                culture = CultureInfo.InvariantCulture;
+
+            var datePart = culture.DateTimeFormat.ShortDatePattern?.Trim();
+            var timePart = culture.DateTimeFormat.LongTimePattern?.Trim();
+
+            if (string.IsNullOrWhiteSpace(datePart) && string.IsNullOrWhiteSpace(timePart))
+                return "o";
+
+            if (string.IsNullOrWhiteSpace(datePart))
+                return timePart;
+
+            if (string.IsNullOrWhiteSpace(timePart))
+                return datePart;
+
+            return $"{datePart} {timePart}";
         }
 
         [Required]

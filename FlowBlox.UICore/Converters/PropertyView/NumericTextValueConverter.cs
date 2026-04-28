@@ -55,6 +55,17 @@ namespace FlowBlox.UICore.Converters.PropertyView
                 return DependencyProperty.UnsetValue;
             }
 
+            if (_underlyingType == typeof(long))
+            {
+                if (long.TryParse(text, NumberStyles.Integer, currentCulture, out var parsedCurrent))
+                    return parsedCurrent;
+
+                if (long.TryParse(text, NumberStyles.Integer, invariant, out var parsedInvariant))
+                    return parsedInvariant;
+
+                return DependencyProperty.UnsetValue;
+            }
+
             if (_underlyingType == typeof(float))
             {
                 if (float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, currentCulture, out var parsedCurrent))

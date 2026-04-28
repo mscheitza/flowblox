@@ -554,7 +554,10 @@ The application will now restart to restore a clean environment.</value>
 		<value>&amp;Run</value>
 	</data>
   <data name="ProjectPanel_btGridSettings_Text" xml:space="preserve">
-		<value>Adjust &amp;grid size</value>
+		<value>Settings</value>
+	</data>
+  <data name="ProjectPanel_btAutoAdjustFlowLayout_Text" xml:space="preserve">
+		<value>Auto align</value>
 	</data>
   <data name="ProjectPanel_btPause_Text" xml:space="preserve">
 		<value>&amp;Pause</value>
@@ -783,5 +786,14 @@ The application will now restart to restore a clean environment.</value>
 	</data>
   <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
     <value>Build, Test, and Run Flows (based on .NET)</value>
+  </data>
+  <data name="AppWindow_itmAutoAdjustFlowLayout_Text" xml:space="preserve">
+    <value>Auto-align flow</value>
+  </data>
+  <data name="ProjectPanel_AutoAdjust_NoStart_Title" xml:space="preserve">
+    <value>No automatic alignment</value>
+  </data>
+  <data name="ProjectPanel_AutoAdjust_NoStart_Message" xml:space="preserve">
+    <value>No start flow block was found. Automatic alignment cannot be performed.</value>
   </data>
 </root>

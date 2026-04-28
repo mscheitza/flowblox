@@ -1,10 +1,10 @@
-﻿namespace FlowBlox.UICore.Actions
+namespace FlowBlox.Core.Actions
 {
     public abstract class FlowBloxBaseAction
     {
         protected FlowBloxBaseAction()
         {
-            this.AssociatedActions = new List<FlowBloxBaseAction>();
+            AssociatedActions = new List<FlowBloxBaseAction>();
         }
 
         public List<FlowBloxBaseAction> AssociatedActions { get; internal set; }

@@ -19,7 +19,7 @@ using FlowBlox.Grid.Elements.Util;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components.Modifier;
-using FlowBlox.Actions;
+using FlowBlox.Core.Actions;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
@@ -51,6 +51,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         private BaseFlowBlock _flowBlock;
 
         private Point _moveFromPosition;
+        private Point _moveFromModelPosition;
 
         public BaseFlowBlock InternalFlowBlock => _flowBlock;
 
@@ -333,7 +334,7 @@ namespace FlowBlox.Grid.Elements.UserControls
 
             if (HasOverriddenNotifications)
             {
-                pbHeaderRight1.Image = imageList_BaseFlowBlock.Images["suppressNotifications"];
+                pbHeaderRight1.Image = imageList_BaseFlowBlock.Images["overriddenNotifications"];
                 pbHeaderRight1.Visible = true;
             }
             else
@@ -390,11 +391,12 @@ namespace FlowBlox.Grid.Elements.UserControls
             pbHeaderRight1.BackColor = colorToUse;
             pbHeaderRight2.BackColor = colorToUse;
 
+            ElementSelected = (state == ElementState.Marked);
+            ElementSelectedAt = DateTime.Now;
+
             if ((ApplicationWindowRef != null) && !ApplicationWindowRef.IsRuntimeActive)
             {
                 labelHeader.BackColor = colorToUse;
-                ElementSelected = (state == ElementState.Marked);
-                ElementSelectedAt = DateTime.Now;
             }
         }
 
@@ -619,12 +621,12 @@ namespace FlowBlox.Grid.Elements.UserControls
 
                         if (ApplicationWindowRef != null && _moveFromPosition != this.Location)
                         {
-                            moveAction = new FlowBloxMoveAction()
+                            var targetLocation = TranslateUiToModelLocation(this.Location, (Panel)this.Parent);
+                            moveAction = new FlowBloxMoveAction
                             {
-                                UIElement = this,
-                                CapturedAutoScrollPosition = ((Panel)this.Parent).AutoScrollPosition,
-                                From = _moveFromPosition,
-                                To = this.Location
+                                FlowBlock = _flowBlock,
+                                From = _moveFromModelPosition,
+                                To = targetLocation
                             };
 
                             if (parentMoveAction == null)
@@ -694,6 +696,7 @@ namespace FlowBlox.Grid.Elements.UserControls
                         this.BlockLocationUpdateX = false;
                         this.BlockLocationUpdateY = false;
                         this._moveFromPosition = this.Location;
+                        this._moveFromModelPosition = TranslateUiToModelLocation(this.Location, this.Parent as Panel);
                     }
                 }
             }

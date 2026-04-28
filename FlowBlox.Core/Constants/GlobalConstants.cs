@@ -25,5 +25,9 @@
         public const string FlowBloxUICoreAssemblyName = "FlowBlox.UICore";
 
         public const string PropertyNameDisplayName = "DisplayName";
+
+        public const string SimplePropertySelectedFieldSuffix = "_SelectedField";
+
+        public const string HiddenSensitiveValue = "<<hidden>>";
     }
 }

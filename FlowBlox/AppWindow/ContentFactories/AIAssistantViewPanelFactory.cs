@@ -21,7 +21,7 @@ namespace FlowBlox.AppWindow.ContentFactories
             return new DockContentSettings
             {
                 DockState = DockState.DockRight,
-                Visible = false
+                Visible = true
             };
         }
     }

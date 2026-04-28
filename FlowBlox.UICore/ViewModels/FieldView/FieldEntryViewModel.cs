@@ -1,4 +1,5 @@
 using FlowBlox.Core;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.UICore.Utilities;
 using MahApps.Metro.IconPacks;
@@ -122,7 +123,7 @@ namespace FlowBlox.UICore.ViewModels.FieldView
             _fieldName = fieldElement?.Name ?? string.Empty;
             _rawFieldValue = fieldElement?.StringValue ?? string.Empty;
             _isPendingValue = fieldElement?.Pending == true;
-            _fieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues);
+            _fieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues, fieldElement?.IsPassword == true);
             _shortenedText = GetShortenedText(_fieldValue, _maxDisplayLength);
 
             if (IsUserField)
@@ -148,7 +149,7 @@ namespace FlowBlox.UICore.ViewModels.FieldView
         {
             _rawFieldValue = value ?? string.Empty;
             _isPendingValue = pending;
-            FieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues);
+            FieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues, FieldElement?.IsPassword == true);
         }
 
         public void SetSingleLineFieldValues(bool enabled)
@@ -157,7 +158,7 @@ namespace FlowBlox.UICore.ViewModels.FieldView
                 return;
 
             _singleLineFieldValues = enabled;
-            FieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues);
+            FieldValue = GetDisplayFieldValue(_rawFieldValue, _isPendingValue, _singleLineFieldValues, FieldElement?.IsPassword == true);
         }
 
         public void SetMaxDisplayLength(int maxDisplayLength)
@@ -172,10 +173,13 @@ namespace FlowBlox.UICore.ViewModels.FieldView
             ShortenedText = GetShortenedText(_fieldValue, _maxDisplayLength);
         }
 
-        private static string GetDisplayFieldValue(string value, bool pending, bool singleLine)
+        private static string GetDisplayFieldValue(string value, bool pending, bool singleLine, bool isPassword)
         {
             if (pending)
                 return FlowBloxTexts.FieldElement_PendingValue;
+
+            if (isPassword)
+                return GetMaskedFieldValue(value);
 
             if (!singleLine)
                 return value ?? string.Empty;
@@ -184,6 +188,11 @@ namespace FlowBlox.UICore.ViewModels.FieldView
             var normalized = Regex.Replace(input, @"\s*[\r\n]+\s*", " ");
             normalized = Regex.Replace(normalized, @"[ ]{2,}", " ").Trim();
             return normalized;
+        }
+
+        private static string GetMaskedFieldValue(string value)
+        {
+            return GlobalConstants.HiddenSensitiveValue;
         }
 
         private static string GetShortenedText(string value, int maxDisplayLength)

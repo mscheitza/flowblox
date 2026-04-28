@@ -556,7 +556,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Configure provider and request defaults for the AI Assistant. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Configure provider, request defaults, and automatic flow layout behavior for the AI Assistant. ähnelt.
         /// </summary>
         public static string AssistantConfiguration_Description {
             get {
@@ -570,6 +570,24 @@ namespace FlowBlox.Core {
         public static string AssistantConfiguration_DisplayName {
             get {
                 return ResourceManager.GetString("AssistantConfiguration_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enable automatic adjustment ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_EnableAutomaticAdjustment {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_EnableAutomaticAdjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die When enabled, flow blocks are automatically adjusted after successful AI connect/disconnect operations and once again after a completed AI edit run. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_EnableAutomaticAdjustment_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_EnableAutomaticAdjustment_Tooltip", resourceCulture);
             }
         }
         
@@ -1792,6 +1810,240 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Adjustments ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustFlowBlock_Adjustments {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustFlowBlock_Adjustments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ordered list of DateTime component adjustments. Each row applies Target + Mode + Integer Value in sequence. ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustFlowBlock_Adjustments_Description {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustFlowBlock_Adjustments_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Adjusts individual DateTime components using ordered add/set operations. ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DateTime Component Adjust ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Component Adjustments ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustFlowBlock_Groups_Adjustments {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustFlowBlock_Groups_Adjustments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No component adjustments configured ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustFlowBlock_NoAdjustmentsConfigured {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustFlowBlock_NoAdjustmentsConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source Date ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustFlowBlock_SourceDate {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustFlowBlock_SourceDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DateTime field used as input for all configured component adjustments. ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustFlowBlock_SourceDate_Description {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustFlowBlock_SourceDate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DateTime Component Adjustment ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentEntry_DisplayName {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mode ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentEntry_Mode {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentEntry_Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Choose Add to offset the current value, or Set to assign a fixed integer value. ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentEntry_Mode_Description {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentEntry_Mode_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentEntry_Target {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentEntry_Target", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DateTime component to adjust (for example Year, Month, Day, Time). ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentEntry_Target_Description {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentEntry_Target_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentEntry_Value {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentEntry_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Integer value used by the selected mode. Example: Set Hours=0 or Add Day=2. ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentEntry_Value_Description {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentEntry_Value_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentMode_Add {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentMode_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Set ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentMode_Set {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentMode_Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Date ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_Date {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DateTime ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_DateTime {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_DateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Day ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_Day {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_Day", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hours ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_Hours {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_Hours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Minutes ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_Minutes {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_Minutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Month ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_Month {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_Month", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Seconds ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_Seconds {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_Seconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Time ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_Time {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Year ähnelt.
+        /// </summary>
+        public static string DateTimeComponentAdjustmentTarget_Year {
+            get {
+                return ResourceManager.GetString("DateTimeComponentAdjustmentTarget_Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Absolute value ähnelt.
         /// </summary>
         public static string DateTimeDifferenceFlowBlock_AbsoluteValue {
@@ -2575,7 +2827,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die When enabled, the field value is not stored in the project file. It is stored in the local *.fblocaldata file instead (e.g., for input fields or local user data). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die When enabled, the field value is not stored in the project file. It is stored in the local *.fblocaldata file instead (e.g., for input fields or local user data). This option is always enabled for password fields. ähnelt.
         /// </summary>
         public static string FieldElement_StoreValueLocally_Tooltip {
             get {
@@ -2589,6 +2841,24 @@ namespace FlowBlox.Core {
         public static string FieldElement_StringValue {
             get {
                 return ResourceManager.GetString("FieldElement_StringValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password field ähnelt.
+        /// </summary>
+        public static string FieldElement_UsePasswordChar {
+            get {
+                return ResourceManager.GetString("FieldElement_UsePasswordChar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Masks the field value in the field view. For password fields, plain-text values are never written to protocol or log files and are not exposed to the AI Assistant. ähnelt.
+        /// </summary>
+        public static string FieldElement_UsePasswordChar_Tooltip {
+            get {
+                return ResourceManager.GetString("FieldElement_UsePasswordChar_Tooltip", resourceCulture);
             }
         }
         
@@ -3484,6 +3754,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The format expression is invalid. Please check placeholders and escaped braces. ähnelt.
+        /// </summary>
+        public static string FormatFlowBlock_Validation_InvalidFormatExpression {
+            get {
+                return ResourceManager.GetString("FormatFlowBlock_Validation_InvalidFormatExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Format parameter ähnelt.
         /// </summary>
         public static string FormatParameterDefinition {
@@ -4006,6 +4285,420 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Date ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchDestinations_Date {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchDestinations_Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die From ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchDestinations_From {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchDestinations_From", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Is read ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchDestinations_IsRead {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchDestinations_IsRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Message ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchDestinations_Message {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchDestinations_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Message ID ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchDestinations_MessageId {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchDestinations_MessageId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Subject ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchDestinations_Subject {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchDestinations_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die To ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchDestinations_To {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchDestinations_To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unique ID ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchDestinations_UniqueId {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchDestinations_UniqueId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Accept invalid certificates ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_AcceptInvalidCertificates {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_AcceptInvalidCertificates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Accepts invalid TLS certificates. Use for testing only. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_AcceptInvalidCertificates_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_AcceptInvalidCertificates_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete after fetch ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_DeleteAfterFetch {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_DeleteAfterFetch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Marks fetched e-mails as deleted and expunges them from the selected folder. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_DeleteAfterFetch_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_DeleteAfterFetch_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads e-mails from an IMAP mailbox and exposes selected values through configurable result fields. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Read IMAP mails ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die End date ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_EndDate {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_EndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Inclusive end date in format yyyy/MM/dd. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_EndDate_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_EndDate_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Folder ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Folder {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mailbox folder to search in. Default is INBOX. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Folder_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Folder_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Behavior ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Groups_Behavior {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Groups_Behavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Filter ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Groups_Filter {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Groups_Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Host ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Host {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die IMAP server host name, for example imap.gmail.com. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Host_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Host_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mark as read ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_MarkAsRead {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_MarkAsRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Keeps fetched e-mails in read state after retrieval. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_MarkAsRead_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_MarkAsRead_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum results ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_MaxResults {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_MaxResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum number of e-mails returned by this flow block execution. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_MaxResults_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_MaxResults_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Newest first ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_NewestFirst {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_NewestFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Returns newer messages first before older ones. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_NewestFirst_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_NewestFirst_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Only unread ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_OnlyUnread {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_OnlyUnread", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Limits the IMAP search to unread messages. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_OnlyUnread_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_OnlyUnread_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Password {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die IMAP password or app password for the configured account. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Password_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Password_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Port ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Port {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Port", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die IMAP server port. Typical values are 993 (SSL) or 143 (STARTTLS/plain). ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Port_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Port_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result fields ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_ResultFields {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_ResultFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search text ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_SearchText {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_SearchText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Server-side text filter applied to message subject and body. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_SearchText_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_SearchText_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die IMAP retrieval happens server-side with filters (date, unread state and text). Fetching message bodies can set messages to read on some servers; with &quot;Mark as read&quot; disabled, the flow block restores unseen state whenever possible. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_SpecialExplanation_Usage {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_SpecialExplanation_Usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start date ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_StartDate {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Inclusive start date in format yyyy/MM/dd. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_StartDate_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_StartDate_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_UserName {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die IMAP user name or e-mail address used for authentication. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_UserName_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_UserName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use SSL ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_UseSsl {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_UseSsl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Connects by using SSL/TLS from the start of the connection. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_UseSsl_Tooltip {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_UseSsl_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Date must use format yyyy/MM/dd. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Validation_DateFormat {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Validation_DateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die End date must be greater than or equal to start date. ähnelt.
+        /// </summary>
+        public static string IMAPMailFetchFlowBlock_Validation_DateRange {
+            get {
+                return ResourceManager.GetString("IMAPMailFetchFlowBlock_Validation_DateRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Index context ähnelt.
         /// </summary>
         public static string IndexFlowBlock_Context {
@@ -4227,6 +4920,87 @@ namespace FlowBlox.Core {
         public static string JoinFlowBlock_Validation_NoSeparatorDefined {
             get {
                 return ResourceManager.GetString("JoinFlowBlock_Validation_NoSeparatorDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads multiple JSON paths from one JSON source and maps the resolved values directly to result fields. ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select multiple JSON paths ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mappings ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorFlowBlock_Groups_Mappings {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_Groups_Mappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON content ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorFlowBlock_JsonContent {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_JsonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON source content used for all configured path mappings. ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path mappings ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorFlowBlock_MappingEntries {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_MappingEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path mapping entry ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorMappingEntry_DisplayName {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorMappingEntry_JsonPath {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorMappingEntry_JsonPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path used to resolve a value from the JSON content. Use &apos;/&apos; to separate nodes and numeric indexes for arrays. ähnelt.
+        /// </summary>
+        public static string JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip", resourceCulture);
             }
         }
         
@@ -6560,6 +7334,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Attachment mappings generated from configured fields. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Attachments_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Attachments_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Bcc addresses ähnelt.
         /// </summary>
         public static string SMTPFlowBlock_BccAddresses {
@@ -6583,6 +7366,15 @@ namespace FlowBlox.Core {
         public static string SMTPFlowBlock_Body {
             get {
                 return ResourceManager.GetString("SMTPFlowBlock_Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die E-mail body text or HTML, depending on &quot;Body as HTML&quot;. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Body_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Body_Tooltip", resourceCulture);
             }
         }
         
@@ -6632,6 +7424,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sender e-mail address. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_FromAddress_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_FromAddress_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die SMTP host ähnelt.
         /// </summary>
         public static string SMTPFlowBlock_Host {
@@ -6641,11 +7442,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SMTP server host name, for example smtp.gmail.com. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Host_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Host_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Body is HTML ähnelt.
         /// </summary>
         public static string SMTPFlowBlock_IsBodyHtml {
             get {
                 return ResourceManager.GetString("SMTPFlowBlock_IsBodyHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die When enabled, the e-mail body is sent as HTML content. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_IsBodyHtml_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_IsBodyHtml_Tooltip", resourceCulture);
             }
         }
         
@@ -6668,6 +7487,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password or app password used for SMTP authentication. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Password_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Password_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Port ähnelt.
         /// </summary>
         public static string SMTPFlowBlock_Port {
@@ -6677,11 +7505,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SMTP server port. Typical values are 25, 465 or 587. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Port_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Port_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Subject ähnelt.
         /// </summary>
         public static string SMTPFlowBlock_Subject {
             get {
                 return ResourceManager.GetString("SMTPFlowBlock_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die E-mail subject line. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_Subject_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_Subject_Tooltip", resourceCulture);
             }
         }
         
@@ -6713,11 +7559,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses explicit SMTP credentials for sending the e-mail. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_UseAuthentication_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_UseAuthentication_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die User name ähnelt.
         /// </summary>
         public static string SMTPFlowBlock_UserName {
             get {
                 return ResourceManager.GetString("SMTPFlowBlock_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name used for SMTP authentication. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_UserName_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_UserName_Tooltip", resourceCulture);
             }
         }
         

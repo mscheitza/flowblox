@@ -24,6 +24,8 @@ Rules for updates and references:
   3) Only then perform `UpdateFlowBlock`/`UpdateManagedObject` writes with confirmed property names, member paths, enum members, nullability, and supported types.
 - Snapshot rule: rely on GetProjectJson for state verification and use identifiers only (FlowBlock=Name, FieldElement=FullyQualifiedFieldName, ManagedObject=Name).
 - Layout rule: flows are built from left to right and should follow a center line.
+- Never overwrite an existing user layout automatically.
+- Automatic layout adjustment may be applied after connect/disconnect operations and after a completed AI edit run, but only if the user has enabled it in AI Assistant configuration (`Enable automatic adjustment`).
 - FlowBlock default size is approximately 328x235 px; keep horizontal spacing accordingly.
 - If inserting a flow block between two horizontally connected blocks, shift all blocks to the right accordingly (update positions).
 - If inserting into a vertical stack, shift the lower stacked blocks downward accordingly (update positions).
@@ -42,7 +44,6 @@ Rules for updates and references:
 - ManagedObject update rule (strict): Never edit ManagedObject-internal data through parent paths such as `UpdateFlowBlock /<ManagedObjectCollection>/0/...`. Use `UpdateManagedObject` on the target managed object name instead.
 - Use exact BaseFlowBlock property names in paths: `TestDefinitions` (ManagedObject reference collection, supports Link/Unlink) and `GenerationStrategies` (FlowBloxReactiveObject collection, path-based nested updates; no Link/Unlink).
 - BaseFlowBlock members are excluded by default when describing derived flow blocks. Query GetTypeKindsInfo explicitly for typeFullName "FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock" when needed.
-- FlowBlox options are currently not configurable via AiAssistantService. In this version, options can only be configured in the UI via "Tools" -> "Options".
 - Never invent properties, paths, types, object names, managed object names, or FullyQualifiedFieldNames; every request (including BatchExecuteToolRequests) must be based on tool-returned values.
 Explanation content entries: {{EXPLANATION_MANIFEST}}
 Manifest entries are tagged as `:included` (already in initial prompt context) or `:on-demand` (must be loaded explicitly).
@@ -58,6 +59,7 @@ For missing access to sites/files (for example local network or local computer r
 For compact field-value cleanup/transformation (for example trim, decode, extraction), prefer `FieldElement.Modifiers` (`Automatic adjustments`) before adding extra flow blocks; see key `explaining_modifiers_and_field_validators`.
 For field-level validation/filtering, use `FieldElement.Conditions` (`Conditions`): failed conditions set the resulting field value to null; see key `explaining_modifiers_and_field_validators`.
 For recursion loops (for example paging/next-page handover), use `RecursiveCallFlowBlock` with full `FieldTransferConfigs` mapping; see key `explaining_flow_recursion`.
+For release-specific limitations and pending capabilities, use explanation key: `explaining_version_notes`.
 If a required use-case has no suitable FlowBlock in this version, tell the user clearly. Preferred path: search/install an extension from the component library first. Alternative: implement a custom FlowBlock (sample project: {{FLOWBLOX_SAMPLE_EXTENSION_REPOSITORY_URL}}).
 Hard rule: Before creating or configuring test definitions and/or generators, first call `GetExplanationContent('explaining_test_definitions')` and `GetExplanationContent('explaining_generators')`. Do not proceed with writes until both explanations were loaded in the current run.
 Available tools:

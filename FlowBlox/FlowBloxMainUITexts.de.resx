@@ -539,7 +539,10 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
 		<value>&amp;Ausführen</value>
 	</data>
   <data name="ProjectPanel_btGridSettings_Text" xml:space="preserve">
-		<value>&amp;Rastergröße anpassen</value>
+		<value>Einstellungen</value>
+	</data>
+  <data name="ProjectPanel_btAutoAdjustFlowLayout_Text" xml:space="preserve">
+		<value>Automatisch ausrichten</value>
 	</data>
   <data name="ProjectPanel_btPause_Text" xml:space="preserve">
 		<value>&amp;Pausieren</value>
@@ -783,5 +786,14 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   </data>
   <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
     <value>Build, Test, and Run Flows (based on .NET)</value>
+  </data>
+  <data name="AppWindow_itmAutoAdjustFlowLayout_Text" xml:space="preserve">
+    <value>Flow automatisch ausrichten</value>
+  </data>
+  <data name="ProjectPanel_AutoAdjust_NoStart_Title" xml:space="preserve">
+    <value>Keine automatische Ausrichtung</value>
+  </data>
+  <data name="ProjectPanel_AutoAdjust_NoStart_Message" xml:space="preserve">
+    <value>Es wurde kein Start-Flow-Block gefunden. Die automatische Ausrichtung kann daher nicht ausgeführt werden.</value>
   </data>
 </root>

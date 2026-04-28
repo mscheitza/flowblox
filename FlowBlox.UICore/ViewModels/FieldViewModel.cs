@@ -269,12 +269,16 @@ namespace FlowBlox.UICore.ViewModels
 
             fieldElement.OnValueChanged -= FieldElement_OnValueChanged;
             fieldElement.OnValueChanged += FieldElement_OnValueChanged;
+
+            fieldElement.PropertyChanged -= FieldElement_PropertyChanged;
+            fieldElement.PropertyChanged += FieldElement_PropertyChanged;
         }
 
         private void UnsubscribeFieldEvents(FieldElement fieldElement)
         {
             fieldElement.OnNameChanged -= FieldElement_OnNameChanged;
             fieldElement.OnValueChanged -= FieldElement_OnValueChanged;
+            fieldElement.PropertyChanged -= FieldElement_PropertyChanged;
         }
 
         private void FieldElement_OnNameChanged(FieldElement field, string oldName, string newName)
@@ -297,6 +301,21 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     row.UpdateValue(newValue, field.Pending);
                 }
+            });
+        }
+
+        private void FieldElement_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is not FieldElement field)
+                return;
+
+            if (e.PropertyName != nameof(FieldElement.IsPassword))
+                return;
+
+            PostToUi(() =>
+            {
+                if (_rowsByField.TryGetValue(field, out var row))
+                    row.UpdateValue(field.StringValue, field.Pending);
             });
         }
 

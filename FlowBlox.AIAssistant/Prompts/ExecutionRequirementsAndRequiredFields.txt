@@ -25,3 +25,38 @@ Practical rule:
 Typical chain example:
 Start -> XmlDocument -> TableReader -> XmlNodeWriter -> XmlDocumentOutput -> FileWriter
 If TableReader has no rows, it can still produce an empty-result iteration; XmlNodeWriter/XmlDocumentOutput/FileWriter must therefore be guarded by required mappings, required fields, or activation conditions.
+
+Flow organization pattern (readability + maintenance):
+- Prefer standard Downstream Flow Design by default:
+  `A -> B -> C -> D`
+  Use this when blocks are tightly dependent and each step clearly builds on the previous one.
+
+- Use Stack Flow Design when multiple follow-up tasks are independent sibling tasks of one parent:
+  `A -> B(index 0), C(index 1), D(index 2) ...`
+  Important: B/C/D must be direct next flow blocks of A.
+  In FlowBlox terms: B/C/D are targets whose `ReferencedFlowBlocks` contain `A` (same parent, sibling tasks).
+  Keep B/C/D visually stacked to avoid very wide flows and improve readability.
+
+Decision criteria:
+- Choose Downstream when the next block semantically depends on the previous sibling result and should be read as one linear story.
+- Choose Stack when sibling blocks share the same parent/source context but are not semantically dependent on each other.
+- In Stack mode, use `BaseFlowBlock.ExecutionIndex` on siblings to define deterministic order (0 first). Leave index unset (-1) only when order is irrelevant.
+- If a sibling still needs a value from another sibling, model that explicitly via RequiredFields or mapping requirements instead of faking dependency through chain wiring.
+
+Example 1 (JSON configuration pre-task):
+- Avoid long serial chains like:
+  `StartFlowBlock -> JsonObjectFlowBlock -> JsonPathSelectorFlowBlock(SMTP Host) -> JsonPathSelectorFlowBlock(SMTP Port) -> ...`
+- Prefer:
+  `StartFlowBlock -> JsonObjectFlowBlock`
+  with multiple stacked `JsonPathSelectorFlowBlock` siblings as direct next blocks of `JsonObjectFlowBlock` and explicit `ExecutionIndex` as needed.
+- Treat this as a configuration sub-flow (task block), then continue to the main business flow in a later index.
+
+Example 2 (Web cookie/search pre-task):
+- `WebBrowserFlowBlock` can have stacked `WebEventFlowBlock` siblings as direct next blocks:
+  index 0: cookie acceptance step (for example `WebBrowserEventType=Click` on cookie selector)
+  index 1+: search/navigation/business actions (for example `WebBrowserEventType=Enter`, `Click`, `SendSpecialKey`).
+- This models prerequisite tasks first, then actual processing flow, without unnecessary horizontal chaining.
+
+Important:
+- Never stack only for style when true hard dependency exists; use linear downstream wiring in that case.
+- Stack pattern is an organizational readability tool for independent sibling tasks and sub-flows.

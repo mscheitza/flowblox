@@ -7,6 +7,7 @@ using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Json;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.Grid.Elements.UserControls;
 using FlowBlox.Grid.Provider;
@@ -208,14 +209,10 @@ namespace FlowBlox.AppWindow.Contents
             foreach (var flowBlock in e.AddedFlowBlocks)
             {
                 if (flowBlock == null)
-                {
                     continue;
-                }
 
                 if (uiRegistry.GetUIElementToGridElement(flowBlock) != null)
-                {
                     continue;
-                }
 
                 var uiElement = projectPanel.CreateGridUIElement(flowBlock);
                 uiRegistry.RegisterGridUIElement(uiElement);

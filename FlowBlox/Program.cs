@@ -18,7 +18,9 @@ namespace FlowBlox
         [STAThread]
         static void Main(string[] args)
         {
-            InstallFonts();
+            if (InstallFonts())
+                return;
+
             SetupCulture();
 
             Application.EnableVisualStyles();
@@ -82,13 +84,13 @@ namespace FlowBlox
                 AppWindow.AppWindow.Instance.SetProjectSpaceGuid(options.ProjectSpaceGuid);
         }
 
-        private static void InstallFonts()
+        private static bool InstallFonts()
         {
             string assemblyDir = Path.GetDirectoryName(typeof(Program).Assembly.Location)!;
             string fontsDirectory = Path.Combine(assemblyDir, "data", "fonts");
 
             if (!Directory.Exists(fontsDirectory))
-                return;
+                return false;
 
             var fontFiles = Directory.GetFiles(fontsDirectory, "*.*", SearchOption.TopDirectoryOnly)
                 .Where(f => f.EndsWith(".ttf", StringComparison.OrdinalIgnoreCase) ||
@@ -111,7 +113,10 @@ namespace FlowBlox
             if (anyInstalled)
             {
                 Application.Restart();
+                return true;
             }
+
+            return false;
         }
     }
 }

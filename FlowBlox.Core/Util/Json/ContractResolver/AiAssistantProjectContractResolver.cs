@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.Project;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
@@ -12,10 +13,15 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
             var property = base.CreateProperty(member, memberSerialization);
 
             if (member.DeclaringType == typeof(FlowBloxProject) &&
-                (string.Equals(property.PropertyName, "InputFiles", StringComparison.Ordinal) ||
-                 string.Equals(property.PropertyName, "InputFiles", StringComparison.Ordinal)))
+                string.Equals(property.PropertyName, "InputFiles", StringComparison.Ordinal))
             {
                 property.Ignored = true;
+            }
+
+            if (member.DeclaringType == typeof(FieldElement) &&
+                string.Equals(property.PropertyName, nameof(FieldElement.StringValue), StringComparison.Ordinal))
+            {
+                property.ShouldSerialize = instance => instance is not FieldElement field || !field.IsPassword;
             }
 
             return property;

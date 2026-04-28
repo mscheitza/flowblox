@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title" xml:space="preserve"><value>Settings</value></data>
+  <data name="Header_Title" xml:space="preserve"><value>Project panel settings</value></data>
+  <data name="Header_Description" xml:space="preserve"><value>Configure the project grid size and runtime behavior for flow block notifications.</value></data>
+  <data name="Label_GridWidth" xml:space="preserve"><value>Grid width</value></data>
+  <data name="Label_GridHeight" xml:space="preserve"><value>Grid height</value></data>
+  <data name="Label_ResetNotifications" xml:space="preserve"><value>Reset flow-block notifications when runtime finishes</value></data>
+  <data name="Tooltip_ResetNotifications" xml:space="preserve"><value>If enabled, warnings and errors shown on flow blocks are reset after runtime completion.</value></data>
+  <data name="Toggle_On" xml:space="preserve"><value>Enabled</value></data>
+  <data name="Toggle_Off" xml:space="preserve"><value>Disabled</value></data>
+  <data name="Button_Back" xml:space="preserve"><value>Back</value></data>
+  <data name="Button_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="Validation_Title" xml:space="preserve"><value>Invalid input</value></data>
+  <data name="Validation_InvalidWidth_Message" xml:space="preserve"><value>Please enter a valid grid width. Minimum value: {0}px.</value></data>
+  <data name="Validation_InvalidHeight_Message" xml:space="preserve"><value>Please enter a valid grid height. Minimum value: {0}px.</value></data>
+</root>

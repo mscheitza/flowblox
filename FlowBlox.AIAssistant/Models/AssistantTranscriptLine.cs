@@ -8,6 +8,7 @@ namespace FlowBlox.AIAssistant.Models
         Status,
         ToolProcessing,
         ToolSuccess,
+        ToolPartialSuccess,
         ToolError
     }
 

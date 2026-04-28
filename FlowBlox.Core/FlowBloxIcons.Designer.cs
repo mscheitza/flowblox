@@ -273,6 +273,16 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
+        public static byte[] email_send_outline {
+            get {
+                object obj = ResourceManager.GetObject("email_send_outline", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
         public static byte[] file_delimited_outline {
             get {
                 object obj = ResourceManager.GetObject("file_delimited_outline", resourceCulture);
@@ -416,6 +426,16 @@ namespace FlowBlox.Core {
         public static byte[] identifier {
             get {
                 object obj = ResourceManager.GetObject("identifier", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] inbox_arrow_down_outline {
+            get {
+                object obj = ResourceManager.GetObject("inbox_arrow_down_outline", resourceCulture);
                 return ((byte[])(obj));
             }
         }

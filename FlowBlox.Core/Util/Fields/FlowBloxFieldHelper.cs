@@ -1,14 +1,28 @@
-﻿using System.Text.RegularExpressions;
+using System.Globalization;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Provider.Project;
+using System.Reflection;
 
 namespace FlowBlox.Core.Util.Fields
 {
     public static class FlowBloxFieldHelper
     {
+        private static readonly HashSet<Type> SupportedSimplePropertyTypes = new HashSet<Type>
+        {
+            typeof(int),
+            typeof(long),
+            typeof(float),
+            typeof(double),
+            typeof(bool),
+            typeof(DateTime)
+        };
+
         public static List<FieldElement> GetFieldElementsFromString(string value)
         {
             List<FieldElement> referencedFields = new List<FieldElement>();
@@ -117,12 +131,135 @@ namespace FlowBlox.Core.Util.Fields
             }
             return sqlStatement;
         }
-
         public static string ReplaceFQName(string value, string fqOld, string fqNew)
         {
             if (!string.IsNullOrEmpty(value) && value.Contains(fqOld))
                 value = value.Replace(fqOld, fqNew);
             return value;
+        }
+        public static TValue GetSimplePropertyOrFieldValue<TTarget, TValue>(
+            TTarget target,
+            Expression<Func<TTarget, TValue>> expression)
+        {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
+            if (expression?.Body is not MemberExpression memberExpression)
+                throw new ArgumentException("Expression must reference a property.", nameof(expression));
+
+            if (memberExpression.Member is not System.Reflection.PropertyInfo propertyInfo)
+                throw new ArgumentException("Expression must reference a property.", nameof(expression));
+
+            var directValue = (TValue)propertyInfo.GetValue(target);
+
+            var selectedFieldProperty = target.GetType().GetProperty(
+                propertyInfo.Name + GlobalConstants.SimplePropertySelectedFieldSuffix);
+
+            if (selectedFieldProperty == null)
+                return directValue;
+
+            if (selectedFieldProperty.GetValue(target) is not FieldElement selectedField)
+                return directValue;
+
+            var resolvedValue = ResolveSimpleFieldValue(typeof(TValue), selectedField.Value);
+            return (TValue)resolvedValue;
+        }
+
+        private static object ResolveSimpleFieldValue(Type targetType, object fieldValue)
+        {
+            var underlyingTargetType = Nullable.GetUnderlyingType(targetType) ?? targetType;
+            var targetIsNullable = Nullable.GetUnderlyingType(targetType) != null || !underlyingTargetType.IsValueType;
+
+            if (fieldValue == null)
+            {
+                if (targetIsNullable)
+                    return null;
+
+                return Activator.CreateInstance(underlyingTargetType);
+            }
+
+            if (underlyingTargetType.IsInstanceOfType(fieldValue))
+                return fieldValue;
+
+            if (underlyingTargetType == typeof(bool))
+            {
+                if (fieldValue is string boolText && bool.TryParse(boolText, out var boolParsed))
+                    return boolParsed;
+
+                return Convert.ToBoolean(fieldValue, CultureInfo.InvariantCulture);
+            }
+
+            if (underlyingTargetType == typeof(int))
+            {
+                if (fieldValue is string intText && int.TryParse(intText, NumberStyles.Integer, CultureInfo.InvariantCulture, out var intParsed))
+                    return intParsed;
+
+                return Convert.ToInt32(fieldValue, CultureInfo.InvariantCulture);
+            }
+
+            if (underlyingTargetType == typeof(long))
+            {
+                if (fieldValue is string longText && long.TryParse(longText, NumberStyles.Integer, CultureInfo.InvariantCulture, out var longParsed))
+                    return longParsed;
+
+                return Convert.ToInt64(fieldValue, CultureInfo.InvariantCulture);
+            }
+
+            if (underlyingTargetType == typeof(float))
+            {
+                if (fieldValue is string floatText && float.TryParse(floatText, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var floatParsed))
+                    return floatParsed;
+
+                return Convert.ToSingle(fieldValue, CultureInfo.InvariantCulture);
+            }
+
+            if (underlyingTargetType == typeof(double))
+            {
+                if (fieldValue is string doubleText && double.TryParse(doubleText, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var doubleParsed))
+                    return doubleParsed;
+
+                return Convert.ToDouble(fieldValue, CultureInfo.InvariantCulture);
+            }
+
+            if (underlyingTargetType == typeof(DateTime))
+            {
+                if (fieldValue is string dateText && DateTime.TryParse(dateText, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var parsedDate))
+                    return parsedDate;
+
+                if (fieldValue is DateTimeOffset dto)
+                    return dto.DateTime;
+
+                return Convert.ToDateTime(fieldValue, CultureInfo.InvariantCulture);
+            }
+
+            throw new InvalidOperationException($"Type '{underlyingTargetType.Name}' is not supported for simple property field resolution.");
+        }
+
+        public static object GetPropertyValueOrSelectedField(object target, PropertyInfo propertyInfo)
+        {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
+            if (propertyInfo == null)
+                throw new ArgumentNullException(nameof(propertyInfo));
+
+            var directValue = propertyInfo.GetValue(target);
+            if (!IsSupportedSimplePropertyType(propertyInfo.PropertyType))
+                return directValue;
+
+            var selectedFieldProperty = target.GetType().GetProperty(
+                propertyInfo.Name + GlobalConstants.SimplePropertySelectedFieldSuffix);
+
+            if (selectedFieldProperty?.GetValue(target) is FieldElement selectedField)
+                return selectedField;
+
+            return directValue;
+        }
+
+        private static bool IsSupportedSimplePropertyType(Type propertyType)
+        {
+            var underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
+            return SupportedSimplePropertyTypes.Contains(underlyingType);
         }
     }
 }

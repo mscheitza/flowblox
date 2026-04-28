@@ -36,6 +36,12 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
                 return property;
             }
 
+            if (member.DeclaringType == typeof(FieldElement) &&
+                string.Equals(property.PropertyName, nameof(FieldElement.StringValue), StringComparison.Ordinal))
+            {
+                property.ShouldSerialize = instance => instance is not FieldElement field || !field.IsPassword;
+            }
+
             return property;
         }
 

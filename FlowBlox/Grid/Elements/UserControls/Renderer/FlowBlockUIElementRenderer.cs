@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -108,7 +109,9 @@ namespace FlowBlox.Grid.Elements.UserControls.Renderer
                 var property = block.GetType().GetProperty(propertyName);
                 var displayAttribute = property.GetCustomAttribute<DisplayAttribute>();
 
-                var propertyValue = property?.GetValue(block);
+                var propertyValue = property == null
+                    ? null
+                    : FlowBloxFieldHelper.GetPropertyValueOrSelectedField(block, property);
                 if (propertyValue == null)
                     continue;
 

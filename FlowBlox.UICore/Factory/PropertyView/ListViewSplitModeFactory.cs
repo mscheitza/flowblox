@@ -1,6 +1,7 @@
 ﻿using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.ViewModels.PropertyView;
+using MahApps.Metro.IconPacks;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -62,17 +63,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 Visibility = Visibility.Visible
             };
 
-            // Create Save button
-            var saveButton = new Button
-            {
-                Content = FlowBloxResourceUtil.GetLocalizedString("Buttons_Apply"),
-                Margin = new Thickness(10),
-                Padding = new Thickness(10, 5, 10, 5),
-                Background = Brushes.LightGreen,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Visibility = listView.SelectedItem != null ? Visibility.Visible : Visibility.Collapsed,
-                IsEnabled = false
-            };
+            // Create Save button (toolbar style)
+            var saveButton = CreateSaveToolbarButton();
             _saveButton = saveButton;
             saveButton.Click += async (s, e) =>
             {
@@ -87,27 +79,28 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 }
             };
 
-            // Create a 2-row Grid for PropertyView and Save button
+            // Create a 2-row Grid for toolbar and PropertyView
             var rightGrid = new System.Windows.Controls.Grid()
             {
                 VerticalAlignment = VerticalAlignment.Stretch
             };
-            rightGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }); // PropertyView 
-            rightGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Button row
+            rightGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Toolbar row
+            rightGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }); // PropertyView row
 
-            // Add PropertyView (Row 0)
-            System.Windows.Controls.Grid.SetRow(_propertyView, 0);
-            System.Windows.Controls.Grid.SetRow(_noSelectionText, 0);
+            var rightToolBar = new ToolBar
+            {
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            rightToolBar.Items.Add(saveButton);
+            var rightToolbarHost = CreateEmbeddedToolbarHost(rightToolBar, compact: true);
+            System.Windows.Controls.Grid.SetRow(rightToolbarHost, 0);
+            rightGrid.Children.Add(rightToolbarHost);
+
+            // Add PropertyView (Row 1)
+            System.Windows.Controls.Grid.SetRow(_propertyView, 1);
+            System.Windows.Controls.Grid.SetRow(_noSelectionText, 1);
             rightGrid.Children.Add(_propertyView);
             rightGrid.Children.Add(_noSelectionText);
-
-            // Add Button inside a right-aligned container (Row 1)
-            var buttonContainer = new DockPanel { LastChildFill = false };
-            DockPanel.SetDock(saveButton, Dock.Right);
-            buttonContainer.Children.Add(saveButton);
-
-            System.Windows.Controls.Grid.SetRow(buttonContainer, 1);
-            rightGrid.Children.Add(buttonContainer);
 
             // Now put everything in the main horizontal Grid (2 Columns)
             _mainGrid = new System.Windows.Controls.Grid();
@@ -141,8 +134,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 if (toolbar != null)
                 {
                     stackPanel.Children.RemoveAt(0);
-                    System.Windows.Controls.Grid.SetRow(toolbar, 0);
-                    leftGrid.Children.Add(toolbar);
+                    var toolbarHost = CreateEmbeddedToolbarHost(toolbar);
+                    System.Windows.Controls.Grid.SetRow(toolbarHost, 0);
+                    leftGrid.Children.Add(toolbarHost);
                 }
             }
 
@@ -168,14 +162,25 @@ namespace FlowBlox.UICore.Factory.PropertyView
             return leftGrid;
         }
 
+        private static Border CreateEmbeddedToolbarHost(UIElement toolbar, bool compact = false)
+        {
+            var verticalPadding = compact ? 3 : 4;
+            return new Border
+            {
+                Background = (Brush)new BrushConverter().ConvertFromString("#DDE7F3"),
+                BorderBrush = Brushes.LightGray,
+                BorderThickness = new Thickness(0, 1, 0, 1),
+                Padding = new Thickness(6, verticalPadding, 6, verticalPadding),
+                Child = toolbar
+            };
+        }
+
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_listView.SelectedItem != null)
             {
                 _noSelectionText.Visibility = Visibility.Collapsed;
                 _propertyView.Visibility = Visibility.Visible;
-                if (_saveButton != null)
-                    _saveButton.Visibility = Visibility.Visible;
                 _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: false);
                 _propertyViewModel.IsDirty = _enableSaveForNextSelection;
                 _enableSaveForNextSelection = false;
@@ -188,10 +193,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 _propertyView.Visibility = Visibility.Collapsed;
                 _noSelectionText.Visibility = Visibility.Visible;
                 if (_saveButton != null)
-                {
-                    _saveButton.Visibility = Visibility.Collapsed;
                     _saveButton.IsEnabled = false;
-                }
             }
         }
 
@@ -239,6 +241,42 @@ namespace FlowBlox.UICore.Factory.PropertyView
         {
             if (item != null)
                 _propertyViewModel.Open(item, _target, deepCopy: true, readOnly: false);
+        }
+
+        private static Button CreateSaveToolbarButton()
+        {
+            var button = new Button
+            {
+                Margin = new Thickness(3, 0, 3, 0),
+                Padding = new Thickness(6, 3, 6, 3),
+                MinWidth = 80,
+                IsEnabled = false,
+                Content = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Children =
+                    {
+                        new PackIconMaterial
+                        {
+                            Kind = PackIconMaterialKind.ContentSave,
+                            Width = 14,
+                            Height = 14,
+                            Margin = new Thickness(0, 0, 5, 0),
+                            VerticalAlignment = VerticalAlignment.Center
+                        },
+                        new TextBlock
+                        {
+                            Text = FlowBloxResourceUtil.GetLocalizedString("Buttons_Apply"),
+                            VerticalAlignment = VerticalAlignment.Center
+                        }
+                    }
+                }
+            };
+
+            if (Application.Current?.TryFindResource(ToolBar.ButtonStyleKey) is Style toolbarButtonStyle)
+                button.Style = toolbarButtonStyle;
+
+            return button;
         }
     }
 }

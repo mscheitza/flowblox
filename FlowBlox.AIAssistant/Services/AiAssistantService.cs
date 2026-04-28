@@ -11,9 +11,11 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace FlowBlox.AIAssistant.Services
 {
@@ -24,9 +26,11 @@ namespace FlowBlox.AIAssistant.Services
         private readonly ILogger? _logger;
         private readonly StringComparer _nameComparer = StringComparer.OrdinalIgnoreCase;
         private readonly object _sessionSync = new();
+        private int _activeRunCount;
         private AssistantSessionState? _session;
 
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
+        public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
 
         public AiAssistantService(
@@ -37,6 +41,7 @@ namespace FlowBlox.AIAssistant.Services
             _executor = executor ?? throw new ArgumentNullException(nameof(executor));
             _tools = tools ?? throw new ArgumentNullException(nameof(tools));
             _logger = logger;
+            _tools.FlowBlocksConnectionsChanged += Tools_FlowBlocksConnectionsChanged;
         }
 
         public void ResetSession()
@@ -136,6 +141,7 @@ namespace FlowBlox.AIAssistant.Services
             var knownFlowBlocksByName = CaptureFlowBlocksByName();
             var protocolWriter = TryCreateCommunicationProtocolWriter(config, userPrompt, session.SessionId);
             var formatRetryIssued = false;
+            var hasExecutedAnyToolCall = false;
             protocolWriter?.AppendAiAssistantServiceText("System prompt prepared", systemPrompt);
             protocolWriter?.AppendAiAssistantServiceText("Session bootstrap prompt prepared", sessionBootstrapPrompt);
 
@@ -143,6 +149,7 @@ namespace FlowBlox.AIAssistant.Services
 
             try
             {
+                Interlocked.Increment(ref _activeRunCount);
                 for (var round = 1; round <= maxRounds; round++)
                 {
                     ct.ThrowIfCancellationRequested();
@@ -226,6 +233,9 @@ namespace FlowBlox.AIAssistant.Services
 
                     if (instruction.ToolCalls.Count == 0 || instruction.Final)
                     {
+                        if (hasExecutedAnyToolCall)
+                            RunAutomaticAdjustmentIfEnabled("AI run completed");
+
                         result.Success = true;
                         result.AssistantText = instruction.AssistantMessage;
                         result.Summary = "Assistant response generated.";
@@ -239,8 +249,6 @@ namespace FlowBlox.AIAssistant.Services
 
                     var roundToolTranscript = new List<string>();
                     var executedToolCalls = new List<ExecutedToolCallInfo>();
-                    var toolExecutionFailed = false;
-                    var failedToolNames = new List<string>();
 
                     var processingStatus = BuildToolProcessingTranscript(instruction.ToolCalls);
                     AddTranscript(
@@ -268,6 +276,7 @@ namespace FlowBlox.AIAssistant.Services
                             (request.Arguments ?? new JObject()).ToString(Formatting.Indented));
 
                         var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
+                        hasExecutedAnyToolCall = true;
 
                         protocolWriter?.AppendToolCall(round, request, response);
 
@@ -286,8 +295,6 @@ namespace FlowBlox.AIAssistant.Services
 
                         if (!response.Ok)
                         {
-                            toolExecutionFailed = true;
-                            failedToolNames.Add(request.ToolName);
                             result.Warnings.Add($"Tool '{request.ToolName}' reported a problem: {response.Error}");
                             _logger?.Warn($"Assistant tool call reported a problem. Tool={request.ToolName}, Error={response.Error}");
                         }
@@ -297,17 +304,25 @@ namespace FlowBlox.AIAssistant.Services
 
                     latestToolTranscript = roundToolTranscript;
 
+                    var executionSummary = BuildToolExecutionSummary(executedToolCalls);
+
                     var internalStatus = BuildToolExecutionTranscript(
-                        instruction.ToolCalls.Count,
-                        toolExecutionFailed,
-                        failedToolNames,
+                        executionSummary.RequestedOperationCount,
+                        executionSummary.SuccessfulOperationCount,
+                        executionSummary.FailedToolNames,
                         executedToolCalls);
+
+                    var toolExecutionKind = executionSummary.AllSuccessful
+                        ? AssistantTranscriptKind.ToolSuccess
+                        : executionSummary.AnySuccessful
+                            ? AssistantTranscriptKind.ToolPartialSuccess
+                            : AssistantTranscriptKind.ToolError;
+
+                    var toolExecutionMessage = BuildToolExecutionMessage(executionSummary);
                     AddTranscript(
                         result,
-                        toolExecutionFailed ? AssistantTranscriptKind.ToolError : AssistantTranscriptKind.ToolSuccess,
-                        toolExecutionFailed
-                            ? "There was a problem with one or more requested operations. A problem report was included."
-                            : "Requested operations were executed successfully.",
+                        toolExecutionKind,
+                        toolExecutionMessage,
                         internalStatus);
                 }
 
@@ -320,8 +335,33 @@ namespace FlowBlox.AIAssistant.Services
             }
             finally
             {
+                Interlocked.Decrement(ref _activeRunCount);
                 protocolWriter?.TryWrite(_logger);
             }
+        }
+
+        private void Tools_FlowBlocksConnectionsChanged(object? sender, FlowBlocksConnectionsChangedEventArgs e)
+        {
+            if (e == null || !e.HasChanges)
+                return;
+
+            FlowBlocksConnectionsChanged?.Invoke(this, e);
+
+            if (Volatile.Read(ref _activeRunCount) <= 0)
+                return;
+
+            RunAutomaticAdjustmentIfEnabled($"AI connect/disconnect (connections={e.Changes.Count})");
+        }
+
+        private void RunAutomaticAdjustmentIfEnabled(string reason)
+        {
+            var configuration = GetConfiguration(out _);
+            if (configuration?.EnableAutomaticAdjustment != true)
+                return;
+
+            var layoutResult = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
+            _logger?.Info(
+                $"AutoAdjustFlowLayout executed ({reason}). Updated={layoutResult.UpdatedFlowBlocks}, Total={layoutResult.TotalFlowBlocks}, Components={layoutResult.ComponentsProcessed}");
         }
 
         private AiCommunicationProtocolWriter? TryCreateCommunicationProtocolWriter(AssistantConfiguration config, string userPrompt, string sessionId)
@@ -553,6 +593,10 @@ namespace FlowBlox.AIAssistant.Services
             if (!string.IsNullOrWhiteSpace(executionRequirements))
                 sections.Add("Topic: Execution Requirements / Required Fields\n" + ReplaceRuntimePromptTokens(executionRequirements).Trim());
 
+            var versionNotes = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.VersionNotesKey);
+            if (!string.IsNullOrWhiteSpace(versionNotes))
+                sections.Add("Topic: Version Notes\n" + ReplaceRuntimePromptTokens(versionNotes).Trim());
+
             if (sections.Count == 0)
                 return "No central guidelines available.";
 
@@ -700,16 +744,25 @@ namespace FlowBlox.AIAssistant.Services
 
         private static string BuildToolExecutionTranscript(
             int requestedOperationCount,
-            bool hasFailures,
+            int successfulOperationCount,
             List<string> failedToolNames,
             List<ExecutedToolCallInfo> executedToolCalls)
         {
             var sb = new StringBuilder();
             sb.AppendLine($"Requested operations: {requestedOperationCount}");
             sb.AppendLine($"Executed operations: {executedToolCalls?.Count ?? 0}");
-            sb.AppendLine($"Status: {(hasFailures ? "issues detected" : "success")}");
+            sb.AppendLine($"Successful operations: {successfulOperationCount}");
 
-            if (hasFailures && failedToolNames?.Count > 0)
+            var hasAnySuccessful = successfulOperationCount > 0;
+            var allSuccessful = requestedOperationCount > 0 && successfulOperationCount == requestedOperationCount;
+            var status = allSuccessful
+                ? "success"
+                : hasAnySuccessful
+                    ? "partial success"
+                    : "issues detected";
+            sb.AppendLine($"Status: {status}");
+
+            if (!allSuccessful && failedToolNames?.Count > 0)
                 sb.AppendLine("Failed tools: " + string.Join(", ", failedToolNames.Distinct(StringComparer.OrdinalIgnoreCase)));
 
             if (executedToolCalls == null || executedToolCalls.Count == 0)
@@ -751,6 +804,83 @@ namespace FlowBlox.AIAssistant.Services
             }
 
             return sb.ToString().TrimEnd();
+        }
+
+        private static string BuildToolExecutionMessage(ToolExecutionSummary summary)
+        {
+            if (summary.AnySuccessful && !summary.AllSuccessful)
+            {
+                return $"{summary.SuccessfulOperationCount}/{summary.RequestedOperationCount} requested operations were executed successfully.";
+            }
+
+            if (summary.AllSuccessful)
+            {
+                if (summary.RequestedOperationCount == 1)
+                    return "The requested operation was executed successfully.";
+
+                return $"All {summary.RequestedOperationCount} requested operations were executed successfully.";
+            }
+
+            return "There was a problem with the request. A problem report was included.";
+        }
+
+        private static ToolExecutionSummary BuildToolExecutionSummary(List<ExecutedToolCallInfo> executedToolCalls)
+        {
+            var requestedOperationCount = 0;
+            var successfulOperationCount = 0;
+            var failedToolNames = new List<string>();
+
+            if (executedToolCalls == null || executedToolCalls.Count == 0)
+            {
+                return new ToolExecutionSummary
+                {
+                    RequestedOperationCount = 0,
+                    SuccessfulOperationCount = 0,
+                    FailedToolNames = failedToolNames
+                };
+            }
+
+            foreach (var executedToolCall in executedToolCalls)
+            {
+                var response = executedToolCall?.Response ?? new ToolResponse();
+                var result = response.Result;
+
+                if (result?["batchResults"] is JArray batchResults)
+                {
+                    var requestedBatchCount = executedToolCall.Arguments?["requests"] is JArray requests
+                        ? requests.Count
+                        : batchResults.Count;
+
+                    var successfulBatchCount = batchResults
+                        .OfType<JObject>()
+                        .Count(x => x.Value<bool?>("ok") == true);
+
+                    requestedOperationCount += requestedBatchCount;
+                    successfulOperationCount += successfulBatchCount;
+
+                    if (successfulBatchCount < requestedBatchCount)
+                        failedToolNames.Add(executedToolCall.ToolName);
+
+                    continue;
+                }
+
+                requestedOperationCount += 1;
+                if (response.Ok)
+                {
+                    successfulOperationCount += 1;
+                }
+                else
+                {
+                    failedToolNames.Add(executedToolCall.ToolName);
+                }
+            }
+
+            return new ToolExecutionSummary
+            {
+                RequestedOperationCount = requestedOperationCount,
+                SuccessfulOperationCount = successfulOperationCount,
+                FailedToolNames = failedToolNames
+            };
         }
 
         private static string BuildToolProcessingTranscript(IReadOnlyList<AssistantToolCall> toolCalls)
@@ -848,6 +978,15 @@ namespace FlowBlox.AIAssistant.Services
             public string ToolName { get; set; } = string.Empty;
             public JObject Arguments { get; set; } = new JObject();
             public ToolResponse Response { get; set; } = new ToolResponse();
+        }
+
+        private sealed class ToolExecutionSummary
+        {
+            public int RequestedOperationCount { get; set; }
+            public int SuccessfulOperationCount { get; set; }
+            public List<string> FailedToolNames { get; set; } = new();
+            public bool AnySuccessful => SuccessfulOperationCount > 0;
+            public bool AllSuccessful => RequestedOperationCount > 0 && SuccessfulOperationCount == RequestedOperationCount;
         }
 
         private sealed class AssistantSessionState

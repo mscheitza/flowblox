@@ -1,8 +1,9 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Actions;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 
-namespace FlowBlox.UICore.Actions
+namespace FlowBlox.Core.Actions
 {
-    public class FlowBloxDisconnectAction : FlowBloxBaseAction
+    public class FlowBloxConnectAction : FlowBloxBaseAction
     {
         public BaseFlowBlock From { get; set; }
 
@@ -10,11 +11,10 @@ namespace FlowBlox.UICore.Actions
 
         public override void Undo()
         {
-            // Rückgängig machen des Disconnects bedeutet, die Verbindung wiederherzustellen
             var referencedFlowBlocks = To.ReferencedFlowBlocks;
 
-            if (!referencedFlowBlocks.Contains(From))
-                referencedFlowBlocks.Add(From);
+            if (referencedFlowBlocks.Contains(From))
+                referencedFlowBlocks.Remove(From);
 
             To.ReferencedFlowBlocks = referencedFlowBlocks;
 
@@ -23,11 +23,10 @@ namespace FlowBlox.UICore.Actions
 
         public override void Invoke()
         {
-            // Trennen der Verbindung
             var referencedFlowBlocks = To.ReferencedFlowBlocks;
 
-            if (referencedFlowBlocks.Contains(From))
-                referencedFlowBlocks.Remove(From);
+            if (!referencedFlowBlocks.Contains(From))
+                referencedFlowBlocks.Add(From);
 
             To.ReferencedFlowBlocks = referencedFlowBlocks;
 

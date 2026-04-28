@@ -28,6 +28,7 @@ namespace FlowBlox
             serviceCollection.AddSingleton<IFlowBloxUIEvaluationService, FlowBloxUIEvaluationService>();
             serviceCollection.AddSingleton<IAppNotificationService, AppNotificationService>();
             serviceCollection.AddSingleton<IFlowBloxInstallerService, FlowBloxInstallerService>();
+            serviceCollection.AddSingleton<IFlowBloxActionHistoryService, FlowBloxActionHistoryService>();
         }
     }
 }

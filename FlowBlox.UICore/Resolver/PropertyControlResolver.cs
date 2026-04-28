@@ -24,12 +24,14 @@ namespace FlowBlox.UICore.Resolver
         private Window _window;
         private readonly object _parent;
         private TextBoxWithOptionalButtonsCreator _textBoxWithOptionalButtonsCreator;
+        private SimplePropertyInputControlWithOptionalButtonsCreator _simplePropertyInputControlWithOptionalButtonsCreator;
 
         public PropertyControlResolver(Window window, object parent = null)
         {
             this._window = window;
             this._parent = parent;
             this._textBoxWithOptionalButtonsCreator = new TextBoxWithOptionalButtonsCreator(window);
+            this._simplePropertyInputControlWithOptionalButtonsCreator = new SimplePropertyInputControlWithOptionalButtonsCreator(window);
         }
 
         public PropertyControlViewModel Resolve(
@@ -122,26 +124,16 @@ namespace FlowBlox.UICore.Resolver
                 ValidatesOnExceptions = true
             };
 
-            if (property.PropertyType == typeof(bool))
+            if (IsSimpleSupportedType(property.PropertyType))
             {
-                var toggle = new ToggleSwitch
-                {
-                    IsEnabled = !readOnly,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Margin = new Thickness(0, 4, 0, 4),
-                    MinWidth = 80,
-                    OnContent = FlowBloxResourceUtil.GetLocalizedString("PropertyControlResolver_ToggleSwitch_OnContent", typeof(FlowBloxTexts)),
-                    OffContent = FlowBloxResourceUtil.GetLocalizedString("PropertyControlResolver_ToggleSwitch_OffContent", typeof(FlowBloxTexts))
-                };
-
-                toggle.SetBinding(ToggleSwitch.IsOnProperty, binding);
-
-                toggle.Toggled += (s, e) =>
-                    FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
-
-                return new PropertyControlWithFactoryResult(toggle);
+                return new PropertyControlWithFactoryResult(
+                    _simplePropertyInputControlWithOptionalButtonsCreator.CreateSimplePropertyInputControlWithOptionalButtons(
+                        property,
+                        target,
+                        uiAttribute,
+                        binding,
+                        readOnly));
             }
-
 
             if (property.PropertyType.IsEnum || Nullable.GetUnderlyingType(property.PropertyType)?.IsEnum == true)
             {
@@ -230,24 +222,6 @@ namespace FlowBlox.UICore.Resolver
                 }
             }
 
-            if (property.PropertyType == typeof(int) || 
-                property.PropertyType == typeof(int?) ||
-                property.PropertyType == typeof(float) ||
-                property.PropertyType == typeof(float?) ||
-                property.PropertyType == typeof(double) ||
-                property.PropertyType == typeof(double?))
-            {
-                binding.Converter = new NumericTextValueConverter(property.PropertyType);
-
-                var textBox = new TextBox
-                {
-                    IsReadOnly = readOnly
-                };
-                textBox.TextChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
-                textBox.SetBinding(TextBox.TextProperty, binding);
-                return new PropertyControlWithFactoryResult(textBox);
-            }
-
             if (uiAttribute?.Factory == UIFactory.Association)
             {
                 AssociationControlFactory associationControlFactory = new AssociationControlFactory(_window, property, target, readOnly, _parent);
@@ -289,6 +263,22 @@ namespace FlowBlox.UICore.Resolver
             comboBox.IsHitTestVisible = !readOnly;
             comboBox.Focusable = !readOnly;
             comboBox.IsTabStop = !readOnly;
+        }
+
+        private static bool IsSimpleSupportedType(Type propertyType)
+        {
+            return propertyType == typeof(bool) ||
+                   propertyType == typeof(bool?) ||
+                   propertyType == typeof(int) ||
+                   propertyType == typeof(int?) ||
+                   propertyType == typeof(long) ||
+                   propertyType == typeof(long?) ||
+                   propertyType == typeof(float) ||
+                   propertyType == typeof(float?) ||
+                   propertyType == typeof(double) ||
+                   propertyType == typeof(double?) ||
+                   propertyType == typeof(DateTime) ||
+                   propertyType == typeof(DateTime?);
         }
     }
 }

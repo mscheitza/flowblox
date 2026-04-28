@@ -1,15 +1,15 @@
-﻿using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Actions;
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Provider;
 using FlowBlox.Grid.Elements.UserControls;
 using FlowBlox.Grid.Provider;
-using FlowBlox.UICore.Actions;
 using System.Windows.Forms;
 
 namespace FlowBlox.Actions
 {
     public class FlowBloxDeleteAction : FlowBloxBaseAction
     {
-        private FlowBloxProjectComponentProvider _componentProvider;
+        private readonly FlowBloxProjectComponentProvider _componentProvider;
 
         public FlowBloxDeleteAction()
         {
@@ -22,7 +22,7 @@ namespace FlowBlox.Actions
 
         public override void Undo()
         {
-            this.MainPanel.Controls.Add(UIElement);
+            MainPanel.Controls.Add(UIElement);
             _componentProvider.GetCurrentUIRegistry().RegisterGridUIElement(UIElement);
             FlowBloxRegistryProvider.GetRegistry().RegisterFlowBlock(UIElement.InternalFlowBlock);
             base.Undo();
@@ -30,7 +30,7 @@ namespace FlowBlox.Actions
 
         public override void Invoke()
         {
-            this.MainPanel.Controls.Remove(UIElement);
+            MainPanel.Controls.Remove(UIElement);
             _componentProvider.GetCurrentUIRegistry().RemoveUIElement(UIElement);
             FlowBloxRegistryProvider.GetRegistry().RemoveFlowBlock(UIElement.InternalFlowBlock);
             base.Invoke();

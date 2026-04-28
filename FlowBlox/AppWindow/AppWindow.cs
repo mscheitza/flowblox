@@ -19,14 +19,17 @@ using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Services;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.Grid.Provider;
 using FlowBlox.Interfaces;
 using FlowBlox.Services;
+using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.PSProjects;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -179,6 +182,8 @@ namespace FlowBlox.AppWindow
 
             itmDockablePanels.Enabled = isProjectActive;
             itmResetDockablePanels.Enabled = isProjectActive;
+            itmAutoAdjustFlowLayout.Enabled = isProjectActive && !isRuntimeActive;
+
 
             itmOpenRuntimeLogDirectory.Enabled = !string.IsNullOrEmpty(RuntimeLogfilePath);
             itmOpenProjectInputDir.Enabled = isProjectActive;
@@ -1285,11 +1290,20 @@ namespace FlowBlox.AppWindow
         {
             FlowBloxOptions.GetOptionInstance().GetOption("MainPanel.DockSettings").Value = string.Empty;
             FlowBloxOptions.GetOptionInstance().Save();
+            itmDockablePanels.DropDownItems.Clear();
             InitializeDockPanel(true);
         }
 
         private void itmDockablePanels_Click(object sender, EventArgs e)
         {
+        }
+
+        private void itmAutoAdjustFlowLayout_Click(object sender, EventArgs e)
+        {
+            var result = _dockContentProjectPanel?.ExecuteAutoAdjustFlowLayout() ?? new FlowBlockAutoLayoutResult();
+
+            var logger = FlowBloxLogManager.Instance.GetLogger();
+            logger.Info($"AutoAdjustFlowLayout executed. Updated={result.UpdatedFlowBlocks}, Total={result.TotalFlowBlocks}, Components={result.ComponentsProcessed}");
         }
 
         private void itmSaveToProjectSpace_Click(object sender, EventArgs e)

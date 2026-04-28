@@ -151,6 +151,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Auto-align flow ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmAutoAdjustFlowLayout_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmAutoAdjustFlowLayout_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Check for updates... ähnelt.
         /// </summary>
         internal static string AppWindow_itmCheckForNewVersion_Text {
@@ -1118,6 +1127,15 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execution index: {0} ähnelt.
+        /// </summary>
+        internal static string FlowBlockUIElement_ExecutionIndex_Text {
+            get {
+                return ResourceManager.GetString("FlowBlockUIElement_ExecutionIndex_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Output field: {0} (Fully qualified field name: {1}) ähnelt.
         /// </summary>
         internal static string FlowBlockUIElementRenderer_Field_Tooltip {
@@ -1451,6 +1469,33 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No start flow block was found. Automatic alignment cannot be performed. ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_AutoAdjust_NoStart_Message {
+            get {
+                return ResourceManager.GetString("ProjectPanel_AutoAdjust_NoStart_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No automatic alignment ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_AutoAdjust_NoStart_Title {
+            get {
+                return ResourceManager.GetString("ProjectPanel_AutoAdjust_NoStart_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Auto align ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_btAutoAdjustFlowLayout_Text {
+            get {
+                return ResourceManager.GetString("ProjectPanel_btAutoAdjustFlowLayout_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Connect ähnelt.
         /// </summary>
         internal static string ProjectPanel_btConnectionMode_Text {
@@ -1469,7 +1514,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Adjust &amp;grid size ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Settings ähnelt.
         /// </summary>
         internal static string ProjectPanel_btGridSettings_Text {
             get {
@@ -1541,7 +1586,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Set index ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Set execution index ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmDefineIndex_Text {
             get {
@@ -1595,7 +1640,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manage &amp;index ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage execution &amp;index ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmIndex_Text {
             get {
@@ -1640,7 +1685,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Remove index ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die &amp;Remove execution index ähnelt.
         /// </summary>
         internal static string ProjectPanel_itmRemoveIndex_Text {
             get {

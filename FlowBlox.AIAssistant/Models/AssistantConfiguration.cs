@@ -29,5 +29,7 @@ namespace FlowBlox.AIAssistant.Models
         [Display(Name = "AssistantConfiguration_EnableCommunicationProtocol", Description = "AssistantConfiguration_EnableCommunicationProtocol_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 4)]
         public bool EnableCommunicationProtocol { get; set; }
 
+        [Display(Name = "AssistantConfiguration_EnableAutomaticAdjustment", Description = "AssistantConfiguration_EnableAutomaticAdjustment_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 5)]
+        public bool EnableAutomaticAdjustment { get; set; } = true;
     }
 }

@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.calendar_clock, 16, SKColors.DarkSlateBlue);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.calendar_clock, 32, SKColors.DarkSlateBlue);
 
-        public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.None;
+        public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.DateOperations;
         public override FieldTypes DefaultResultFieldType => FieldTypes.DateTime;
 

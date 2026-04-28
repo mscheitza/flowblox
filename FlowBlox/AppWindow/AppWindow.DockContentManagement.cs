@@ -135,6 +135,9 @@ namespace FlowBlox.AppWindow
                     _initializedDockContents.Add(content);
                 }
 
+                if (dockPanel.ActiveContent != target)
+                    target.Activate();
+
                 _initializedDockContents.Add(target);
             }
             finally
@@ -160,10 +163,7 @@ namespace FlowBlox.AppWindow
             if (!ShouldUseStepThrough(dockContent, out _, out _))
                 return;
 
-            BeginInvoke(new MethodInvoker(() =>
-            {
-                ActivateDockContentWithStepThrough(dockContent);
-            }));
+            ActivateDockContentWithStepThrough(dockContent);
         }
 
         private enum DockRegion
@@ -255,18 +255,37 @@ namespace FlowBlox.AppWindow
 
         private void DockPanel_ContentAdded(object sender, DockContentEventArgs e)
         {
-            var dockContent = ((DockContent)e.Content);
+            if (e?.Content is not DockContent dockContent)
+                return;
+
+            var menuKey = GetDockMenuItemKey(dockContent);
+            var existingMenuItem = itmDockablePanels.DropDownItems
+                .OfType<ToolStripMenuItem>()
+                .FirstOrDefault(item =>
+                    ReferenceEquals(item.Tag, dockContent) ||
+                    string.Equals(item.Name, menuKey, StringComparison.Ordinal));
+
+            if (existingMenuItem != null)
+            {
+                existingMenuItem.Text = dockContent.Text;
+                existingMenuItem.Tag = dockContent;
+                existingMenuItem.Image = DockContentIconResolver.Resolve(dockContent);
+                return;
+            }
 
             var toolstripMenuItem = new ToolStripMenuItem()
             {
-                Text = dockContent.Text
+                Name = menuKey,
+                Text = dockContent.Text,
+                Tag = dockContent
             };
 
             toolstripMenuItem.Image = DockContentIconResolver.Resolve(dockContent);
 
             toolstripMenuItem.Click += (s, e2) =>
             {
-                dockContent.Show();
+                if (toolstripMenuItem.Tag is DockContent content && !content.IsDisposed)
+                    content.Show();
             };
 
             itmDockablePanels.DropDownItems.Add(toolstripMenuItem);
@@ -276,15 +295,27 @@ namespace FlowBlox.AppWindow
 
         private void DockPanel_ContentRemoved(object sender, DockContentEventArgs e)
         {
-            var removedContent = (DockContent)e.Content;
-            foreach (ToolStripItem item in itmDockablePanels.DropDownItems)
+            if (e?.Content is not DockContent removedContent)
+                return;
+
+            var menuKey = GetDockMenuItemKey(removedContent);
+            var itemsToRemove = itmDockablePanels.DropDownItems
+                .OfType<ToolStripMenuItem>()
+                .Where(item =>
+                    ReferenceEquals(item.Tag, removedContent) ||
+                    string.Equals(item.Name, menuKey, StringComparison.Ordinal))
+                .Cast<ToolStripItem>()
+                .ToList();
+
+            foreach (var item in itemsToRemove)
             {
-                if (item is ToolStripMenuItem menuItem && menuItem.Text == removedContent.Name)
-                {
-                    itmDockablePanels.DropDownItems.Remove(item);
-                    break;
-                }
+                itmDockablePanels.DropDownItems.Remove(item);
             }
+        }
+
+        private static string GetDockMenuItemKey(DockContent dockContent)
+        {
+            return dockContent?.GetType().FullName;
         }
     }
 }

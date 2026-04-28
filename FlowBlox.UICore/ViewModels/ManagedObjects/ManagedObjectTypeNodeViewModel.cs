@@ -16,6 +16,21 @@ namespace FlowBlox.UICore.ViewModels.ManagedObjects
         public bool CanCreateInstance { get; }
 
         public bool IsCategoryOnly { get; }
+        public bool IsAllManagedObjectsRoot { get; }
+
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                if (_isExpanded == value)
+                    return;
+
+                _isExpanded = value;
+                Raise();
+            }
+        }
 
         public ObservableCollection<ManagedObjectTypeNodeViewModel> Children { get; } = new();
 
@@ -24,13 +39,17 @@ namespace FlowBlox.UICore.ViewModels.ManagedObjects
             string displayName,
             ImageSource icon,
             bool canCreateInstance,
-            bool isCategoryOnly = false)
+            bool isCategoryOnly = false,
+            bool isAllManagedObjectsRoot = false,
+            bool isExpanded = false)
         {
             ManagedObjectType = managedObjectType;
             DisplayName = displayName;
             Icon = icon;
             CanCreateInstance = canCreateInstance;
             IsCategoryOnly = isCategoryOnly;
+            IsAllManagedObjectsRoot = isAllManagedObjectsRoot;
+            IsExpanded = isExpanded;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

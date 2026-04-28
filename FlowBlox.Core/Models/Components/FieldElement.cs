@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
@@ -11,7 +12,6 @@ using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
-using Newtonsoft.Json;
 using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -228,6 +228,8 @@ namespace FlowBlox.Core.Models.Components
 
         public bool IsRegularField() => !UserField;
 
+        public bool IsUserInputField() => UserField && UserFieldType == UserFieldTypes.Input;
+
         private string _stringValue;
 
         public bool ShouldSerializeStringValue()
@@ -273,12 +275,39 @@ namespace FlowBlox.Core.Models.Components
 
         [ActivationCondition(MemberName = nameof(UserField), Value = true)]
         [Display(Name = "FieldElement_StoreValueLocally", Description = "FieldElement_StoreValueLocally_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        [FlowBloxUI(ReadOnlyMethod = nameof(IsStoreValueLocallyReadOnly))]
         public bool StoreValueLocally
         {
-            get => _storeValueLocally ?? false;
+            get => IsPassword || (_storeValueLocally ?? false);
             set
             {
-                _storeValueLocally = value;
+                _storeValueLocally = IsPassword ? true : value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsStoreValueLocallyReadOnly() => IsPassword;
+
+        private bool _isPassword;
+
+        [ActivationCondition(ActivationMethod = nameof(IsUserInputField))]
+        [Display(Name = "FieldElement_UsePasswordChar", Description = "FieldElement_UsePasswordChar_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
+        public bool IsPassword
+        {
+            get => _isPassword;
+            set
+            {
+                if (_isPassword == value)
+                    return;
+
+                _isPassword = value;
+
+                if (value)
+                {
+                    _storeValueLocally = true;
+                    OnPropertyChanged(nameof(StoreValueLocally));
+                }
+
                 OnPropertyChanged();
             }
         }
@@ -326,7 +355,7 @@ namespace FlowBlox.Core.Models.Components
 
 
         [ActivationCondition(MemberName = nameof(UserFieldType), Value = UserFieldTypes.Input)]
-        [Display(Name = "FieldElement_ListOfValues", ResourceType = typeof(FlowBloxTexts), Order = 5)]
+        [Display(Name = "FieldElement_ListOfValues", ResourceType = typeof(FlowBloxTexts), Order = 6)]
         [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ValueItem> ListOfValues { get; set; }
 
@@ -428,10 +457,11 @@ namespace FlowBlox.Core.Models.Components
         {
             if (value != this.StringValue)
             {
+                var externalValue = GetExternalValue(value);
                 if (!string.IsNullOrEmpty(value))
-                    runtime.Report($"Field value changed: " + this.FullyQualifiedName + "=" + GetShortStringValue(value));
+                    runtime.Report($"Field value changed: " + this.FullyQualifiedName + "=" + GetShortStringValue(externalValue));
                 else
-                    runtime.Report($"Field value changed: " + this.FullyQualifiedName + "=" + "<null>");
+                    runtime.Report($"Field value changed: " + this.FullyQualifiedName + "=" + (IsPassword ? GlobalConstants.HiddenSensitiveValue : "<null>"));
             }
             SetValueWithoutEvaluation(runtime, value, runtimeBound);
         }
@@ -469,6 +499,14 @@ namespace FlowBlox.Core.Models.Components
                 UserFieldTypes.Input => InputFieldColor,
                 _ => RegularFieldColor
             };
+        }
+
+        public string GetExternalValue(string value)
+        {
+            if (!IsPassword)
+                return value;
+
+            return GlobalConstants.HiddenSensitiveValue;
         }
     }
 }

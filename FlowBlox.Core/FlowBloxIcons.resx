@@ -181,6 +181,9 @@
   <data name="download" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\download.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="email_send_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\email-send-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="file_delimited_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\file-delimited-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -225,6 +228,9 @@
   </data>
   <data name="identifier" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\identifier.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="inbox_arrow_down_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\inbox-arrow-down-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lightning_bolt_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\lightning-bolt-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
