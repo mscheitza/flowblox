@@ -3645,4 +3645,9 @@ Multi-level XPath expressions are not allowed here.</value>
   <data name="DateTimeComponentAdjustmentTarget_Seconds" xml:space="preserve">
     <value>Seconds</value>
   </data>
-</root>
+	<data name="SMTPFlowBlock_AcceptInvalidCertificates" xml:space="preserve">
+		<value>Accept invalid certificates</value>
+	</data>
+	<data name="SMTPFlowBlock_AcceptInvalidCertificates_Tooltip" xml:space="preserve">
+		<value>Accepts invalid TLS certificates for SMTP connections. Use for testing only.</value>
+	</data></root>

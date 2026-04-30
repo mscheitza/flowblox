@@ -7325,6 +7325,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Accept invalid certificates ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_AcceptInvalidCertificates {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_AcceptInvalidCertificates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Accepts invalid TLS certificates for SMTP connections. Use for testing only. ähnelt.
+        /// </summary>
+        public static string SMTPFlowBlock_AcceptInvalidCertificates_Tooltip {
+            get {
+                return ResourceManager.GetString("SMTPFlowBlock_AcceptInvalidCertificates_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Attachment mappings ähnelt.
         /// </summary>
         public static string SMTPFlowBlock_Attachments {

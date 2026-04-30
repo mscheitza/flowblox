@@ -25,12 +25,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
 
     public enum DateTimeComponentAdjustmentTarget
     {
-        [Display(Name = "DateTimeComponentAdjustmentTarget_DateTime", ResourceType = typeof(FlowBloxTexts))]
-        DateTime,
-
-        [Display(Name = "DateTimeComponentAdjustmentTarget_Date", ResourceType = typeof(FlowBloxTexts))]
-        Date,
-
         [Display(Name = "DateTimeComponentAdjustmentTarget_Time", ResourceType = typeof(FlowBloxTexts))]
         Time,
 
@@ -70,8 +64,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
     [Display(Name = "DateTimeComponentAdjustFlowBlock_DisplayName", Description = "DateTimeComponentAdjustFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class DateTimeComponentAdjustFlowBlock : BaseSingleResultFlowBlock
     {
-        private static readonly DateTime UnixEpoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
         [Required]
         [Display(Name = "DateTimeComponentAdjustFlowBlock_SourceDate", Description = "DateTimeComponentAdjustFlowBlock_SourceDate_Description", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(
@@ -169,9 +161,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
                 DateTimeComponentAdjustmentTarget.Hours => source.AddHours(value),
                 DateTimeComponentAdjustmentTarget.Minutes => source.AddMinutes(value),
                 DateTimeComponentAdjustmentTarget.Seconds => source.AddSeconds(value),
-                DateTimeComponentAdjustmentTarget.Date => source.AddDays(value),
                 DateTimeComponentAdjustmentTarget.Time => source.AddSeconds(value),
-                DateTimeComponentAdjustmentTarget.DateTime => source.AddSeconds(value),
                 _ => source
             };
         }
@@ -180,8 +170,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
         {
             return target switch
             {
-                DateTimeComponentAdjustmentTarget.DateTime => DateTimeOffset.FromUnixTimeSeconds(value).LocalDateTime,
-                DateTimeComponentAdjustmentTarget.Date => SetDateByUnixDays(source, value),
                 DateTimeComponentAdjustmentTarget.Time => source.Date.AddSeconds(Math.Max(0, value)),
                 DateTimeComponentAdjustmentTarget.Year => SetYear(source, value),
                 DateTimeComponentAdjustmentTarget.Month => SetMonth(source, value),
@@ -191,13 +179,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
                 DateTimeComponentAdjustmentTarget.Seconds => SetTimePart(source, source.Hour, source.Minute, value),
                 _ => source
             };
-        }
-
-        private static DateTime SetDateByUnixDays(DateTime source, int daysSinceUnixEpoch)
-        {
-            var clampedDays = Math.Clamp(daysSinceUnixEpoch, -719162, 2932896);
-            var date = UnixEpoch.AddDays(clampedDays).Date;
-            return new DateTime(date.Year, date.Month, date.Day, source.Hour, source.Minute, source.Second, source.Kind);
         }
 
         private static DateTime SetYear(DateTime source, int value)

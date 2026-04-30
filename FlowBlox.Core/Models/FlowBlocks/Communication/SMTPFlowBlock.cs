@@ -33,14 +33,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
         public bool UseSsl { get; set; }
         public FieldElement UseSsl_SelectedField { get; set; }
 
-        [Display(Name = "SMTPFlowBlock_UseAuthentication", Description = "SMTPFlowBlock_UseAuthentication_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [Display(Name = "SMTPFlowBlock_AcceptInvalidCertificates", Description = "SMTPFlowBlock_AcceptInvalidCertificates_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        public bool AcceptInvalidCertificates { get; set; } = true;
+
+        [Display(Name = "SMTPFlowBlock_UseAuthentication", Description = "SMTPFlowBlock_UseAuthentication_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
         public bool UseAuthentication { get; set; }
 
-        [Display(Name = "SMTPFlowBlock_UserName", Description = "SMTPFlowBlock_UserName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        [Display(Name = "SMTPFlowBlock_UserName", Description = "SMTPFlowBlock_UserName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string UserName { get; set; }
 
-        [Display(Name = "SMTPFlowBlock_Password", Description = "SMTPFlowBlock_Password_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
+        [Display(Name = "SMTPFlowBlock_Password", Description = "SMTPFlowBlock_Password_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 6)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBloxTextBox]
         public string Password { get; set; }
@@ -93,6 +96,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
             properties.Add(nameof(Host));
             properties.Add(nameof(Port));
             properties.Add(nameof(UseSsl));
+            properties.Add(nameof(AcceptInvalidCertificates));
             properties.Add(nameof(UseAuthentication));
             properties.Add(nameof(FromAddress));
             properties.Add(nameof(ToAddresses));
@@ -173,7 +177,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
 
                     try
                     {
-                        client.Send(message);
+                        SendMessage(client, message, useSsl, this.AcceptInvalidCertificates);
                         runtime.Report($"SMTP mail sent successfully via '{resolvedHost}:{port}'.");
                     }
                     catch (Exception ex)
@@ -247,6 +251,31 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
 
             var fallback = value?.ToString() ?? string.Empty;
             return mapping.EncodingName.ToEncoding().GetBytes(fallback);
+        }
+
+        private static readonly object SmtpCertificateValidationSync = new();
+
+        private static void SendMessage(SmtpClient client, MailMessage message, bool useSsl, bool acceptInvalidCertificates)
+        {
+            if (!(useSsl && acceptInvalidCertificates))
+            {
+                client.Send(message);
+                return;
+            }
+
+            lock (SmtpCertificateValidationSync)
+            {
+                var previousValidationCallback = ServicePointManager.ServerCertificateValidationCallback;
+                try
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = (_, _, _, _) => true;
+                    client.Send(message);
+                }
+                finally
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = previousValidationCallback;
+                }
+            }
         }
 
         public override List<Type> NotificationTypes

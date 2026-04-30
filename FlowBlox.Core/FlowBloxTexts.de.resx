@@ -3588,4 +3588,9 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="OAuthFlowBlock_Notification_AuthorizationFailed" xml:space="preserve">
 		<value>Autorisierung fehlgeschlagen</value>
 	</data>
-</root>
+	<data name="SMTPFlowBlock_AcceptInvalidCertificates" xml:space="preserve">
+		<value>Ungültige Zertifikate akzeptieren</value>
+	</data>
+	<data name="SMTPFlowBlock_AcceptInvalidCertificates_Tooltip" xml:space="preserve">
+		<value>Akzeptiert ungültige TLS-Zertifikate für SMTP-Verbindungen. Nur für Tests verwenden.</value>
+	</data></root>
