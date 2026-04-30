@@ -295,6 +295,9 @@
       <Component Id="CMP_E79E74EAB584CE20CAF04F25" Directory="INSTALLFOLDER" Guid="*">
         <File Id="FIL_E79E74EAB584CE20CAF04F25" Source="$(var.SourceDir)\\MahApps.Metro.IconPacks.Zondicons.dll" />
       </Component>
+      <Component Id="CMP_C06369F1B96BB480A13CFB73" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_C06369F1B96BB480A13CFB73" Source="$(var.SourceDir)\\MailKit.dll" />
+      </Component>
       <Component Id="CMP_78BA15314D7968958D1A6B91" Directory="INSTALLFOLDER" Guid="*">
         <File Id="FIL_78BA15314D7968958D1A6B91" Source="$(var.SourceDir)\\Microsoft.Bcl.AsyncInterfaces.dll" />
       </Component>
@@ -408,6 +411,9 @@
       </Component>
       <Component Id="CMP_5681D1C513DE4D99476D4A32" Directory="INSTALLFOLDER" Guid="*">
         <File Id="FIL_5681D1C513DE4D99476D4A32" Source="$(var.SourceDir)\\Microsoft.Xaml.Behaviors.dll" />
+      </Component>
+      <Component Id="CMP_21DEB672960458AFC37B908D" Directory="INSTALLFOLDER" Guid="*">
+        <File Id="FIL_21DEB672960458AFC37B908D" Source="$(var.SourceDir)\\MimeKit.dll" />
       </Component>
       <Component Id="CMP_8A0CB90675F8753841DB40B6" Directory="INSTALLFOLDER" Guid="*">
         <File Id="FIL_8A0CB90675F8753841DB40B6" Source="$(var.SourceDir)\\MySql.Data.dll" />

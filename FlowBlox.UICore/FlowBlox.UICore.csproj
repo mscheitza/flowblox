@@ -10,7 +10,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>FlowBlox and contributors</Company>
-    <Copyright>Copyright (c) 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
+    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
     <Authors>FlowBlox and contributors</Authors>
     <Product>FlowBlox</Product>
   </PropertyGroup>
@@ -325,4 +325,3 @@
     </EmbeddedResource>
   </ItemGroup>
 </Project>
-
