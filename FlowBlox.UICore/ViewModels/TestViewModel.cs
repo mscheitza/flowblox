@@ -240,10 +240,25 @@ namespace FlowBlox.UICore.ViewModels
             if (_registry == null)
                 return;
 
+            if (!HasValidStartFlowChain())
+            {
+                _messageBoxService.ShowMessageBox(
+                    Resources.TestView.Message_CreateBlockedMissingFlowChain_Description,
+                    Resources.TestView.Message_CreateBlockedMissingFlowChain_Title,
+                    FlowBloxMessageBoxTypes.Warning);
+                return;
+            }
+
             var newTestDefinition = new FlowBloxTestDefinition();
             _registry.PostProcessManagedObjectCreated(newTestDefinition);
 
-            var view = new TestDefinitionView(newTestDefinition, currentFlowBlock: null);
+            var startFlowBlock = _registry.GetStartFlowBlock();
+            if (startFlowBlock == null)
+                return;
+
+            var latestFlowBlock = _registry.GetFlowBlocksRecursiveOrderedByExecutionFlow(startFlowBlock).Last();
+
+            var view = new TestDefinitionView(newTestDefinition, currentFlowBlock: latestFlowBlock);
             var result = _dialogService.ShowWPFDialog(view, isModal: true);
             if (result == true)
                 _registry.RegisterManagedObject(newTestDefinition);
@@ -253,6 +268,15 @@ namespace FlowBlox.UICore.ViewModels
 
         private void EditTestCase()
         {
+            if (!HasValidStartFlowChain())
+            {
+                _messageBoxService.ShowMessageBox(
+                    Resources.TestView.Message_EditBlockedMissingFlowChain_Description,
+                    Resources.TestView.Message_EditBlockedMissingFlowChain_Title,
+                    FlowBloxMessageBoxTypes.Warning);
+                return;
+            }
+
             if (_selectedEntries.Count != 1)
                 return;
 
@@ -266,7 +290,8 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         private bool CanEditTestCase()
-            => _selectedEntries.Count == 1 && _selectedEntries[0].TestDefinition != null;
+            => _selectedEntries.Count == 1
+               && _selectedEntries[0].TestDefinition != null;
 
         private void DeleteTestCases()
         {
@@ -315,6 +340,15 @@ namespace FlowBlox.UICore.ViewModels
 
         private bool CanDeleteTestCases()
             => !IsReadOnly && ResolveSelectionOrAll().Count > 0;
+
+        private bool HasValidStartFlowChain()
+        {
+            if (_registry == null)
+                return false;
+
+            var startFlowBlock = _registry.GetStartFlowBlock();
+            return startFlowBlock != null && startFlowBlock.GetNextFlowBlocks().Any();
+        }
 
         private async void RunSelectedOrAllTestsAsync()
         {

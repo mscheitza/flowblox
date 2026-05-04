@@ -26,6 +26,7 @@ namespace FlowBlox.UICore.ViewModels
         private string _userName;
         private bool _isExtensionDirty;
         private bool _isVersionDirty;
+        private bool _isBusy;
 
         private Lazy<FlowBloxWebApiService> _flowBloxWebApiService = new Lazy<FlowBloxWebApiService>(() =>
         {
@@ -102,8 +103,22 @@ namespace FlowBlox.UICore.ViewModels
         public bool IsExtensionSelected => SelectedItem is FbExtensionResult;
 
         public bool IsVersionSelected => SelectedItem is FbVersionResult;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                if (_isBusy == value)
+                    return;
 
-        public bool CanSaveChanges() => SelectedExtension?.IsDirty == true || SelectedVersion?.IsDirty == true;
+                _isBusy = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanSaveChanges));
+                ((RelayCommand)SaveChangesCommand).Invalidate();
+            }
+        }
+
+        public bool CanSaveChanges() => !IsBusy && (SelectedExtension?.IsDirty == true || SelectedVersion?.IsDirty == true);
 
         private readonly Dictionary<(Guid ExtensionGuid, string Version), bool> _hasVersionContentCache = new Dictionary<(Guid ExtensionGuid, string Version), bool>();
         private bool HasVersionContent(Guid extensionGuid, string version)
@@ -321,78 +336,87 @@ namespace FlowBlox.UICore.ViewModels
 
         private async void SaveChanges()
         {
-            if (SelectedExtension?.IsDirty == true)
+            try
             {
-                var request = new FbExtensionChangeRequest
+                IsBusy = true;
+
+                if (SelectedExtension?.IsDirty == true)
                 {
-                    ExtensionGuid = SelectedExtension.Guid.ToString(),
-                    Description = SelectedExtension.Description,
-                    Active = SelectedExtension.Active
-                };
+                    var request = new FbExtensionChangeRequest
+                    {
+                        ExtensionGuid = SelectedExtension.Guid.ToString(),
+                        Description = SelectedExtension.Description,
+                        Active = SelectedExtension.Active
+                    };
 
-                var response = await _flowBloxWebApiService.Value.UpdateExtensionAsync(_userToken, request);
+                    var response = await _flowBloxWebApiService.Value.UpdateExtensionAsync(_userToken, request);
 
-                if (response.Success)
-                {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Notification,
-                        FlowBloxResourceUtil.GetLocalizedString("Message_SaveChangesSuccessful", typeof(Resources.ManageUserExtensionsWindow)));
+                    if (response.Success)
+                    {
+                        await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Notification,
+                            FlowBloxResourceUtil.GetLocalizedString("Message_SaveChangesSuccessful", typeof(Resources.ManageUserExtensionsWindow)));
 
-                    SelectedExtension.IsDirty = false;
+                        SelectedExtension.IsDirty = false;
+                    }
+                    else
+                    {
+                        await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
+                            ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
+                    }
                 }
-                else
+
+                if (SelectedVersion?.IsDirty == true)
                 {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
-                        ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
+                    if (!_versionToExtension.TryGetValue(SelectedVersion, out var extension))
+                    {
+                        await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
+                            FlowBloxResourceUtil.GetLocalizedString("Message_ExtensionNotResolvable", typeof(Resources.ManageUserExtensionsWindow)));
+
+                        return;
+                    }
+
+                    var changeRequest = new FbExtensionVersionChangeRequest
+                    {
+                        ExtensionGuid = extension.Guid.ToString(),
+                        Version = SelectedVersion.Version,
+                        Changes = SelectedVersion.Changes,
+                        Content = SelectedVersion.ArchiveContent,
+                        RuntimeVersion = SelectedVersion.RuntimeVersion,
+                        Dependencies = SelectedVersion.Dependencies?.ToList(),
+                        Active = SelectedVersion.Active,
+                        BackwardsCompatible = SelectedVersion.BackwardsCompatible
+                    };
+
+                    if (SelectedVersion.ArchiveContent != null)
+                    {
+                        if (await IsExtensionContentValid(extension) == false)
+                            return;
+
+                        changeRequest.Content = SelectedVersion.ArchiveContent;
+                    }
+
+                    var response = await _flowBloxWebApiService.Value.UpdateExtensionVersionAsync(_userToken, changeRequest);
+
+                    if (response.Success)
+                    {
+                        SelectedVersion.IsDirty = false;
+                        SelectedVersion.ArchivePath = null;
+
+                        InvalidateHasVersionContentCache(extension.Guid, SelectedVersion.Version);
+
+                        await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Notification,
+                            FlowBloxResourceUtil.GetLocalizedString("Message_SaveChangesSuccessful", typeof(Resources.ManageUserExtensionsWindow)));
+                    }
+                    else
+                    {
+                        await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
+                            ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
+                    }
                 }
             }
-
-            if (SelectedVersion?.IsDirty == true)
+            finally
             {
-                if (!_versionToExtension.TryGetValue(SelectedVersion, out var extension))
-                {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error,
-                        FlowBloxResourceUtil.GetLocalizedString("Message_ExtensionNotResolvable", typeof(Resources.ManageUserExtensionsWindow)));
-
-                    return;
-                }
-
-                var changeRequest = new FbExtensionVersionChangeRequest
-                {
-                    ExtensionGuid = extension.Guid.ToString(),
-                    Version = SelectedVersion.Version,
-                    Changes = SelectedVersion.Changes,
-                    Content = SelectedVersion.ArchiveContent,
-                    RuntimeVersion = SelectedVersion.RuntimeVersion,
-                    Dependencies = SelectedVersion.Dependencies?.ToList(),
-                    Active = SelectedVersion.Active,
-                    BackwardsCompatible = SelectedVersion.BackwardsCompatible
-                };
-
-                if (SelectedVersion.ArchiveContent != null)
-                {
-                    if (await IsExtensionContentValid(extension) == false)
-                        return;
-
-                    changeRequest.Content = SelectedVersion.ArchiveContent;
-                }
-
-                var response = await _flowBloxWebApiService.Value.UpdateExtensionVersionAsync(_userToken, changeRequest);
-
-                if (response.Success)
-                {
-                    SelectedVersion.IsDirty = false;
-                    SelectedVersion.ArchivePath = null;
-
-                    InvalidateHasVersionContentCache(extension.Guid, SelectedVersion.Version);
-
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Notification, 
-                        FlowBloxResourceUtil.GetLocalizedString("Message_SaveChangesSuccessful", typeof(Resources.ManageUserExtensionsWindow)));
-                }
-                else
-                {
-                    await MessageBoxHelper.ShowMessageBoxAsync((MetroWindow)_window, MessageBoxType.Error, 
-                        ApiErrorMessageHelper.BuildErrorMessage(response.ErrorMessage));
-                }
+                IsBusy = false;
             }
         }
 

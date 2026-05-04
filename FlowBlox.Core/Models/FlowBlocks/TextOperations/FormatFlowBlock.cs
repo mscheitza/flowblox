@@ -9,6 +9,7 @@ using FlowBlox.Core.Models.FlowBlocks.Format;
 using System.Collections.ObjectModel;
 using SkiaSharp;
 using System.Text;
+using FlowBlox.Core.Util.Fields;
 
 namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
 {
@@ -29,6 +30,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         private string _formatExpression;
 
         [Display(Name = "FormatFlowBlock_FormatExpression", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         [CustomValidation(typeof(FormatFlowBlock), nameof(ValidateFormatExpression))]
         [Required()]
@@ -100,10 +102,34 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
                 Wait(runtime);
                 SetParentElement(data);
 
+                var resolvedFormatExpression = FlowBloxFieldHelper.ReplaceFieldsInString(FormatExpression ?? string.Empty);
+                if (string.IsNullOrWhiteSpace(resolvedFormatExpression))
+                {
+                    CreateNotification(runtime, FormatFlowBlockNotifications.FormatExpressionMissingAfterResolving);
+                    return;
+                }
+
                 object[] parameters = FormatParameterDefinitions.Select(x => x.Field.Value).ToArray();
-                var formattedValue = string.Format(FormatExpression, parameters);
+                var formattedValue = string.Format(resolvedFormatExpression, parameters);
                 GenerateResult(runtime, formattedValue);
             });
+        }
+
+        public override List<Type> NotificationTypes
+        {
+            get
+            {
+                var notificationTypes = base.NotificationTypes;
+                notificationTypes.Add(typeof(FormatFlowBlockNotifications));
+                return notificationTypes;
+            }
+        }
+
+        public enum FormatFlowBlockNotifications
+        {
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "Format expression is empty after field resolving")]
+            FormatExpressionMissingAfterResolving
         }
     }
 }

@@ -238,4 +238,25 @@ Passen Sie die Suchkriterien an oder versuchen Sie einen anderen Suchbegriff.</v
   <data name="Error_LoadApiMetadataFailed" xml:space="preserve">
     <value>Die API-Metadaten konnten nicht abgerufen werden. Der Dienst ist möglicherweise nicht verfügbar oder stellt in dieser Schnittstelle keine Metadaten bereit.</value>
   </data>
+  <data name="Header_Title" xml:space="preserve">
+    <value>Erweiterungen</value>
+  </data>
+  <data name="Header_DescriptionMain" xml:space="preserve">
+    <value>Hier können Online- oder Offline-Erweiterungen zu Ihrem FlowBlox-Projekt hinzugefügt werden. Erweiterungen werden in einer separaten *.fbdeps-Datei gespeichert und sind nach dem Laden sofort im Projekt verfügbar.</value>
+  </data>
+  <data name="Expander_Hints_Header" xml:space="preserve">
+    <value>Zusätzliche Informationen</value>
+  </data>
+  <data name="Hint_Storage" xml:space="preserve">
+    <value>Erweiterungen sind .NET-Assemblies und können FlowBlocks, Kategorien und ManagedObjects bereitstellen.</value>
+  </data>
+  <data name="Hint_Online" xml:space="preserve">
+    <value>Online-Erweiterungen können direkt im Account-Kontext gesucht, installiert und aktualisiert werden.</value>
+  </data>
+  <data name="Hint_OfflineFirst" xml:space="preserve">
+    <value>Empfohlener Ablauf: Erweiterung zuerst offline hinzufügen und debuggen, danach veröffentlichen.</value>
+  </data>
+  <data name="Hint_PublishWorkflow" xml:space="preserve">
+    <value>Zum Veröffentlichen: Account erstellen, "Eigene Erweiterungen verwalten" öffnen und danach neue Erweiterung plus Version hinzufügen.</value>
+  </data>
 </root>

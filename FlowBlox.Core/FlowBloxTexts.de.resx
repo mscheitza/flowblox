@@ -874,6 +874,18 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	<data name="JoinFlowBlock_Validation_NoSeparatorDefined" xml:space="preserve">
 		<value>Es wurde kein Trennzeichen angegeben. Bitte geben Sie entweder ein Trennzeichen oder ein spezielles Trennzeichen an.</value>
 	</data>
+	<data name="JoinFlowBlock_SpecialExplanation_Purpose" xml:space="preserve">
+		<value>Der Join-FlowBlock führt ausgewählte Feldwerte mit einem Trennzeichen zusammen.</value>
+	</data>
+	<data name="JoinFlowBlock_SpecialExplanation_IterationScope" xml:space="preserve">
+		<value>Join sammelt Werte über den aktiven Iterationskontext und erzeugt genau ein Ergebnis, wenn das letzte Input-Dataset dieses Kontexts erreicht ist.</value>
+	</data>
+	<data name="JoinFlowBlock_SpecialExplanation_AutoIterationContext" xml:space="preserve">
+		<value>Automatische Ermittlung des Iterationskontexts: Standardmäßig wird der Iterationskontext auf den Vorgänger des verknüpften Vorgängers aufgelöst; bei mehreren Vorgängern auf den ersten gemeinsamen vorgelagerten Flow-Block. Der Iterationskontext kann manuell überschrieben werden.</value>
+	</data>
+	<data name="JoinFlowBlock_SpecialExplanation_UseFormatForMultiField" xml:space="preserve">
+		<value>Join ist geeignet, um Feldwerte aus mehreren Datensätzen über einen Iterationskontext zusammenzuführen. Wenn Werte innerhalb eines einzelnen Datensatzes zusammengesetzt werden sollen, sollte der FormatFlowBlock verwendet werden.</value>
+	</data>
 	<data name="JsonObjectFlowBlock_Description" xml:space="preserve">
 		<value>Erstellt aus dem angegebenen Inhalt ein JSON-Objekt, verwaltet das interne JSON-Objekt und stellt es anderen Flow-Blocks zur Verfügung.</value>
 	</data>

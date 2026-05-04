@@ -24,6 +24,7 @@ namespace FlowBlox.Core.Util.Fields
                 FieldTypes.Double => FormatDouble(typeElement, value),
                 FieldTypes.Boolean => FormatBoolean(value),
                 FieldTypes.DateTime => FormatDateTime(typeElement, value),
+                FieldTypes.ByteArray => FormatByteArray(value),
                 FieldTypes.Text => value.ToString(),
                 _ => value.ToString()
             };
@@ -71,6 +72,17 @@ namespace FlowBlox.Core.Util.Fields
             };
 
             return dt.ToString(typeElement.DateFormat, CultureInfo.InvariantCulture);
+        }
+
+        private static string FormatByteArray(object value)
+        {
+            if (value is byte[] bytes)
+                return Convert.ToBase64String(bytes);
+
+            if (value is string text)
+                return text;
+
+            return value.ToString();
         }
     }
 }

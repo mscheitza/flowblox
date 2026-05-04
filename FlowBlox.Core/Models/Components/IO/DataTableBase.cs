@@ -3,6 +3,7 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -41,7 +42,7 @@ namespace FlowBlox.Core.Models.Components.IO
         public override List<string> GetDisplayableProperties()
             => [nameof(Name), nameof(DataSource)];
 
-        public bool CanRead()
+        public bool CanRead(BaseRuntime runtime = null)
         {
             return DataSource.CanRead();
         }

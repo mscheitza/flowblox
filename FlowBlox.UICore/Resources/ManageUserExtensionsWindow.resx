@@ -249,4 +249,7 @@ You can add, edit, disable, or remove extensions, as well as create and manage d
   <data name="Watermark_RuntimeVersion" xml:space="preserve">
     <value>Automatically detected from archive ZIP</value>
   </data>
+  <data name="Loading_SaveInProgress" xml:space="preserve">
+    <value>Saving changes and uploading extension content. Please wait...</value>
+  </data>
 </root>

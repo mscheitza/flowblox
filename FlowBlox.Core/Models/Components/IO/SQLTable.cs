@@ -3,6 +3,7 @@ using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
@@ -47,9 +48,9 @@ namespace FlowBlox.Core.Models.Components.IO
         [FlowBloxTextBox(MultiLine = true, IsCodingMode = true, SyntaxHighlighting = "SQL")]
         public string SQLStatement { get; set; }
 
-        public bool CanRead()
+        public bool CanRead(BaseRuntime runtime = null)
         {
-            if (this.TryRead(out _))
+            if (this.TryRead(out _, runtime))
                 return true;
 
             return false;
@@ -88,15 +89,16 @@ namespace FlowBlox.Core.Models.Components.IO
             throw new InvalidOperationException($"Unable to connect to \"{SQLConnectionstring}\".");
         }
 
-        private bool TryRead(out DataTable dataTable)
+        private bool TryRead(out DataTable dataTable, BaseRuntime runtime = null)
         {
             try
             {
                 dataTable = this.Read();
                 return true;
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                runtime?.Report($"SQLTable \"{Name}\": failed to execute read query.", FlowBloxLogLevel.Error, exception);
                 dataTable = null;
                 return false;
             }

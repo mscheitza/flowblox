@@ -22,7 +22,8 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <DockPanel Margin="10">
+    <Grid>
+        <DockPanel Margin="10">
 
         <!-- Header -->
         <Border Background="#FFEEEEEE" DockPanel.Dock="Top" Height="50" Padding="8">
@@ -154,5 +155,25 @@
                         IsDefault="True"/>
             </StackPanel>
         </Grid>
-    </DockPanel>
+        </DockPanel>
+
+        <Border Background="#80000000"
+                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="White"
+                    Margin="20"
+                    Padding="20">
+                <StackPanel>
+                <mah:ProgressRing IsActive="True"
+                                  Width="40"
+                                  Height="40"
+                                  HorizontalAlignment="Center" />
+                <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Loading_SaveInProgress}"
+                           Margin="0,12,0,0"
+                           HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
 </mah:MetroWindow>

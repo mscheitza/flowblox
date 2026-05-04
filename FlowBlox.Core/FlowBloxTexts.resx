@@ -875,6 +875,18 @@ All inputs are collected during the referenced block's iteration and this flow b
 	<data name="JoinFlowBlock_Validation_NoSeparatorDefined" xml:space="preserve">
 		<value>No separator was specified. Please specify either a separator or a special separator.</value>
 	</data>
+	<data name="JoinFlowBlock_SpecialExplanation_Purpose" xml:space="preserve">
+		<value>Join merges selected field values using a separator.</value>
+	</data>
+	<data name="JoinFlowBlock_SpecialExplanation_IterationScope" xml:space="preserve">
+		<value>Join collects values across the active IterationContext and emits one result when the last input dataset of that context is reached.</value>
+	</data>
+	<data name="JoinFlowBlock_SpecialExplanation_AutoIterationContext" xml:space="preserve">
+		<value>Automatic IterationContext resolution: by default, IterationContext is resolved to the predecessor of the linked predecessor; if multiple such predecessors exist, the first common upstream flow block is used. You can override this manually.</value>
+	</data>
+	<data name="JoinFlowBlock_SpecialExplanation_UseFormatForMultiField" xml:space="preserve">
+		<value>Use Join to merge field values across multiple datasets via an IterationContext. If values should be composed within a single dataset, use FormatFlowBlock.</value>
+	</data>
 	<data name="JsonObjectFlowBlock_Description" xml:space="preserve">
 		<value>Creates a JSON object from the specified content, manages the internal JSON object, and makes it available to other flow blocks.</value>
 	</data>

@@ -249,4 +249,7 @@ Sie können Erweiterungen hinzufügen, bearbeiten, deaktivieren oder entfernen s
   <data name="Watermark_RuntimeVersion" xml:space="preserve">
     <value>Automatisch ermittelt über Archiv-ZIP</value>
   </data>
+  <data name="Loading_SaveInProgress" xml:space="preserve">
+    <value>Aenderungen werden gespeichert und Erweiterungsinhalt hochgeladen. Bitte warten...</value>
+  </data>
 </root>

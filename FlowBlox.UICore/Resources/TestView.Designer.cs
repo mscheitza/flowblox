@@ -97,6 +97,24 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No valid start flow chain could be resolved. Please ensure a Start-FlowBlock exists and has at least one subsequent FlowBlock before creating test cases. ähnelt.
+        /// </summary>
+        public static string Message_CreateBlockedMissingFlowChain_Description {
+            get {
+                return ResourceManager.GetString("Message_CreateBlockedMissingFlowChain_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cannot create test case ähnelt.
+        /// </summary>
+        public static string Message_CreateBlockedMissingFlowChain_Title {
+            get {
+                return ResourceManager.GetString("Message_CreateBlockedMissingFlowChain_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The test case &quot;{0}&quot; cannot be deleted because it is still used by: {1} ähnelt.
         /// </summary>
         public static string Message_DeleteBlocked_Description {
@@ -129,6 +147,24 @@ namespace FlowBlox.UICore.Resources {
         public static string Message_DeleteConfirm_Title {
             get {
                 return ResourceManager.GetString("Message_DeleteConfirm_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No valid start flow chain could be resolved. Please ensure a Start-FlowBlock exists and has at least one subsequent FlowBlock before editing test cases. ähnelt.
+        /// </summary>
+        public static string Message_EditBlockedMissingFlowChain_Description {
+            get {
+                return ResourceManager.GetString("Message_EditBlockedMissingFlowChain_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cannot edit test case ähnelt.
+        /// </summary>
+        public static string Message_EditBlockedMissingFlowChain_Title {
+            get {
+                return ResourceManager.GetString("Message_EditBlockedMissingFlowChain_Title", resourceCulture);
             }
         }
         

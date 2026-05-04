@@ -316,6 +316,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Saving changes and uploading extension content. Please wait... ähnelt.
+        /// </summary>
+        public static string Loading_SaveInProgress {
+            get {
+                return ResourceManager.GetString("Loading_SaveInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The extension for the selected version could not be resolved. ähnelt.
         /// </summary>
         public static string Message_ExtensionNotResolvable {

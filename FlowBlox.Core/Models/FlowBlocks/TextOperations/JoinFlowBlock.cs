@@ -14,6 +14,10 @@ using FlowBlox.Core.Util.Fields;
 namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
 {
     [Display(Name = "JoinFlowBlock_DisplayName", Description = "JoinFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("JoinFlowBlock_SpecialExplanation_Purpose", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("JoinFlowBlock_SpecialExplanation_IterationScope", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("JoinFlowBlock_SpecialExplanation_AutoIterationContext", Icon = SpecialExplanationIcon.Hint)]
+    [FlowBloxSpecialExplanation("JoinFlowBlock_SpecialExplanation_UseFormatForMultiField", Icon = SpecialExplanationIcon.Important)]
     public class JoinFlowBlock : BaseSingleResultFlowBlock
     {
         [Display(Name = "JoinFlowBlock_Separator", ResourceType = typeof(FlowBloxTexts), Order = 0)]

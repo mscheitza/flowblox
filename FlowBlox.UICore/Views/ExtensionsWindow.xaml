@@ -9,7 +9,7 @@
                  xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  Title="{x:Static resources:ExtensionsWindow.ExtensionsWindow_Title}"
-                 Height="500"
+                 Height="650"
                  Width="900"
                  Icon="/Icons/extension.ico"
                  mc:Ignorable="d">
@@ -29,18 +29,111 @@
 	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<TabControl Grid.Row="0">
+		<Border Grid.Row="0"
+		        Background="#FFEEEEEE"
+		        Height="50"
+		        Margin="10,10,10,0"
+		        Padding="8">
+			<StackPanel Orientation="Horizontal">
+				<iconPacks:PackIconMaterial Kind="PuzzleOutline"
+				                            Width="30"
+				                            Height="30"
+				                            Margin="0,0,10,0"
+				                            VerticalAlignment="Center"
+				                            Foreground="DarkSlateGray"/>
+				<TextBlock Text="{x:Static resources:ExtensionsWindow.Header_Title}"
+				           FontWeight="Bold"
+				           VerticalAlignment="Center"
+				           FontSize="16"/>
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="1"
+		        Background="#EDF3F9"
+		        Padding="12"
+		        CornerRadius="4"
+		        Margin="10,8,10,0">
+			<TextBlock Text="{x:Static resources:ExtensionsWindow.Header_DescriptionMain}"
+			           FontWeight="UltraLight"
+			           Foreground="DarkSlateGray"
+			           TextWrapping="Wrap"/>
+		</Border>
+
+		<Expander Grid.Row="2"
+		          Header="{x:Static resources:ExtensionsWindow.Expander_Hints_Header}"
+		          Margin="10,8,10,8"
+		          IsExpanded="False"
+		          MaxHeight="220">
+			<ScrollViewer VerticalScrollBarVisibility="Auto"
+			              HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Margin="0,0,0,5">
+					<Grid Margin="0,0,0,6">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<iconPacks:PackIconMaterial Kind="InformationOutline" Margin="0,0,8,0" VerticalAlignment="Top"/>
+						<TextBlock Grid.Column="1"
+						           Text="{x:Static resources:ExtensionsWindow.Hint_Storage}"
+						           TextWrapping="Wrap"/>
+					</Grid>
+					<Grid Margin="0,0,0,6">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<iconPacks:PackIconMaterial Kind="CloudOutline" Margin="0,0,8,0" VerticalAlignment="Top" Foreground="#1565C0"/>
+						<TextBlock Grid.Column="1"
+						           Text="{x:Static resources:ExtensionsWindow.Hint_Online}"
+						           TextWrapping="Wrap"/>
+					</Grid>
+					<Grid Margin="0,0,0,6">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<iconPacks:PackIconMaterial Kind="CloudOffOutline" Margin="0,0,8,0" VerticalAlignment="Top" Foreground="#2E7D32"/>
+						<TextBlock Grid.Column="1"
+						           Text="{x:Static resources:ExtensionsWindow.Hint_OfflineFirst}"
+						           TextWrapping="Wrap"/>
+					</Grid>
+					<Grid Margin="0,0,0,6">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<iconPacks:PackIconMaterial Kind="AccountCogOutline" Margin="0,0,8,0" VerticalAlignment="Top"/>
+						<TextBlock Grid.Column="1"
+						           Text="{x:Static resources:ExtensionsWindow.Hint_PublishWorkflow}"
+						           TextWrapping="Wrap"/>
+					</Grid>
+				</StackPanel>
+			</ScrollViewer>
+		</Expander>
+
+		<TabControl Grid.Row="3">
 			<!-- Tab "Online" -->
 			<TabItem Header="{x:Static resources:ExtensionsWindow.Tab_Online}">
 				<TabItem.HeaderTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding}"
-						           FontSize="14"
-						           FontWeight="Normal"
-						           Padding="10,5"/>
+						<StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+							<iconPacks:PackIconMaterial Kind="CloudOutline"
+							                            Width="16"
+							                            Height="16"
+							                            Margin="0,0,8,0"
+							                            VerticalAlignment="Center"
+							                            Foreground="#1565C0"/>
+							<TextBlock Text="{Binding}"
+							           FontSize="15"
+							           FontWeight="SemiBold"
+							           Padding="0,5"/>
+						</StackPanel>
 					</DataTemplate>
 				</TabItem.HeaderTemplate>
 				<Grid>
@@ -264,10 +357,18 @@
                      Visibility="{Binding HasProjectReference, Converter={StaticResource BoolToVisibilityConverter}}">
 				<TabItem.HeaderTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding}"
-						           FontSize="14"
-						           FontWeight="Normal"
-						           Padding="10,5"/>
+						<StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+							<iconPacks:PackIconMaterial Kind="CloudOffOutline"
+							                            Width="16"
+							                            Height="16"
+							                            Margin="0,0,8,0"
+							                            VerticalAlignment="Center"
+							                            Foreground="#2E7D32"/>
+							<TextBlock Text="{Binding}"
+							           FontSize="15"
+							           FontWeight="SemiBold"
+							           Padding="0,5"/>
+						</StackPanel>
 					</DataTemplate>
 				</TabItem.HeaderTemplate>
 				<Grid>
@@ -334,10 +435,18 @@
                      Visibility="{Binding HasProjectReference, Converter={StaticResource BoolToVisibilityConverter}}">
 				<TabItem.HeaderTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding}"
-						           FontSize="14"
-						           FontWeight="Normal"
-						           Padding="10,5"/>
+						<StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+							<iconPacks:PackIconMaterial Kind="PackageVariantClosed"
+							                            Width="16"
+							                            Height="16"
+							                            Margin="0,0,8,0"
+							                            VerticalAlignment="Center"
+							                            Foreground="#6A1B9A"/>
+							<TextBlock Text="{Binding}"
+							           FontSize="15"
+							           FontWeight="SemiBold"
+							           Padding="0,5"/>
+						</StackPanel>
 					</DataTemplate>
 				</TabItem.HeaderTemplate>
 				<StackPanel Margin="10">
@@ -377,7 +486,7 @@
 			</TabItem>
 		</TabControl>
 		<!-- Footer buttons -->
-		<Grid Grid.Row="1"
+		<Grid Grid.Row="4"
 		      Margin="10">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>

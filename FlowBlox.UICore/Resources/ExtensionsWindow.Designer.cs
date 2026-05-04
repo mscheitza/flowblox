@@ -187,6 +187,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Additional information ähnelt.
+        /// </summary>
+        public static string Expander_Hints_Header {
+            get {
+                return ResourceManager.GetString("Expander_Hints_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage extensions ähnelt.
         /// </summary>
         public static string ExtensionsWindow_Title {
@@ -210,6 +219,15 @@ namespace FlowBlox.UICore.Resources {
         public static string Header_Description {
             get {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add online or offline extensions to your FlowBlox project. Extensions are stored in a dedicated *.fbdeps file and are available in the project immediately after loading. ähnelt.
+        /// </summary>
+        public static string Header_DescriptionMain {
+            get {
+                return ResourceManager.GetString("Header_DescriptionMain", resourceCulture);
             }
         }
         
@@ -259,11 +277,56 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extensions ähnelt.
+        /// </summary>
+        public static string Header_Title {
+            get {
+                return ResourceManager.GetString("Header_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version ähnelt.
         /// </summary>
         public static string Header_Version {
             get {
                 return ResourceManager.GetString("Header_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recommended workflow: add and debug the extension offline first, then publish it. ähnelt.
+        /// </summary>
+        public static string Hint_OfflineFirst {
+            get {
+                return ResourceManager.GetString("Hint_OfflineFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Online extensions can be searched, installed and updated directly from your account context. ähnelt.
+        /// </summary>
+        public static string Hint_Online {
+            get {
+                return ResourceManager.GetString("Hint_Online", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die To publish: create an account, open &quot;Manage own extensions&quot;, then add a new extension and version. ähnelt.
+        /// </summary>
+        public static string Hint_PublishWorkflow {
+            get {
+                return ResourceManager.GetString("Hint_PublishWorkflow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extensions are .NET assemblies and can provide FlowBlocks, categories and managed objects. ähnelt.
+        /// </summary>
+        public static string Hint_Storage {
+            get {
+                return ResourceManager.GetString("Hint_Storage", resourceCulture);
             }
         }
         

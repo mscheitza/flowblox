@@ -89,7 +89,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             var rightToolBar = new ToolBar
             {
-                HorizontalAlignment = HorizontalAlignment.Left
+                HorizontalAlignment = HorizontalAlignment.Right
             };
             rightToolBar.Items.Add(saveButton);
             var rightToolbarHost = CreateEmbeddedToolbarHost(rightToolBar, compact: true);
@@ -245,6 +245,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         private static Button CreateSaveToolbarButton()
         {
+            const string saveBlueHex = "#3A8DDE";
             var button = new Button
             {
                 Margin = new Thickness(3, 0, 3, 0),
@@ -259,6 +260,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         new PackIconMaterial
                         {
                             Kind = PackIconMaterialKind.ContentSave,
+                            Style = Application.Current?.TryFindResource("FlowBlox.ToolbarIconBase") as Style,
+                            Foreground = (Brush)new BrushConverter().ConvertFromString(saveBlueHex),
                             Width = 14,
                             Height = 14,
                             Margin = new Thickness(0, 0, 5, 0),

@@ -66,5 +66,17 @@
   <data name="Message_DeleteBlocked_Description">
     <value>Der Testfall "{0}" kann nicht gelöscht werden, da er noch verwendet wird von: {1}</value>
   </data>
+  <data name="Message_CreateBlockedMissingFlowChain_Title">
+    <value>Testfall kann nicht erstellt werden</value>
+  </data>
+  <data name="Message_CreateBlockedMissingFlowChain_Description">
+    <value>Es konnte keine gültige Start-Flow-Kette ermittelt werden. Bitte sicherstellen, dass ein Start-FlowBlock vorhanden ist und mindestens einen nachfolgenden FlowBlock besitzt, bevor Testfälle hinzugefügt werden.</value>
+  </data>
+  <data name="Message_EditBlockedMissingFlowChain_Title">
+    <value>Testfall kann nicht bearbeitet werden</value>
+  </data>
+  <data name="Message_EditBlockedMissingFlowChain_Description">
+    <value>Es konnte keine gültige Start-Flow-Kette ermittelt werden. Bitte sicherstellen, dass ein Start-FlowBlock vorhanden ist und mindestens einen nachfolgenden FlowBlock besitzt, bevor Testfälle bearbeitet werden.</value>
+  </data>
 </root>
 

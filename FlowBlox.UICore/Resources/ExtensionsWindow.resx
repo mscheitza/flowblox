@@ -238,4 +238,25 @@ Adjust the search criteria or try a different search term.</value>
   <data name="Error_LoadApiMetadataFailed" xml:space="preserve">
     <value>The API metadata could not be retrieved. The service may be unavailable or does not provide metadata through this endpoint.</value>
   </data>
+  <data name="Header_Title" xml:space="preserve">
+    <value>Extensions</value>
+  </data>
+  <data name="Header_DescriptionMain" xml:space="preserve">
+    <value>Add online or offline extensions to your FlowBlox project. Extensions are stored in a dedicated *.fbdeps file and are available in the project immediately after loading.</value>
+  </data>
+  <data name="Expander_Hints_Header" xml:space="preserve">
+    <value>Additional information</value>
+  </data>
+  <data name="Hint_Storage" xml:space="preserve">
+    <value>Extensions are .NET assemblies and can provide FlowBlocks, categories and managed objects.</value>
+  </data>
+  <data name="Hint_Online" xml:space="preserve">
+    <value>Online extensions can be searched, installed and updated directly from your account context.</value>
+  </data>
+  <data name="Hint_OfflineFirst" xml:space="preserve">
+    <value>Recommended workflow: add and debug the extension offline first, then publish it.</value>
+  </data>
+  <data name="Hint_PublishWorkflow" xml:space="preserve">
+    <value>To publish: create an account, open "Manage own extensions", then add a new extension and version.</value>
+  </data>
 </root>

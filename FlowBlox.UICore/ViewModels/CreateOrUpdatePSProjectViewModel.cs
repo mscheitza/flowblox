@@ -24,6 +24,7 @@ namespace FlowBlox.UICore.ViewModels
         private string _backupProjectGuid;
 
         private bool _suppressTabEffects;
+        private bool _isBusy;
 
         public RelayCommand CloseCommand { get; }
         public RelayCommand SaveCommand { get; }
@@ -168,7 +169,23 @@ namespace FlowBlox.UICore.ViewModels
         public bool CanSave => ActiveUser != null
                                && !string.IsNullOrWhiteSpace(UserToken)
                                && !string.IsNullOrWhiteSpace(ProjectName)
-                               && !string.IsNullOrWhiteSpace(ProjectDescription);
+                               && !string.IsNullOrWhiteSpace(ProjectDescription)
+                               && !IsBusy;
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                if (_isBusy == value)
+                    return;
+
+                _isBusy = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanSave));
+                SaveCommand.Invalidate();
+            }
+        }
 
         public FbUserData ActiveUser
         {
@@ -351,6 +368,7 @@ namespace FlowBlox.UICore.ViewModels
 
             try
             {
+                IsBusy = true;
                 await WarnIfExternalProjectReferencesExistAsync();
 
                 if (string.IsNullOrWhiteSpace(ProjectGuid))
@@ -437,6 +455,10 @@ namespace FlowBlox.UICore.ViewModels
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
                 await ShowErrorAsync(ex.Message);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

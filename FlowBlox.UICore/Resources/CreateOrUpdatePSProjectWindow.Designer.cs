@@ -237,6 +237,15 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Saving project and uploading content. Please wait... ähnelt.
+        /// </summary>
+        public static string Loading_SaveInProgress {
+            get {
+                return ResourceManager.GetString("Loading_SaveInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project was saved successfully to Project Space. ähnelt.
         /// </summary>
         public static string Message_SaveSuccessful {
@@ -255,7 +264,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die GUID will be assigned after saving ähnelt.
         /// </summary>
         public static string Placeholder_ProjectGuid {
             get {

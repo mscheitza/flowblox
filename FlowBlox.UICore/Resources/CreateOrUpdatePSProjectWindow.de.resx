@@ -218,4 +218,7 @@ Beispiele (max. {1}):
   <data name="Placeholder_ProjectGuid" xml:space="preserve">
     <value>GUID wird nach dem Speichern vergeben</value>
   </data>
+  <data name="Loading_SaveInProgress" xml:space="preserve">
+    <value>Projekt wird gespeichert und Inhalt hochgeladen. Bitte warten...</value>
+  </data>
 </root>

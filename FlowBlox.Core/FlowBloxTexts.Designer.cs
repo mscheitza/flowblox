@@ -4897,6 +4897,42 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic IterationContext resolution: by default, IterationContext is resolved to the predecessor of the linked predecessor; if multiple such predecessors exist, the first common upstream flow block is used. You can override this manually. ähnelt.
+        /// </summary>
+        public static string JoinFlowBlock_SpecialExplanation_AutoIterationContext {
+            get {
+                return ResourceManager.GetString("JoinFlowBlock_SpecialExplanation_AutoIterationContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Join collects values across the active IterationContext and emits one result when the last input dataset of that context is reached. ähnelt.
+        /// </summary>
+        public static string JoinFlowBlock_SpecialExplanation_IterationScope {
+            get {
+                return ResourceManager.GetString("JoinFlowBlock_SpecialExplanation_IterationScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Join merges selected field values using a separator. ähnelt.
+        /// </summary>
+        public static string JoinFlowBlock_SpecialExplanation_Purpose {
+            get {
+                return ResourceManager.GetString("JoinFlowBlock_SpecialExplanation_Purpose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use Join to merge field values across multiple datasets via an IterationContext. If values should be composed within a single dataset, use FormatFlowBlock. ähnelt.
+        /// </summary>
+        public static string JoinFlowBlock_SpecialExplanation_UseFormatForMultiField {
+            get {
+                return ResourceManager.GetString("JoinFlowBlock_SpecialExplanation_UseFormatForMultiField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Special separator ähnelt.
         /// </summary>
         public static string JoinFlowBlock_SpecialSeparator {

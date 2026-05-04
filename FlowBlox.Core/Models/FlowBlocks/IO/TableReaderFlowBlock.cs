@@ -8,6 +8,7 @@ using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Util.Fields;
 using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -119,7 +120,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
                 if (ReferencedTable == null)
                     throw new Exception("The is no Table defined for TableSelectorElement [" + Name + "].");
 
-                if (!ReferencedTable.CanRead())
+                if (!ReferencedTable.CanRead(runtime))
                 {
                     CreateNotification(runtime, TableReaderNotifications.TableNotReady);
                     GenerateResult(runtime);
@@ -163,8 +164,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
                         if (!tableData.Columns.Contains(mappingEntry.ColumnName))
                             throw new InvalidOperationException($"The column \"{mappingEntry.ColumnName}\" does not exist in table \"{ReferencedTable.Name}\".");
 
-                        string fieldValue = tableData.Rows[rowCounter][mappingEntry.ColumnName].ToString();
                         FieldElement fieldElement = mappingEntry.Field;
+                        var rawValue = tableData.Rows[rowCounter][mappingEntry.ColumnName];
+                        string fieldValue = rawValue == DBNull.Value
+                            ? string.Empty
+                            : FieldResultFormatter.FormatResult(fieldElement, rawValue);
                         resultEntry[fieldElement] = fieldValue;
                         
                     }

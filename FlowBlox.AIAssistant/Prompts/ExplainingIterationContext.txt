@@ -1,36 +1,78 @@
-Explaining IterationContext and flow execution (compact):
+Explaining IterationContext and multi-input behavior:
 
-- Normal flow: each flow block invokes the next connected flow block.
-- BaseResultFlowBlock fans out: downstream execution runs N times (N = result dataset count).
-
-Result handling basics:
-- A dataset can contain one or more field values; these result fields are defined on the BaseResultFlowBlock.
-- BaseSingleResultFlowBlock has exactly one result field, but can still have multiple input predecessors depending on InputCardinality.
+1) Core execution model
+- Normal flow: each flow block invokes its connected successors.
+- BaseResultFlowBlock can output multiple datasets, so downstream blocks may run N times.
+- Result handling basics:
+  - A dataset can contain one or more field values; these result fields are defined on the BaseResultFlowBlock.
+  - BaseSingleResultFlowBlock has exactly one result field, but can still have multiple input predecessors depending on InputCardinality.
 - BasePipeFlowBlock has exactly one InputField, one referenced predecessor flow block, and one result field.
+- IterationContext defines the aggregation boundary: collect inputs during the context iteration, then process combined datasets at iteration end.
 
-Multiple predecessors into one target:
-- IterationContext is auto-derived as the first common flow block across predecessor paths.
-- This automatic value can always be overridden by setting AssociatedIterationContext explicitly.
-- During IterationContext:
-  - start: clear target inputs and collect incoming datasets
-  - finish: combine collected datasets by InputBehavior
-- Default InputBehavior is Combine (cross-product). Per predecessor override is possible (for example First).
-- Target executes once per resulting combined dataset.
+2) Execution order and iteration guarantees
+- Sibling execution follows index order.
+- Example structure: A > A1 (index0), A2 (index1), and A2 > A3.
+- Logical execution order is: A, A1, A2, A3.
+- Consequence at A3:
+  - We are inside an iteration of A.
+  - A1 has already executed in the same iteration.
+  - Fields from A and A1 are available in A3, even without a direct A1 -> A3 connection.
+- Practical pattern:
+  - A1 TableReader yields row fields (for example Name, Content, CreatedAt).
+  - A2 FormatFlowBlock builds path: `$Project::OutputDirectory\{0}.txt` with `{0}=Name`.
+  - A3 (child of A2) FormatFlowBlock builds file content from `Content + CreatedAt`, without direct TableReader link.
+  - FileWriter then writes with path from `FormatFlowBlock_Path` and content from `FormatFlowBlock_Content`.
+- Key insight: the composed flow works because iteration scope + sibling execution order guarantee data availability.
 
-Manual/Associated IterationContext:
-- Use it to define an explicit aggregation boundary: "within which iteration scope should this target collect datasets?"
-- Typical optimization: run output/writer once after a reader is fully finished.
-- Practical way: set output IterationContext to a parent of the reader, so output executes on parent iteration finish.
-- The current IterationContext can be retrieved at any time via a GetComponentSnapshot.
-- JoinFlowBlock has a special auto-resolution fallback for its predecessor topology, but AssociatedIterationContext still has highest priority and overrides it.
+3) Multi-input combination and IterationContext
+- If multiple input flow blocks connect to one successor, FlowBlox combines their datasets based on InputBehavior.
+- Default behavior is Cross (combinational).
+- IterationContext default (multi-input): first common upstream flow block across all incoming paths.
+- Manual override is always possible via AssociatedIterationContext (Input -> IterationContext).
+- Successor executes once per resulting combined dataset.
+- For each combined dataset (N total), each value is applied to its associated target field (mapped from the corresponding predecessor) before execution.
 
-Concrete decision helper (XML from table):
-- Flow: Start -> XmlDocumentFlowBlock -> TableReader -> XmlDocumentNodeWriter -> XmlDocumentOutput -> FileWriter
-- Desired result: one XML for all rows, one file write.
-- Recommended:
-  - XmlDocumentFlowBlock before TableReader.
-  - XmlDocumentNodeWriter runs per row and appends nodes.
-  - XmlDocumentOutput waits for parent iteration finish of TableReader (for example parent XmlDocumentFlowBlock context), then outputs once.
-  - FileWriter writes once.
-  - Important: do not re-apply the same IterationContext on every downstream block. It is enough to set it on the first block that must wait (here: XmlDocumentOutput). FileWriter can stay in normal sequence behind XmlDocumentOutput and is then executed once after XmlDocumentOutput has finished.
-- If you want one XML per row instead: place XmlDocumentFlowBlock after TableReader (and usually use placeholders in file names).
+4) InputBehavior (all values)
+- Cross: Cartesian combination of input datasets.
+- CrossValid: Cross, but only with valid values.
+- RowWise: combine row-by-row by index.
+- RowWiseValid: row-wise, but only with valid values.
+- First: use first dataset.
+- FirstValid: first dataset with value != null/empty.
+- Last: use last dataset.
+- LastValid: last dataset with value != null/empty.
+
+5) InputBehaviorAssignments and referenced sources
+- InputBehaviorAssignments are auto-synced with ReferencedFlowBlocks.
+- When a flow block is linked as input source, its InputBehaviorAssignment is created automatically (default Cross).
+- Recommended for AI update calls: after all ReferencedFlowBlocks are linked, get a fresh component snapshot and map index -> source flow block before updating assignments.
+
+6) JoinFlowBlock special case
+- Function: collects selected input field values (from result datasets) and joins them into one string with a separator.
+- IterationContext resolution:
+  - Highest priority: AssociatedIterationContext (manual override).
+  - If exactly one referenced BaseResultFlowBlock exists:
+    - if that predecessor has exactly one predecessor: use that predecessor as IterationContext.
+    - else: use predecessor.IterationContext.
+  - Otherwise: fallback to default IterationContext resolution (first common upstream).
+- Practical shorthand: JoinFlowBlock tends to aggregate on the "first common predecessor of its predecessor chain", unless manually overridden.
+
+7) Practical use-cases for InputBehavior
+- Simple unique company extraction (name/street/zip/city each one match): keep default Cross.
+- 1:N expansion (one company, many categories, one output per category): Cross fits.
+- Multiple matches where only one should count: First or FirstValid.
+- Vertical selector results -> horizontal row datasets:
+  - Some selectors return all matches for one field across the page (for example all streets, all zip codes, all cities).
+  - Goal: build row-wise records (street1+zip1+city1, street2+zip2+city2, ...), not independent vertical lists.
+  - Set company name source to First or FirstValid.
+  - Set street/zip/city sources to RowWise (or RowWiseValid).
+  - Result: company name repeated with location row 1, row 2, etc.
+
+8) When to rethink IterationContext (JoinFlowBlock)
+- Typical pattern: Reader -> Formatter -> JoinFlowBlock.
+- Default JoinFlowBlock IterationContext resolves to the predecessor of the formatter.
+- That can still be the reader item context (for example: one mail), so Join executes per item instead of across all items.
+- Guiding question: Which flow block produces the full set of data we want to aggregate?
+  - Formatter? Usually no, it typically emits one formatted result per item.
+  - Reader? Usually yes, it produces the item set to aggregate (for example all mails).
+- If Join should aggregate across all reader items, set JoinFlowBlock.AssociatedIterationContext to the predecessor of the reader flow block (one level higher than the reader item iteration).

@@ -66,4 +66,16 @@
   <data name="Message_DeleteBlocked_Description">
     <value>The test case "{0}" cannot be deleted because it is still used by: {1}</value>
   </data>
+  <data name="Message_CreateBlockedMissingFlowChain_Title">
+    <value>Cannot create test case</value>
+  </data>
+  <data name="Message_CreateBlockedMissingFlowChain_Description">
+    <value>No valid start flow chain could be resolved. Please ensure a Start-FlowBlock exists and has at least one subsequent FlowBlock before creating test cases.</value>
+  </data>
+  <data name="Message_EditBlockedMissingFlowChain_Title">
+    <value>Cannot edit test case</value>
+  </data>
+  <data name="Message_EditBlockedMissingFlowChain_Description">
+    <value>No valid start flow chain could be resolved. Please ensure a Start-FlowBlock exists and has at least one subsequent FlowBlock before editing test cases.</value>
+  </data>
 </root>

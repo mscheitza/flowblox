@@ -241,9 +241,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             }
         }
 
-        private void OnReadableTableInitializedOrChanged(IReadableTable readableTable)
+        private void OnReadableTableInitializedOrChanged(IReadableTable readableTable, BaseRuntime runtime = null)
         {
-            if (readableTable.CanRead())
+            if (readableTable.CanRead(runtime))
             {
                 this._currentTableData = ((IReadableTable)ReferencedTable).Read();
                 InitRowKeyCache();
@@ -265,8 +265,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             if (ReferencedTable is IReadableTable)
             {
                 var readableTable = (IReadableTable)ReferencedTable;
-                readableTable.AddDataSourceChangedListener(() => OnReadableTableInitializedOrChanged(readableTable));
-                OnReadableTableInitializedOrChanged(readableTable);
+                readableTable.AddDataSourceChangedListener(() => OnReadableTableInitializedOrChanged(readableTable, runtime));
+                OnReadableTableInitializedOrChanged(readableTable, runtime);
             }
             base.RuntimeStarted(runtime);
         }
