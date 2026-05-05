@@ -225,9 +225,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
                 runtime.Focus(this);
                 Wait(runtime);
                 SetParentElement(data);
-                if (CreateOrUpdateDataRowFromCurrentSchemaDefinition(_currentTableData, this.TableColumnDefinitions))
+                var hasWritten = CreateOrUpdateDataRowFromCurrentSchemaDefinition(_currentTableData, this.TableColumnDefinitions);
+                if (hasWritten)
                     this.ReferencedTable.Write(_currentTableData);
-                GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
+
+                if (hasWritten)
+                    GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
+                else
+                    GenerateResult(runtime);
             });
         }
 
