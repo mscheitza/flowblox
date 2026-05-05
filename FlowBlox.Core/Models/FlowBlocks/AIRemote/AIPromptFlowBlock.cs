@@ -80,6 +80,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
                 if (string.IsNullOrWhiteSpace(promptResolved))
                 {
                     CreateNotification(runtime, AIPromptNotifications.PromptMissing);
+                    GenerateResult(runtime);
                     return;
                 }
 
@@ -110,7 +111,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
                     runtime.Report(logMessage);
 
                     CreateNotification(runtime, AIPromptNotifications.AIPromptExecutionFailed);
-
+                    GenerateResult(runtime);
                     return;
                 }
 

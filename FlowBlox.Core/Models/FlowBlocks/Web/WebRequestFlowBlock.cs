@@ -165,13 +165,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
 
         protected void CreateDefaultResultFields()
         {
-            var contentResultField = FlowBloxRegistryProvider.GetRegistry().CreateField(this);
-            contentResultField.Name = nameof(WebRequestDestinations.Content);
-            ResultFields.Add(new ResultFieldByEnumValue<WebRequestDestinations>()
-            {
-                EnumValue = WebRequestDestinations.Content,
-                ResultField = contentResultField
-            });
+            CreateDestinationResultField(ResultFields, WebRequestDestinations.Content);
         }
 
         public override void OnAfterCreate()

@@ -9,7 +9,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     [Display(Name = "JsonPropertyValueAssignment_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class JsonPropertyValueAssignment : FlowBloxReactiveObject
     {
-        [Display(Name = "JsonPropertyValueAssignment_PropertyName", ResourceType = typeof(FlowBloxTexts))]
+        [Display(Name = "JsonPropertyValueAssignment_PropertyName", Description = "JsonPropertyValueAssignment_PropertyName_Tooltip", ResourceType = typeof(FlowBloxTexts))]
         public string PropertyName { get; set; }
 
         [Display(Name = "JsonPropertyValueAssignment_Value", Description = "JsonPropertyValueAssignment_Value_Tooltip", ResourceType = typeof(FlowBloxTexts))]

@@ -106,6 +106,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
                 if (string.IsNullOrWhiteSpace(resolvedFormatExpression))
                 {
                     CreateNotification(runtime, FormatFlowBlockNotifications.FormatExpressionMissingAfterResolving);
+                    GenerateResult(runtime);
                     return;
                 }
 

@@ -1,4 +1,5 @@
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -17,8 +18,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
 {
     [Display(Name = "XmlDocumentNodeWriterFlowBlock_DisplayName", Description = "XmlDocumentNodeWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("XmlDocumentNodeWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
-    public class XmlDocumentNodeWriterFlowBlock : BaseFlowBlock
+    public class XmlDocumentNodeWriterFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => GlobalConstants.SuccessFieldName;
+
         [Display(Name = "XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument", Description = "XmlDocumentNodeWriterFlowBlock_AssociatedXmlDocument_Tooltip",
             ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
@@ -196,10 +200,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
 
                 CreatedOrUpdatedNode = newOrUpdatedNode;
                 ApplyAssignments(newOrUpdatedNode);
-                ExecuteNextFlowBlocks(runtime);
-
-                ApplyAssignments(newOrUpdatedNode);
-                ExecuteNextFlowBlocks(runtime);
+                GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
             });
         }
     }

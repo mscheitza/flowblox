@@ -79,23 +79,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
 
         private void CreateDefaultResultFields()
         {
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-
-            var domContentField = registry.CreateField(this);
-            domContentField.Name = nameof(WebDownloadDestinations.DOMContent);
-            ResultFields.Add(new ResultFieldByEnumValue<WebDownloadDestinations>
-            {
-                EnumValue = WebDownloadDestinations.DOMContent,
-                ResultField = domContentField
-            });
-
-            var downloadPathField = registry.CreateField(this);
-            downloadPathField.Name = nameof(WebDownloadDestinations.DownloadPath);
-            ResultFields.Add(new ResultFieldByEnumValue<WebDownloadDestinations>
-            {
-                EnumValue = WebDownloadDestinations.DownloadPath,
-                ResultField = downloadPathField
-            });
+            CreateDestinationResultField(ResultFields, WebDownloadDestinations.DOMContent);
+            CreateDestinationResultField(ResultFields, WebDownloadDestinations.DownloadPath);
         }
 
         public override List<FieldElement> Fields

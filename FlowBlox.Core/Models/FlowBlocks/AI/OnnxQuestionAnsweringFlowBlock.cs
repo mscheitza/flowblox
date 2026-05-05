@@ -76,12 +76,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 if (string.IsNullOrEmpty(ModelPath) || !File.Exists(ModelPath))
                 {
                     CreateNotification(runtime, OnnxNotifications.ModelFileMissing);
+                    GenerateResult(runtime);
                     return;
                 }
 
                 if (QATokenizer == null)
                 {
                     CreateNotification(runtime, OnnxNotifications.TokenizerMissing);
+                    GenerateResult(runtime);
                     return;
                 }
 
@@ -92,6 +94,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 catch (Exception ex)
                 {
                     CreateNotification(runtime, OnnxNotifications.AITokenizerInitializationFailed, ex);
+                    GenerateResult(runtime);
                     return;
                 }
 
@@ -107,6 +110,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 catch (Exception ex)
                 {
                     CreateNotification(runtime, OnnxNotifications.PromptExecutionFailed, ex);
+                    GenerateResult(runtime);
                     return;
                 }
             });

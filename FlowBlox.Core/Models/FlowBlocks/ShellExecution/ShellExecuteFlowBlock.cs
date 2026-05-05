@@ -55,23 +55,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.ShellExecution
 
         private void CreateDefaultResultFields()
         {
-            CreateDestinationResultField(ShellExecuteDestinations.Success, FieldTypes.Boolean);
-        }
-
-        private void CreateDestinationResultField(ShellExecuteDestinations destination, FieldTypes fieldType)
-        {
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-            var field = registry.CreateField(this);
-            field.Name = destination.ToString();
-
-            if (field.FieldType != null)
-                field.FieldType.FieldType = fieldType;
-
-            ResultFields.Add(new ResultFieldByEnumValue<ShellExecuteDestinations>
-            {
-                EnumValue = destination,
-                ResultField = field
-            });
+            CreateDestinationResultField(ResultFields, ShellExecuteDestinations.Success, FieldTypes.Boolean);
         }
 
         public override List<FieldElement> Fields

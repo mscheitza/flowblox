@@ -1,4 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Components;
@@ -16,8 +17,11 @@ using System.Net.Mime;
 namespace FlowBlox.Core.Models.FlowBlocks.Communication
 {
     [Display(Name = "SMTPFlowBlock_DisplayName", Description = "SMTPFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class SMTPFlowBlock : BaseFlowBlock
+    public class SMTPFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => GlobalConstants.SuccessFieldName;
+
         [Required]
         [Display(Name = "SMTPFlowBlock_Host", Description = "SMTPFlowBlock_Host_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
@@ -127,12 +131,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                 if (string.IsNullOrWhiteSpace(resolvedHost))
                 {
                     CreateNotification(runtime, SMTPNotifications.HostIsEmpty);
+                    GenerateResult(runtime);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(resolvedFrom))
                 {
                     CreateNotification(runtime, SMTPNotifications.FromAddressIsEmpty);
+                    GenerateResult(runtime);
                     return;
                 }
 
@@ -147,6 +153,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                 if (!AddAddresses(message.To, resolvedTo, true))
                 {
                     CreateNotification(runtime, SMTPNotifications.ToAddressesAreEmpty);
+                    GenerateResult(runtime);
                     return;
                 }
 
@@ -154,6 +161,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                 AddAddresses(message.Bcc, resolvedBcc, false);
 
                 var disposableAttachments = BuildAttachments();
+                var sendSucceeded = true;
                 try
                 {
                     foreach (var attachment in disposableAttachments)
@@ -184,6 +192,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                     {
                         runtime.Report(ex.ToString());
                         CreateNotification(runtime, SMTPNotifications.MailSendFailure);
+                        sendSucceeded = false;
                     }
                 }
                 finally
@@ -192,7 +201,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                         attachment.Dispose();
                 }
 
-                ExecuteNextFlowBlocks(runtime);
+                if (sendSucceeded)
+                    GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
+                else
+                    GenerateResult(runtime);
             });
         }
 

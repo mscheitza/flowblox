@@ -1,4 +1,5 @@
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.Components.IO;
@@ -13,8 +14,11 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.Compression
 {
     [Display(Name = "ZipArchiveCreatorFlowBlock_DisplayName", Description = "ZipArchiveCreatorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class ZipArchiveCreatorFlowBlock : BaseFlowBlock
+    public class ZipArchiveCreatorFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => GlobalConstants.SuccessFieldName;
+
         [Required]
         [Display(Name = "ZipArchiveCreatorFlowBlock_ZipArchiveObject", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.Association,
@@ -70,14 +74,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
                 {
                     var password = FlowBloxFieldHelper.ReplaceFieldsInString(Password ?? string.Empty);
                     ZipArchiveObject.CreateNewArchive(CompressionStrength, password);
+                    GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
                 }
                 catch (Exception e)
                 {
                     runtime.Report(e.ToString());
                     CreateNotification(runtime, ZipArchiveCreatorNotifications.FailedToCreateArchive);
+                    GenerateResult(runtime);
                 }
-
-                ExecuteNextFlowBlocks(runtime);
             });
         }
 

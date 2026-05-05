@@ -25,7 +25,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Logic
                 nameof(FieldComparisonCondition.FieldElement),
                 nameof(FieldComparisonCondition.Operator),
                 nameof(FieldComparisonCondition.Value)
-            })]
+            }, IsMovable = true)]
         public ObservableCollection<FieldComparisonCondition> Decisions { get; set; }
 
         public static ValidationResult ValidateDecisions(List<FieldComparisonCondition> decisions, ValidationContext context)

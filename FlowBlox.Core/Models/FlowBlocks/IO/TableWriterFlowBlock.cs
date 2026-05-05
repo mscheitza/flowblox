@@ -16,8 +16,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
 {
     [FlowBloxUIGroup("TableWriterFlowBlock_Groups_Schema", 0)]
     [Display(Name = "TableWriterFlowBlock_DisplayName", Description = "TableWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class TableWriterFlowBlock : BaseFlowBlock
+    public class TableWriterFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => GlobalConstants.SuccessFieldName;
+
         private readonly Dictionary<string, DataRow> _rowKeyCache = new Dictionary<string, DataRow>();
 
         private ObservableCollection<TableColumnDefinition> _tableColumnDefinitions;
@@ -224,7 +227,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
                 SetParentElement(data);
                 if (CreateOrUpdateDataRowFromCurrentSchemaDefinition(_currentTableData, this.TableColumnDefinitions))
                     this.ReferencedTable.Write(_currentTableData);
-                ExecuteNextFlowBlocks(runtime);
+                GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
             });
         }
 

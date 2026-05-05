@@ -1,4 +1,5 @@
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -15,8 +16,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 {
     [Display(Name = "JsonObjectFlowBlock_DisplayName", Description = "JsonObjectFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("JsonObjectFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
-    public class JsonObjectFlowBlock : BaseFlowBlock
+    public class JsonObjectFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => GlobalConstants.SuccessFieldName;
+
         [JsonIgnore]
         [DeepCopierIgnore]
         public JObject InternalJsonObject { get; protected set; }
@@ -47,7 +51,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                 else
                     InternalJsonObject = new JObject { ["_"] = token };
 
-                ExecuteNextFlowBlocks(runtime);
+                GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
             });
         }
     }

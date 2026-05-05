@@ -1,33 +1,34 @@
-﻿using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Models.Runtime;
-using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Util;
 using FlowBlox.Core.Attributes;
-using System.ComponentModel.DataAnnotations;
-using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Util.Resources;
-using System.Collections.ObjectModel;
-using SkiaSharp;
+using FlowBlox.Core.Extensions;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Fields;
+using FlowBlox.Core.Util.Resources;
+using SkiaSharp;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
 {
-    [Display(Name = "JoinFlowBlock_DisplayName", Description = "JoinFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class JoinFlowBlock : BaseSingleResultFlowBlock
+    [Display(Name = "JoinCollectorFlowBlock_DisplayName", Description = "JoinCollectorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    public class JoinCollectorFlowBlock : BaseSingleResultCollectorFlowBlock
     {
         [Display(Name = "JoinFlowBlock_Separator", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [CustomValidation(typeof(JoinFlowBlock), nameof(ValidateSeparators))]
+        [CustomValidation(typeof(JoinCollectorFlowBlock), nameof(ValidateSeparators))]
         public string Separator { get; set; }
 
         [Display(Name = "JoinFlowBlock_SpecialSeparator", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(Factory = UIFactory.ComboBox)]
-        [CustomValidation(typeof(JoinFlowBlock), nameof(ValidateSeparators))]
+        [CustomValidation(typeof(JoinCollectorFlowBlock), nameof(ValidateSeparators))]
         public SpecialSeparator? SpecialSeparator { get; set; }
 
         public static ValidationResult ValidateSeparators(object separator, ValidationContext validationContext)
         {
-            var joinFlowBlock = (JoinFlowBlock)validationContext.ObjectInstance;
+            var joinFlowBlock = (JoinCollectorFlowBlock)validationContext.ObjectInstance;
 
             if (string.IsNullOrEmpty(joinFlowBlock.Separator) && !joinFlowBlock.SpecialSeparator.HasValue)
                 return new ValidationResult(FlowBloxResourceUtil.GetLocalizedString("JoinFlowBlock_Validation_NoSeparatorDefined"), [validationContext.MemberName]);
@@ -49,7 +50,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.set_merge, 16, SKColors.DarkOliveGreen);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.set_merge, 32, SKColors.DarkOliveGreen);
 
-        public JoinFlowBlock() : base()
+        public JoinCollectorFlowBlock() : base()
         {
             JoinedParameters = new ObservableCollection<FieldElement>();
         }
@@ -93,7 +94,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
                     .Select(x => x.StringValue)
                     .ExceptNullOrEmpty();
 
-                GenerateResult(runtime, string.Join(separator, values));
+                StageValues(values);
+
+                if (CanGenerateResult())
+                    GenerateResult(runtime, string.Join(separator, StagedValues));
             });
         }
 

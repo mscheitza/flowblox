@@ -7,7 +7,9 @@ Explaining IterationContext and multi-input behavior:
   - A dataset can contain one or more field values; these result fields are defined on the BaseResultFlowBlock.
   - BaseSingleResultFlowBlock has exactly one result field, but can still have multiple input predecessors depending on InputCardinality.
 - BasePipeFlowBlock has exactly one InputField, one referenced predecessor flow block, and one result field.
-- IterationContext defines the aggregation boundary: collect inputs during the context iteration, then process combined datasets at iteration end.
+- IterationContext always references a flow block.
+- The target flow block is executed once per iteration of that referenced flow block (once per dataset).
+- Important: "iteration end" means the end of one iteration, not automatically the end of the full dataset stream.
 
 2) Execution order and iteration guarantees
 - Sibling execution follows index order.
@@ -47,15 +49,14 @@ Explaining IterationContext and multi-input behavior:
 - When a flow block is linked as input source, its InputBehaviorAssignment is created automatically (default Cross).
 - Recommended for AI update calls: after all ReferencedFlowBlocks are linked, get a fresh component snapshot and map index -> source flow block before updating assignments.
 
-6) JoinFlowBlock special case
-- Function: collects selected input field values (from result datasets) and joins them into one string with a separator.
+6) Collector flow-block special case (`BaseSingleResultCollectorFlowBlock`)
+- Function: collect selected values across multiple datasets and emit one result when `CanGenerateResult()` becomes true.
 - IterationContext resolution:
   - Highest priority: AssociatedIterationContext (manual override).
-  - If exactly one referenced BaseResultFlowBlock exists:
-    - if that predecessor has exactly one predecessor: use that predecessor as IterationContext.
-    - else: use predecessor.IterationContext.
-  - Otherwise: fallback to default IterationContext resolution (first common upstream).
-- Practical shorthand: JoinFlowBlock tends to aggregate on the "first common predecessor of its predecessor chain", unless manually overridden.
+  - Otherwise: predecessor of the directly associated predecessor, or (if available) that predecessor's IterationContext.
+  - If multiple predecessors are involved: first common upstream flow block (default).
+- `CanGenerateResult()` is true only at the last input dataset within the active context scope.
+- Example implementation: `JoinCollectorFlowBlock`.
 
 7) Practical use-cases for InputBehavior
 - Simple unique company extraction (name/street/zip/city each one match): keep default Cross.
@@ -68,11 +69,12 @@ Explaining IterationContext and multi-input behavior:
   - Set street/zip/city sources to RowWise (or RowWiseValid).
   - Result: company name repeated with location row 1, row 2, etc.
 
-8) When to rethink IterationContext (JoinFlowBlock)
-- Typical pattern: Reader -> Formatter -> JoinFlowBlock.
-- Default JoinFlowBlock IterationContext resolves to the predecessor of the formatter.
-- That can still be the reader item context (for example: one mail), so Join executes per item instead of across all items.
-- Guiding question: Which flow block produces the full set of data we want to aggregate?
-  - Formatter? Usually no, it typically emits one formatted result per item.
-  - Reader? Usually yes, it produces the item set to aggregate (for example all mails).
-- If Join should aggregate across all reader items, set JoinFlowBlock.AssociatedIterationContext to the predecessor of the reader flow block (one level higher than the reader item iteration).
+8) When to rethink IterationContext (collector blocks)
+- Typical pattern: Reader -> Formatter -> JoinCollectorFlowBlock.
+- Decision rule:
+  - If the target should run for every reader row, set IterationContext to the Reader (or keep the default when it resolves there).
+  - If the target should run only after all reader rows are covered, set IterationContext to the predecessor of the Reader (for example Start), so the full reader run is inside one context iteration.
+- Compact example:
+  - Reader has 3 rows (r1, r2, r3).
+  - IterationContext = Reader -> target runs 3x (after r1, after r2, after r3).
+  - IterationContext = Start -> target runs 1x after the full reader run.

@@ -7,6 +7,8 @@ using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util.Fields;
 using Newtonsoft.Json;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Enums;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Base
 {
@@ -111,6 +113,28 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 definedManagedObjects.AddRange(this.Fields);
                 return definedManagedObjects;
             }
+        }
+
+        protected void CreateDestinationResultField<TEnum>(
+            ICollection<ResultFieldByEnumValue<TEnum>> resultFields,
+            TEnum destination,
+            FieldTypes fieldType = FieldTypes.Text)
+            where TEnum : struct, Enum
+        {
+            if (resultFields == null)
+                throw new ArgumentNullException(nameof(resultFields));
+
+            var field = FlowBloxRegistryProvider.GetRegistry().CreateField(this);
+            field.Name = destination.ToString();
+
+            if (field.FieldType != null)
+                field.FieldType.FieldType = fieldType;
+
+            resultFields.Add(new ResultFieldByEnumValue<TEnum>
+            {
+                EnumValue = destination,
+                ResultField = field
+            });
         }
 
         protected void GenerateResult(BaseRuntime runtime, string content)

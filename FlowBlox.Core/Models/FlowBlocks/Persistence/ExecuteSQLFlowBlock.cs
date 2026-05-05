@@ -13,8 +13,11 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.Persistence
 {
     [Display(Name = "ExecuteSQLFlowBlock_DisplayName", Description = "ExecuteSQLFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class ExecuteSQLFlowBlock : BaseFlowBlock
+    public class ExecuteSQLFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => FlowBlox.Core.Constants.GlobalConstants.SuccessFieldName;
+
         [Display(Name = "ExecuteSQLFlowBlock_DbType", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [Required]
         public DbTypes DbType { get; set; }
@@ -72,6 +75,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Persistence
 
                 var updatedRows = ExecuteSQL();
                 runtime.Report($"Successfully executed SQL Query: Updated row count is {updatedRows}");
+                GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
             });
         }
     }

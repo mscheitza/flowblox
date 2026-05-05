@@ -145,27 +145,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
 
         private void CreateDefaultResultFields()
         {
-            CreateDestinationResultField(IMAPMailFetchDestinations.Subject, FieldTypes.Text);
-            CreateDestinationResultField(IMAPMailFetchDestinations.Message, FieldTypes.Text);
-            CreateDestinationResultField(IMAPMailFetchDestinations.From, FieldTypes.Text);
-            CreateDestinationResultField(IMAPMailFetchDestinations.Date, FieldTypes.Text);
-            CreateDestinationResultField(IMAPMailFetchDestinations.IsRead, FieldTypes.Boolean);
-        }
-
-        private void CreateDestinationResultField(IMAPMailFetchDestinations destination, FieldTypes fieldType)
-        {
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-            var field = registry.CreateField(this);
-            field.Name = destination.ToString();
-
-            if (field.FieldType != null)
-                field.FieldType.FieldType = fieldType;
-
-            ResultFields.Add(new ResultFieldByEnumValue<IMAPMailFetchDestinations>
-            {
-                EnumValue = destination,
-                ResultField = field
-            });
+            CreateDestinationResultField(ResultFields, IMAPMailFetchDestinations.Subject, FieldTypes.Text);
+            CreateDestinationResultField(ResultFields, IMAPMailFetchDestinations.Message, FieldTypes.Text);
+            CreateDestinationResultField(ResultFields, IMAPMailFetchDestinations.From, FieldTypes.Text);
+            CreateDestinationResultField(ResultFields, IMAPMailFetchDestinations.Date, FieldTypes.Text);
+            CreateDestinationResultField(ResultFields, IMAPMailFetchDestinations.IsRead, FieldTypes.Boolean);
         }
 
         public override bool Execute(BaseRuntime runtime, object data)

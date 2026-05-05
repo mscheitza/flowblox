@@ -58,23 +58,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
 
         private void CreateDefaultResultFields()
         {
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-
-            var fileResultField = registry.CreateField(this);
-            fileResultField.Name = nameof(ZipArchiveIteratorDestinations.File);
-            ResultFields.Add(new ResultFieldByEnumValue<ZipArchiveIteratorDestinations>
-            {
-                EnumValue = ZipArchiveIteratorDestinations.File,
-                ResultField = fileResultField
-            });
-
-            var contentResultField = registry.CreateField(this);
-            contentResultField.Name = nameof(ZipArchiveIteratorDestinations.Content);
-            ResultFields.Add(new ResultFieldByEnumValue<ZipArchiveIteratorDestinations>
-            {
-                EnumValue = ZipArchiveIteratorDestinations.Content,
-                ResultField = contentResultField
-            });
+            CreateDestinationResultField(ResultFields, ZipArchiveIteratorDestinations.File);
+            CreateDestinationResultField(ResultFields, ZipArchiveIteratorDestinations.Content);
         }
 
         public override List<FieldElement> Fields

@@ -14,8 +14,11 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.IO
 {
     [Display(Name = "FileWriterFlowBlock_DisplayName", Description = "FileWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class FileWriterFlowBlock : BaseFlowBlock
+    public class FileWriterFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => FlowBlox.Core.Constants.GlobalConstants.SuccessFieldName;
+
         [Required]
         [Display(Name = "PropertyNames_DataSource", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.Association,
@@ -114,14 +117,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
                     }
 
                     DataSource.Content = content;
+                    GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
                 }
                 catch (Exception e)
                 {
                     runtime.Report(e.ToString());
                     CreateNotification(runtime, FileWriterNotifications.FailedToWriteFile);
+                    GenerateResult(runtime);
                 }
-
-                ExecuteNextFlowBlocks(runtime);
             });
         }
 

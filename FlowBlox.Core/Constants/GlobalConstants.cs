@@ -6,7 +6,7 @@
 
         public const string DataGridViewColumnSelectionSuffix = "Selection";
 
-        public const string DefaultFieldName = "Content";
+        public const string SuccessFieldName = "Success";
 
         public const string PropertyNameFielName = "FieldName";
 

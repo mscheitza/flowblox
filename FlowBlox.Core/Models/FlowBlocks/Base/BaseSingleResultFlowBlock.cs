@@ -14,6 +14,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         /// </summary>
         public virtual FieldTypes DefaultResultFieldType => FieldTypes.Text;
 
+        /// <summary>
+        /// Default field name for auto-create of the result field. Can be overridden in derived classes. Default: Derived from Flow-Block
+        /// </summary>
+        public virtual string DefaultResultFieldName => null;
+
         [Display(Name = "PropertyNames_Name", ResourceType = typeof(FlowBloxTexts), Order = -10)]
         [CustomValidation(typeof(FlowBloxComponent), nameof(ValidateName))]
         [Required()]
@@ -82,14 +87,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
         }
 
-        protected void CreateDefaultResultField()
+        protected virtual void CreateDefaultResultField()
         {
-            if (this.ResultField == null)
-            {
-                this.ResultField = FlowBloxRegistryProvider.GetRegistry().CreateField(this,
-                    FieldNameGenerationMode.DeriveFromFlowBlock,
-                    DefaultResultFieldType);
-            }
+            if (this.ResultField != null)
+                return;
+
+            this.ResultField = FlowBloxRegistryProvider.GetRegistry().CreateField(this,
+                FieldNameGenerationMode.DeriveFromFlowBlock,
+                DefaultResultFieldType);
+
+            if (!string.IsNullOrWhiteSpace(DefaultResultFieldName))
+                this.ResultField.Name = DefaultResultFieldName;
         }
 
         public override void OnAfterCreate()

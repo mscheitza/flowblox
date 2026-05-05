@@ -49,21 +49,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             base.OnAfterCreate();
         }
 
-        private void CreateDestinationResultField(FSDirectoryIteratorDestinations destination)
-        {
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-            var field = registry.CreateField(this);
-            field.Name = destination.ToString();
-            ResultFields.Add(new ResultFieldByEnumValue<FSDirectoryIteratorDestinations>
-            {
-                EnumValue = destination,
-                ResultField = field
-            });
-        }
-
         private void CreateDefaultResultFields()
         {
-            CreateDestinationResultField(FSDirectoryIteratorDestinations.FullPath);
+            CreateDestinationResultField(ResultFields, FSDirectoryIteratorDestinations.FullPath);
         }
 
         public override List<FieldElement> Fields

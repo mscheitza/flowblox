@@ -157,9 +157,10 @@
 	</data>
 	<data name="BaseFlowBlock_AssociatedIterationContext_Tooltip" xml:space="preserve">
 		<value>Defines the flow block whose iteration lifecycle controls this block.
+The target flow block executes once per iteration of that referenced flow block (usually once per dataset).
 With multiple incoming paths, the IterationContext is auto-resolved to the first common flow block.
 This automatic value can be overridden by setting AssociatedIterationContext explicitly.
-All inputs are collected during the referenced block's iteration and this flow block executes once the iteration has completed.</value>
+All inputs are collected during each referenced iteration and this flow block executes at iteration end (after that iteration has completed).</value>
 	</data>
 	<data name="BaseFlowBlock_DefaultDescription" xml:space="preserve">
 		<value>In this area you can configure all required settings for the “{0}” flow block. Make the desired adjustments and then click “Apply” to save your changes.</value>
@@ -399,7 +400,7 @@ All inputs are collected during the referenced block's iteration and this flow b
 		<value>SQL tables</value>
 	</data>
 	<data name="DecisionFlowBlock_Description" xml:space="preserve">
-		<value>Flow block for conditional path execution based on configurable decision rules.</value>
+		<value>Evaluates configured field conditions in order and outputs the field value of the first matching rule. Rule order defines priority.</value>
 	</data>
 	<data name="DecisionFlowBlock_DisplayName" xml:space="preserve">
 		<value>Decision</value>
@@ -855,10 +856,16 @@ All inputs are collected during the referenced block's iteration and this flow b
 		<value>All fields of the target flow block must be mapped. Mappings are missing for the following fields: {0}</value>
 	</data>
 	<data name="JoinFlowBlock_Description" xml:space="preserve">
-		<value>Combines multiple inputs into a consolidated output.</value>
+		<value>Combines selected field values of the current dataset into one output value using a separator.</value>
 	</data>
 	<data name="JoinFlowBlock_DisplayName" xml:space="preserve">
 		<value>Merge</value>
+	</data>
+	<data name="JoinCollectorFlowBlock_DisplayName" xml:space="preserve">
+		<value>Merge (Collector)</value>
+	</data>
+	<data name="JoinCollectorFlowBlock_Description" xml:space="preserve">
+		<value>Collects selected field values across multiple datasets and merges them into one output value using a separator.</value>
 	</data>
 	<data name="JoinFlowBlock_JoinedParameters" xml:space="preserve">
 		<value>Fields to merge</value>
@@ -875,17 +882,14 @@ All inputs are collected during the referenced block's iteration and this flow b
 	<data name="JoinFlowBlock_Validation_NoSeparatorDefined" xml:space="preserve">
 		<value>No separator was specified. Please specify either a separator or a special separator.</value>
 	</data>
-	<data name="JoinFlowBlock_SpecialExplanation_Purpose" xml:space="preserve">
-		<value>Join merges selected field values using a separator.</value>
+	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_IterationScope" xml:space="preserve">
+		<value>This collector flow block gathers values across the active IterationContext and emits one result when the last input dataset is reached. If all datasets of a block should be covered, set IterationContext to that block's predecessor.</value>
 	</data>
-	<data name="JoinFlowBlock_SpecialExplanation_IterationScope" xml:space="preserve">
-		<value>Join collects values across the active IterationContext and emits one result when the last input dataset of that context is reached.</value>
+	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_AutoIterationContext" xml:space="preserve">
+		<value>Automatic IterationContext resolution: IterationContext is resolved to the predecessor of the directly associated predecessor or, if available, to that predecessor's IterationContext. If multiple predecessors exist, the first common upstream flow block is used (default).</value>
 	</data>
-	<data name="JoinFlowBlock_SpecialExplanation_AutoIterationContext" xml:space="preserve">
-		<value>Automatic IterationContext resolution: by default, IterationContext is resolved to the predecessor of the linked predecessor; if multiple such predecessors exist, the first common upstream flow block is used. You can override this manually.</value>
-	</data>
-	<data name="JoinFlowBlock_SpecialExplanation_UseFormatForMultiField" xml:space="preserve">
-		<value>Use Join to merge field values across multiple datasets via an IterationContext. If values should be composed within a single dataset, use FormatFlowBlock.</value>
+	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_ManualOverride" xml:space="preserve">
+		<value>IterationContext can be overridden manually. Use this to increase the aggregation scope.</value>
 	</data>
 	<data name="JsonObjectFlowBlock_Description" xml:space="preserve">
 		<value>Creates a JSON object from the specified content, manages the internal JSON object, and makes it available to other flow blocks.</value>
@@ -936,7 +940,7 @@ All inputs are collected during the referenced block's iteration and this flow b
 		<value>Path</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_Path_Tooltip" xml:space="preserve">
-		<value>Path to the target node where the object should be created or updated. Use '/' to separate segments; object properties by name, array entries by index (e.g. 'participants/0'). For array appends, set Path to the array property (e.g. 'participants') and describe element properties with JSON assignments. Empty path targets the root object.</value>
+		<value>Path to the target node where the object should be created or updated. Use '/' to separate segments; object properties by name, array entries by index (e.g. 'participants/0'). For array append, set Path to the array property (e.g. 'participants') and enable IsArray. A new object element is appended and assignments set properties directly on that new element. Assignment PropertyName is treated as a literal property key (not as a path). Empty path targets the root object.</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_IsArray" xml:space="preserve">
 		<value>Is array</value>
@@ -971,6 +975,9 @@ All inputs are collected during the referenced block's iteration and this flow b
 	<data name="JsonPropertyValueAssignment_PropertyName" xml:space="preserve">
 		<value>Property name</value>
 	</data>
+	<data name="JsonPropertyValueAssignment_PropertyName_Tooltip" xml:space="preserve">
+		<value>Literal property key to write at the writer target. This is not a path. Characters such as '/' are not interpreted as path separators.</value>
+	</data>
 	<data name="JsonPropertyValueAssignment_PropertyPath" xml:space="preserve">
 		<value>Property path</value>
 	</data>
@@ -978,7 +985,7 @@ All inputs are collected during the referenced block's iteration and this flow b
 		<value>Value</value>
 	</data>
 	<data name="JsonPropertyValueAssignment_Value_Tooltip" xml:space="preserve">
-		<value>Value for the target property path (field placeholders supported). Direct JSON is not supported here: create one mapping entry per property assignment. Missing parent paths are created automatically.</value>
+		<value>Value for PropertyName at the current Writer.Path target (field placeholders supported). Direct JSON is not supported here: create one mapping entry per property assignment.</value>
 	</data>
 	<data name="LineExtractorModifier_DisplayName" xml:space="preserve">
 		<value>Extract lines (Auto adjustment)</value>
@@ -3663,3 +3670,5 @@ Multi-level XPath expressions are not allowed here.</value>
 	<data name="SMTPFlowBlock_AcceptInvalidCertificates_Tooltip" xml:space="preserve">
 		<value>Accepts invalid TLS certificates for SMTP connections. Use for testing only.</value>
 	</data></root>
+
+

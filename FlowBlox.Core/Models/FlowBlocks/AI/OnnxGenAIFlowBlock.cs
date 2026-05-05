@@ -134,12 +134,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 if (string.IsNullOrWhiteSpace(ModelFolder) || !Directory.Exists(ModelFolder))
                 {
                     CreateNotification(runtime, OnnxRuntimeGenAiNotifications.ModelFolderMissing);
+                    GenerateResult(runtime);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(Prompt))
                 {
                     CreateNotification(runtime, OnnxRuntimeGenAiNotifications.PromptMissing);
+                    GenerateResult(runtime);
                     return;
                 }
 
@@ -158,6 +160,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 catch (Exception ex)
                 {
                     CreateNotification(runtime, OnnxRuntimeGenAiNotifications.ExecutionFailed, ex);
+                    GenerateResult(runtime);
                     return;
                 }
 

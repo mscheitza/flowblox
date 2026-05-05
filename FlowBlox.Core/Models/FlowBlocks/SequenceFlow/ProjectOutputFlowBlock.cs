@@ -31,8 +31,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
 
     [FlowBloxUIGroup("ProjectOutputFlowBlock_Groups_Mapping", 0)]
     [Display(Name = "ProjectOutputFlowBlock_DisplayName", Description = "ProjectOutputFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
-    public class ProjectOutputFlowBlock : BaseFlowBlock
+    public class ProjectOutputFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => FlowBlox.Core.Constants.GlobalConstants.SuccessFieldName;
+
         private ObservableCollection<ProjectOutputMappingEntry> _mappingEntries;
 
         [Display(Name = "ProjectOutputFlowBlock_MappingEntries", ResourceType = typeof(FlowBloxTexts), GroupName = "ProjectOutputFlowBlock_Groups_Mapping", Order = 0)]
@@ -94,8 +97,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
                 };
 
                 runtime.AppendOutputDataset(this.Name, dataset);
-
-                ExecuteNextFlowBlocks(runtime);
+                GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
             });
         }
     }

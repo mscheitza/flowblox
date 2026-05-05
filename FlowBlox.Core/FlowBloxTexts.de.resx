@@ -157,9 +157,10 @@
 	</data>
 	<data name="BaseFlowBlock_AssociatedIterationContext_Tooltip" xml:space="preserve">
 		<value>Definiert den Flow-Block, dessen Iterationszyklus diesen Block steuert.
+Der Ziel-Flow-Block wird pro Iteration dieses referenzierten Flow-Blocks genau einmal ausgeführt (in der Regel pro Datensatz).
 Bei mehreren eingehenden Pfaden wird der Iterationskontext automatisch auf den ersten gemeinsamen Flow-Block der Pfade gesetzt.
 Dieser automatisch ermittelte Wert kann durch einen explizit gesetzten AssociatedIterationContext überschrieben werden.
-Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesammelt, und dieser Flow-Block wird erst nach Abschluss der Iteration ausgeführt.</value>
+Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und dieser Flow-Block wird am Iterationsende ausgeführt (nach Abschluss dieser Iteration).</value>
 	</data>
 	<data name="BaseFlowBlock_DefaultDescription" xml:space="preserve">
 		<value>In diesem Bereich können Sie alle notwendigen Einstellungen für den „{0}“-FlowBlock vornehmen. Nehmen Sie die gewünschten Anpassungen vor und klicken Sie anschließend auf „Annehmen“, um Ihre Änderungen zu speichern.</value>
@@ -399,7 +400,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>SQL-Tabellen</value>
 	</data>
 	<data name="DecisionFlowBlock_Description" xml:space="preserve">
-		<value>Flow-Block zur bedingten Ausführung von Pfaden basierend auf konfigurierbaren Entscheidungsregeln.</value>
+		<value>Prüft konfigurierte Feldbedingungen in Reihenfolge und gibt den Feldwert der ersten zutreffenden Regel aus. Die Reihenfolge der Regeln definiert die Priorität.</value>
 	</data>
 	<data name="DecisionFlowBlock_DisplayName" xml:space="preserve">
 		<value>Entscheidung</value>
@@ -854,10 +855,16 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>Alle Felder des Ziel-Flow-Blocks müssen abgebildet werden. Es fehlen Übertragungen für folgende Felder: {0}</value>
 	</data>
 	<data name="JoinFlowBlock_Description" xml:space="preserve">
-		<value>Kombiniert mehrere Eingaben zu einer konsolidierten Ausgabe.</value>
+		<value>Fügt ausgewählte Feldwerte des aktuellen Datensatzes mit einem Trennzeichen zu einem Ausgabewert zusammen.</value>
 	</data>
 	<data name="JoinFlowBlock_DisplayName" xml:space="preserve">
 		<value>Zusammenführen</value>
+	</data>
+	<data name="JoinCollectorFlowBlock_DisplayName" xml:space="preserve">
+		<value>Zusammenführen (Collector)</value>
+	</data>
+	<data name="JoinCollectorFlowBlock_Description" xml:space="preserve">
+		<value>Sammelt ausgewählte Feldwerte über mehrere Datensätze und führt sie mit einem Trennzeichen zu einem Ausgabewert zusammen.</value>
 	</data>
 	<data name="JoinFlowBlock_JoinedParameters" xml:space="preserve">
 		<value>Zusammenzuführende Feldwerte</value>
@@ -874,17 +881,14 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	<data name="JoinFlowBlock_Validation_NoSeparatorDefined" xml:space="preserve">
 		<value>Es wurde kein Trennzeichen angegeben. Bitte geben Sie entweder ein Trennzeichen oder ein spezielles Trennzeichen an.</value>
 	</data>
-	<data name="JoinFlowBlock_SpecialExplanation_Purpose" xml:space="preserve">
-		<value>Der Join-FlowBlock führt ausgewählte Feldwerte mit einem Trennzeichen zusammen.</value>
+	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_IterationScope" xml:space="preserve">
+		<value>Dieser Collector-Flow-Block sammelt Werte über den aktiven Iterationskontext und erzeugt genau ein Ergebnis, wenn das letzte Input-Dataset erreicht ist. Sollen alle Datensätze eines Flow-Blocks erfasst werden, setzen Sie den Iterationskontext auf dessen Vorgänger.</value>
 	</data>
-	<data name="JoinFlowBlock_SpecialExplanation_IterationScope" xml:space="preserve">
-		<value>Join sammelt Werte über den aktiven Iterationskontext und erzeugt genau ein Ergebnis, wenn das letzte Input-Dataset dieses Kontexts erreicht ist.</value>
+	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_AutoIterationContext" xml:space="preserve">
+		<value>Automatische Ermittlung des Iterationskontexts: Der Iterationskontext wird auf den Vorgänger des direkt assoziierten Vorgängers oder, falls vorhanden, auf dessen Iterationskontext festgelegt. Wenn mehrere Vorgänger vorhanden sind, wird standardmäßig der erste gemeinsame vorgelagerte Flow-Block verwendet.</value>
 	</data>
-	<data name="JoinFlowBlock_SpecialExplanation_AutoIterationContext" xml:space="preserve">
-		<value>Automatische Ermittlung des Iterationskontexts: Standardmäßig wird der Iterationskontext auf den Vorgänger des verknüpften Vorgängers aufgelöst; bei mehreren Vorgängern auf den ersten gemeinsamen vorgelagerten Flow-Block. Der Iterationskontext kann manuell überschrieben werden.</value>
-	</data>
-	<data name="JoinFlowBlock_SpecialExplanation_UseFormatForMultiField" xml:space="preserve">
-		<value>Join ist geeignet, um Feldwerte aus mehreren Datensätzen über einen Iterationskontext zusammenzuführen. Wenn Werte innerhalb eines einzelnen Datensatzes zusammengesetzt werden sollen, sollte der FormatFlowBlock verwendet werden.</value>
+	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_ManualOverride" xml:space="preserve">
+		<value>Der Iterationskontext kann manuell überschrieben werden. Nutzen Sie dies, um den Aggregations-Scope zu vergrößern.</value>
 	</data>
 	<data name="JsonObjectFlowBlock_Description" xml:space="preserve">
 		<value>Erstellt aus dem angegebenen Inhalt ein JSON-Objekt, verwaltet das interne JSON-Objekt und stellt es anderen Flow-Blocks zur Verfügung.</value>
@@ -935,7 +939,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>Pfad</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_Path_Tooltip" xml:space="preserve">
-		<value>Pfad zum Zielknoten, an dem das Objekt erstellt oder aktualisiert wird. Verwenden Sie '/' zur Trennung von Segmenten; Objekt-Eigenschaften über Namen, Array-Einträge über Index (z. B. 'participants/0'). Für Array-Append den Pfad auf die Array-Property setzen (z. B. 'participants') und die Element-Eigenschaften über JSON-Zuweisungen definieren. Ein leerer Pfad adressiert das Root-Objekt.</value>
+		<value>Pfad zum Zielknoten, an dem das Objekt erstellt oder aktualisiert wird. Verwenden Sie '/' zur Trennung von Segmenten; Objekt-Eigenschaften über Namen, Array-Einträge über Index (z. B. 'participants/0'). Für Array-Append den Pfad auf die Array-Property setzen (z. B. 'participants') und IsArray aktivieren. Es wird ein neues Objekt-Element angehängt, und die Zuweisungen setzen Eigenschaften direkt auf diesem neuen Element. Assignment PropertyName wird als literaler Property-Key behandelt (nicht als Pfad). Ein leerer Pfad adressiert das Root-Objekt.</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_IsArray" xml:space="preserve">
 		<value>Ist Array</value>
@@ -970,6 +974,9 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 	<data name="JsonPropertyValueAssignment_PropertyName" xml:space="preserve">
 		<value>Property-Name</value>
 	</data>
+	<data name="JsonPropertyValueAssignment_PropertyName_Tooltip" xml:space="preserve">
+		<value>Literaler Property-Key am Writer-Ziel. Kein Pfad. Zeichen wie '/' werden nicht als Pfadtrenner interpretiert.</value>
+	</data>
 	<data name="JsonPropertyValueAssignment_PropertyPath" xml:space="preserve">
 		<value>Property-Pfad</value>
 	</data>
@@ -977,7 +984,7 @@ Alle Eingabedaten werden während der Iteration des referenzierten Blocks gesamm
 		<value>Wert</value>
 	</data>
 	<data name="JsonPropertyValueAssignment_Value_Tooltip" xml:space="preserve">
-		<value>Wert für den angegebenen Property-Pfad. Direktes JSON wird hier nicht unterstützt: pro Property-Set einen eigenen Mapping-Eintrag anlegen. Nicht vorhandene Parent-Pfade werden automatisch erzeugt.</value>
+		<value>Wert für PropertyName am aktuellen Writer.Path-Ziel (Feldplatzhalter unterstützt). Direktes JSON wird hier nicht unterstützt: pro Property-Zuweisung einen eigenen Mapping-Eintrag anlegen.</value>
 	</data>
 	<data name="LineExtractorModifier_DisplayName" xml:space="preserve">
 		<value>Zeilenweise extrahieren (Automatische Anpassung)</value>

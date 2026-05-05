@@ -764,9 +764,10 @@ namespace FlowBlox.Core {
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Defines the flow block whose iteration lifecycle controls this block.
+        ///The target flow block executes once per iteration of that referenced flow block (usually once per dataset).
         ///With multiple incoming paths, the IterationContext is auto-resolved to the first common flow block.
         ///This automatic value can be overridden by setting AssociatedIterationContext explicitly.
-        ///All inputs are collected during the referenced block&apos;s iteration and this flow block executes once the iteration has completed. ähnelt.
+        ///All inputs are collected during each referenced iteration and this flow block executes at iteration end (after that iteration has completed). ähnelt.
         /// </summary>
         public static string BaseFlowBlock_AssociatedIterationContext_Tooltip {
             get {
@@ -969,6 +970,33 @@ namespace FlowBlox.Core {
         public static string BaseResultFlowBlockUIActions_Generate {
             get {
                 return ResourceManager.GetString("BaseResultFlowBlockUIActions_Generate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic IterationContext resolution: IterationContext is resolved to the predecessor of the directly associated predecessor or, if available, to that predecessor&apos;s IterationContext. If multiple predecessors exist, the first common upstream flow block is used (default). ähnelt.
+        /// </summary>
+        public static string BaseSingleResultCollectorFlowBlock_SpecialExplanation_AutoIterationContext {
+            get {
+                return ResourceManager.GetString("BaseSingleResultCollectorFlowBlock_SpecialExplanation_AutoIterationContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This collector flow block gathers values across the active IterationContext and emits one result when the last input dataset is reached. If all datasets of a block should be covered, set IterationContext to that block&apos;s predecessor. ähnelt.
+        /// </summary>
+        public static string BaseSingleResultCollectorFlowBlock_SpecialExplanation_IterationScope {
+            get {
+                return ResourceManager.GetString("BaseSingleResultCollectorFlowBlock_SpecialExplanation_IterationScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die IterationContext can be overridden manually. Use this to increase the aggregation scope. ähnelt.
+        /// </summary>
+        public static string BaseSingleResultCollectorFlowBlock_SpecialExplanation_ManualOverride {
+            get {
+                return ResourceManager.GetString("BaseSingleResultCollectorFlowBlock_SpecialExplanation_ManualOverride", resourceCulture);
             }
         }
         
@@ -4861,7 +4889,25 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Combines multiple inputs into a consolidated output. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Collects selected field values across multiple datasets and merges them into one output value using a separator. ähnelt.
+        /// </summary>
+        public static string JoinCollectorFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("JoinCollectorFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Merge (Collector) ähnelt.
+        /// </summary>
+        public static string JoinCollectorFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("JoinCollectorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Combines selected field values of the current dataset into one output value using a separator. ähnelt.
         /// </summary>
         public static string JoinFlowBlock_Description {
             get {
@@ -4893,42 +4939,6 @@ namespace FlowBlox.Core {
         public static string JoinFlowBlock_Separator {
             get {
                 return ResourceManager.GetString("JoinFlowBlock_Separator", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic IterationContext resolution: by default, IterationContext is resolved to the predecessor of the linked predecessor; if multiple such predecessors exist, the first common upstream flow block is used. You can override this manually. ähnelt.
-        /// </summary>
-        public static string JoinFlowBlock_SpecialExplanation_AutoIterationContext {
-            get {
-                return ResourceManager.GetString("JoinFlowBlock_SpecialExplanation_AutoIterationContext", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Join collects values across the active IterationContext and emits one result when the last input dataset of that context is reached. ähnelt.
-        /// </summary>
-        public static string JoinFlowBlock_SpecialExplanation_IterationScope {
-            get {
-                return ResourceManager.GetString("JoinFlowBlock_SpecialExplanation_IterationScope", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Join merges selected field values using a separator. ähnelt.
-        /// </summary>
-        public static string JoinFlowBlock_SpecialExplanation_Purpose {
-            get {
-                return ResourceManager.GetString("JoinFlowBlock_SpecialExplanation_Purpose", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Use Join to merge field values across multiple datasets via an IterationContext. If values should be composed within a single dataset, use FormatFlowBlock. ähnelt.
-        /// </summary>
-        public static string JoinFlowBlock_SpecialExplanation_UseFormatForMultiField {
-            get {
-                return ResourceManager.GetString("JoinFlowBlock_SpecialExplanation_UseFormatForMultiField", resourceCulture);
             }
         }
         
@@ -5293,7 +5303,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Path to the target node where the object should be created or updated. Use &apos;/&apos; to separate segments; object properties by name, array entries by index (e.g. &apos;participants/0&apos;). For array appends, set Path to the array property (e.g. &apos;participants&apos;) and describe element properties with JSON assignments. Empty path targets the root object. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path to the target node where the object should be created or updated. Use &apos;/&apos; to separate segments; object properties by name, array entries by index (e.g. &apos;participants/0&apos;). For array append, set Path to the array property (e.g. &apos;participants&apos;) and enable IsArray. A new object element is appended and assignments set properties directly on that new element. Assignment PropertyName is treated as a literal property key (not as a path). Empty path targets the root object. ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_Path_Tooltip {
             get {
@@ -5401,6 +5411,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Literal property key to write at the writer target. This is not a path. Characters such as &apos;/&apos; are not interpreted as path separators. ähnelt.
+        /// </summary>
+        public static string JsonPropertyValueAssignment_PropertyName_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonPropertyValueAssignment_PropertyName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Property path ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_PropertyPath {
@@ -5419,7 +5438,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Value for the target property path (field placeholders supported). Direct JSON is not supported here: create one mapping entry per property assignment. Missing parent paths are created automatically. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value for PropertyName at the current Writer.Path target (field placeholders supported). Direct JSON is not supported here: create one mapping entry per property assignment. ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_Value_Tooltip {
             get {

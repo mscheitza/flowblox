@@ -1,4 +1,5 @@
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -17,8 +18,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 {
     [Display(Name = "JsonObjectWriterFlowBlock_DisplayName", Description = "JsonObjectWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
-    public class JsonObjectWriterFlowBlock : BaseFlowBlock
+    public class JsonObjectWriterFlowBlock : BaseSingleResultFlowBlock
     {
+        public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
+        public override string DefaultResultFieldName => GlobalConstants.SuccessFieldName;
+
         [Display(Name = "JsonObjectWriterFlowBlock_AssociatedJsonObject", Description = "JsonObjectWriterFlowBlock_AssociatedJsonObject_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [AssociatedFlowBlockResolvable()]
         [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
@@ -141,7 +145,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
                 CreatedOrUpdatedObject = createdOrUpdatedObject;
                 ApplyAssignments(createdOrUpdatedObject);
-                ExecuteNextFlowBlocks(runtime);
+                GenerateResult(runtime, bool.TrueString.ToLowerInvariant());
             });
         }
 

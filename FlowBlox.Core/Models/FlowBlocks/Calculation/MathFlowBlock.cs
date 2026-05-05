@@ -40,6 +40,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Calculation
                 {
                     runtime.Report("Math expression is empty.", FlowBloxLogLevel.Warning);
                     CreateNotification(runtime, MathFlowBlockNotifications.ExpressionEmpty);
+                    GenerateResult(runtime);
                     return;
                 }
 
@@ -53,6 +54,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Calculation
                 {
                     runtime.Report($"Failed to prepare math expression.", FlowBloxLogLevel.Error, e: ex);
                     CreateNotification(runtime, MathFlowBlockNotifications.UnsupportedFieldType);
+                    GenerateResult(runtime);
                     return;
                 }
 
@@ -70,6 +72,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Calculation
                 {
                     runtime.Report($"Failed to evaluate math expression '{MathExpression}'. Details: {ex.Message}", FlowBloxLogLevel.Error, e: ex);
                     CreateNotification(runtime, MathFlowBlockNotifications.EvaluationFailed);
+                    GenerateResult(runtime);
                     return;
                 }
 

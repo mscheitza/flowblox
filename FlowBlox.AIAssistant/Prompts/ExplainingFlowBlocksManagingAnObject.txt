@@ -23,5 +23,6 @@ Concrete XML example (aggregated):
   - TableReader iterates rows.
   - XmlDocumentNodeWriter appends one node per row.
   - Without IterationContext, XmlDocumentOutput is called N times (once per row/iteration).
-  - With IterationContext = XmlDocumentFlowBlock (or explicitly via AssociatedIterationContext), XmlDocumentOutput is called once after reader completion, then FileWriter writes once.
+  - With IterationContext = TableReader, XmlDocumentOutput is called once per reader row (after each row iteration).
+  - With IterationContext = Start (or another predecessor that wraps the full reader run), XmlDocumentOutput is called once after all reader rows are processed.
   - For IterationContext details, see: "Explaining IterationContext"
