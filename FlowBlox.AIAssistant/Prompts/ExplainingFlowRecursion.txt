@@ -9,24 +9,35 @@ What it does:
   - `TransferFrom`
   - `TransferTo`
 - During execution, each mapped source value is copied to the mapped target field, then the target flow block's next flow blocks are executed.
+- Mental model: source output is handed over to target output fields; then successors of the target run as if the target produced that dataset.
 
 Required setup:
 1. Set `TargetFlowBlock`.
 2. Configure `FieldTransferConfigs` so all target result fields are mapped.
    - Validation requires full target-field coverage.
 3. Ensure target is reachable on the upstream path (validated by the block).
+   - "Reachable on path" means same connected execution graph/branch, not a direct successor link.
+   - Single-input targets are still valid recursion targets when they are already on that path.
 
 Paging-style recursion pattern (compact):
 - Typical chain:
-  - initial request block (page N)
-  - extraction blocks
-  - next-page request block (page N+1 link)
+  - paging entry block (page N state, for example search/submit or page-load event)
+  - data-iteration block (for example card/row selector)
+  - data field selectors/writers
+  - next-page block (resolve/click next page)
   - `RecursiveCallFlowBlock`
-- Map `TransferFrom` fields from the next-page request output to the initial request target fields (`TransferTo`).
-- Result: downstream flow continues with next-page content as if it came from the original request branch.
+- Important scope rule:
+  - next-page selector/click must be connected to the paging entry path (per page), not to the data-iteration block (per item).
+  - otherwise next-page logic runs once per extracted item instead of once per page.
+- Recursion target should be the paging entry block (same semantic type, same state model).
+- Map `TransferFrom` fields from next-page output to paging-entry target fields (`TransferTo`), usually DOM/URL state fields.
+- Result: downstream flow continues with next-page state as if it came from the paging entry block.
 - Recursion naturally stops when no usable next-page value is produced for the mapped chain.
 
 Important notes:
 - `RecursiveCallFlowBlock` itself has one incoming execution path (`ReferencedFlowBlocks` expected as single source for transfer candidates).
+- `connect_flow_blocks`/`disconnect_flow_blocks` with source = `RecursiveCallFlowBlock` operate on `TargetFlowBlock` association (invoke mode), not normal `ReferencedFlowBlocks` wiring.
 - Prefer recursion for controlled loop handover; use normal linear flow when one-pass processing is sufficient.
 - Keep mappings explicit and stable; avoid ambiguous field semantics between source and target.
+- Prefer recursion targets of the same type/category where possible (for example web paging event -> web paging event).
+- Do not target data-record selectors/iterators as recursion entry, because this mixes data-record output with paging state handover.

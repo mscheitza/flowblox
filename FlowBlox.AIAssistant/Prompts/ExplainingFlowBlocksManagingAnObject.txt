@@ -8,6 +8,9 @@ Lifecycle and scope rule:
 - The position of the object-managing flow block defines lifetime and reuse.
 - Manager before an iterator (for example TableReader with N rows): usually one object is reused and enriched across rows.
 - Manager after an iterator: typically a new object is created per row/dataset.
+- Hard rule:
+  - If you need one managed object state containing all iterator datasets, the manager must be placed before the iterator.
+  - If the manager is placed after the iterator, a new managed object state is created per dataset; previous state is not carried over.
 
 Flow-order patterns:
 - Aggregated object (all rows in one object/file):
@@ -22,7 +25,11 @@ Concrete XML example (aggregated):
   - XmlDocumentFlowBlock creates one XML document.
   - TableReader iterates rows.
   - XmlDocumentNodeWriter appends one node per row.
-  - Without IterationContext, XmlDocumentOutput is called N times (once per row/iteration).
-  - With IterationContext = TableReader, XmlDocumentOutput is called once per reader row (after each row iteration).
-  - With IterationContext = Start (or another predecessor that wraps the full reader run), XmlDocumentOutput is called once after all reader rows are processed.
-  - For IterationContext details, see: "Explaining IterationContext"
+  - Special IterationContext notes for this example:
+    - Without IterationContext, XmlDocumentOutput is called N times (once per row/iteration).
+    - With IterationContext = TableReader, XmlDocumentOutput is called once per reader row (after each row iteration).
+    - With IterationContext = Start (or another predecessor that wraps the full reader run), XmlDocumentOutput is called once after all reader rows are processed.
+    - If ObjectOutput already has the intended IterationContext, direct successors (for example FileWriter) usually do not need the same IterationContext again.
+    - Reason: successors are invoked by ObjectOutput, so they run only when ObjectOutput runs and after ObjectOutput has produced its result(s).
+  - For IterationContext details, see: "Explaining IterationContext".
+  - For general ordering behavior, see `ExplainingFlowLogic`, section: `Execution Order of Next Flow-Blocks (Sibling case)`.

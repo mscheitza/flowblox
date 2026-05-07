@@ -400,7 +400,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
             var actionResult = this.Invoke(() =>
             {
                 var elem = FindElement(selector, mode);
-                content = innerContent ? elem.GetAttribute("innerHTML") : elem.GetAttribute("outerHTML");
+                content = innerContent ? 
+                    elem.GetAttribute("innerHTML") : 
+                    elem.GetAttribute("outerHTML");
+
                 return new WebBrowserActionResult()
                 {
                     Success = true
@@ -409,6 +412,42 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
             return new WebBrowserContentActionResult()
             {
                 Content = content,
+                Exception = actionResult.Exception,
+                Status = actionResult.Status,
+                Success = actionResult.Success
+            };
+        }
+
+        public virtual WebBrowserContentsActionResult GetContents(string selector, WebEventSelectionMode mode, bool innerContent)
+        {
+            List<string> contents = new();
+            var actionResult = this.Invoke(() =>
+            {
+                var elements = FindElements(selector, mode)?.ToList() ?? new List<IWebElement>();
+                if (elements.Count == 0)
+                {
+                    return new WebBrowserActionResult
+                    {
+                        Success = false,
+                        Status = WebBrowserActionStatus.ElementNotFound
+                    };
+                }
+
+                contents = elements
+                    .Select(elem => innerContent ? 
+                        elem.GetAttribute("innerHTML") : 
+                        elem.GetAttribute("outerHTML"))
+                    .ToList();
+
+                return new WebBrowserActionResult
+                {
+                    Success = true
+                };
+            });
+
+            return new WebBrowserContentsActionResult
+            {
+                Contents = contents,
                 Exception = actionResult.Exception,
                 Status = actionResult.Status,
                 Success = actionResult.Success

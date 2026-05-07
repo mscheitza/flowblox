@@ -965,6 +965,9 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="JsonPropertyValueAssignment_FieldValue" xml:space="preserve">
 		<value>Feldwert</value>
 	</data>
+	<data name="JsonPropertyValueAssignment_FieldValue_Tooltip" xml:space="preserve">
+		<value>Bevorzugt verwenden, wenn JSON-Typen erhalten bleiben sollen. Bei "Feldwert" wird die Typkonvertierung des Quell-FieldElements angewendet (z. B. DateTime/Zahl/Boolean), sodass JSON typisierte Werte statt Platzhalter-Text enthält.</value>
+	</data>
 	<data name="JsonPropertyValueAssignment_IsArray" xml:space="preserve">
 		<value>Ist Array</value>
 	</data>
@@ -2907,6 +2910,9 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="RecursiveCallFlowBlock_TargetFlowBlock_Tooltip" xml:space="preserve">
     <value>Der Ziel-Flow-Block, ab dem die Ausführung nach der Übertragung der konfigurierten Feldwerte fortgesetzt wird.</value>
   </data>
+	<data name="RecursiveCallFlowBlock_SpecialExplanation_TargetPathAndTransfer" xml:space="preserve">
+    <value>Achtung: Alle Ergebnisfelder des Target-Flow-Blocks müssen vollständig über FieldTransferConfigs abgedeckt sein. Ohne vollständige Feldübertragungen schlägt die Validierung bzw. Ausführung fehl.</value>
+  </data>
 	<data name="XmlDocumentOutputFlowBlock_AssociatedXmlDocument_Tooltip" xml:space="preserve">
     <value>Der XML-Dokument-Flow-Block, der das interne XML-Dokument für die Ausgabe verwaltet.</value>
   </data>
@@ -2974,19 +2980,19 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Web-Download</value>
   </data>
 	<data name="WebDownloadFlowBlock_Description" xml:space="preserve">
-    <value>Laedt Dateien von Webseiten ueber den zugeordneten WebBrowser-Flow-Block herunter und liefert DOM-Content sowie den tatsaechlichen Downloadpfad zurueck.</value>
+    <value>Lädt Dateien von Webseiten über den zugeordneten WebBrowser-Flow-Block herunter und liefert DOM-Content sowie den tatsächlichen Downloadpfad zurück.</value>
   </data>
 	<data name="WebDownloadFlowBlock_AssociatedWebBrowser" xml:space="preserve">
     <value>Zugeordneter WebBrowser</value>
   </data>
 	<data name="WebDownloadFlowBlock_AssociatedWebBrowser_Tooltip" xml:space="preserve">
-    <value>Der WebBrowser-Flow-Block, dessen intern verwaltete Browserinstanz fuer Download-Aktionen verwendet wird.</value>
+    <value>Der WebBrowser-Flow-Block, dessen intern verwaltete Browserinstanz für Download-Aktionen verwendet wird.</value>
   </data>
 	<data name="WebDownloadFlowBlock_DownloadMode" xml:space="preserve">
     <value>Download-Modus</value>
   </data>
 	<data name="WebDownloadFlowBlock_DownloadMode_Tooltip" xml:space="preserve">
-    <value>Legt fest, ob der Download per browsernativen Klick, direkter HTTP-Anfrage oder automatischem Fallback ausgefuehrt wird.</value>
+    <value>Legt fest, ob der Download per browsernativen Klick, direkter HTTP-Anfrage oder automatischem Fallback ausgeführt wird.</value>
   </data>
 	<data name="WebDownloadFlowBlock_XPath" xml:space="preserve">
     <value>XPath</value>
@@ -3004,13 +3010,13 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Download-Pfad</value>
   </data>
 	<data name="WebDownloadFlowBlock_DownloadPath_Tooltip" xml:space="preserve">
-    <value>Der Ziel-Datei- oder Ziel-Ordnerpfad fuer Downloads per HTTP-Anfrage.</value>
+    <value>Der Ziel-Datei- oder Ziel-Ordnerpfad für Downloads per HTTP-Anfrage.</value>
   </data>
 	<data name="WebDownloadFlowBlock_DownloadDirectory" xml:space="preserve">
     <value>Download-Verzeichnis</value>
   </data>
 	<data name="WebDownloadFlowBlock_DownloadDirectory_Tooltip" xml:space="preserve">
-    <value>Das Ziel-Download-Verzeichnis fuer browsernative Downloads.</value>
+    <value>Das Ziel-Download-Verzeichnis für browsernative Downloads.</value>
   </data>
 	<data name="WebDownloadFlowBlock_TimeoutSeconds" xml:space="preserve">
     <value>Timeout (Sekunden)</value>
@@ -3028,13 +3034,13 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Verwendung externer Flow-Blocks in diesem Flow-Block</value>
   </data>
 	<data name="WebDownloadFlowBlock_ExternalFlowBlocks_Explanation0" xml:space="preserve">
-    <value>Dieser Flow-Block verwendet die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block, um Datei-Downloads auszufuehren.</value>
+    <value>Dieser Flow-Block verwendet die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block, um Datei-Downloads auszuführen.</value>
   </data>
 	<data name="WebDownloadFlowBlock_ResultBehavior_Topic" xml:space="preserve">
-    <value>Rueckgabe von DOM-Content und Downloadpfad</value>
+    <value>Rückgabe von DOM-Content und Downloadpfad</value>
   </data>
 	<data name="WebDownloadFlowBlock_ResultBehavior_Explanation0" xml:space="preserve">
-    <value>Nach der Ausfuehrung liefert dieser Flow-Block den aktuellen DOM-Content und den tatsaechlich aufgeloesten Downloadpfad in seinen Ergebnisfeldern zurueck.</value>
+    <value>Nach der Ausführung liefert dieser Flow-Block den aktuellen DOM-Content und den tatsächlich aufgelösten Downloadpfad in seinen Ergebnisfeldern zurück.</value>
   </data>
 	<data name="OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
     <value>Dieser Flow-Block verwaltet interne ONNX Runtime GenAI-Modell- und Tokenizer-Instanzen für die Prompt-Ausführung.</value>
@@ -3081,11 +3087,43 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="WebEventFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
     <value>Nach einer erfolgreichen Web-Aktion wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben.</value>
   </data>
+	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_LinkExtractionAndSwitch" xml:space="preserve">
+    <value>Best Practice: Links zuerst extrahieren, dann aufrufen.
+- ClickAll führt mehrere Klicks aus, erzeugt aber keine eigene Ergebnis-Iteration pro geklicktem Element.
+- ClickAll liefert einen DOM erst nach Abschluss aller Klicks. $$CONTINUE$$
+
+Für Mehrfachverarbeitung:
+- Web-Selector: Ziel-href-Werte erfassen.
+- Web-Event (Switch to URL): erfasste URLs iterieren.
+- Danach Detail-/Download-Aktionen auf der geöffneten Seite ausführen.
+
+Vorteil:
+- Die Iteration läuft über stabile URL-Werte (nicht über DOM-Element-Handles).
+- Dadurch werden stale-element Probleme nach Navigation/Re-Render vermieden.</value>
+  </data>
+	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction" xml:space="preserve">
+    <value>Best Practice für Links auf mehreren Seiten:
+- Schritt 1: Web-Event (Search/Submit) -> Web-Selector (Target Links erfassen)
+- Schritt 2: Web-Event (Search/Submit) -> Web-Selector (Links der nächsten Seite erfassen) -> Web-Event (Next Page klicken)
+- Schritt 3: Web-Event (Next Page klicken) -> Recursive-Call zurück auf den Search/Submit-Schritt, mit Mapping des erzeugten DOM auf den Input $$CONTINUE$$
+
+Wiederholen, bis keine Next-Page mehr vorhanden ist.
+
+Do/Don't:
+- Do: Recursive-Call auf das Paging-Element zurückführen (z. B. Search/Submit-Web-Event).
+- Don't: Recursive-Call auf Datensatz-Selectoren/Iteratoren setzen, da diese Datensatz-Ausgaben statt Paging-State liefern.
+- Do: NextPage-Selector/-Click vom Paging-Element aus aufrufen (pro Seite).
+- Don't: NextPage-Selector/-Click hinter den Datensatz-Iterator hängen, sonst läuft Paging pro Datensatz statt pro Seite.
+
+Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
+- Join.AssociatedIterationContext auf den Vorgänger des Paging-WebEvents (Web-Event: Search/Submit) setzen.
+- Dann erfolgt die Aggregation erst nach dem gesamten Paging-Scope.</value>
+  </data>
 	<data name="WebDownloadFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
-    <value>Dieser Flow-Block verwendet die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block, um Datei-Downloads auszufuehren.</value>
+    <value>Dieser Flow-Block verwendet die intern verwaltete WebBrowser-Instanz aus einem WebBrowser-Flow-Block, um Datei-Downloads auszuführen.</value>
   </data>
 	<data name="WebDownloadFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
-    <value>Nach der Ausfuehrung liefert dieser Flow-Block den aktuellen DOM-Content und den tatsaechlich aufgeloesten Downloadpfad in seinen Ergebnisfeldern zurueck.</value>
+    <value>Nach der Ausführung liefert dieser Flow-Block den aktuellen DOM-Content und den tatsächlich aufgelösten Downloadpfad in seinen Ergebnisfeldern zurück.</value>
   </data>
 	<data name="WebDownloadMode_Auto" xml:space="preserve">
     <value>Auto</value>
@@ -3115,7 +3153,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Modifier</value>
   </data>
 	<data name="WebEventFlowBlock_SpecialKeyModifier_Tooltip" xml:space="preserve">
-    <value>Optionale Modifier-Kombination, die zusammen mit der ausgewaehlten Sondertaste gesendet wird.</value>
+    <value>Optionale Modifier-Kombination, die zusammen mit der ausgewählten Sondertaste gesendet wird.</value>
   </data>
 	<data name="WebSpecialKey_Enter" xml:space="preserve">
     <value>Enter</value>
@@ -3175,7 +3213,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Kopieren/Verschieben</value>
   </data>
 	<data name="CopyMoveFlowBlock_Description" xml:space="preserve">
-    <value>Kopiert oder verschiebt Dateien und Ordner und liefert den aufgeloesten Zielpfad zurueck.</value>
+    <value>Kopiert oder verschiebt Dateien und Ordner und liefert den aufgelösten Zielpfad zurück.</value>
   </data>
 	<data name="CopyMoveFlowBlock_Mode" xml:space="preserve">
     <value>Modus</value>
@@ -3199,7 +3237,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Zielpfad</value>
   </data>
 	<data name="CopyMoveFlowBlock_DestinationPath_Tooltip" xml:space="preserve">
-    <value>Der Ziel-Datei- oder Ziel-Verzeichnispfad fuer den ausgewaehlten Modus.</value>
+    <value>Der Ziel-Datei- oder Ziel-Verzeichnispfad für den ausgewählten Modus.</value>
   </data>
 	<data name="CopyMoveFlowBlock_Recursive" xml:space="preserve">
     <value>Rekursiv</value>
@@ -3208,13 +3246,13 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Bezieht Unterverzeichnisse beim Kopieren von Verzeichnissen ein.</value>
   </data>
 	<data name="CopyMoveFlowBlock_FileOverwrite" xml:space="preserve">
-    <value>Dateien ueberschreiben</value>
+    <value>Dateien überschreiben</value>
   </data>
 	<data name="CopyMoveFlowBlock_FileOverwrite_Tooltip" xml:space="preserve">
-    <value>Ueberschreibt vorhandene Zieldateien.</value>
+    <value>überschreibt vorhandene Zieldateien.</value>
   </data>
 	<data name="CopyMoveFlowBlock_DirectoryOverwrite" xml:space="preserve">
-    <value>Verzeichnisse ueberschreiben</value>
+    <value>Verzeichnisse überschreiben</value>
   </data>
 	<data name="CopyMoveFlowBlock_DirectoryOverwrite_Tooltip" xml:space="preserve">
     <value>Erlaubt das Schreiben in ein bereits vorhandenes Zielverzeichnis.</value>
@@ -3235,7 +3273,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>IMAP-Mails lesen</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_Description" xml:space="preserve">
-    <value>Liest E-Mails aus einem IMAP-Postfach und stellt ausgewaehlte Werte ueber konfigurierbare Ergebnisfelder bereit.</value>
+    <value>Liest E-Mails aus einem IMAP-Postfach und stellt ausgewählte Werte über konfigurierbare Ergebnisfelder bereit.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_Host" xml:space="preserve">
     <value>Host</value>
@@ -3256,28 +3294,28 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Verbindet sich direkt mit SSL/TLS.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_AcceptInvalidCertificates" xml:space="preserve">
-    <value>Ungueltige Zertifikate akzeptieren</value>
+    <value>Ungültige Zertifikate akzeptieren</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_AcceptInvalidCertificates_Tooltip" xml:space="preserve">
-    <value>Akzeptiert ungueltige TLS-Zertifikate. Nur fuer Tests verwenden.</value>
+    <value>Akzeptiert Ungültige TLS-Zertifikate. Nur für Tests verwenden.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_UserName" xml:space="preserve">
     <value>Benutzername</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_UserName_Tooltip" xml:space="preserve">
-    <value>IMAP-Benutzername oder E-Mail-Adresse fuer die Anmeldung.</value>
+    <value>IMAP-Benutzername oder E-Mail-Adresse für die Anmeldung.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_Password" xml:space="preserve">
     <value>Passwort</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_Password_Tooltip" xml:space="preserve">
-    <value>IMAP-Passwort oder App-Passwort fuer das Konto.</value>
+    <value>IMAP-Passwort oder App-Passwort für das Konto.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_Folder" xml:space="preserve">
     <value>Ordner</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_Folder_Tooltip" xml:space="preserve">
-    <value>Postfachordner fuer die Suche. Standard ist INBOX.</value>
+    <value>Postfachordner für die Suche. Standard ist INBOX.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_Groups_Filter" xml:space="preserve">
     <value>Filter</value>
@@ -3289,7 +3327,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Nur ungelesene</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_OnlyUnread_Tooltip" xml:space="preserve">
-    <value>Beschraenkt die IMAP-Suche auf ungelesene Nachrichten.</value>
+    <value>Beschränkt die IMAP-Suche auf ungelesene Nachrichten.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_StartDate" xml:space="preserve">
     <value>Startdatum</value>
@@ -3307,31 +3345,31 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Suchtext</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_SearchText_Tooltip" xml:space="preserve">
-    <value>Serverseitiger Textfilter fuer Betreff und Nachrichtentext.</value>
+    <value>Serverseitiger Textfilter für Betreff und Nachrichtentext.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_MaxResults" xml:space="preserve">
     <value>Maximale Ergebnisse</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_MaxResults_Tooltip" xml:space="preserve">
-    <value>Maximale Anzahl an E-Mails pro Ausfuehrung dieses Flow-Blocks.</value>
+    <value>Maximale Anzahl an E-Mails pro Ausführung dieses Flow-Blocks.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_NewestFirst" xml:space="preserve">
     <value>Neueste zuerst</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_NewestFirst_Tooltip" xml:space="preserve">
-    <value>Liefert neuere Nachrichten vor aelteren.</value>
+    <value>Liefert neuere Nachrichten vor älteren.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_MarkAsRead" xml:space="preserve">
     <value>Als gelesen markieren</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_MarkAsRead_Tooltip" xml:space="preserve">
-    <value>Behaelt den Gelesen-Status nach dem Abruf bei.</value>
+    <value>Behält den Gelesen-Status nach dem Abruf bei.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_DeleteAfterFetch" xml:space="preserve">
-    <value>Nach Abruf loeschen</value>
+    <value>Nach Abruf löschen</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_DeleteAfterFetch_Tooltip" xml:space="preserve">
-    <value>Markiert abgerufene E-Mails als geloescht und entfernt sie aus dem ausgewaehlten Ordner.</value>
+    <value>Markiert abgerufene E-Mails als gelöscht und entfernt sie aus dem ausgewählten Ordner.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_ResultFields" xml:space="preserve">
     <value>Ergebnisfelder</value>
@@ -3340,10 +3378,10 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Das Datum muss das Format yyyy/MM/dd haben.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_Validation_DateRange" xml:space="preserve">
-    <value>Das Enddatum muss groesser oder gleich dem Startdatum sein.</value>
+    <value>Das Enddatum muss größer oder gleich dem Startdatum sein.</value>
   </data>
 	<data name="IMAPMailFetchFlowBlock_SpecialExplanation_Usage" xml:space="preserve">
-    <value>Der IMAP-Abruf erfolgt serverseitig mit Filtern (Datum, Ungelesen-Status, Suchtext). Das Laden des Nachrichtentexts kann auf manchen Servern E-Mails als gelesen markieren; wenn "Als gelesen markieren" deaktiviert ist, wird der Ungelesen-Status nach Moeglichkeit wiederhergestellt.</value>
+    <value>Der IMAP-Abruf erfolgt serverseitig mit Filtern (Datum, Ungelesen-Status, Suchtext). Das Laden des Nachrichtentexts kann auf manchen Servern E-Mails als gelesen markieren; wenn "Als gelesen markieren" deaktiviert ist, wird der Ungelesen-Status nach Möglichkeit wiederhergestellt.</value>
   </data>
 	<data name="IMAPMailFetchDestinations_Subject" xml:space="preserve">
     <value>Betreff</value>
@@ -3376,13 +3414,13 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>SMTP-Server-Port. Uebliche Werte sind 25, 465 oder 587.</value>
   </data>
 	<data name="SMTPFlowBlock_UseAuthentication_Tooltip" xml:space="preserve">
-    <value>Verwendet explizite SMTP-Zugangsdaten fuer den Mailversand.</value>
+    <value>Verwendet explizite SMTP-Zugangsdaten für den Mailversand.</value>
   </data>
 	<data name="SMTPFlowBlock_UserName_Tooltip" xml:space="preserve">
-    <value>Benutzername fuer die SMTP-Authentifizierung.</value>
+    <value>Benutzername für die SMTP-Authentifizierung.</value>
   </data>
 	<data name="SMTPFlowBlock_Password_Tooltip" xml:space="preserve">
-    <value>Passwort oder App-Passwort fuer die SMTP-Authentifizierung.</value>
+    <value>Passwort oder App-Passwort für die SMTP-Authentifizierung.</value>
   </data>
 	<data name="SMTPFlowBlock_FromAddress_Tooltip" xml:space="preserve">
     <value>Absender-E-Mail-Adresse.</value>
@@ -3613,3 +3651,5 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="SMTPFlowBlock_AcceptInvalidCertificates_Tooltip" xml:space="preserve">
 		<value>Akzeptiert ungültige TLS-Zertifikate für SMTP-Verbindungen. Nur für Tests verwenden.</value>
 	</data></root>
+
+

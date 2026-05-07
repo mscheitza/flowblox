@@ -1,80 +1,53 @@
 Explaining IterationContext and multi-input behavior:
 
-1) Core execution model
-- Normal flow: each flow block invokes its connected successors.
-- BaseResultFlowBlock can output multiple datasets, so downstream blocks may run N times.
-- Result handling basics:
-  - A dataset can contain one or more field values; these result fields are defined on the BaseResultFlowBlock.
-  - BaseSingleResultFlowBlock has exactly one result field, but can still have multiple input predecessors depending on InputCardinality.
-- BasePipeFlowBlock has exactly one InputField, one referenced predecessor flow block, and one result field.
+1) Scope and timing
 - IterationContext always references a flow block.
-- The target flow block is executed once per iteration of that referenced flow block (once per dataset).
+- The target flow block is executed once per iteration-end of the referenced flow block (once per dataset).
 - Important: "iteration end" means the end of one iteration, not automatically the end of the full dataset stream.
 
-2) Execution order and iteration guarantees
-- Sibling execution follows index order.
-- Example structure: A > A1 (index0), A2 (index1), and A2 > A3.
-- Logical execution order is: A, A1, A2, A3.
-- Consequence at A3:
-  - We are inside an iteration of A.
-  - A1 has already executed in the same iteration.
-  - Fields from A and A1 are available in A3, even without a direct A1 -> A3 connection.
-- Practical pattern:
-  - A1 TableReader yields row fields (for example Name, Content, CreatedAt).
-  - A2 FormatFlowBlock builds path: `$Project::OutputDirectory\{0}.txt` with `{0}=Name`.
-  - A3 (child of A2) FormatFlowBlock builds file content from `Content + CreatedAt`, without direct TableReader link.
-  - FileWriter then writes with path from `FormatFlowBlock_Path` and content from `FormatFlowBlock_Content`.
-- Key insight: the composed flow works because iteration scope + sibling execution order guarantee data availability.
+2) Manual override and hard rule
+- Manual override is possible via `AssociatedIterationContext` (Input -> IterationContext).
+- Hard rule: do not set `AssociatedIterationContext` to a direct predecessor of the same target flow block.
+- Hard rule: do not re-apply the same `AssociatedIterationContext` on direct successors if they are triggered only by that predecessor block.
+- Reason: normal flow execution already guarantees that the successor is called by the predecessor. If the predecessor itself runs at `IterationContext` iteration-end, the whole downstream chain also runs in that same iteration-end dependency.
 
-3) Multi-input combination and IterationContext
-- If multiple input flow blocks connect to one successor, FlowBlox combines their datasets based on InputBehavior.
-- Default behavior is Cross (combinational).
-- IterationContext default (multi-input): first common upstream flow block across all incoming paths.
-- Manual override is always possible via AssociatedIterationContext (Input -> IterationContext).
+3) Multi-input combination and default resolution
+- If multiple input flow blocks connect to one successor, FlowBlox combines datasets based on `InputBehavior`.
+- Default behavior is `Cross` (combinational).
+- IterationContext default for multi-input: first common upstream flow block across all incoming paths.
 - Successor executes once per resulting combined dataset.
-- For each combined dataset (N total), each value is applied to its associated target field (mapped from the corresponding predecessor) before execution.
+- For each combined dataset, mapped values are applied before execution.
 
-4) InputBehavior (all values)
-- Cross: Cartesian combination of input datasets.
-- CrossValid: Cross, but only with valid values.
-- RowWise: combine row-by-row by index.
-- RowWiseValid: row-wise, but only with valid values.
-- First: use first dataset.
-- FirstValid: first dataset with value != null/empty.
-- Last: use last dataset.
-- LastValid: last dataset with value != null/empty.
+4) InputBehavior overview
+- `Cross`: Cartesian combination of input datasets.
+- `CrossValid`: Cross, only valid values.
+- `RowWise`: combine row-by-row by index.
+- `RowWiseValid`: row-wise, only valid values.
+- `First` / `FirstValid` / `Last` / `LastValid`: select one dataset by position/validity.
+- `InputBehaviorAssignments` are auto-synced with `ReferencedFlowBlocks`.
 
-5) InputBehaviorAssignments and referenced sources
-- InputBehaviorAssignments are auto-synced with ReferencedFlowBlocks.
-- When a flow block is linked as input source, its InputBehaviorAssignment is created automatically (default Cross).
-- Recommended for AI update calls: after all ReferencedFlowBlocks are linked, get a fresh component snapshot and map index -> source flow block before updating assignments.
-
-6) Collector flow-block special case (`BaseSingleResultCollectorFlowBlock`)
-- Function: collect selected values across multiple datasets and emit one result when `CanGenerateResult()` becomes true.
+5) Collector flow-block special case (`BaseSingleResultCollectorFlowBlock`)
+- Collects values across input datasets and emits one result when `CanGenerateResult()` becomes true.
 - IterationContext resolution:
-  - Highest priority: AssociatedIterationContext (manual override).
+  - Highest priority: `AssociatedIterationContext`.
   - Otherwise: predecessor of the directly associated predecessor, or (if available) that predecessor's IterationContext.
-  - If multiple predecessors are involved: first common upstream flow block (default).
-- `CanGenerateResult()` is true only at the last input dataset within the active context scope.
-- Example implementation: `JoinCollectorFlowBlock`.
+  - If multiple predecessors are involved: first common upstream flow block.
+- Typical decision:
+  - `IterationContext = Reader` -> runs per reader row.
+  - `IterationContext = Start` (or wrapping predecessor) -> runs once after full reader run.
 
-7) Practical use-cases for InputBehavior
-- Simple unique company extraction (name/street/zip/city each one match): keep default Cross.
-- 1:N expansion (one company, many categories, one output per category): Cross fits.
-- Multiple matches where only one should count: First or FirstValid.
-- Vertical selector results -> horizontal row datasets:
-  - Some selectors return all matches for one field across the page (for example all streets, all zip codes, all cities).
-  - Goal: build row-wise records (street1+zip1+city1, street2+zip2+city2, ...), not independent vertical lists.
-  - Set company name source to First or FirstValid.
-  - Set street/zip/city sources to RowWise (or RowWiseValid).
-  - Result: company name repeated with location row 1, row 2, etc.
+6) Related topic
+- For normal execution order, dataset propagation, and nested successor behavior in standard flow execution, see `ExplainingFlowLogic`, section: `Execution Order of Next Flow-Blocks (Sibling case)`.
 
-8) When to rethink IterationContext (collector blocks)
-- Typical pattern: Reader -> Formatter -> JoinCollectorFlowBlock.
-- Decision rule:
-  - If the target should run for every reader row, set IterationContext to the Reader (or keep the default when it resolves there).
-  - If the target should run only after all reader rows are covered, set IterationContext to the predecessor of the Reader (for example Start), so the full reader run is inside one context iteration.
-- Compact example:
-  - Reader has 3 rows (r1, r2, r3).
-  - IterationContext = Reader -> target runs 3x (after r1, after r2, after r3).
-  - IterationContext = Start -> target runs 1x after the full reader run.
+7) Best-practice pattern: sibling extractors -> one output row per capture
+- Pattern:
+  - one capture/scope block (for example `WebSelector`, `WebEvent`, or `WebRequest` result scope)
+  - sibling extractors for fields A/B/C
+  - one multi-input consumer (for example `TableWriter`) connected to all extractor outputs
+- Expected default behavior:
+  - IterationContext resolves to the first common upstream capture block.
+  - Consumer executes once per capture iteration and writes one combined row per capture dataset.
+- Why `Cross` still works here:
+  - if each extractor returns exactly one value per capture iteration, `Cross` behaves effectively 1:1.
+- Data quality guard:
+  - if columns are mandatory, enforce requirements (for example required column mapping and/or required input fields) to avoid writing partial/empty rows.

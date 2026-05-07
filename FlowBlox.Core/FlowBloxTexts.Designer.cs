@@ -2216,7 +2216,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Flow block for conditional path execution based on configurable decision rules. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Evaluates configured field conditions in order and outputs the field value of the first matching rule. Rule order defines priority. ähnelt.
         /// </summary>
         public static string DecisionFlowBlock_Description {
             get {
@@ -5384,6 +5384,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Preferred when JSON type fidelity matters. Using FieldValue applies the source FieldElement type conversion (for example DateTime/number/boolean), so JSON keeps typed values instead of placeholder text. ähnelt.
+        /// </summary>
+        public static string JsonPropertyValueAssignment_FieldValue_Tooltip {
+            get {
+                return ResourceManager.GetString("JsonPropertyValueAssignment_FieldValue_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Is array ähnelt.
         /// </summary>
         public static string JsonPropertyValueAssignment_IsArray {
@@ -6899,6 +6908,15 @@ namespace FlowBlox.Core {
         public static string RecursiveCallFlowBlock_Groups_Transferrations {
             get {
                 return ResourceManager.GetString("RecursiveCallFlowBlock_Groups_Transferrations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Warning: All result fields of the target flow block must be fully covered by FieldTransferConfigs. Without complete field-transfer mapping, validation/execution will fail. ähnelt.
+        /// </summary>
+        public static string RecursiveCallFlowBlock_SpecialExplanation_TargetPathAndTransfer {
+            get {
+                return ResourceManager.GetString("RecursiveCallFlowBlock_SpecialExplanation_TargetPathAndTransfer", resourceCulture);
             }
         }
         
@@ -9374,6 +9392,43 @@ namespace FlowBlox.Core {
         public static string WebEventFlowBlock_ResultBehavior_Topic {
             get {
                 return ResourceManager.GetString("WebEventFlowBlock_ResultBehavior_Topic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: extract links, then open links.
+        ///- ClickAll executes multiple clicks, but does not create one result iteration per clicked element.
+        ///- ClickAll returns one DOM only after all clicks are finished.$$CONTINUE$$
+        ///
+        ///For multi-item processing:
+        ///- Web-Selector: collect target href values.
+        ///- Web-Event (Switch to URL): iterate collected URLs.
+        ///- Then run detail/download actions on the opened page.
+        ///
+        ///Benefit:
+        ///- Iteration is based on stable URL values (not DOM element handles).
+        ///- This avoids stale-element issu [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialExplanation_BestPractice_LinkExtractionAndSwitch {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialExplanation_BestPractice_LinkExtractionAndSwitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice for links across multiple pages:
+        ///- Step 1: Web-Event (search/submit) -&gt; Web-Selector (collect target links)
+        ///- Step 2: Web-Event (search/submit) -&gt; Web-Selector (collect links from the next page) -&gt; Web-Event (click next page)
+        ///- Step 3: Web-Event (click next page) -&gt; Recursive-Call back to the search/submit step, mapping returned DOM to input.$$CONTINUE$$
+        ///
+        ///Repeat until no next page is available.
+        ///
+        ///Do/Don&apos;t:
+        ///- Do: route Recursive-Call back to the paging entry element (for example search/submit We [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction", resourceCulture);
             }
         }
         

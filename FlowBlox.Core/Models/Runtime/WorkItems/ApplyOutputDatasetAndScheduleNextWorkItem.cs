@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using global::FlowBlox.Core.Models.FlowBlocks.Additions;
 
 namespace FlowBlox.Core.Models.Runtime.WorkItems

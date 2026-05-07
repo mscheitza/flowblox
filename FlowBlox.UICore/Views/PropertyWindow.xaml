@@ -25,8 +25,37 @@
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
             <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+            <Style x:Key="SpecialExplanationLinkButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="Cursor" Value="Arrow"/>
+                <Setter Property="Foreground" Value="#3A6EA5"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Root"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="3"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="#5B8FC7"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -70,9 +99,25 @@
                                                             Margin="0,0,8,0"
                                                             VerticalAlignment="Top"
                                                             Foreground="{Binding IconForeground}"/>
-                                <TextBlock Text="{Binding Explanation}"
+                                <StackPanel Visibility="{Binding HasContinuationMarker, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <TextBlock Text="{Binding DisplayText, Mode=OneWay}"
+                                               TextWrapping="Wrap"
+                                               Foreground="DarkSlateGray"/>
+                                    <Button Command="{Binding OpenExplanationCommand}"
+                                            Style="{StaticResource SpecialExplanationLinkButtonStyle}"
+                                            ToolTip="Open details"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,3,0,0">
+                                        <TextBlock Text="{x:Static resources:PropertyWindow.ReadMore}"
+                                                   FontSize="11"
+                                                   Opacity="0.9"
+                                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                                    </Button>
+                                </StackPanel>
+                                <TextBlock Text="{Binding DisplayText, Mode=OneWay}"
                                            TextWrapping="Wrap"
-                                           Foreground="DarkSlateGray"/>
+                                           Foreground="DarkSlateGray"
+                                           Visibility="{Binding HasContinuationMarker, Converter={StaticResource BoolToInverseVisibilityConverter}}"/>
                             </DockPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

@@ -13,6 +13,12 @@ namespace FlowBloxTest.FlowBlocks
 {
     public class FlowBloxTestsBase
     {
+        protected sealed class RuntimeExecutionCapture
+        {
+            public FlowBloxUnitTestRuntime Runtime { get; init; }
+            public List<string> InvocationOrder { get; init; } = new();
+        }
+
         protected FlowBloxRegistry Registry
         {
             get
@@ -61,6 +67,32 @@ namespace FlowBloxTest.FlowBlocks
             var runtime = new FlowBloxUnitTestRuntime(project);
             runtime.LogMessageCreated += Runtime_LogMessageCreated;
             runtime.Execute();
+        }
+
+        protected RuntimeExecutionCapture CreateRuntimeExecuteAndCaptureInvocationOrder(FlowBloxProject project)
+        {
+            var invocationOrder = new List<string>();
+            var runtime = new FlowBloxUnitTestRuntime(project);
+
+            runtime.LogMessageCreated += Runtime_LogMessageCreated;
+            runtime.LogMessageCreated += (rt, message, level) =>
+            {
+                const string prefix = "Invocation started for flow block: \"";
+                if (string.IsNullOrWhiteSpace(message) || !message.StartsWith(prefix, StringComparison.Ordinal))
+                    return;
+
+                var startIndex = prefix.Length;
+                var endIndex = message.LastIndexOf('"');
+                if (endIndex > startIndex)
+                    invocationOrder.Add(message.Substring(startIndex, endIndex - startIndex));
+            };
+
+            runtime.Execute();
+            return new RuntimeExecutionCapture
+            {
+                Runtime = runtime,
+                InvocationOrder = invocationOrder
+            };
         }
 
         private void Runtime_LogMessageCreated(BaseRuntime runtime, string message, FlowBloxLogLevel logLevel)

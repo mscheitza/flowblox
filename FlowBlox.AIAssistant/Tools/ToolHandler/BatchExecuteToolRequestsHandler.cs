@@ -19,7 +19,7 @@ namespace FlowBlox.AIAssistant.Tools
             "Executes multiple tool requests.",
             new JObject
             {
-                ["continueOnError"] = "bool?",
+                ["continueOnError"] = "bool? (default: false) - continue executing remaining requests when one request fails",
                 ["requests"] = "[{toolName,arguments}]"
             });
 
@@ -87,6 +87,7 @@ namespace FlowBlox.AIAssistant.Tools
             var payload = new JObject
             {
                 ["allOk"] = allOk,
+                ["continueOnError"] = continueOnError,
                 ["batchResults"] = batchResults
             };
 

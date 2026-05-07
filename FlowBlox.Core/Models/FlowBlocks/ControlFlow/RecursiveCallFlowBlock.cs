@@ -30,6 +30,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.ControlFlow
     }
 
     [FlowBloxUIGroup("RecursiveCallFlowBlock_Groups_Transferrations", 0)]
+    [FlowBloxSpecialExplanation("RecursiveCallFlowBlock_SpecialExplanation_TargetPathAndTransfer", Icon = SpecialExplanationIcon.Warning)]
     [Display(Name = "RecursiveCallFlowBlock_DisplayName", Description = "RecursiveCallFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class RecursiveCallFlowBlock : BaseFlowBlock
     {

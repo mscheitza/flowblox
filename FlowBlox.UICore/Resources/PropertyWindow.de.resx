@@ -129,4 +129,7 @@
 	<data name="SaveWithoutVerification" xml:space="preserve">
 		<value>Speichern ohne Überprüfung</value>
 	</data>
+	<data name="ReadMore" xml:space="preserve">
+		<value>Mehr lesen</value>
+	</data>
 </root>

@@ -19,13 +19,41 @@ Sync modes:
 1) CreateIfNotExists (default): write only if file is missing.
 2) AlwaysOverwrite: write on every synchronization.
 
+Hard rule (data safety):
+- If an input file is user-editable (template/data entry), do not use AlwaysOverwrite as persistent mode.
+- Standard mode for user-editable templates is CreateIfNotExists.
+- AlwaysOverwrite for such files is only allowed as an explicit temporary migration/debug step and must be reverted to CreateIfNotExists in the same AI run.
+
+Input file categories:
+1) User-editable (template): users are expected to enter/maintain data -> CreateIfNotExists.
+2) System-generated (script/download/build artifact/cache/model prep): file is produced/updated automatically -> AlwaysOverwrite is allowed.
+
 Use case 1 (schema/sample input):
 - Provide a starter file that matches the expected format/columns/structure.
 - Example: input.csv, input.xlsx, input.json, input.xml.
 - Recommended mode: CreateIfNotExists.
+- This is the default for template files that users should fill with their own data.
+- For a short debug run (for example before `RunProjectDebugTest`), `AlwaysOverwrite` can be used temporarily to inject test data.
+- Important: after such a debug run, switch the template file back to `CreateIfNotExists`.
+- If structure/header migration is required for an existing user template:
+  - warn explicitly that overwrite will replace user data,
+  - apply temporary AlwaysOverwrite only for the migration step,
+  - then revert to CreateIfNotExists in the same run.
 
 Use case 2 (helper script):
 - Provide a script file needed by the project setup (for example model/download preparation).
 - Recommended mode: AlwaysOverwrite.
+- Use this for fixed operational files that should be refreshed/updated automatically and are not user data templates.
 - Optionally set command + executeBeforeRuntime for automatic execution before runtime start.
+
+syncMode decision quick guide:
+- User should fill/edit file -> CreateIfNotExists.
+- Pure system artifact (download/script/cache/model/build helper) -> AlwaysOverwrite (optionally with executeBeforeRuntime).
+- Unsure -> CreateIfNotExists (fail-safe against data loss).
+- Template structure must be changed -> temporary AlwaysOverwrite (migration), then revert to CreateIfNotExists.
+
+Tool hint (`CreateOrUpdateInputFile`):
+- Warning: AlwaysOverwrite can destroy user-entered data.
+- Use AlwaysOverwrite only for system-generated files or explicit temporary migration/debug use.
+- For user-editable templates, CreateIfNotExists is the default.
 

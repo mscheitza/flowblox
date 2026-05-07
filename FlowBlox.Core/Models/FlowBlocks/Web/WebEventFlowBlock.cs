@@ -13,6 +13,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
     [FlowBloxUIGroup("WebEventFlowBlock_Groups_Advanced", 0)]
     [Display(Name = "WebEventFlowBlock_DisplayName", Description = "WebEventFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("WebEventFlowBlock_SpecialExplanation_ResultBehavior", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("WebEventFlowBlock_SpecialExplanation_BestPractice_LinkExtractionAndSwitch", Icon = SpecialExplanationIcon.Hint)]
+    [FlowBloxSpecialExplanation("WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction", Icon = SpecialExplanationIcon.Hint)]
     public class WebEventFlowBlock : WebActionFlowblockBase
     {
         public enum WebBrowserEventTypes

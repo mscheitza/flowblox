@@ -62,14 +62,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
                 if (!TryRequireAndGetSelector(runtime, out mode, out selector))
                     return;
 
-                var result = webBrowser.GetContent(selector, mode, InnerContent);
+                var result = webBrowser.GetContents(selector, mode, InnerContent);
 
                 if (runtime != null)
                 {
                     if (result.Success)
                     {
-                        runtime.Report($"Content retrieval successfully executed for selector \"{selector}\".");
-                        GenerateResult(runtime, result.Content);
+                        runtime.Report($"Content retrieval successfully executed for selector \"{selector}\" ({result.Contents.Count} matches).");
+                        GenerateResult(runtime, result.Contents);
                     }
                     else
                     {

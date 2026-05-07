@@ -19,7 +19,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
         [ThreadStatic]
         private static List<FlowBloxMoveAction> _recordedMoveActions;
 
-        private static readonly bool EnableTrace = false;
+        private static readonly bool EnableTrace = true;
         private const string TracePrefix = "[FlowBlockAutoLayout]";
         private const int DefaultOriginX = 60;
         private const int DefaultOriginY = 260;
@@ -280,6 +280,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
                     locations[block] = new Point(current.X, Math.Max(0, targetTop));
                 }
 
+                ResolveVerticalOverlapsPerColumn(component, roots, locations, sizeMap, predecessors);
                 TraceLine($"Relaxation pass end: Pass={pass + 1}/{RelaxationPasses}");
             }
 
@@ -326,6 +327,84 @@ namespace FlowBlox.Core.Util.FlowBlocks
             var width = flowBlock.Size.Width > 0 ? flowBlock.Size.Width : DefaultBlockWidth;
             var height = flowBlock.Size.Height > 0 ? flowBlock.Size.Height : DefaultBlockHeight;
             return new Size(width, height);
+        }
+
+        /// <summary>
+        /// Ensures non-overlapping vertical placement per visual column (same X).
+        /// Keeps root positions fixed and only pushes subsequent blocks down when required.
+        /// </summary>
+        private static void ResolveVerticalOverlapsPerColumn(
+            List<BaseFlowBlock> component,
+            List<BaseFlowBlock> roots,
+            Dictionary<BaseFlowBlock, Point> locations,
+            Dictionary<BaseFlowBlock, Size> sizeMap,
+            Dictionary<BaseFlowBlock, List<BaseFlowBlock>> predecessors)
+        {
+            var rootSet = new HashSet<BaseFlowBlock>(roots);
+
+            var columns = component
+                .Where(locations.ContainsKey)
+                .GroupBy(x => locations[x].X);
+
+            foreach (var column in columns)
+            {
+                var branchKeyCache = new Dictionary<BaseFlowBlock, double>();
+
+                double BranchOrderKey(BaseFlowBlock block)
+                {
+                    if (branchKeyCache.TryGetValue(block, out var cached))
+                        return cached;
+
+                    var value = BranchOrderKeyRecursive(block, new HashSet<BaseFlowBlock>());
+                    branchKeyCache[block] = value;
+                    return value;
+                }
+
+                double BranchOrderKeyRecursive(BaseFlowBlock block, HashSet<BaseFlowBlock> visited)
+                {
+                    if (!visited.Add(block))
+                        return GetCenterY(locations[block], sizeMap[block]);
+
+                    if (predecessors.TryGetValue(block, out var preds) && preds.Count > 0)
+                    {
+                        var recursiveAverage = preds
+                            .Where(locations.ContainsKey)
+                            .Select(p => BranchOrderKeyRecursive(p, visited))
+                            .DefaultIfEmpty(GetCenterY(locations[block], sizeMap[block]))
+                            .Average();
+
+                        visited.Remove(block);
+                        return recursiveAverage;
+                    }
+
+                    visited.Remove(block);
+                    return GetCenterY(locations[block], sizeMap[block]);
+                }
+
+                var ordered = column
+                    .OrderBy(BranchOrderKey)
+                    .ThenBy(x => locations[x].Y)
+                    .ThenBy(x => x.Name)
+                    .ToList();
+
+                for (int i = 1; i < ordered.Count; i++)
+                {
+                    var previous = ordered[i - 1];
+                    var current = ordered[i];
+
+                    // Keep root anchors stable where possible.
+                    if (rootSet.Contains(current))
+                        continue;
+
+                    var previousBottom = locations[previous].Y + sizeMap[previous].Height;
+                    var minTop = previousBottom + VerticalSpacing;
+
+                    if (locations[current].Y < minTop)
+                    {
+                        locations[current] = new Point(locations[current].X, minTop);
+                    }
+                }
+            }
         }
 
         private static int DetermineGlobalTop(List<BaseFlowBlock> flowBlocks)

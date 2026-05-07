@@ -64,7 +64,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public event OnBeforeInputProcessingEventHandler OnBeforeInputProcessing;
 
         internal void RaiseIterationStart(BaseRuntime runtime) => IterationStart?.Invoke(runtime);
-        internal void RaiseIterationEnd(BaseRuntime runtime) => IterationEnd?.Invoke(runtime);
+        private static readonly ThreadLocal<List<IRuntimeWorkItem>> IterationEndWorkItemCache = new(() => null);
+
+        internal void RaiseIterationEnd(BaseRuntime runtime)
+        {
+            var cache = IterationEndWorkItemCache.Value;
+            if (cache == null)
+                cache = new List<IRuntimeWorkItem>();
+
+            cache.Clear();
+            IterationEndWorkItemCache.Value = cache;
+
+            IterationEnd?.Invoke(runtime);
+            runtime.TaskRunner.EnqueueBatchInExecutionOrder(cache);
+            cache.Clear();
+        }
 
         public void CreateNotification(BaseRuntime runtime, Enum notificationEnumValue, Exception e = null)
         {
@@ -500,11 +514,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             ResourceType = typeof(FlowBloxTexts), 
             GroupName = "BaseFlowBlock_Groups_Input", Order = 0)]
         [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink, 
-            SelectionFilterMethod = nameof(GetPossibleInputReference), 
+            SelectionFilterMethod = nameof(GetPossibleIterationContexts), 
             SelectionDisplayMember = nameof(Name))]
         [AssociatedFlowBlockResolvableCustom(nameof(IterationContext), nameof(CanDisplayAssociatedIterationContextHint))]
         [JsonProperty("AssociatedIterationContext")]
-        public BaseFlowBlock AssociatedIterationContext { get; set; }
+        public BaseFlowBlock AssociatedIterationContext
+        {
+            get => _associatedIterationContext;
+            set
+            {
+                ValidateAssociatedIterationContext(value);
+                _associatedIterationContext = value;
+            }
+        }
+
+        private BaseFlowBlock _associatedIterationContext;
 
         [JsonProperty("AssociatedInputReference")]
         private BaseFlowBlock LegacyAssociatedInputReference
@@ -534,6 +558,36 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
                 return null;
             }
+        }
+
+        private void ValidateAssociatedIterationContext(BaseFlowBlock value)
+        {
+            if (value == null)
+                return;
+
+            if (ReferenceEquals(value, this))
+                throw new InvalidOperationException("AssociatedIterationContext must reference another flow block.");
+
+            if (IsDirectPredecessorFlowBlock(value))
+            {
+                throw new InvalidOperationException(
+                    $"AssociatedIterationContext \"{value.Name}\" is not allowed for \"{Name}\". " +
+                    "It must not reference a direct predecessor flow block.");
+            }
+        }
+
+        private bool IsDirectPredecessorFlowBlock(BaseFlowBlock candidate)
+        {
+            if (candidate == null)
+                return false;
+
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+            if (registry == null)
+                return false;
+
+            return registry.GetPreviousElements(this)
+                .OfType<BaseFlowBlock>()
+                .Any(previous => ReferenceEquals(previous, candidate));
         }
 
         [Display(Name = "BaseFlowBlock_InputIgnoreDuplicates", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 1)]
@@ -709,10 +763,42 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             base.OnReferencedFieldNameChanged(field, oldFQFieldName, newFQFieldName);
         }
 
-        public virtual List<BaseFlowBlock> GetPossibleInputReference()
+        public virtual List<BaseFlowBlock> GetPossibleIterationContexts()
         {
-            return FlowBloxRegistryProvider.GetRegistry().GetFlowBlocks()
-                .Where(x => x.Name != this.Name)
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+            if (registry == null)
+                return new List<BaseFlowBlock>();
+
+            var directPredecessors = registry.GetPreviousElements(this)
+                .OfType<BaseFlowBlock>()
+                .Where(x => x != null)
+                .ToList();
+
+            var result = new List<BaseFlowBlock>();
+            var visited = new HashSet<BaseFlowBlock>();
+            var queue = new Queue<BaseFlowBlock>(directPredecessors);
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+                if (current == null || !visited.Add(current))
+                    continue;
+
+                foreach (var previous in registry.GetPreviousElements(current).OfType<BaseFlowBlock>())
+                {
+                    if (previous == null)
+                        continue;
+
+                    // Only upstream predecessors are allowed in the selection.
+                    result.Add(previous);
+                    queue.Enqueue(previous);
+                }
+            }
+
+            return result
+                .Where(x => !ReferenceEquals(x, this))
+                .Distinct()
+                .OrderBy(x => x.Name)
                 .ToList();
         }
 
@@ -1063,7 +1149,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
             foreach (var dataset in results)
             {
-                runtime.TaskRunner.Enqueue(new InputDatasetWorkItem(
+                EnqueueIterationEndWorkItem(runtime, new InputDatasetWorkItem(
                     block: this,
                     dataset: dataset,
                     applyDatasetAndExecute: (rt, blk, dataset) =>
@@ -1082,6 +1168,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
 
             InputDataset_CurrentlyProcessing = null;
+        }
+
+        private static void EnqueueIterationEndWorkItem(BaseRuntime runtime, IRuntimeWorkItem workItem)
+        {
+            var cache = IterationEndWorkItemCache.Value;
+            if (cache == null)
+                throw new InvalidOperationException("An iteration end work item cache must be initialized before runtime work items can be added.");
+
+            cache.Add(workItem);
         }
 
         private void FilterInputDatasets(ref List<FlowBlockOutDataset> results)

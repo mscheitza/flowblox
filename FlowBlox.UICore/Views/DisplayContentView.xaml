@@ -1,0 +1,59 @@
+<mah:MetroWindow
+    x:Class="FlowBlox.UICore.Views.DisplayContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    mc:Ignorable="d"
+    Title="{x:Static resources:DisplayContentView.Window_Title}"
+    Height="650"
+    Width="900"
+    WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ToolBar Grid.Row="0" Padding="4">
+            <Button Command="{Binding CopyCommand}" ToolTip="{x:Static resources:DisplayContentView.Tooltip_CopyToClipboard}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="ContentCopy" Width="16" Height="16" Margin="0,0,6,0"/>
+                    <TextBlock Text="{x:Static resources:DisplayContentView.Button_Copy}"/>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+
+        <Border Grid.Row="1" Margin="10" Padding="16" Background="#FFFDFDFD" BorderBrush="#FFD8D8D8" BorderThickness="1" CornerRadius="4">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <TextBlock Text="{Binding ContentText}"
+                           TextWrapping="Wrap"
+                           FontSize="14"
+                           LineHeight="22"
+                           Foreground="#222"/>
+            </ScrollViewer>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Command="{Binding CloseCommand}" IsDefault="True" IsCancel="True">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Check" Width="16" Height="16" Margin="0,0,6,0"/>
+                    <TextBlock Text="{x:Static resources:DisplayContentView.Button_Close}"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

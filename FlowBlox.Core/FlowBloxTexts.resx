@@ -966,6 +966,9 @@ All inputs are collected during each referenced iteration and this flow block ex
 	<data name="JsonPropertyValueAssignment_FieldValue" xml:space="preserve">
 		<value>Field value</value>
 	</data>
+	<data name="JsonPropertyValueAssignment_FieldValue_Tooltip" xml:space="preserve">
+		<value>Preferred when JSON type fidelity matters. Using FieldValue applies the source FieldElement type conversion (for example DateTime/number/boolean), so JSON keeps typed values instead of placeholder text.</value>
+	</data>
 	<data name="JsonPropertyValueAssignment_IsArray" xml:space="preserve">
 		<value>Is array</value>
 	</data>
@@ -3070,6 +3073,9 @@ Multi-level XPath expressions are not allowed here.</value>
 	<data name="RecursiveCallFlowBlock_TargetFlowBlock_Tooltip" xml:space="preserve">
     <value>The target flow block from which execution continues after transferring the configured field values.</value>
   </data>
+	<data name="RecursiveCallFlowBlock_SpecialExplanation_TargetPathAndTransfer" xml:space="preserve">
+    <value>Warning: All result fields of the target flow block must be fully covered by FieldTransferConfigs. Without complete field-transfer mapping, validation/execution will fail.</value>
+  </data>
 	<data name="XmlDocumentOutputFlowBlock_AssociatedXmlDocument_Tooltip" xml:space="preserve">
     <value>The XML document flow block that manages the internal XML document used for output.</value>
   </data>
@@ -3252,6 +3258,38 @@ Multi-level XPath expressions are not allowed here.</value>
   </data>
 	<data name="WebEventFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
     <value>After a successful web action, the current DOM content is written to the result field.</value>
+  </data>
+	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_LinkExtractionAndSwitch" xml:space="preserve">
+<value>Best practice: extract links, then open links.
+- ClickAll executes multiple clicks, but does not create one result iteration per clicked element.
+- ClickAll returns one DOM only after all clicks are finished.$$CONTINUE$$
+
+For multi-item processing:
+- Web-Selector: collect target href values.
+- Web-Event (Switch to URL): iterate collected URLs.
+- Then run detail/download actions on the opened page.
+
+Benefit:
+- Iteration is based on stable URL values (not DOM element handles).
+- This avoids stale-element issues after navigation/re-render.</value>
+  </data>
+	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction" xml:space="preserve">
+<value>Best practice for links across multiple pages:
+- Step 1: Web-Event (search/submit) -> Web-Selector (collect target links)
+- Step 2: Web-Event (search/submit) -> Web-Selector (collect links from the next page) -> Web-Event (click next page)
+- Step 3: Web-Event (click next page) -> Recursive-Call back to the search/submit step, mapping returned DOM to input.$$CONTINUE$$
+
+Repeat until no next page is available.
+
+Do/Don't:
+- Do: route Recursive-Call back to the paging entry element (for example search/submit Web-Event).
+- Don't: target data-record selectors/iterators, because they produce data-record output, not paging state.
+- Do: run next-page selector/click from the paging element path (once per page).
+- Don't: place next-page selector/click behind the data-iteration block, otherwise paging runs per record instead of per page.
+
+If a Join collector should aggregate links across all page iterations:
+- Set Join.AssociatedIterationContext to the predecessor of the paging WebEvent (Web-Event: search/submit).
+- Then aggregation runs after the full paging scope.</value>
   </data>
 	<data name="WebDownloadFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
     <value>This flow block uses the internally managed web browser instance from a web browser flow block to execute file downloads.</value>

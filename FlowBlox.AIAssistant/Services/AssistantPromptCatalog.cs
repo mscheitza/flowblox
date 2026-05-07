@@ -8,11 +8,13 @@ namespace FlowBlox.AIAssistant.Services
     {
         public const string SystemMessageKey = "system_message";
         public const string SessionBootstrapKey = "session_bootstrap";
+        public const string FlowLogicKey = "explaining_flow_logic";
         public const string IterationContextKey = "explaining_iteration_context";
         public const string FlowBlocksManagingObjectKey = "explaining_flow_blocks_managing_an_object";
         public const string EditAndDeleteKey = "explaining_edit_and_delete";
         public const string NamingConventionsKey = "naming_conventions";
         public const string ExecutionRequirementsKey = "execution_requirements_and_required_fields";
+        public const string FlowOrganizationPatternsKey = "explaining_flow_organization_patterns";
         public const string InputFilesKey = "explaining_input_files";
         public const string SpecialTestDefinitionsKey = "explaining_test_definitions";
         public const string SpecialTestDefinitionsDeepDiveKey = "explaining_test_definitions_deep_dive";
@@ -36,6 +38,12 @@ namespace FlowBlox.AIAssistant.Services
                     "Session Bootstrap",
                     "FlowBlox.AIAssistant.Prompts.SessionBootstrap.txt",
                     "Editing rules, tool usage policy, and workflow guardrails.",
+                    true),
+                [FlowLogicKey] = new PromptEntryDefinition(
+                    FlowLogicKey,
+                    "Explaining FlowLogic",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingFlowLogic.txt",
+                    "Normal flow execution order, dataset propagation, and iterative behavior.",
                     true),
                 [IterationContextKey] = new PromptEntryDefinition(
                     IterationContextKey,
@@ -66,6 +74,12 @@ namespace FlowBlox.AIAssistant.Services
                     "Execution Requirements and Required Fields",
                     "FlowBlox.AIAssistant.Prompts.ExecutionRequirementsAndRequiredFields.txt",
                     "How to ensure downstream execution is guarded when upstream result datasets are empty.",
+                    true),
+                [FlowOrganizationPatternsKey] = new PromptEntryDefinition(
+                    FlowOrganizationPatternsKey,
+                    "Explaining Flow Organization Patterns",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingFlowOrganizationPatterns.txt",
+                    "How to structure flows with downstream vs. stack patterns for readability and maintainability.",
                     true),
                 [InputFilesKey] = new PromptEntryDefinition(
                     InputFilesKey,

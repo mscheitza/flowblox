@@ -1,0 +1,36 @@
+Explaining FlowLogic (normal flow execution):
+
+1) Core normal-flow rules
+- Every flow block executes its next flow blocks.
+- For `BaseFlowBlock`: next flow blocks are executed once.
+- For `BaseResultFlowBlock`: next flow blocks are executed per result dataset.
+- Before each invocation, field values are applied from the currently processed dataset.
+
+2) Execution Order of Next Flow-Blocks (Sibling case)
+- If multiple next flow blocks exist, execution order is:
+  - first by `ExecutionIndex` (ascending, starting at 0),
+  - then by creation/link order for blocks without explicit index.
+- This execution-order rule always refers to sibling next flow blocks (multiple direct successors of the same predecessor).
+- If a `BaseResultFlowBlock` has N next flow blocks, all N next flow blocks are executed in this resolved order for the current dataset.
+
+- Example:
+  - `A -> A1 (index 0), A2 (index 1)` and `A2 -> A3`.
+  - Effective order: `A, A1, A2, A3`.
+  - Consequence at `A3`:
+    - You are inside an iteration of `A`.
+    - `A1` has already executed in the same iteration.
+    - Fields from `A` and `A1` are available in `A3`, even without a direct `A1 -> A3` connection.
+  - Key insight: the composed flow works because iteration scope + sibling execution order guarantee data availability.
+
+3) Iterative flow concept
+- Every flow block has at least one iteration.
+- `BaseResultFlowBlock` may produce N datasets, which means N iterations for downstream processing in normal flow.
+- If a next flow block has its own next flow block, that nested successor is still inside the same current dataset iteration of the original `BaseResultFlowBlock`.
+- Therefore, next flow blocks are automatically inside the active iteration scope of their predecessors.
+
+4) Exception: IterationContext
+- If a flow block has more than one predecessor, IterationContext is auto-resolved (see `ExplainingIterationContext`).
+- For `BaseSingleResultCollectorFlowBlock`, IterationContext follows collector-specific auto-resolution rules (see `ExplainingIterationContext`).
+- `AssociatedIterationContext` can intentionally change the normal iterative behavior.
+- Purpose: collect/process data in the iteration scope of an earlier flow block, not only the directly linked predecessor scope.
+- Do not set `AssociatedIterationContext` to a direct predecessor of the same target flow block.

@@ -46,6 +46,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
         public string Content;
     }
 
+    public class WebBrowserContentsActionResult : WebBrowserActionResult
+    {
+        public List<string> Contents { get; set; } = new();
+    }
+
     public class WebBrowserDownloadActionResult : WebBrowserActionResult
     {
         public string DownloadPath { get; set; }

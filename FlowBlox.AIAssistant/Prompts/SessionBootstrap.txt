@@ -52,6 +52,9 @@ Central guidelines (must be followed before tool execution):
 
 5) Execution Index
 - ExecutionIndex only orders direct sibling next blocks of the same predecessor (same parent source context). It does not control a horizontal chain like A -> B -> C.
+- Hard rule: increment ExecutionIndex only across siblings, never across a horizontal successor chain.
+- Invalid: A1(index 0) -> A2(index 1) -> A3(index 2).
+- Valid: A0 -> A1(index 0), A2(index 1), A3(index 2).
 - If a flow block has multiple direct next flow blocks, default order is creation/link order; when ExecutionIndex is set, ascending index wins (0 first). Set ExecutionIndex via UpdateFlowBlock only when sibling sequence matters.
 - If sequence does not matter, leave ExecutionIndex unset (-1). To reset an existing value, set ExecutionIndex to -1.
 

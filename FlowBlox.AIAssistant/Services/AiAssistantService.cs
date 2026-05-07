@@ -572,6 +572,10 @@ namespace FlowBlox.AIAssistant.Services
         {
             var sections = new List<string>();
 
+            var flowLogic = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.FlowLogicKey);
+            if (!string.IsNullOrWhiteSpace(flowLogic))
+                sections.Add("Topic: FlowLogic\n" + ReplaceRuntimePromptTokens(flowLogic).Trim());
+
             var iteration = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.IterationContextKey);
             if (!string.IsNullOrWhiteSpace(iteration))
                 sections.Add("Topic: IterationContext / Flow\n" + ReplaceRuntimePromptTokens(iteration).Trim());
@@ -591,6 +595,10 @@ namespace FlowBlox.AIAssistant.Services
             var executionRequirements = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.ExecutionRequirementsKey);
             if (!string.IsNullOrWhiteSpace(executionRequirements))
                 sections.Add("Topic: Execution Requirements / Required Fields\n" + ReplaceRuntimePromptTokens(executionRequirements).Trim());
+
+            var flowOrganizationPatterns = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.FlowOrganizationPatternsKey);
+            if (!string.IsNullOrWhiteSpace(flowOrganizationPatterns))
+                sections.Add("Topic: Flow Organization Patterns\n" + ReplaceRuntimePromptTokens(flowOrganizationPatterns).Trim());
 
             var versionNotes = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.VersionNotesKey);
             if (!string.IsNullOrWhiteSpace(versionNotes))

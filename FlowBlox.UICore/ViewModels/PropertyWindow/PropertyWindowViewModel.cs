@@ -119,6 +119,16 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 SpecialExplanations.Add(new PropertyWindowSpecialExplanationEntryViewModel
                 {
                     Explanation = x.SpecialExplanation,
+                    OpenExplanationCommand = new RelayCommand(_ =>
+                    {
+                        var fullText = (x.SpecialExplanation ?? string.Empty)
+                            .Replace("$$CONTINUE$$", string.Empty, StringComparison.Ordinal)
+                            .Trim();
+                        var displayWindow = new DisplayContentView(fullText);
+                        displayWindow.Owner = _window;
+                        displayWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
+                        displayWindow.ShowDialog();
+                    }),
                     IconKind = iconKind,
                     IconForeground = iconForeground
                 });
