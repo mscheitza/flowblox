@@ -182,7 +182,6 @@ namespace FlowBlox.AppWindow
 
             itmDockablePanels.Enabled = isProjectActive;
             itmResetDockablePanels.Enabled = isProjectActive;
-            itmAutoAdjustFlowLayout.Enabled = isProjectActive && !isRuntimeActive;
 
 
             itmOpenRuntimeLogDirectory.Enabled = !string.IsNullOrEmpty(RuntimeLogfilePath);
@@ -1296,14 +1295,6 @@ namespace FlowBlox.AppWindow
 
         private void itmDockablePanels_Click(object sender, EventArgs e)
         {
-        }
-
-        private void itmAutoAdjustFlowLayout_Click(object sender, EventArgs e)
-        {
-            var result = _dockContentProjectPanel?.ExecuteAutoAdjustFlowLayout() ?? new FlowBlockAutoLayoutResult();
-
-            var logger = FlowBloxLogManager.Instance.GetLogger();
-            logger.Info($"AutoAdjustFlowLayout executed. Updated={result.UpdatedFlowBlocks}, Total={result.TotalFlowBlocks}, Components={result.ComponentsProcessed}");
         }
 
         private void itmSaveToProjectSpace_Click(object sender, EventArgs e)

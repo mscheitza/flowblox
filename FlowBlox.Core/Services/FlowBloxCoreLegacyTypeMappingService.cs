@@ -37,6 +37,11 @@ namespace FlowBlox.Core.Services
                         "FlowBlox.Core.Models.FlowBlocks.InvokerFlowBlock, FlowBlox.Core"
                     ]),
                 new FlowBloxLegacyTypeMapping(
+                    typeof(InvocationFieldTransferConfig),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.InvocationFieldTransferConfig, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
                     typeof(FlowBloxFieldTestConfiguration),
                     [
                         "FlowBlox.Core.Models.FlowBlocks.Additions.FlowBloxFieldTestConfiguration, FlowBlox.Core",

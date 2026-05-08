@@ -280,9 +280,12 @@ namespace FlowBlox.Core.Util.FlowBlocks
                     locations[block] = new Point(current.X, Math.Max(0, targetTop));
                 }
 
-                ResolveVerticalOverlapsPerColumn(component, roots, locations, sizeMap, predecessors);
                 TraceLine($"Relaxation pass end: Pass={pass + 1}/{RelaxationPasses}");
             }
+
+            // Phase 2: branch-wise backward refit.
+            // Keep branch sub-graphs coherent and separated from each other.
+            RefitBranchSubgraphsBackward(component, successors, sizeMap, locations);
 
             return locations;
         }
@@ -327,84 +330,6 @@ namespace FlowBlox.Core.Util.FlowBlocks
             var width = flowBlock.Size.Width > 0 ? flowBlock.Size.Width : DefaultBlockWidth;
             var height = flowBlock.Size.Height > 0 ? flowBlock.Size.Height : DefaultBlockHeight;
             return new Size(width, height);
-        }
-
-        /// <summary>
-        /// Ensures non-overlapping vertical placement per visual column (same X).
-        /// Keeps root positions fixed and only pushes subsequent blocks down when required.
-        /// </summary>
-        private static void ResolveVerticalOverlapsPerColumn(
-            List<BaseFlowBlock> component,
-            List<BaseFlowBlock> roots,
-            Dictionary<BaseFlowBlock, Point> locations,
-            Dictionary<BaseFlowBlock, Size> sizeMap,
-            Dictionary<BaseFlowBlock, List<BaseFlowBlock>> predecessors)
-        {
-            var rootSet = new HashSet<BaseFlowBlock>(roots);
-
-            var columns = component
-                .Where(locations.ContainsKey)
-                .GroupBy(x => locations[x].X);
-
-            foreach (var column in columns)
-            {
-                var branchKeyCache = new Dictionary<BaseFlowBlock, double>();
-
-                double BranchOrderKey(BaseFlowBlock block)
-                {
-                    if (branchKeyCache.TryGetValue(block, out var cached))
-                        return cached;
-
-                    var value = BranchOrderKeyRecursive(block, new HashSet<BaseFlowBlock>());
-                    branchKeyCache[block] = value;
-                    return value;
-                }
-
-                double BranchOrderKeyRecursive(BaseFlowBlock block, HashSet<BaseFlowBlock> visited)
-                {
-                    if (!visited.Add(block))
-                        return GetCenterY(locations[block], sizeMap[block]);
-
-                    if (predecessors.TryGetValue(block, out var preds) && preds.Count > 0)
-                    {
-                        var recursiveAverage = preds
-                            .Where(locations.ContainsKey)
-                            .Select(p => BranchOrderKeyRecursive(p, visited))
-                            .DefaultIfEmpty(GetCenterY(locations[block], sizeMap[block]))
-                            .Average();
-
-                        visited.Remove(block);
-                        return recursiveAverage;
-                    }
-
-                    visited.Remove(block);
-                    return GetCenterY(locations[block], sizeMap[block]);
-                }
-
-                var ordered = column
-                    .OrderBy(BranchOrderKey)
-                    .ThenBy(x => locations[x].Y)
-                    .ThenBy(x => x.Name)
-                    .ToList();
-
-                for (int i = 1; i < ordered.Count; i++)
-                {
-                    var previous = ordered[i - 1];
-                    var current = ordered[i];
-
-                    // Keep root anchors stable where possible.
-                    if (rootSet.Contains(current))
-                        continue;
-
-                    var previousBottom = locations[previous].Y + sizeMap[previous].Height;
-                    var minTop = previousBottom + VerticalSpacing;
-
-                    if (locations[current].Y < minTop)
-                    {
-                        locations[current] = new Point(locations[current].X, minTop);
-                    }
-                }
-            }
         }
 
         private static int DetermineGlobalTop(List<BaseFlowBlock> flowBlocks)
@@ -476,6 +401,148 @@ namespace FlowBlox.Core.Util.FlowBlocks
             var targetTop = (int)Math.Round(avgCenter - (blockSize.Height / 2.0));
             var current = locations[block];
             locations[block] = new Point(current.X, Math.Max(0, targetTop));
+        }
+
+        private static void RefitBranchSubgraphsBackward(
+            List<BaseFlowBlock> component,
+            Dictionary<BaseFlowBlock, List<BaseFlowBlock>> successors,
+            Dictionary<BaseFlowBlock, Size> sizeMap,
+            Dictionary<BaseFlowBlock, Point> locations)
+        {
+            var componentSet = new HashSet<BaseFlowBlock>(component);
+
+            var branchSources = component
+                .Where(x => successors.TryGetValue(x, out var next) && next.Count > 1)
+                .OrderBy(x => locations.TryGetValue(x, out var p) ? p.X : int.MinValue)
+                .ThenBy(x => locations.TryGetValue(x, out var p) ? p.Y : int.MinValue)
+                .ToList();
+
+            // backward: right-most/deeper branches first
+            for (int i = branchSources.Count - 1; i >= 0; i--)
+            {
+                var source = branchSources[i];
+                var children = successors[source]
+                    .Where(componentSet.Contains)
+                    .OrderBy(x => locations.TryGetValue(x, out var p) ? p.Y : int.MinValue)
+                    .ThenBy(BlockName)
+                    .ToList();
+
+                if (children.Count <= 1)
+                    continue;
+
+                // If at least one direct branch child has no own downstream sub-flow,
+                // keep the standard alignment for this branching source.
+                var hasChildWithoutSubflow = children.Any(child =>
+                    !successors.TryGetValue(child, out var childNext) ||
+                    childNext == null ||
+                    childNext.Count == 0);
+
+                if (hasChildWithoutSubflow)
+                {
+                    TraceLine($"Branch refit skipped for {BlockName(source)} because at least one child has no sub-flow.");
+                    continue;
+                }
+
+                var childRoots = new HashSet<BaseFlowBlock>(children);
+                var groups = new List<(BaseFlowBlock Child, HashSet<BaseFlowBlock> Nodes, int Top, int Bottom)>();
+                bool hasSharedNodes = false;
+
+                foreach (var child in children)
+                {
+                    var nodes = CollectSubgraphNodes(child, successors, componentSet);
+                    nodes.Add(child);
+
+                    // If subgraphs merge, deterministic shifting is unsafe -> skip this source.
+                    if (groups.Any(g => g.Nodes.Overlaps(nodes)))
+                    {
+                        hasSharedNodes = true;
+                        break;
+                    }
+
+                    var top = nodes.Min(n => locations[n].Y);
+                    var bottom = nodes.Max(n => locations[n].Y + sizeMap[n].Height);
+                    groups.Add((child, nodes, top, bottom));
+                }
+
+                if (hasSharedNodes)
+                {
+                    TraceLine($"Branch refit skipped for {BlockName(source)} due to shared/merged child sub-graphs.");
+                    continue;
+                }
+
+                if (groups.Count <= 1)
+                    continue;
+
+                var hasOverlapOrTooSmallSpacing = false;
+                for (var g = 1; g < groups.Count; g++)
+                {
+                    var spacing = groups[g].Top - groups[g - 1].Bottom;
+                    if (spacing < VerticalSpacing)
+                    {
+                        hasOverlapOrTooSmallSpacing = true;
+                        break;
+                    }
+                }
+
+                if (!hasOverlapOrTooSmallSpacing)
+                {
+                    TraceLine($"Branch refit not required for {BlockName(source)}.");
+                    continue;
+                }
+
+                var totalHeight = groups.Sum(g => g.Bottom - g.Top) + ((groups.Count - 1) * VerticalSpacing);
+                var sourceCenter = GetCenterY(locations[source], sizeMap[source]);
+                var targetTop = sourceCenter - (totalHeight / 2.0);
+
+                TraceLine($"Branch refit start: Source={BlockName(source)}, ChildCount={groups.Count}, TotalHeight={totalHeight}, SourceCenter={sourceCenter:F2}, TargetTop={targetTop:F2}");
+
+                foreach (var group in groups)
+                {
+                    var groupHeight = group.Bottom - group.Top;
+                    var delta = (int)Math.Round(targetTop - group.Top);
+
+                    if (delta != 0)
+                    {
+                        foreach (var node in group.Nodes)
+                        {
+                            var current = locations[node];
+                            locations[node] = new Point(current.X, Math.Max(0, current.Y + delta));
+                        }
+                    }
+
+                    targetTop += groupHeight + VerticalSpacing;
+                }
+
+                TraceLine($"Branch refit end: Source={BlockName(source)}");
+            }
+        }
+
+        private static HashSet<BaseFlowBlock> CollectSubgraphNodes(
+            BaseFlowBlock start,
+            Dictionary<BaseFlowBlock, List<BaseFlowBlock>> successors,
+            HashSet<BaseFlowBlock> componentSet)
+        {
+            var result = new HashSet<BaseFlowBlock>();
+            var stack = new Stack<BaseFlowBlock>();
+            stack.Push(start);
+
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+                if (!result.Add(current))
+                    continue;
+
+                if (!successors.TryGetValue(current, out var nextBlocks))
+                    continue;
+
+                foreach (var next in nextBlocks)
+                {
+                    if (componentSet.Contains(next))
+                        stack.Push(next);
+                }
+            }
+
+            return result;
         }
 
         private static void TraceLine(string message)

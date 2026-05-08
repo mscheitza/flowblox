@@ -74,8 +74,6 @@ namespace FlowBlox.AppWindow
             toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             itmCopy = new System.Windows.Forms.ToolStripMenuItem();
             itmPaste = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            itmAutoAdjustFlowLayout = new System.Windows.Forms.ToolStripMenuItem();
             mnItmWindows = new System.Windows.Forms.ToolStripMenuItem();
             itmDockablePanels = new System.Windows.Forms.ToolStripMenuItem();
             itmResetDockablePanels = new System.Windows.Forms.ToolStripMenuItem();
@@ -372,7 +370,7 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmEdit
             // 
-            mnItmEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmUndo, itmRedo, toolStripSeparator10, itmCopy, itmPaste, toolStripSeparator7, itmAutoAdjustFlowLayout });
+            mnItmEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmUndo, itmRedo, toolStripSeparator10, itmCopy, itmPaste });
             mnItmEdit.Name = "mnItmEdit";
             mnItmEdit.Size = new System.Drawing.Size(101, 19);
             mnItmEdit.Text = "mnItmEdit_Text";
@@ -417,20 +415,6 @@ namespace FlowBlox.AppWindow
             itmPaste.Size = new System.Drawing.Size(281, 22);
             itmPaste.Text = "itmPaste_Text";
             itmPaste.Click += itmPaste_Click;
-            // 
-            // toolStripSeparator7
-            // 
-            toolStripSeparator7.Name = "toolStripSeparator7";
-            toolStripSeparator7.Size = new System.Drawing.Size(278, 6);
-            // 
-            // itmAutoAdjustFlowLayout
-            // 
-            itmAutoAdjustFlowLayout.Image = (System.Drawing.Image)resources.GetObject("itmAutoAdjustFlowLayout.Image");
-            itmAutoAdjustFlowLayout.Name = "itmAutoAdjustFlowLayout";
-            itmAutoAdjustFlowLayout.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L;
-            itmAutoAdjustFlowLayout.Size = new System.Drawing.Size(281, 22);
-            itmAutoAdjustFlowLayout.Text = "itmAutoAdjustFlowLayout_Text";
-            itmAutoAdjustFlowLayout.Click += itmAutoAdjustFlowLayout_Click;
             // 
             // mnItmWindows
             // 
@@ -718,8 +702,6 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripMenuItem mnItmDirectories;
         private System.Windows.Forms.ToolStripMenuItem itmOpenProjectInputDir;
         private System.Windows.Forms.ToolStripMenuItem itmOpenProjectOutputDir;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-        private System.Windows.Forms.ToolStripMenuItem itmAutoAdjustFlowLayout;
     }
 }
 

@@ -1084,12 +1084,12 @@ namespace FlowBlox.AppWindow.Contents
             }
         }
 
-        private void btAutoAdjustFlowLayout_Click(object sender, EventArgs e)
+        private async void btAutoAdjustFlowLayout_Click(object sender, EventArgs e)
         {
-            ExecuteAutoAdjustFlowLayout();
+            await ExecuteAutoAdjustFlowLayout();
         }
 
-        public FlowBlockAutoLayoutResult ExecuteAutoAdjustFlowLayout()
+        public async Task<FlowBlockAutoLayoutResult> ExecuteAutoAdjustFlowLayout()
         {
             var registry = FlowBloxRegistry;
             var startFlowBlock = registry?.GetStartFlowBlock();
@@ -1105,7 +1105,7 @@ namespace FlowBlox.AppWindow.Contents
                 return new FlowBlockAutoLayoutResult();
             }
 
-            var result = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
+            var result = await Task.Run(FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout);
             var moveActions = FlowBlockAutoLayoutAdjuster.GetRecordedMoveActions();
             FlowBloxServiceLocator.Instance
                 .GetService<IFlowBloxActionHistoryService>()
