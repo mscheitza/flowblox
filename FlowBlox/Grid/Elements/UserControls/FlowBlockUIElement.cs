@@ -89,6 +89,7 @@ namespace FlowBlox.Grid.Elements.UserControls
         private bool _suppressFlowBlockLocationSync;
 
         private bool _elementSelected;
+        private string _baseHeaderTitle = string.Empty;
         public bool ElementSelected
         {
             get => _elementSelected;
@@ -170,7 +171,11 @@ namespace FlowBlox.Grid.Elements.UserControls
             this.Name = _flowBlock.Name;
             this.Location = _flowBlock.Location;
             this.pbHeaderLeft1.Image = SkiaToSystemDrawingHelper.ToSystemDrawingImage(_flowBlock.Icon16);
-            this.labelHeader.Text = FlowBloxComponentHelper.GetDisplayName(_flowBlock);
+            this._baseHeaderTitle = FlowBloxComponentHelper.GetDisplayName(_flowBlock);
+            UpdateHeaderTitle();
+
+            this._flowBlock.IterationStart += FlowBlock_IterationStateChanged;
+            this._flowBlock.IterationEnd += FlowBlock_IterationStateChanged;
 
             this.Move += GridUIElement_Move;
             this.Disposed += FlowBlockUIElement_Disposed;
@@ -184,7 +189,16 @@ namespace FlowBlox.Grid.Elements.UserControls
                 return;
 
             _flowBlock.PropertyChanged -= FlowBlock_PropertyChanged;
+            _flowBlock.IterationStart -= FlowBlock_IterationStateChanged;
+            _flowBlock.IterationEnd -= FlowBlock_IterationStateChanged;
+
+            if (_flowBlock is BaseResultFlowBlock resultFlowBlock)
+                resultFlowBlock.OutputDatasetProcessingChanged -= ResultFlowBlock_OutputDatasetProcessingChanged;
         }
+
+        private void FlowBlock_IterationStateChanged(BaseRuntime runtime) => UpdateHeaderTitle();
+
+        private void ResultFlowBlock_OutputDatasetProcessingChanged() => UpdateHeaderTitle();
 
         private void FlowBlock_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -289,7 +303,8 @@ namespace FlowBlox.Grid.Elements.UserControls
         /// <param name="title"></param>
         protected void SetTitle(string title)
         {
-            this.labelHeader.Text = title;
+            _baseHeaderTitle = title ?? string.Empty;
+            UpdateHeaderTitle();
         }
 
         public Label GetHeader() => labelHeader;
@@ -445,6 +460,12 @@ namespace FlowBlox.Grid.Elements.UserControls
         private FlowBlockUIElementRenderer _renderer;
         public virtual void UpdateContent()
         {
+            if (_flowBlock is BaseResultFlowBlock resultFlowBlock)
+            {
+                resultFlowBlock.OutputDatasetProcessingChanged -= ResultFlowBlock_OutputDatasetProcessingChanged;
+                resultFlowBlock.OutputDatasetProcessingChanged += ResultFlowBlock_OutputDatasetProcessingChanged;
+            }
+
             _renderer = new FlowBlockUIElementRenderer(this);
             var innerPanel = _renderer.Render();
             if (_renderer.RenderedEntries > 0)
@@ -469,6 +490,36 @@ namespace FlowBlox.Grid.Elements.UserControls
 
             UpdateFlags();
             RefreshSizeAndLocation();
+        }
+
+        private void UpdateHeaderTitle()
+        {
+            if (IsDisposed || Disposing)
+                return;
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(UpdateHeaderTitle));
+                return;
+            }
+
+            var title = _baseHeaderTitle;
+            if (ApplicationWindowRef?.IsRuntimeActive == true && _flowBlock is BaseResultFlowBlock resultFlowBlock && resultFlowBlock.OutputDatasets_Count > 0)
+            {
+                var currentIndex = Math.Max(0, resultFlowBlock.OutputDataset_CurrentlyProcessingIndex);
+                if (currentIndex > 0)
+                    title = $"{_baseHeaderTitle} ({currentIndex}/{resultFlowBlock.OutputDatasets_Count})";
+            }
+
+            labelHeader.Text = title;
+        }
+
+        public void ResetRuntimeIterationInfo()
+        {
+            if (_flowBlock is BaseResultFlowBlock resultFlowBlock)
+                resultFlowBlock.ResetOutputDatasetProcessing();
+
+            UpdateHeaderTitle();
         }
 
         public void RefreshSizeAndLocation()

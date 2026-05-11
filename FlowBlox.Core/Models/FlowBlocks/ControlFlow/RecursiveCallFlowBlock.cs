@@ -1,8 +1,11 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
@@ -199,6 +202,56 @@ namespace FlowBlox.Core.Models.FlowBlocks.ControlFlow
             var properties = base.GetDisplayableProperties();
             properties.Add(nameof(FieldTransferConfigs));
             return properties;
+        }
+
+        public override void RuntimeStarted(Runtime.BaseRuntime runtime)
+        {
+            base.RuntimeStarted(runtime);
+
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+            if (registry == null)
+                return;
+
+            var previousFlowBlocks = GetAllPreviousFlowBlocks(this, registry);
+            var iterationContextSourceFlowBlocks = registry.GetFlowBlocks()
+                .OfType<BaseFlowBlock>()
+                .Where(x => x.IterationContext != null && previousFlowBlocks.Contains(x.IterationContext))
+                .Distinct()
+                .ToList();
+
+            if (iterationContextSourceFlowBlocks.Count == 0)
+                return;
+
+            var sourceFlowBlockNames = string.Join(
+                ", ",
+                iterationContextSourceFlowBlocks
+                    .Select(x => $"\"{x.Name}\"")
+                    .OrderBy(x => x));
+
+            runtime.Report(
+                $"A recursion is executed within an iteration context. This means the source flow block(s) {sourceFlowBlockNames} are only executed after all results, including recursive results, are available.",
+                FlowBloxLogLevel.Warning);
+        }
+
+        private static HashSet<BaseFlowBlock> GetAllPreviousFlowBlocks(BaseFlowBlock flowBlock, FlowBloxRegistry registry)
+        {
+            var result = new HashSet<BaseFlowBlock>();
+            var queue = new Queue<BaseFlowBlock>(registry.GetPreviousElements(flowBlock).OfType<BaseFlowBlock>());
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+                if (current == null || !result.Add(current))
+                    continue;
+
+                foreach (var previous in registry.GetPreviousElements(current).OfType<BaseFlowBlock>())
+                {
+                    if (previous != null)
+                        queue.Enqueue(previous);
+                }
+            }
+
+            return result;
         }
     }
 }

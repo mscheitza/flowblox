@@ -20,6 +20,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
     [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_ResultBehavior", Icon = SpecialExplanationIcon.Information)]
     [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_CookieOverlay", Icon = SpecialExplanationIcon.Important)]
+    [FlowBloxSpecialExplanation("WebBrowserFlowBlock_SpecialExplanation_BrowserConfiguration", Icon = SpecialExplanationIcon.Hint)]
     public class WebBrowserFlowBlock : BaseSingleResultFlowBlock
     {
         WebBrowserBase _internalWebBrowser;

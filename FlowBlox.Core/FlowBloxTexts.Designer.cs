@@ -8955,6 +8955,16 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Chrome is preconfigured by default. To use a different browser, adjust the options &quot;WebBrowser.ServiceName&quot; and &quot;WebBrowser.ServiceSettings&quot; under Options.
+        ///Ensure Selenium is installed and configured correctly (Chrome setup: https://www.selenium.dev/documentation/webdriver/browsers/chrome/). ähnelt.
+        /// </summary>
+        public static string WebBrowserFlowBlock_SpecialExplanation_BrowserConfiguration {
+            get {
+                return ResourceManager.GetString("WebBrowserFlowBlock_SpecialExplanation_BrowserConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Check whether a cookie-consent overlay is displayed. If present, add a web event flow block with click action on the accept button. Determine the exact selector or naming from the website DOM content. ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_SpecialExplanation_CookieOverlay {

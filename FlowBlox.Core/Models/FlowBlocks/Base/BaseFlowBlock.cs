@@ -1147,6 +1147,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
             OnBeforeInputProcessing?.Invoke();
 
+            runtime.NotifyBeforeInputProcessing(
+                flowBlock: this,
+                inputDatasetsCount: InputDatasets_Count,
+                inputBehaviours: BuildInputBehaviourSummary(),
+                iterationContext: IterationContext);
+
             foreach (var dataset in results)
             {
                 EnqueueIterationEndWorkItem(runtime, new InputDatasetWorkItem(
@@ -1168,6 +1174,22 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
 
             InputDataset_CurrentlyProcessing = null;
+        }
+
+        private IReadOnlyDictionary<string, Enum> BuildInputBehaviourSummary()
+        {
+            var behaviors = new Dictionary<string, Enum>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var assignment in InputBehaviorAssignments.Where(x => x?.FlowBlock != null))
+            {
+                var flowBlockName = assignment.FlowBlock.Name;
+                if (string.IsNullOrWhiteSpace(flowBlockName))
+                    continue;
+
+                behaviors[flowBlockName] = assignment.Behavior;
+            }
+
+            return behaviors;
         }
 
         private static void EnqueueIterationEndWorkItem(BaseRuntime runtime, IRuntimeWorkItem workItem)

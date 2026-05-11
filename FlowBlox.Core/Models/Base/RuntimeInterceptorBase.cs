@@ -93,6 +93,11 @@ namespace FlowBlox.Core.Models.Base
 
         }
 
+        public virtual void NotifyBeforeInputProcessing(RuntimeInputProcessingSummary inputProcessingSummary)
+        {
+
+        }
+
         public virtual void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
         {
             

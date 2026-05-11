@@ -33,5 +33,6 @@ namespace FlowBlox.Core.Interfaces
         void NotifyIterationStarted(BaseFlowBlock flowBlock);
         void NotifyIterationFinished(BaseFlowBlock flowBlock);
         void NotifyResultDatasetsGenerated(RuntimeResultDatasetSummary resultDatasetSummary);
+        void NotifyBeforeInputProcessing(RuntimeInputProcessingSummary inputProcessingSummary);
     }
 }

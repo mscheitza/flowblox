@@ -3066,6 +3066,10 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="WebBrowserFlowBlock_SpecialExplanation_CookieOverlay" xml:space="preserve">
     <value>Prüfen Sie, ob ein Cookie-Consent-Overlay angezeigt wird. Falls ja, fügen Sie einen Web-Event-Flow-Block mit Klick-Aktion auf den Akzeptieren-Button hinzu. Ermitteln Sie den genauen Selektor bzw. Namen aus dem DOM-Content der Website.</value>
   </data>
+	<data name="WebBrowserFlowBlock_SpecialExplanation_BrowserConfiguration" xml:space="preserve">
+    <value>Standardmäßig ist Chrome vorkonfiguriert. Für andere Browser passen Sie unter Optionen die Einträge "WebBrowser.ServiceName" und "WebBrowser.ServiceSettings" an.
+Stellen Sie sicher, dass Selenium korrekt installiert und konfiguriert ist (Chrome-Setup: https://www.selenium.dev/documentation/webdriver/browsers/chrome/).</value>
+  </data>
 	<data name="XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
     <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und liest Knoteninhalte per XPath.</value>
   </data>

@@ -1721,6 +1721,30 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Iteration-context relation: the selected flow block is executed once per dataset iteration of the target flow block (iteration context). ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_Legend_IterationContext_Tooltip {
+            get {
+                return ResourceManager.GetString("ProjectPanel_Legend_IterationContext_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recursive call:
+        ///Datasets are transferred through field transfers
+        ///from the source flow block, via the recursion flow block,
+        ///to the target flow block.
+        ///Afterwards, all transferred datasets are processed
+        ///through the flow from the target flow block.
+        ///This repeats while the source flow block keeps producing the recursive call. ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_Legend_RecursiveCall_Tooltip {
+            get {
+                return ResourceManager.GetString("ProjectPanel_Legend_RecursiveCall_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The runtime was aborted due to an unexpected error.{1}Runtime exception:{1}{0} ähnelt.
         /// </summary>
         internal static string ProjectPanel_RuntimeAborted_Message {

@@ -16,6 +16,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
     [FlowBloxUIGroup("BaseResultFlowBlock_Groups_Output", 25)]
     public abstract class BaseResultFlowBlock : BaseFlowBlock
     {
+        public delegate void OutputDatasetProcessingChangedEventHandler();
+        public event OutputDatasetProcessingChangedEventHandler OutputDatasetProcessingChanged;
+
         [Display(Name = "BaseResultFlowBlock_OutputBehavior", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
         [CustomValidation(typeof(BaseResultFlowBlock), nameof(ValidateOutputBehavior))]
         public OutputBehavior OutputBehavior { get; set; }
@@ -99,6 +102,25 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [JsonIgnore()]
         [DeepCopierIgnore()]
         public FlowBlockOutDataset OutputDataset_CurrentlyProcessing { get; internal set; }
+
+        [JsonIgnore()]
+        [DeepCopierIgnore()]
+        public int OutputDataset_CurrentlyProcessingIndex
+        {
+            get
+            {
+                var datasets = GridElementResult?.Results;
+                if (datasets == null || OutputDataset_CurrentlyProcessing == null)
+                    return 0;
+
+                var index = datasets.IndexOf(OutputDataset_CurrentlyProcessing);
+                return index >= 0 ? index + 1 : 0;
+            }
+        }
+
+        [JsonIgnore()]
+        [DeepCopierIgnore()]
+        public int OutputDatasets_Count => GridElementResult?.Results?.Count ?? 0;
 
         public override List<FieldElement> GetPossibleFieldElements()
         {
@@ -248,6 +270,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     PrecedingFieldValues = precedingFieldValues
                 }).ToList()
             }).ToList() : CreateEmptyResults();
+
+            ResetOutputDatasetProcessing();
+
             runtime.NotifyResultDatasetsGenerated(this, this.GridElementResult.Results ?? new List<FlowBlockOutDataset>());
 
             if (!runtime.ExecutionFlowEnabled)
@@ -376,5 +401,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 GenerateResult(runtime);
             return success;
         }
+
+        public void ResetOutputDatasetProcessing()
+        {
+            OutputDataset_CurrentlyProcessing = null;
+            NotifyOutputDatasetProcessingChanged();
+        }
+
+        internal void NotifyOutputDatasetProcessingChanged() => OutputDatasetProcessingChanged?.Invoke();
     }
 }

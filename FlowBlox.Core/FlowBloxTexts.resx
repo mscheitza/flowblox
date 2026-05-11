@@ -3238,6 +3238,10 @@ Multi-level XPath expressions are not allowed here.</value>
 	<data name="WebBrowserFlowBlock_SpecialExplanation_CookieOverlay" xml:space="preserve">
     <value>Check whether a cookie-consent overlay is displayed. If present, add a web event flow block with click action on the accept button. Determine the exact selector or naming from the website DOM content.</value>
   </data>
+	<data name="WebBrowserFlowBlock_SpecialExplanation_BrowserConfiguration" xml:space="preserve">
+    <value>Chrome is preconfigured by default. To use a different browser, adjust the options "WebBrowser.ServiceName" and "WebBrowser.ServiceSettings" under Options.
+Ensure Selenium is installed and configured correctly (Chrome setup: https://www.selenium.dev/documentation/webdriver/browsers/chrome/).</value>
+  </data>
 	<data name="XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
     <value>This flow block uses the internally managed XML document from an XML document flow block and reads node content by XPath.</value>
   </data>

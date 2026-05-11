@@ -123,7 +123,8 @@ namespace FlowBlox.AIAssistant.Services
                 var providerLabel = FlowBloxComponentHelper.GetDisplayName(configuredProvider);
                 var message =
                     $"Provider '{providerLabel}' does not support native conversation continuation. " +
-                    "AI Assistant requires conversation-capable providers.";
+                    "AI Assistant requires conversation-capable providers. " +
+                    "Support for non-native continuation providers is planned for a future release.";
                 result.Errors.Add(message);
                 AddTranscript(result, AssistantTranscriptKind.Error, message);
                 return result;
@@ -938,8 +939,17 @@ namespace FlowBlox.AIAssistant.Services
 
         private static JObject? TryParseFirstJsonObject(string output)
         {
+            if (string.IsNullOrWhiteSpace(output))
+                return null;
+
             try
             {
+                if (TextHelper.TrySubstringFromFirstOccurrence(output, '{', out var objectCandidate) &&
+                    !string.IsNullOrWhiteSpace(objectCandidate))
+                {
+                    output = objectCandidate;
+                }
+
                 using var stringReader = new StringReader(output);
                 using var jsonReader = new JsonTextReader(stringReader)
                 {

@@ -10,6 +10,7 @@
     xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:utilities="clr-namespace:FlowBlox.UICore.Utilities"
     mc:Ignorable="d"
     Title="{Binding HeaderTitle}"
     Height="600"
@@ -100,7 +101,7 @@
                                                             VerticalAlignment="Top"
                                                             Foreground="{Binding IconForeground}"/>
                                 <StackPanel Visibility="{Binding HasContinuationMarker, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <TextBlock Text="{Binding DisplayText, Mode=OneWay}"
+                                    <TextBlock utilities:TextBlockLinkHelper.FormattedText="{Binding DisplayText, Mode=OneWay}"
                                                TextWrapping="Wrap"
                                                Foreground="DarkSlateGray"/>
                                     <Button Command="{Binding OpenExplanationCommand}"
@@ -114,7 +115,7 @@
                                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
                                     </Button>
                                 </StackPanel>
-                                <TextBlock Text="{Binding DisplayText, Mode=OneWay}"
+                                <TextBlock utilities:TextBlockLinkHelper.FormattedText="{Binding DisplayText, Mode=OneWay}"
                                            TextWrapping="Wrap"
                                            Foreground="DarkSlateGray"
                                            Visibility="{Binding HasContinuationMarker, Converter={StaticResource BoolToInverseVisibilityConverter}}"/>

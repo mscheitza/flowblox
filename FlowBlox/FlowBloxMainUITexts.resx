@@ -784,6 +784,18 @@ The application will now restart to restore a clean environment.</value>
   <data name="ProjectPanel_labelIterationContext_Text" xml:space="preserve">
 		<value>Iteration Context</value>
 	</data>
+  <data name="ProjectPanel_Legend_IterationContext_Tooltip" xml:space="preserve">
+		<value>Iteration-context relation: the selected flow block is executed once per dataset iteration of the target flow block (iteration context).</value>
+	</data>
+  <data name="ProjectPanel_Legend_RecursiveCall_Tooltip" xml:space="preserve">
+    <value>Recursive call:
+Datasets are transferred through field transfers
+from the source flow block, via the recursion flow block,
+to the target flow block.
+Afterwards, all transferred datasets are processed
+through the flow from the target flow block.
+This repeats while the source flow block keeps producing the recursive call.</value>
+  </data>
   <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
     <value>Build, Test, and Run Flows (based on .NET)</value>
   </data>

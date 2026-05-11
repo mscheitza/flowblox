@@ -245,6 +245,27 @@ namespace FlowBlox.Core.Models.Runtime
             }
         }
 
+        internal void NotifyBeforeInputProcessing(
+            BaseFlowBlock flowBlock,
+            int inputDatasetsCount,
+            IReadOnlyDictionary<string, Enum> inputBehaviours,
+            BaseFlowBlock iterationContext)
+        {
+            if (DisableInterceptors)
+                return;
+
+            var summary = new RuntimeInputProcessingSummary(
+                flowBlock: flowBlock,
+                iterationContext: iterationContext,
+                inputDatasetCount: inputDatasetsCount,
+                inputBehaviours: inputBehaviours ?? new Dictionary<string, Enum>());
+
+            foreach (var interceptor in _interceptors)
+            {
+                interceptor.NotifyBeforeInputProcessing(summary);
+            }
+        }
+
         public void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
         {
             if (StopOnWarning)

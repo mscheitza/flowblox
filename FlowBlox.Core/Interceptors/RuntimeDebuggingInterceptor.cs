@@ -231,6 +231,31 @@ namespace FlowBlox.Core.Interceptors
                 generatedResultId);
         }
 
+        public override void NotifyBeforeInputProcessing(RuntimeInputProcessingSummary inputProcessingSummary)
+        {
+            if (!IsEnabled || inputProcessingSummary == null)
+                return;
+
+            var flowBlockName = inputProcessingSummary.FlowBlock?.Name;
+            var iterationContextName = inputProcessingSummary.IterationContext?.Name ?? string.Empty;
+
+            var orderedBehaviours = inputProcessingSummary.InputBehaviours
+                .Where(x => !string.IsNullOrWhiteSpace(x.Key) && x.Value != null)
+                .OrderBy(x => x.Key, StringComparer.OrdinalIgnoreCase)
+                .Select(x => $"- {x.Key}: {x.Value}")
+                .ToList();
+
+            var details = orderedBehaviours.Count == 0
+                ? $"IterationContext: {iterationContextName}"
+                : $"IterationContext: {iterationContextName}{Environment.NewLine}{string.Join(Environment.NewLine, orderedBehaviours)}";
+
+            AppendProtocol(
+                "BeforeInputProcessing",
+                $"Iteration for '{iterationContextName}' completed. Generated {inputProcessingSummary.InputDatasetCount} input dataset(s) for '{flowBlockName}'.",
+                flowBlockName,
+                details: details);
+        }
+
         public override void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
         {
             if (!IsEnabled)

@@ -17,6 +17,7 @@ namespace FlowBlox.Core.Models.Runtime.WorkItems
         public void Run(BaseRuntime runtime)
         {
             _resultBlock.OutputDataset_CurrentlyProcessing = _dataset;
+            _resultBlock.NotifyOutputDatasetProcessingChanged();
 
             foreach (var fieldValueMapping in _dataset.FieldValueMappings)
             {

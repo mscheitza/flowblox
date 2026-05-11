@@ -16,15 +16,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
     {
         public override string ProviderType => "Anthropic";
 
-        // Anthropic supports a container concept for conversation state.
-        public override bool SupportsNativeResponseContinuation => true;
+        public override bool SupportsNativeResponseContinuation => false;
 
         private HttpClient _http;
 
         public AnthropicAIProvider()
         {
             BaseUrl = "https://api.anthropic.com/v1";
-            DefaultModel = "claude-opus-4-5";
+            DefaultModel = "claude-opus-4-6";
             TimeoutSeconds = 60;
         }
 
@@ -92,23 +91,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             if (request.Temperature is >= 0 and <= 1)
                 body["temperature"] = request.Temperature;
 
-            if (!string.IsNullOrWhiteSpace(request.PreviousResponseId))
-                body["container"] = request.PreviousResponseId;
-
-            if (request.Meta != null && request.Meta.Count > 0)
-            {
-                var metadata = new JObject();
-                foreach (var kv in request.Meta)
-                {
-                    if (kv.Value == null)
-                        continue;
-
-                    metadata[kv.Key] = kv.Value.ToString();
-                }
-
-                if (metadata.HasValues)
-                    body["metadata"] = metadata;
-            }
+            var metadata = BuildAnthropicMetadata(request);
+            if (metadata != null)
+                body["metadata"] = metadata;
 
             msg.Content = new StringContent(body.ToString(Formatting.None), Encoding.UTF8, "application/json");
 
@@ -131,7 +116,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             {
                 Success = true,
                 Text = text ?? string.Empty,
-                ResponseId = parsed["container"]?.Value<string>() ?? parsed["id"]?.Value<string>(),
+                ResponseId = parsed["id"]?.Value<string>(),
                 PromptTokens = parsed["usage"]?["input_tokens"]?.Value<int?>(),
                 CompletionTokens = parsed["usage"]?["output_tokens"]?.Value<int?>()
             };
@@ -161,6 +146,29 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             }
 
             return sb.Length == 0 ? null : sb.ToString();
+        }
+
+        private static JObject BuildAnthropicMetadata(AIRequest request)
+        {
+            if (request?.Meta == null || request.Meta.Count == 0)
+                return null;
+
+            // Anthropic metadata is schema-restricted. Avoid forwarding arbitrary keys
+            // such as "Source" or "RequireResponseStorage" that are valid for other providers.
+            if (!request.Meta.TryGetValue("user_id", out var value) &&
+                !request.Meta.TryGetValue("UserId", out value))
+            {
+                return null;
+            }
+
+            var resolved = value?.ToString();
+            if (string.IsNullOrWhiteSpace(resolved))
+                return null;
+
+            return new JObject
+            {
+                ["user_id"] = resolved
+            };
         }
     }
 }

@@ -769,6 +769,17 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   <data name="ProjectPanel_labelIterationContext_Text" xml:space="preserve">
 		<value>Iterationskontext</value>
 	</data>
+  <data name="ProjectPanel_Legend_IterationContext_Tooltip" xml:space="preserve">
+    <value>Iterationskontext-Relation: Der ausgewählte Flow-Block wird pro Datensatz-Iteration des Ziel-Flow-Blocks (Iterationskontext) ausgeführt.</value>
+  </data>
+  <data name="ProjectPanel_Legend_RecursiveCall_Tooltip" xml:space="preserve">
+    <value>Rekursiver Aufruf:
+Datensätze werden per Feldübertragungen vom Quell-Flow-Block
+über den Rekursion-Flow-Block an den Ziel-Flow-Block übertragen.
+Anschließend werden alle übertragenen Datensätze
+am Ziel-Flow-Block über den Flow abgearbeitet.
+Das wiederholt sich, solange der Quell-Flow-Block den rekursiven Aufruf liefert.</value>
+  </data>
   <data name="AppWindow_itmRecentProjects_Text" xml:space="preserve">
     <value>Zuletzt geöffnete Projekte</value>
   </data>

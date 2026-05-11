@@ -2,6 +2,20 @@
 {
     public class TextHelper
     {
+        public static bool TrySubstringFromFirstOccurrence(string? value, char character, out string? result)
+        {
+            result = null;
+            if (string.IsNullOrEmpty(value))
+                return false;
+
+            var index = value.IndexOf(character);
+            if (index < 0)
+                return false;
+
+            result = value.Substring(index);
+            return true;
+        }
+
         public static string ShortenString(string value, int maxLength, bool removeLineBreaks)
         {
             if (TryShortenString(value, maxLength, removeLineBreaks, out string shortValue))

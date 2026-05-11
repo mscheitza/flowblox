@@ -60,6 +60,7 @@ namespace FlowBlox.AppWindow.Contents
         private bool _isPrintGridDelayPending;
         private bool _isMoveFinishedDelayPending;
         private bool _isScrollDelayPending;
+        private readonly ToolTip _legendToolTip = new ToolTip();
 
         internal void EnableGridUpdate() => _blockGridUpdate = false;
 
@@ -112,6 +113,7 @@ namespace FlowBlox.AppWindow.Contents
             pictureBoxInvoke.Image = CreateLegendArrowImage(FlowBloxArrowColors.InvokeArrow);
             pictureBoxRecursiveCall.Image = CreateLegendArrowImage(FlowBloxArrowColors.RecursiveCallArrow);
             pictureBoxIterationContext.Image = CreateLegendArrowImage(FlowBloxArrowColors.IterationContextArrow);
+            InitializeLegendTooltips();
 
             _shortcutManager = new ShortcutManager(toolStrip_Mode);
             _shortcutManager.RegisterShortcut(Keys.Control | Keys.Shift, btConnectionMode);
@@ -125,6 +127,35 @@ namespace FlowBlox.AppWindow.Contents
             ControlHelper.EnableDoubleBuffer(toolStrip_Runtime);
             ControlHelper.EnableOptimizedDoubleBuffer(toolStrip_Runtime);
             InitDoubleBuffer();
+        }
+
+        private void InitializeLegendTooltips()
+        {
+            _legendToolTip.AutoPopDelay = 15000;
+            _legendToolTip.InitialDelay = 250;
+            _legendToolTip.ReshowDelay = 150;
+            _legendToolTip.ShowAlways = true;
+
+            var inputDatasetsMenuText = FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_itmInsightInput_Text", typeof(FlowBloxMainUITexts));
+            var outputDatasetsMenuText = FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_itmInsightOutput_Text", typeof(FlowBloxMainUITexts));
+
+            var iterationTooltip = string.Format(
+                FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Legend_IterationContext_Tooltip", typeof(FlowBloxMainUITexts)),
+                inputDatasetsMenuText,
+                outputDatasetsMenuText);
+
+            var recursionTooltip = FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Legend_RecursiveCall_Tooltip", typeof(FlowBloxMainUITexts));
+
+            labelIterationContext.Cursor = Cursors.Help;
+            pictureBoxIterationContext.Cursor = Cursors.Help;
+            labelRecursiveCall.Cursor = Cursors.Help;
+            pictureBoxRecursiveCall.Cursor = Cursors.Help;
+
+            _legendToolTip.SetToolTip(labelIterationContext, iterationTooltip);
+            _legendToolTip.SetToolTip(pictureBoxIterationContext, iterationTooltip);
+
+            _legendToolTip.SetToolTip(labelRecursiveCall, recursionTooltip);
+            _legendToolTip.SetToolTip(pictureBoxRecursiveCall, recursionTooltip);
         }
 
         private static Image CreateLegendArrowImage(Color tintColor)
@@ -672,6 +703,11 @@ namespace FlowBlox.AppWindow.Contents
                 {
                     uiElement.InternalFlowBlock.ResetNotifications(this.Runtime);
                 }
+            }
+
+            foreach (var uiElement in this.FlowBloxUIRegistry.UIElements)
+            {
+                uiElement.ResetRuntimeIterationInfo();
             }
 
             if (result is Exception)
