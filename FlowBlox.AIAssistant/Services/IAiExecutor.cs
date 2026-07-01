@@ -1,4 +1,5 @@
 using FlowBlox.AIAssistant.Models;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 
 namespace FlowBlox.AIAssistant.Services
 {
@@ -13,11 +14,9 @@ namespace FlowBlox.AIAssistant.Services
 
     public interface IAiExecutor
     {
-        Task<AiExecutorResult> ExecutePromptAsync(
-            string systemPrompt,
-            string userPrompt,
+        Task<AiExecutorResult> ExecuteChatAsync(
+            AIChatRequest request,
             AssistantConfiguration configuration,
-            string previousResponseId,
             CancellationToken ct);
     }
 }

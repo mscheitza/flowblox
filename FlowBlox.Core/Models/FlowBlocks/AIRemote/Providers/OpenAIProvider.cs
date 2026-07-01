@@ -1,18 +1,11 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
-using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 {
@@ -24,18 +17,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         [FlowBloxUI(Factory = UIFactory.Default)]
         public string OrganizationId { get; set; }
 
-        [Display(Name = "OpenAIProvider_ProjectId", Description = "OpenAIProvider_ProjectId_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 11)]
-        [FlowBloxUI(Factory = UIFactory.Default)]
-        public string ProjectId { get; set; }
-
-        [Display(Name = "OpenAIProvider_StoreResponses", Description = "OpenAIProvider_StoreResponses_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 12)]
-        [FlowBloxUI(Factory = UIFactory.Default)]
-        public bool StoreResponses { get; set; } = false;
 
         public override string ProviderType => "OpenAI";
-        public override bool SupportsNativeResponseContinuation => true;
-
-        private HttpClient _http;
 
         public OpenAIProvider()
         {
@@ -44,26 +27,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             TimeoutSeconds = 60;
         }
 
-        protected override void OnBeforeExecution()
-        {
-            _http?.Dispose();
-
-            _http = new HttpClient
-            {
-                Timeout = Timeout.InfiniteTimeSpan
-            };
-
-            _http.DefaultRequestHeaders.Accept.Clear();
-            _http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
-
-        protected override void OnAfterExecution()
-        {
-            _http?.Dispose();
-            _http = null;
-        }
-
-        protected override async Task<AIResponse> ExecuteCoreAsync(AIRequest request, CancellationToken ct)
+        protected override async Task<AIResponse> ExecuteChatCoreAsync(AIChatRequest request, CancellationToken ct)
         {
             var resolvedApiKey = FlowBloxFieldHelper.ReplaceFieldsInString(ApiKey);
             if (string.IsNullOrWhiteSpace(resolvedApiKey))
@@ -75,168 +39,69 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
                 };
             }
 
-            var resolvedBaseUrl = FlowBloxFieldHelper.ReplaceFieldsInString(BaseUrl);
-            var resolvedOrganizationId = FlowBloxFieldHelper.ReplaceFieldsInString(OrganizationId);
-            var resolvedProjectId = FlowBloxFieldHelper.ReplaceFieldsInString(ProjectId);
             var resolvedModel = FlowBloxFieldHelper.ReplaceFieldsInString(request.Model);
+            if (string.IsNullOrWhiteSpace(resolvedModel))
+                resolvedModel = FlowBloxFieldHelper.ReplaceFieldsInString(DefaultModel);
 
-            var urlBase = string.IsNullOrWhiteSpace(resolvedBaseUrl) ? 
-                "https://api.openai.com/v1" : 
-                resolvedBaseUrl.TrimEnd('/');
+            var resolvedBaseUrl = FlowBloxFieldHelper.ReplaceFieldsInString(BaseUrl);
+            if (string.IsNullOrWhiteSpace(resolvedBaseUrl))
+                throw new InvalidOperationException("OpenAI base URL is empty after field resolution.");
 
-            var url = $"{urlBase}/responses";
+            var resolvedOrganizationId = FlowBloxFieldHelper.ReplaceFieldsInString(OrganizationId);
 
-            using var msg = new HttpRequestMessage(HttpMethod.Post, url);
+#pragma warning disable SKEXP0010
+            var chatService = string.Equals(resolvedBaseUrl.TrimEnd('/'), "https://api.openai.com/v1", StringComparison.OrdinalIgnoreCase)
+                ? new OpenAIChatCompletionService(resolvedModel, resolvedApiKey, resolvedOrganizationId)
+                : new OpenAIChatCompletionService(resolvedModel, new Uri(resolvedBaseUrl.TrimEnd('/')), resolvedApiKey, resolvedOrganizationId);
+#pragma warning restore SKEXP0010
 
-            // Auth: Authorization: Bearer
-            msg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", resolvedApiKey);
-
-            // Optional org/project headers
-            if (!string.IsNullOrWhiteSpace(resolvedOrganizationId))
-                msg.Headers.TryAddWithoutValidation("OpenAI-Organization", resolvedOrganizationId);
-
-            if (!string.IsNullOrWhiteSpace(resolvedProjectId))
-                msg.Headers.TryAddWithoutValidation("OpenAI-Project", resolvedProjectId);
-
-            // Build request body (Responses API)
-            var body = new JObject
-            {
-                ["model"] = resolvedModel,
-                ["input"] = request.Prompt,
-                ["store"] = ShouldStoreResponses(request)
-            };
-
-            if (!string.IsNullOrWhiteSpace(request.SystemInstruction))
-                body["instructions"] = request.SystemInstruction;
-
-            if (!string.IsNullOrWhiteSpace(request.PreviousResponseId))
-                body["previous_response_id"] = request.PreviousResponseId;
-
-            if (request.Temperature is >= 0 and <= 2)
-                body["temperature"] = request.Temperature;
-
-            if (request.MaxTokens.HasValue && request.MaxTokens.Value > 0)
-                body["max_output_tokens"] = request.MaxTokens.Value;
-
-            if (request.Meta != null && request.Meta.Count > 0)
-            {
-                var meta = new JObject();
-                foreach (var kv in request.Meta)
-                {
-                    if (kv.Value == null) continue;
-                    meta[kv.Key] = kv.Value.ToString();
-                }
-                if (meta.HasValues)
-                    body["metadata"] = meta;
-            }
-
-            msg.Content = new StringContent(body.ToString(Formatting.None), Encoding.UTF8, "application/json");
-
-            using var resp = await _http.SendAsync(msg, HttpCompletionOption.ResponseContentRead, ct).ConfigureAwait(false);
-            var json = await resp.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
-
-            if (!resp.IsSuccessStatusCode)
-            {
-                // OpenAI returns error JSON; pass through for debugging
-                return new AIResponse
-                {
-                    Success = false,
-                    Error = $"HTTP {(int)resp.StatusCode} {resp.ReasonPhrase}: {json}"
-                };
-            }
-
-            var text = TryExtractOutputText(json);
-            var responseId = TryExtractResponseId(json);
+            var response = await chatService.GetChatMessageContentAsync(
+                BuildChatHistory(request),
+                BuildExecutionSettings(request),
+                kernel: null,
+                cancellationToken: ct).ConfigureAwait(false);
 
             return new AIResponse
             {
                 Success = true,
-                Text = text ?? string.Empty,
-                ResponseId = responseId
+                Text = response?.Content ?? string.Empty
             };
         }
 
-        private bool ShouldStoreResponses(AIRequest request)
+        private static OpenAIPromptExecutionSettings BuildExecutionSettings(AIChatRequest request)
         {
-            if (StoreResponses)
-                return true;
+            var settings = new OpenAIPromptExecutionSettings();
+            if (request.Temperature is >= 0 and <= 2)
+                settings.Temperature = request.Temperature;
 
-            if (!string.IsNullOrWhiteSpace(request?.PreviousResponseId))
-                return true;
+            if (request.MaxTokens is > 0)
+                settings.MaxTokens = request.MaxTokens;
 
-            if (request?.Meta == null)
-                return false;
-
-            if (!request.Meta.TryGetValue("RequireResponseStorage", out var value))
-                return false;
-
-            return value switch
-            {
-                bool b => b,
-                string s when bool.TryParse(s, out var parsed) => parsed,
-                _ => false
-            };
+            return settings;
         }
 
-        private static string TryExtractResponseId(string responseJson)
+        private static ChatHistory BuildChatHistory(AIChatRequest request)
         {
-            if (string.IsNullOrWhiteSpace(responseJson))
-                return null;
+            var history = new ChatHistory();
 
-            var root = JObject.Parse(responseJson);
-            return root["id"]?.Value<string>();
-        }
-
-        private static string TryExtractOutputText(string responseJson)
-        {
-            if (string.IsNullOrWhiteSpace(responseJson))
-                return null;
-
-            var root = JObject.Parse(responseJson);
-
-            // OpenAI Responses API output structure:
-            //
-            // {
-            //   "output": [
-            //     {
-            //       "type": "message",
-            //       "role": "assistant",
-            //       "content": [
-            //         {
-            //           "type": "output_text",
-            //           "text": "The generated text from the model."
-            //         }
-            //       ]
-            //     }
-            //   ]
-            // }
-
-            var outputs = root["output"] as JArray;
-            if (outputs == null) return null;
-
-            var sb = new StringBuilder();
-
-            foreach (var outputItem in outputs)
+            foreach (var systemMessage in request?.SystemMessages ?? Enumerable.Empty<AIChatMessage>())
             {
-                var content = outputItem?["content"] as JArray;
-                if (content == null) continue;
-
-                foreach (var c in content)
-                {
-                    var type = c?["type"]?.Value<string>();
-                    if (type == "output_text")
-                    {
-                        var t = c?["text"]?.Value<string>();
-                        if (!string.IsNullOrEmpty(t))
-                        {
-                            if (sb.Length > 0) sb.AppendLine();
-                            sb.Append(t);
-                        }
-                    }
-                }
+                if (!string.IsNullOrWhiteSpace(systemMessage?.Content))
+                    history.AddSystemMessage(systemMessage.Content);
             }
 
-            return sb.Length == 0 ? null : sb.ToString();
+            foreach (var message in request?.Messages ?? Enumerable.Empty<AIChatMessage>())
+            {
+                if (string.IsNullOrWhiteSpace(message?.Content))
+                    continue;
+
+                if (string.Equals(message.Role, "assistant", StringComparison.OrdinalIgnoreCase))
+                    history.AddAssistantMessage(message.Content);
+                else
+                    history.AddUserMessage(message.Content);
+            }
+
+            return history;
         }
     }
 }

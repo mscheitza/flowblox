@@ -31,5 +31,17 @@ namespace FlowBlox.AIAssistant.Models
 
         [Display(Name = "AssistantConfiguration_EnableAutomaticAdjustment", Description = "AssistantConfiguration_EnableAutomaticAdjustment_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 5)]
         public bool EnableAutomaticAdjustment { get; set; } = true;
+
+        [Display(Name = "Max latest messages", Description = "Number of latest user/assistant messages kept verbatim in chat context.", GroupName = "AssistantConfiguration_Groups_General", Order = 6)]
+        public int MaxLatestMessages { get; set; } = 5;
+
+        [Display(Name = "Max context tokens", Description = "Approximate maximum context window used for system prompts, summary, latest messages, and current prompt.", GroupName = "AssistantConfiguration_Groups_General", Order = 7)]
+        public int MaxContextTokens { get; set; } = 32000;
+
+        [Display(Name = "Reserved response tokens", Description = "Approximate tokens reserved for the model response when trimming latest messages.", GroupName = "AssistantConfiguration_Groups_General", Order = 8)]
+        public int ReservedResponseTokens { get; set; } = 4096;
+
+        [Display(Name = "Characters per token", Description = "Approximate character-to-token ratio used for provider-independent context trimming.", GroupName = "AssistantConfiguration_Groups_General", Order = 9)]
+        public int ApproximateCharactersPerToken { get; set; } = 4;
     }
 }

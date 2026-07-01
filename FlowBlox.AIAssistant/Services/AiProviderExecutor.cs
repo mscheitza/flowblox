@@ -7,11 +7,9 @@ namespace FlowBlox.AIAssistant.Services
 {
     public class AiProviderExecutor : IAiExecutor
     {
-        public async Task<AiExecutorResult> ExecutePromptAsync(
-            string systemPrompt,
-            string userPrompt,
+        public async Task<AiExecutorResult> ExecuteChatAsync(
+            AIChatRequest request,
             AssistantConfiguration configuration,
-            string previousResponseId,
             CancellationToken ct)
         {
             try
@@ -27,27 +25,24 @@ namespace FlowBlox.AIAssistant.Services
                 }
 
                 var provider = configuration?.Provider ?? new OpenAIProvider();
+                request ??= new AIChatRequest();
+                request.Model = string.IsNullOrWhiteSpace(request.Model)
+                    ? provider.DefaultModel
+                    : request.Model;
+
+                if (configuration?.Temperature.HasValue == true)
+                    request.Temperature = configuration.Temperature;
+
+                if (configuration?.MaxTokens is > 0)
+                    request.MaxTokens = configuration.MaxTokens;
+
+                if (string.IsNullOrWhiteSpace(request.Source))
+                    request.Source = "FlowBloxAIAssistant";
 
                 provider.PrepareExecution();
                 try
                 {
-                    var request = new AIRequest
-                    {
-                        Prompt = userPrompt,
-                        SystemInstruction = systemPrompt,
-                        Model = provider.DefaultModel,
-                        Temperature = configuration?.Temperature ?? 0.0,
-                        MaxTokens = configuration?.MaxTokens,
-                        TimeoutSecondsOverride = Math.Max(provider.TimeoutSeconds, 180),
-                        PreviousResponseId = provider.SupportsNativeResponseContinuation
-                            ? previousResponseId ?? string.Empty
-                            : string.Empty
-                    };
-
-                    request.Meta["Source"] = "FlowBloxAIAssistant";
-                    request.Meta["RequireResponseStorage"] = true;
-
-                    var response = await provider.ExecuteAsync(request, ct).ConfigureAwait(false);
+                    var response = await provider.ExecuteChatAsync(request, ct).ConfigureAwait(false);
                     return new AiExecutorResult
                     {
                         Success = response.Success,

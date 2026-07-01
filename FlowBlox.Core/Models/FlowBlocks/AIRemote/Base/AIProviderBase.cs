@@ -41,11 +41,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
 
         public abstract string ProviderType { get; }
 
-        public virtual bool SupportsNativeResponseContinuation => false;
-
         protected AIProviderBase()
         {
             TimeoutSeconds = 60;
+        }
+
+        public Task<AIResponse> ExecuteChatAsync(AIChatRequest request, CancellationToken ct)
+        {
+            return ExecuteChatAsyncInternal(runtime: null, request, ct);
+        }
+
+        public async Task<AIResponse> ExecuteChatAsync(BaseRuntime runtime, AIChatRequest request, CancellationToken ct)
+        {
+            return await ExecuteChatAsyncInternal(runtime, request, ct).ConfigureAwait(false);
         }
 
         public Task<AIResponse> ExecuteAsync(AIRequest request, CancellationToken ct)
@@ -75,6 +83,52 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             if (string.IsNullOrWhiteSpace(request.Model))
                 request.Model = DefaultModel;
 
+            var chatRequest = new AIChatRequest
+            {
+                Model = request.Model,
+                Temperature = request.Temperature,
+                MaxTokens = request.MaxTokens,
+                TimeoutSecondsOverride = request.TimeoutSecondsOverride,
+                Source = request.Meta.TryGetValue("Source", out var source) ? source?.ToString() ?? string.Empty : string.Empty,
+                Meta = request.Meta
+            };
+
+            if (!string.IsNullOrWhiteSpace(request.SystemInstruction))
+            {
+                chatRequest.SystemMessages.Add(new AIChatMessage
+                {
+                    Role = "system",
+                    Content = request.SystemInstruction
+                });
+            }
+
+            chatRequest.Messages.Add(new AIChatMessage
+            {
+                Role = "user",
+                Content = request.Prompt
+            });
+
+            return await ExecuteChatAsyncInternal(runtime, chatRequest, ct).ConfigureAwait(false);
+        }
+
+        private async Task<AIResponse> ExecuteChatAsyncInternal(BaseRuntime runtime, AIChatRequest request, CancellationToken ct)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            if ((request.Messages == null || request.Messages.Count == 0) &&
+                (request.SystemMessages == null || request.SystemMessages.Count == 0))
+            {
+                return new AIResponse
+                {
+                    Success = false,
+                    Error = "Chat request is empty."
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Model))
+                request.Model = DefaultModel;
+
             var timeoutSeconds = request.TimeoutSecondsOverride ?? TimeoutSeconds;
             if (timeoutSeconds <= 0)
                 timeoutSeconds = 60;
@@ -84,7 +138,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
 
             try
             {
-                return await ExecuteCoreAsync(request, cts.Token).ConfigureAwait(false);
+                return await ExecuteChatCoreAsync(request, cts.Token).ConfigureAwait(false);
             }
             catch (TaskCanceledException ex)
             {
@@ -164,7 +218,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         {
         }
 
-        protected abstract Task<AIResponse> ExecuteCoreAsync(AIRequest request, CancellationToken ct);
+        protected abstract Task<AIResponse> ExecuteChatCoreAsync(AIChatRequest request, CancellationToken ct);
 
         public override void OptionsInit(List<OptionElement> defaults)
         {

@@ -1,11 +1,11 @@
 using System.Text;
-using System.Diagnostics;
-using System.Reflection;
+using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Project;
@@ -23,6 +23,7 @@ namespace FlowBlox.AIAssistant.Services
         private readonly IAiExecutor _executor;
         private readonly IFlowBloxAIToolApi _tools;
         private readonly ILogger? _logger;
+        private readonly Func<AssistantConfiguration>? _configurationProvider;
         private readonly StringComparer _nameComparer = StringComparer.OrdinalIgnoreCase;
         private readonly object _sessionSync = new();
         private int _activeRunCount;
@@ -35,11 +36,13 @@ namespace FlowBlox.AIAssistant.Services
         public AiAssistantService(
             IAiExecutor executor,
             IFlowBloxAIToolApi tools,
-            ILogger? logger = null)
+            ILogger? logger = null,
+            Func<AssistantConfiguration>? configurationProvider = null)
         {
             _executor = executor ?? throw new ArgumentNullException(nameof(executor));
             _tools = tools ?? throw new ArgumentNullException(nameof(tools));
             _logger = logger;
+            _configurationProvider = configurationProvider;
             _tools.FlowBlocksConnectionsChanged += Tools_FlowBlocksConnectionsChanged;
         }
 
@@ -57,6 +60,9 @@ namespace FlowBlox.AIAssistant.Services
         public AssistantConfiguration GetConfiguration(out string error)
         {
             error = string.Empty;
+            if (_configurationProvider != null)
+                return _configurationProvider() ?? new AssistantConfiguration();
+
             var rawConfig = FlowBloxOptions.GetOptionInstance().GetOption("AI.AssistantConfiguration")?.Value ?? string.Empty;
             var parseResult = AssistantConfigurationJson.Parse(rawConfig);
             if (parseResult.HasError)
@@ -93,6 +99,16 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
+        private static AssistantTokenBudget BuildTokenBudget(AssistantConfiguration config)
+        {
+            return new AssistantTokenBudget
+            {
+                MaxContextTokens = Math.Max(0, config?.MaxContextTokens ?? 0),
+                ReservedResponseTokens = Math.Max(0, config?.ReservedResponseTokens ?? 0),
+                ApproximateCharactersPerToken = Math.Clamp(config?.ApproximateCharactersPerToken ?? 4, 1, 20)
+            };
+        }
+
         public async Task<AssistantResult> GenerateProjectAsync(string userPrompt, CancellationToken ct)
         {
             var result = new AssistantResult();
@@ -116,27 +132,15 @@ namespace FlowBlox.AIAssistant.Services
                 return result;
             }
 
-            var configuredProvider = config.Provider ?? new OpenAIProvider();
-            if (!configuredProvider.SupportsNativeResponseContinuation)
-            {
-                result.Success = false;
-                var providerLabel = FlowBloxComponentHelper.GetDisplayName(configuredProvider);
-                var message =
-                    $"Provider '{providerLabel}' does not support native conversation continuation. " +
-                    "AI Assistant requires conversation-capable providers. " +
-                    "Support for non-native continuation providers is planned for a future release.";
-                result.Errors.Add(message);
-                AddTranscript(result, AssistantTranscriptKind.Error, message);
-                return result;
-            }
-
             var maxRounds = Math.Clamp(config.MaxToolRounds, 1, 200);
+            var maxLatestMessages = Math.Clamp(config.MaxLatestMessages, 0, 50);
+            var tokenBudget = BuildTokenBudget(config);
             var session = GetOrCreateSession();
             ToolHandlerUtilities.SetCurrentSessionGuid(session.SessionId);
-            var isConversationStart = string.IsNullOrWhiteSpace(session.LastResponseId);
+            var isConversationStart = session.Messages.Count == 0;
             var toolDefinitions = _tools.GetToolDefinitions();
-            var systemPrompt = BuildSystemPrompt();
-            var sessionBootstrapPrompt = BuildSessionBootstrapPrompt(toolDefinitions);
+            var systemPrompt = AssistantPromptBuilder.BuildSystemPrompt();
+            var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions);
             var latestToolTranscript = new List<string>();
             var knownFlowBlocksByName = CaptureFlowBlocksByName();
             var protocolWriter = TryCreateCommunicationProtocolWriter(config, userPrompt, session.SessionId);
@@ -153,26 +157,28 @@ namespace FlowBlox.AIAssistant.Services
                 for (var round = 1; round <= maxRounds; round++)
                 {
                     ct.ThrowIfCancellationRequested();
-                    var includeConversationStartContext = round == 1 && isConversationStart;
-
-                    var roundPrompt = BuildRoundPrompt(
-                        sessionBootstrapPrompt,
+                    var roundPrompt = AssistantPromptBuilder.BuildRoundPrompt(
                         userPrompt,
-                        includeConversationStartContext ? GetCurrentProjectJson() : null,
+                        round == 1 && isConversationStart ? GetCurrentProjectJson() : null,
                         latestToolTranscript,
                         round,
-                        maxRounds,
-                        includeConversationStartContext);
+                        maxRounds);
                     protocolWriter?.AppendAiAssistantServiceText($"Round {round} prompt prepared", roundPrompt);
 
-                    var exec = await _executor.ExecutePromptAsync(
+                    var chatRequest = AssistantChatRequestBuilder.Build(
                         systemPrompt,
+                        sessionBootstrapPrompt,
+                        session.ConversationSummary,
+                        session.Messages,
                         roundPrompt,
+                        maxLatestMessages,
+                        tokenBudget);
+
+                    var exec = await _executor.ExecuteChatAsync(
+                        chatRequest,
                         config,
-                        session.LastResponseId,
                         ct).ConfigureAwait(false);
                     result.RawModelOutput = exec.RawOutput ?? exec.OutputText ?? string.Empty;
-                    UpdateSessionResponseId(session, exec.ResponseId);
 
                     if (!exec.Success)
                     {
@@ -218,6 +224,7 @@ namespace FlowBlox.AIAssistant.Services
                         AddTranscript(result, AssistantTranscriptKind.Error,
                             "Invalid response format repeated after correction. Aborting.");
                         AppendSessionTurn(session, userPrompt, assistantOutput);
+                        await TryUpdateConversationSummaryAsync(session, config, ct).ConfigureAwait(false);
                         return result;
                     }
 
@@ -244,6 +251,7 @@ namespace FlowBlox.AIAssistant.Services
                             ? assistantOutput
                             : instruction.AssistantMessage;
                         AppendSessionTurn(session, userPrompt, finalText);
+                        await TryUpdateConversationSummaryAsync(session, config, ct).ConfigureAwait(false);
                         return result;
                     }
 
@@ -331,6 +339,7 @@ namespace FlowBlox.AIAssistant.Services
                 AddTranscript(result, AssistantTranscriptKind.Error,
                     $"Reached max tool rounds ({maxRounds}) without a final response.");
                 AppendSessionTurn(session, userPrompt, $"No final response after {maxRounds} rounds.");
+                await TryUpdateConversationSummaryAsync(session, config, ct).ConfigureAwait(false);
                 return result;
             }
             finally
@@ -403,17 +412,6 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
-        private void UpdateSessionResponseId(AssistantSessionState session, string responseId)
-        {
-            if (session == null || string.IsNullOrWhiteSpace(responseId))
-                return;
-
-            lock (_sessionSync)
-            {
-                session.LastResponseId = responseId;
-            }
-        }
-
         private void AppendSessionTurn(AssistantSessionState session, string userPrompt, string assistantMessage)
         {
             if (session == null)
@@ -431,15 +429,76 @@ namespace FlowBlox.AIAssistant.Services
             if (session == null || string.IsNullOrWhiteSpace(content))
                 return;
 
-            session.Messages.Add(new SessionMessage
+            session.Messages.Add(new AssistantConversationMessage
             {
                 Role = role,
                 Content = content.Trim()
             });
 
-            const int maxMessages = 20;
+            const int maxMessages = 200;
             if (session.Messages.Count > maxMessages)
-                session.Messages.RemoveRange(0, session.Messages.Count - maxMessages);
+            {
+                var removedMessageCount = session.Messages.Count - maxMessages;
+                session.Messages.RemoveRange(0, removedMessageCount);
+                session.SummarizedMessageCount = Math.Max(0, session.SummarizedMessageCount - removedMessageCount);
+            }
+        }
+
+        private async Task TryUpdateConversationSummaryAsync(
+            AssistantSessionState session,
+            AssistantConfiguration config,
+            CancellationToken ct)
+        {
+            if (session == null || session.Messages.Count == 0)
+                return;
+
+            try
+            {
+                string currentSummary;
+                int targetSummarizedMessageCount;
+                List<AssistantConversationMessage> messagesToSummarize;
+
+                lock (_sessionSync)
+                {
+                    var maxLatestMessages = Math.Clamp(config.MaxLatestMessages, 0, 50);
+                    targetSummarizedMessageCount = Math.Max(0, session.Messages.Count - maxLatestMessages);
+                    if (targetSummarizedMessageCount <= session.SummarizedMessageCount)
+                        return;
+
+                    currentSummary = session.ConversationSummary;
+                    messagesToSummarize = session.Messages
+                        .Skip(session.SummarizedMessageCount)
+                        .Take(targetSummarizedMessageCount - session.SummarizedMessageCount)
+                        .ToList();
+                }
+
+                if (messagesToSummarize.Count == 0)
+                    return;
+
+                var summaryRequest = AssistantSummaryRequestBuilder.Build(currentSummary, messagesToSummarize);
+                var summaryResult = await _executor.ExecuteChatAsync(summaryRequest, config, ct).ConfigureAwait(false);
+                if (!summaryResult.Success || string.IsNullOrWhiteSpace(summaryResult.OutputText))
+                {
+                    if (!string.IsNullOrWhiteSpace(summaryResult.Error))
+                        _logger?.Warn($"AI Assistant summary update failed: {summaryResult.Error}");
+
+                    return;
+                }
+
+                lock (_sessionSync)
+                {
+                    session.ConversationSummary = summaryResult.OutputText.Trim();
+                    session.SummarizedMessageCount = Math.Max(session.SummarizedMessageCount, targetSummarizedMessageCount);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger?.Warn($"AI Assistant summary update failed: {ex.Message}");
+            }
         }
 
         private static string GetCurrentProjectJson()
@@ -500,205 +559,6 @@ namespace FlowBlox.AIAssistant.Services
 
             result.TranscriptLines.Add(line);
             TranscriptLineAdded?.Invoke(this, line);
-        }
-
-        private static string BuildSystemPrompt()
-        {
-            var prompt = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.SystemMessageKey);
-            if (string.IsNullOrWhiteSpace(prompt))
-            {
-                throw new InvalidOperationException(
-                    $"Required assistant system prompt '{AssistantPromptCatalog.SystemMessageKey}' is missing or empty.");
-            }
-
-            return ReplaceRuntimePromptTokens(prompt);
-        }
-
-        private static string BuildSessionBootstrapPrompt(IReadOnlyList<ToolDefinition> toolDefinitions)
-        {
-            var rootCategories = FlowBlockCategory.GetAll()
-                .Where(x => x.ParentCategory == null)
-                .Select(x => x.DisplayName)
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Distinct(StringComparer.Ordinal)
-                .OrderBy(x => x, StringComparer.Ordinal)
-                .ToList();
-            var template = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.SessionBootstrapKey);
-            if (string.IsNullOrWhiteSpace(template))
-            {
-                throw new InvalidOperationException(
-                    $"Required assistant bootstrap prompt '{AssistantPromptCatalog.SessionBootstrapKey}' is missing or empty.");
-            }
-
-            return ReplaceRuntimePromptTokens(template)
-                .Replace("{{ROOT_CATEGORIES}}", string.Join(", ", rootCategories), StringComparison.Ordinal)
-                .Replace("{{CENTRAL_GUIDELINES}}", BuildCentralGuidelinesText(), StringComparison.Ordinal)
-                .Replace("{{EXPLANATION_MANIFEST}}", BuildExplanationManifestText(), StringComparison.Ordinal)
-                .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal);
-        }
-
-        private static string BuildToolDefinitionsText(IReadOnlyList<ToolDefinition> toolDefinitions)
-        {
-            var sb = new StringBuilder();
-            foreach (var tool in toolDefinitions)
-            {
-                sb.Append("- ");
-                sb.Append(tool.Name);
-                sb.Append(": ");
-                sb.Append(tool.Description);
-                if (tool.ArgumentsSchema?.HasValues == true)
-                {
-                    sb.Append(" args=");
-                    sb.Append(tool.ArgumentsSchema.ToString(Formatting.None));
-                }
-
-                sb.AppendLine();
-            }
-
-            return sb.ToString().TrimEnd();
-        }
-
-        private static string BuildExplanationManifestText()
-        {
-            var explanations = AssistantPromptCatalog.GetAllEntries();
-            if (explanations.Count == 0)
-                return "[]";
-
-            return string.Join(
-                ", ",
-                explanations.Select(x => $"{x.Key}:{x.ContentHash}{(x.IsIncludedInInitialPrompt ? ":included" : ":on-demand")}"));
-        }
-
-        private static string BuildCentralGuidelinesText()
-        {
-            var sections = new List<string>();
-
-            var flowLogic = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.FlowLogicKey);
-            if (!string.IsNullOrWhiteSpace(flowLogic))
-                sections.Add("Topic: FlowLogic\n" + ReplaceRuntimePromptTokens(flowLogic).Trim());
-
-            var iteration = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.IterationContextKey);
-            if (!string.IsNullOrWhiteSpace(iteration))
-                sections.Add("Topic: IterationContext / Flow\n" + ReplaceRuntimePromptTokens(iteration).Trim());
-
-            var objectManagingFlowBlocks = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.FlowBlocksManagingObjectKey);
-            if (!string.IsNullOrWhiteSpace(objectManagingFlowBlocks))
-                sections.Add("Topic: FlowBlocks Managing an Object\n" + ReplaceRuntimePromptTokens(objectManagingFlowBlocks).Trim());
-
-            var editDelete = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.EditAndDeleteKey);
-            if (!string.IsNullOrWhiteSpace(editDelete))
-                sections.Add("Topic: Update / Delete Handling\n" + ReplaceRuntimePromptTokens(editDelete).Trim());
-
-            var namingConventions = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.NamingConventionsKey);
-            if (!string.IsNullOrWhiteSpace(namingConventions))
-                sections.Add("Topic: Naming Conventions\n" + ReplaceRuntimePromptTokens(namingConventions).Trim());
-
-            var executionRequirements = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.ExecutionRequirementsKey);
-            if (!string.IsNullOrWhiteSpace(executionRequirements))
-                sections.Add("Topic: Execution Requirements / Required Fields\n" + ReplaceRuntimePromptTokens(executionRequirements).Trim());
-
-            var flowOrganizationPatterns = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.FlowOrganizationPatternsKey);
-            if (!string.IsNullOrWhiteSpace(flowOrganizationPatterns))
-                sections.Add("Topic: Flow Organization Patterns\n" + ReplaceRuntimePromptTokens(flowOrganizationPatterns).Trim());
-
-            var versionNotes = AssistantPromptCatalog.GetPromptContentOrNull(AssistantPromptCatalog.VersionNotesKey);
-            if (!string.IsNullOrWhiteSpace(versionNotes))
-                sections.Add("Topic: Version Notes\n" + ReplaceRuntimePromptTokens(versionNotes).Trim());
-
-            if (sections.Count == 0)
-                return "No central guidelines available.";
-
-            return string.Join("\n\n", sections);
-        }
-
-        private static string ReplaceRuntimePromptTokens(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return text ?? string.Empty;
-
-            return text
-                .Replace("{{FLOWBLOX_VERSION}}", GetFlowBloxApplicationVersion(), StringComparison.Ordinal)
-                .Replace("{{FLOWBLOX_GITHUB_REPOSITORY_URL}}", GlobalUrls.FlowBloxGitHubRepository, StringComparison.Ordinal)
-                .Replace("{{FLOWBLOX_SAMPLE_EXTENSION_REPOSITORY_URL}}", GlobalUrls.FlowBloxSampleExtensionRepository, StringComparison.Ordinal)
-                .Replace("{{FLOWBLOX_WEBSITE_URL}}", GlobalUrls.FlowBloxWebsite, StringComparison.Ordinal)
-                .Replace("{{FLOWBLOX_REPORT_PROBLEM_URL}}", GlobalUrls.FlowBloxReportProblem, StringComparison.Ordinal);
-        }
-
-        private static string GetFlowBloxApplicationVersion()
-        {
-            try
-            {
-                var entryAssembly = Assembly.GetEntryAssembly();
-                if (entryAssembly == null)
-                    return "unknown";
-
-                var location = entryAssembly.Location;
-                if (!string.IsNullOrWhiteSpace(location))
-                {
-                    var productVersion = FileVersionInfo.GetVersionInfo(location).ProductVersion;
-                    if (!string.IsNullOrWhiteSpace(productVersion))
-                        return productVersion;
-                }
-
-                return entryAssembly.GetName().Version?.ToString() ?? "unknown";
-            }
-            catch
-            {
-                return "unknown";
-            }
-        }
-
-        private static string BuildRoundPrompt(
-            string sessionBootstrapPrompt,
-            string userPrompt,
-            string? projectJson,
-            List<string> toolTranscript,
-            int round,
-            int maxRounds,
-            bool includeConversationStartContext)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($"Round: {round}/{maxRounds}");
-
-            var includeStartContext = round == 1 && includeConversationStartContext;
-
-            if (includeStartContext)
-            {
-                sb.AppendLine(sessionBootstrapPrompt);
-                sb.AppendLine();
-            }
-
-            if (round == 1)
-            {
-                sb.AppendLine("User prompt:");
-                sb.AppendLine(userPrompt);
-                sb.AppendLine();
-
-                if (includeStartContext && !string.IsNullOrWhiteSpace(projectJson))
-                {
-                    sb.AppendLine("Current project JSON:");
-                    sb.AppendLine(projectJson);
-                    sb.AppendLine();
-                }
-
-                sb.AppendLine("Tool execution history (latest first):");
-            }
-            else
-            {
-                sb.AppendLine("Tool execution updates since last round:");
-            }
-
-            if (toolTranscript.Count == 0)
-            {
-                sb.AppendLine("[]");
-            }
-            else
-            {
-                foreach (var item in toolTranscript.TakeLast(20).Reverse())
-                    sb.AppendLine(item);
-            }
-
-            return sb.ToString();
         }
 
         private static bool TryParseAssistantInstruction(string output, out AssistantInstruction instruction)
@@ -1009,14 +869,9 @@ namespace FlowBlox.AIAssistant.Services
         private sealed class AssistantSessionState
         {
             public string SessionId { get; set; } = Guid.NewGuid().ToString("N");
-            public string LastResponseId { get; set; } = string.Empty;
-            public List<SessionMessage> Messages { get; set; } = new();
-        }
-
-        private sealed class SessionMessage
-        {
-            public string Role { get; set; } = string.Empty;
-            public string Content { get; set; } = string.Empty;
+            public string ConversationSummary { get; set; } = string.Empty;
+            public int SummarizedMessageCount { get; set; }
+            public List<AssistantConversationMessage> Messages { get; set; } = new();
         }
 
     }

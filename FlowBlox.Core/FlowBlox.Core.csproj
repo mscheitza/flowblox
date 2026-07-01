@@ -30,30 +30,32 @@
     <None Remove="Models\FlowBlocks\Web\duplicate_tab_shortcut_1.5.1.0.crx" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Anthropic.SDK" Version="5.10.0" />
     <PackageReference Include="CoreCLR-NCalc" Version="3.1.253" />
-    <PackageReference Include="CsvHelper" Version="32.0.3" />
-    <PackageReference Include="EPPlus" Version="8.0.5" />
-    <PackageReference Include="log4net" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.16" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.36" />
-    <PackageReference Include="MailKit" Version="4.16.0" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.23.0" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntimeGenAI.Managed" Version="0.11.4" />
-    <PackageReference Include="Microsoft.ML.Tokenizers" Version="1.0.2" />
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Gpt2" Version="1.0.2" />
-    <PackageReference Include="MySql.Data" Version="8.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.8.0" />
-    <PackageReference Include="PdfPig" Version="0.1.11" />
-    <PackageReference Include="Selenium.Support" Version="4.33.0" />
-    <PackageReference Include="Selenium.WebDriver" Version="4.33.0" />
+    <PackageReference Include="CsvHelper" Version="33.1.0" />
+    <PackageReference Include="EPPlus" Version="8.6.1" />
+    <PackageReference Include="log4net" Version="3.3.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.9" />
+    <PackageReference Include="MailKit" Version="4.17.0" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.27.0" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntimeGenAI.Managed" Version="0.14.1" />
+    <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Gpt2" Version="2.0.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Google" Version="1.76.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.77.0" />
+    <PackageReference Include="MySql.Data" Version="9.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.200" />
+    <PackageReference Include="PdfPig" Version="0.1.15" />
+    <PackageReference Include="Selenium.Support" Version="4.45.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="SkiaSharp" Version="3.119.0" />
-    <PackageReference Include="Svg.Skia" Version="3.0.6" />
-    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageReference Include="SkiaSharp" Version="4.148.0" />
+    <PackageReference Include="Svg.Skia" Version="5.1.1" />
+    <PackageReference Include="System.Resources.Extensions" Version="10.0.9" />
     <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
     <PackageReference Include="Ude.NetStandard" Version="1.2.0" />
   </ItemGroup>
