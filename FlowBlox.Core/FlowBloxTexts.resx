@@ -3711,6 +3711,40 @@ If a Join collector should aggregate links across all page iterations:
 	</data>
 	<data name="SMTPFlowBlock_AcceptInvalidCertificates_Tooltip" xml:space="preserve">
 		<value>Accepts invalid TLS certificates for SMTP connections. Use for testing only.</value>
-	</data></root>
+	</data>	<data name="AssistantConfiguration_Groups_Extended" xml:space="preserve">
+		<value>Advanced settings</value>
+	</data>
+	<data name="AssistantConfiguration_MaxLatestMessages" xml:space="preserve">
+		<value>Maximum latest messages</value>
+	</data>
+	<data name="AssistantConfiguration_MaxLatestMessages_Tooltip" xml:space="preserve">
+		<value>Maximum number of latest user and assistant messages kept verbatim in the chat context.</value>
+	</data>
+	<data name="AssistantConfiguration_MinLatestMessages" xml:space="preserve">
+		<value>Minimum latest messages</value>
+	</data>
+	<data name="AssistantConfiguration_MinLatestMessages_Tooltip" xml:space="preserve">
+		<value>Minimum number of latest messages kept verbatim even if the approximate token budget is exceeded.</value>
+	</data>
+	<data name="AssistantConfiguration_MaxContextTokens" xml:space="preserve">
+		<value>Maximum context tokens</value>
+	</data>
+	<data name="AssistantConfiguration_MaxContextTokens_Tooltip" xml:space="preserve">
+		<value>Approximate maximum context window used for system prompts, summary, latest messages, and the current prompt.</value>
+	</data>
+	<data name="AssistantConfiguration_ReservedResponseTokens" xml:space="preserve">
+		<value>Reserved response tokens</value>
+	</data>
+	<data name="AssistantConfiguration_ReservedResponseTokens_Tooltip" xml:space="preserve">
+		<value>Approximate tokens reserved for the model response when trimming latest messages.</value>
+	</data>
+	<data name="AssistantConfiguration_ApproximateCharactersPerToken" xml:space="preserve">
+		<value>Characters per token</value>
+	</data>
+	<data name="AssistantConfiguration_ApproximateCharactersPerToken_Tooltip" xml:space="preserve">
+		<value>Approximate character-to-token ratio used for provider-independent context trimming.</value>
+	</data>
+</root>
+
 
 

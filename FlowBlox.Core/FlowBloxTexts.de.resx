@@ -3654,6 +3654,40 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
 	</data>
 	<data name="SMTPFlowBlock_AcceptInvalidCertificates_Tooltip" xml:space="preserve">
 		<value>Akzeptiert ungültige TLS-Zertifikate für SMTP-Verbindungen. Nur für Tests verwenden.</value>
-	</data></root>
+	</data>	<data name="AssistantConfiguration_Groups_Extended" xml:space="preserve">
+		<value>Erweiterte Einstellungen</value>
+	</data>
+	<data name="AssistantConfiguration_MaxLatestMessages" xml:space="preserve">
+		<value>Maximale neueste Nachrichten</value>
+	</data>
+	<data name="AssistantConfiguration_MaxLatestMessages_Tooltip" xml:space="preserve">
+		<value>Maximale Anzahl neuester Benutzer- und Assistentennachrichten, die unverändert im Chat-Kontext behalten werden.</value>
+	</data>
+	<data name="AssistantConfiguration_MinLatestMessages" xml:space="preserve">
+		<value>Minimale neueste Nachrichten</value>
+	</data>
+	<data name="AssistantConfiguration_MinLatestMessages_Tooltip" xml:space="preserve">
+		<value>Minimale Anzahl neuester Nachrichten, die auch bei überschrittenem geschätztem Tokenbudget unverändert behalten werden.</value>
+	</data>
+	<data name="AssistantConfiguration_MaxContextTokens" xml:space="preserve">
+		<value>Maximale Kontext-Tokens</value>
+	</data>
+	<data name="AssistantConfiguration_MaxContextTokens_Tooltip" xml:space="preserve">
+		<value>Geschätztes maximales Kontextfenster für System-Prompts, Zusammenfassung, neueste Nachrichten und aktuellen Prompt.</value>
+	</data>
+	<data name="AssistantConfiguration_ReservedResponseTokens" xml:space="preserve">
+		<value>Reservierte Antwort-Tokens</value>
+	</data>
+	<data name="AssistantConfiguration_ReservedResponseTokens_Tooltip" xml:space="preserve">
+		<value>Geschätzte Tokens, die beim Kürzen neuester Nachrichten für die Modellantwort reserviert bleiben.</value>
+	</data>
+	<data name="AssistantConfiguration_ApproximateCharactersPerToken" xml:space="preserve">
+		<value>Zeichen pro Token</value>
+	</data>
+	<data name="AssistantConfiguration_ApproximateCharactersPerToken_Tooltip" xml:space="preserve">
+		<value>Geschätztes Zeichen-zu-Token-Verhältnis für providerunabhängiges Kürzen des Kontextes.</value>
+	</data>
+</root>
+
 
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Header_Title" xml:space="preserve"><value>KI-Assistent</value></data>
+  <data name="Header_Description" xml:space="preserve"><value>Der KI-Assistent kann genutzt werden, um den aktuellen Flow anzupassen oder einen kompletten Flow auf Basis einer Beschreibung zu erstellen.</value></data>
+  <data name="Warning_MissingProvider" xml:space="preserve"><value>Bitte konfigurieren Sie zuerst Ihren AI-Provider. API-Key erforderlich.</value></data>
+  <data name="Tooltip_NewHistory" xml:space="preserve"><value>Neuen Chat starten</value></data>
+  <data name="Tooltip_BackToHistory" xml:space="preserve"><value>Zurück zu den Verläufen</value></data>
+  <data name="Tooltip_Undo" xml:space="preserve"><value>Letzte KI-Projektzustandsänderung rückgängig machen</value></data>
+  <data name="Tooltip_Redo" xml:space="preserve"><value>Letzte KI-Projektzustandsänderung wiederherstellen</value></data>
+  <data name="Tooltip_OpenCommunicationProtocolDirectory" xml:space="preserve"><value>Kommunikationsprotokoll-Verzeichnis öffnen</value></data>
+  <data name="Tooltip_Configure" xml:space="preserve"><value>KI-Assistent konfigurieren</value></data>
+  <data name="ContextMenu_Copy" xml:space="preserve"><value>Kopieren</value></data>
+  <data name="ContextMenu_OpenInEditor" xml:space="preserve"><value>Im Editor öffnen</value></data>
+  <data name="Watermark_Title" xml:space="preserve"><value>FlowBlox AI-Assistant</value></data>
+  <data name="Button_Submit" xml:space="preserve"><value>Senden</value></data>
+  <data name="Button_Cancel" xml:space="preserve"><value>Anhalten</value></data>
+  <data name="Message_CommunicationProtocolDirectory_NotFound_Title" xml:space="preserve"><value>Kommunikationsprotokoll-Verzeichnis nicht gefunden</value></data>
+  <data name="Message_CommunicationProtocolDirectory_NotFound_Description" xml:space="preserve"><value>Das Kommunikationsprotokoll-Verzeichnis existiert nicht: {0}</value></data>
+  <data name="Message_CommunicationProtocolDirectory_OpenFailed_Title" xml:space="preserve"><value>Kommunikationsprotokoll-Verzeichnis konnte nicht geöffnet werden</value></data>
+  <data name="Message_CommunicationProtocolDirectory_OpenFailed_Description" xml:space="preserve"><value>Das Kommunikationsprotokoll-Verzeichnis konnte nicht geöffnet werden. Details: {0}</value></data>
+  <data name="Message_ExecuteInputFileCommand_Confirm_Title" xml:space="preserve"><value>Skriptausführung bestätigen</value></data>
+  <data name="Message_ExecuteInputFileCommand_Confirm_Description" xml:space="preserve"><value>Der KI-Assistent möchte das Input-File-Skript für '{0}' ausführen. Möchten Sie fortfahren?</value></data>
+</root>

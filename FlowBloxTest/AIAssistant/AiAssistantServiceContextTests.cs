@@ -1,4 +1,4 @@
-using FlowBlox.AIAssistant.Builder;
+﻿using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.AIAssistant.Tools;
@@ -23,14 +23,10 @@ namespace FlowBloxTest.AIAssistant
                 .Where(x => x.Source == "FlowBloxAIAssistantSummary")
                 .ToList();
 
-            Assert.AreEqual(2, summaryRequests.Count);
+            Assert.AreEqual(1, summaryRequests.Count);
             AssertContains(summaryRequests[0].Messages.Single().Content, "USER-1");
             AssertContains(summaryRequests[0].Messages.Single().Content, "ASSISTANT-USER-1");
             AssertDoesNotContain(summaryRequests[0].Messages.Single().Content, "USER-2");
-
-            AssertContains(summaryRequests[1].Messages.Single().Content, "USER-2");
-            AssertContains(summaryRequests[1].Messages.Single().Content, "ASSISTANT-USER-2");
-            AssertDoesNotContain(summaryRequests[1].Messages.Single().Content, "USER-3");
         }
 
         [TestMethod]
@@ -58,7 +54,7 @@ namespace FlowBloxTest.AIAssistant
         [TestMethod]
         public void BuildChatRequest_TrimsLatestMessagesByTokenBudget()
         {
-            var request = AssistantChatRequestBuilder.Build(
+            var requestResult = AssistantChatRequestBuilder.Build(
                 systemPrompt: "S",
                 sessionBootstrapPrompt: "B",
                 conversationSummary: string.Empty,
@@ -69,6 +65,7 @@ namespace FlowBloxTest.AIAssistant
                 ],
                 currentUserPrompt: "C",
                 maxLatestMessages: 5,
+                minLatestMessages: 1,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 14,
@@ -76,6 +73,7 @@ namespace FlowBloxTest.AIAssistant
                     ApproximateCharactersPerToken = 1
                 });
 
+            var request = requestResult.Request;
             var historyMessages = request.Messages.Take(request.Messages.Count - 1).ToList();
 
             Assert.AreEqual(1, historyMessages.Count);
@@ -86,13 +84,14 @@ namespace FlowBloxTest.AIAssistant
         [TestMethod]
         public void BuildChatRequest_MarksOnlyStableSystemMessagesForCaching()
         {
-            var request = AssistantChatRequestBuilder.Build(
+            var requestResult = AssistantChatRequestBuilder.Build(
                 systemPrompt: "Stable system",
                 sessionBootstrapPrompt: "Stable bootstrap",
                 conversationSummary: "Variable summary",
                 sessionMessages: [],
                 currentUserPrompt: "Current prompt",
                 maxLatestMessages: 5,
+                minLatestMessages: 1,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,
@@ -100,11 +99,39 @@ namespace FlowBloxTest.AIAssistant
                     ApproximateCharactersPerToken = 4
                 });
 
+            var request = requestResult.Request;
+
             Assert.AreEqual(AIChatCacheBehavior.PreferCache, request.SystemMessages[0].CacheBehavior);
             Assert.AreEqual(AIChatCacheBehavior.PreferCache, request.SystemMessages[1].CacheBehavior);
             Assert.AreEqual(AIChatCacheBehavior.Default, request.SystemMessages[2].CacheBehavior);
         }
 
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_SummarizesMessagesExcludedByEffectiveTokenWindow()
+        {
+            var executor = new RecordingAiExecutor();
+            var config = CreateConfiguration(maxLatestMessages: 4);
+            config.MinLatestMessages = 1;
+            config.MaxContextTokens = 35;
+            config.ApproximateCharactersPerToken = 1;
+            var service = CreateService(executor, config);
+
+            await service.GenerateProjectAsync("USER-1-LONG", CancellationToken.None);
+            await service.GenerateProjectAsync("USER-2-LONG", CancellationToken.None);
+            await service.GenerateProjectAsync("USER-3-LONG", CancellationToken.None);
+
+            var thirdChatRequest = executor.ChatRequests[2];
+            var combinedContext = string.Join(
+                "\n",
+                thirdChatRequest.SystemMessages.Select(x => x.Content).Concat(thirdChatRequest.Messages.Select(x => x.Content)));
+
+            AssertContains(combinedContext, "USER-1-LONG");
+            AssertContains(combinedContext, "ASSISTANT-USER-1-LONG");
+            AssertContains(combinedContext, "USER-2-LONG");
+            AssertContains(combinedContext, "ASSISTANT-USER-2-LONG");
+            AssertContains(combinedContext, "USER-3-LONG");
+        }
         [TestMethod]
         public void BuildSummaryRequest_UsesStructuredSummaryContract()
         {
@@ -139,6 +166,7 @@ namespace FlowBloxTest.AIAssistant
                 MaxContextTokens = 100000,
                 ReservedResponseTokens = 0,
                 ApproximateCharactersPerToken = 4,
+                MinLatestMessages = 1,
                 EnableAutomaticAdjustment = false
             };
         }

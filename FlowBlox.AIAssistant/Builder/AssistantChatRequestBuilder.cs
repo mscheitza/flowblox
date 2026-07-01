@@ -1,16 +1,17 @@
-using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
+﻿using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 
 namespace FlowBlox.AIAssistant.Builder
 {
     internal static class AssistantChatRequestBuilder
     {
-        public static AIChatRequest Build(
+        public static AssistantChatRequestBuildResult Build(
             string systemPrompt,
             string sessionBootstrapPrompt,
             string conversationSummary,
             IReadOnlyList<AssistantConversationMessage> sessionMessages,
             string currentUserPrompt,
             int maxLatestMessages,
+            int minLatestMessages,
             AssistantTokenBudget tokenBudget)
         {
             var request = new AIChatRequest();
@@ -37,7 +38,14 @@ namespace FlowBlox.AIAssistant.Builder
             }
 
             var remainingHistoryTokens = CalculateRemainingHistoryTokens(request.SystemMessages, currentUserPrompt, tokenBudget);
-            foreach (var message in SelectLatestMessages(sessionMessages, maxLatestMessages, remainingHistoryTokens, tokenBudget))
+            var latestSelection = SelectLatestMessages(
+                sessionMessages,
+                maxLatestMessages,
+                minLatestMessages,
+                remainingHistoryTokens,
+                tokenBudget);
+
+            foreach (var message in latestSelection.Messages)
             {
                 request.Messages.Add(new AIChatMessage
                 {
@@ -54,7 +62,12 @@ namespace FlowBlox.AIAssistant.Builder
                 Content = currentUserPrompt
             });
 
-            return request;
+            return new AssistantChatRequestBuildResult
+            {
+                Request = request,
+                FirstIncludedHistoryMessageIndex = latestSelection.FirstIncludedHistoryMessageIndex,
+                IncludedHistoryMessageCount = latestSelection.Messages.Count
+            };
         }
 
         private static int CalculateRemainingHistoryTokens(
@@ -74,33 +87,63 @@ namespace FlowBlox.AIAssistant.Builder
             return Math.Max(0, maxContextTokens - reservedResponseTokens - fixedTokens);
         }
 
-        private static IReadOnlyList<AssistantConversationMessage> SelectLatestMessages(
+        private static LatestMessageSelection SelectLatestMessages(
             IReadOnlyList<AssistantConversationMessage> sessionMessages,
             int maxLatestMessages,
+            int minLatestMessages,
             int maxHistoryTokens,
             AssistantTokenBudget tokenBudget)
         {
-            var candidates = (sessionMessages ?? Array.Empty<AssistantConversationMessage>())
-                .Where(x => !string.IsNullOrWhiteSpace(x?.Content))
-                .TakeLast(Math.Clamp(maxLatestMessages, 0, 50))
+            var messages = sessionMessages ?? Array.Empty<AssistantConversationMessage>();
+            var maxMessages = Math.Clamp(maxLatestMessages, 0, 50);
+            var minMessages = Math.Clamp(minLatestMessages, 0, maxMessages);
+
+            var indexedCandidates = messages
+                .Select((message, index) => new IndexedConversationMessage(message, index))
+                .Where(x => !string.IsNullOrWhiteSpace(x.Message?.Content))
+                .TakeLast(maxMessages)
                 .Reverse()
                 .ToList();
 
-            var selected = new List<AssistantConversationMessage>();
+            var selected = new List<IndexedConversationMessage>();
             var usedTokens = 0;
 
-            foreach (var message in candidates)
+            foreach (var candidate in indexedCandidates)
             {
-                var messageTokens = tokenBudget.EstimateTokens(message.Content);
-                if (usedTokens + messageTokens > maxHistoryTokens)
+                var messageTokens = tokenBudget.EstimateTokens(candidate.Message.Content);
+                if (selected.Count >= minMessages && usedTokens + messageTokens > maxHistoryTokens)
                     break;
 
-                selected.Add(message);
+                selected.Add(candidate);
                 usedTokens += messageTokens;
             }
 
             selected.Reverse();
-            return selected;
+            return new LatestMessageSelection
+            {
+                Messages = selected.Select(x => x.Message).ToList(),
+                FirstIncludedHistoryMessageIndex = selected.Count == 0
+                    ? messages.Count
+                    : selected.Min(x => x.Index)
+            };
+        }
+
+        private sealed class LatestMessageSelection
+        {
+            public List<AssistantConversationMessage> Messages { get; init; } = new();
+            public int FirstIncludedHistoryMessageIndex { get; init; }
+        }
+
+        private sealed class IndexedConversationMessage
+        {
+            public IndexedConversationMessage(AssistantConversationMessage message, int index)
+            {
+                Message = message;
+                Index = index;
+            }
+
+            public AssistantConversationMessage Message { get; }
+            public int Index { get; }
         }
     }
 }

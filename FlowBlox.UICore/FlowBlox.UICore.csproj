@@ -30,10 +30,15 @@
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Resources\AIAssistantControl.Designer.cs">
+    <Compile Update="Resources\AiAssistantChatView.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>AIAssistantControl.resx</DependentUpon>
+      <DependentUpon>AiAssistantChatView.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\AiAssistantHistoryView.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AiAssistantHistoryView.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\CreateExtensionVersionWindow.Designer.cs">
       <DependentUpon>CreateExtensionVersionWindow.resx</DependentUpon>
@@ -195,9 +200,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Resources\AIAssistantControl.resx">
+    <EmbeddedResource Update="Resources\AiAssistantChatView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AIAssistantControl.Designer.cs</LastGenOutput>
+      <LastGenOutput>AiAssistantChatView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AiAssistantHistoryView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AiAssistantHistoryView.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\CreateExtensionVersionWindow.resx">
       <LastGenOutput>CreateExtensionVersionWindow.Designer.cs</LastGenOutput>

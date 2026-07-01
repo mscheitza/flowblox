@@ -1,4 +1,4 @@
-using FlowBlox.AIAssistant.Models;
+﻿using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Components;
@@ -20,6 +20,12 @@ namespace FlowBlox.AIAssistant
                 "AI.CommuncationProtocolDir",
                 @"%localappdata%\FlowBlox\logs\ai_assistant_protocol",
                 "Directory path for AI assistant communication protocol files.",
+                OptionElement.OptionType.Text));
+
+            defaults.Add(new OptionElement(
+                "AI.AssistantHistoryDirectory",
+                @"%localappdata%\FlowBlox\ai_assistant_histories",
+                "Directory path for AI assistant history files.",
                 OptionElement.OptionType.Text));
         }
     }

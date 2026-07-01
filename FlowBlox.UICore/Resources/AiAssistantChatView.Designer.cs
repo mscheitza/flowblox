@@ -22,14 +22,14 @@ namespace FlowBlox.UICore.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AIAssistantControl {
+    public class AiAssistantChatView {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AIAssistantControl() {
+        internal AiAssistantChatView() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace FlowBlox.UICore.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.AIAssistantControl", typeof(AIAssistantControl).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.AiAssistantChatView", typeof(AiAssistantChatView).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -169,20 +169,11 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Are you sure you want to reset the assistant communication state? All session and transcript states will be reset. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Back to histories ähnelt.
         /// </summary>
-        public static string Message_ResetCommunicationState_Question {
+        public static string Tooltip_BackToHistory {
             get {
-                return ResourceManager.GetString("Message_ResetCommunicationState_Question", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reset Communication State ähnelt.
-        /// </summary>
-        public static string Message_ResetCommunicationState_Title {
-            get {
-                return ResourceManager.GetString("Message_ResetCommunicationState_Title", resourceCulture);
+                return ResourceManager.GetString("Tooltip_BackToHistory", resourceCulture);
             }
         }
         
@@ -192,6 +183,15 @@ namespace FlowBlox.UICore.Resources {
         public static string Tooltip_Configure {
             get {
                 return ResourceManager.GetString("Tooltip_Configure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start new chat ähnelt.
+        /// </summary>
+        public static string Tooltip_NewHistory {
+            get {
+                return ResourceManager.GetString("Tooltip_NewHistory", resourceCulture);
             }
         }
         
@@ -210,15 +210,6 @@ namespace FlowBlox.UICore.Resources {
         public static string Tooltip_Redo {
             get {
                 return ResourceManager.GetString("Tooltip_Redo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reset communication state ähnelt.
-        /// </summary>
-        public static string Tooltip_ResetCommunicationState {
-            get {
-                return ResourceManager.GetString("Tooltip_ResetCommunicationState", resourceCulture);
             }
         }
         

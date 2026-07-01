@@ -1,0 +1,376 @@
+<UserControl x:Class="FlowBlox.UICore.Views.AiAssistantChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:aiModels="clr-namespace:FlowBlox.AIAssistant.Models;assembly=FlowBlox.AIAssistant"
+             xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="450">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+            <Style x:Key="AIAssistantTranscriptItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0,0,0,8" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="AIAssistantTranscriptBubbleStyle" TargetType="{x:Type Border}">
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Padding" Value="8,6" />
+                <Setter Property="Background" Value="#FFF3F4F6" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="MaxWidth" Value="560" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.User}">
+                        <Setter Property="Background" Value="#FFE8F3FF" />
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Status}">
+                        <Setter Property="Background" Value="#FFFFF7DB" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Error}">
+                        <Setter Property="Background" Value="#FFFDECEC" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolProcessing}">
+                        <Setter Property="Background" Value="#FFE8F3FF" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolSuccess}">
+                        <Setter Property="Background" Value="#FFEAF8EE" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolPartialSuccess}">
+                        <Setter Property="Background" Value="#FFE7F6EA" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolError}">
+                        <Setter Property="Background" Value="#FFFFF7DB" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="AIAssistantTranscriptIconStyle" TargetType="{x:Type iconPacks:PackIconMaterial}">
+                <Setter Property="Kind" Value="MessageTextOutline" />
+                <Setter Property="Foreground" Value="#FF4B5563" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.User}">
+                        <Setter Property="Kind" Value="AccountCircleOutline" />
+                        <Setter Property="Foreground" Value="#FF1565C0" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Assistant}">
+                        <Setter Property="Kind" Value="RobotOutline" />
+                        <Setter Property="Foreground" Value="#FF374151" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Status}">
+                        <Setter Property="Kind" Value="InformationOutline" />
+                        <Setter Property="Foreground" Value="#FF8A6D1F" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.Error}">
+                        <Setter Property="Kind" Value="AlertCircleOutline" />
+                        <Setter Property="Foreground" Value="#FFB71C1C" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolProcessing}">
+                        <Setter Property="Kind" Value="ProgressClock" />
+                        <Setter Property="Foreground" Value="#FF1565C0" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolSuccess}">
+                        <Setter Property="Kind" Value="CheckCircle" />
+                        <Setter Property="Foreground" Value="#FF2E7D32" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolPartialSuccess}">
+                        <Setter Property="Kind" Value="CheckCircleOutline" />
+                        <Setter Property="Foreground" Value="#FF2E7D32" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="{x:Static aiModels:AssistantTranscriptKind.ToolError}">
+                        <Setter Property="Kind" Value="AlertBoxOutline" />
+                        <Setter Property="Foreground" Value="#FF8A6D1F" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="#FFEEEEEE"
+                Height="48"
+                Padding="10,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{x:Static resources:AiAssistantChatView.Header_Title}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           FontSize="16" />
+
+                <Button Grid.Column="1"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="8,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_NewHistory}"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{Binding NewHistoryCommand}">
+                    <iconPacks:PackIconMaterial Kind="Plus"
+                                                Width="18"
+                                                Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                </Button>
+
+                <Button Grid.Column="2"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="8,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_BackToHistory}"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{Binding BackToHistoryCommand}">
+                    <iconPacks:PackIconMaterial Kind="History"
+                                                Width="18"
+                                                Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                </Button>
+
+                <Button Grid.Column="3"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="8,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Undo}"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{Binding UndoProjectStateCommand}">
+                    <iconPacks:PackIconMaterial Kind="Undo"
+                                                Width="18"
+                                                Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                </Button>
+
+                <Button Grid.Column="4"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="4,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Redo}"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{Binding RedoProjectStateCommand}">
+                    <iconPacks:PackIconMaterial Kind="Redo"
+                                                Width="18"
+                                                Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                </Button>
+
+                <Button Grid.Column="5"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="4,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_OpenCommunicationProtocolDirectory}"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Command="{Binding OpenCommunicationProtocolDirectoryCommand}">
+                    <iconPacks:PackIconMaterial Kind="FolderOpenOutline"
+                                                Width="18"
+                                                Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                </Button>
+
+                <Button x:Name="SettingsButton"
+                        Grid.Column="6"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        Margin="4,0,0,0"
+                        HorizontalAlignment="Right"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Configure}"
+                        BorderThickness="0"
+                        Background="Transparent">
+                    <iconPacks:PackIconMaterial Kind="CogOutline"
+                                                Width="18"
+                                                Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1"
+                Background="#EDF3F9"
+                Padding="10"
+                CornerRadius="4"
+                Margin="0,8,0,6">
+            <TextBlock Text="{x:Static resources:AiAssistantChatView.Header_Description}"
+                       Foreground="DarkSlateGray"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <Border Grid.Row="2"
+                Background="#FFF6E27A"
+                Padding="10"
+                CornerRadius="4"
+                Margin="0,0,0,8"
+                Visibility="{Binding ShowProviderConfigurationWarning, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="{x:Static resources:AiAssistantChatView.Warning_MissingProvider}"
+                       Foreground="#FF5E4A00"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <Border Grid.Row="3"
+                Background="#FFFFFFFF"
+                BorderBrush="#FFD0D0D0"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="6">
+            <Grid>
+                <ListBox x:Name="TranscriptListBox"
+                         ItemsSource="{Binding Transcript}"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         HorizontalContentAlignment="Stretch"
+                         ItemContainerStyle="{StaticResource AIAssistantTranscriptItemContainerStyle}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource AIAssistantTranscriptBubbleStyle}"
+                                    Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{x:Static resources:AiAssistantChatView.ContextMenu_Copy}"
+                                                  Command="{Binding PlacementTarget.Tag.CopyTranscriptEntryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="ContentCopy" Width="16" Height="16" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="{x:Static resources:AiAssistantChatView.ContextMenu_OpenInEditor}"
+                                                  Command="{Binding PlacementTarget.Tag.OpenTranscriptEntryInEditorCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="OpenInNew" Width="16" Height="16" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconMaterial Grid.Column="0"
+                                                                Width="16"
+                                                                Height="16"
+                                                                Margin="0,1,8,0"
+                                                                VerticalAlignment="Top"
+                                                                Style="{StaticResource AIAssistantTranscriptIconStyle}" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Text}"
+                                               TextWrapping="Wrap"
+                                               VerticalAlignment="Top"
+                                               Foreground="#FF1F2937" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel IsHitTestVisible="False"
+                            Opacity="0.16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <StackPanel.Style>
+                        <Style TargetType="{x:Type StackPanel}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=TranscriptListBox, Path=HasItems}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <iconPacks:PackIconMaterial Kind="RobotOutline"
+                                                Width="84"
+                                                Height="84"
+                                                Foreground="#FF666666"
+                                                HorizontalAlignment="Center" />
+                    <TextBlock Text="{x:Static resources:AiAssistantChatView.Watermark_Title}"
+                               Foreground="#FF666666"
+                               FontSize="14"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="4"
+                Margin="0,8,0,8"
+                Background="#FFFFFFFF"
+                BorderBrush="#FFD0D0D0"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="6">
+            <TextBox x:Name="PromptTextBox"
+                     Height="180"
+                     MinHeight="120"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     IsEnabled="{Binding CanEditInput}"
+                     Text="{Binding CurrentInput, UpdateSourceTrigger=PropertyChanged}" />
+        </Border>
+
+        <StackPanel Grid.Row="5"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="{x:Static resources:AiAssistantChatView.Button_Submit}"
+                    MinWidth="90"
+                    Style="{StaticResource FlowBlox.RoundedActionButtonStyle}"
+                    Margin="0,0,8,0"
+                    Command="{Binding SubmitCommand}" />
+            <Button Content="{x:Static resources:AiAssistantChatView.Button_Cancel}"
+                    MinWidth="90"
+                    Style="{StaticResource FlowBlox.RoundedActionButtonStyle}"
+                    Command="{Binding StopCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

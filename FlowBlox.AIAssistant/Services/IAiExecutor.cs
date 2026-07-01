@@ -6,10 +6,10 @@ namespace FlowBlox.AIAssistant.Services
     public class AiExecutorResult
     {
         public bool Success { get; set; }
-        public string OutputText { get; set; } = string.Empty;
-        public string Error { get; set; } = string.Empty;
-        public string RawOutput { get; set; } = string.Empty;
-        public string ResponseId { get; set; } = string.Empty;
+        public string OutputText { get; set; }
+        public string Error { get; set; }
+        public string RawOutput { get; set; }
+        public string ResponseId { get; set; }
     }
 
     public interface IAiExecutor

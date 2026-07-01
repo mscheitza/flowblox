@@ -1,22 +1,8 @@
 using FlowBlox.AIAssistant.Models;
-using FlowBlox.AIAssistant.Services;
-using FlowBlox.Core.DependencyInjection;
-using FlowBlox.Core.Util;
-using FlowBlox.Core.Util.Resources;
-using FlowBlox.AIAssistant.Tools;
-using FlowBlox.Core.Logging;
-using FlowBlox.UICore.Resources;
-using FlowBlox.UICore.Commands;
-using FlowBlox.UICore.Enums;
-using FlowBlox.UICore.Interfaces;
-using FlowBlox.UICore.Utilities;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Collections.ObjectModel;
+using FlowBlox.AIAssistant.History;
+using FlowBlox.Core.Models.Components;
+using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Threading;
-using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels
 {
@@ -31,422 +17,119 @@ namespace FlowBlox.UICore.ViewModels
         public string ProjectSpaceEndpointUri { get; init; }
     }
 
-    public class AIAssistantViewModel : INotifyPropertyChanged
+    public sealed class AIAssistantViewModel : INotifyPropertyChanged
     {
-        private readonly AiAssistantService _service;
-        private readonly IFlowBloxMessageBoxService _messageBoxService;
-        private readonly SynchronizationContext? _uiContext;
-        private CancellationTokenSource? _cts;
-        private string _currentInput = string.Empty;
-        private bool _isBusy;
-        private Func<AIAssistantProjectStateSnapshot?>? _captureProjectState;
-        private Func<AIAssistantProjectStateSnapshot, bool>? _restoreProjectState;
-        private AIAssistantProjectStateSnapshot? _stateBeforeLastPrompt;
-        private AIAssistantProjectStateSnapshot? _stateAfterLastPrompt;
-        private bool _isPromptStateUndone;
+        private bool _isHistoryOverviewVisible = true;
 
-        public ObservableCollection<AssistantTranscriptLine> Transcript { get; } = new ObservableCollection<AssistantTranscriptLine>();
+        public AiAssistantChatViewModel ChatViewModel { get; } = new();
+        public AiAssistantHistoryViewModel HistoryViewModel { get; } = new();
 
-        public RelayCommand SubmitCommand { get; }
-        public RelayCommand StopCommand { get; }
-        public RelayCommand CopyTranscriptEntryCommand { get; }
-        public RelayCommand OpenTranscriptEntryInEditorCommand { get; }
-        public RelayCommand OpenCommunicationProtocolDirectoryCommand { get; }
-        public RelayCommand ResetCommunicationStateCommand { get; }
-        public RelayCommand UndoProjectStateCommand { get; }
-        public RelayCommand RedoProjectStateCommand { get; }
-
-        public string CurrentInput
+        public bool IsHistoryOverviewVisible
         {
-            get => _currentInput;
-            set
-            {
-                if (_currentInput != value)
-                {
-                    _currentInput = value;
-                    OnPropertyChanged(nameof(CurrentInput));
-                    SubmitCommand.Invalidate();
-                }
-            }
-        }
-
-        public bool IsBusy
-        {
-            get => _isBusy;
+            get => _isHistoryOverviewVisible;
             private set
             {
-                if (_isBusy != value)
-                {
-                    _isBusy = value;
-                    OnPropertyChanged(nameof(IsBusy));
-                    OnPropertyChanged(nameof(CanEditInput));
-                    SubmitCommand.Invalidate();
-                    StopCommand.Invalidate();
-                    ResetCommunicationStateCommand.Invalidate();
-                    RefreshUndoRedoState();
-                }
+                if (_isHistoryOverviewVisible == value)
+                    return;
+
+                _isHistoryOverviewVisible = value;
+                OnPropertyChanged(nameof(IsHistoryOverviewVisible));
+                OnPropertyChanged(nameof(IsChatVisible));
             }
         }
 
-        public bool CanEditInput => !IsBusy;
-        public bool ShowProviderConfigurationWarning => !_isProviderConfigured;
-        public bool CanUndoProjectState =>
-            !IsBusy &&
-            _stateBeforeLastPrompt != null &&
-            _stateAfterLastPrompt != null &&
-            !_isPromptStateUndone;
-
-        public bool CanRedoProjectState =>
-            !IsBusy &&
-            _stateBeforeLastPrompt != null &&
-            _stateAfterLastPrompt != null &&
-            _isPromptStateUndone;
+        public bool IsChatVisible => !IsHistoryOverviewVisible;
 
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
-        private bool _isProviderConfigured;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public AIAssistantViewModel()
         {
-            _uiContext = SynchronizationContext.Current;
-            _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
-            var toolApi = new DefaultToolApi
-            {
-                ToolExecutionConfirmationCallback = ConfirmToolExecutionRequest
-            };
-            _service = new AiAssistantService(
-                new AiProviderExecutor(),
-                toolApi,
-                FlowBloxLogManager.Instance.GetLogger());
-            _service.FlowBlocksChanged += Service_FlowBlocksChanged;
-            _service.TranscriptLineAdded += Service_TranscriptLineAdded;
+            ChatViewModel.FlowBlocksChanged += (_, e) => FlowBlocksChanged?.Invoke(this, e);
+            ChatViewModel.NewHistoryRequested += (_, _) => StartNewChat();
+            ChatViewModel.HistoryRequested += (_, _) => ShowHistoryOverview();
 
-            SubmitCommand = new RelayCommand(async () => await SubmitAsync(), CanSubmit);
-            StopCommand = new RelayCommand(Stop, () => IsBusy);
-            CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
-            OpenTranscriptEntryInEditorCommand = new RelayCommand(OpenTranscriptEntryInEditor);
-            OpenCommunicationProtocolDirectoryCommand = new RelayCommand(OpenCommunicationProtocolDirectory);
-            ResetCommunicationStateCommand = new RelayCommand(ResetCommunicationState, () => !IsBusy);
-            UndoProjectStateCommand = new RelayCommand(UndoProjectState, () => CanUndoProjectState);
-            RedoProjectStateCommand = new RelayCommand(RedoProjectState, () => CanRedoProjectState);
+            HistoryViewModel.NewHistoryRequested += (_, _) => StartNewChat();
+            HistoryViewModel.HistoryOpenRequested += (_, item) => OpenHistory(item);
+            HistoryViewModel.Histories.CollectionChanged += Histories_CollectionChanged;
 
-            RefreshProviderConfigurationState();
-        }
-
-        private bool CanSubmit()
-        {
-            return !IsBusy && !string.IsNullOrWhiteSpace(CurrentInput);
-        }
-
-        private async Task SubmitAsync()
-        {
-            var input = CurrentInput?.Trim();
-            if (string.IsNullOrWhiteSpace(input) || IsBusy)
-                return;
-
-            var stateBeforePrompt = _captureProjectState?.Invoke();
-            var promptCompleted = false;
-
-            AddTranscriptLine(new AssistantTranscriptLine
-            {
-                Kind = AssistantTranscriptKind.User,
-                Text = input,
-                Timestamp = DateTime.Now
-            });
-
-            IsBusy = true;
-            _cts = new CancellationTokenSource();
-
-            try
-            {
-                await _service.GenerateProjectAsync(input, _cts.Token);
-                promptCompleted = true;
-            }
-            catch (OperationCanceledException)
-            {
-                AddTranscriptLine(new AssistantTranscriptLine
-                {
-                    Kind = AssistantTranscriptKind.Status,
-                    Text = "Stopped.",
-                    Timestamp = DateTime.Now
-                });
-            }
-            catch (Exception ex)
-            {
-                AddTranscriptLine(new AssistantTranscriptLine
-                {
-                    Kind = AssistantTranscriptKind.Error,
-                    Text = ex.Message,
-                    Timestamp = DateTime.Now
-                });
-            }
-            finally
-            {
-                if (promptCompleted && stateBeforePrompt != null)
-                {
-                    var stateAfterPrompt = _captureProjectState?.Invoke();
-                    if (stateAfterPrompt != null)
-                    {
-                        _stateBeforeLastPrompt = stateBeforePrompt;
-                        _stateAfterLastPrompt = stateAfterPrompt;
-                        _isPromptStateUndone = false;
-                        RefreshUndoRedoState();
-                    }
-                }
-
-                CurrentInput = string.Empty;
-                IsBusy = false;
-                _cts?.Dispose();
-                _cts = null;
-            }
-        }
-
-        private void Stop()
-        {
-            if (!IsBusy)
-                return;
-
-            _cts?.Cancel();
-        }
-
-        private void UndoProjectState()
-        {
-            if (!CanUndoProjectState || _restoreProjectState == null || _stateBeforeLastPrompt == null)
-                return;
-
-            if (_restoreProjectState.Invoke(_stateBeforeLastPrompt))
-            {
-                _isPromptStateUndone = true;
-                RefreshUndoRedoState();
-            }
-        }
-
-        private void RedoProjectState()
-        {
-            if (!CanRedoProjectState || _restoreProjectState == null || _stateAfterLastPrompt == null)
-                return;
-
-            if (_restoreProjectState.Invoke(_stateAfterLastPrompt))
-            {
-                _isPromptStateUndone = false;
-                RefreshUndoRedoState();
-            }
-        }
-
-        private void Service_FlowBlocksChanged(object? sender, FlowBlocksChangedEventArgs e)
-        {
-            FlowBlocksChanged?.Invoke(this, e);
-        }
-
-        private void Service_TranscriptLineAdded(object? sender, AssistantTranscriptLine line)
-        {
-            AddTranscriptLine(line);
-        }
-
-        private bool ConfirmToolExecutionRequest(ToolRequest request)
-        {
-            if (request == null || !string.Equals(request.ToolName, "ExecuteInputFileCommand", StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            var key = request.Arguments?.Value<string>("key") ?? string.Empty;
-            var message = string.Format(
-                FlowBloxResourceUtil.GetLocalizedString("Message_ExecuteInputFileCommand_Confirm_Description", typeof(AIAssistantControl)),
-                key);
-
-            var title = FlowBloxResourceUtil.GetLocalizedString("Message_ExecuteInputFileCommand_Confirm_Title", typeof(AIAssistantControl));
-            var decision = _messageBoxService?.ShowMessageBox(message, title, FlowBloxMessageBoxTypes.Question);
-
-            return decision == FlowBloxMessageBoxDialogResult.Yes;
-        }
-
-        private void CopyTranscriptEntry(object parameter)
-        {
-            if (parameter is not AssistantTranscriptLine line)
-                return;
-
-            var content = GetTranscriptContent(line);
-            if (string.IsNullOrWhiteSpace(content))
-                return;
-
-            Clipboard.SetText(content);
-        }
-
-        private void OpenTranscriptEntryInEditor(object parameter)
-        {
-            if (parameter is not AssistantTranscriptLine line)
-                return;
-
-            var content = GetTranscriptContent(line);
-            if (string.IsNullOrWhiteSpace(content))
-                return;
-
-            var subject = $"AIAssistant_{line.Timestamp:yyyyMMdd_HHmmss}_{line.Kind}";
-            FlowBloxEditingHelper.OpenUsingEditor(content, subject);
-        }
-
-        private void OpenCommunicationProtocolDirectory(object _)
-        {
-            try
-            {
-                var options = FlowBloxOptions.GetOptionInstance();
-                var directory = options.GetOption("AI.CommuncationProtocolDir")?.Value;
-                if (string.IsNullOrWhiteSpace(directory))
-                {
-                    directory = Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                        "FlowBlox",
-                        "logs",
-                        "ai_assistant_protocol");
-                }
-
-                if (!Directory.Exists(directory))
-                {
-                    _messageBoxService?.ShowMessageBox(
-                        string.Format(
-                            FlowBloxResourceUtil.GetLocalizedString("Message_CommunicationProtocolDirectory_NotFound_Description", typeof(AIAssistantControl)),
-                            directory),
-                        FlowBloxResourceUtil.GetLocalizedString("Message_CommunicationProtocolDirectory_NotFound_Title", typeof(AIAssistantControl)),
-                        FlowBloxMessageBoxTypes.Warning);
-                    return;
-                }
-
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = directory,
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
-            {
-                _messageBoxService?.ShowMessageBox(
-                    string.Format(
-                        FlowBloxResourceUtil.GetLocalizedString("Message_CommunicationProtocolDirectory_OpenFailed_Description", typeof(AIAssistantControl)),
-                        ex.Message),
-                    FlowBloxResourceUtil.GetLocalizedString("Message_CommunicationProtocolDirectory_OpenFailed_Title", typeof(AIAssistantControl)),
-                    FlowBloxMessageBoxTypes.Error);
-            }
-        }
-
-        private void ResetCommunicationState()
-        {
-            if (IsBusy)
-                return;
-
-            var result = _messageBoxService?.ShowMessageBox(
-                FlowBloxResourceUtil.GetLocalizedString(
-                    "Message_ResetCommunicationState_Question",
-                    typeof(AIAssistantControl)),
-                FlowBloxResourceUtil.GetLocalizedString(
-                    "Message_ResetCommunicationState_Title",
-                    typeof(AIAssistantControl)),
-                FlowBloxMessageBoxTypes.Question);
-
-            if (result != FlowBloxMessageBoxDialogResult.Yes)
-                return;
-
-            ResetForProjectInitialization();
-        }
-
-        private static string GetTranscriptContent(AssistantTranscriptLine line)
-        {
-            if (line == null)
-                return string.Empty;
-
-            var sb = new StringBuilder();
-            sb.AppendLine($"Timestamp: {line.Timestamp:O}");
-            sb.AppendLine($"Kind: {line.Kind}");
-
-            if (!string.IsNullOrWhiteSpace(line.Text))
-            {
-                sb.AppendLine();
-                sb.AppendLine("Text:");
-                sb.AppendLine(line.Text);
-            }
-
-            if (!string.IsNullOrWhiteSpace(line.InternalContent))
-            {
-                sb.AppendLine();
-                sb.AppendLine("Details:");
-                sb.AppendLine(line.InternalContent);
-            }
-
-            return sb.ToString().TrimEnd();
-        }
-
-        private void AddTranscriptLine(AssistantTranscriptLine line)
-        {
-            if (line == null)
-                return;
-
-            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
-            {
-                _uiContext.Post(_ => Transcript.Add(line), null);
-                return;
-            }
-
-            Transcript.Add(line);
+            HistoryViewModel.Refresh();
+            if (HistoryViewModel.HasHistories)
+                ShowHistoryOverview();
+            else
+                StartNewChat();
         }
 
         public void ResetForProjectInitialization()
         {
-            Stop();
-            _service.ResetSession();
-            Transcript.Clear();
-            CurrentInput = string.Empty;
-            IsBusy = false;
-            _stateBeforeLastPrompt = null;
-            _stateAfterLastPrompt = null;
-            _isPromptStateUndone = false;
-            RefreshProviderConfigurationState();
-            RefreshUndoRedoState();
+            ChatViewModel.ResetForProjectInitialization();
+            HistoryViewModel.Refresh();
+            if (HistoryViewModel.HasHistories)
+                ShowHistoryOverview();
+            else
+                StartNewChat();
         }
 
         public void ConfigureProjectStateAccess(
             Func<AIAssistantProjectStateSnapshot?> captureProjectState,
             Func<AIAssistantProjectStateSnapshot, bool> restoreProjectState)
         {
-            _captureProjectState = captureProjectState;
-            _restoreProjectState = restoreProjectState;
-            RefreshUndoRedoState();
+            ChatViewModel.ConfigureProjectStateAccess(captureProjectState, restoreProjectState);
+            HistoryViewModel.ConfigureProjectStateAccess(captureProjectState);
+            if (HistoryViewModel.HasHistories)
+                ShowHistoryOverview();
+            else
+                StartNewChat();
         }
 
-        public AssistantConfiguration GetConfiguration(out string error) => _service.GetConfiguration(out error);
+        public AssistantConfiguration GetConfiguration(out string error) =>
+            ChatViewModel.GetConfiguration(out error);
 
-        public bool SaveConfiguration(AssistantConfiguration configuration, out string error) =>
-            SaveConfigurationInternal(configuration, out error);
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+        public bool SaveConfiguration(AssistantConfiguration configuration, out string error)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var success = ChatViewModel.SaveConfiguration(configuration, out error);
+            HistoryViewModel.Refresh();
+            RefreshChatNavigationState();
+            return success;
         }
 
-        private void RefreshUndoRedoState()
+        private void StartNewChat()
         {
-            OnPropertyChanged(nameof(CanUndoProjectState));
-            OnPropertyChanged(nameof(CanRedoProjectState));
-            UndoProjectStateCommand.Invalidate();
-            RedoProjectStateCommand.Invalidate();
+            ChatViewModel.StartNewHistory();
+            IsHistoryOverviewVisible = false;
+            RefreshChatNavigationState();
         }
 
-        public void RefreshProviderConfigurationState()
+        private void OpenHistory(AiAssistantHistoryListItem item)
         {
-            var configuration = _service.GetConfiguration(out _);
-            var isConfigured = configuration?.Provider != null;
+            ChatViewModel.OpenHistory(item);
+            IsHistoryOverviewVisible = false;
+            RefreshChatNavigationState();
+        }
 
-            if (_isProviderConfigured == isConfigured)
+        private void ShowHistoryOverview()
+        {
+            if (!HistoryViewModel.HasHistories)
                 return;
 
-            _isProviderConfigured = isConfigured;
-            OnPropertyChanged(nameof(ShowProviderConfigurationWarning));
+            HistoryViewModel.Refresh();
+            IsHistoryOverviewVisible = true;
+            RefreshChatNavigationState();
         }
 
-        private bool SaveConfigurationInternal(AssistantConfiguration configuration, out string error)
+        private void Histories_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            var success = _service.SaveConfiguration(configuration, out error);
-            if (success)
-                RefreshProviderConfigurationState();
+            RefreshChatNavigationState();
+        }
 
-            return success;
+        private void RefreshChatNavigationState()
+        {
+            ChatViewModel.CanGoBackToHistory = HistoryViewModel.HasHistories;
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
