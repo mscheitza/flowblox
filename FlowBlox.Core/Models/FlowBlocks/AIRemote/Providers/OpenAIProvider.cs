@@ -23,7 +23,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         public OpenAIProvider()
         {
             BaseUrl = "https://api.openai.com/v1";
-            DefaultModel = "gpt-5.4";
+            DefaultModel = "gpt-5.5";
             TimeoutSeconds = 60;
         }
 

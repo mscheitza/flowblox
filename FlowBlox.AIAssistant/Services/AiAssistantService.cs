@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using FlowBlox.AIAssistant.Builder;
+using FlowBlox.AIAssistant.Constants;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Grid.Elements.Util;
@@ -69,19 +70,38 @@ namespace FlowBlox.AIAssistant.Services
                 {
                     ConversationSummary = history?.ConversationSummary ?? string.Empty,
                     SummarizedMessageCount = Math.Max(0, history?.SummarizedMessageCount ?? 0),
-                    LastRound = Math.Max(0, history?.LastRound ?? 0),
                     LastProjectJsonHash = history?.LastProjectJsonHash ?? string.Empty
                 };
 
-                foreach (var line in history?.Transcripts ?? Enumerable.Empty<AssistantTranscriptLine>())
-                {
-                    if (string.IsNullOrWhiteSpace(line?.Text))
-                        continue;
+                var sessionMessages = history?.SessionMessages?
+                    .Where(x => !string.IsNullOrWhiteSpace(x?.Content))
+                    .Select(x => new AssistantConversationMessage
+                    {
+                        Role = string.Equals(x.Role, "assistant", StringComparison.OrdinalIgnoreCase)
+                            ? "assistant"
+                            : "user",
+                        Source = x.Source?.Trim() ?? string.Empty,
+                        PairId = x.PairId?.Trim() ?? string.Empty,
+                        Content = x.Content.Trim()
+                    })
+                    .ToList() ?? new List<AssistantConversationMessage>();
 
-                    if (line.Kind == AssistantTranscriptKind.User)
-                        AppendSessionMessage(session, "user", line.Text);
-                    else if (line.Kind == AssistantTranscriptKind.Assistant)
-                        AppendSessionMessage(session, "assistant", line.Text);
+                if (sessionMessages.Count > 0)
+                {
+                    session.Messages.AddRange(sessionMessages);
+                }
+                else
+                {
+                    foreach (var line in history?.Transcripts ?? Enumerable.Empty<AssistantTranscriptLine>())
+                    {
+                        if (string.IsNullOrWhiteSpace(line?.Text))
+                            continue;
+
+                        if (line.Kind == AssistantTranscriptKind.User)
+                            AppendSessionMessage(session, "user", line.Text);
+                        else if (line.Kind == AssistantTranscriptKind.Assistant)
+                            AppendSessionMessage(session, "assistant", line.Text);
+                    }
                 }
 
                 session.SummarizedMessageCount = Math.Clamp(session.SummarizedMessageCount, 0, session.Messages.Count);
@@ -97,10 +117,21 @@ namespace FlowBlox.AIAssistant.Services
             lock (_sessionSync)
             {
                 var session = _session ?? new AssistantSessionState();
-                history.LastRound = session.LastRound;
                 history.LastProjectJsonHash = session.LastProjectJsonHash;
                 history.ConversationSummary = session.ConversationSummary;
                 history.SummarizedMessageCount = session.SummarizedMessageCount;
+                history.SessionMessages = session.Messages
+                    .Where(x => !string.IsNullOrWhiteSpace(x?.Content))
+                    .Select(x => new AssistantConversationMessage
+                    {
+                        Role = string.Equals(x.Role, "assistant", StringComparison.OrdinalIgnoreCase)
+                            ? "assistant"
+                            : "user",
+                        Source = x.Source?.Trim() ?? string.Empty,
+                        PairId = x.PairId?.Trim() ?? string.Empty,
+                        Content = x.Content.Trim()
+                    })
+                    .ToList();
             }
         }
 
@@ -108,7 +139,7 @@ namespace FlowBlox.AIAssistant.Services
         {
             error = string.Empty;
             if (_configurationProvider != null)
-                return _configurationProvider() ?? new AssistantConfiguration();
+                return _configurationProvider() ?? throw new InvalidOperationException("Assistant configuration provider returned null.");
 
             var rawConfig = FlowBloxOptions.GetOptionInstance().GetOption("AI.AssistantConfiguration")?.Value ?? string.Empty;
             var parseResult = AssistantConfigurationJson.Parse(rawConfig);
@@ -126,7 +157,9 @@ namespace FlowBlox.AIAssistant.Services
             error = string.Empty;
             try
             {
-                var serialized = AssistantConfigurationJson.Serialize(configuration ?? new AssistantConfiguration());
+                ArgumentNullException.ThrowIfNull(configuration);
+
+                var serialized = AssistantConfigurationJson.Serialize(configuration);
                 var options = FlowBloxOptions.GetOptionInstance();
                 var option = options.GetOption("AI.AssistantConfiguration");
                 if (option == null)
@@ -148,11 +181,16 @@ namespace FlowBlox.AIAssistant.Services
 
         private static AssistantTokenBudget BuildTokenBudget(AssistantConfiguration config)
         {
+            ArgumentNullException.ThrowIfNull(config);
+
             return new AssistantTokenBudget
             {
-                MaxContextTokens = Math.Max(0, config?.MaxContextTokens ?? 0),
-                ReservedResponseTokens = Math.Max(0, config?.ReservedResponseTokens ?? 0),
-                ApproximateCharactersPerToken = Math.Clamp(config?.ApproximateCharactersPerToken ?? 4, 1, 20)
+                MaxContextTokens = Math.Max(AssistantConfigurationLimits.MinContextTokens, config.MaxContextTokens),
+                ReservedResponseTokens = Math.Max(AssistantConfigurationLimits.MinReservedResponseTokens, config.ReservedResponseTokens),
+                ApproximateCharactersPerToken = Math.Clamp(
+                    config.ApproximateCharactersPerToken,
+                    AssistantConfigurationLimits.MinApproximateCharactersPerToken,
+                    AssistantConfigurationLimits.MaxApproximateCharactersPerToken)
             };
         }
 
@@ -179,9 +217,18 @@ namespace FlowBlox.AIAssistant.Services
                 return result;
             }
 
-            var maxRounds = Math.Clamp(config.MaxToolRounds, 1, 200);
-            var maxLatestMessages = Math.Clamp(config.MaxLatestMessages, 0, 50);
-            var minLatestMessages = Math.Clamp(config.MinLatestMessages, 0, maxLatestMessages);
+            var maxToolRounds = Math.Clamp(
+                config.MaxToolRounds,
+                AssistantConfigurationLimits.MinToolRounds,
+                AssistantConfigurationLimits.MaxToolRounds);
+            var maxLatestMessages = Math.Clamp(
+                config.MaxLatestMessages,
+                AssistantConfigurationLimits.MinLatestMessages,
+                AssistantConfigurationLimits.MaxLatestMessages);
+            var minLatestMessages = Math.Clamp(
+                config.MinLatestMessages,
+                AssistantConfigurationLimits.MinLatestMessages,
+                maxLatestMessages);
             var tokenBudget = BuildTokenBudget(config);
             var session = GetOrCreateSession();
             ToolHandlerUtilities.SetCurrentSessionGuid(session.SessionId);
@@ -205,17 +252,17 @@ namespace FlowBlox.AIAssistant.Services
             {
                 Interlocked.Increment(ref _activeRunCount);
                 var summaryTargetMessageCount = session.SummarizedMessageCount;
-                var conversationRound = session.LastRound + 1;
-                for (var round = 1; round <= maxRounds; round++)
+                for (var toolRound = 1; toolRound <= maxToolRounds; toolRound++)
                 {
                     ct.ThrowIfCancellationRequested();
                     var roundPrompt = AssistantPromptBuilder.BuildRoundPrompt(
                         userPrompt,
-                        shouldAttachProjectJson && round == 1 ? currentProjectJson : null,
+                        shouldAttachProjectJson && toolRound == 1 ? currentProjectJson : null,
                         latestToolTranscript,
-                        round,
-                        maxRounds);
-                    protocolWriter?.AppendAiAssistantServiceText($"Round {round} prompt prepared", roundPrompt);
+                        toolRound,
+                        maxToolRounds);
+                    var roundPairId = Guid.NewGuid().ToString("N");
+                    protocolWriter?.AppendAiAssistantServiceText($"Round {toolRound} prompt prepared", roundPrompt);
 
                     var chatRequestResult = AssistantChatRequestBuilder.Build(
                         systemPrompt,
@@ -239,8 +286,12 @@ namespace FlowBlox.AIAssistant.Services
                         minLatestMessages,
                         tokenBudget);
                     var chatRequest = chatRequestResult.Request;
-                    if (shouldAttachProjectJson && round == 1)
-                        session.LastProjectJsonHash = currentProjectJsonHash;
+                    AppendSessionMessage(
+                        session,
+                        "user",
+                        roundPrompt,
+                        toolRound == 1 ? "UserPrompt" : "ToolApiResultPrompt",
+                        roundPairId);
 
                     var exec = await _executor.ExecuteChatAsync(
                         chatRequest,
@@ -259,10 +310,11 @@ namespace FlowBlox.AIAssistant.Services
                     }
 
                     var assistantOutput = exec.OutputText ?? string.Empty;
+                    AppendSessionMessage(session, "assistant", assistantOutput, "AssistantResponse", roundPairId);
 
                     if (!TryParseAssistantInstruction(assistantOutput, out var instruction))
                     {
-                        protocolWriter?.AppendAiText(round, assistantOutput);
+                        protocolWriter?.AppendAiText(toolRound, assistantOutput);
                         AddTranscript(
                             result,
                             AssistantTranscriptKind.Assistant,
@@ -291,13 +343,12 @@ namespace FlowBlox.AIAssistant.Services
                         result.Errors.Add("Assistant returned an invalid response format twice. Aborting execution.");
                         AddTranscript(result, AssistantTranscriptKind.Error,
                             "Invalid response format repeated after correction. Aborting.");
-                        AppendSessionTurn(session, userPrompt, assistantOutput);
-                        session.LastRound = Math.Max(session.LastRound, conversationRound);
+                        UpdateKnownProjectJsonHash(session);
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
                     }
 
-                    protocolWriter?.AppendAiJson(round, TryParseFirstJsonObject(assistantOutput));
+                    protocolWriter?.AppendAiJson(toolRound, TryParseFirstJsonObject(assistantOutput));
 
                     var assistantRoundMessage = BuildAssistantRoundMessage(instruction, assistantOutput);
                     AddTranscript(
@@ -318,8 +369,7 @@ namespace FlowBlox.AIAssistant.Services
                         var finalText = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
                             ? assistantOutput
                             : instruction.AssistantMessage;
-                        AppendSessionTurn(session, userPrompt, finalText);
-                        session.LastRound = Math.Max(session.LastRound, conversationRound);
+                        UpdateKnownProjectJsonHash(session);
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
                     }
@@ -355,7 +405,7 @@ namespace FlowBlox.AIAssistant.Services
                         var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
                         hasExecutedAnyToolCall = true;
 
-                        protocolWriter?.AppendToolCall(round, request, response);
+                        protocolWriter?.AppendToolCall(toolRound, request, response);
 
                         roundToolTranscript.Add(JsonConvert.SerializeObject(new
                         {
@@ -404,11 +454,10 @@ namespace FlowBlox.AIAssistant.Services
                 }
 
                 result.Success = false;
-                result.Errors.Add($"Assistant reached max tool rounds ({maxRounds}) without a final response.");
+                result.Errors.Add($"Assistant reached max tool rounds ({maxToolRounds}) without a final response.");
                 AddTranscript(result, AssistantTranscriptKind.Error,
-                    $"Reached max tool rounds ({maxRounds}) without a final response.");
-                AppendSessionTurn(session, userPrompt, $"No final response after {maxRounds} rounds.");
-                session.LastRound = Math.Max(session.LastRound, conversationRound);
+                    $"Reached max tool rounds ({maxToolRounds}) without a final response.");
+                UpdateKnownProjectJsonHash(session);
                 await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                 return result;
             }
@@ -435,7 +484,7 @@ namespace FlowBlox.AIAssistant.Services
         private void RunAutomaticAdjustmentIfEnabled(string reason)
         {
             var configuration = GetConfiguration(out _);
-            if (configuration?.EnableAutomaticAdjustment != true)
+            if (!configuration.EnableAutomaticAdjustment)
                 return;
 
             var layoutResult = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
@@ -445,7 +494,9 @@ namespace FlowBlox.AIAssistant.Services
 
         private AiCommunicationProtocolWriter? TryCreateCommunicationProtocolWriter(AssistantConfiguration config, string userPrompt, string sessionId)
         {
-            if (config?.EnableCommunicationProtocol != true)
+            ArgumentNullException.ThrowIfNull(config);
+
+            if (!config.EnableCommunicationProtocol)
                 return null;
 
             try
@@ -482,35 +533,25 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
-        private void AppendSessionTurn(AssistantSessionState session, string userPrompt, string assistantMessage)
-        {
-            if (session == null)
-                return;
-
-            lock (_sessionSync)
-            {
-                AppendSessionMessage(session, "user", userPrompt);
-                AppendSessionMessage(session, "assistant", assistantMessage);
-            }
-        }
-
-        private static void AppendSessionMessage(AssistantSessionState session, string role, string content)
+        private void AppendSessionMessage(
+            AssistantSessionState session,
+            string role,
+            string content,
+            string source = "",
+            string pairId = "")
         {
             if (session == null || string.IsNullOrWhiteSpace(content))
                 return;
 
-            session.Messages.Add(new AssistantConversationMessage
+            lock (_sessionSync)
             {
-                Role = role,
-                Content = content.Trim()
-            });
-
-            const int maxMessages = 200;
-            if (session.Messages.Count > maxMessages)
-            {
-                var removedMessageCount = session.Messages.Count - maxMessages;
-                session.Messages.RemoveRange(0, removedMessageCount);
-                session.SummarizedMessageCount = Math.Max(0, session.SummarizedMessageCount - removedMessageCount);
+                session.Messages.Add(new AssistantConversationMessage
+                {
+                    Role = role,
+                    Source = source?.Trim() ?? string.Empty,
+                    PairId = pairId?.Trim() ?? string.Empty,
+                    Content = content.Trim()
+                });
             }
         }
 
@@ -573,6 +614,13 @@ namespace FlowBlox.AIAssistant.Services
         private static string ComputeProjectJsonHash(string projectJson)
         {
             return HashHelper.ComputeSHA256Hash(Encoding.UTF8.GetBytes(projectJson ?? string.Empty));
+        }
+
+        private static void UpdateKnownProjectJsonHash(AssistantSessionState session)
+        {
+            ArgumentNullException.ThrowIfNull(session);
+
+            session.LastProjectJsonHash = ComputeProjectJsonHash(GetCurrentProjectJson());
         }
 
         private static string GetCurrentProjectJson()
@@ -945,10 +993,13 @@ namespace FlowBlox.AIAssistant.Services
             public string SessionId { get; set; } = Guid.NewGuid().ToString("N");
             public string ConversationSummary { get; set; } = string.Empty;
             public int SummarizedMessageCount { get; set; }
-            public int LastRound { get; set; }
             public string LastProjectJsonHash { get; set; } = string.Empty;
             public List<AssistantConversationMessage> Messages { get; set; } = new();
         }
 
     }
 }
+
+
+
+

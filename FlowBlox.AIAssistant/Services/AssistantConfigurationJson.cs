@@ -1,4 +1,4 @@
-using FlowBlox.AIAssistant.Models;
+﻿using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
 using Newtonsoft.Json;
 
@@ -40,9 +40,10 @@ namespace FlowBlox.AIAssistant.Services
 
         public static string Serialize(AssistantConfiguration configuration)
         {
-            var normalized = configuration ?? new AssistantConfiguration();
-            normalized.Provider ??= new OpenAIProvider();
-            return JsonConvert.SerializeObject(normalized, _settings);
+            ArgumentNullException.ThrowIfNull(configuration);
+
+            configuration.Provider ??= new OpenAIProvider();
+            return JsonConvert.SerializeObject(configuration, _settings);
         }
     }
 }

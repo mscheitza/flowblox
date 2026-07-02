@@ -16,8 +16,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
         public GeminiAIProvider()
         {
-            BaseUrl = "https://generativelanguage.googleapis.com/v1beta";
-            DefaultModel = "gemini-3-flash";
+            BaseUrl = "https://generativelanguage.googleapis.com/v1";
+            DefaultModel = "gemini-3.5-flash";
             TimeoutSeconds = 60;
         }
 
@@ -45,7 +45,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             var chatService = new GoogleAIGeminiChatCompletionService(
                 resolvedModel,
                 resolvedApiKey,
-                GoogleAIVersion.V1_Beta);
+                ResolveApiVersion(resolvedBaseUrl));
 #pragma warning restore SKEXP0070
 
             var response = await chatService.GetChatMessageContentAsync(
@@ -71,6 +71,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
                 settings.MaxTokens = request.MaxTokens;
 
             return settings;
+        }
+
+        private static GoogleAIVersion ResolveApiVersion(string resolvedBaseUrl)
+        {
+            var trimmedBaseUrl = resolvedBaseUrl.Trim().TrimEnd('/');
+            if (trimmedBaseUrl.EndsWith("/v1", StringComparison.OrdinalIgnoreCase))
+                return GoogleAIVersion.V1;
+
+            return GoogleAIVersion.V1_Beta;
         }
 
         private static ChatHistory BuildChatHistory(AIChatRequest request)

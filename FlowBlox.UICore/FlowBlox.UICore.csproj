@@ -30,6 +30,11 @@
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Resources\AiAssistantControl.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AiAssistantControl.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\AiAssistantChatView.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -200,6 +205,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Resources\AiAssistantControl.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AiAssistantControl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\AiAssistantChatView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AiAssistantChatView.Designer.cs</LastGenOutput>

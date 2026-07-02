@@ -34,9 +34,12 @@ namespace FlowBlox.AIAssistant.Builder
                     continue;
 
                 sb.AppendLine();
+                var source = string.IsNullOrWhiteSpace(message.Source)
+                    ? string.Empty
+                    : $" ({message.Source.Trim()})";
                 sb.AppendLine(string.Equals(message.Role, "assistant", StringComparison.OrdinalIgnoreCase)
-                    ? "Assistant:"
-                    : "User:");
+                    ? $"Assistant{source}:"
+                    : $"User{source}:");
                 sb.AppendLine(message.Content.Trim());
             }
 

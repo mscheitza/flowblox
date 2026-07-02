@@ -1,3 +1,5 @@
+﻿using FlowBlox.AIAssistant.Constants;
+
 namespace FlowBlox.AIAssistant.Builder
 {
     internal sealed class AssistantTokenBudget
@@ -11,7 +13,7 @@ namespace FlowBlox.AIAssistant.Builder
             if (string.IsNullOrEmpty(text))
                 return 0;
 
-            var charsPerToken = Math.Max(1, ApproximateCharactersPerToken);
+            var charsPerToken = Math.Max(AssistantConfigurationLimits.MinApproximateCharactersPerToken, ApproximateCharactersPerToken);
             return Math.Max(1, (int)Math.Ceiling(text.Length / (double)charsPerToken));
         }
     }

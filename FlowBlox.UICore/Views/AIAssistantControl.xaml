@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
              xmlns:viewModels="clr-namespace:FlowBlox.UICore.ViewModels"
              xmlns:views="clr-namespace:FlowBlox.UICore.Views"
              mc:Ignorable="d"
@@ -13,14 +15,132 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+            <Style x:Key="ToolbarButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="32" />
+                <Setter Property="Height" Value="32" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="4,0,0,0" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Margin="8">
-        <views:AiAssistantHistoryView DataContext="{Binding HistoryViewModel}"
-                                      Visibility="{Binding IsHistoryOverviewVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
-        <views:AiAssistantChatView x:Name="ChatView"
-                                   DataContext="{Binding ChatViewModel}"
-                                   Visibility="{Binding IsChatVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="#FFEEEEEE"
+                Height="48"
+                Padding="10,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <StackPanel Visibility="{Binding IsHistoryOverviewVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Orientation="Horizontal">
+                        <Button Style="{StaticResource ToolbarButtonStyle}"
+                                Margin="0"
+                                ToolTip="{x:Static resources:AiAssistantControl.Tooltip_NewHistory}"
+                                Command="{Binding NewChatCommand}">
+                            <iconPacks:PackIconMaterial Kind="Plus"
+                                                        Width="18"
+                                                        Height="18"
+                                                        Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Visibility="{Binding IsChatVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Orientation="Horizontal">
+                        <Button Style="{StaticResource ToolbarButtonStyle}"
+                                Margin="0"
+                                ToolTip="{x:Static resources:AiAssistantControl.Tooltip_BackToHistory}"
+                                Command="{Binding BackToHistoryCommand}">
+                            <iconPacks:PackIconMaterial Kind="ArrowLeft"
+                                                        Width="18"
+                                                        Height="18"
+                                                        Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        </Button>
+
+                        <Button Style="{StaticResource ToolbarButtonStyle}"
+                                ToolTip="{x:Static resources:AiAssistantControl.Tooltip_Undo}"
+                                Command="{Binding UndoProjectStateCommand}">
+                            <iconPacks:PackIconMaterial Kind="Undo"
+                                                        Width="18"
+                                                        Height="18"
+                                                        Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        </Button>
+
+                        <Button Style="{StaticResource ToolbarButtonStyle}"
+                                ToolTip="{x:Static resources:AiAssistantControl.Tooltip_Redo}"
+                                Command="{Binding RedoProjectStateCommand}">
+                            <iconPacks:PackIconMaterial Kind="Redo"
+                                                        Width="18"
+                                                        Height="18"
+                                                        Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBlock Grid.Column="1"
+                           Text="{x:Static resources:AiAssistantControl.Header_Title}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="16" />
+
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <Button Style="{StaticResource ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:AiAssistantControl.Tooltip_OpenCommunicationProtocolDirectory}"
+                            Command="{Binding OpenCommunicationProtocolDirectoryCommand}">
+                        <iconPacks:PackIconMaterial Kind="FolderOpenOutline"
+                                                    Width="18"
+                                                    Height="18"
+                                                    Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+
+                    <Button x:Name="SettingsButton"
+                            Style="{StaticResource ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:AiAssistantControl.Tooltip_Configure}">
+                        <iconPacks:PackIconMaterial Kind="CogOutline"
+                                                    Width="18"
+                                                    Height="18"
+                                                    Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="0,8,0,0">
+            <views:AiAssistantHistoryView DataContext="{Binding HistoryViewModel}"
+                                          Visibility="{Binding IsHistoryOverviewVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <views:AiAssistantChatView x:Name="ChatView"
+                                       DataContext="{Binding ChatViewModel}"
+                                       Visibility="{Binding IsChatVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+        </Grid>
     </Grid>
 </UserControl>

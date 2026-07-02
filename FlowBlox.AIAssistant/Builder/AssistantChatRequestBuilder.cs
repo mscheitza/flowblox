@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
+﻿using FlowBlox.AIAssistant.Constants;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 
 namespace FlowBlox.AIAssistant.Builder
 {
@@ -75,16 +76,18 @@ namespace FlowBlox.AIAssistant.Builder
             string currentUserPrompt,
             AssistantTokenBudget tokenBudget)
         {
-            var maxContextTokens = Math.Max(0, tokenBudget.MaxContextTokens);
+            ArgumentNullException.ThrowIfNull(tokenBudget);
+
+            var maxContextTokens = Math.Max(AssistantConfigurationLimits.MinContextTokens, tokenBudget.MaxContextTokens);
             if (maxContextTokens == 0)
                 return int.MaxValue;
 
-            var reservedResponseTokens = Math.Max(0, tokenBudget.ReservedResponseTokens);
+            var reservedResponseTokens = Math.Max(AssistantConfigurationLimits.MinReservedResponseTokens, tokenBudget.ReservedResponseTokens);
             var fixedTokens = tokenBudget.EstimateTokens(currentUserPrompt);
             foreach (var systemMessage in systemMessages ?? Array.Empty<AIChatMessage>())
                 fixedTokens += tokenBudget.EstimateTokens(systemMessage?.Content ?? string.Empty);
 
-            return Math.Max(0, maxContextTokens - reservedResponseTokens - fixedTokens);
+            return Math.Max(AssistantConfigurationLimits.MinContextTokens, maxContextTokens - reservedResponseTokens - fixedTokens);
         }
 
         private static LatestMessageSelection SelectLatestMessages(
@@ -94,31 +97,54 @@ namespace FlowBlox.AIAssistant.Builder
             int maxHistoryTokens,
             AssistantTokenBudget tokenBudget)
         {
+            ArgumentNullException.ThrowIfNull(tokenBudget);
+
             var messages = sessionMessages ?? Array.Empty<AssistantConversationMessage>();
-            var maxMessages = Math.Clamp(maxLatestMessages, 0, 50);
-            var minMessages = Math.Clamp(minLatestMessages, 0, maxMessages);
+            var maxMessages = Math.Clamp(
+                maxLatestMessages,
+                AssistantConfigurationLimits.MinLatestMessages,
+                AssistantConfigurationLimits.MaxLatestMessages);
+            var minMessages = Math.Clamp(
+                minLatestMessages,
+                AssistantConfigurationLimits.MinLatestMessages,
+                maxMessages);
 
-            var indexedCandidates = messages
-                .Select((message, index) => new IndexedConversationMessage(message, index))
-                .Where(x => !string.IsNullOrWhiteSpace(x.Message?.Content))
-                .TakeLast(maxMessages)
-                .Reverse()
-                .ToList();
-
-            var selected = new List<IndexedConversationMessage>();
-            var usedTokens = 0;
-
-            foreach (var candidate in indexedCandidates)
+            if (maxMessages == 0)
             {
-                var messageTokens = tokenBudget.EstimateTokens(candidate.Message.Content);
-                if (selected.Count >= minMessages && usedTokens + messageTokens > maxHistoryTokens)
-                    break;
-
-                selected.Add(candidate);
-                usedTokens += messageTokens;
+                return new LatestMessageSelection
+                {
+                    FirstIncludedHistoryMessageIndex = messages.Count
+                };
             }
 
-            selected.Reverse();
+            var units = BuildContextUnits(messages
+                .Select((message, index) => new IndexedConversationMessage(message, index))
+                .Where(x => !string.IsNullOrWhiteSpace(x.Message?.Content))
+                .ToList());
+
+            var selectedUnits = new List<ContextMessageUnit>();
+            var selectedMessageCount = 0;
+            var usedTokens = 0;
+
+            foreach (var unit in units.AsEnumerable().Reverse())
+            {
+                if (selectedMessageCount > 0 && selectedMessageCount + unit.Messages.Count > maxMessages)
+                    break;
+
+                var unitTokens = unit.Messages.Sum(x => tokenBudget.EstimateTokens(x.Message.Content));
+                if (selectedMessageCount >= minMessages && usedTokens + unitTokens > maxHistoryTokens)
+                    break;
+
+                selectedUnits.Add(unit);
+                selectedMessageCount += unit.Messages.Count;
+                usedTokens += unitTokens;
+            }
+
+            selectedUnits.Reverse();
+            var selected = selectedUnits
+                .SelectMany(x => x.Messages)
+                .ToList();
+
             return new LatestMessageSelection
             {
                 Messages = selected.Select(x => x.Message).ToList(),
@@ -128,10 +154,63 @@ namespace FlowBlox.AIAssistant.Builder
             };
         }
 
+        private static List<ContextMessageUnit> BuildContextUnits(List<IndexedConversationMessage> messages)
+        {
+            var units = new List<ContextMessageUnit>();
+            for (var index = 0; index < messages.Count; index++)
+            {
+                var current = messages[index];
+                var pairId = current.Message.PairId?.Trim() ?? string.Empty;
+                var unitMessages = new List<IndexedConversationMessage> { current };
+
+                if (!string.IsNullOrWhiteSpace(pairId))
+                {
+                    while (index + 1 < messages.Count &&
+                           string.Equals(messages[index + 1].Message.PairId?.Trim(), pairId, StringComparison.Ordinal))
+                    {
+                        index++;
+                        unitMessages.Add(messages[index]);
+                    }
+                }
+                else if (IsUserMessage(current.Message) &&
+                         index + 1 < messages.Count &&
+                         string.IsNullOrWhiteSpace(messages[index + 1].Message.PairId) &&
+                         IsAssistantMessage(messages[index + 1].Message))
+                {
+                    index++;
+                    unitMessages.Add(messages[index]);
+                }
+
+                units.Add(new ContextMessageUnit(unitMessages));
+            }
+
+            return units;
+        }
+
+        private static bool IsUserMessage(AssistantConversationMessage message)
+        {
+            return !IsAssistantMessage(message);
+        }
+
+        private static bool IsAssistantMessage(AssistantConversationMessage message)
+        {
+            return string.Equals(message?.Role, "assistant", StringComparison.OrdinalIgnoreCase);
+        }
+
         private sealed class LatestMessageSelection
         {
             public List<AssistantConversationMessage> Messages { get; init; } = new();
             public int FirstIncludedHistoryMessageIndex { get; init; }
+        }
+
+        private sealed class ContextMessageUnit
+        {
+            public ContextMessageUnit(List<IndexedConversationMessage> messages)
+            {
+                Messages = messages ?? new List<IndexedConversationMessage>();
+            }
+
+            public List<IndexedConversationMessage> Messages { get; }
         }
 
         private sealed class IndexedConversationMessage

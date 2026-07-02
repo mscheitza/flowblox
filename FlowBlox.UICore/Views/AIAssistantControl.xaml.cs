@@ -9,7 +9,7 @@ namespace FlowBlox.UICore.Views
         public AIAssistantControl()
         {
             InitializeComponent();
-            ChatView.ConfigurationRequested += (_, _) => ConfigurationRequested?.Invoke(this, EventArgs.Empty);
+            SettingsButton.Click += (_, _) => ConfigurationRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -151,6 +151,24 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Your message has not been sent yet. If you leave this chat now, the draft will be lost. Do you want to continue? ähnelt.
+        /// </summary>
+        public static string Message_DiscardUnsentDraft_Description {
+            get {
+                return ResourceManager.GetString("Message_DiscardUnsentDraft_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Discard Unsent Message? ähnelt.
+        /// </summary>
+        public static string Message_DiscardUnsentDraft_Title {
+            get {
+                return ResourceManager.GetString("Message_DiscardUnsentDraft_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The AI Assistant requested execution of the input-file script for &apos;{0}&apos;. Do you want to continue? ähnelt.
         /// </summary>
         public static string Message_ExecuteInputFileCommand_Confirm_Description {

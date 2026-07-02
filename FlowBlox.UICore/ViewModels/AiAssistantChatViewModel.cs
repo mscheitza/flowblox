@@ -132,7 +132,7 @@ namespace FlowBlox.UICore.ViewModels
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
 
             NewHistoryCommand = new RelayCommand(() => NewHistoryRequested?.Invoke(this, EventArgs.Empty), () => !IsBusy);
-            BackToHistoryCommand = new RelayCommand(() => HistoryRequested?.Invoke(this, EventArgs.Empty), () => CanGoBackToHistory);
+            BackToHistoryCommand = new RelayCommand(RequestHistoryOverview, () => CanGoBackToHistory);
             SubmitCommand = new RelayCommand(async () => await SubmitAsync(), CanSubmit);
             StopCommand = new RelayCommand(Stop, () => IsBusy);
             CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
@@ -221,6 +221,29 @@ namespace FlowBlox.UICore.ViewModels
                 return;
 
             _cts?.Cancel();
+        }
+
+        private void RequestHistoryOverview()
+        {
+            if (HasUnsavedFirstMessageDraft() && !ConfirmDiscardFirstMessageDraft())
+                return;
+
+            HistoryRequested?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool HasUnsavedFirstMessageDraft()
+        {
+            return Transcript.Count == 0 && !string.IsNullOrWhiteSpace(CurrentInput);
+        }
+
+        private bool ConfirmDiscardFirstMessageDraft()
+        {
+            var decision = _messageBoxService?.ShowMessageBox(
+                FlowBloxResourceUtil.GetLocalizedString("Message_DiscardUnsentDraft_Description", typeof(Resources.AiAssistantChatView)),
+                FlowBloxResourceUtil.GetLocalizedString("Message_DiscardUnsentDraft_Title", typeof(Resources.AiAssistantChatView)),
+                FlowBloxMessageBoxTypes.Question);
+
+            return decision == FlowBloxMessageBoxDialogResult.Yes;
         }
 
         private void UndoProjectState()

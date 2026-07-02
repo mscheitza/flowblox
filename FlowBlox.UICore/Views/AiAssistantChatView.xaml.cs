@@ -6,18 +6,10 @@ namespace FlowBlox.UICore.Views
 {
     public partial class AiAssistantChatView : UserControl
     {
-        public event EventHandler? ConfigurationRequested;
-
         public AiAssistantChatView()
         {
             InitializeComponent();
             PromptTextBox.PreviewKeyDown += PromptTextBox_PreviewKeyDown;
-            SettingsButton.Click += SettingsButton_Click;
-        }
-
-        private void SettingsButton_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            ConfigurationRequested?.Invoke(this, EventArgs.Empty);
         }
 
         private void PromptTextBox_PreviewKeyDown(object sender, KeyEventArgs e)

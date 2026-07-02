@@ -79,7 +79,7 @@ namespace FlowBlox.AIAssistant.Builder
                 }
                 else
                 {
-                    foreach (var item in toolTranscript.TakeLast(20).Reverse())
+                    foreach (var item in toolTranscript)
                         sb.AppendLine(item);
                 }
             }

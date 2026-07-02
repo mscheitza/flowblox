@@ -17,7 +17,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         public AnthropicAIProvider()
         {
             BaseUrl = "https://api.anthropic.com/v1";
-            DefaultModel = "claude-opus-4-6";
+            DefaultModel = "claude-opus-4-8";
             TimeoutSeconds = 60;
         }
 

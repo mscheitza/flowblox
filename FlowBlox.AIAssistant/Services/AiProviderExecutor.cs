@@ -1,6 +1,5 @@
-using FlowBlox.AIAssistant.Models;
+﻿using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
-using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
 using FlowBlox.Core.Provider.Project;
 
 namespace FlowBlox.AIAssistant.Services
@@ -12,6 +11,8 @@ namespace FlowBlox.AIAssistant.Services
             AssistantConfiguration configuration,
             CancellationToken ct)
         {
+            ArgumentNullException.ThrowIfNull(configuration);
+
             try
             {
                 var project = FlowBloxProjectManager.Instance.ActiveProject;
@@ -24,16 +25,16 @@ namespace FlowBlox.AIAssistant.Services
                     };
                 }
 
-                var provider = configuration?.Provider ?? new OpenAIProvider();
+                var provider = configuration.Provider ?? throw new InvalidOperationException("AI provider is not configured.");
                 request ??= new AIChatRequest();
                 request.Model = string.IsNullOrWhiteSpace(request.Model)
                     ? provider.DefaultModel
                     : request.Model;
 
-                if (configuration?.Temperature.HasValue == true)
+                if (configuration.Temperature.HasValue)
                     request.Temperature = configuration.Temperature;
 
-                if (configuration?.MaxTokens is > 0)
+                if (configuration.MaxTokens is > 0)
                     request.MaxTokens = configuration.MaxTokens;
 
                 if (string.IsNullOrWhiteSpace(request.Source))

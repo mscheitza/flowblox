@@ -7,7 +7,6 @@ namespace FlowBlox.AIAssistant.History
         public Guid ProjectGuid { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset UpdatedAt { get; set; }
-        public int LastRound { get; set; }
         public string Preview { get; set; } = string.Empty;
         public string DisplayTimestamp => UpdatedAt.LocalDateTime.ToString("dddd, dd.MM.yyyy HH:mm");
     }

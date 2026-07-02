@@ -24,4 +24,6 @@
   <data name="Message_CommunicationProtocolDirectory_OpenFailed_Description" xml:space="preserve"><value>The communication protocol directory could not be opened. Details: {0}</value></data>
   <data name="Message_ExecuteInputFileCommand_Confirm_Title" xml:space="preserve"><value>Confirm Script Execution</value></data>
   <data name="Message_ExecuteInputFileCommand_Confirm_Description" xml:space="preserve"><value>The AI Assistant requested execution of the input-file script for '{0}'. Do you want to continue?</value></data>
+  <data name="Message_DiscardUnsentDraft_Title" xml:space="preserve"><value>Discard Unsent Message?</value></data>
+  <data name="Message_DiscardUnsentDraft_Description" xml:space="preserve"><value>Your message has not been sent yet. If you leave this chat now, the draft will be lost. Do you want to continue?</value></data>
 </root>

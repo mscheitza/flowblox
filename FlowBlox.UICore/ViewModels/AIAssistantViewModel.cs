@@ -1,6 +1,7 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.History;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.UICore.Commands;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -23,6 +24,11 @@ namespace FlowBlox.UICore.ViewModels
 
         public AiAssistantChatViewModel ChatViewModel { get; } = new();
         public AiAssistantHistoryViewModel HistoryViewModel { get; } = new();
+        public RelayCommand NewChatCommand { get; }
+        public RelayCommand BackToHistoryCommand { get; }
+        public RelayCommand UndoProjectStateCommand { get; }
+        public RelayCommand RedoProjectStateCommand { get; }
+        public RelayCommand OpenCommunicationProtocolDirectoryCommand { get; }
 
         public bool IsHistoryOverviewVisible
         {
@@ -35,6 +41,7 @@ namespace FlowBlox.UICore.ViewModels
                 _isHistoryOverviewVisible = value;
                 OnPropertyChanged(nameof(IsHistoryOverviewVisible));
                 OnPropertyChanged(nameof(IsChatVisible));
+                InvalidateToolbarCommands();
             }
         }
 
@@ -45,9 +52,24 @@ namespace FlowBlox.UICore.ViewModels
 
         public AIAssistantViewModel()
         {
+            NewChatCommand = new RelayCommand(StartNewChat, () => !ChatViewModel.IsBusy);
+            BackToHistoryCommand = new RelayCommand(
+                () => ChatViewModel.BackToHistoryCommand.Execute(null),
+                () => IsChatVisible && ChatViewModel.BackToHistoryCommand.CanExecute(null));
+            UndoProjectStateCommand = new RelayCommand(
+                () => ChatViewModel.UndoProjectStateCommand.Execute(null),
+                () => IsChatVisible && ChatViewModel.UndoProjectStateCommand.CanExecute(null));
+            RedoProjectStateCommand = new RelayCommand(
+                () => ChatViewModel.RedoProjectStateCommand.Execute(null),
+                () => IsChatVisible && ChatViewModel.RedoProjectStateCommand.CanExecute(null));
+            OpenCommunicationProtocolDirectoryCommand = new RelayCommand(
+                () => ChatViewModel.OpenCommunicationProtocolDirectoryCommand.Execute(null),
+                () => ChatViewModel.OpenCommunicationProtocolDirectoryCommand.CanExecute(null));
+
             ChatViewModel.FlowBlocksChanged += (_, e) => FlowBlocksChanged?.Invoke(this, e);
             ChatViewModel.NewHistoryRequested += (_, _) => StartNewChat();
             ChatViewModel.HistoryRequested += (_, _) => ShowHistoryOverview();
+            ChatViewModel.PropertyChanged += (_, _) => InvalidateToolbarCommands();
 
             HistoryViewModel.NewHistoryRequested += (_, _) => StartNewChat();
             HistoryViewModel.HistoryOpenRequested += (_, item) => OpenHistory(item);
@@ -125,6 +147,16 @@ namespace FlowBlox.UICore.ViewModels
         private void RefreshChatNavigationState()
         {
             ChatViewModel.CanGoBackToHistory = HistoryViewModel.HasHistories;
+            InvalidateToolbarCommands();
+        }
+
+        private void InvalidateToolbarCommands()
+        {
+            NewChatCommand?.Invalidate();
+            BackToHistoryCommand?.Invalidate();
+            UndoProjectStateCommand?.Invalidate();
+            RedoProjectStateCommand?.Invalidate();
+            OpenCommunicationProtocolDirectoryCommand?.Invalidate();
         }
 
         private void OnPropertyChanged(string propertyName)

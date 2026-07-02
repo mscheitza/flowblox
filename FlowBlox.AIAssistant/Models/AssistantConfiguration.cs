@@ -34,10 +34,10 @@ namespace FlowBlox.AIAssistant.Models
         public int MaxToolRounds { get; set; } = 50;
 
         [Display(Name = "AssistantConfiguration_MaxLatestMessages", Description = "AssistantConfiguration_MaxLatestMessages_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        public int MaxLatestMessages { get; set; } = 5;
+        public int MaxLatestMessages { get; set; } = 10;
 
         [Display(Name = "AssistantConfiguration_MinLatestMessages", Description = "AssistantConfiguration_MinLatestMessages_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        public int MinLatestMessages { get; set; } = 1;
+        public int MinLatestMessages { get; set; } = 2;
 
         [Display(Name = "AssistantConfiguration_MaxContextTokens", Description = "AssistantConfiguration_MaxContextTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 4)]
         public int MaxContextTokens { get; set; } = 32000;

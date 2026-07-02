@@ -24,4 +24,6 @@
   <data name="Message_CommunicationProtocolDirectory_OpenFailed_Description" xml:space="preserve"><value>Das Kommunikationsprotokoll-Verzeichnis konnte nicht geöffnet werden. Details: {0}</value></data>
   <data name="Message_ExecuteInputFileCommand_Confirm_Title" xml:space="preserve"><value>Skriptausführung bestätigen</value></data>
   <data name="Message_ExecuteInputFileCommand_Confirm_Description" xml:space="preserve"><value>Der KI-Assistent möchte das Input-File-Skript für '{0}' ausführen. Möchten Sie fortfahren?</value></data>
+  <data name="Message_DiscardUnsentDraft_Title" xml:space="preserve"><value>Nicht gesendete Nachricht verwerfen?</value></data>
+  <data name="Message_DiscardUnsentDraft_Description" xml:space="preserve"><value>Ihre Nachricht wurde noch nicht gesendet. Wenn Sie diesen Chat jetzt verlassen, geht der Entwurf verloren. Möchten Sie fortfahren?</value></data>
 </root>

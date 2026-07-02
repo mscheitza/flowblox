@@ -156,7 +156,6 @@ namespace FlowBlox.AIAssistant.History
                 ProjectGuid = document.ProjectGuid,
                 CreatedAt = document.CreatedAt,
                 UpdatedAt = document.UpdatedAt,
-                LastRound = document.LastRound,
                 Preview = document.Transcripts
                     .LastOrDefault(x => x.Kind == AssistantTranscriptKind.User || x.Kind == AssistantTranscriptKind.Assistant)
                     ?.Text ?? string.Empty
