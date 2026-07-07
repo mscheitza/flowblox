@@ -5,7 +5,7 @@ namespace FlowBlox.AIAssistant.Builder
 {
     internal static class AssistantSummaryRequestBuilder
     {
-        public static AIChatRequest Build(string currentSummary, IReadOnlyList<AssistantConversationMessage> messagesToSummarize)
+        public static AIChatRequest Build(string currentSummary, IReadOnlyList<AssistantSessionMessage> messagesToSummarize)
         {
             var request = new AIChatRequest
             {
@@ -28,19 +28,19 @@ namespace FlowBlox.AIAssistant.Builder
             sb.AppendLine();
             sb.AppendLine("New messages to merge into the summary:");
 
-            foreach (var message in messagesToSummarize ?? Array.Empty<AssistantConversationMessage>())
+            foreach (var message in messagesToSummarize ?? Array.Empty<AssistantSessionMessage>())
             {
-                if (string.IsNullOrWhiteSpace(message?.Content))
+                if (string.IsNullOrWhiteSpace(message?.CompleteMessage))
                     continue;
 
                 sb.AppendLine();
-                var source = string.IsNullOrWhiteSpace(message.Source)
-                    ? string.Empty
-                    : $" ({message.Source.Trim()})";
-                sb.AppendLine(string.Equals(message.Role, "assistant", StringComparison.OrdinalIgnoreCase)
-                    ? $"Assistant{source}:"
-                    : $"User{source}:");
-                sb.AppendLine(message.Content.Trim());
+                sb.AppendLine(message switch
+                {
+                    AssistantMessagePair => "MessagePair (AssistantRequest + ToolApiResponse):",
+                    AssistantSingleMessage single when string.Equals(single.Role, "assistant", StringComparison.OrdinalIgnoreCase) => "SingleMessage (Assistant):",
+                    _ => "SingleMessage (User):"
+                });
+                sb.AppendLine(message.CompleteMessage.Trim());
             }
 
             request.Messages.Add(new AIChatMessage

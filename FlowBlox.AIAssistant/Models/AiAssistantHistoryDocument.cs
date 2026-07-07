@@ -11,7 +11,7 @@ namespace FlowBlox.AIAssistant.Models
         public string LastProjectJsonHash { get; set; } = string.Empty;
         public string ConversationSummary { get; set; } = string.Empty;
         public int SummarizedMessageCount { get; set; }
-        public List<AssistantConversationMessage> SessionMessages { get; set; } = new();
+        public List<AssistantSessionMessage> SessionMessages { get; set; } = new();
         public List<AssistantTranscriptLine> Transcripts { get; set; } = new();
     }
 }

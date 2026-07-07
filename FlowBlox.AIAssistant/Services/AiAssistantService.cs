@@ -74,36 +74,11 @@ namespace FlowBlox.AIAssistant.Services
                 };
 
                 var sessionMessages = history?.SessionMessages?
-                    .Where(x => !string.IsNullOrWhiteSpace(x?.Content))
-                    .Select(x => new AssistantConversationMessage
-                    {
-                        Role = string.Equals(x.Role, "assistant", StringComparison.OrdinalIgnoreCase)
-                            ? "assistant"
-                            : "user",
-                        Source = x.Source?.Trim() ?? string.Empty,
-                        PairId = x.PairId?.Trim() ?? string.Empty,
-                        Content = x.Content.Trim()
-                    })
-                    .ToList() ?? new List<AssistantConversationMessage>();
+                    .Where(x => !string.IsNullOrWhiteSpace(x?.CompleteMessage))
+                    .Select(x => x.Clone())
+                    .ToList() ?? new List<AssistantSessionMessage>();
 
-                if (sessionMessages.Count > 0)
-                {
-                    session.Messages.AddRange(sessionMessages);
-                }
-                else
-                {
-                    foreach (var line in history?.Transcripts ?? Enumerable.Empty<AssistantTranscriptLine>())
-                    {
-                        if (string.IsNullOrWhiteSpace(line?.Text))
-                            continue;
-
-                        if (line.Kind == AssistantTranscriptKind.User)
-                            AppendSessionMessage(session, "user", line.Text);
-                        else if (line.Kind == AssistantTranscriptKind.Assistant)
-                            AppendSessionMessage(session, "assistant", line.Text);
-                    }
-                }
-
+                session.Messages.AddRange(sessionMessages);
                 session.SummarizedMessageCount = Math.Clamp(session.SummarizedMessageCount, 0, session.Messages.Count);
                 _session = session;
             }
@@ -121,16 +96,8 @@ namespace FlowBlox.AIAssistant.Services
                 history.ConversationSummary = session.ConversationSummary;
                 history.SummarizedMessageCount = session.SummarizedMessageCount;
                 history.SessionMessages = session.Messages
-                    .Where(x => !string.IsNullOrWhiteSpace(x?.Content))
-                    .Select(x => new AssistantConversationMessage
-                    {
-                        Role = string.Equals(x.Role, "assistant", StringComparison.OrdinalIgnoreCase)
-                            ? "assistant"
-                            : "user",
-                        Source = x.Source?.Trim() ?? string.Empty,
-                        PairId = x.PairId?.Trim() ?? string.Empty,
-                        Content = x.Content.Trim()
-                    })
+                    .Where(x => !string.IsNullOrWhiteSpace(x?.CompleteMessage))
+                    .Select(x => x.Clone())
                     .ToList();
             }
         }
@@ -255,21 +222,22 @@ namespace FlowBlox.AIAssistant.Services
                 for (var toolRound = 1; toolRound <= maxToolRounds; toolRound++)
                 {
                     ct.ThrowIfCancellationRequested();
-                    var roundPrompt = AssistantPromptBuilder.BuildRoundPrompt(
-                        userPrompt,
-                        shouldAttachProjectJson && toolRound == 1 ? currentProjectJson : null,
-                        latestToolTranscript,
-                        toolRound,
-                        maxToolRounds);
-                    var roundPairId = Guid.NewGuid().ToString("N");
-                    protocolWriter?.AppendAiAssistantServiceText($"Round {toolRound} prompt prepared", roundPrompt);
+                    var initialUserPrompt = toolRound == 1
+                        ? AssistantPromptBuilder.BuildInitialUserPrompt(
+                            userPrompt,
+                            shouldAttachProjectJson ? currentProjectJson : null)
+                        : string.Empty;
+                    var modelPrompt = toolRound == 1
+                        ? initialUserPrompt
+                        : "Continue from the latest stored Tool API response in the conversation history. Return the next assistant JSON response.";
+                    protocolWriter?.AppendAiAssistantServiceText($"Round {toolRound} prompt prepared", modelPrompt);
 
                     var chatRequestResult = AssistantChatRequestBuilder.Build(
                         systemPrompt,
                         sessionBootstrapPrompt,
                         session.ConversationSummary,
                         session.Messages,
-                        roundPrompt,
+                        modelPrompt,
                         maxLatestMessages,
                         minLatestMessages,
                         tokenBudget);
@@ -281,17 +249,13 @@ namespace FlowBlox.AIAssistant.Services
                         sessionBootstrapPrompt,
                         session.ConversationSummary,
                         session.Messages,
-                        roundPrompt,
+                        modelPrompt,
                         maxLatestMessages,
                         minLatestMessages,
                         tokenBudget);
                     var chatRequest = chatRequestResult.Request;
-                    AppendSessionMessage(
-                        session,
-                        "user",
-                        roundPrompt,
-                        toolRound == 1 ? "UserPrompt" : "ToolApiResultPrompt",
-                        roundPairId);
+                    if (toolRound == 1)
+                        AppendSingleSessionMessage(session, "user", initialUserPrompt);
 
                     var exec = await _executor.ExecuteChatAsync(
                         chatRequest,
@@ -310,10 +274,10 @@ namespace FlowBlox.AIAssistant.Services
                     }
 
                     var assistantOutput = exec.OutputText ?? string.Empty;
-                    AppendSessionMessage(session, "assistant", assistantOutput, "AssistantResponse", roundPairId);
 
                     if (!TryParseAssistantInstruction(assistantOutput, out var instruction))
                     {
+                        AppendSingleSessionMessage(session, "assistant", assistantOutput);
                         protocolWriter?.AppendAiText(toolRound, assistantOutput);
                         AddTranscript(
                             result,
@@ -348,6 +312,10 @@ namespace FlowBlox.AIAssistant.Services
                         return result;
                     }
 
+                    var assistantInstructionContent = string.IsNullOrWhiteSpace(instruction.InternalContent)
+                        ? assistantOutput
+                        : instruction.InternalContent;
+
                     protocolWriter?.AppendAiJson(toolRound, TryParseFirstJsonObject(assistantOutput));
 
                     var assistantRoundMessage = BuildAssistantRoundMessage(instruction, assistantOutput);
@@ -369,6 +337,7 @@ namespace FlowBlox.AIAssistant.Services
                         var finalText = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
                             ? assistantOutput
                             : instruction.AssistantMessage;
+                        AppendSingleSessionMessage(session, "assistant", finalText);
                         UpdateKnownProjectJsonHash(session);
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
@@ -384,52 +353,64 @@ namespace FlowBlox.AIAssistant.Services
                         "Processing requested operations...",
                         processingStatus);
 
-                    for (var toolCallIndex = 0; toolCallIndex < instruction.ToolCalls.Count; toolCallIndex++)
+                    var assistantToolRequestPersisted = false;
+                    try
                     {
-                        var toolCall = instruction.ToolCalls[toolCallIndex];
-                        ct.ThrowIfCancellationRequested();
-
-                        var request = new ToolRequest
+                        for (var toolCallIndex = 0; toolCallIndex < instruction.ToolCalls.Count; toolCallIndex++)
                         {
-                            ToolName = toolCall.ToolName,
-                            Arguments = toolCall.Arguments,
-                            CorrelationId = Guid.NewGuid().ToString("N")
-                        };
+                            var toolCall = instruction.ToolCalls[toolCallIndex];
+                            ct.ThrowIfCancellationRequested();
 
-                        AddTranscript(
-                            result,
-                            AssistantTranscriptKind.ToolProcessing,
-                            $"Processing tool request {toolCallIndex + 1}/{instruction.ToolCalls.Count}: {request.ToolName}",
-                            (request.Arguments ?? new JObject()).ToString(Formatting.Indented));
+                            var request = new ToolRequest
+                            {
+                                ToolName = toolCall.ToolName,
+                                Arguments = toolCall.Arguments,
+                                CorrelationId = Guid.NewGuid().ToString("N")
+                            };
 
-                        var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
-                        hasExecutedAnyToolCall = true;
+                            AddTranscript(
+                                result,
+                                AssistantTranscriptKind.ToolProcessing,
+                                $"Processing tool request {toolCallIndex + 1}/{instruction.ToolCalls.Count}: {request.ToolName}",
+                                (request.Arguments ?? new JObject()).ToString(Formatting.Indented));
 
-                        protocolWriter?.AppendToolCall(toolRound, request, response);
+                            var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
+                            hasExecutedAnyToolCall = true;
 
-                        roundToolTranscript.Add(JsonConvert.SerializeObject(new
-                        {
-                            tool = request.ToolName,
-                            arguments = request.Arguments,
-                            response
-                        }, Formatting.None));
-                        executedToolCalls.Add(new ExecutedToolCallInfo
-                        {
-                            ToolName = request.ToolName,
-                            Arguments = request.Arguments,
-                            Response = response
-                        });
+                            protocolWriter?.AppendToolCall(toolRound, request, response);
 
-                        if (!response.Ok)
-                        {
-                            result.Warnings.Add($"Tool '{request.ToolName}' reported a problem: {response.Error}");
-                            _logger?.Warn($"Assistant tool call reported a problem. Tool={request.ToolName}, Error={response.Error}");
+                            roundToolTranscript.Add(JsonConvert.SerializeObject(new
+                            {
+                                tool = request.ToolName,
+                                arguments = request.Arguments,
+                                response
+                            }, Formatting.None));
+                            executedToolCalls.Add(new ExecutedToolCallInfo
+                            {
+                                ToolName = request.ToolName,
+                                Arguments = request.Arguments,
+                                Response = response
+                            });
+
+                            if (!response.Ok)
+                            {
+                                result.Warnings.Add($"Tool '{request.ToolName}' reported a problem: {response.Error}");
+                                _logger?.Warn($"Assistant tool call reported a problem. Tool={request.ToolName}, Error={response.Error}");
+                            }
+
+                            knownFlowBlocksByName = NotifyFlowBlockChanges(knownFlowBlocksByName);
                         }
 
-                        knownFlowBlocksByName = NotifyFlowBlockChanges(knownFlowBlocksByName);
+                        latestToolTranscript = roundToolTranscript;
+                        var toolApiResponse = AssistantPromptBuilder.BuildToolApiResponsePrompt(latestToolTranscript);
+                        AppendMessagePair(session, assistantInstructionContent, toolApiResponse);
+                        assistantToolRequestPersisted = true;
                     }
-
-                    latestToolTranscript = roundToolTranscript;
+                    finally
+                    {
+                        if (!assistantToolRequestPersisted)
+                            AppendSingleSessionMessage(session, "assistant", assistantInstructionContent);
+                    }
 
                     var executionSummary = BuildToolExecutionSummary(executedToolCalls);
 
@@ -533,24 +514,36 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
-        private void AppendSessionMessage(
-            AssistantSessionState session,
-            string role,
-            string content,
-            string source = "",
-            string pairId = "")
+        private void AppendSingleSessionMessage(AssistantSessionState session, string role, string content)
         {
             if (session == null || string.IsNullOrWhiteSpace(content))
                 return;
 
             lock (_sessionSync)
             {
-                session.Messages.Add(new AssistantConversationMessage
+                session.Messages.Add(new AssistantSingleMessage
                 {
-                    Role = role,
-                    Source = source?.Trim() ?? string.Empty,
-                    PairId = pairId?.Trim() ?? string.Empty,
-                    Content = content.Trim()
+                    MessageRole = string.Equals(role, "assistant", StringComparison.OrdinalIgnoreCase)
+                        ? "assistant"
+                        : "user",
+                    Message = content.Trim()
+                });
+            }
+        }
+
+        private void AppendMessagePair(AssistantSessionState session, string assistantRequest, string toolApiResponse)
+        {
+            if (session == null ||
+                string.IsNullOrWhiteSpace(assistantRequest) ||
+                string.IsNullOrWhiteSpace(toolApiResponse))
+                return;
+
+            lock (_sessionSync)
+            {
+                session.Messages.Add(new AssistantMessagePair
+                {
+                    AssistantRequest = assistantRequest.Trim(),
+                    ToolApiResponse = toolApiResponse.Trim()
                 });
             }
         }
@@ -567,7 +560,7 @@ namespace FlowBlox.AIAssistant.Services
             try
             {
                 string currentSummary;
-                List<AssistantConversationMessage> messagesToSummarize;
+                List<AssistantSessionMessage> messagesToSummarize;
 
                 lock (_sessionSync)
                 {
@@ -994,7 +987,7 @@ namespace FlowBlox.AIAssistant.Services
             public string ConversationSummary { get; set; } = string.Empty;
             public int SummarizedMessageCount { get; set; }
             public string LastProjectJsonHash { get; set; } = string.Empty;
-            public List<AssistantConversationMessage> Messages { get; set; } = new();
+            public List<AssistantSessionMessage> Messages { get; set; } = new();
         }
 
     }

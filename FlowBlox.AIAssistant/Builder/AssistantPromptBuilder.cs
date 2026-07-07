@@ -46,42 +46,36 @@ namespace FlowBlox.AIAssistant.Builder
                 .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal);
         }
 
-        public static string BuildRoundPrompt(
-            string userPrompt,
-            string? projectJson,
-            List<string> toolTranscript,
-            int round,
-            int maxRounds)
+        public static string BuildInitialUserPrompt(string userPrompt, string? projectJson)
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"Round: {round}/{maxRounds}");
+            sb.AppendLine("User prompt:");
+            sb.AppendLine(userPrompt);
+            sb.AppendLine();
 
-            if (round == 1)
+            if (!string.IsNullOrWhiteSpace(projectJson))
             {
-                sb.AppendLine("User prompt:");
-                sb.AppendLine(userPrompt);
+                sb.AppendLine("Current project JSON:");
+                sb.AppendLine(projectJson);
                 sb.AppendLine();
+            }
 
-                if (!string.IsNullOrWhiteSpace(projectJson))
-                {
-                    sb.AppendLine("Current project JSON:");
-                    sb.AppendLine(projectJson);
-                    sb.AppendLine();
-                }
+            return sb.ToString();
+        }
+
+        public static string BuildToolApiResponsePrompt(IReadOnlyList<string> toolTranscript)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Tool execution updates since last assistant request:");
+
+            if (toolTranscript == null || toolTranscript.Count == 0)
+            {
+                sb.AppendLine("[]");
             }
             else
             {
-                sb.AppendLine("Tool execution updates since last round:");
-
-                if (toolTranscript.Count == 0)
-                {
-                    sb.AppendLine("[]");
-                }
-                else
-                {
-                    foreach (var item in toolTranscript)
-                        sb.AppendLine(item);
-                }
+                foreach (var item in toolTranscript)
+                    sb.AppendLine(item);
             }
 
             return sb.ToString();

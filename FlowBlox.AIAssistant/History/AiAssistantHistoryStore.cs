@@ -2,12 +2,17 @@ using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Util;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.IO.Compression;
+using System.Text;
 
 namespace FlowBlox.AIAssistant.History
 {
     public sealed class AiAssistantHistoryStore
     {
         private const string OptionName = "AI.AssistantHistoryDirectory";
+        private const string HistorySearchPattern = "history_*.json*";
+        private const string HistoryZipExtension = ".zip";
+        private const string HistoryJsonEntryName = "history.json";
         private readonly object _sync = new();
         private bool _isInitialized;
 
@@ -56,7 +61,8 @@ namespace FlowBlox.AIAssistant.History
         public IReadOnlyList<AiAssistantHistoryListItem> LoadList(Guid? projectGuid = null)
         {
             var directory = GetHistoryDirectory();
-            return Directory.EnumerateFiles(directory, "history_*.json")
+            return Directory.EnumerateFiles(directory, HistorySearchPattern)
+                .Where(IsSupportedHistoryFile)
                 .Select(TryLoadListItem)
                 .Where(x => x != null)
                 .Select(x => x!)
@@ -70,7 +76,7 @@ namespace FlowBlox.AIAssistant.History
             if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
                 return null;
 
-            var document = JsonConvert.DeserializeObject<AiAssistantHistoryDocument>(File.ReadAllText(filePath));
+            var document = JsonConvert.DeserializeObject<AiAssistantHistoryDocument>(ReadHistoryJson(filePath));
             if (document != null && document.HistoryGuid == Guid.Empty)
                 document.HistoryGuid = Guid.NewGuid();
 
@@ -97,11 +103,17 @@ namespace FlowBlox.AIAssistant.History
             {
                 filePath = Path.Combine(
                     GetHistoryDirectory(),
-                    $"history_{document.CreatedAt:yyyyMMdd_HHmmss_fff}.json");
+                    $"history_{document.CreatedAt:yyyyMMdd_HHmmss_fff}.json{HistoryZipExtension}");
+            }
+            else if (!IsZipHistoryFile(filePath))
+            {
+                var zipFilePath = filePath + HistoryZipExtension;
+                if (!File.Exists(zipFilePath))
+                    filePath = zipFilePath;
             }
 
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(document, Formatting.Indented));
+            WriteHistoryJson(filePath, JsonConvert.SerializeObject(document, Formatting.Indented));
             UpsertListItem(ToListItem(document, filePath));
             return filePath;
         }
@@ -132,7 +144,7 @@ namespace FlowBlox.AIAssistant.History
         {
             try
             {
-                var document = JsonConvert.DeserializeObject<AiAssistantHistoryDocument>(File.ReadAllText(filePath));
+                var document = JsonConvert.DeserializeObject<AiAssistantHistoryDocument>(ReadHistoryJson(filePath));
                 if (document == null)
                     return null;
 
@@ -160,6 +172,62 @@ namespace FlowBlox.AIAssistant.History
                     .LastOrDefault(x => x.Kind == AssistantTranscriptKind.User || x.Kind == AssistantTranscriptKind.Assistant)
                     ?.Text ?? string.Empty
             };
+        }
+
+        private static bool IsSupportedHistoryFile(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+                return false;
+
+            return filePath.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ||
+                   filePath.EndsWith(".json" + HistoryZipExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsZipHistoryFile(string filePath)
+        {
+            return filePath?.EndsWith(HistoryZipExtension, StringComparison.OrdinalIgnoreCase) == true;
+        }
+
+        private static string ReadHistoryJson(string filePath)
+        {
+            if (!IsZipHistoryFile(filePath))
+                return File.ReadAllText(filePath);
+
+            using var archive = ZipFile.OpenRead(filePath);
+            var entry = archive.GetEntry(HistoryJsonEntryName)
+                ?? archive.Entries.FirstOrDefault(x => x.FullName.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
+            if (entry == null)
+                throw new InvalidOperationException("AI assistant history archive does not contain a JSON history entry.");
+
+            using var stream = entry.Open();
+            using var reader = new StreamReader(stream, Encoding.UTF8);
+            return reader.ReadToEnd();
+        }
+
+        private static void WriteHistoryJson(string filePath, string json)
+        {
+            if (!IsZipHistoryFile(filePath))
+            {
+                File.WriteAllText(filePath, json);
+                return;
+            }
+
+            var tempFilePath = filePath + ".tmp";
+            if (File.Exists(tempFilePath))
+                File.Delete(tempFilePath);
+
+            using (var archive = ZipFile.Open(tempFilePath, ZipArchiveMode.Create))
+            {
+                var entry = archive.CreateEntry(HistoryJsonEntryName, CompressionLevel.Optimal);
+                using var stream = entry.Open();
+                using var writer = new StreamWriter(stream, Encoding.UTF8);
+                writer.Write(json);
+            }
+
+            if (File.Exists(filePath))
+                File.Delete(filePath);
+
+            File.Move(tempFilePath, filePath);
         }
     }
 }

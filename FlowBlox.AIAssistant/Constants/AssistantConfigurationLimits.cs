@@ -5,7 +5,7 @@ namespace FlowBlox.AIAssistant.Constants
         public const int MinToolRounds = 1;
         public const int MaxToolRounds = 200;
 
-        public const int MinLatestMessages = 0;
+        public const int MinLatestMessages = 1;
         public const int MaxLatestMessages = 50;
 
         public const int MinContextTokens = 0;

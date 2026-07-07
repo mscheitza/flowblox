@@ -3,6 +3,7 @@ using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
+using Newtonsoft.Json;
 
 namespace FlowBloxTest.AIAssistant
 {
@@ -52,17 +53,19 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public void BuildChatRequest_KeepsLatestPairWhenTokenBudgetIsTight()
+        public void BuildChatRequest_KeepsLatestMessagePairWhenTokenBudgetIsTight()
         {
-            const string pairId = "PAIR-1";
             var requestResult = AssistantChatRequestBuilder.Build(
                 systemPrompt: "S",
                 sessionBootstrapPrompt: "B",
                 conversationSummary: string.Empty,
                 sessionMessages:
                 [
-                    new AssistantConversationMessage { Role = "user", PairId = pairId, Content = "PAIR-USER-TOO-LONG-FOR-BUDGET" },
-                    new AssistantConversationMessage { Role = "assistant", PairId = pairId, Content = "PAIR-ASSISTANT-FITS" }
+                    new AssistantMessagePair
+                    {
+                        AssistantRequest = "PAIR-ASSISTANT-REQUEST-TOO-LONG-FOR-BUDGET",
+                        ToolApiResponse = "PAIR-TOOL-RESPONSE-FITS"
+                    }
                 ],
                 currentUserPrompt: "C",
                 maxLatestMessages: 5,
@@ -77,14 +80,14 @@ namespace FlowBloxTest.AIAssistant
             var request = requestResult.Request;
             var historyMessages = request.Messages.Take(request.Messages.Count - 1).ToList();
 
-            Assert.AreEqual(2, historyMessages.Count);
-            Assert.AreEqual("PAIR-USER-TOO-LONG-FOR-BUDGET", historyMessages[0].Content);
-            Assert.AreEqual("PAIR-ASSISTANT-FITS", historyMessages[1].Content);
+            Assert.AreEqual(1, historyMessages.Count);
+            AssertContains(historyMessages[0].Content, "PAIR-ASSISTANT-REQUEST-TOO-LONG-FOR-BUDGET");
+            AssertContains(historyMessages[0].Content, "PAIR-TOOL-RESPONSE-FITS");
             Assert.AreEqual("C", request.Messages.Last().Content);
         }
 
         [TestMethod]
-        public void BuildChatRequest_DoesNotSplitOlderPairWhenMaxLatestMessagesIsReached()
+        public void BuildChatRequest_SelectsCompleteSessionMessagesWhenMaxLatestMessagesIsReached()
         {
             var requestResult = AssistantChatRequestBuilder.Build(
                 systemPrompt: "S",
@@ -92,16 +95,13 @@ namespace FlowBloxTest.AIAssistant
                 conversationSummary: string.Empty,
                 sessionMessages:
                 [
-                    new AssistantConversationMessage { Role = "user", PairId = "PAIR-1", Content = "PAIR-1-USER" },
-                    new AssistantConversationMessage { Role = "assistant", PairId = "PAIR-1", Content = "PAIR-1-ASSISTANT" },
-                    new AssistantConversationMessage { Role = "user", PairId = "PAIR-2", Content = "PAIR-2-USER" },
-                    new AssistantConversationMessage { Role = "assistant", PairId = "PAIR-2", Content = "PAIR-2-ASSISTANT" },
-                    new AssistantConversationMessage { Role = "user", PairId = "PAIR-3", Content = "PAIR-3-USER" },
-                    new AssistantConversationMessage { Role = "assistant", PairId = "PAIR-3", Content = "PAIR-3-ASSISTANT" }
+                    new AssistantSingleMessage { MessageRole = "user", Message = "SINGLE-1" },
+                    new AssistantMessagePair { AssistantRequest = "PAIR-2-REQUEST", ToolApiResponse = "PAIR-2-RESPONSE" },
+                    new AssistantMessagePair { AssistantRequest = "PAIR-3-REQUEST", ToolApiResponse = "PAIR-3-RESPONSE" }
                 ],
                 currentUserPrompt: "C",
-                maxLatestMessages: 4,
-                minLatestMessages: 2,
+                maxLatestMessages: 2,
+                minLatestMessages: 1,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,
@@ -111,12 +111,12 @@ namespace FlowBloxTest.AIAssistant
 
             var historyMessages = requestResult.Request.Messages.Take(requestResult.Request.Messages.Count - 1).ToList();
 
-            Assert.AreEqual(4, historyMessages.Count);
-            Assert.AreEqual("PAIR-2-USER", historyMessages[0].Content);
-            Assert.AreEqual("PAIR-2-ASSISTANT", historyMessages[1].Content);
-            Assert.AreEqual("PAIR-3-USER", historyMessages[2].Content);
-            Assert.AreEqual("PAIR-3-ASSISTANT", historyMessages[3].Content);
-            Assert.AreEqual(2, requestResult.FirstIncludedHistoryMessageIndex);
+            Assert.AreEqual(2, historyMessages.Count);
+            AssertContains(historyMessages[0].Content, "PAIR-2-REQUEST");
+            AssertContains(historyMessages[0].Content, "PAIR-2-RESPONSE");
+            AssertContains(historyMessages[1].Content, "PAIR-3-REQUEST");
+            AssertContains(historyMessages[1].Content, "PAIR-3-RESPONSE");
+            Assert.AreEqual(1, requestResult.FirstIncludedHistoryMessageIndex);
         }
 
         [TestMethod]
@@ -175,7 +175,7 @@ namespace FlowBloxTest.AIAssistant
         {
             var request = AssistantSummaryRequestBuilder.Build(
                 "## Goals\n- Existing goal",
-                [new AssistantConversationMessage { Role = "user", Source = "ToolApiResultPrompt", Content = "USER-1" }]);
+                [new AssistantMessagePair { AssistantRequest = "ASSISTANT-REQUEST-1", ToolApiResponse = "TOOL-RESPONSE-1" }]);
 
             var systemMessage = request.SystemMessages.Single().Content;
 
@@ -184,8 +184,9 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(systemMessage, "Completed Changes");
             AssertContains(systemMessage, "Open Points");
             AssertContains(systemMessage, "Provider And Configuration Constraints");
-            AssertContains(request.Messages.Single().Content, "USER-1");
-            AssertContains(request.Messages.Single().Content, "User (ToolApiResultPrompt):");
+            AssertContains(request.Messages.Single().Content, "ASSISTANT-REQUEST-1");
+            AssertContains(request.Messages.Single().Content, "TOOL-RESPONSE-1");
+            AssertContains(request.Messages.Single().Content, "MessagePair (AssistantRequest + ToolApiResponse):");
         }
 
         [TestMethod]
@@ -203,26 +204,20 @@ namespace FlowBloxTest.AIAssistant
             var history = new AiAssistantHistoryDocument();
             service.UpdateHistorySessionMetadata(history);
 
-            Assert.AreEqual(4, history.SessionMessages.Count);
-            Assert.AreEqual("user", history.SessionMessages[0].Role);
-            Assert.AreEqual("UserPrompt", history.SessionMessages[0].Source);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(history.SessionMessages[0].PairId));
-            AssertContains(history.SessionMessages[0].Content, "User prompt:");
-            AssertContains(history.SessionMessages[0].Content, "USER-TOOL-ROUND");
-            Assert.AreEqual("assistant", history.SessionMessages[1].Role);
-            Assert.AreEqual("AssistantResponse", history.SessionMessages[1].Source);
-            Assert.AreEqual(history.SessionMessages[0].PairId, history.SessionMessages[1].PairId);
-            AssertContains(history.SessionMessages[1].Content, "GetProjectJson");
-            Assert.AreEqual("user", history.SessionMessages[2].Role);
-            Assert.AreEqual("ToolApiResultPrompt", history.SessionMessages[2].Source);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(history.SessionMessages[2].PairId));
-            Assert.AreNotEqual(history.SessionMessages[0].PairId, history.SessionMessages[2].PairId);
-            AssertContains(history.SessionMessages[2].Content, "Tool execution updates since last round:");
-            AssertContains(history.SessionMessages[2].Content, "GetProjectJson");
-            Assert.AreEqual("assistant", history.SessionMessages[3].Role);
-            Assert.AreEqual("AssistantResponse", history.SessionMessages[3].Source);
-            Assert.AreEqual(history.SessionMessages[2].PairId, history.SessionMessages[3].PairId);
-            AssertContains(history.SessionMessages[3].Content, "Done.");
+            Assert.AreEqual(3, history.SessionMessages.Count);
+            var initialMessage = AssertIsInstanceOfType<AssistantSingleMessage>(history.SessionMessages[0]);
+            Assert.AreEqual("user", initialMessage.Role);
+            AssertContains(initialMessage.CompleteMessage, "User prompt:");
+            AssertContains(initialMessage.CompleteMessage, "USER-TOOL-ROUND");
+
+            var pair = AssertIsInstanceOfType<AssistantMessagePair>(history.SessionMessages[1]);
+            AssertContains(pair.AssistantRequest, "GetProjectJson");
+            AssertContains(pair.ToolApiResponse, "Tool execution updates since last assistant request:");
+            AssertContains(pair.ToolApiResponse, "GetProjectJson");
+
+            var finalMessage = AssertIsInstanceOfType<AssistantSingleMessage>(history.SessionMessages[2]);
+            Assert.AreEqual("assistant", finalMessage.Role);
+            AssertContains(finalMessage.CompleteMessage, "Done.");
         }
 
         [TestMethod]
@@ -234,8 +229,8 @@ namespace FlowBloxTest.AIAssistant
             {
                 SessionMessages =
                 [
-                    new AssistantConversationMessage { Role = "user", Content = "TECHNICAL-ROUND-PROMPT" },
-                    new AssistantConversationMessage { Role = "assistant", Content = "TECHNICAL-ASSISTANT-OUTPUT" }
+                    new AssistantSingleMessage { MessageRole = "user", Message = "TECHNICAL-ROUND-PROMPT" },
+                    new AssistantSingleMessage { MessageRole = "assistant", Message = "TECHNICAL-ASSISTANT-OUTPUT" }
                 ],
                 Transcripts =
                 [
@@ -256,6 +251,81 @@ namespace FlowBloxTest.AIAssistant
             AssertDoesNotContain(combinedContext, "UI-ONLY-ASSISTANT");
         }
 
+        [TestMethod]
+        public void HistoryDocument_RoundTripsPolymorphicSessionMessages()
+        {
+            var history = new AiAssistantHistoryDocument
+            {
+                SessionMessages =
+                [
+                    new AssistantSingleMessage { MessageRole = "user", Message = "USER-SINGLE" },
+                    new AssistantMessagePair { AssistantRequest = "ASSISTANT-REQUEST", ToolApiResponse = "TOOL-RESPONSE" },
+                    new AssistantSingleMessage { MessageRole = "assistant", Message = "ASSISTANT-FINAL" }
+                ]
+            };
+
+            var json = JsonConvert.SerializeObject(history);
+            var restored = JsonConvert.DeserializeObject<AiAssistantHistoryDocument>(json);
+
+            Assert.IsNotNull(restored);
+            Assert.AreEqual(3, restored!.SessionMessages.Count);
+            AssertIsInstanceOfType<AssistantSingleMessage>(restored.SessionMessages[0]);
+            AssertIsInstanceOfType<AssistantMessagePair>(restored.SessionMessages[1]);
+            AssertIsInstanceOfType<AssistantSingleMessage>(restored.SessionMessages[2]);
+            AssertContains(restored.SessionMessages[1].CompleteMessage, "ASSISTANT-REQUEST");
+            AssertContains(restored.SessionMessages[1].CompleteMessage, "TOOL-RESPONSE");
+        }
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_PersistsAssistantToolRequestWhenToolProcessingIsCanceled()
+        {
+            var executor = new QueuedAiExecutor(
+                "{\"assistantMessage\":\"I will update the flow.\",\"final\":false,\"toolCalls\":[{\"toolName\":\"CancelingTool\",\"arguments\":{}}]}");
+            var service = CreateService(
+                executor,
+                new CancelingToolApi(),
+                CreateConfiguration(maxLatestMessages: 10));
+
+            try
+            {
+                await service.GenerateProjectAsync("USER-CANCEL", CancellationToken.None);
+                Assert.Fail("Expected OperationCanceledException.");
+            }
+            catch (OperationCanceledException)
+            {
+            }
+
+            var history = new AiAssistantHistoryDocument();
+            service.UpdateHistorySessionMetadata(history);
+
+            Assert.AreEqual(2, history.SessionMessages.Count);
+            AssertIsInstanceOfType<AssistantSingleMessage>(history.SessionMessages[0]);
+            var assistantMessage = AssertIsInstanceOfType<AssistantSingleMessage>(history.SessionMessages[1]);
+            Assert.AreEqual("assistant", assistantMessage.Role);
+            AssertContains(assistantMessage.CompleteMessage, "CancelingTool");
+        }
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_PersistsNormalizedInstructionInsteadOfRawAssistantOutput()
+        {
+            var executor = new QueuedAiExecutor(
+                "preface that should not be persisted {\"assistantMessage\":\"Reading project details.\",\"final\":false,\"toolCalls\":[{\"toolName\":\"GetProjectJson\",\"arguments\":{}}]} trailing text",
+                "{\"assistantMessage\":\"Done.\",\"final\":true,\"toolCalls\":[]}");
+            var config = CreateConfiguration(maxLatestMessages: 10);
+            config.MaxToolRounds = 2;
+            var service = CreateService(executor, config);
+
+            await service.GenerateProjectAsync("USER-NORMALIZED", CancellationToken.None);
+
+            var history = new AiAssistantHistoryDocument();
+            service.UpdateHistorySessionMetadata(history);
+
+            var pair = AssertIsInstanceOfType<AssistantMessagePair>(history.SessionMessages[1]);
+            AssertContains(pair.AssistantRequest, "GetProjectJson");
+            AssertDoesNotContain(pair.AssistantRequest, "preface that should not be persisted");
+            AssertDoesNotContain(pair.AssistantRequest, "trailing text");
+        }
+
         private static AiAssistantService CreateService(RecordingAiExecutor executor, AssistantConfiguration configuration)
         {
             return new AiAssistantService(
@@ -269,6 +339,17 @@ namespace FlowBloxTest.AIAssistant
             return new AiAssistantService(
                 executor,
                 new EmptyToolApi(),
+                configurationProvider: () => configuration);
+        }
+
+        private static AiAssistantService CreateService(
+            IAiExecutor executor,
+            IFlowBloxAIToolApi toolApi,
+            AssistantConfiguration configuration)
+        {
+            return new AiAssistantService(
+                executor,
+                toolApi,
                 configurationProvider: () => configuration);
         }
 
@@ -296,6 +377,12 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsFalse(actual.Contains(unexpected, StringComparison.Ordinal), $"Did not expect '{unexpected}' in:\n{actual}");
         }
 
+        private static T AssertIsInstanceOfType<T>(object value)
+        {
+            Assert.IsInstanceOfType(value, typeof(T));
+            return (T)value;
+        }
+
         private sealed class EmptyToolApi : IFlowBloxAIToolApi
         {
             public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged
@@ -307,6 +394,25 @@ namespace FlowBloxTest.AIAssistant
             public Task<ToolResponse> ExecuteAsync(ToolRequest request, CancellationToken ct)
             {
                 return Task.FromResult(new ToolResponse { Ok = true });
+            }
+
+            public IReadOnlyList<ToolDefinition> GetToolDefinitions()
+            {
+                return Array.Empty<ToolDefinition>();
+            }
+        }
+
+        private sealed class CancelingToolApi : IFlowBloxAIToolApi
+        {
+            public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged
+            {
+                add { }
+                remove { }
+            }
+
+            public Task<ToolResponse> ExecuteAsync(ToolRequest request, CancellationToken ct)
+            {
+                throw new OperationCanceledException();
             }
 
             public IReadOnlyList<ToolDefinition> GetToolDefinitions()

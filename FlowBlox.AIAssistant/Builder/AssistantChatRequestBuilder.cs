@@ -9,7 +9,7 @@ namespace FlowBlox.AIAssistant.Builder
             string systemPrompt,
             string sessionBootstrapPrompt,
             string conversationSummary,
-            IReadOnlyList<AssistantConversationMessage> sessionMessages,
+            IReadOnlyList<AssistantSessionMessage> sessionMessages,
             string currentUserPrompt,
             int maxLatestMessages,
             int minLatestMessages,
@@ -53,7 +53,7 @@ namespace FlowBlox.AIAssistant.Builder
                     Role = string.Equals(message.Role, "assistant", StringComparison.OrdinalIgnoreCase)
                         ? "assistant"
                         : "user",
-                    Content = message.Content.Trim()
+                    Content = message.CompleteMessage.Trim()
                 });
             }
 
@@ -91,7 +91,7 @@ namespace FlowBlox.AIAssistant.Builder
         }
 
         private static LatestMessageSelection SelectLatestMessages(
-            IReadOnlyList<AssistantConversationMessage> sessionMessages,
+            IReadOnlyList<AssistantSessionMessage> sessionMessages,
             int maxLatestMessages,
             int minLatestMessages,
             int maxHistoryTokens,
@@ -99,7 +99,7 @@ namespace FlowBlox.AIAssistant.Builder
         {
             ArgumentNullException.ThrowIfNull(tokenBudget);
 
-            var messages = sessionMessages ?? Array.Empty<AssistantConversationMessage>();
+            var messages = sessionMessages ?? Array.Empty<AssistantSessionMessage>();
             var maxMessages = Math.Clamp(
                 maxLatestMessages,
                 AssistantConfigurationLimits.MinLatestMessages,
@@ -117,33 +117,31 @@ namespace FlowBlox.AIAssistant.Builder
                 };
             }
 
-            var units = BuildContextUnits(messages
+            var indexedCandidates = messages
                 .Select((message, index) => new IndexedConversationMessage(message, index))
-                .Where(x => !string.IsNullOrWhiteSpace(x.Message?.Content))
-                .ToList());
+                .Where(x => !string.IsNullOrWhiteSpace(x.Message?.CompleteMessage))
+                .Reverse()
+                .ToList();
 
-            var selectedUnits = new List<ContextMessageUnit>();
+            var selected = new List<IndexedConversationMessage>();
             var selectedMessageCount = 0;
             var usedTokens = 0;
 
-            foreach (var unit in units.AsEnumerable().Reverse())
+            foreach (var candidate in indexedCandidates)
             {
-                if (selectedMessageCount > 0 && selectedMessageCount + unit.Messages.Count > maxMessages)
+                if (selectedMessageCount > 0 && selectedMessageCount + 1 > maxMessages)
                     break;
 
-                var unitTokens = unit.Messages.Sum(x => tokenBudget.EstimateTokens(x.Message.Content));
-                if (selectedMessageCount >= minMessages && usedTokens + unitTokens > maxHistoryTokens)
+                var messageTokens = tokenBudget.EstimateTokens(candidate.Message.CompleteMessage);
+                if (selectedMessageCount >= minMessages && usedTokens + messageTokens > maxHistoryTokens)
                     break;
 
-                selectedUnits.Add(unit);
-                selectedMessageCount += unit.Messages.Count;
-                usedTokens += unitTokens;
+                selected.Add(candidate);
+                selectedMessageCount++;
+                usedTokens += messageTokens;
             }
 
-            selectedUnits.Reverse();
-            var selected = selectedUnits
-                .SelectMany(x => x.Messages)
-                .ToList();
+            selected.Reverse();
 
             return new LatestMessageSelection
             {
@@ -154,74 +152,21 @@ namespace FlowBlox.AIAssistant.Builder
             };
         }
 
-        private static List<ContextMessageUnit> BuildContextUnits(List<IndexedConversationMessage> messages)
-        {
-            var units = new List<ContextMessageUnit>();
-            for (var index = 0; index < messages.Count; index++)
-            {
-                var current = messages[index];
-                var pairId = current.Message.PairId?.Trim() ?? string.Empty;
-                var unitMessages = new List<IndexedConversationMessage> { current };
-
-                if (!string.IsNullOrWhiteSpace(pairId))
-                {
-                    while (index + 1 < messages.Count &&
-                           string.Equals(messages[index + 1].Message.PairId?.Trim(), pairId, StringComparison.Ordinal))
-                    {
-                        index++;
-                        unitMessages.Add(messages[index]);
-                    }
-                }
-                else if (IsUserMessage(current.Message) &&
-                         index + 1 < messages.Count &&
-                         string.IsNullOrWhiteSpace(messages[index + 1].Message.PairId) &&
-                         IsAssistantMessage(messages[index + 1].Message))
-                {
-                    index++;
-                    unitMessages.Add(messages[index]);
-                }
-
-                units.Add(new ContextMessageUnit(unitMessages));
-            }
-
-            return units;
-        }
-
-        private static bool IsUserMessage(AssistantConversationMessage message)
-        {
-            return !IsAssistantMessage(message);
-        }
-
-        private static bool IsAssistantMessage(AssistantConversationMessage message)
-        {
-            return string.Equals(message?.Role, "assistant", StringComparison.OrdinalIgnoreCase);
-        }
-
         private sealed class LatestMessageSelection
         {
-            public List<AssistantConversationMessage> Messages { get; init; } = new();
+            public List<AssistantSessionMessage> Messages { get; init; } = new();
             public int FirstIncludedHistoryMessageIndex { get; init; }
-        }
-
-        private sealed class ContextMessageUnit
-        {
-            public ContextMessageUnit(List<IndexedConversationMessage> messages)
-            {
-                Messages = messages ?? new List<IndexedConversationMessage>();
-            }
-
-            public List<IndexedConversationMessage> Messages { get; }
         }
 
         private sealed class IndexedConversationMessage
         {
-            public IndexedConversationMessage(AssistantConversationMessage message, int index)
+            public IndexedConversationMessage(AssistantSessionMessage message, int index)
             {
                 Message = message;
                 Index = index;
             }
 
-            public AssistantConversationMessage Message { get; }
+            public AssistantSessionMessage Message { get; }
             public int Index { get; }
         }
     }

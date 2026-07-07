@@ -4,6 +4,7 @@ using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
+using FlowBlox.AIAssistant.Constants;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.AIAssistant.Models
@@ -34,9 +35,11 @@ namespace FlowBlox.AIAssistant.Models
         public int MaxToolRounds { get; set; } = 50;
 
         [Display(Name = "AssistantConfiguration_MaxLatestMessages", Description = "AssistantConfiguration_MaxLatestMessages_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [Range(AssistantConfigurationLimits.MinLatestMessages, AssistantConfigurationLimits.MaxLatestMessages)]
         public int MaxLatestMessages { get; set; } = 10;
 
         [Display(Name = "AssistantConfiguration_MinLatestMessages", Description = "AssistantConfiguration_MinLatestMessages_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [Range(AssistantConfigurationLimits.MinLatestMessages, AssistantConfigurationLimits.MaxLatestMessages)]
         public int MinLatestMessages { get; set; } = 2;
 
         [Display(Name = "AssistantConfiguration_MaxContextTokens", Description = "AssistantConfiguration_MaxContextTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 4)]
