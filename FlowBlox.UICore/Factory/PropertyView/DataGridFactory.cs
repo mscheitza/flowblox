@@ -7,10 +7,12 @@ using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Factory.Adapter;
 using FlowBlox.UICore.PropertyView.Converters;
+using FlowBlox.UICore.PropertyView.Resolver;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.IconPacks;
 using System.Collections;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Windows;
@@ -28,6 +30,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private const double DefaultTextColumnMinWidth = 140;
 
         private readonly FlowBloxDataGridAttribute _dataGridAttribute;
+        private readonly object _parent;
 
         private RelayCommand _addCommand;
         private RelayCommand _deleteCommand;
@@ -35,9 +38,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private RelayCommand _moveUpCommand;
         private RelayCommand _moveDownCommand;
 
-        public DataGridFactory(Window window, PropertyInfo property, object target, bool readOnly)
+        public DataGridFactory(Window window, PropertyInfo property, object target, bool readOnly, object parent = null)
             : base(window, property, target, readOnly)
         {
+            _parent = parent;
             _dataGridAttribute = _property.GetCustomAttribute<FlowBloxDataGridAttribute>();
         }
 
@@ -251,40 +255,24 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 // Selection-Filter
                 else if (uiAttribute?.Factory == UIFactory.ComboBox)
                 {
-                    var filterMethod = !string.IsNullOrEmpty(uiAttribute?.SelectionFilterMethod) ?
-                        _target.GetType().GetMethod(uiAttribute?.SelectionFilterMethod) :
-                        null;
+                    var selectionMethodResolution = SelectionMethodResolver.ResolveSelectionFilterMethodFromTargetOrParent(
+                        _target,
+                        _parent,
+                        uiAttribute?.SelectionFilterMethod);
 
-                    if (filterMethod != null)
+                    if (selectionMethodResolution?.Method != null)
                     {
-                        var originalItems = filterMethod.Invoke(_target, null) as IList;
-
-                        IList items = null;
-                        bool isRequired = childProperty.GetCustomAttribute<RequiredAttribute>() != null;
-
-                        if (originalItems != null && !isRequired)
-                        {
-                            items = (IList)Activator.CreateInstance(originalItems.GetType());
-                            items!.Add(null);
-
-                            foreach (var item in originalItems)
-                                items.Add(item);
-                        }
-                        else
-                        {
-                            items = originalItems;
-                        }
-
                         var column = new DataGridComboBoxColumn
                         {
                             Header = headerText,
-                            ItemsSource = items,
+                            ItemsSource = SelectionItemsSourceResolver.ResolveItemsSource(selectionMethodResolution, childProperty),
                             SelectedValueBinding = new Binding(childProperty.Name) { 
                                 Mode = BindingMode.TwoWay 
                             },
                             DisplayMemberPath = uiAttribute.SelectionDisplayMember
                         };
                         dataGrid.Columns.Add(column);
+                        AttachSelectionFilterDependencyRefresh(dataGrid, column, childProperty, uiAttribute, selectionMethodResolution);
                     }
                     else
                     {
@@ -459,6 +447,39 @@ namespace FlowBlox.UICore.Factory.PropertyView
             UpdateEmptyMessageVisibilityOnCollectionChanged(emptyMessage, list);
 
             return ResizableControlContainer.Create(stackPanel, minHeight: 150);
+        }
+
+        private void AttachSelectionFilterDependencyRefresh(
+            DataGrid dataGrid,
+            DataGridComboBoxColumn column,
+            PropertyInfo property,
+            FlowBloxUIAttribute uiAttribute,
+            SelectionMethodResolutionResult selectionMethodResolution)
+        {
+            if (string.IsNullOrWhiteSpace(uiAttribute?.SelectionFilterDependency))
+                return;
+
+            var dependencyResolution = SelectionFilterDependencyResolver.ResolveSelectionFilterDependencyFromTargetOrParent(
+                _target,
+                _parent,
+                uiAttribute.SelectionFilterDependency);
+
+            if (dependencyResolution?.Property == null ||
+                dependencyResolution.InvocationTarget is not INotifyPropertyChanged notifyPropertyChanged)
+            {
+                return;
+            }
+
+            PropertyChangedEventHandler handler = (s, e) =>
+            {
+                if (e.PropertyName != dependencyResolution.Property.Name)
+                    return;
+
+                column.ItemsSource = SelectionItemsSourceResolver.ResolveItemsSource(selectionMethodResolution, property);
+                FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+            };
+
+            notifyPropertyChanged.PropertyChanged += handler;
         }
 
         private void ApplyCenteredTextColumnStyles(DataGridTextColumn column)

@@ -2,46 +2,32 @@ using System.Reflection;
 
 namespace FlowBlox.UICore.PropertyView.Resolver
 {
-    public class SelectionMethodResolutionResult
-    {
-        public MethodInfo Method { get; init; }
-
-        public object InvocationTarget { get; init; }
-    }
-
-    public static class SelectionMethodResolver
+    public class SelectionMethodResolver : SelectionMemberResolverBase<MethodInfo, SelectionMethodResolutionResult>
     {
         public static SelectionMethodResolutionResult ResolveSelectionFilterMethodFromTargetOrParent(
             object target,
             object parent,
             string selectionFilterMethod)
         {
-            if (target == null || string.IsNullOrWhiteSpace(selectionFilterMethod))
-                return null;
+            return ResolveMemberFromTargetOrParent(
+                target,
+                parent,
+                selectionFilterMethod,
+                ResolveMethod,
+                CreateResult);
+        }
 
-            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        private static MethodInfo ResolveMethod(Type type, string name)
+        {
+            return type.GetMethod(name, BindingFlags);
+        }
 
-            var method = target.GetType().GetMethod(selectionFilterMethod, flags);
-            if (method != null)
-            {
-                return new SelectionMethodResolutionResult
-                {
-                    Method = method,
-                    InvocationTarget = target
-                };
-            }
-
-            if (parent == null)
-                return null;
-
-            method = parent.GetType().GetMethod(selectionFilterMethod, flags);
-            if (method == null)
-                return null;
-
+        private static SelectionMethodResolutionResult CreateResult(object invocationTarget, MethodInfo method)
+        {
             return new SelectionMethodResolutionResult
             {
-                Method = method,
-                InvocationTarget = parent
+                InvocationTarget = invocationTarget,
+                Method = method
             };
         }
     }

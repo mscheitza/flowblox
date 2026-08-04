@@ -64,6 +64,8 @@
 
         public string SelectionFilterMethod { get; set; }
 
+        public string SelectionFilterDependency { get; set; }
+
         public string ReadOnlyMethod { get; set; }
 
         public UIOptions UiOptions { get; set; }

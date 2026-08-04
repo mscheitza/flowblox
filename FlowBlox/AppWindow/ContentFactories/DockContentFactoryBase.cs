@@ -15,7 +15,7 @@ namespace FlowBlox.AppWindow.ContentFactories
         private bool _dockPanelResizeInProgress;
         private Size _lastDockPanelClientSize;
         private bool _applyingAutoResizeFixedSize;
-        private bool _initialLayoutInProgress;
+        private DockPanelLayoutDebouncer.DockPanelLayoutDebounceRegistration _layoutDebounceRegistration;
 
         public DockContentFactoryBase(DockPanel dockPanel)
         {
@@ -63,7 +63,10 @@ namespace FlowBlox.AppWindow.ContentFactories
 
         protected Task SaveSettingsAsync(string key, DockContentSettings settings)
         {
-            return Task.Run(() => { SaveSettings(key, settings); });
+            return Task.Run(() => 
+            { 
+                SaveSettings(key, settings); 
+            });
         }
 
         protected T Create(string key, T dockContent)
@@ -77,8 +80,7 @@ namespace FlowBlox.AppWindow.ContentFactories
             if (settings.Height != null)
                 dockContent.Height = settings.Height.Value;
 
-
-            _initialLayoutInProgress = true;
+            _layoutDebounceRegistration = DockPanelLayoutDebouncer.For(_dockPanel).Register(key);
             dockContent.Show(_dockPanel, settings.DockState);
 
             // Apply fixed orientation size immediately after docking so startup layout
@@ -89,12 +91,12 @@ namespace FlowBlox.AppWindow.ContentFactories
             {
                 _dockPanel.BeginInvoke(new MethodInvoker(() =>
                 {
-                    _initialLayoutInProgress = false;
+                    NotifyLayoutActivity("BeginInvoke");
                 }));
             }
             else
             {
-                _initialLayoutInProgress = false;
+                NotifyLayoutActivity("NoHandle");
             }
 
             dockContent.HideOnClose = true;
@@ -136,8 +138,11 @@ namespace FlowBlox.AppWindow.ContentFactories
                 if (_closing)
                     return;
 
-                if (_initialLayoutInProgress)
+                if (IsLayoutSuppressed())
+                {
+                    NotifyLayoutActivity("SizeChanged");
                     return;
+                }
 
                 if (dockContent.DockState == DockState.Hidden || dockContent.DockState == DockState.Unknown)
                     return;
@@ -180,11 +185,13 @@ namespace FlowBlox.AppWindow.ContentFactories
         private void DockContent_FormClosing(object sender, FormClosingEventArgs e)
         {
             _closing = true;
+            _layoutDebounceRegistration?.Stop();
         }
 
         private void DockPanel_SizeChanged(object sender, System.EventArgs e)
         {
             _dockPanelResizeInProgress = true;
+            NotifyLayoutActivity("DockPanel.SizeChanged");
 
             if (_dockPanel.IsHandleCreated && !_dockPanel.IsDisposed)
             {
@@ -206,9 +213,20 @@ namespace FlowBlox.AppWindow.ContentFactories
             return _dockPanelResizeInProgress || _dockPanel.ClientSize != _lastDockPanelClientSize;
         }
 
+        private bool IsLayoutSuppressed()
+        {
+            return _layoutDebounceRegistration?.IsSuppressed == true;
+        }
+
+        private void NotifyLayoutActivity(string reason)
+        {
+            _layoutDebounceRegistration?.NotifyActivity(reason);
+        }
+
         private void _dockPanel_Layout(object sender, LayoutEventArgs e)
         {
             _ready = true;
+            NotifyLayoutActivity($"Layout:{e?.AffectedProperty}");
         }
 
         private void TryApplyFixedSizeForAutoResize(DockContent dockContent, DockContentSettings settings)

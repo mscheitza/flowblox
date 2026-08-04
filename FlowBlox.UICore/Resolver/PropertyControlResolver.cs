@@ -1,15 +1,12 @@
-﻿using FlowBlox.Core;
-using FlowBlox.Core.Attributes;
+﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
-using FlowBlox.UICore.Converters.PropertyView;
 using FlowBlox.UICore.Factory.PropertyView;
 using FlowBlox.UICore.PropertyView.Resolver;
 using FlowBlox.UICore.ViewModels.PropertyView;
-using MahApps.Metro.Controls;
-using System.Collections;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Windows;
@@ -185,33 +182,16 @@ namespace FlowBlox.UICore.Resolver
 
                 if (selectionMethodResolution?.Method != null)
                 {
-                    var originalItems = selectionMethodResolution.Method.Invoke(selectionMethodResolution.InvocationTarget, null) as IList;
-                    
-                    IList items = null;
-
-                    bool isRequired = property.GetCustomAttribute<RequiredAttribute>() != null;
-                    if (originalItems != null && !isRequired)
-                    {
-                        items = (IList)Activator.CreateInstance(originalItems.GetType());
-                        items!.Add(null);
-
-                        foreach (var item in originalItems)
-                            items.Add(item);
-                    }
-                    else
-                    {
-                        items = originalItems;
-                    }
-
                     var comboBox = new ComboBox
                     {
-                        ItemsSource = items,
+                        ItemsSource = SelectionItemsSourceResolver.ResolveItemsSource(selectionMethodResolution, property),
                         DisplayMemberPath = uiAttribute?.SelectionDisplayMember
                     };
 
                     comboBox.SelectionChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
 
                     SetComboBoxReadOnly(comboBox, readOnly);
+                    AttachSelectionFilterDependencyRefresh(comboBox, property, target, uiAttribute, selectionMethodResolution);
 
                     comboBox.SetBinding(ComboBox.SelectedValueProperty, binding);
                     return new PropertyControlWithFactoryResult(new Border
@@ -230,7 +210,7 @@ namespace FlowBlox.UICore.Resolver
 
             if (uiAttribute?.Factory == UIFactory.GridView)
             {
-                DataGridFactory dataGridFactory = new DataGridFactory(_window, property, target, readOnly);
+                DataGridFactory dataGridFactory = new DataGridFactory(_window, property, target, readOnly, _parent);
                 dataGridFactory.SetPreselectedInstance(preselectedInstance);
                 return new PropertyControlWithFactoryResult(dataGridFactory.Create(), dataGridFactory);
             }
@@ -251,6 +231,39 @@ namespace FlowBlox.UICore.Resolver
             return new PropertyControlWithFactoryResult(
                 _textBoxWithOptionalButtonsCreator
                     .CreateTextBoxWithOptionalButtons(property, target, displayName, uiAttribute, binding, readOnly));
+        }
+
+        private void AttachSelectionFilterDependencyRefresh(
+            ComboBox comboBox,
+            PropertyInfo property,
+            object target,
+            FlowBloxUIAttribute uiAttribute,
+            SelectionMethodResolutionResult selectionMethodResolution)
+        {
+            if (string.IsNullOrWhiteSpace(uiAttribute?.SelectionFilterDependency))
+                return;
+
+            var dependencyResolution = SelectionFilterDependencyResolver.ResolveSelectionFilterDependencyFromTargetOrParent(
+                target,
+                _parent,
+                uiAttribute.SelectionFilterDependency);
+
+            if (dependencyResolution?.Property == null ||
+                dependencyResolution.InvocationTarget is not INotifyPropertyChanged notifyPropertyChanged)
+            {
+                return;
+            }
+
+            PropertyChangedEventHandler handler = (s, e) =>
+            {
+                if (e.PropertyName != dependencyResolution.Property.Name)
+                    return;
+
+                comboBox.ItemsSource = SelectionItemsSourceResolver.ResolveItemsSource(selectionMethodResolution, property);
+                FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
+            };
+
+            notifyPropertyChanged.PropertyChanged += handler;
         }
 
         private void Toggle_Toggled(object sender, RoutedEventArgs e)

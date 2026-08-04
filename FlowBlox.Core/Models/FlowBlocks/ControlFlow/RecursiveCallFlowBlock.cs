@@ -21,14 +21,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.ControlFlow
         [Display(Name = "InvocationFieldTransferConfig_TransferFrom", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
-            SelectionFilterMethod = nameof(RecursiveCallFlowBlock.GetPossibleTransferFromFieldElements))]
+            SelectionFilterMethod = nameof(RecursiveCallFlowBlock.GetPossibleTransferFromFieldElements),
+            SelectionFilterDependency = nameof(RecursiveCallFlowBlock.ReferencedFlowBlocks))]
         public FieldElement TransferFrom { get; set; }
 
         [Required()]
         [Display(Name = "InvocationFieldTransferConfig_TransferTo", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), 
-            SelectionFilterMethod = nameof(RecursiveCallFlowBlock.GetPossibleTransferToFieldElements))]
+            SelectionFilterMethod = nameof(RecursiveCallFlowBlock.GetPossibleTransferToFieldElements),
+            SelectionFilterDependency = nameof(RecursiveCallFlowBlock.TargetFlowBlock))]
         public FieldElement TransferTo { get; set; }
     }
 
