@@ -807,4 +807,10 @@ Das wiederholt sich, solange der Quell-Flow-Block den rekursiven Aufruf liefert.
   <data name="ProjectPanel_AutoAdjust_NoStart_Message" xml:space="preserve">
     <value>Es wurde kein Start-Flow-Block gefunden. Die automatische Ausrichtung kann daher nicht ausgeführt werden.</value>
   </data>
+  <data name="AppWindow_itmAutomation_Text" xml:space="preserve">
+    <value>Automatisierung</value>
+  </data>
+  <data name="AppWindow_itmFlowBloxTaskManagement_Text" xml:space="preserve">
+    <value>Geplante Projektausführungen...</value>
+  </data>
 </root>

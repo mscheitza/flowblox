@@ -3204,6 +3204,42 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("FlowBloxResourceUtil_FallbackPluralSuffix", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die At startup ähnelt.
+        /// </summary>
+        public static string FlowBloxTaskScheduleType_AtStartup {
+            get {
+                return ResourceManager.GetString("FlowBloxTaskScheduleType_AtStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Daily ähnelt.
+        /// </summary>
+        public static string FlowBloxTaskScheduleType_Daily {
+            get {
+                return ResourceManager.GetString("FlowBloxTaskScheduleType_Daily", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Interval ähnelt.
+        /// </summary>
+        public static string FlowBloxTaskScheduleType_Interval {
+            get {
+                return ResourceManager.GetString("FlowBloxTaskScheduleType_Interval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manual ähnelt.
+        /// </summary>
+        public static string FlowBloxTaskScheduleType_Manual {
+            get {
+                return ResourceManager.GetString("FlowBloxTaskScheduleType_Manual", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test case configuration ähnelt.

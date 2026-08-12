@@ -1,0 +1,390 @@
+<mah:MetroWindow
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    x:Class="FlowBlox.UICore.Views.FlowBloxTaskManagementWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    Title="{x:Static resources:FlowBloxTaskManagementWindow.Title}"
+    Height="780"
+    Width="1180"
+    mc:Ignorable="d"
+    WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/PropertyViewStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter"/>
+
+            <Style x:Key="TaskMgmt.Icon.Blue"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#2F6DB3"/>
+            </Style>
+            <Style x:Key="TaskMgmt.Icon.Green"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#2E8B57"/>
+            </Style>
+            <Style x:Key="TaskMgmt.Icon.Red"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#C94F4F"/>
+            </Style>
+            <Style x:Key="TaskMgmt.Icon.Gray"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#5C6B73"/>
+            </Style>
+            <Style x:Key="TaskMgmt.DetailLabelBorder"
+                   TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#D9E6F2"/>
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="Margin" Value="0,8,0,5"/>
+                <Setter Property="CornerRadius" Value="4"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <DockPanel Margin="10">
+        <Border Background="#FFEEEEEE"
+                DockPanel.Dock="Top"
+                Height="50"
+                Padding="8">
+            <StackPanel Orientation="Horizontal">
+                <iconPacks:PackIconMaterial Kind="CalendarClock"
+                                            Width="30"
+                                            Height="30"
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Foreground="DarkSlateGray"/>
+                <TextBlock Text="{x:Static resources:FlowBloxTaskManagementWindow.Header_Title_Main}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           FontSize="16"/>
+            </StackPanel>
+        </Border>
+
+        <Border Background="#EDF3F9"
+                DockPanel.Dock="Top"
+                Padding="12"
+                CornerRadius="4"
+                Margin="0,8,0,10">
+            <TextBlock Text="{x:Static resources:FlowBloxTaskManagementWindow.Header_Description_Main}"
+                       FontWeight="UltraLight"
+                       Foreground="DarkSlateGray"
+                       TextWrapping="Wrap"/>
+        </Border>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ToolBar Grid.Row="0" VerticalAlignment="Center">
+                <Button Command="{Binding AddProjectFileCommand}"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_AddProjectFile}">
+                    <iconPacks:PackIconMaterial Kind="FileLinkOutline"
+                                                Style="{StaticResource TaskMgmt.Icon.Green}"/>
+                </Button>
+                <Button Command="{Binding AddProjectSpaceCommand}"
+                        Margin="6,0,0,0"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_AddProjectSpace}">
+                    <iconPacks:PackIconMaterial Kind="CloudOutline"
+                                                Style="{StaticResource TaskMgmt.Icon.Green}"/>
+                </Button>
+                <Separator/>
+                <Button Command="{Binding RemoveTaskCommand}"
+                        IsEnabled="{Binding IsTaskSelected}"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_RemoveTask}">
+                    <iconPacks:PackIconMaterial Kind="DeleteOutline"
+                                                Style="{StaticResource TaskMgmt.Icon.Red}"/>
+                </Button>
+                <Button Command="{Binding RunTaskCommand}"
+                        IsEnabled="{Binding IsTaskSelected}"
+                        Margin="6,0,0,0"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_RunTask}">
+                    <iconPacks:PackIconMaterial Kind="PlayCircleOutline"
+                                                Style="{StaticResource TaskMgmt.Icon.Green}"/>
+                </Button>
+                <Button Command="{Binding StopTaskCommand}"
+                        IsEnabled="{Binding IsTaskSelected}"
+                        Margin="6,0,0,0"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_StopTask}">
+                    <iconPacks:PackIconMaterial Kind="StopCircleOutline"
+                                                Style="{StaticResource TaskMgmt.Icon.Red}"/>
+                </Button>
+                <Button Command="{Binding ToggleEnabledCommand}"
+                        IsEnabled="{Binding IsTaskSelected}"
+                        Margin="6,0,0,0"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_ToggleEnabled}">
+                    <iconPacks:PackIconMaterial Kind="Power"
+                                                Style="{StaticResource TaskMgmt.Icon.Blue}"/>
+                </Button>
+                <Button Command="{Binding OpenTaskDirectoryCommand}"
+                        IsEnabled="{Binding IsTaskSelected}"
+                        Margin="6,0,0,0"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_OpenTaskDirectory}">
+                    <iconPacks:PackIconMaterial Kind="FolderOpenOutline"
+                                                Style="{StaticResource TaskMgmt.Icon.Gray}"/>
+                </Button>
+                <Separator/>
+                <Button Command="{Binding ReloadCommand}"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_Reload}">
+                    <iconPacks:PackIconMaterial Kind="Refresh"
+                                                Style="{StaticResource TaskMgmt.Icon.Blue}"/>
+                </Button>
+                <Button Command="{Binding ApplyCommand}"
+                        IsEnabled="{Binding IsDirty}"
+                        Margin="6,0,0,0"
+                        ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_Apply}">
+                    <iconPacks:PackIconMaterial Kind="ContentSave"
+                                                Style="{StaticResource TaskMgmt.Icon.Green}"/>
+                </Button>
+            </ToolBar>
+
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.4*"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <DataGrid Grid.Column="0"
+                          ItemsSource="{Binding Tasks}"
+                          SelectedItem="{Binding SelectedTask}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          IsReadOnly="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_TaskName}"
+                                            Binding="{Binding TaskName, UpdateSourceTrigger=PropertyChanged}"
+                                            Width="2*"/>
+                        <DataGridCheckBoxColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_Enabled}"
+                                                Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"
+                                                Width="90"/>
+                        <DataGridCheckBoxColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_Dirty}"
+                                                Binding="{Binding IsDirty, Mode=OneWay}"
+                                                IsReadOnly="True"
+                                                Width="70"/>
+                        <DataGridCheckBoxColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_Running}"
+                                                Binding="{Binding IsRunning, Mode=OneWay}"
+                                                IsReadOnly="True"
+                                                Width="80"/>
+                        <DataGridTextColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_NextRun}"
+                                            Binding="{Binding NextRunTime, Mode=OneWay, StringFormat={}{0:g}}"
+                                            IsReadOnly="True"
+                                            Width="150"/>
+                        <DataGridTextColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_LastResult}"
+                                            Binding="{Binding LastResult, Mode=OneWay}"
+                                            IsReadOnly="True"
+                                            Width="90"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Border Grid.Column="2"
+                        BorderBrush="#D8DDE3"
+                        BorderThickness="1"
+                        Padding="10">
+                    <StackPanel Visibility="{Binding IsTaskSelected, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <TextBlock Text="{x:Static resources:FlowBloxTaskManagementWindow.Detail_Header}"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+                        <Label Content="{x:Static resources:FlowBloxTaskManagementWindow.Label_ProjectName}"/>
+                        <TextBox Text="{Binding SelectedTask.ProjectName, Mode=OneWay}"
+                                 IsReadOnly="True"/>
+                        <Label Content="{x:Static resources:FlowBloxTaskManagementWindow.Label_ProjectReference}"
+                               Margin="0,8,0,0"/>
+                        <TextBox Text="{Binding SelectedTask.ProjectReference, Mode=OneWay}"
+                                 TextWrapping="Wrap"
+                                 IsReadOnly="True"/>
+                        <Label Content="{x:Static resources:FlowBloxTaskManagementWindow.Label_TaskDirectory}"
+                               Margin="0,8,0,0"/>
+                        <TextBox Text="{Binding SelectedTask.TaskDirectory, Mode=OneWay}"
+                                 TextWrapping="Wrap"
+                                 IsReadOnly="True"/>
+
+                        <TextBlock Text="{x:Static resources:FlowBloxTaskManagementWindow.Detail_Scheduling_Header}"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Margin="0,16,0,0"/>
+
+                        <Border Style="{StaticResource TaskMgmt.DetailLabelBorder}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static resources:FlowBloxTaskManagementWindow.Label_ScheduleType}"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                                <Border Style="{StaticResource PropertyView.HelpIconBorderStyle}">
+                                    <TextBlock Text="?"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="11"
+                                               FontWeight="Bold"
+                                               Foreground="White"/>
+                                    <Border.ToolTip>
+                                        <ToolTip Style="{StaticResource PropertyView.HelpToolTipStyle}"
+                                                 Content="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_ScheduleType}"/>
+                                    </Border.ToolTip>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <ComboBox ItemsSource="{Binding ScheduleTypes}"
+                                  SelectedItem="{Binding SelectedTask.ScheduleType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDisplayNameConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Border Style="{StaticResource TaskMgmt.DetailLabelBorder}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static resources:FlowBloxTaskManagementWindow.Label_StartAt}"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                                <Border Style="{StaticResource PropertyView.HelpIconBorderStyle}">
+                                    <TextBlock Text="?"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="11"
+                                               FontWeight="Bold"
+                                               Foreground="White"/>
+                                    <Border.ToolTip>
+                                        <ToolTip Style="{StaticResource PropertyView.HelpToolTipStyle}"
+                                                 Content="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_StartAt}"/>
+                                    </Border.ToolTip>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <mah:DateTimePicker SelectedDateTime="{Binding SelectedTask.StartAt, Mode=TwoWay}"
+                                            IsEnabled="{Binding SelectedTask.IsStartAtEnabled}"/>
+
+                        <Border Style="{StaticResource TaskMgmt.DetailLabelBorder}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static resources:FlowBloxTaskManagementWindow.Label_IntervalMinutes}"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                                <Border Style="{StaticResource PropertyView.HelpIconBorderStyle}">
+                                    <TextBlock Text="?"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="11"
+                                               FontWeight="Bold"
+                                               Foreground="White"/>
+                                    <Border.ToolTip>
+                                        <ToolTip Style="{StaticResource PropertyView.HelpToolTipStyle}"
+                                                 Content="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_IntervalMinutes}"/>
+                                    </Border.ToolTip>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <TextBox Text="{Binding SelectedTask.IntervalMinutes, Mode=TwoWay}"
+                                 IsEnabled="{Binding SelectedTask.IsIntervalEnabled}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Expander Grid.Row="2"
+                      Header="{x:Static resources:FlowBloxTaskManagementWindow.Expander_Sessions_Header}"
+                      Margin="0,10,0,0"
+                      IsExpanded="False"
+                      MaxHeight="220">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ToolBar Grid.Row="0">
+                        <Button Command="{Binding RefreshSessionsCommand}"
+                                IsEnabled="{Binding IsTaskSelected}"
+                                ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_RefreshSessions}">
+                            <iconPacks:PackIconMaterial Kind="Refresh"
+                                                        Style="{StaticResource TaskMgmt.Icon.Blue}"/>
+                        </Button>
+                        <Button Command="{Binding OpenSessionLogFileCommand}"
+                                IsEnabled="{Binding IsSessionSelected}"
+                                Margin="6,0,0,0"
+                                ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_OpenSessionLog}">
+                            <iconPacks:PackIconMaterial Kind="FileDocumentOutline"
+                                                        Style="{StaticResource TaskMgmt.Icon.Blue}"/>
+                        </Button>
+                        <Button Command="{Binding OpenSessionDirectoryCommand}"
+                                IsEnabled="{Binding IsSessionSelected}"
+                                Margin="6,0,0,0"
+                                ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_OpenSessionDirectory}">
+                            <iconPacks:PackIconMaterial Kind="FolderSearchOutline"
+                                                        Style="{StaticResource TaskMgmt.Icon.Gray}"/>
+                        </Button>
+                    </ToolBar>
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding Sessions}"
+                              SelectedItem="{Binding SelectedSession}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              Margin="0,6,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_SessionStatus}"
+                                                    Width="130">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconMaterial Kind="{Binding StatusIconKind}"
+                                                                        Width="15"
+                                                                        Height="15"
+                                                                        Margin="0,0,6,0"
+                                                                        VerticalAlignment="Center"
+                                                                        Foreground="{Binding StatusBrush}"/>
+                                            <TextBlock Text="{Binding StatusText}"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_SessionCreatedAt}"
+                                                Binding="{Binding CreatedAt, Mode=OneWay, StringFormat={}{0:g}}"
+                                                Width="170"/>
+                            <DataGridTextColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_SessionId}"
+                                                Binding="{Binding SessionId, Mode=OneWay}"
+                                                Width="150"/>
+                            <DataGridTextColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_SessionLogFile}"
+                                                Binding="{Binding LogFilePath, Mode=OneWay}"
+                                                Width="2*"/>
+                            <DataGridTextColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_SessionMessage}"
+                                                Binding="{Binding Message, Mode=OneWay}"
+                                                Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Expander>
+
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,10,0,0">
+                <Button Command="{Binding CloseCommand}" IsCancel="True">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="Close" Margin="0,0,5,0"/>
+                            <TextBlock Text="{x:Static resources:FlowBloxTaskManagementWindow.Button_Close}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</mah:MetroWindow>

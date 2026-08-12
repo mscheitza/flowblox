@@ -5,5 +5,6 @@
         public string ProjectName { get; init; }
         public string ContentForHash { get; init; }
         public DateTime UtcNow { get; init; } = DateTime.UtcNow;
+        public Dictionary<int, string> StoredUids { get; init; } = new();
     }
 }

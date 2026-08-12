@@ -12,7 +12,7 @@ namespace FlowBlox.UICore.Converters
                 return null;
 
             var field = value.GetType().GetField(value.ToString());
-            var displayAttribute = field.GetCustomAttributes(typeof(DisplayAttribute), false)
+            var displayAttribute = field?.GetCustomAttributes(typeof(DisplayAttribute), false)
                                         .FirstOrDefault() as DisplayAttribute;
             return displayAttribute != null ? displayAttribute.GetName() : value.ToString();
         }

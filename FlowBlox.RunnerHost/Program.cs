@@ -33,6 +33,8 @@ namespace FlowBlox.Core.RunnerHost
 
         private static int Run(Options options)
         {
+            var responseFile = options.ResponseFile;
+
             try
             {
                 if (!File.Exists(options.RequestFile))
@@ -44,16 +46,18 @@ namespace FlowBlox.Core.RunnerHost
                 if (request == null)
                     throw new InvalidOperationException("RunnerRequest could not be deserialized.");
 
+                responseFile = RunnerRequestTemplatePostprocessor.ResolveTemplates(request, options.ResponseFile);
+
                 // Execute project
                 var response = FlowBloxProjectRunner.Run(request);
 
                 // Ensure response directory exists
-                var responseDir = Path.GetDirectoryName(options.ResponseFile);
+                var responseDir = Path.GetDirectoryName(responseFile);
                 if (!string.IsNullOrWhiteSpace(responseDir) && !Directory.Exists(responseDir))
                     Directory.CreateDirectory(responseDir);
 
                 // Write response
-                RunnerJson.WriteFile(options.ResponseFile, response);
+                RunnerJson.WriteFile(responseFile, response);
 
                 return response.ExitCode;
             }
@@ -72,7 +76,7 @@ namespace FlowBlox.Core.RunnerHost
                         FinishedUtc = DateTime.UtcNow
                     };
 
-                    RunnerJson.WriteFile(options.ResponseFile, fallbackResponse);
+                    RunnerJson.WriteFile(responseFile, fallbackResponse);
                 }
                 catch
                 {

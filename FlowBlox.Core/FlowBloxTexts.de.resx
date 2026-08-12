@@ -3687,6 +3687,18 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
 	<data name="AssistantConfiguration_ApproximateCharactersPerToken_Tooltip" xml:space="preserve">
 		<value>Geschätztes Zeichen-zu-Token-Verhältnis für providerunabhängiges Kürzen des Kontextes.</value>
 	</data>
+  <data name="FlowBloxTaskScheduleType_Manual" xml:space="preserve">
+    <value>Manuell</value>
+  </data>
+  <data name="FlowBloxTaskScheduleType_AtStartup" xml:space="preserve">
+    <value>Bei Systemstart</value>
+  </data>
+  <data name="FlowBloxTaskScheduleType_Daily" xml:space="preserve">
+    <value>Täglich</value>
+  </data>
+  <data name="FlowBloxTaskScheduleType_Interval" xml:space="preserve">
+    <value>Intervall</value>
+  </data>
 </root>
 
 

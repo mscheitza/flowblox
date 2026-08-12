@@ -160,6 +160,24 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Scheduled project executions... ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmFlowBloxTaskManagement_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmFlowBloxTaskManagement_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automation ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmAutomation_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmAutomation_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Check for updates... ähnelt.
         /// </summary>
         internal static string AppWindow_itmCheckForNewVersion_Text {

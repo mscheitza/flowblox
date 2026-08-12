@@ -43,23 +43,21 @@ namespace FlowBlox.Core.Util.Controls
         private static void LocalizeToolStripItems(ToolStrip toolStrip, string context)
         {
             foreach (ToolStripItem item in toolStrip.Items)
-            {
-                string key = $"{context}_{item.Name}_Text";
-                string localizedText = FlowBloxResourceUtil.GetLocalizedString(key, typeof(FlowBloxMainUITexts));
-                if (!string.IsNullOrEmpty(localizedText))
-                    item.Text = localizedText;
+                LocalizeToolStripItem(item, context);
+        }
 
-                if (item is ToolStripDropDownItem dropDownItem)
-                {
-                    foreach (ToolStripItem subItem in dropDownItem.DropDownItems)
-                    {
-                        string subKey = $"{context}_{subItem.Name}_Text";
-                        string localizedSubText = FlowBloxResourceUtil.GetLocalizedString(subKey, typeof(FlowBloxMainUITexts));
-                        if (!string.IsNullOrEmpty(localizedSubText))
-                            subItem.Text = localizedSubText;
-                    }
-                }
-            }
+        private static void LocalizeToolStripItem(ToolStripItem item, string context)
+        {
+            string key = $"{context}_{item.Name}_Text";
+            string localizedText = FlowBloxResourceUtil.GetLocalizedString(key, typeof(FlowBloxMainUITexts));
+            if (!string.IsNullOrEmpty(localizedText))
+                item.Text = localizedText;
+
+            if (item is not ToolStripDropDownItem dropDownItem)
+                return;
+
+            foreach (ToolStripItem subItem in dropDownItem.DropDownItems)
+                LocalizeToolStripItem(subItem, context);
         }
     }
 }

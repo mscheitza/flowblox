@@ -3744,6 +3744,18 @@ If a Join collector should aggregate links across all page iterations:
 	<data name="AssistantConfiguration_ApproximateCharactersPerToken_Tooltip" xml:space="preserve">
 		<value>Approximate character-to-token ratio used for provider-independent context trimming.</value>
 	</data>
+  <data name="FlowBloxTaskScheduleType_Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="FlowBloxTaskScheduleType_AtStartup" xml:space="preserve">
+    <value>At startup</value>
+  </data>
+  <data name="FlowBloxTaskScheduleType_Daily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="FlowBloxTaskScheduleType_Interval" xml:space="preserve">
+    <value>Interval</value>
+  </data>
 </root>
 
 

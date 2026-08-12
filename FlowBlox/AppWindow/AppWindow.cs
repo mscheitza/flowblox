@@ -1379,6 +1379,12 @@ namespace FlowBlox.AppWindow
             WindowsFormWPFHelper.ShowDialog(dialog, this);
         }
 
+        private void itmFlowBloxTaskManagement_Click(object sender, EventArgs e)
+        {
+            var dialog = new FlowBloxTaskManagementWindow();
+            WindowsFormWPFHelper.ShowDialog(dialog, this);
+        }
+
         private void itmManageInputFiles_Click(object sender, EventArgs e)
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;

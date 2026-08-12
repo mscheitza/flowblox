@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Title" xml:space="preserve"><value>Geplante FlowBlox-Aufgaben</value></data>
+  <data name="Header_Title_Main" xml:space="preserve"><value>Geplante Projektausführungen</value></data>
+  <data name="Header_Description_Main" xml:space="preserve"><value>Verwaltet FlowBlox-Projektausführungen im nativen Windows-Aufgabenplanungsordner "\FlowBlox and contributors".</value></data>
+  <data name="Tooltip_AddProjectFile" xml:space="preserve"><value>Projekt per Projektdatei verknüpfen</value></data>
+  <data name="Tooltip_AddProjectSpace" xml:space="preserve"><value>Projekt per Project Space verknüpfen</value></data>
+  <data name="Tooltip_RemoveTask" xml:space="preserve"><value>Ausgewählte Aufgabe entfernen</value></data>
+  <data name="Tooltip_RunTask" xml:space="preserve"><value>Ausgewählte Aufgabe jetzt ausführen</value></data>
+  <data name="Tooltip_StopTask" xml:space="preserve"><value>Ausgewählte Aufgabe stoppen</value></data>
+  <data name="Tooltip_ToggleEnabled" xml:space="preserve"><value>Ausgewählte Aufgabe aktivieren oder deaktivieren</value></data>
+  <data name="Tooltip_OpenTaskDirectory" xml:space="preserve"><value>Aufgabenverzeichnis öffnen</value></data>
+  <data name="Tooltip_Reload" xml:space="preserve"><value>Aufgaben neu laden</value></data>
+  <data name="Tooltip_Apply" xml:space="preserve"><value>Änderungen übernehmen</value></data>
+  <data name="Header_TaskName" xml:space="preserve"><value>Aufgabenname</value></data>
+  <data name="Header_Enabled" xml:space="preserve"><value>Aktiv</value></data>
+  <data name="Header_Dirty" xml:space="preserve"><value>Geändert</value></data>
+  <data name="Header_Running" xml:space="preserve"><value>Läuft</value></data>
+  <data name="Header_ScheduleType" xml:space="preserve"><value>Planung</value></data>
+  <data name="Header_StartAt" xml:space="preserve"><value>Start</value></data>
+  <data name="Header_IntervalMinutes" xml:space="preserve"><value>Intervall Min.</value></data>
+  <data name="Header_NextRun" xml:space="preserve"><value>Nächster Lauf</value></data>
+  <data name="Header_LastResult" xml:space="preserve"><value>Ergebnis</value></data>
+  <data name="Detail_Header" xml:space="preserve"><value>Projekt</value></data>
+  <data name="Label_ProjectName" xml:space="preserve"><value>Projektname</value></data>
+  <data name="Label_ProjectReference" xml:space="preserve"><value>Referenz</value></data>
+  <data name="Label_TaskDirectory" xml:space="preserve"><value>Aufgabenverzeichnis</value></data>
+  <data name="Detail_Scheduling_Header" xml:space="preserve"><value>Zeitsteuerung</value></data>
+  <data name="Label_ScheduleType" xml:space="preserve"><value>Planung</value></data>
+  <data name="Label_StartAt" xml:space="preserve"><value>Startzeitpunkt</value></data>
+  <data name="Label_IntervalMinutes" xml:space="preserve"><value>Intervall in Minuten</value></data>
+  <data name="Tooltip_ScheduleType" xml:space="preserve"><value>Manuelle Aufgaben werden ohne automatischen Ausloeser gespeichert und koennen aus FlowBlox oder der Windows-Aufgabenplanung manuell gestartet werden. Bei Systemstart startet die Aufgabe beim Windows-Start. Taeglich startet einmal pro Tag mit der Uhrzeit aus dem Startzeitpunkt. Intervall startet wiederholt ab dem Startzeitpunkt mit dem angegebenen Intervall.</value></data>
+  <data name="Tooltip_StartAt" xml:space="preserve"><value>Wird fuer taegliche und Intervall-Ausfuehrungen verwendet. Bei taeglicher Ausfuehrung bestimmt die Uhrzeit, wann das Projekt jeden Tag startet. Bei Intervall-Ausfuehrung ist dies der erste moegliche Startzeitpunkt.</value></data>
+  <data name="Tooltip_IntervalMinutes" xml:space="preserve"><value>Wird nur fuer Intervall-Ausfuehrungen verwendet. Legt fest, wie viele Minuten zwischen automatischen Projektausfuehrungen liegen.</value></data>
+  <data name="Expander_Sessions_Header" xml:space="preserve"><value>Gestartete Sitzungen</value></data>
+  <data name="Tooltip_RefreshSessions" xml:space="preserve"><value>Sitzungen aktualisieren</value></data>
+  <data name="Tooltip_OpenSessionLog" xml:space="preserve"><value>Sitzungs-Logdatei öffnen</value></data>
+  <data name="Tooltip_OpenSessionDirectory" xml:space="preserve"><value>Sitzungsverzeichnis öffnen</value></data>
+  <data name="Header_SessionStatus" xml:space="preserve"><value>Status</value></data>
+  <data name="Header_SessionCreatedAt" xml:space="preserve"><value>Erstellt am</value></data>
+  <data name="Header_SessionId" xml:space="preserve"><value>Eindeutige ID</value></data>
+  <data name="Header_SessionLogFile" xml:space="preserve"><value>Logdatei</value></data>
+  <data name="Header_SessionMessage" xml:space="preserve"><value>Meldung</value></data>
+  <data name="Button_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="Error_LoadTasksFailed" xml:space="preserve"><value>Aufgaben konnten nicht geladen werden.</value></data>
+  <data name="Error_LoadProjectFailed" xml:space="preserve"><value>Projekt konnte nicht geladen werden.</value></data>
+  <data name="Error_RunTaskFailed" xml:space="preserve"><value>Aufgabe konnte nicht gestartet werden.</value></data>
+  <data name="Error_StopTaskFailed" xml:space="preserve"><value>Aufgabe konnte nicht gestoppt werden.</value></data>
+  <data name="Error_SaveFailed" xml:space="preserve"><value>Aufgaben konnten nicht gespeichert werden.</value></data>
+  <data name="Error_TaskSchedulerPermissionDenied" xml:space="preserve"><value>Die Windows-Aufgabenplanung hat den Vorgang abgelehnt, weil der aktuelle Benutzer nicht die notwendigen Rechte besitzt. Bitte starte FlowBlox als Administrator und versuche es erneut.</value></data>
+  <data name="Error_DuplicateTaskName" xml:space="preserve"><value>Aufgabennamen müssen eindeutig sein.</value></data>
+  <data name="Error_InvalidTaskName" xml:space="preserve"><value>Der Aufgabenname enthaelt Zeichen, die von der Windows-Aufgabenplanung nicht unterstuetzt werden.</value></data>
+  <data name="Error_ProjectReferenceMissing" xml:space="preserve"><value>Eine Projektdatei oder Project-Space-GUID ist erforderlich.</value></data>
+  <data name="Message_SaveSuccessful" xml:space="preserve"><value>Aufgabenänderungen wurden gespeichert.</value></data>
+  <data name="Message_DiscardChangesQuestion" xml:space="preserve"><value>Es gibt ungespeicherte Aufgabenänderungen. Verwerfen und aus der Windows-Aufgabenplanung neu laden?</value></data>
+  <data name="Message_SaveBeforeRun" xml:space="preserve"><value>Bitte speichere die Aufgabe, bevor sie gestartet wird.</value></data>
+  <data name="Message_SaveBeforeStop" xml:space="preserve"><value>Bitte speichere die Aufgabe, bevor sie gestoppt wird.</value></data>
+  <data name="Message_TaskAlreadyRunning" xml:space="preserve"><value>Die ausgewählte Aufgabe läuft bereits.</value></data>
+  <data name="Message_TaskNotRunning" xml:space="preserve"><value>Die ausgewählte Aufgabe läuft nicht.</value></data>
+  <data name="SessionStatus_Running" xml:space="preserve"><value>In Betrieb</value></data>
+  <data name="SessionStatus_Successful" xml:space="preserve"><value>Erfolgreich</value></data>
+  <data name="SessionStatus_Failed" xml:space="preserve"><value>Fehlerhaft</value></data>
+  <data name="SessionMessage_Running" xml:space="preserve"><value>Die Response-Datei wurde noch nicht geschrieben.</value></data>
+  <data name="SessionMessage_Successful" xml:space="preserve"><value>Ausführung erfolgreich abgeschlossen.</value></data>
+</root>

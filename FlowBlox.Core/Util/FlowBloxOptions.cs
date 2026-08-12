@@ -90,6 +90,7 @@ namespace FlowBlox.Core.Util
                 new OptionElement("Paths.ProblemTraceDir", @"%localappdata%\FlowBlox\logs\runtime\problems", "Problem trace directory path.", OptionElement.OptionType.Text),
                 new OptionElement("Paths.RuntimeLogDir", @"%localappdata%\FlowBlox\logs\runtime", "Runtime log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
                 new OptionElement("Paths.ApplicationLogDir", @"%localappdata%\FlowBlox\logs\application", "Application log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.ScheduledTasksDir", @"%localappdata%\FlowBlox\tasks", "Base directory for scheduled FlowBlox task request, response, and log files.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
                 new OptionElement("Paths.DeepCopierProtocolDir", @"%localappdata%\FlowBlox\copy_protocols", "Deep copier protocol directory.", OptionElement.OptionType.Text),
                 new OptionElement("Paths.ToolboxCacheDir", @"%localappdata%\FlowBlox\toolbox", "Global toolbox cache directory path.", OptionElement.OptionType.Text),
 

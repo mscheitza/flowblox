@@ -808,4 +808,10 @@ This repeats while the source flow block keeps producing the recursive call.</va
   <data name="ProjectPanel_AutoAdjust_NoStart_Message" xml:space="preserve">
     <value>No start flow block was found. Automatic alignment cannot be performed.</value>
   </data>
+  <data name="AppWindow_itmAutomation_Text" xml:space="preserve">
+    <value>Automation</value>
+  </data>
+  <data name="AppWindow_itmFlowBloxTaskManagement_Text" xml:space="preserve">
+    <value>Scheduled project executions...</value>
+  </data>
 </root>

@@ -9,6 +9,7 @@ using FlowBlox.Services;
 using FlowBlox.Interfaces;
 using FlowBlox.Core.Services;
 using FlowBlox.WebServices;
+using FlowBlox.Core.TaskManagement;
 
 namespace FlowBlox
 {
@@ -29,6 +30,7 @@ namespace FlowBlox
             serviceCollection.AddSingleton<IAppNotificationService, AppNotificationService>();
             serviceCollection.AddSingleton<IFlowBloxInstallerService, FlowBloxInstallerService>();
             serviceCollection.AddSingleton<IFlowBloxActionHistoryService, FlowBloxActionHistoryService>();
+            serviceCollection.AddSingleton<ITaskManagementService, WindowsTaskManagementService>();
         }
     }
 }

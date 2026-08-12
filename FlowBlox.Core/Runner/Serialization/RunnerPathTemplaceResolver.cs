@@ -13,6 +13,7 @@ namespace FlowBlox.Core.Runner.Serialization
         // - $Options::Key (legacy)
         // - %Options::Key% (path-friendly)
         // - %timestamp%, %date%, %time%, %projectName%, %hash%, %guid%
+        // - %uid8%, %uid16%, %NewUID(16,0)% where the second argument keeps a generated UID in the context.
         public static string Resolve(string template, RunnerPathTemplateContext ctx = null)
         {
             if (string.IsNullOrWhiteSpace(template))
@@ -68,12 +69,42 @@ namespace FlowBlox.Core.Runner.Serialization
             value = ReplaceToken(value, "%date%", date);
             value = ReplaceToken(value, "%time%", time);
             value = ReplaceToken(value, "%guid%", guid);
+            value = ReplaceUidTokens(value, ctx);
 
             // Optional tokens
             value = ReplaceToken(value, "%projectName%", projectNameSafe);
             value = ReplaceToken(value, "%hash%", hash);
 
             return value;
+        }
+
+        private static string ReplaceUidTokens(string value, RunnerPathTemplateContext ctx)
+        {
+            value = Regex.Replace(value, "%uid(?<length>8|16)%", m =>
+            {
+                var length = int.Parse(m.Groups["length"].Value);
+                return CreateUid(length);
+            }, RegexOptions.IgnoreCase);
+
+            return Regex.Replace(value, "%NewUID\\((?<length>\\d+)\\s*,\\s*(?<index>\\d+)\\)%", m =>
+            {
+                var length = Math.Clamp(int.Parse(m.Groups["length"].Value), 1, 32);
+                var index = int.Parse(m.Groups["index"].Value);
+
+                if (!ctx.StoredUids.TryGetValue(index, out var uid) || uid.Length != length)
+                {
+                    uid = CreateUid(length);
+                    ctx.StoredUids[index] = uid;
+                }
+
+                return uid;
+            }, RegexOptions.IgnoreCase);
+        }
+
+        private static string CreateUid(int length)
+        {
+            length = Math.Clamp(length, 1, 32);
+            return Guid.NewGuid().ToString("N")[..length];
         }
 
         private static string ReplaceToken(string value, string token, string replacement)
