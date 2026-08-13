@@ -13,7 +13,7 @@ namespace FlowBlox.AppWindow
         private static readonly Dictionary<Type, string> _resourceKeysByDockType = new()
         {
             [typeof(ProjectPanel)] = nameof(FlowBloxMainUIImages.ProjectPanel_16),
-            [typeof(ComponentLibraryPanel)] = nameof(FlowBloxMainUIImages.ComponentLibraryPanel_16),
+            [typeof(ComponentLibraryView)] = nameof(FlowBloxMainUIImages.ComponentLibraryPanel_16),
             [typeof(FieldView)] = nameof(FlowBloxMainUIImages.FieldView_16),
             [typeof(ManagedObjectsView)] = nameof(FlowBloxMainUIImages.ManagedObjectsView_16),
             [typeof(TestView)] = nameof(FlowBloxMainUIImages.DockContent_16),

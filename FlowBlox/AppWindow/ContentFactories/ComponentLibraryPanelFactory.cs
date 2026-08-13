@@ -5,24 +5,25 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace FlowBlox.AppWindow.ContentFactories
 {
-    public class ComponentLibraryPanelFactory : DockContentFactoryBase<ComponentLibraryPanel>
+    public class ComponentLibraryPanelFactory : DockContentFactoryBase<ComponentLibraryView>
     {
         private string _displayName;
 
         public ComponentLibraryPanelFactory(DockPanel dockPanel) : base(dockPanel)
         {
-            _displayName = FlowBloxResourceUtil.GetLocalizedString($"{nameof(ComponentLibraryPanel) + "_Text"}", typeof(FlowBloxMainUITexts));
+            _displayName = FlowBloxResourceUtil.GetLocalizedString($"{nameof(ComponentLibraryView) + "_Text"}", typeof(FlowBloxMainUITexts));
         }
 
-        public override ComponentLibraryPanel Create()
+        public override ComponentLibraryView Create()
         {
-            var dockContent = new ComponentLibraryPanel
+            var dockContent = new ComponentLibraryView
             {
                 Dock = DockStyle.Fill,
+                Text = _displayName,
                 Name = _displayName,
                 DockAreas = DockAreas.DockLeft | DockAreas.DockRight
             };
-            var key = typeof(ComponentLibraryPanel).FullName;
+            var key = typeof(ComponentLibraryView).FullName;
             return Create(key, dockContent);
         }
 

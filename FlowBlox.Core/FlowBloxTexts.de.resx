@@ -3699,6 +3699,33 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="FlowBloxTaskScheduleType_Interval" xml:space="preserve">
     <value>Intervall</value>
   </data>
+  <data name="SplitFlowBlock_Description" xml:space="preserve">
+    <value>Zerlegt einen Eingabetext anhand eines oder mehrerer Separatoren in mehrere Ausgabewerte.</value>
+  </data>
+  <data name="SplitFlowBlock_DisplayName" xml:space="preserve">
+    <value>Aufteilen</value>
+  </data>
+  <data name="SplitFlowBlock_RemoveEmptyEntries" xml:space="preserve">
+    <value>Leere Eintrage entfernen</value>
+  </data>
+  <data name="SplitFlowBlock_Separators" xml:space="preserve">
+    <value>Separatoren</value>
+  </data>
+  <data name="SplitFlowBlock_Validation_NoSeparatorDefined" xml:space="preserve">
+    <value>Es wurde kein Separator angegeben. Bitte geben Sie mindestens einen Separator an.</value>
+  </data>
+  <data name="SplitSeparatorDefinition_Separator" xml:space="preserve">
+    <value>Separator</value>
+  </data>
+  <data name="SplitSeparatorDefinition_SpecialSeparator" xml:space="preserve">
+    <value>Spezialseparator</value>
+  </data>
+  <data name="SplitSeparatorDefinition_Validation_ManySeparatorsDefined" xml:space="preserve">
+    <value>Es wurde mehr als ein Separator angegeben. Bitte geben Sie entweder einen Separator oder einen Spezialseparator an.</value>
+  </data>
+  <data name="SplitSeparatorDefinition_Validation_NoSeparatorDefined" xml:space="preserve">
+    <value>Es wurde kein Separator angegeben. Bitte geben Sie entweder einen Separator oder einen Spezialseparator an.</value>
+  </data>
 </root>
 
 

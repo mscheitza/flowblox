@@ -1,6 +1,8 @@
+using FlowBlox.Core.Authentication;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.Runner.Contracts;
 using FlowBlox.Core.Runner.Serialization;
 using FlowBlox.Core.TaskManagement;
@@ -33,6 +35,8 @@ namespace FlowBlox.UICore.ViewModels
         private FlowBloxScheduledSession _selectedSession;
         private bool _isBusy;
         private bool _isDirty;
+        private bool _isLoadingInputParameters;
+        private int _selectedDetailTabIndex;
 
         public ObservableCollection<FlowBloxTaskItemViewModel> Tasks { get; } = new();
         public ObservableCollection<FlowBloxTaskScheduleType> ScheduleTypes { get; }
@@ -63,7 +67,12 @@ namespace FlowBlox.UICore.ViewModels
                 _selectedTask = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsTaskSelected));
+                OnPropertyChanged(nameof(InputParameters));
+                OnInputParameterStateChanged();
                 RefreshSessions();
+
+                if (SelectedDetailTabIndex == 1)
+                    _ = LoadInputParametersAsync();
             }
         }
 
@@ -81,6 +90,41 @@ namespace FlowBlox.UICore.ViewModels
         public bool IsTaskSelected => SelectedTask != null;
         public bool IsSessionSelected => SelectedSession != null;
         public bool IsBusy { get => _isBusy; set { _isBusy = value; OnPropertyChanged(); } }
+        public bool IsLoadingInputParameters
+        {
+            get => _isLoadingInputParameters;
+            private set
+            {
+                if (_isLoadingInputParameters == value)
+                    return;
+
+                _isLoadingInputParameters = value;
+                OnPropertyChanged();
+                OnInputParameterStateChanged();
+            }
+        }
+
+        public int SelectedDetailTabIndex
+        {
+            get => _selectedDetailTabIndex;
+            set
+            {
+                if (_selectedDetailTabIndex == value)
+                    return;
+
+                _selectedDetailTabIndex = value;
+                OnPropertyChanged();
+
+                if (_selectedDetailTabIndex == 1)
+                    _ = LoadInputParametersAsync();
+            }
+        }
+
+        public ObservableCollection<FlowBloxTaskInputParameterViewModel> InputParameters => SelectedTask?.InputParameters ?? new ObservableCollection<FlowBloxTaskInputParameterViewModel>();
+        public bool HasInputParameters => InputParameters.Count > 0;
+        public bool ShowInputParameterList => IsTaskSelected && !IsLoadingInputParameters && SelectedTask?.InputParametersLoaded == true && HasInputParameters;
+        public bool ShowInputParameterEmptyMessage => IsTaskSelected && !IsLoadingInputParameters && SelectedTask?.InputParametersLoaded == true && !HasInputParameters;
+        public bool ShowInputParameterPrompt => IsTaskSelected && !IsLoadingInputParameters && SelectedTask?.InputParametersLoaded != true;
         public bool IsDirty
         {
             get => _isDirty;
@@ -277,6 +321,23 @@ namespace FlowBlox.UICore.ViewModels
                 RunTaskCommand.Invalidate();
                 StopTaskCommand.Invalidate();
             }
+
+            if (e.PropertyName == nameof(FlowBloxTaskItemViewModel.InputParametersLoaded))
+                OnInputParameterStateChanged();
+        }
+
+        private void InputParameter_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            SelectedTask?.MarkDirty();
+            IsDirty = true;
+        }
+
+        private void OnInputParameterStateChanged()
+        {
+            OnPropertyChanged(nameof(HasInputParameters));
+            OnPropertyChanged(nameof(ShowInputParameterList));
+            OnPropertyChanged(nameof(ShowInputParameterEmptyMessage));
+            OnPropertyChanged(nameof(ShowInputParameterPrompt));
         }
 
         private string CreateUniqueTaskName(string baseName)
@@ -324,6 +385,80 @@ namespace FlowBlox.UICore.ViewModels
 
             baseDir = Environment.ExpandEnvironmentVariables(baseDir);
             return Path.Combine(baseDir, safeProjectName);
+        }
+
+        private async Task LoadInputParametersAsync()
+        {
+            if (SelectedTask == null || SelectedTask.InputParametersLoaded || IsLoadingInputParameters)
+                return;
+
+            var task = SelectedTask;
+
+            try
+            {
+                IsLoadingInputParameters = true;
+
+                var project = await LoadProjectForTaskAsync(task);
+                if (!ReferenceEquals(task, SelectedTask))
+                    return;
+
+                task.LoadedProject = project;
+                task.InputParameters.Clear();
+
+                var inputFields = project?.UserFields?
+                    .Where(x => x.IsUserInputField())
+                    .OrderBy(x => x.Name, StringComparer.OrdinalIgnoreCase)
+                    .ToList() ?? new List<Core.Models.Components.FieldElement>();
+
+                foreach (var field in inputFields)
+                {
+                    task.UserFields.TryGetValue(field.Name, out var existingValue);
+                    var parameter = new FlowBloxTaskInputParameterViewModel(field, existingValue);
+                    parameter.PropertyChanged += InputParameter_PropertyChanged;
+                    task.InputParameters.Add(parameter);
+                }
+
+                task.InputParametersLoaded = true;
+                OnPropertyChanged(nameof(InputParameters));
+                OnInputParameterStateChanged();
+            }
+            catch (Exception ex)
+            {
+                await ShowError("Error_LoadInputParametersFailed", ex.Message);
+            }
+            finally
+            {
+                IsLoadingInputParameters = false;
+            }
+        }
+
+        private static async Task<FlowBloxProject> LoadProjectForTaskAsync(FlowBloxTaskItemViewModel task)
+        {
+            if (task.LoadedProject != null)
+                return task.LoadedProject;
+
+            if (!string.IsNullOrWhiteSpace(task.ProjectFile))
+                return await Task.Run(() => FlowBloxProject.FromFile(task.ProjectFile));
+
+            if (!string.IsNullOrWhiteSpace(task.ProjectSpaceGuid))
+            {
+                var baseUrl = FlowBloxOptions.GetOptionInstance().OptionCollection["Api.ProjectServiceBaseUrl"].Value;
+                var webApi = new FlowBloxWebApiService(baseUrl);
+                var token = FlowBloxAccountManager.Instance.GetUserToken(baseUrl);
+                return await FlowBloxProject.FromProjectSpaceGuidAsync(task.ProjectSpaceGuid, task.ProjectSpaceVersion, token, webApi);
+            }
+
+            return null;
+        }
+
+        private static void ApplyLoadedInputParameters(FlowBloxTaskItemViewModel task)
+        {
+            if (task?.InputParametersLoaded != true)
+                return;
+
+            task.UserFields.Clear();
+            foreach (var parameter in task.InputParameters)
+                task.UserFields[parameter.FieldName] = parameter.ToRunnerValue();
         }
 
         private void RemoveTask()
@@ -434,6 +569,7 @@ namespace FlowBlox.UICore.ViewModels
 
                 foreach (var task in currentTasks)
                 {
+                    ApplyLoadedInputParameters(task);
                     EnsureTaskFiles(task);
 
                     if (!task.IsNew && !string.Equals(task.OriginalTaskName, task.TaskName, StringComparison.OrdinalIgnoreCase))
@@ -511,6 +647,7 @@ namespace FlowBlox.UICore.ViewModels
                 AutoRestart = false,
                 AbortOnError = true,
                 AbortOnWarning = false,
+                UserFields = new Dictionary<string, string>(task.UserFields, StringComparer.OrdinalIgnoreCase),
                 OptionOverrides = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                 {
                     ["Paths.RuntimeLogDir"] = Path.Combine(task.TaskDirectory, "logs", "%NewUID(8,0)%")
@@ -647,7 +784,11 @@ namespace FlowBlox.UICore.ViewModels
                 FlowBloxResourceUtil.GetLocalizedString("FileOpenMode_Dialog_Message", typeof(Core.FlowBloxTexts)),
                 new GenericSelectionHandler<FileOpenMode>(
                     Enum.GetValues(typeof(FileOpenMode)).Cast<FileOpenMode>().ToList(),
-                    mode => mode.GetDisplayName()));
+                    mode => mode.GetDisplayName()))
+            {
+                Owner = _ownerWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
 
             if (dialog.ShowDialog() == true)
             {

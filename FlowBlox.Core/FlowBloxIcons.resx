@@ -139,6 +139,9 @@
   <data name="call_merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\call-merge.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="call_split" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\call-split.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="code_braces" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\code-braces.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

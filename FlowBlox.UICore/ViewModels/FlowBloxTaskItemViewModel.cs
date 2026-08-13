@@ -1,5 +1,7 @@
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.TaskManagement;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -27,6 +29,7 @@ namespace FlowBlox.UICore.ViewModels
         private bool _isDirty;
         private bool _isRunning;
         private bool _isTrackingChanges;
+        private bool _inputParametersLoaded;
 
         public string OriginalTaskName { get; set; }
 
@@ -51,9 +54,9 @@ namespace FlowBlox.UICore.ViewModels
         public DateTime? StartAt { get => _startAt; set { if (_startAt == value) return; _startAt = value; OnPropertyChanged(); MarkDirty(); } }
         public int IntervalMinutes { get => _intervalMinutes; set { if (_intervalMinutes == value) return; _intervalMinutes = value; OnPropertyChanged(); MarkDirty(); } }
         public string ProjectName { get => _projectName; set { if (_projectName == value) return; _projectName = value; OnPropertyChanged(); MarkDirty(); } }
-        public string ProjectFile { get => _projectFile; set { if (_projectFile == value) return; _projectFile = value; OnPropertyChanged(); OnPropertyChanged(nameof(ProjectReference)); MarkDirty(); } }
-        public string ProjectSpaceGuid { get => _projectSpaceGuid; set { if (_projectSpaceGuid == value) return; _projectSpaceGuid = value; OnPropertyChanged(); OnPropertyChanged(nameof(ProjectReference)); MarkDirty(); } }
-        public int? ProjectSpaceVersion { get => _projectSpaceVersion; set { if (_projectSpaceVersion == value) return; _projectSpaceVersion = value; OnPropertyChanged(); OnPropertyChanged(nameof(ProjectReference)); MarkDirty(); } }
+        public string ProjectFile { get => _projectFile; set { if (_projectFile == value) return; _projectFile = value; ClearLoadedProject(); OnPropertyChanged(); OnPropertyChanged(nameof(ProjectReference)); MarkDirty(); } }
+        public string ProjectSpaceGuid { get => _projectSpaceGuid; set { if (_projectSpaceGuid == value) return; _projectSpaceGuid = value; ClearLoadedProject(); OnPropertyChanged(); OnPropertyChanged(nameof(ProjectReference)); MarkDirty(); } }
+        public int? ProjectSpaceVersion { get => _projectSpaceVersion; set { if (_projectSpaceVersion == value) return; _projectSpaceVersion = value; ClearLoadedProject(); OnPropertyChanged(); OnPropertyChanged(nameof(ProjectReference)); MarkDirty(); } }
         public DateTime? NextRunTime { get => _nextRunTime; set { _nextRunTime = value; OnPropertyChanged(); } }
         public DateTime? LastRunTime { get => _lastRunTime; set { _lastRunTime = value; OnPropertyChanged(); } }
         public int? LastResult { get => _lastResult; set { _lastResult = value; OnPropertyChanged(); } }
@@ -67,6 +70,10 @@ namespace FlowBlox.UICore.ViewModels
         public bool CanStart => !IsNew && !IsDirty && !IsRunning;
         public bool IsStartAtEnabled => ScheduleType is FlowBloxTaskScheduleType.Daily or FlowBloxTaskScheduleType.Interval;
         public bool IsIntervalEnabled => ScheduleType == FlowBloxTaskScheduleType.Interval;
+        public FlowBloxProject LoadedProject { get; set; }
+        public ObservableCollection<FlowBloxTaskInputParameterViewModel> InputParameters { get; } = new();
+        public Dictionary<string, string> UserFields { get; } = new(StringComparer.OrdinalIgnoreCase);
+        public bool InputParametersLoaded { get => _inputParametersLoaded; set { if (_inputParametersLoaded == value) return; _inputParametersLoaded = value; OnPropertyChanged(); } }
 
         public string ProjectReference
         {
@@ -101,13 +108,14 @@ namespace FlowBlox.UICore.ViewModels
                 ProjectSpaceVersion = ProjectSpaceVersion,
                 TaskDirectory = TaskDirectory,
                 RequestFilePath = RequestFilePath,
-                ResponseFilePathTemplate = ResponseFilePathTemplate
+                ResponseFilePathTemplate = ResponseFilePathTemplate,
+                UserFields = new Dictionary<string, string>(UserFields, StringComparer.OrdinalIgnoreCase)
             };
         }
 
         public static FlowBloxTaskItemViewModel FromModel(FlowBloxScheduledTask task)
         {
-            return new FlowBloxTaskItemViewModel
+            var item = new FlowBloxTaskItemViewModel
             {
                 OriginalTaskName = task.TaskName,
                 TaskName = task.TaskName,
@@ -126,7 +134,19 @@ namespace FlowBlox.UICore.ViewModels
                 TaskDirectory = task.TaskDirectory,
                 RequestFilePath = task.RequestFilePath,
                 ResponseFilePathTemplate = task.ResponseFilePathTemplate
-            }.EnableChangeTracking();
+            };
+
+            foreach (var userField in task.UserFields ?? new Dictionary<string, string>())
+                item.UserFields[userField.Key] = userField.Value;
+
+            return item.EnableChangeTracking();
+        }
+
+        public void ClearLoadedProject()
+        {
+            LoadedProject = null;
+            InputParametersLoaded = false;
+            InputParameters.Clear();
         }
 
         public FlowBloxTaskItemViewModel EnableChangeTracking()

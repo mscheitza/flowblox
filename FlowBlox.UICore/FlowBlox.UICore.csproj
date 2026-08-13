@@ -60,6 +60,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CreateOrUpdatePSProjectWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ComponentLibraryView.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComponentLibraryView.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\CreateProjectVersionWindow.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -155,6 +160,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\OptionsWindow.Designer.cs">
+      <DependentUpon>OptionsWindow.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\PasswordResetWindow.Designer.cs">
       <DependentUpon>PasswordResetWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -234,6 +244,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CreateOrUpdatePSProjectWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ComponentLibraryView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ComponentLibraryView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\CreateProjectVersionWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CreateProjectVersionWindow.Designer.cs</LastGenOutput>
@@ -312,6 +326,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\PasswordResetWindow.resx">
       <LastGenOutput>PasswordResetWindow.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\OptionsWindow.resx">
+      <LastGenOutput>OptionsWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ProblemTraceWindow.resx">

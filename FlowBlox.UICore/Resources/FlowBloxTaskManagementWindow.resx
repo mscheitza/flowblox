@@ -46,6 +46,8 @@
   <data name="Header_NextRun" xml:space="preserve"><value>Next run</value></data>
   <data name="Header_LastResult" xml:space="preserve"><value>Result</value></data>
   <data name="Detail_Header" xml:space="preserve"><value>Project</value></data>
+  <data name="Tab_Project" xml:space="preserve"><value>Project</value></data>
+  <data name="Tab_InputParameters" xml:space="preserve"><value>Input parameters</value></data>
   <data name="Label_ProjectName" xml:space="preserve"><value>Project name</value></data>
   <data name="Label_ProjectReference" xml:space="preserve"><value>Reference</value></data>
   <data name="Label_TaskDirectory" xml:space="preserve"><value>Task directory</value></data>
@@ -68,6 +70,7 @@
   <data name="Button_Close" xml:space="preserve"><value>Close</value></data>
   <data name="Error_LoadTasksFailed" xml:space="preserve"><value>Tasks could not be loaded.</value></data>
   <data name="Error_LoadProjectFailed" xml:space="preserve"><value>Project could not be loaded.</value></data>
+  <data name="Error_LoadInputParametersFailed" xml:space="preserve"><value>Input parameters could not be loaded.</value></data>
   <data name="Error_RunTaskFailed" xml:space="preserve"><value>Task could not be started.</value></data>
   <data name="Error_StopTaskFailed" xml:space="preserve"><value>Task could not be stopped.</value></data>
   <data name="Error_SaveFailed" xml:space="preserve"><value>Tasks could not be saved.</value></data>
@@ -81,6 +84,11 @@
   <data name="Message_SaveBeforeStop" xml:space="preserve"><value>Please save the task before stopping it.</value></data>
   <data name="Message_TaskAlreadyRunning" xml:space="preserve"><value>The selected task is already running.</value></data>
   <data name="Message_TaskNotRunning" xml:space="preserve"><value>The selected task is not running.</value></data>
+  <data name="Message_LoadingInputParameters" xml:space="preserve"><value>Loading input parameters...</value></data>
+  <data name="Message_InputParametersLoadPrompt" xml:space="preserve"><value>Select this tab to load project input parameters.</value></data>
+  <data name="Message_NoInputParameters" xml:space="preserve"><value>No input parameters were defined in the project.</value></data>
+  <data name="Toggle_On" xml:space="preserve"><value>On</value></data>
+  <data name="Toggle_Off" xml:space="preserve"><value>Off</value></data>
   <data name="SessionStatus_Running" xml:space="preserve"><value>Running</value></data>
   <data name="SessionStatus_Successful" xml:space="preserve"><value>Successful</value></data>
   <data name="SessionStatus_Failed" xml:space="preserve"><value>Failed</value></data>

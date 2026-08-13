@@ -3756,6 +3756,33 @@ If a Join collector should aggregate links across all page iterations:
   <data name="FlowBloxTaskScheduleType_Interval" xml:space="preserve">
     <value>Interval</value>
   </data>
+  <data name="SplitFlowBlock_Description" xml:space="preserve">
+    <value>Splits one input text into multiple output values using one or more separators.</value>
+  </data>
+  <data name="SplitFlowBlock_DisplayName" xml:space="preserve">
+    <value>Split</value>
+  </data>
+  <data name="SplitFlowBlock_RemoveEmptyEntries" xml:space="preserve">
+    <value>Remove empty entries</value>
+  </data>
+  <data name="SplitFlowBlock_Separators" xml:space="preserve">
+    <value>Separators</value>
+  </data>
+  <data name="SplitFlowBlock_Validation_NoSeparatorDefined" xml:space="preserve">
+    <value>No separator was specified. Please specify at least one separator.</value>
+  </data>
+  <data name="SplitSeparatorDefinition_Separator" xml:space="preserve">
+    <value>Separator</value>
+  </data>
+  <data name="SplitSeparatorDefinition_SpecialSeparator" xml:space="preserve">
+    <value>Special separator</value>
+  </data>
+  <data name="SplitSeparatorDefinition_Validation_ManySeparatorsDefined" xml:space="preserve">
+    <value>More than one separator was specified. Please specify either a separator or a special separator.</value>
+  </data>
+  <data name="SplitSeparatorDefinition_Validation_NoSeparatorDefined" xml:space="preserve">
+    <value>No separator was specified. Please specify either a separator or a special separator.</value>
+  </data>
 </root>
 
 

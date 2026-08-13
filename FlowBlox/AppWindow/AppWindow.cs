@@ -77,7 +77,7 @@ namespace FlowBlox.AppWindow
 
         private string _recentProjectPath;
         private string _recentProjectSpaceGuid;
-        private ComponentLibraryPanel _componentLibraryPanel;
+        private ComponentLibraryView _componentLibraryPanel;
         private FieldView _fieldViewPanel;
         private ManagedObjectsView _managedObjectsViewPanel;
         private TestView _testViewPanel;
@@ -638,8 +638,8 @@ namespace FlowBlox.AppWindow
 
         private void itmOptions_Click(object sender, EventArgs e)
         {
-            OptionWindow OptionWindow = new OptionWindow(null);
-            OptionWindow.ShowDialog(this);
+            var optionsWindow = new UICore.Views.OptionsWindow();
+            WindowsFormWPFHelper.ShowDialog(optionsWindow, this);
             UpdateUI();
         }
 

@@ -160,15 +160,6 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Scheduled project executions... ähnelt.
-        /// </summary>
-        internal static string AppWindow_itmFlowBloxTaskManagement_Text {
-            get {
-                return ResourceManager.GetString("AppWindow_itmFlowBloxTaskManagement_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automation ähnelt.
         /// </summary>
         internal static string AppWindow_itmAutomation_Text {
@@ -255,6 +246,15 @@ namespace FlowBlox {
         internal static string AppWindow_itmFbProjects_Text {
             get {
                 return ResourceManager.GetString("AppWindow_itmFbProjects_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Scheduled project executions... ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmFlowBloxTaskManagement_Text {
+            get {
+                return ResourceManager.GetString("AppWindow_itmFlowBloxTaskManagement_Text", resourceCulture);
             }
         }
         
@@ -877,9 +877,9 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Component library ähnelt.
         /// </summary>
-        internal static string ComponentLibraryPanel_Text {
+        internal static string ComponentLibraryView_Text {
             get {
-                return ResourceManager.GetString("ComponentLibraryPanel_Text", resourceCulture);
+                return ResourceManager.GetString("ComponentLibraryView_Text", resourceCulture);
             }
         }
         

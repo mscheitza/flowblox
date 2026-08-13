@@ -20,6 +20,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/TreeViewStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
 
@@ -53,16 +54,48 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" BorderThickness="1" BorderBrush="#FFD4DEE9" CornerRadius="6" Background="#FFF9FBFD">
-                <TreeView ItemsSource="{Binding TypeNodes}" SelectedItemChanged="TypeTreeView_SelectedItemChanged" BorderThickness="0" Margin="6">
-                    <TreeView.ItemContainerStyle>
-                        <Style TargetType="TreeViewItem">
-                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                        </Style>
-                    </TreeView.ItemContainerStyle>
+                <TreeView ItemsSource="{Binding TypeNodes}" SelectedItemChanged="TypeTreeView_SelectedItemChanged" ItemContainerStyle="{StaticResource FlowBlox.SubtleTreeViewItemStyle}" BorderThickness="0" Margin="6">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding Icon}" Width="16" Height="16" Margin="0,0,8,0"/>
+                            <StackPanel Orientation="Horizontal" MinHeight="22">
+                                <Grid Width="18"
+                                      Height="18"
+                                      Margin="0,0,8,0"
+                                      VerticalAlignment="Center">
+                                    <iconPacks:PackIconMaterial Kind="PackageVariantClosed"
+                                                                Width="16"
+                                                                Height="16"
+                                                                Foreground="#00897B"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalAlignment="Center">
+                                        <iconPacks:PackIconMaterial.Style>
+                                            <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsGroupNode}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </iconPacks:PackIconMaterial.Style>
+                                    </iconPacks:PackIconMaterial>
+                                    <Image Source="{Binding Icon}"
+                                           Width="16"
+                                           Height="16"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center">
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsGroupNode}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                </Grid>
                                 <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </HierarchicalDataTemplate>

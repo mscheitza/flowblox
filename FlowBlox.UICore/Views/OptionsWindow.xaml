@@ -1,0 +1,331 @@
+<mah:MetroWindow
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    x:Class="FlowBlox.UICore.Views.OptionsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:viewModels="clr-namespace:FlowBlox.UICore.ViewModels.Options"
+    Title="{x:Static resources:OptionsWindow.Title}"
+    Height="640"
+    Width="960"
+    MinHeight="520"
+    MinWidth="820"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/TreeViewStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+            <Style x:Key="Options.ToolbarButtonStyle"
+                   TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="0,0,6,0"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Background" Value="#FFF3F6FA"/>
+                <Setter Property="BorderBrush" Value="#FFD1D9E2"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#FFE9EEF4"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#FFDDE6F0"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="Options.ToolbarTextButtonStyle"
+                   TargetType="{x:Type Button}">
+                <Setter Property="MinWidth" Value="118"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="0,0,0,0"/>
+                <Setter Property="Padding" Value="9,0"/>
+                <Setter Property="Background" Value="#FFF3F6FA"/>
+                <Setter Property="BorderBrush" Value="#FFD1D9E2"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#FFE9EEF4"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#FFDDE6F0"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="Options.Icon.Blue"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#2F6DB3"/>
+            </Style>
+            <Style x:Key="Options.Icon.Green"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#2E8B57"/>
+            </Style>
+            <Style x:Key="Options.Icon.Red"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#C94F4F"/>
+            </Style>
+            <Style x:Key="Options.Icon.Gray"
+                   TargetType="{x:Type iconPacks:PackIconMaterial}"
+                   BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
+                <Setter Property="Foreground" Value="#5C6B73"/>
+            </Style>
+
+            <Style x:Key="Options.DetailLabelBorder"
+                   TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#D9E6F2"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Margin" Value="0,9,0,5"/>
+                <Setter Property="CornerRadius" Value="4"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="310"/>
+            <ColumnDefinition Width="12"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0"
+                       LastChildFill="True"
+                       Margin="0,0,0,8">
+                <iconPacks:PackIconMaterial Kind="Magnify"
+                                            Width="16"
+                                            Height="16"
+                                            Margin="0,0,6,0"
+                                            VerticalAlignment="Center"/>
+                <TextBox Height="30"
+                         MinHeight="30"
+                         VerticalContentAlignment="Center"
+                         Padding="8,0,8,0"
+                         Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </DockPanel>
+
+            <Border Grid.Row="1"
+                    BorderThickness="1"
+                    BorderBrush="#FFD4DEE9"
+                    Background="#FFF9FBFD"
+                    CornerRadius="6">
+                <TreeView x:Name="OptionsTreeView"
+                          ItemsSource="{Binding OptionNodes}"
+                          SelectedItemChanged="OptionsTreeView_SelectedItemChanged"
+                          ItemContainerStyle="{StaticResource FlowBlox.SubtleTreeViewItemStyle}"
+                          BorderThickness="0"
+                          Margin="6">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <StackPanel Orientation="Horizontal" MinHeight="22">
+                                <Grid Width="18"
+                                      Height="18"
+                                      Margin="0,0,8,0"
+                                      VerticalAlignment="Center">
+                                    <iconPacks:PackIconMaterial Kind="FolderOutline"
+                                                                Width="16"
+                                                                Height="16"
+                                                                Foreground="#2F6DB3"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalAlignment="Center">
+                                        <iconPacks:PackIconMaterial.Style>
+                                            <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsOption}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </iconPacks:PackIconMaterial.Style>
+                                    </iconPacks:PackIconMaterial>
+                                    <iconPacks:PackIconMaterial Kind="CogOutline"
+                                                                Width="16"
+                                                                Height="16"
+                                                                Foreground="#00897B"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalAlignment="Center">
+                                        <iconPacks:PackIconMaterial.Style>
+                                            <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsOption}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </iconPacks:PackIconMaterial.Style>
+                                    </iconPacks:PackIconMaterial>
+                                </Grid>
+                                <TextBlock Text="{Binding DisplayName}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </Border>
+
+            <ToolBar Grid.Row="2"
+                     Margin="0,8,0,0"
+                     VerticalAlignment="Center">
+                <Button Click="AddButton_Click"
+                        Style="{StaticResource Options.ToolbarButtonStyle}"
+                        ToolTip="{x:Static resources:OptionsWindow.Tooltip_Add}">
+                    <iconPacks:PackIconMaterial Kind="Plus"
+                                                Style="{StaticResource Options.Icon.Green}"/>
+                </Button>
+                <Button Command="{Binding DeleteCommand}"
+                        Style="{StaticResource Options.ToolbarButtonStyle}"
+                        ToolTip="{x:Static resources:OptionsWindow.Tooltip_Delete}">
+                    <iconPacks:PackIconMaterial Kind="DeleteOutline"
+                                                Style="{StaticResource Options.Icon.Red}"/>
+                </Button>
+                <Separator/>
+                <Button Click="ResetButton_Click"
+                        Style="{StaticResource Options.ToolbarButtonStyle}"
+                        ToolTip="{x:Static resources:OptionsWindow.Tooltip_Reset}">
+                    <iconPacks:PackIconMaterial Kind="Restore"
+                                                Style="{StaticResource Options.Icon.Gray}"/>
+                </Button>
+            </ToolBar>
+        </Grid>
+
+        <GridSplitter Grid.Column="1"
+                      Width="12"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="#FFE2E8EF"/>
+
+        <Grid Grid.Column="2">
+            <Border Visibility="{Binding IsNoOptionSelected, Converter={StaticResource BoolToVisibilityConverter}}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="18">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="InformationOutline"
+                                                Width="22"
+                                                Height="22"
+                                                Margin="0,0,8,0"
+                                                Foreground="#5C6B73"/>
+                    <TextBlock Text="{x:Static resources:OptionsWindow.EmptyState}"
+                               TextWrapping="Wrap"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <Grid Visibility="{Binding IsOptionSelected, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0"
+                           LastChildFill="False">
+                    <Button Command="{Binding SaveCommand}"
+                            DockPanel.Dock="Right"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource Options.ToolbarTextButtonStyle}"
+                            ToolTip="{x:Static resources:OptionsWindow.Tooltip_Save}"
+                            ToolTipService.Placement="Bottom">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="ContentSave"
+                                                        Margin="0,0,6,0"
+                                                        Style="{StaticResource Options.Icon.Green}"/>
+                            <TextBlock Text="{x:Static resources:OptionsWindow.Button_Apply}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+
+                <ScrollViewer Grid.Row="1"
+                              Margin="0,8,0,0"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <iconPacks:PackIconMaterial Kind="CogOutline"
+                                                        Width="32"
+                                                        Height="32"
+                                                        Margin="0,0,12,0"
+                                                        Foreground="#5C6B73"/>
+                            <TextBlock Text="{x:Static resources:OptionsWindow.Header_EditOption}"
+                                       FontSize="15"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Border Style="{StaticResource Options.DetailLabelBorder}">
+                            <TextBlock Text="{x:Static resources:OptionsWindow.Label_Description}"/>
+                        </Border>
+                        <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 IsReadOnly="{Binding IsMetadataReadOnly}"
+                                 MinHeight="58"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"/>
+
+                        <Border Style="{StaticResource Options.DetailLabelBorder}">
+                            <TextBlock Text="{x:Static resources:OptionsWindow.Label_Name}"/>
+                        </Border>
+                        <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 IsReadOnly="{Binding IsMetadataReadOnly}"/>
+
+                        <Border Style="{StaticResource Options.DetailLabelBorder}">
+                            <TextBlock Text="{x:Static resources:OptionsWindow.Label_Type}"/>
+                        </Border>
+                        <ComboBox ItemsSource="{Binding OptionTypes}"
+                                  SelectedItem="{Binding SelectedType, Mode=TwoWay}"
+                                  IsEnabled="{Binding CanEditMetadata}"/>
+
+                        <Border Style="{StaticResource Options.DetailLabelBorder}">
+                            <TextBlock Text="{x:Static resources:OptionsWindow.Label_PlaceholderEnabled}"/>
+                        </Border>
+                        <mah:ToggleSwitch IsOn="{Binding IsPlaceholderEnabled, Mode=TwoWay}"
+                                          OnContent="{x:Static resources:OptionsWindow.Value_Yes}"
+                                          OffContent="{x:Static resources:OptionsWindow.Value_No}"
+                                          IsEnabled="{Binding CanEditMetadata}"/>
+
+                        <Border Style="{StaticResource Options.DetailLabelBorder}">
+                            <TextBlock Text="{x:Static resources:OptionsWindow.Label_Value}"/>
+                        </Border>
+
+                        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Visibility="{Binding IsTextValueType, Converter={StaticResource BoolToVisibilityConverter}}"
+                                 MinHeight="90"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"/>
+
+                        <PasswordBox x:Name="ValuePasswordBox"
+                                     Visibility="{Binding IsPasswordType, Converter={StaticResource BoolToVisibilityConverter}}"
+                                     PasswordChanged="ValuePasswordBox_PasswordChanged"/>
+
+                        <mah:ToggleSwitch IsOn="{Binding BooleanValue, Mode=TwoWay}"
+                                          Visibility="{Binding IsBooleanType, Converter={StaticResource BoolToVisibilityConverter}}"
+                                          OnContent="{x:Static resources:OptionsWindow.Value_Yes}"
+                                          OffContent="{x:Static resources:OptionsWindow.Value_No}"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</mah:MetroWindow>

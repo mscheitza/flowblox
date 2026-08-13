@@ -21,5 +21,6 @@ namespace FlowBlox.Core.TaskManagement
         public string TaskDirectory { get; set; }
         public string RequestFilePath { get; set; }
         public string ResponseFilePathTemplate { get; set; }
+        public Dictionary<string, string> UserFields { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     }
 }

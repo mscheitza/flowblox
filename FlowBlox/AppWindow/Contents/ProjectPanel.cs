@@ -192,29 +192,52 @@ namespace FlowBlox.AppWindow.Contents
 
         private void mainPanel_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Copy;
+            e.Effect = ResolveDraggedFlowBlockType(e) != null
+                ? DragDropEffects.Copy
+                : DragDropEffects.None;
         }
 
         private void mainPanel_DragDrop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(typeof(TreeNode)))
-            {
-                TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
-                BaseFlowBlock templateFlowBlock = draggedNode.Tag as BaseFlowBlock;
+            var flowBlockType = ResolveDraggedFlowBlockType(e);
 
-                if (templateFlowBlock != null)
+            if (flowBlockType != null)
+            {
+                Point location = mainPanel.PointToClient(new Point(e.X, e.Y));
+                BaseFlowBlock createdFlowBlock = this.FlowBloxRegistry.CreateFlowBlockUnregistered(flowBlockType);
+                if (AssignFlowBlockName(createdFlowBlock))
                 {
-                    Point location = mainPanel.PointToClient(new Point(e.X, e.Y));
-                    BaseFlowBlock createdFlowBlock = this.FlowBloxRegistry.CreateFlowBlockUnregistered(templateFlowBlock.GetType());
-                    if (AssignFlowBlockName(createdFlowBlock))
-                    {
-                        var uiElement = CreateGridUIElement(createdFlowBlock, location);
-                        FlowBloxUIRegistry.RegisterGridUIElement(uiElement);
-                        this.FlowBloxRegistry.PostProcessFlowBlockCreated(createdFlowBlock);
-                        this.FlowBloxRegistry.RegisterFlowBlock(createdFlowBlock);
-                    }
+                    var uiElement = CreateGridUIElement(createdFlowBlock, location);
+                    FlowBloxUIRegistry.RegisterGridUIElement(uiElement);
+                    this.FlowBloxRegistry.PostProcessFlowBlockCreated(createdFlowBlock);
+                    this.FlowBloxRegistry.RegisterFlowBlock(createdFlowBlock);
                 }
             }
+        }
+
+        private static Type ResolveDraggedFlowBlockType(DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(FlowBloxFlowBlockDragDropFormats.FlowBlockType) &&
+                e.Data.GetData(FlowBloxFlowBlockDragDropFormats.FlowBlockType) is string typeName)
+                return ResolveFlowBlockType(typeName);
+
+            return null;
+        }
+
+        private static Type ResolveFlowBlockType(string typeName)
+        {
+            if (string.IsNullOrWhiteSpace(typeName))
+                return null;
+
+            foreach (var type in AppDomain.CurrentDomain.GetAssemblies()
+                         .Select(assembly => assembly.GetType(typeName, throwOnError: false))
+                         .Where(type => type != null))
+            {
+                if (type != null && typeof(BaseFlowBlock).IsAssignableFrom(type))
+                    return type;
+            }
+
+            return null;
         }
 
         private delegate void UpdateUIMethod(bool GridUpdate, bool appWindowUpdate);

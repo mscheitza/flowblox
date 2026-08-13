@@ -340,7 +340,7 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   <data name="ComponentLibraryPanel_btManageExtensions_Text" xml:space="preserve">
 		<value>Erweiterungen verwalten</value>
 	</data>
-  <data name="ComponentLibraryPanel_Text" xml:space="preserve">
+  <data name="ComponentLibraryView_Text" xml:space="preserve">
 		<value>Komponentenbibliothek</value>
 	</data>
   <data name="CreateEntryWindow_btApply_Text" xml:space="preserve">

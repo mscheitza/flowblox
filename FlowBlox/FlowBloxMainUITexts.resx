@@ -355,7 +355,7 @@ The application will now restart to restore a clean environment.</value>
   <data name="ComponentLibraryPanel_btManageExtensions_Text" xml:space="preserve">
 		<value>Manage extensions</value>
 	</data>
-  <data name="ComponentLibraryPanel_Text" xml:space="preserve">
+  <data name="ComponentLibraryView_Text" xml:space="preserve">
 		<value>Component library</value>
 	</data>
   <data name="CreateEntryWindow_btApply_Text" xml:space="preserve">

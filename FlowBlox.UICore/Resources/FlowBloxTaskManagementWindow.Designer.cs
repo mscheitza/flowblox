@@ -83,6 +83,18 @@ namespace FlowBlox.UICore.Resources {
                 return ResourceManager.GetString("Detail_Scheduling_Header", resourceCulture);
             }
         }
+
+        public static string Tab_Project {
+            get {
+                return ResourceManager.GetString("Tab_Project", resourceCulture);
+            }
+        }
+
+        public static string Tab_InputParameters {
+            get {
+                return ResourceManager.GetString("Tab_InputParameters", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Task names must be unique. ähnelt.
@@ -105,6 +117,12 @@ namespace FlowBlox.UICore.Resources {
         public static string Error_LoadProjectFailed {
             get {
                 return ResourceManager.GetString("Error_LoadProjectFailed", resourceCulture);
+            }
+        }
+
+        public static string Error_LoadInputParametersFailed {
+            get {
+                return ResourceManager.GetString("Error_LoadInputParametersFailed", resourceCulture);
             }
         }
         
@@ -378,6 +396,36 @@ namespace FlowBlox.UICore.Resources {
         public static string Message_TaskNotRunning {
             get {
                 return ResourceManager.GetString("Message_TaskNotRunning", resourceCulture);
+            }
+        }
+
+        public static string Message_LoadingInputParameters {
+            get {
+                return ResourceManager.GetString("Message_LoadingInputParameters", resourceCulture);
+            }
+        }
+
+        public static string Message_InputParametersLoadPrompt {
+            get {
+                return ResourceManager.GetString("Message_InputParametersLoadPrompt", resourceCulture);
+            }
+        }
+
+        public static string Message_NoInputParameters {
+            get {
+                return ResourceManager.GetString("Message_NoInputParameters", resourceCulture);
+            }
+        }
+
+        public static string Toggle_On {
+            get {
+                return ResourceManager.GetString("Toggle_On", resourceCulture);
+            }
+        }
+
+        public static string Toggle_Off {
+            get {
+                return ResourceManager.GetString("Toggle_Off", resourceCulture);
             }
         }
 

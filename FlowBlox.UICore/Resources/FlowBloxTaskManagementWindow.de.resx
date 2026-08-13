@@ -46,6 +46,8 @@
   <data name="Header_NextRun" xml:space="preserve"><value>Nächster Lauf</value></data>
   <data name="Header_LastResult" xml:space="preserve"><value>Ergebnis</value></data>
   <data name="Detail_Header" xml:space="preserve"><value>Projekt</value></data>
+  <data name="Tab_Project" xml:space="preserve"><value>Projekt</value></data>
+  <data name="Tab_InputParameters" xml:space="preserve"><value>Eingabeparameter</value></data>
   <data name="Label_ProjectName" xml:space="preserve"><value>Projektname</value></data>
   <data name="Label_ProjectReference" xml:space="preserve"><value>Referenz</value></data>
   <data name="Label_TaskDirectory" xml:space="preserve"><value>Aufgabenverzeichnis</value></data>
@@ -68,6 +70,7 @@
   <data name="Button_Close" xml:space="preserve"><value>Schließen</value></data>
   <data name="Error_LoadTasksFailed" xml:space="preserve"><value>Aufgaben konnten nicht geladen werden.</value></data>
   <data name="Error_LoadProjectFailed" xml:space="preserve"><value>Projekt konnte nicht geladen werden.</value></data>
+  <data name="Error_LoadInputParametersFailed" xml:space="preserve"><value>Eingabeparameter konnten nicht geladen werden.</value></data>
   <data name="Error_RunTaskFailed" xml:space="preserve"><value>Aufgabe konnte nicht gestartet werden.</value></data>
   <data name="Error_StopTaskFailed" xml:space="preserve"><value>Aufgabe konnte nicht gestoppt werden.</value></data>
   <data name="Error_SaveFailed" xml:space="preserve"><value>Aufgaben konnten nicht gespeichert werden.</value></data>
@@ -81,6 +84,11 @@
   <data name="Message_SaveBeforeStop" xml:space="preserve"><value>Bitte speichere die Aufgabe, bevor sie gestoppt wird.</value></data>
   <data name="Message_TaskAlreadyRunning" xml:space="preserve"><value>Die ausgewählte Aufgabe läuft bereits.</value></data>
   <data name="Message_TaskNotRunning" xml:space="preserve"><value>Die ausgewählte Aufgabe läuft nicht.</value></data>
+  <data name="Message_LoadingInputParameters" xml:space="preserve"><value>Eingabeparameter werden geladen...</value></data>
+  <data name="Message_InputParametersLoadPrompt" xml:space="preserve"><value>Waehle diesen Tab aus, um die Eingabeparameter des Projekts zu laden.</value></data>
+  <data name="Message_NoInputParameters" xml:space="preserve"><value>Im Projekt wurden keine Eingabeparameter definiert.</value></data>
+  <data name="Toggle_On" xml:space="preserve"><value>An</value></data>
+  <data name="Toggle_Off" xml:space="preserve"><value>Aus</value></data>
   <data name="SessionStatus_Running" xml:space="preserve"><value>In Betrieb</value></data>
   <data name="SessionStatus_Successful" xml:space="preserve"><value>Erfolgreich</value></data>
   <data name="SessionStatus_Failed" xml:space="preserve"><value>Fehlerhaft</value></data>

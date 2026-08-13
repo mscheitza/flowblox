@@ -17,6 +17,7 @@ namespace FlowBlox.UICore.ViewModels.ManagedObjects
 
         public bool IsCategoryOnly { get; }
         public bool IsAllManagedObjectsRoot { get; }
+        public bool IsGroupNode => IsAllManagedObjectsRoot || IsCategoryOnly || ManagedObjectType.IsAbstract;
 
         private bool _isExpanded;
         public bool IsExpanded
