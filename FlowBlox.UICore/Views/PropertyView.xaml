@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/PropertyViewStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -85,52 +86,109 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <ScrollViewer>
-                        <StackPanel>
-                            <ItemsControl ItemsSource="{Binding Controls}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel behavior:ToolTipPreferenceBehavior.PreferChildToolTips="True"
-                                                    Margin="0,0,0,10" 
-                                                    IsEnabled="{Binding IsEnabled}" 
-                                                    Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
-                                            <Border 
-                                                Background="#D9E6F2" 
-                                                Padding="4" 
-                                                Margin="0,0,0,5" 
+                    <Grid>
+                        <ScrollViewer Visibility="{Binding HasMaximizedControl, Converter={StaticResource BoolToInverseVisibilityConverter}}">
+                            <StackPanel>
+                                <ItemsControl ItemsSource="{Binding Controls}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel behavior:ToolTipPreferenceBehavior.PreferChildToolTips="True"
+                                                        Margin="0,0,0,10"
+                                                        IsEnabled="{Binding IsEnabled}"
+                                                        Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                <Border
+                                                    Background="#D9E6F2"
+                                                    Padding="4"
+                                                    Margin="0,0,0,5"
+                                                    CornerRadius="4"
+                                                    Visibility="{Binding UseLabel, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock
+                                                            Text="{Binding Label}"
+                                                            FontWeight="SemiBold"
+                                                            Foreground="Black"
+                                                            VerticalAlignment="Center" />
+                                                        <Border
+                                                            Style="{StaticResource PropertyView.HelpIconBorderStyle}"
+                                                            Visibility="{Binding HasTooltip, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                            <TextBlock
+                                                                Text="?"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                FontSize="11"
+                                                                FontWeight="Bold"
+                                                                Foreground="White" />
+                                                            <Border.ToolTip>
+                                                                <ToolTip
+                                                                    Style="{StaticResource PropertyView.HelpToolTipStyle}"
+                                                                    Content="{Binding TooltipText}" />
+                                                            </Border.ToolTip>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Border>
+                                                <ContentControl Content="{Binding Control}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <ItemsControl ItemsSource="{Binding MaximizedControls}"
+                                      Visibility="{Binding HasMaximizedControl, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Grid />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid behavior:ToolTipPreferenceBehavior.PreferChildToolTips="True"
+                                          IsEnabled="{Binding IsEnabled}"
+                                          Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="0"
+                                                Background="#D9E6F2"
+                                                Padding="4"
+                                                Margin="0,0,0,5"
                                                 CornerRadius="4"
                                                 Visibility="{Binding UseLabel, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock 
-                                                        Text="{Binding Label}" 
-                                                        FontWeight="SemiBold"
-                                                        Foreground="Black"
-                                                        VerticalAlignment="Center" />
-                                                    <Border
-                                                        Style="{StaticResource PropertyView.HelpIconBorderStyle}"
-                                                        Visibility="{Binding HasTooltip, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                        <TextBlock
-                                                            Text="?"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            FontSize="11"
-                                                            FontWeight="Bold"
-                                                            Foreground="White" />
-                                                        <Border.ToolTip>
-                                                            <ToolTip
-                                                                Style="{StaticResource PropertyView.HelpToolTipStyle}"
-                                                                Content="{Binding TooltipText}" />
-                                                        </Border.ToolTip>
-                                                    </Border>
-                                                </StackPanel>
-                                            </Border>
-                                            <ContentControl Content="{Binding Control}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </ScrollViewer>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock
+                                                    Text="{Binding Label}"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="Black"
+                                                    VerticalAlignment="Center" />
+                                                <Border
+                                                    Style="{StaticResource PropertyView.HelpIconBorderStyle}"
+                                                    Visibility="{Binding HasTooltip, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                    <TextBlock
+                                                        Text="?"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="11"
+                                                        FontWeight="Bold"
+                                                        Foreground="White" />
+                                                    <Border.ToolTip>
+                                                        <ToolTip
+                                                            Style="{StaticResource PropertyView.HelpToolTipStyle}"
+                                                            Content="{Binding TooltipText}" />
+                                                    </Border.ToolTip>
+                                                </Border>
+                                            </StackPanel>
+                                        </Border>
+                                        <ContentControl Grid.Row="1"
+                                                        Content="{Binding Control}"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        VerticalContentAlignment="Stretch" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

@@ -10,6 +10,7 @@ using FlowBlox.Interfaces;
 using FlowBlox.Core.Services;
 using FlowBlox.WebServices;
 using FlowBlox.Core.TaskManagement;
+using FlowBlox.UICore.Services;
 
 namespace FlowBlox
 {
@@ -30,6 +31,7 @@ namespace FlowBlox
             serviceCollection.AddSingleton<IAppNotificationService, AppNotificationService>();
             serviceCollection.AddSingleton<IFlowBloxInstallerService, FlowBloxInstallerService>();
             serviceCollection.AddSingleton<IFlowBloxActionHistoryService, FlowBloxActionHistoryService>();
+            serviceCollection.AddSingleton<IRuntimeStateService, RuntimeStateService>();
             serviceCollection.AddSingleton<ITaskManagementService, WindowsTaskManagementService>();
         }
     }

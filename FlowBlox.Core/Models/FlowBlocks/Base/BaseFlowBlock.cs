@@ -283,6 +283,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             this.ActivationConditions = new ObservableCollection<LogicalCondition>();
             this.TestDefinitions = new ObservableCollection<FlowBloxTestDefinition>();
             this.GenerationStrategies = new ObservableCollection<FlowBloxGenerationStrategyBase>();
+            this._passedResults = new FlowBlockPassedResultBuffer();
 
             this.InheritRequirementsNotMet = true;
 
@@ -860,12 +861,24 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         }
 
         /// <summary>
-        /// Executes the subsequent flow blocks within the current runtime context.
+        /// Schedules the subsequent flow blocks in the current execution layer.
         /// </summary>
-        /// <param name="runtime">The runtime instance managing the current flow execution context.</param>
+        /// <param name="runtime">The runtime that owns the work queue and current execution state.</param>
         public virtual void ExecuteNextFlowBlocks(BaseRuntime runtime)
         {
-            runtime.TaskRunner.ScheduleNext(this);
+            ExecuteNextFlowBlocks(runtime, false);
+        }
+
+        /// <summary>
+        /// Schedules the subsequent flow blocks and can wrap them in a new execution layer.
+        /// Recursive calls use the extra layer so iteration-context input collection keeps
+        /// recursive results separate from the caller's pending results until iteration end.
+        /// </summary>
+        /// <param name="runtime">The runtime that owns the work queue and current execution state.</param>
+        /// <param name="increaseExecutionLayer">If true, the queued successor work runs one execution layer deeper.</param>
+        internal void ExecuteNextFlowBlocks(BaseRuntime runtime, bool increaseExecutionLayer)
+        {
+            runtime.TaskRunner.ScheduleNext(this, increaseExecutionLayer);
         }
 
         public override void RuntimeStarted(BaseRuntime runtime)
@@ -1009,8 +1022,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             return messages.Count == 0;
         }
 
-
-        private Dictionary<BaseFlowBlock, HashSet<FlowBlockOut>> _passedResults = new Dictionary<BaseFlowBlock, HashSet<FlowBlockOut>>();
+        private readonly FlowBlockPassedResultBuffer _passedResults;
 
         private Action _storedExecutor;
 
@@ -1027,12 +1039,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
                 if (callingFlowBlock is BaseResultFlowBlock)
                 {
-                    if (!_passedResults.ContainsKey(callingFlowBlock))
-                        _passedResults.Add(callingFlowBlock, new HashSet<FlowBlockOut>());
-
-                    var callingFlowBlockResult = ((BaseResultFlowBlock)callingFlowBlock).GridElementResult;
-                    if (!_passedResults[callingFlowBlock].Contains(callingFlowBlockResult))
-                        _passedResults[callingFlowBlock].Add(callingFlowBlockResult);
+                    _passedResults.Add(runtime, (BaseResultFlowBlock)callingFlowBlock);
                 }
 
                 this._storedExecutor = executor;
@@ -1112,7 +1119,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         private void InputReference_IterationStart(BaseRuntime runtime)
         {
-            _passedResults.Clear();
+            _passedResults.Clear(runtime);
         }
 
         [JsonIgnore()]
@@ -1137,7 +1144,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         private void InputReference_IterationEnd(BaseRuntime runtime)
         {
-            var selector = FlowBlockDatasetSelectorFactory.Create(_passedResults, this.InputBehaviorAssignments);
+            var selector = FlowBlockDatasetSelectorFactory.Create(_passedResults.GetResults(runtime), this.InputBehaviorAssignments);
             var results = selector.GetResults();
             FilterInputDatasets(ref results);
 

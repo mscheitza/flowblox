@@ -7,4 +7,6 @@
   <data name="History_Title" xml:space="preserve"><value>Assistant histories</value></data>
   <data name="Button_NewHistory" xml:space="preserve"><value>New chat</value></data>
   <data name="Button_OpenHistory" xml:space="preserve"><value>Open</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>No chat histories yet</value></data>
+  <data name="Empty_Description" xml:space="preserve"><value>No chat histories have been created for this project yet. Use the plus button to start a new chat.</value></data>
 </root>

@@ -1,0 +1,675 @@
+<UserControl x:Class="FlowBlox.UICore.Views.ProjectPanelWpfControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+             xmlns:projectPanel="clr-namespace:FlowBlox.UICore.ViewModels.ProjectPanel"
+             xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
+             xmlns:projectPanelConverters="clr-namespace:FlowBlox.UICore.Converters.ProjectPanel"
+             Focusable="True"
+             Background="#454545">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <projectPanelConverters:FlowBlockRowLabelVisibilityConverter x:Key="FlowBlockRowLabelVisibilityConverter"/>
+        <projectPanelConverters:FlowBlockRowIconVisibilityConverter x:Key="FlowBlockRowIconVisibilityConverter"/>
+        <projectPanelConverters:FlowBlockRowIconKindConverter x:Key="FlowBlockRowIconKindConverter"/>
+        <projectPanelConverters:FlowBlockRowIconBrushConverter x:Key="FlowBlockRowIconBrushConverter"/>
+
+        <DrawingBrush x:Key="ProjectGridBrush"
+                      TileMode="Tile"
+                      Viewport="0,0,19.2,19.2"
+                      ViewportUnits="Absolute">
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <GeometryDrawing Brush="#050505">
+                        <GeometryDrawing.Geometry>
+                            <RectangleGeometry Rect="0,0,19.2,19.2"/>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                    <GeometryDrawing>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#141414" Thickness="1"/>
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <GeometryGroup>
+                                <LineGeometry StartPoint="19.2,0" EndPoint="19.2,19.2"/>
+                                <LineGeometry StartPoint="0,19.2" EndPoint="19.2,19.2"/>
+                            </GeometryGroup>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                    <GeometryDrawing>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#202020" Thickness="1"/>
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <GeometryGroup>
+                                <LineGeometry StartPoint="0,0" EndPoint="0,19.2"/>
+                                <LineGeometry StartPoint="0,0" EndPoint="19.2,0"/>
+                            </GeometryGroup>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+        <Style x:Key="ProjectPanel.ToolbarButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#454545"/>
+            <Setter Property="Foreground" Value="#F2F2F2"/>
+            <Setter Property="BorderBrush" Value="#666666"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="MinHeight" Value="24"/>
+        </Style>
+
+        <Style x:Key="ProjectPanel.ToolbarToggleButton" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Background" Value="#454545"/>
+            <Setter Property="Foreground" Value="#F2F2F2"/>
+            <Setter Property="BorderBrush" Value="#666666"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="MinHeight" Value="24"/>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#0A56C6"/>
+                    <Setter Property="BorderBrush" Value="#5FB4FF"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ProjectPanel.ScrollThumb" TargetType="{x:Type Thumb}">
+            <Setter Property="Background" Value="#6F91A8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#86A9C2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <ControlTemplate x:Key="ProjectPanel.HorizontalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
+            <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                <Track x:Name="PART_Track">
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource ProjectPanel.ScrollThumb}"/>
+                    </Track.Thumb>
+                </Track>
+            </Border>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="ProjectPanel.VerticalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
+            <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                <Track x:Name="PART_Track" IsDirectionReversed="True">
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource ProjectPanel.ScrollThumb}"/>
+                    </Track.Thumb>
+                </Track>
+            </Border>
+        </ControlTemplate>
+
+        <Style x:Key="ProjectPanel.ThinScrollBar" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Background" Value="#555555"/>
+            <Setter Property="Foreground" Value="#9A9A9A"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="Width" Value="7"/>
+                    <Setter Property="MinWidth" Value="7"/>
+                    <Setter Property="Template" Value="{StaticResource ProjectPanel.VerticalScrollBarTemplate}"/>
+                </Trigger>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Height" Value="7"/>
+                    <Setter Property="MinHeight" Value="7"/>
+                    <Setter Property="Template" Value="{StaticResource ProjectPanel.HorizontalScrollBarTemplate}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ProjectPanel.RowKind" TargetType="{x:Type TextBlock}">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Foreground" Value="#7DB7FF"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Kind}" Value="field">
+                    <Setter Property="Foreground" Value="#6DE6BE"/>
+                    <Setter Property="Text" Value="fld"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Kind}" Value="modifier">
+                    <Setter Property="Foreground" Value="#90EE90"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Kind}" Value="condition">
+                    <Setter Property="Foreground" Value="#F08080"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Kind}" Value="required">
+                    <Setter Property="Foreground" Value="#FFDAB9"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Kind}" Value="activation">
+                    <Setter Property="Foreground" Value="#DAA520"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Kind}" Value="property">
+                    <Setter Property="Text" Value="⚙"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ProjectPanel.BlockBorder" TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="#696969"/>
+            <Setter Property="BorderBrush" Value="#202020"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="BorderBrush" Value="#0A56C6"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsReference}" Value="True">
+                    <Setter Property="BorderBrush" Value="#663399"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsRuntimeFocused}" Value="True">
+                    <Setter Property="BorderBrush" Value="#32D75F"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsNotExecuted}" Value="True">
+                    <Setter Property="Background" Value="#A03D3D"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="#454545">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="26"/>
+        </Grid.RowDefinitions>
+
+        <ToolBar Grid.Row="0" Background="#454545" Foreground="#F5F5F5" HorizontalAlignment="Right">
+            <Button Command="{Binding RefreshCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_Refresh}">
+                <iconPacks:PackIconMaterial Kind="Refresh" Width="14" Height="14"/>
+            </Button>
+            <Button Command="{Binding GridSettingsCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_Settings}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="CogOutline" Width="14" Height="14" Foreground="#7DB7FF"/>
+                    <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_Settings}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding AutoLayoutCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_AutoLayout}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="AlignHorizontalLeft" Width="14" Height="14" Foreground="#32D75F"/>
+                    <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_AutoLayout}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+            <Separator/>
+            <Button Command="{Binding ExecuteRuntimeCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_Execute}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="PlayCircle" Width="14" Height="14"/>
+                    <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_Execute}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding PauseRuntimeCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_Pause}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="PauseCircle" Width="14" Height="14"/>
+                    <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_Pause}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding StopRuntimeCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_Stop}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="StopCircle" Width="14" Height="14"/>
+                    <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_Stop}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+
+        <ToolBar Grid.Row="1" Background="#454545" Foreground="#F5F5F5">
+            <ToggleButton Command="{Binding SelectModeCommand}"
+                          IsChecked="{Binding IsSelectionMode, Mode=OneWay}"
+                          Style="{StaticResource ProjectPanel.ToolbarToggleButton}"
+                          ToolTip="{x:Static resources:ProjectPanel.Toolbar_Select}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="CursorDefault" Width="14" Height="14"/>
+                    <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_Select}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </ToggleButton>
+            <ToggleButton Command="{Binding ConnectionModeCommand}"
+                          IsChecked="{Binding IsConnectionMode, Mode=OneWay}"
+                          Style="{StaticResource ProjectPanel.ToolbarToggleButton}"
+                          ToolTip="{x:Static resources:ProjectPanel.Toolbar_Connect}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="VectorLine" Width="14" Height="14"/>
+                    <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_Connect}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </ToggleButton>
+            <Separator/>
+            <Button Command="{Binding SelectLeftCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_SelectLeft}">
+                <iconPacks:PackIconMaterial Kind="ArrowLeftBoldBoxOutline" Width="14" Height="14"/>
+            </Button>
+            <Button Command="{Binding SelectRightCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_SelectRight}">
+                <iconPacks:PackIconMaterial Kind="ArrowRightBoldBoxOutline" Width="14" Height="14"/>
+            </Button>
+            <Button Command="{Binding SelectUpCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_SelectUp}">
+                <iconPacks:PackIconMaterial Kind="ArrowUpBoldBoxOutline" Width="14" Height="14"/>
+            </Button>
+            <Button Command="{Binding SelectDownCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_SelectDown}">
+                <iconPacks:PackIconMaterial Kind="ArrowDownBoldBoxOutline" Width="14" Height="14"/>
+            </Button>
+            <Button Command="{Binding SelectAllCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_SelectAll}">
+                <iconPacks:PackIconMaterial Kind="SelectAll" Width="14" Height="14"/>
+            </Button>
+        </ToolBar>
+
+        <ScrollViewer x:Name="CanvasScrollViewer"
+                      Grid.Row="2"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      PreviewMouseDown="CanvasScrollViewer_PreviewMouseDown"
+                      PreviewMouseMove="CanvasScrollViewer_PreviewMouseMove"
+                      PreviewMouseUp="CanvasScrollViewer_PreviewMouseUp"
+                      MouseLeave="CanvasScrollViewer_MouseLeave">
+            <Grid x:Name="ProjectCanvas"
+                  Width="{Binding CanvasWidth}"
+                  Height="{Binding CanvasHeight}"
+                  Background="{StaticResource ProjectGridBrush}"
+                  AllowDrop="True"
+                  DragEnter="ProjectCanvas_DragEnter"
+                  DragOver="ProjectCanvas_DragEnter"
+                  Drop="ProjectCanvas_Drop"
+                  MouseLeftButtonDown="ProjectCanvas_MouseLeftButtonDown"
+                  MouseMove="ProjectCanvas_MouseMove"
+                  MouseLeftButtonUp="ProjectCanvas_MouseLeftButtonUp">
+                <Grid.ContextMenu>
+                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_Refresh}"
+                                  Command="{Binding RefreshCommand}"
+                                  InputGestureText="F5">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource HostedControlContextMenuIcon.Neutral}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </Grid.ContextMenu>
+                <ItemsControl ItemsSource="{Binding Arrows}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type projectPanel:FlowBlockArrowViewModel}">
+                            <Canvas Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    PreviewMouseLeftButtonDown="Arrow_PreviewMouseLeftButtonDown"
+                                    PreviewMouseRightButtonDown="Arrow_PreviewMouseRightButtonDown">
+                                <Canvas.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_RemoveConnection}"
+                                                  Command="{Binding PlacementTarget.Tag.RemoveConnectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="LinkOff" Style="{StaticResource HostedControlContextMenuIcon.Danger}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Canvas.ContextMenu>
+                                <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"
+                                      Stroke="Transparent" StrokeThickness="12" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                                <Ellipse Canvas.Left="{Binding StartDotX}"
+                                         Canvas.Top="{Binding StartDotY}"
+                                         Width="{Binding StartDotSize}"
+                                         Height="{Binding StartDotSize}">
+                                    <Ellipse.Style>
+                                        <Style TargetType="{x:Type Ellipse}">
+                                            <Setter Property="Fill" Value="#FFF0F5"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Kind}" Value="iteration">
+                                                    <Setter Property="Fill" Value="#9370DB"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Kind}" Value="recursive">
+                                                    <Setter Property="Fill" Value="#DAA520"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                    <Setter Property="Fill" Value="#4682B4"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"
+                                      StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+                                    <Line.Style>
+                                        <Style TargetType="{x:Type Line}">
+                                            <Setter Property="Stroke" Value="#FFF0F5"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Kind}" Value="iteration">
+                                                    <Setter Property="Stroke" Value="#9370DB"/>
+                                                    <Setter Property="StrokeDashArray" Value="5 4"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Kind}" Value="recursive">
+                                                    <Setter Property="Stroke" Value="#DAA520"/>
+                                                    <Setter Property="StrokeDashArray" Value="6 6"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                    <Setter Property="Stroke" Value="#4682B4"/>
+                                                    <Setter Property="StrokeThickness" Value="3"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Line.Style>
+                                </Line>
+                                <Polygon Points="{Binding ArrowHeadPoints}">
+                                    <Polygon.Style>
+                                        <Style TargetType="{x:Type Polygon}">
+                                            <Setter Property="Fill" Value="#FFF0F5"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Kind}" Value="iteration">
+                                                    <Setter Property="Fill" Value="#9370DB"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Kind}" Value="recursive">
+                                                    <Setter Property="Fill" Value="#DAA520"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                    <Setter Property="Fill" Value="#4682B4"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Polygon.Style>
+                                </Polygon>
+                                <TextBlock Canvas.Left="{Binding LabelX}" Canvas.Top="{Binding LabelY}"
+                                           Text="{Binding Label}" Foreground="#DAA520" FontSize="11"/>
+                            </Canvas>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Line x:Name="ConnectionPreviewLine"
+                      Visibility="Collapsed"
+                      Stroke="#DA8A00"
+                      StrokeThickness="2"
+                      StrokeDashArray="5 2 5 2"
+                      StrokeStartLineCap="Round"
+                      StrokeEndLineCap="Round"/>
+                <Ellipse x:Name="ConnectionPreviewStartDot"
+                         Visibility="Collapsed"
+                         Fill="#DA8A00"
+                         Width="7"
+                         Height="7"/>
+                <Polygon x:Name="ConnectionPreviewArrowHead"
+                         Visibility="Collapsed"
+                         Fill="#DA8A00"/>
+
+                <ItemsControl ItemsSource="{Binding Nodes}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type ContentPresenter}">
+                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type projectPanel:FlowBlockNodeViewModel}">
+                            <Border Width="{Binding Width}"
+                                    Height="{Binding Height}"
+                                    Padding="1"
+                                    Style="{StaticResource ProjectPanel.BlockBorder}"
+                                    Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    PreviewMouseLeftButtonDown="FlowBlock_PreviewMouseLeftButtonDown"
+                                    PreviewMouseRightButtonDown="FlowBlock_PreviewMouseRightButtonDown"
+                                    PreviewMouseMove="FlowBlock_PreviewMouseMove"
+                                    PreviewMouseLeftButtonUp="FlowBlock_PreviewMouseLeftButtonUp">
+                                <Border.ContextMenu>
+                                    <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem Header="{Binding EditSelectionHeader}" Command="{Binding EditSelectionCommand}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="PencilOutline" Style="{StaticResource HostedControlContextMenuIcon.Primary}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_ShowInputDatasets}" Command="{Binding ShowInputInsightCommand}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="DatabaseArrowDownOutline" Style="{StaticResource HostedControlContextMenuIcon.Teal}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_ShowOutputDatasets}" Command="{Binding ShowOutputInsightCommand}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="DatabaseArrowUpOutline" Style="{StaticResource HostedControlContextMenuIcon.Info}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator/>
+                                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_ManageNotifications}" Command="{Binding ManageNotificationsCommand}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="MessageAlertOutline" Style="{StaticResource HostedControlContextMenuIcon.Warning}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="{Binding ToggleBreakpointHeader}" Command="{Binding ToggleBreakpointCommand}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="RecordCircleOutline" Style="{StaticResource HostedControlContextMenuIcon.Danger}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_ManageExecutionIndex}"
+                                                  IsEnabled="{Binding CanManageExecutionIndex}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="Numeric" Style="{StaticResource HostedControlContextMenuIcon.Purple}"/>
+                                            </MenuItem.Icon>
+                                            <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_DefineExecutionIndex}" Command="{Binding DefineExecutionIndexCommand}">
+                                                <MenuItem.Icon>
+                                                    <iconPacks:PackIconMaterial Kind="PlusBoxOutline" Style="{StaticResource HostedControlContextMenuIcon.Success}"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_RemoveExecutionIndex}" Command="{Binding RemoveExecutionIndexCommand}">
+                                                <MenuItem.Icon>
+                                                    <iconPacks:PackIconMaterial Kind="MinusBoxOutline" Style="{StaticResource HostedControlContextMenuIcon.Danger}"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </MenuItem>
+                                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_DeleteFlowBlock}" Command="{Binding DeleteSelectionCommand}" InputGestureText="Entf">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource HostedControlContextMenuIcon.Danger}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
+                                <Grid ClipToBounds="True">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="26"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="0" CornerRadius="5,5,0,0">
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="Background" Value="#AFAFAF"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                        <Setter Property="Background" Value="#00008B"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <DockPanel LastChildFill="True">
+                                            <iconPacks:PackIconMaterial DockPanel.Dock="Left" Kind="LightningBolt" Width="15" Height="15" Margin="6,5,4,0" Foreground="#00A2FF"/>
+                                            <iconPacks:PackIconMaterial DockPanel.Dock="Right" Kind="RecordCircle" Width="13" Height="13" Margin="3,6" Foreground="#E53B3B" Visibility="{Binding HasBreakpoint, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding Title}" Foreground="#FFFFFF" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </DockPanel>
+                                    </Border>
+                                    <Border Grid.Row="1" Background="{Binding Background, RelativeSource={RelativeSource AncestorType=Border}}" CornerRadius="0,0,5,5" ClipToBounds="True">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.Row="0" Background="#7E8F9B" Height="24" Visibility="{Binding HasExecutionIndex, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <StackPanel Orientation="Horizontal" Margin="8,0,0,0">
+                                                <iconPacks:PackIconMaterial Kind="Numeric" Width="14" Height="14" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding ExecutionIndexText}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                            </StackPanel>
+                                        </Border>
+                                    <ScrollViewer x:Name="FlowBlockContentScrollViewer"
+                                                  Grid.Row="1"
+                                                  HorizontalScrollBarVisibility="Auto">
+                                        <ScrollViewer.Style>
+                                            <Style TargetType="{x:Type ScrollViewer}">
+                                                <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasVerticalOverflow}" Value="True">
+                                                        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ScrollViewer.Style>
+                                        <ScrollViewer.Resources>
+                                            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ProjectPanel.ThinScrollBar}"/>
+                                            <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource ProjectPanel.ScrollThumb}"/>
+                                        </ScrollViewer.Resources>
+                                        <ItemsControl ItemsSource="{Binding Rows}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type projectPanel:FlowBlockRenderRowViewModel}">
+                                                    <Grid Height="24"
+                                                          MinWidth="{Binding ViewportWidth, ElementName=FlowBlockContentScrollViewer}"
+                                                          ToolTip="{Binding Tooltip}"
+                                                          Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          MouseLeftButtonDown="FlowBlockRow_MouseLeftButtonDown"
+                                                          PreviewMouseRightButtonDown="FlowBlockRow_PreviewMouseRightButtonDown">
+                                                        <Grid.ContextMenu>
+                                                            <ContextMenu>
+                                                                <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_CopyValue}"
+                                                                          Command="{Binding PlacementTarget.Tag.CopyRowValueCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                                          Visibility="{Binding PlacementTarget.DataContext.CanCopyValue, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                                    <MenuItem.Icon>
+                                                                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource HostedControlContextMenuIcon.Primary}"/>
+                                                                    </MenuItem.Icon>
+                                                                </MenuItem>
+                                                            </ContextMenu>
+                                                        </Grid.ContextMenu>
+                                                        <Grid.Style>
+                                                            <Style TargetType="{x:Type Grid}">
+                                                                <Setter Property="Background" Value="Transparent"/>
+                                                                <Setter Property="Cursor" Value="Arrow"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding CanNavigate}" Value="True">
+                                                                        <Setter Property="Cursor" Value="Hand"/>
+                                                                    </DataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding CanNavigate}" Value="True"/>
+                                                                            <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                                                        </MultiDataTrigger.Conditions>
+                                                                            <Setter Property="Background" Value="#536472"/>
+                                                                    </MultiDataTrigger>
+                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                            <Setter Property="Background" Value="#2F5268"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="34"/>
+                                                            <ColumnDefinition Width="110"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid Grid.Column="0" VerticalAlignment="Center">
+                                                            <TextBlock Text="{Binding Label}" Style="{StaticResource ProjectPanel.RowKind}" Visibility="{Binding Kind, Converter={StaticResource FlowBlockRowLabelVisibilityConverter}}"/>
+                                                            <iconPacks:PackIconMaterial Kind="{Binding Kind, Converter={StaticResource FlowBlockRowIconKindConverter}}"
+                                                                                        Width="13"
+                                                                                        Height="13"
+                                                                                        HorizontalAlignment="Center"
+                                                                                        Foreground="{Binding Kind, Converter={StaticResource FlowBlockRowIconBrushConverter}}"
+                                                                                        Visibility="{Binding Kind, Converter={StaticResource FlowBlockRowIconVisibilityConverter}}"/>
+                                                        </Grid>
+                                                        <TextBlock Grid.Column="1" Text="{Binding Label}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                        <TextBlock Grid.Column="2" Text="{Binding Value}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                        <Border Grid.Row="2"
+                                                MinHeight="28"
+                                                Padding="7,4"
+                                                Visibility="{Binding HasNotification, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <Border.Style>
+                                                <Style TargetType="{x:Type Border}">
+                                                    <Setter Property="Background" Value="#FFF3C66A"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasError}" Value="True">
+                                                            <Setter Property="Background" Value="#D98578"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="22"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid Grid.Column="0"
+                                                      Width="18"
+                                                      Height="18"
+                                                      VerticalAlignment="Center">
+                                                    <iconPacks:PackIconMaterial Kind="AlertOutline"
+                                                                                Width="15"
+                                                                                Height="15"
+                                                                                Foreground="#7C5A00"
+                                                                                Visibility="{Binding HasWarning, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                                    <iconPacks:PackIconMaterial Kind="AlertCircleOutline"
+                                                                                Width="15"
+                                                                                Height="15"
+                                                                                Foreground="#7A1717"
+                                                                                Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                                </Grid>
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding NotificationMessage}"
+                                                           Foreground="#1F1F1F"
+                                                           FontSize="11"
+                                                           VerticalAlignment="Center"
+                                                           TextWrapping="Wrap"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Canvas IsHitTestVisible="False">
+                    <Rectangle x:Name="MarqueeSelectionRectangle"
+                               Visibility="Collapsed"
+                               Stroke="CadetBlue"
+                               StrokeThickness="2"
+                               StrokeDashArray="5 2 5 2"
+                               Fill="#144B7C7C"/>
+                </Canvas>
+            </Grid>
+        </ScrollViewer>
+
+        <DockPanel Grid.Row="3" Background="#454545" LastChildFill="False">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right" Margin="0,0,8,0">
+                <TextBlock Text="→" Foreground="#FFF0F5" Margin="12,4,4,0"/>
+                <TextBlock Text="{x:Static resources:ProjectPanel.Legend_Invoke}" Foreground="#FFFFFF" FontSize="12" Margin="0,5,0,0"/>
+                <TextBlock Text="→" Foreground="#9370DB" Margin="16,4,4,0"/>
+                <TextBlock Text="{x:Static resources:ProjectPanel.Legend_IterationContext}" Foreground="#FFFFFF" FontSize="12" Margin="0,5,0,0"/>
+                <TextBlock Text="→" Foreground="#DAA520" Margin="16,4,4,0"/>
+                <TextBlock Text="{x:Static resources:ProjectPanel.Legend_RecursiveCall}" Foreground="#FFFFFF" FontSize="12" Margin="0,5,0,0"/>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>

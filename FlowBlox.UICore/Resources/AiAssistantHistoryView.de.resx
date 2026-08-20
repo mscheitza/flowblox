@@ -7,4 +7,6 @@
   <data name="History_Title" xml:space="preserve"><value>Assistenten-Verläufe</value></data>
   <data name="Button_NewHistory" xml:space="preserve"><value>Neuer Chat</value></data>
   <data name="Button_OpenHistory" xml:space="preserve"><value>Öffnen</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Noch keine Chat-Verläufe</value></data>
+  <data name="Empty_Description" xml:space="preserve"><value>Für dieses Projekt wurden noch keine Chat-Verläufe angelegt. Nutzen Sie die Plus-Schaltfläche, um einen neuen Chat zu beginnen.</value></data>
 </root>

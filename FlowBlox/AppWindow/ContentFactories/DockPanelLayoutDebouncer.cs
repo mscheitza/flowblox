@@ -8,7 +8,7 @@ namespace FlowBlox.AppWindow.ContentFactories
 {
     internal sealed class DockPanelLayoutDebouncer
     {
-        private const int QuietIntervalMilliseconds = 2000;
+        private const int QuietIntervalMilliseconds = 1500;
         private static readonly Dictionary<DockPanel, DockPanelLayoutDebouncer> Debouncers = new Dictionary<DockPanel, DockPanelLayoutDebouncer>();
 
         private readonly DockPanel _dockPanel;

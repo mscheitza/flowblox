@@ -7,7 +7,7 @@ namespace FlowBlox.AppWindow
 {
     internal sealed class WaitOverlayWindow : MetroWindow
     {
-        public WaitOverlayWindow()
+        public WaitOverlayWindow(string loadingText = "Loading project...")
         {
             Width = 140;
             Height = 86;
@@ -53,7 +53,7 @@ namespace FlowBlox.AppWindow
 
             var label = new TextBlock
             {
-                Text = "Loading project...",
+                Text = loadingText,
                 Foreground = Brushes.WhiteSmoke,
                 Margin = new Thickness(0, 8, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Center

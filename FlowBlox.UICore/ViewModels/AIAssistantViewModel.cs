@@ -76,20 +76,14 @@ namespace FlowBlox.UICore.ViewModels
             HistoryViewModel.Histories.CollectionChanged += Histories_CollectionChanged;
 
             HistoryViewModel.Refresh();
-            if (HistoryViewModel.HasHistories)
-                ShowHistoryOverview();
-            else
-                StartNewChat();
+            ShowHistoryOverview();
         }
 
         public void ResetForProjectInitialization()
         {
             ChatViewModel.ResetForProjectInitialization();
             HistoryViewModel.Refresh();
-            if (HistoryViewModel.HasHistories)
-                ShowHistoryOverview();
-            else
-                StartNewChat();
+            ShowHistoryOverview();
         }
 
         public void ConfigureProjectStateAccess(
@@ -98,10 +92,7 @@ namespace FlowBlox.UICore.ViewModels
         {
             ChatViewModel.ConfigureProjectStateAccess(captureProjectState, restoreProjectState);
             HistoryViewModel.ConfigureProjectStateAccess(captureProjectState);
-            if (HistoryViewModel.HasHistories)
-                ShowHistoryOverview();
-            else
-                StartNewChat();
+            ShowHistoryOverview();
         }
 
         public AssistantConfiguration GetConfiguration(out string error) =>
@@ -131,9 +122,6 @@ namespace FlowBlox.UICore.ViewModels
 
         private void ShowHistoryOverview()
         {
-            if (!HistoryViewModel.HasHistories)
-                return;
-
             HistoryViewModel.Refresh();
             IsHistoryOverviewVisible = true;
             RefreshChatNavigationState();
@@ -146,7 +134,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void RefreshChatNavigationState()
         {
-            ChatViewModel.CanGoBackToHistory = HistoryViewModel.HasHistories;
+            ChatViewModel.CanGoBackToHistory = true;
             InvalidateToolbarCommands();
         }
 

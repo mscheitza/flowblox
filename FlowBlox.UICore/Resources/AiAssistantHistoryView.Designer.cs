@@ -77,6 +77,24 @@ namespace FlowBlox.UICore.Resources {
                 return ResourceManager.GetString("Button_OpenHistory", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No chat histories have been created for this project yet. Use the plus button to start a new chat. ähnelt.
+        /// </summary>
+        public static string Empty_Description {
+            get {
+                return ResourceManager.GetString("Empty_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No chat histories yet ähnelt.
+        /// </summary>
+        public static string Empty_Title {
+            get {
+                return ResourceManager.GetString("Empty_Title", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Assistant histories ähnelt.

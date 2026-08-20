@@ -24,39 +24,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <converters:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
             <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
-            <Style x:Key="SpecialExplanationLinkButtonStyle" TargetType="Button">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                <Setter Property="Cursor" Value="Arrow"/>
-                <Setter Property="Foreground" Value="#3A6EA5"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="Root"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="3"
-                                    Padding="{TemplateBinding Padding}">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="#5B8FC7"/>
-                                    <Setter Property="Cursor" Value="Hand"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -89,41 +62,36 @@
                   Header="Zusätzliche Informationen"
                   IsExpanded="False"
                   Visibility="{Binding SpecialExplanations.Count, Converter={StaticResource CountToVisibilityConverter}}">
-            <Border Background="#F8FBFF" Padding="10" BorderBrush="#D8E1ED" BorderThickness="1" CornerRadius="4">
-                <ItemsControl ItemsSource="{Binding SpecialExplanations}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel Margin="0,0,0,6">
-                                <iconPacks:PackIconMaterial Kind="{Binding IconKind}"
-                                                            Width="16"
-                                                            Height="16"
-                                                            Margin="0,0,8,0"
-                                                            VerticalAlignment="Top"
-                                                            Foreground="{Binding IconForeground}"/>
-                                <StackPanel Visibility="{Binding HasContinuationMarker, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ScrollViewer MaxHeight="250"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+                <Border Background="#F8FBFF" Padding="10" BorderBrush="#D8E1ED" BorderThickness="1" CornerRadius="4">
+                    <ItemsControl ItemsSource="{Binding SpecialExplanations}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel Margin="0,0,0,6">
+                                    <iconPacks:PackIconMaterial Kind="{Binding IconKind}"
+                                                                Width="16"
+                                                                Height="16"
+                                                                Margin="0,0,8,0"
+                                                                VerticalAlignment="Top"
+                                                                Foreground="{Binding IconForeground}"/>
+                                    <TextBlock utilities:TextBlockLinkHelper.FormattedText="{Binding DisplayText, Mode=OneWay}"
+                                               utilities:TextBlockLinkHelper.AppendLinkText="{x:Static resources:PropertyWindow.ReadMore}"
+                                               utilities:TextBlockLinkHelper.AppendLinkCommand="{Binding OpenExplanationCommand}"
+                                               TextWrapping="Wrap"
+                                               Foreground="DarkSlateGray"
+                                               Visibility="{Binding HasContinuationMarker, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                     <TextBlock utilities:TextBlockLinkHelper.FormattedText="{Binding DisplayText, Mode=OneWay}"
                                                TextWrapping="Wrap"
-                                               Foreground="DarkSlateGray"/>
-                                    <Button Command="{Binding OpenExplanationCommand}"
-                                            Style="{StaticResource SpecialExplanationLinkButtonStyle}"
-                                            ToolTip="Open details"
-                                            HorizontalAlignment="Left"
-                                            Margin="0,3,0,0">
-                                        <TextBlock Text="{x:Static resources:PropertyWindow.ReadMore}"
-                                                   FontSize="11"
-                                                   Opacity="0.9"
-                                                   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
-                                    </Button>
-                                </StackPanel>
-                                <TextBlock utilities:TextBlockLinkHelper.FormattedText="{Binding DisplayText, Mode=OneWay}"
-                                           TextWrapping="Wrap"
-                                           Foreground="DarkSlateGray"
-                                           Visibility="{Binding HasContinuationMarker, Converter={StaticResource BoolToInverseVisibilityConverter}}"/>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
+                                               Foreground="DarkSlateGray"
+                                               Visibility="{Binding HasContinuationMarker, Converter={StaticResource BoolToInverseVisibilityConverter}}"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </ScrollViewer>
         </Expander>
 
         <!-- Operations -->
@@ -166,42 +134,44 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Bottom" Margin="10">
 
             <!-- Back -->
-            <Button Margin="5" Command="{Binding CancelCommand}" IsCancel="True">
+            <Button Command="{Binding CancelCommand}"
+                    IsCancel="True"
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="ArrowLeft"
-                                        Width="14"
-                                        Height="14"
-                                        VerticalAlignment="Center"
-                                        Margin="0,0,5,0"/>
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Back}"/>
                     <TextBlock Text="{x:Static resources:PropertyWindow.Back}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
 
             <!-- SaveWithoutVerification -->
-            <Button Margin="5"
-                Command="{Binding SaveWithoutVerificationCommand}"
-                Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Button Command="{Binding SaveWithoutVerificationCommand}"
+                    Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="ContentSaveEdit"
-                                        Width="14"
-                                        Height="14"
-                                        VerticalAlignment="Center"
-                                        Margin="0,0,5,0"/>
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
                     <TextBlock Text="{x:Static resources:PropertyWindow.SaveWithoutVerification}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
 
             <!-- Save -->
-            <Button Margin="5"
-                Command="{Binding SaveCommand}"
-                Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                IsDefault="True">
+            <Button Command="{Binding SaveCommand}"
+                    Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
+                    IsDefault="True"
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="ContentSave"
-                                        Width="14"
-                                        Height="14"
-                                        VerticalAlignment="Center"
-                                        Margin="0,0,5,0"/>
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
                     <TextBlock Text="{x:Static resources:PropertyWindow.Save}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>

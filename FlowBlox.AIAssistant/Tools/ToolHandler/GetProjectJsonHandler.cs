@@ -11,7 +11,8 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns active project JSON export.");
+            "Returns active project JSON export. " + 
+            "Empty collections are represented as the string EMPTY_COLLECTION to keep the payload compact while preserving the member.");
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {

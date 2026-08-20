@@ -41,7 +41,6 @@ namespace FlowBlox.AppWindow.Contents
 
         internal void UpdateUI()
         {
-            _componentLibraryViewControl.UpdateRuntimeState(AppWindow.Instance.IsRuntimeActive);
         }
 
         internal new bool ProcessCmdKey(ref Message msg, Keys keyData)

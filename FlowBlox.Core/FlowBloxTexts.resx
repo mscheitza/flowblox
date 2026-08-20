@@ -3233,7 +3233,8 @@ Multi-level XPath expressions are not allowed here.</value>
     <value>This flow block manages an internal web browser instance. The managed instance can be used by other flow blocks.</value>
   </data>
 	<data name="WebBrowserFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
-    <value>After successfully opening the URL, the current DOM content is written to the result field.</value>
+    <value>After successfully opening the URL, the current DOM content is written to the result field.
+If opening the URL fails, an empty text value is written to the result field.</value>
   </data>
 	<data name="WebBrowserFlowBlock_SpecialExplanation_CookieOverlay" xml:space="preserve">
     <value>Check whether a cookie-consent overlay is displayed. If present, add a web event flow block with click action on the accept button. Determine the exact selector or naming from the website DOM content.</value>
@@ -3261,14 +3262,11 @@ Ensure Selenium is installed and configured correctly (Chrome setup: https://www
     <value>This flow block uses the internally managed XML document from an XML document flow block and writes or updates nodes.</value>
   </data>
 	<data name="WebEventFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
-    <value>After a successful web action, the current DOM content is written to the result field.</value>
+    <value>After a successful web action, the current DOM content is written to the result field.
+If a web action fails, an empty text value is written to the result field, for example when no DOM element is found for an XPath or CSS selector.</value>
   </data>
 	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_LinkExtractionAndSwitch" xml:space="preserve">
-<value>Best practice: extract links, then open links.
-- ClickAll executes multiple clicks, but does not create one result iteration per clicked element.
-- ClickAll returns one DOM only after all clicks are finished.$$CONTINUE$$
-
-For multi-item processing:
+<value>Best practice: extract links, then open links.$$CONTINUE$$
 - Web-Selector: collect target href values.
 - Web-Event (Switch to URL): iterate collected URLs.
 - Then run detail/download actions on the opened page.
@@ -3276,6 +3274,18 @@ For multi-item processing:
 Benefit:
 - Iteration is based on stable URL values (not DOM element handles).
 - This avoids stale-element issues after navigation/re-render.</value>
+  </data>
+	<data name="WebEventFlowBlock_SpecialExplanation_EventType_ClickAll" xml:space="preserve">
+<value>Hints for event: ClickAll$$CONTINUE$$
+- Executes all matching clicks in sequence.
+- Does not create a separate result iteration for each clicked element.
+- Writes one DOM result only after all clicks have finished.</value>
+  </data>
+	<data name="WebEventFlowBlock_SpecialExplanation_EventType_UpdateDOM" xml:space="preserve">
+<value>Hints for event: UpdateDOM$$CONTINUE$$
+- Replaces the DOM content of the element resolved by XPath or CSS selector.
+- Uses the input text as the new DOM content.
+- This is intended for controlled DOM manipulation before subsequent web actions or selectors run.</value>
   </data>
 	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction" xml:space="preserve">
 <value>Best practice for links across multiple pages:

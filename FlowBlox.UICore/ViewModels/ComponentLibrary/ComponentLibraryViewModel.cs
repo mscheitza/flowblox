@@ -1,3 +1,4 @@
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
@@ -5,6 +6,8 @@ using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Events;
+using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using MahApps.Metro.IconPacks;
 using System.Collections.ObjectModel;
@@ -20,6 +23,8 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
     public sealed class ComponentLibraryViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly ImageSource _categoryIcon = WpfIconHelper.CreateMaterialIcon(PackIconMaterialKind.Folder, 16, new SolidColorBrush(Color.FromRgb(30, 136, 229)));
+        private readonly IRuntimeStateService _runtimeStateService;
+        private readonly SynchronizationContext _uiContext;
         private FlowBloxProject _project;
         private string _filterText;
         private bool _isRuntimeActive;
@@ -30,10 +35,17 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
 
         public ComponentLibraryViewModel()
         {
+            _uiContext = SynchronizationContext.Current;
+            _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
             ManageExtensionsCommand = new RelayCommand(() => ManageExtensionsRequested?.Invoke(this, EventArgs.Empty), () => _project != null);
             InitializeProject();
             RefreshLibrary();
             FlowBloxProjectManager.Instance.ProjectChanged += OnProjectChanged;
+            if (_runtimeStateService != null)
+            {
+                _runtimeStateService.StateChanged += RuntimeStateService_StateChanged;
+                UpdateRuntimeState(_runtimeStateService.IsRuntimeActive);
+            }
         }
 
         public string FilterText
@@ -71,6 +83,9 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
             IsRuntimeActive = isRuntimeActive;
             ManageExtensionsCommand.Invalidate();
         }
+
+        private void RuntimeStateService_StateChanged(object? sender, RuntimeStateChangedEventArgs e)
+            => SynchronizationContextHelper.PostToUi(_uiContext, () => UpdateRuntimeState(e.IsRuntimeActive));
 
         private static bool TypeMatchesFilter(Type type, string filter)
         {
@@ -236,11 +251,15 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
         public void Dispose()
         {
             FlowBloxProjectManager.Instance.ProjectChanged -= OnProjectChanged;
+            if (_runtimeStateService != null)
+                _runtimeStateService.StateChanged -= RuntimeStateService_StateChanged;
+
             DetachProject();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
     }
 }

@@ -190,7 +190,7 @@ namespace FlowBlox.UICore.ViewModels
             if (eventArgs?.AddedObject is not FieldElement fieldElement)
                 return;
 
-            PostToUi(() =>
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 AddFieldRow(fieldElement);
                 ApplyFilter();
@@ -203,7 +203,7 @@ namespace FlowBlox.UICore.ViewModels
             if (eventArgs?.RemovedObject is not FieldElement fieldElement)
                 return;
 
-            PostToUi(() =>
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 RemoveFieldRow(fieldElement);
                 ApplyFilter();
@@ -213,7 +213,7 @@ namespace FlowBlox.UICore.ViewModels
         private void UiRegistry_UIElementRegistered(object? sender, FlowBloxUIElementRegisteredEventArgs e)
         {
             RegisterElementSelectionEvent(e?.UIElement);
-            PostToUi(UpdateFlowBlockSelectionState);
+            SynchronizationContextHelper.PostToUi(_uiContext, UpdateFlowBlockSelectionState);
         }
 
         private void RegisterElementSelectionEvent(IFlowBloxUIElement? uiElement)
@@ -226,7 +226,7 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         private void UiElement_ElementSelectedChangedByUser(object? sender, EventArgs e)
-            => PostToUi(UpdateFlowBlockSelectionState);
+            => SynchronizationContextHelper.PostToUi(_uiContext, UpdateFlowBlockSelectionState);
 
         private void AddFieldRow(FieldElement fieldElement)
         {
@@ -283,7 +283,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void FieldElement_OnNameChanged(FieldElement field, string oldName, string newName)
         {
-            PostToUi(() =>
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 if (_rowsByField.TryGetValue(field, out var row))
                 {
@@ -295,7 +295,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void FieldElement_OnValueChanged(FieldElement field, string oldValue, string newValue)
         {
-            PostToUi(() =>
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 if (_rowsByField.TryGetValue(field, out var row))
                 {
@@ -312,7 +312,7 @@ namespace FlowBlox.UICore.ViewModels
             if (e.PropertyName != nameof(FieldElement.IsPassword))
                 return;
 
-            PostToUi(() =>
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 if (_rowsByField.TryGetValue(field, out var row))
                     row.UpdateValue(field.StringValue, field.Pending);
@@ -460,20 +460,6 @@ namespace FlowBlox.UICore.ViewModels
                     FlowBloxLogManager.Instance.GetLogger().Error($"Failed to persist FieldView option '{optionName}'.", e);
                 }
             });
-        }
-
-        private void PostToUi(Action action)
-        {
-            if (action == null)
-                return;
-
-            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
-            {
-                _uiContext.Post(_ => action(), null);
-                return;
-            }
-
-            action();
         }
 
         private void UnsubscribeAll()

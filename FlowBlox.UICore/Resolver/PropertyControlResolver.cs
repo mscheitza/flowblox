@@ -80,6 +80,7 @@ namespace FlowBlox.UICore.Resolver
                 IsEnabled = !FlowBlockUIAttributeHelper.IsDynamicallyReadOnly(target, uiAttribute),
                 Control = controlResult.FrameworkElement,
                 IsActive = isActive,
+                Maximize = uiAttribute?.Maximize == true,
                 TooltipText = description
             };
 

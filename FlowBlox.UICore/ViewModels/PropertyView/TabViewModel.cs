@@ -14,6 +14,10 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public ObservableCollection<PropertyControlViewModel> Controls { get; set; }
 
+        public bool HasMaximizedControl => Controls.Any(x => x.Maximize);
+
+        public IEnumerable<PropertyControlViewModel> MaximizedControls => Controls.Where(x => x.Maximize);
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

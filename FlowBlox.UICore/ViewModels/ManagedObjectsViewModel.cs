@@ -12,6 +12,7 @@ using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Events;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Provider;
 using FlowBlox.UICore.Utilities;
@@ -38,6 +39,7 @@ namespace FlowBlox.UICore.ViewModels
         private readonly SynchronizationContext? _uiContext;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
         private readonly IDialogService _dialogService;
+        private readonly IRuntimeStateService? _runtimeStateService;
 
         private FlowBloxRegistry? _registry;
         private FlowBloxProject? _project;
@@ -108,6 +110,7 @@ namespace FlowBlox.UICore.ViewModels
             _uiContext = SynchronizationContext.Current;
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
+            _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
 
             RefreshCommand = new RelayCommand(RefreshAll);
             AddCommand = new RelayCommand(AddManagedObject, CanAddManagedObject);
@@ -115,15 +118,35 @@ namespace FlowBlox.UICore.ViewModels
             DeleteCommand = new RelayCommand(DeleteSelectedManagedObject, CanDeleteManagedObject);
 
             FlowBloxProjectManager.Instance.ProjectChanged += ProjectManager_ProjectChanged;
+            if (_runtimeStateService != null)
+            {
+                _runtimeStateService.StateChanged += RuntimeStateService_StateChanged;
+                SetRuntimeActive(_runtimeStateService.IsRuntimeActive);
+            }
+
             RebindAndRefresh();
         }
 
         public void SetRuntimeActive(bool isRuntimeActive)
         {
             IsReadOnly = isRuntimeActive;
+            // During project shutdown the shell may still propagate runtime state updates.
+            // Avoid rebuilding entries/actions against a registry that has already been detached.
+            if (_project == null || _registry == null)
+            {
+                TypeNodes.Clear();
+                ManagedObjects.Clear();
+                SelectedTypeNode = null;
+                SelectedEntry = null;
+                return;
+            }
+
             RebuildTypeTree();
             RefreshManagedObjects();
         }
+
+        private void RuntimeStateService_StateChanged(object? sender, RuntimeStateChangedEventArgs e)
+            => SynchronizationContextHelper.PostToUi(_uiContext, () => SetRuntimeActive(e.IsRuntimeActive));
 
         public void OnAfterUIRegistryInitialized()
         {
@@ -158,7 +181,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void Project_ExtensionsReloaded(object? sender, EventArgs e)
         {
-            PostToUi(() =>
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 RebuildTypeTree();
                 RefreshManagedObjects();
@@ -180,7 +203,7 @@ namespace FlowBlox.UICore.ViewModels
                 !IsSupportedManagedObjectType(addedManagedObject.GetType()))
                 return;
 
-            PostToUi(() =>
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 RebuildTypeTree();
                 RefreshManagedObjects();
@@ -193,7 +216,7 @@ namespace FlowBlox.UICore.ViewModels
                 !IsSupportedManagedObjectType(removedManagedObject.GetType()))
                 return;
 
-            PostToUi(() =>
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 RebuildTypeTree();
                 RefreshManagedObjects();
@@ -209,6 +232,13 @@ namespace FlowBlox.UICore.ViewModels
 
         private void RebuildTypeTree()
         {
+            if (_project == null || _registry == null)
+            {
+                TypeNodes.Clear();
+                SelectedTypeNode = null;
+                return;
+            }
+
             var previouslySelectedType = SelectedTypeNode?.ManagedObjectType;
             var wasAllManagedObjectsRootSelected = SelectedTypeNode?.IsAllManagedObjectsRoot == true;
 
@@ -737,20 +767,6 @@ namespace FlowBlox.UICore.ViewModels
             OnPropertyChanged(nameof(HasSelectedEntryActions));
         }
 
-        private void PostToUi(Action action)
-        {
-            if (action == null)
-                return;
-
-            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
-            {
-                _uiContext.Post(_ => action(), null);
-                return;
-            }
-
-            action();
-        }
-
         private void Unsubscribe()
         {
             if (_registry != null)
@@ -769,6 +785,9 @@ namespace FlowBlox.UICore.ViewModels
         public void Dispose()
         {
             FlowBloxProjectManager.Instance.ProjectChanged -= ProjectManager_ProjectChanged;
+            if (_runtimeStateService != null)
+                _runtimeStateService.StateChanged -= RuntimeStateService_StateChanged;
+
             Unsubscribe();
             TypeNodes.Clear();
             ManagedObjects.Clear();

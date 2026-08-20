@@ -18,11 +18,21 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
                 property.Ignored = true;
             }
 
+            if (AiAssistantJsonPropertySerializationRules.IsIgnoredComponentProperty(member, property))
+            {
+                property.Ignored = true;
+                return property;
+            }
+
             if (member.DeclaringType == typeof(FieldElement) &&
                 string.Equals(property.PropertyName, nameof(FieldElement.StringValue), StringComparison.Ordinal))
             {
-                property.ShouldSerialize = instance => instance is not FieldElement field || !field.IsPassword;
+                JsonPropertyShouldSerializeHelper.ChainShouldSerialize(
+                    property,
+                    instance => instance is not FieldElement field || !field.IsPassword);
             }
+
+            AiAssistantJsonPropertySerializationRules.WriteEmptyEnumerablesAsKeyword(property);
 
             return property;
         }

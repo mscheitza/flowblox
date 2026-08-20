@@ -147,6 +147,7 @@
                          BorderThickness="0"
                          Background="Transparent"
                          HorizontalContentAlignment="Stretch"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ItemContainerStyle="{StaticResource AIAssistantTranscriptItemContainerStyle}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -184,6 +185,7 @@
                                     <TextBlock Grid.Column="1"
                                                Text="{Binding Text}"
                                                TextWrapping="Wrap"
+                                               TextTrimming="CharacterEllipsis"
                                                VerticalAlignment="Top"
                                                Foreground="#FF1F2937" />
                                 </Grid>
@@ -233,6 +235,7 @@
                      AcceptsReturn="True"
                      TextWrapping="Wrap"
                      VerticalScrollBarVisibility="Auto"
+                     HorizontalScrollBarVisibility="Disabled"
                      BorderThickness="0"
                      Background="Transparent"
                      IsEnabled="{Binding CanEditInput}"
@@ -241,7 +244,8 @@
 
         <StackPanel Grid.Row="4"
                     Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+                    HorizontalAlignment="Right"
+                    Margin="0,0,2,0">
             <Button Content="{x:Static resources:AiAssistantChatView.Button_Submit}"
                     MinWidth="90"
                     Style="{StaticResource FlowBlox.RoundedActionButtonStyle}"

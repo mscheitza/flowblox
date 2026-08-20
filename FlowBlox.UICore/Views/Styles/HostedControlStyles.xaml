@@ -3,41 +3,39 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
-    <Style x:Key="FlowBlox.RoundedActionButtonStyle"
-           TargetType="{x:Type Button}">
+    <Style x:Key="FlowBlox.RoundedActionButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Padding" Value="10,5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="8">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Margin="{TemplateBinding Padding}" />
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+                        <ContentPresenter
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="FlowBlox.EmptyStateIconStyle"
-           TargetType="{x:Type iconPacks:PackIconMaterial}">
+    <Style x:Key="FlowBlox.EmptyStateIconStyle" TargetType="{x:Type iconPacks:PackIconMaterial}">
         <Setter Property="Width" Value="18" />
         <Setter Property="Height" Value="18" />
         <Setter Property="Foreground" Value="#8F98A3" />
     </Style>
 
-    <Style x:Key="FlowBlox.EmptyStateTextStyle"
-           TargetType="{x:Type TextBlock}">
+    <Style x:Key="FlowBlox.EmptyStateTextStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="#8F98A3" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
-    <Style x:Key="HostedControlToolbarIconBase"
-           TargetType="{x:Type iconPacks:PackIconMaterial}">
+    <Style x:Key="HostedControlToolbarIconBase" TargetType="{x:Type iconPacks:PackIconMaterial}">
         <Setter Property="Width" Value="16" />
         <Setter Property="Height" Value="16" />
         <Setter Property="Opacity" Value="1" />
@@ -48,6 +46,75 @@
                 <Setter Property="Opacity" Value="1" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style x:Key="HostedControlContextMenuIconBase" TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Opacity" Value="1" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}" Value="False">
+                <Setter Property="Foreground" Value="#9AA3AF" />
+                <Setter Property="Opacity" Value="1" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="HostedControlContextMenuIcon.Primary"
+        BasedOn="{StaticResource HostedControlContextMenuIconBase}"
+        TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Foreground" Value="#2563EB" />
+    </Style>
+
+    <Style
+        x:Key="HostedControlContextMenuIcon.Success"
+        BasedOn="{StaticResource HostedControlContextMenuIconBase}"
+        TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Foreground" Value="#16A34A" />
+    </Style>
+
+    <Style
+        x:Key="HostedControlContextMenuIcon.Teal"
+        BasedOn="{StaticResource HostedControlContextMenuIconBase}"
+        TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Foreground" Value="#0F766E" />
+    </Style>
+
+    <Style
+        x:Key="HostedControlContextMenuIcon.Info"
+        BasedOn="{StaticResource HostedControlContextMenuIconBase}"
+        TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Foreground" Value="#0284C7" />
+    </Style>
+
+    <Style
+        x:Key="HostedControlContextMenuIcon.Warning"
+        BasedOn="{StaticResource HostedControlContextMenuIconBase}"
+        TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Foreground" Value="#D97706" />
+    </Style>
+
+    <Style
+        x:Key="HostedControlContextMenuIcon.Danger"
+        BasedOn="{StaticResource HostedControlContextMenuIconBase}"
+        TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Foreground" Value="#B91C1C" />
+    </Style>
+
+    <Style
+        x:Key="HostedControlContextMenuIcon.Purple"
+        BasedOn="{StaticResource HostedControlContextMenuIconBase}"
+        TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Foreground" Value="#7C3AED" />
+    </Style>
+
+    <Style
+        x:Key="HostedControlContextMenuIcon.Neutral"
+        BasedOn="{StaticResource HostedControlContextMenuIconBase}"
+        TargetType="{x:Type iconPacks:PackIconMaterial}">
+        <Setter Property="Foreground" Value="#475569" />
     </Style>
 
 </ResourceDictionary>

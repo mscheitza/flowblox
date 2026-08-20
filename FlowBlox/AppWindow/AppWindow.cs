@@ -26,6 +26,8 @@ using FlowBlox.Grid.Provider;
 using FlowBlox.Interfaces;
 using FlowBlox.Services;
 using FlowBlox.UICore.Utilities;
+using FlowBlox.UICore.Models;
+using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.ViewModels.PSProjects;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
@@ -50,6 +52,9 @@ namespace FlowBlox.AppWindow
         private const string UpdateDownloadDirectoryName = "updates";
         private const string UpdateNotificationId = "app.update.available";
         private const string UpdateStatusNotificationId = "app.update.status";
+        private const string CreatingProjectOverlayText = "Creating project...";
+        private const string LoadingProjectOverlayText = "Loading project...";
+        private static readonly TimeSpan AfterProjectActivationUiDelay = TimeSpan.FromSeconds(2);
         private static readonly TimeSpan UpdateNotificationLifetime = TimeSpan.FromDays(14);
         private static readonly TimeSpan UpdateStatusNotificationLifetime = TimeSpan.FromSeconds(15);
         private static readonly TimeSpan UpdateErrorNotificationLifetime = TimeSpan.FromSeconds(15);
@@ -89,12 +94,14 @@ namespace FlowBlox.AppWindow
         private WaitOverlayWindow _waitOverlayWindow;
         private readonly IAppNotificationService _appNotificationService;
         private readonly IFlowBloxInstallerService _flowBloxInstallerService;
+        private readonly IRuntimeStateService _runtimeStateService;
         private bool _isNotificationActionRunning;
         private string _downloadedInstallerPath;
         private string _installerPathToLaunchOnClose;
         private NotificationActionLabelStyleHandler _notificationActionLabelStyleHandler;
 
         private FlowBloxProjectComponentProvider _componentProvider;
+        private ProjectChangelist _subscribedChangelist;
 
         public AppWindow()
         {
@@ -105,18 +112,23 @@ namespace FlowBlox.AppWindow
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
             _appNotificationService = FlowBloxServiceLocator.Instance.GetService<IAppNotificationService>();
             _flowBloxInstallerService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxInstallerService>();
+            _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
             _appNotificationService.NotificationsChanged += AppNotificationService_NotificationsChanged;
             _notificationActionLabelStyleHandler = new NotificationActionLabelStyleHandler(lblNotificationAction, statusStrip);
             _notificationActionLabelStyleHandler.Register();
             this.Resize += (_, __) => PositionProjectLoadingOverlay();
             this.Move += (_, __) => PositionProjectLoadingOverlay();
+            FlowBloxProjectManager.Instance.ProjectChanged += ProjectManager_ProjectChanged;
 
             RefreshRecentProjectsMenu();
+            SubscribeCurrentChangelist();
             this.UpdateUI();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
+            FlowBloxProjectManager.Instance.ProjectChanged -= ProjectManager_ProjectChanged;
+            UnsubscribeCurrentChangelist();
             _notificationActionLabelStyleHandler?.Dispose();
             base.OnFormClosed(e);
         }
@@ -135,7 +147,7 @@ namespace FlowBlox.AppWindow
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        public bool IsRuntimeActive => _dockContentProjectPanel.IsRuntimeActive;
+        public bool IsRuntimeActive => _runtimeStateService?.IsRuntimeActive ?? _dockContentProjectPanel?.IsRuntimeActive == true;
 
         private string _runtimeLogfilePath;
         public string RuntimeLogfilePath
@@ -147,6 +159,38 @@ namespace FlowBlox.AppWindow
                     _runtimeLogfilePath = runtimeLogfilePath;
                 return _runtimeLogfilePath;
             }
+        }
+
+        private void ProjectManager_ProjectChanged(object sender, ProjectChangedEventArgs e)
+        {
+            SubscribeCurrentChangelist();
+            UpdateUI();
+        }
+
+        private void SubscribeCurrentChangelist()
+        {
+            var changelist = _componentProvider.GetCurrentChangelist();
+            if (ReferenceEquals(_subscribedChangelist, changelist))
+                return;
+
+            UnsubscribeCurrentChangelist();
+            _subscribedChangelist = changelist;
+            if (_subscribedChangelist != null)
+                _subscribedChangelist.Changed += Changelist_Changed;
+        }
+
+        private void UnsubscribeCurrentChangelist()
+        {
+            if (_subscribedChangelist == null)
+                return;
+
+            _subscribedChangelist.Changed -= Changelist_Changed;
+            _subscribedChangelist = null;
+        }
+
+        private void Changelist_Changed(object sender, EventArgs e)
+        {
+            UpdateUI();
         }
 
         public void UpdateUI()
@@ -191,8 +235,8 @@ namespace FlowBlox.AppWindow
             itmSaveToProjectSpace.Enabled = isProjectActive;
 
             var changelist = _componentProvider.GetCurrentChangelist();
-            this.itmUndo.Enabled = (changelist != null) && (!isRuntimeActive) && (changelist.ChangeIndex > -1);
-            this.itmRedo.Enabled = (changelist != null) && (!isRuntimeActive) && (changelist.ChangeIndex < changelist.Changes.Count - 1);
+            this.itmUndo.Enabled = (changelist != null) && (!isRuntimeActive) && changelist.CanUndo;
+            this.itmRedo.Enabled = (changelist != null) && (!isRuntimeActive) && changelist.CanRedo;
 
             this._dockContentProjectPanel?.UpdateUI();
             this._componentLibraryPanel?.UpdateUI();
@@ -241,7 +285,7 @@ namespace FlowBlox.AppWindow
             Text = $"{baseTitle} \"{project.ProjectName}\"{suffix}";
         }
 
-        private void rbNewProject_Click(object sender, EventArgs e)
+        private async void itmNewProject_Click(object sender, EventArgs e)
         {
             bool createProject = true;
 
@@ -265,7 +309,7 @@ namespace FlowBlox.AppWindow
             if (createProject)
             {
                 this.CloseProject();
-                this.CreateProject();
+                await this.CreateProjectAsync();
             }
 
             UpdateUI();
@@ -317,7 +361,7 @@ namespace FlowBlox.AppWindow
             }
         }
 
-        private void CreateProject()
+        private async Task CreateProjectAsync()
         {
             var project = new FlowBloxProject();
             this._recentProjectPath = string.Empty;
@@ -330,11 +374,25 @@ namespace FlowBlox.AppWindow
             }
             else
             {
-                FlowBloxProjectManager.Instance.ActiveProject = project;
-                FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
-                this.OnAfterUIRegistryInitialized();
-                OnAfterProjectCreated();
-                UpdateUI_ProjectName();
+                _isProjectLoading = true;
+                ShowProjectLoadingOverlay(CreatingProjectOverlayText);
+                UpdateUI();
+
+                try
+                {
+                    FlowBloxProjectManager.Instance.ActiveProject = project;
+                    FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
+                    this.OnAfterUIRegistryInitialized();
+                    OnAfterProjectCreated();
+                    UpdateUI_ProjectName();
+                    await Task.Delay(AfterProjectActivationUiDelay);
+                }
+                finally
+                {
+                    _isProjectLoading = false;
+                    HideProjectLoadingOverlay();
+                    UpdateUI();
+                }
             }
         }
 
@@ -400,17 +458,17 @@ namespace FlowBlox.AppWindow
             }
         }
 
-        private void ShowProjectLoadingOverlay()
+        private void ShowProjectLoadingOverlay(string loadingText = LoadingProjectOverlayText)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new MethodInvoker(ShowProjectLoadingOverlay));
+                this.Invoke(new MethodInvoker(() => ShowProjectLoadingOverlay(loadingText)));
                 return;
             }
 
             if (_waitOverlayWindow == null)
             {
-                _waitOverlayWindow = new WaitOverlayWindow();
+                _waitOverlayWindow = new WaitOverlayWindow(loadingText);
                 var helper = new System.Windows.Interop.WindowInteropHelper(_waitOverlayWindow)
                 {
                     Owner = this.Handle
@@ -744,7 +802,7 @@ namespace FlowBlox.AppWindow
             finally
             {
                 if (openedSuccessfully)
-                    await Task.Delay(2000);
+                    await Task.Delay(AfterProjectActivationUiDelay);
                 _isProjectLoading = false;
                 HideProjectLoadingOverlay();
                 UpdateUI();

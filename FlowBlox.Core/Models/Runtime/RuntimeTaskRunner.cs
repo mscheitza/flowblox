@@ -68,7 +68,7 @@ namespace FlowBlox.Core.Models.Runtime
         /// and ensures a stack-safe, depth-first execution model based on work items.
         /// 
         /// Execution semantics:
-        /// - Input-reference blocks are executed immediately to register their inputs
+        /// - Input-reference blocks are scheduled first to register their inputs
         ///   (no actual processing is performed at this stage).
         /// - Non-input-reference blocks are enqueued as work items and executed later
         ///   by the runner.
@@ -81,22 +81,30 @@ namespace FlowBlox.Core.Models.Runtime
         /// <param name="current">
         /// The flow block whose successor blocks should be scheduled.
         /// </param>
-        public void ScheduleNext(BaseFlowBlock current)
+        public void ScheduleNext(BaseFlowBlock current) => ScheduleNext(current, false);
+
+        internal void ScheduleNext(BaseFlowBlock current, bool increaseExecutionLayer)
         {
             if (!_runtime.ExecutionFlowEnabled)
                 return;
 
             var nextBlocks = current.GetNextFlowBlocks();
+
+            var items = new List<IRuntimeWorkItem>();
+
+            if (increaseExecutionLayer)
+                items.Add(ExecutionLayerWorkItem.Increase());
+
             foreach (var next in nextBlocks)
             {
-                if (next.HasInputReference == true)
-                    next.Execute(_runtime, current);
+                if (next == null)
+                    continue;
+
+                if (next.HasInputReference)
+                    items.Add(new InvokeFlowBlockWorkItem(next, current));
             }
 
-            var items = new List<IRuntimeWorkItem>()
-            {
-                new IterationStartWorkItem(current)
-            };
+            items.Add(new IterationStartWorkItem(current));
 
             foreach (var next in nextBlocks)
             {
@@ -110,6 +118,9 @@ namespace FlowBlox.Core.Models.Runtime
             }
 
             items.Add(new IterationEndWorkItem(current));
+
+            if (increaseExecutionLayer)
+                items.Add(ExecutionLayerWorkItem.Decrease());
 
             EnqueueBatchInExecutionOrder(items);
         }

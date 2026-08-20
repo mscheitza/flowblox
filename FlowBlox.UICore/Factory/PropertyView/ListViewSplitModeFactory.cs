@@ -64,7 +64,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             };
 
             // Create Save button (toolbar style)
-            var saveButton = CreateSaveToolbarButton();
+            var saveButton = CreateSaveButton();
             _saveButton = saveButton;
             saveButton.Click += async (s, e) =>
             {
@@ -79,26 +79,21 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 }
             };
 
-            // Create a 2-row Grid for toolbar and PropertyView
+            // Create a 2-row Grid for PropertyView and bottom toolbar.
             var rightGrid = new System.Windows.Controls.Grid()
             {
                 VerticalAlignment = VerticalAlignment.Stretch
             };
-            rightGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Toolbar row
-            rightGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }); // PropertyView row
+            rightGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            rightGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-            var rightToolBar = new ToolBar
-            {
-                HorizontalAlignment = HorizontalAlignment.Right
-            };
-            rightToolBar.Items.Add(saveButton);
-            var rightToolbarHost = CreateEmbeddedToolbarHost(rightToolBar, compact: true);
-            System.Windows.Controls.Grid.SetRow(rightToolbarHost, 0);
-            rightGrid.Children.Add(rightToolbarHost);
+            saveButton.HorizontalAlignment = HorizontalAlignment.Right;
+            saveButton.Margin = new Thickness(0, 8, 5, 8);
+            System.Windows.Controls.Grid.SetRow(saveButton, 1);
+            rightGrid.Children.Add(saveButton);
 
-            // Add PropertyView (Row 1)
-            System.Windows.Controls.Grid.SetRow(_propertyView, 1);
-            System.Windows.Controls.Grid.SetRow(_noSelectionText, 1);
+            System.Windows.Controls.Grid.SetRow(_propertyView, 0);
+            System.Windows.Controls.Grid.SetRow(_noSelectionText, 0);
             rightGrid.Children.Add(_propertyView);
             rightGrid.Children.Add(_noSelectionText);
 
@@ -243,15 +238,14 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 _propertyViewModel.Open(item, _target, deepCopy: true, readOnly: false);
         }
 
-        private static Button CreateSaveToolbarButton()
+        private Button CreateSaveButton()
         {
-            const string saveBlueHex = "#3A8DDE";
             var button = new Button
             {
-                Margin = new Thickness(3, 0, 3, 0),
-                Padding = new Thickness(6, 3, 6, 3),
-                MinWidth = 80,
                 IsEnabled = false,
+                MinWidth = 112,
+                MinHeight = 32,
+                Padding = new Thickness(12, 5, 12, 5),
                 Content = new StackPanel
                 {
                     Orientation = Orientation.Horizontal,
@@ -260,11 +254,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         new PackIconMaterial
                         {
                             Kind = PackIconMaterialKind.ContentSave,
-                            Style = Application.Current?.TryFindResource("FlowBlox.ToolbarIconBase") as Style,
-                            Foreground = (Brush)new BrushConverter().ConvertFromString(saveBlueHex),
-                            Width = 14,
-                            Height = 14,
-                            Margin = new Thickness(0, 0, 5, 0),
+                            Style = _window.TryFindResource("FlowBlox.WindowActionIcon.Save") as Style,
                             VerticalAlignment = VerticalAlignment.Center
                         },
                         new TextBlock
@@ -275,9 +265,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     }
                 }
             };
-
-            if (Application.Current?.TryFindResource(ToolBar.ButtonStyleKey) is Style toolbarButtonStyle)
-                button.Style = toolbarButtonStyle;
 
             return button;
         }

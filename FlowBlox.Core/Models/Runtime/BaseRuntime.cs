@@ -39,6 +39,7 @@ namespace FlowBlox.Core.Models.Runtime
         public bool StopOnError { get; set; }
         public int StepTimeunit { get; set; }
         public bool ExecutionFlowEnabled { get; set; }
+        internal int ExecutionLayer { get; private set; }
         public bool DisableInterceptors { get; set; }
         public RuntimeExternalDebuggingInformation ExternalDebuggingInformation { get; set; }
 
@@ -73,6 +74,16 @@ namespace FlowBlox.Core.Models.Runtime
         private RuntimeTaskRunner _runner;
 
         public RuntimeTaskRunner TaskRunner => _runner ??= new RuntimeTaskRunner(this);
+
+        internal void IncreaseExecutionLayer() => ExecutionLayer++;
+
+        internal void DecreaseExecutionLayer()
+        {
+            if (ExecutionLayer == 0)
+                return;
+
+            ExecutionLayer--;
+        }
 
         protected BaseRuntime(FlowBloxProject project)
         {

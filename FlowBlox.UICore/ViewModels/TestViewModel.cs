@@ -11,6 +11,7 @@ using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Events;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.TestView;
@@ -28,6 +29,7 @@ namespace FlowBlox.UICore.ViewModels
         private readonly SynchronizationContext? _uiContext;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
         private readonly IDialogService _dialogService;
+        private readonly IRuntimeStateService? _runtimeStateService;
         private readonly FlowBloxTestDefinitionLatestFlowBlockResolver _targetResolver;
         private readonly List<TestCaseEntryViewModel> _selectedEntries = new();
         private FlowBloxRegistry? _registry;
@@ -78,6 +80,7 @@ namespace FlowBlox.UICore.ViewModels
             _uiContext = SynchronizationContext.Current;
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
+            _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
             _targetResolver = new FlowBloxTestDefinitionLatestFlowBlockResolver();
 
             RefreshCommand = new RelayCommand(Refresh);
@@ -89,12 +92,21 @@ namespace FlowBlox.UICore.ViewModels
             ResetStatusCommand = new RelayCommand(ResetStatus, CanResetStatus);
 
             FlowBloxProjectManager.Instance.ProjectChanged += ProjectManager_ProjectChanged;
+            if (_runtimeStateService != null)
+            {
+                _runtimeStateService.StateChanged += RuntimeStateService_StateChanged;
+                SetRuntimeActive(_runtimeStateService.IsRuntimeActive);
+            }
+
             RebindAndRefresh();
         }
 
         public void OnAfterUIRegistryInitialized() => RebindAndRefresh();
 
         public void SetRuntimeActive(bool isRuntimeActive) => IsReadOnly = isRuntimeActive;
+
+        private void RuntimeStateService_StateChanged(object? sender, RuntimeStateChangedEventArgs e)
+            => SynchronizationContextHelper.PostToUi(_uiContext, () => SetRuntimeActive(e.IsRuntimeActive));
 
         public void UpdateSelection(IEnumerable<TestCaseEntryViewModel> selectedEntries)
         {
@@ -135,7 +147,7 @@ namespace FlowBlox.UICore.ViewModels
             if (eventArgs?.AddedObject is not FlowBloxTestDefinition)
                 return;
 
-            PostToUi(Refresh);
+            SynchronizationContextHelper.PostToUi(_uiContext, Refresh);
         }
 
         private void Registry_OnManagedObjectRemoved(ManagedObjectRemovedEventArgs eventArgs)
@@ -143,7 +155,7 @@ namespace FlowBlox.UICore.ViewModels
             if (eventArgs?.RemovedObject is not FlowBloxTestDefinition)
                 return;
 
-            PostToUi(Refresh);
+            SynchronizationContextHelper.PostToUi(_uiContext, Refresh);
         }
 
         private void Refresh()
@@ -544,20 +556,6 @@ namespace FlowBlox.UICore.ViewModels
             ResetStatusCommand.Invalidate();
         }
 
-        private void PostToUi(Action action)
-        {
-            if (action == null)
-                return;
-
-            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
-            {
-                _uiContext.Post(_ => action(), null);
-                return;
-            }
-
-            action();
-        }
-
         private void Unsubscribe()
         {
             if (_registry != null)
@@ -570,6 +568,9 @@ namespace FlowBlox.UICore.ViewModels
         public void Dispose()
         {
             FlowBloxProjectManager.Instance.ProjectChanged -= ProjectManager_ProjectChanged;
+            if (_runtimeStateService != null)
+                _runtimeStateService.StateChanged -= RuntimeStateService_StateChanged;
+
             Unsubscribe();
             _selectedEntries.Clear();
             TestCases.Clear();

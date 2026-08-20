@@ -9,6 +9,8 @@ namespace FlowBlox.AppWindow.ContentFactories
 {
     public abstract class DockContentFactoryBase<T> where T : DockContent
     {
+        private static readonly object _dockSettingsSaveLock = new object();
+
         protected readonly DockPanel _dockPanel;
         private bool _ready;
         private bool _closing;
@@ -50,15 +52,18 @@ namespace FlowBlox.AppWindow.ContentFactories
 
         protected void SaveSettings(string key, DockContentSettings settings)
         {
-            var dockSettingsOption = FlowBloxOptions.GetOptionInstance().GetOption("MainPanel.DockSettings");
-            var dockSettingsValue = dockSettingsOption.Value;
-            var dockSettings = !string.IsNullOrEmpty(dockSettingsValue)
-                ? JsonConvert.DeserializeObject<DockSettings>(dockSettingsValue)
-                : new DockSettings();
+            lock (_dockSettingsSaveLock)
+            {
+                var dockSettingsOption = FlowBloxOptions.GetOptionInstance().GetOption("MainPanel.DockSettings");
+                var dockSettingsValue = dockSettingsOption.Value;
+                var dockSettings = !string.IsNullOrEmpty(dockSettingsValue)
+                    ? JsonConvert.DeserializeObject<DockSettings>(dockSettingsValue)
+                    : new DockSettings();
 
-            dockSettings.DockContentSettings[key] = settings;
-            dockSettingsOption.Value = JsonConvert.SerializeObject(dockSettings);
-            FlowBloxOptions.GetOptionInstance().Save();
+                dockSettings.DockContentSettings[key] = settings;
+                dockSettingsOption.Value = JsonConvert.SerializeObject(dockSettings);
+                FlowBloxOptions.GetOptionInstance().Save();
+            }
         }
 
         protected Task SaveSettingsAsync(string key, DockContentSettings settings)
@@ -241,23 +246,19 @@ namespace FlowBlox.AppWindow.ContentFactories
                 {
                     case DockState.DockLeft:
                     case DockState.DockLeftAutoHide:
-                        if (settings.Width.HasValue && settings.Width.Value > 0)
-                            _dockPanel.DockLeftPortion = settings.Width.Value;
+                        ApplyFixedWidthPortion(settings, _dockPanel.DockLeftPortion, value => _dockPanel.DockLeftPortion = value);
                         break;
                     case DockState.DockRight:
                     case DockState.DockRightAutoHide:
-                        if (settings.Width.HasValue && settings.Width.Value > 0)
-                            _dockPanel.DockRightPortion = settings.Width.Value;
+                        ApplyFixedWidthPortion(settings, _dockPanel.DockRightPortion, value => _dockPanel.DockRightPortion = value);
                         break;
                     case DockState.DockTop:
                     case DockState.DockTopAutoHide:
-                        if (settings.Height.HasValue && settings.Height.Value > 0)
-                            _dockPanel.DockTopPortion = settings.Height.Value;
+                        ApplyFixedHeightPortion(settings, _dockPanel.DockTopPortion, value => _dockPanel.DockTopPortion = value);
                         break;
                     case DockState.DockBottom:
                     case DockState.DockBottomAutoHide:
-                        if (settings.Height.HasValue && settings.Height.Value > 0)
-                            _dockPanel.DockBottomPortion = settings.Height.Value;
+                        ApplyFixedHeightPortion(settings, _dockPanel.DockBottomPortion, value => _dockPanel.DockBottomPortion = value);
                         break;
                 }
             }
@@ -265,6 +266,51 @@ namespace FlowBlox.AppWindow.ContentFactories
             {
                 _applyingAutoResizeFixedSize = false;
             }
+        }
+
+        private void ApplyFixedWidthPortion(DockContentSettings settings, double currentPortion, System.Action<double> applyPortion)
+        {
+            var width = GetFixedWidth(settings, currentPortion);
+            if (width > 0)
+                applyPortion(width);
+        }
+
+        private void ApplyFixedHeightPortion(DockContentSettings settings, double currentPortion, System.Action<double> applyPortion)
+        {
+            var height = GetFixedHeight(settings, currentPortion);
+            if (height > 0)
+                applyPortion(height);
+        }
+
+        private int GetFixedWidth(DockContentSettings settings, double currentPortion)
+        {
+            if (settings.Width.HasValue && settings.Width.Value > 0)
+                return settings.Width.Value;
+
+            var width = ConvertPortionToPixels(currentPortion, _dockPanel.ClientSize.Width);
+            settings.Width = width;
+            return width;
+        }
+
+        private int GetFixedHeight(DockContentSettings settings, double currentPortion)
+        {
+            if (settings.Height.HasValue && settings.Height.Value > 0)
+                return settings.Height.Value;
+
+            var height = ConvertPortionToPixels(currentPortion, _dockPanel.ClientSize.Height);
+            settings.Height = height;
+            return height;
+        }
+
+        private static int ConvertPortionToPixels(double portion, int availableSize)
+        {
+            if (portion > 1)
+                return (int)System.Math.Round(portion);
+
+            if (portion <= 0 || availableSize <= 0)
+                return 0;
+
+            return (int)System.Math.Round(portion * availableSize);
         }
 
         public abstract DockContent Create();

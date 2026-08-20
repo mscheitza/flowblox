@@ -556,6 +556,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Characters per token ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_ApproximateCharactersPerToken {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_ApproximateCharactersPerToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Approximate character-to-token ratio used for provider-independent context trimming. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_ApproximateCharactersPerToken_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_ApproximateCharactersPerToken_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Configure provider, request defaults, and automatic flow layout behavior for the AI Assistant. ähnelt.
         /// </summary>
         public static string AssistantConfiguration_Description {
@@ -610,11 +628,56 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Advanced settings ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_Groups_Extended {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_Groups_Extended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die General ähnelt.
         /// </summary>
         public static string AssistantConfiguration_Groups_General {
             get {
                 return ResourceManager.GetString("AssistantConfiguration_Groups_General", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum context tokens ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxContextTokens {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxContextTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Approximate maximum context window used for system prompts, summary, latest messages, and the current prompt. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxContextTokens_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxContextTokens_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum latest messages ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxLatestMessages {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxLatestMessages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum number of latest user and assistant messages kept verbatim in the chat context. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxLatestMessages_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxLatestMessages_Tooltip", resourceCulture);
             }
         }
         
@@ -655,6 +718,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Minimum latest messages ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MinLatestMessages {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MinLatestMessages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Minimum number of latest messages kept verbatim even if the approximate token budget is exceeded. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MinLatestMessages_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MinLatestMessages_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Provider ähnelt.
         /// </summary>
         public static string AssistantConfiguration_Provider {
@@ -669,6 +750,24 @@ namespace FlowBlox.Core {
         public static string AssistantConfiguration_Provider_Tooltip {
             get {
                 return ResourceManager.GetString("AssistantConfiguration_Provider_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reserved response tokens ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_ReservedResponseTokens {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_ReservedResponseTokens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Approximate tokens reserved for the model response when trimming latest messages. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_ReservedResponseTokens_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_ReservedResponseTokens_Tooltip", resourceCulture);
             }
         }
         
@@ -3204,7 +3303,7 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("FlowBloxResourceUtil_FallbackPluralSuffix", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die At startup ähnelt.
         /// </summary>
@@ -7821,6 +7920,87 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Splits one input text into multiple output values using one or more separators. ähnelt.
+        /// </summary>
+        public static string SplitFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("SplitFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Split ähnelt.
+        /// </summary>
+        public static string SplitFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("SplitFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove empty entries ähnelt.
+        /// </summary>
+        public static string SplitFlowBlock_RemoveEmptyEntries {
+            get {
+                return ResourceManager.GetString("SplitFlowBlock_RemoveEmptyEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Separators ähnelt.
+        /// </summary>
+        public static string SplitFlowBlock_Separators {
+            get {
+                return ResourceManager.GetString("SplitFlowBlock_Separators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No separator was specified. Please specify at least one separator. ähnelt.
+        /// </summary>
+        public static string SplitFlowBlock_Validation_NoSeparatorDefined {
+            get {
+                return ResourceManager.GetString("SplitFlowBlock_Validation_NoSeparatorDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Separator ähnelt.
+        /// </summary>
+        public static string SplitSeparatorDefinition_Separator {
+            get {
+                return ResourceManager.GetString("SplitSeparatorDefinition_Separator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Special separator ähnelt.
+        /// </summary>
+        public static string SplitSeparatorDefinition_SpecialSeparator {
+            get {
+                return ResourceManager.GetString("SplitSeparatorDefinition_SpecialSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die More than one separator was specified. Please specify either a separator or a special separator. ähnelt.
+        /// </summary>
+        public static string SplitSeparatorDefinition_Validation_ManySeparatorsDefined {
+            get {
+                return ResourceManager.GetString("SplitSeparatorDefinition_Validation_ManySeparatorsDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No separator was specified. Please specify either a separator or a special separator. ähnelt.
+        /// </summary>
+        public static string SplitSeparatorDefinition_Validation_NoSeparatorDefined {
+            get {
+                return ResourceManager.GetString("SplitSeparatorDefinition_Validation_NoSeparatorDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Database type ähnelt.
         /// </summary>
         public static string SQLTable_DbType {
@@ -9019,7 +9199,8 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die After successfully opening the URL, the current DOM content is written to the result field. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die After successfully opening the URL, the current DOM content is written to the result field.
+        ///If opening the URL fails, an empty text value is written to the result field. ähnelt.
         /// </summary>
         public static string WebBrowserFlowBlock_SpecialExplanation_ResultBehavior {
             get {
@@ -9442,18 +9623,14 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: extract links, then open links.
-        ///- ClickAll executes multiple clicks, but does not create one result iteration per clicked element.
-        ///- ClickAll returns one DOM only after all clicks are finished.$$CONTINUE$$
-        ///
-        ///For multi-item processing:
+        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: extract links, then open links.$$CONTINUE$$
         ///- Web-Selector: collect target href values.
         ///- Web-Event (Switch to URL): iterate collected URLs.
         ///- Then run detail/download actions on the opened page.
         ///
         ///Benefit:
         ///- Iteration is based on stable URL values (not DOM element handles).
-        ///- This avoids stale-element issu [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///- This avoids stale-element issues after navigation/re-render. ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_SpecialExplanation_BestPractice_LinkExtractionAndSwitch {
             get {
@@ -9470,7 +9647,7 @@ namespace FlowBlox.Core {
         ///Repeat until no next page is available.
         ///
         ///Do/Don&apos;t:
-        ///- Do: route Recursive-Call back to the paging entry element (for example search/submit We [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///- Do: route Recursive-Call back to the paging entry element (for example search/s [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction {
             get {
@@ -9479,7 +9656,32 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die After a successful web action, the current DOM content is written to the result field. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hints for event: ClickAll$$CONTINUE$$
+        ///- Executes all matching clicks in sequence.
+        ///- Does not create a separate result iteration for each clicked element.
+        ///- Writes one DOM result only after all clicks have finished. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialExplanation_EventType_ClickAll {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialExplanation_EventType_ClickAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hints for event: UpdateDOM$$CONTINUE$$
+        ///- Replaces the DOM content of the element resolved by XPath or CSS selector.
+        ///- Uses the input text as the new DOM content.
+        ///- This is intended for controlled DOM manipulation before subsequent web actions or selectors run. ähnelt.
+        /// </summary>
+        public static string WebEventFlowBlock_SpecialExplanation_EventType_UpdateDOM {
+            get {
+                return ResourceManager.GetString("WebEventFlowBlock_SpecialExplanation_EventType_UpdateDOM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die After a successful web action, the current DOM content is written to the result field.
+        ///If a web action fails, an empty text value is written to the result field, for example when no DOM element is found for an XPath or CSS selector. ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_SpecialExplanation_ResultBehavior {
             get {

@@ -3061,7 +3061,8 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Dieser Flow-Block verwaltet eine interne WebBrowser-Instanz. Die verwaltete Instanz kann von anderen Flow-Blocks verwendet werden.</value>
   </data>
 	<data name="WebBrowserFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
-    <value>Nach dem erfolgreichen Öffnen der URL wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben.</value>
+    <value>Nach dem erfolgreichen Öffnen der URL wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben.
+Wenn das Öffnen der URL fehlschlägt, wird ein leerer Text in das Ergebnisfeld geschrieben.</value>
   </data>
 	<data name="WebBrowserFlowBlock_SpecialExplanation_CookieOverlay" xml:space="preserve">
     <value>Prüfen Sie, ob ein Cookie-Consent-Overlay angezeigt wird. Falls ja, fügen Sie einen Web-Event-Flow-Block mit Klick-Aktion auf den Akzeptieren-Button hinzu. Ermitteln Sie den genauen Selektor bzw. Namen aus dem DOM-Content der Website.</value>
@@ -3089,14 +3090,11 @@ Stellen Sie sicher, dass Selenium korrekt installiert und konfiguriert ist (Chro
     <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und erstellt oder aktualisiert Knoten.</value>
   </data>
 	<data name="WebEventFlowBlock_SpecialExplanation_ResultBehavior" xml:space="preserve">
-    <value>Nach einer erfolgreichen Web-Aktion wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben.</value>
+    <value>Nach einer erfolgreichen Web-Aktion wird der aktuelle DOM-Content in das Ergebnisfeld geschrieben. 
+Wenn eine Web-Aktion fehlschlägt, wird ein leerer Text in das Ergebnisfeld geschrieben, z. B. wenn zu einem XPath- oder CSS-Selector kein DOM-Element gefunden wurde.</value>
   </data>
 	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_LinkExtractionAndSwitch" xml:space="preserve">
-    <value>Best Practice: Links zuerst extrahieren, dann aufrufen.
-- ClickAll führt mehrere Klicks aus, erzeugt aber keine eigene Ergebnis-Iteration pro geklicktem Element.
-- ClickAll liefert einen DOM erst nach Abschluss aller Klicks. $$CONTINUE$$
-
-Für Mehrfachverarbeitung:
+    <value>Best Practice: Links zuerst extrahieren, dann aufrufen.$$CONTINUE$$
 - Web-Selector: Ziel-href-Werte erfassen.
 - Web-Event (Switch to URL): erfasste URLs iterieren.
 - Danach Detail-/Download-Aktionen auf der geöffneten Seite ausführen.
@@ -3104,6 +3102,18 @@ Für Mehrfachverarbeitung:
 Vorteil:
 - Die Iteration läuft über stabile URL-Werte (nicht über DOM-Element-Handles).
 - Dadurch werden stale-element Probleme nach Navigation/Re-Render vermieden.</value>
+  </data>
+	<data name="WebEventFlowBlock_SpecialExplanation_EventType_ClickAll" xml:space="preserve">
+    <value>Hinweise zu Ereignis: ClickAll$$CONTINUE$$
+- Führt alle passenden Klicks nacheinander aus.
+- Erzeugt keine eigene Ergebnis-Iteration pro geklicktem Element.
+- Schreibt erst nach Abschluss aller Klicks einen gemeinsamen DOM-Stand in das Ergebnisfeld.</value>
+  </data>
+	<data name="WebEventFlowBlock_SpecialExplanation_EventType_UpdateDOM" xml:space="preserve">
+    <value>Hinweise zu Ereignis: UpdateDOM$$CONTINUE$$
+- Ersetzt den DOM-Inhalt des per XPath oder CSS-Selector gefundenen Elements.
+- Verwendet den Eingabetext als neuen DOM-Content.
+- Gedacht für gezielte DOM-Manipulationen, bevor nachfolgende Web-Aktionen oder Selektoren ausgeführt werden.</value>
   </data>
 	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction" xml:space="preserve">
     <value>Best Practice für Links auf mehreren Seiten:

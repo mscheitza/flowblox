@@ -23,12 +23,6 @@ namespace FlowBlox.UICore.Views
                 vm.OnAfterUIRegistryInitialized();
         }
 
-        public void UpdateRuntimeState(bool isRuntimeActive)
-        {
-            if (DataContext is ManagedObjectsViewModel vm)
-                vm.SetRuntimeActive(isRuntimeActive);
-        }
-
         private void ManagedObjectsViewControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (DataContext is ManagedObjectsViewModel vm)

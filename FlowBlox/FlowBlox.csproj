@@ -109,9 +109,6 @@
     <Compile Update="Core\Components\DoubleBufferedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Views\OptionView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="Grid\Elements\UserControls\FlowBlockUIElement.cs">
       <SubType>UserControl</SubType>
     </Compile>

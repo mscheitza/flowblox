@@ -195,7 +195,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.ControlFlow
                     transferConfig.TransferTo.SetValue(runtime, value);
                     runtime.Report($"The field value \"{TextHelper.ShortenString(value, 200, true)}\" was copied to \"{transferConfig.TransferTo.FullyQualifiedName}\". Source: \"{transferConfig.TransferFrom.FullyQualifiedName}\"");
                 }
-                TargetFlowBlock.ExecuteNextFlowBlocks(runtime);
+                TargetFlowBlock.ExecuteNextFlowBlocks(runtime, true);
             });
         }
 

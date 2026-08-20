@@ -180,6 +180,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ProjectPanelGridSettingsWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ProjectPanel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProjectPanel.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\PropertyView.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

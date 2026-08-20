@@ -20,9 +20,13 @@ namespace FlowBlox.Core.Provider.Registry
 
         public delegate void ManagedObjectRemovedHandler(ManagedObjectRemovedEventArgs eventArgs);
         public delegate void ManagedObjectAddedHandler(ManagedObjectAddedEventArgs eventArgs);
+        public delegate void FlowBlockRemovedHandler(FlowBlockRemovedEventArgs eventArgs);
+        public delegate void FlowBlockAddedHandler(FlowBlockAddedEventArgs eventArgs);
 
         public event ManagedObjectRemovedHandler OnManagedObjectRemoved;
         public event ManagedObjectAddedHandler OnManagedObjectAdded;
+        public event FlowBlockRemovedHandler OnFlowBlockRemoved;
+        public event FlowBlockAddedHandler OnFlowBlockAdded;
 
         public FlowBloxRegistry()
         {
@@ -298,6 +302,7 @@ namespace FlowBlox.Core.Provider.Registry
                 return;
 
             _flowBlocks.Add(flowBlock);
+            OnFlowBlockAdded?.Invoke(new FlowBlockAddedEventArgs(flowBlock));
 
             // Register fields
             if (flowBlock is BaseResultFlowBlock)
@@ -342,7 +347,10 @@ namespace FlowBlox.Core.Provider.Registry
 
         public virtual void RemoveFlowBlock(BaseFlowBlock flowBlock)
         {
-            _flowBlocks.Remove(flowBlock);
+            if (!_flowBlocks.Remove(flowBlock))
+                return;
+
+            OnFlowBlockRemoved?.Invoke(new FlowBlockRemovedEventArgs(flowBlock));
 
             foreach(var managedObject in flowBlock.DefinedManagedObjects)
             {

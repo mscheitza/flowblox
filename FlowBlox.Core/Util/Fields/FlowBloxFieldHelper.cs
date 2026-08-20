@@ -55,7 +55,7 @@ namespace FlowBlox.Core.Util.Fields
 
             // Field elements
             var registry = FlowBloxRegistryProvider.GetRegistry();
-            foreach (FieldElement fieldElement in registry.GetFieldElements())
+            foreach (FieldElement fieldElement in registry?.GetFieldElements() ?? Enumerable.Empty<FieldElement>())
             {
                 if (value.Contains(fieldElement.FullyQualifiedName))
                     value = value.Replace(fieldElement.FullyQualifiedName, fieldElement.StringValue ?? "");

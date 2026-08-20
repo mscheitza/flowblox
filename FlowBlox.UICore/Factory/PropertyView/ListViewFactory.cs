@@ -145,12 +145,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             var container = new System.Windows.Controls.Grid();
             container.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            container.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            container.Children.Add(_emptyMessage);
             container.Children.Add(listView);
+            container.Children.Add(_emptyMessage);
 
             System.Windows.Controls.Grid.SetRow(listView, 0);
-            System.Windows.Controls.Grid.SetRow(_emptyMessage, 1);
+            System.Windows.Controls.Grid.SetRow(_emptyMessage, 0);
 
             stackPanel.Children.Add(toolBar);
             stackPanel.Children.Add(container);

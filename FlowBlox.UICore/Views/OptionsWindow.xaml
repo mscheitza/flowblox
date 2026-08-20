@@ -46,25 +46,6 @@
                 </Style.Triggers>
             </Style>
 
-            <Style x:Key="Options.ToolbarTextButtonStyle"
-                   TargetType="{x:Type Button}">
-                <Setter Property="MinWidth" Value="118"/>
-                <Setter Property="Height" Value="30"/>
-                <Setter Property="Margin" Value="0,0,0,0"/>
-                <Setter Property="Padding" Value="9,0"/>
-                <Setter Property="Background" Value="#FFF3F6FA"/>
-                <Setter Property="BorderBrush" Value="#FFD1D9E2"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#FFE9EEF4"/>
-                    </Trigger>
-                    <Trigger Property="IsPressed" Value="True">
-                        <Setter Property="Background" Value="#FFDDE6F0"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-
             <Style x:Key="Options.Icon.Blue"
                    TargetType="{x:Type iconPacks:PackIconMaterial}"
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
@@ -236,30 +217,11 @@
 
             <Grid Visibility="{Binding IsOptionSelected, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <DockPanel Grid.Row="0"
-                           LastChildFill="False">
-                    <Button Command="{Binding SaveCommand}"
-                            DockPanel.Dock="Right"
-                            HorizontalAlignment="Right"
-                            Style="{StaticResource Options.ToolbarTextButtonStyle}"
-                            ToolTip="{x:Static resources:OptionsWindow.Tooltip_Save}"
-                            ToolTipService.Placement="Bottom">
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconMaterial Kind="ContentSave"
-                                                        Margin="0,0,6,0"
-                                                        Style="{StaticResource Options.Icon.Green}"/>
-                            <TextBlock Text="{x:Static resources:OptionsWindow.Button_Apply}"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </DockPanel>
-
-                <ScrollViewer Grid.Row="1"
-                              Margin="0,8,0,0"
+                <ScrollViewer Grid.Row="0"
                               VerticalScrollBarVisibility="Auto">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
@@ -325,6 +287,27 @@
                                           OffContent="{x:Static resources:OptionsWindow.Value_No}"/>
                     </StackPanel>
                 </ScrollViewer>
+
+                <DockPanel Grid.Row="1"
+                           Margin="0,8,0,0"
+                           LastChildFill="False">
+                    <Button Command="{Binding SaveCommand}"
+                            DockPanel.Dock="Right"
+                            HorizontalAlignment="Right"
+                            MinWidth="112"
+                            MinHeight="32"
+                            Padding="12,5"
+                            Margin="5"
+                            ToolTip="{x:Static resources:OptionsWindow.Tooltip_Save}"
+                            ToolTipService.Placement="Bottom">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="ContentSave"
+                                                        Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
+                            <TextBlock Text="{x:Static resources:OptionsWindow.Button_Apply}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
             </Grid>
         </Grid>
     </Grid>

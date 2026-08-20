@@ -31,12 +31,10 @@ namespace FlowBlox.AppWindow.Contents
         internal void OnAfterUIRegistryInitialized()
         {
             _testViewControl.OnAfterUIRegistryInitialized();
-            UpdateUI();
         }
 
         internal void UpdateUI()
         {
-            _testViewControl.UpdateRuntimeState(AppWindow.Instance.IsRuntimeActive);
         }
     }
 }

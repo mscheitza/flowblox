@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ContextMenu_RemoveBreakpoint" xml:space="preserve">
+    <value>Haltepunkt entfernen</value>
+  </data>
+  <data name="ArrowLabel_RecursiveCall" xml:space="preserve">
+    <value>rekursiver Aufruf</value>
+  </data>
+  <data name="AssignFlowBlockName_Description" xml:space="preserve">
+    <value>Bitte geben Sie den Namen des Flow-Blocks an.</value>
+  </data>
+  <data name="AssignFlowBlockName_Title" xml:space="preserve">
+    <value>{0} erstellen</value>
+  </data>
+  <data name="ContextMenu_CopyValue" xml:space="preserve">
+    <value>Wert kopieren</value>
+  </data>
+  <data name="ContextMenu_DefineExecutionIndex" xml:space="preserve">
+    <value>Ausführungsindex festlegen</value>
+  </data>
+  <data name="ContextMenu_DeleteFlowBlock" xml:space="preserve">
+    <value>Flow-Block entfernen</value>
+  </data>
+  <data name="ContextMenu_EditProperties" xml:space="preserve">
+    <value>Eigenschaften bearbeiten</value>
+  </data>
+  <data name="ContextMenu_ManageExecutionIndex" xml:space="preserve">
+    <value>Ausführungsindex verwalten</value>
+  </data>
+  <data name="ContextMenu_ManageNotifications" xml:space="preserve">
+    <value>Meldungen verwalten</value>
+  </data>
+  <data name="ContextMenu_Refresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="ContextMenu_RemoveConnection" xml:space="preserve">
+    <value>Verbindung entfernen</value>
+  </data>
+  <data name="ContextMenu_RemoveExecutionIndex" xml:space="preserve">
+    <value>Ausführungsindex entfernen</value>
+  </data>
+  <data name="ContextMenu_SetBreakpoint" xml:space="preserve">
+    <value>Haltepunkt setzen</value>
+  </data>
+  <data name="ContextMenu_ShowInputDatasets" xml:space="preserve">
+    <value>Eingangsdatensätze einsehen</value>
+  </data>
+  <data name="ContextMenu_ShowOutputDatasets" xml:space="preserve">
+    <value>Ausgangsdatensätze einsehen</value>
+  </data>
+  <data name="ContextMenu_ViewProperties" xml:space="preserve">
+    <value>Eigenschaften ansehen</value>
+  </data>
+  <data name="Legend_IterationContext" xml:space="preserve">
+    <value>Iterationskontext</value>
+  </data>
+  <data name="Legend_Invoke" xml:space="preserve">
+    <value>Aufruf</value>
+  </data>
+  <data name="Legend_RecursiveCall" xml:space="preserve">
+    <value>Rekursiver Aufruf</value>
+  </data>
+  <data name="Toolbar_AutoLayout" xml:space="preserve">
+    <value>Automatisch ausrichten</value>
+  </data>
+  <data name="Toolbar_Connect" xml:space="preserve">
+    <value>Verbinden [Shift, Control]</value>
+  </data>
+  <data name="Toolbar_Execute" xml:space="preserve">
+    <value>Ausführen</value>
+  </data>
+  <data name="Toolbar_Pause" xml:space="preserve">
+    <value>Pausieren</value>
+  </data>
+  <data name="Toolbar_Refresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="Toolbar_Select" xml:space="preserve">
+    <value>Auswählen</value>
+  </data>
+  <data name="Toolbar_SelectAll" xml:space="preserve">
+    <value>Alle Elemente auswählen</value>
+  </data>
+  <data name="Toolbar_SelectDown" xml:space="preserve">
+    <value>Alle Elemente unten auswählen</value>
+  </data>
+  <data name="Toolbar_SelectLeft" xml:space="preserve">
+    <value>Alle Elemente links auswählen</value>
+  </data>
+  <data name="Toolbar_SelectRight" xml:space="preserve">
+    <value>Alle Elemente rechts auswählen</value>
+  </data>
+  <data name="Toolbar_SelectUp" xml:space="preserve">
+    <value>Alle Elemente oben auswählen</value>
+  </data>
+  <data name="Toolbar_Settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="Toolbar_Stop" xml:space="preserve">
+    <value>Stoppen</value>
+  </data>
+</root>

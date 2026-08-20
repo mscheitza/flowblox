@@ -15,11 +15,6 @@ namespace FlowBlox.UICore.Views
 
         public ComponentLibraryViewModel ViewModel => DataContext as ComponentLibraryViewModel;
 
-        public void UpdateRuntimeState(bool isRuntimeActive)
-        {
-            ViewModel?.UpdateRuntimeState(isRuntimeActive);
-        }
-
         private void LibraryTreeView_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton != MouseButtonState.Pressed)

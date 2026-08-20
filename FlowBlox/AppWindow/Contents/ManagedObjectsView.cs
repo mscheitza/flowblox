@@ -31,7 +31,6 @@ namespace FlowBlox.AppWindow.Contents
         internal void OnAfterUIRegistryInitialized()
         {
             _managedObjectsViewControl.OnAfterUIRegistryInitialized();
-            UpdateUI();
         }
 
         internal void RefreshData()
@@ -44,7 +43,6 @@ namespace FlowBlox.AppWindow.Contents
 
         internal void UpdateUI()
         {
-            _managedObjectsViewControl.UpdateRuntimeState(AppWindow.Instance.IsRuntimeActive);
         }
     }
 }

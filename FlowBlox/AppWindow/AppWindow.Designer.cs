@@ -256,7 +256,7 @@ namespace FlowBlox.AppWindow
             itmCreateProject.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P;
             itmCreateProject.Size = new System.Drawing.Size(243, 22);
             itmCreateProject.Text = "itmCreateProject_Text";
-            itmCreateProject.Click += rbNewProject_Click;
+            itmCreateProject.Click += itmNewProject_Click;
             // 
             // toolStripMenuItem3
             // 

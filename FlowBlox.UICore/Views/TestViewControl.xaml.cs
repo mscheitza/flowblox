@@ -27,12 +27,6 @@ namespace FlowBlox.UICore.Views
                 vm.OnAfterUIRegistryInitialized();
         }
 
-        public void UpdateRuntimeState(bool isRuntimeActive)
-        {
-            if (DataContext is TestViewModel vm)
-                vm.SetRuntimeActive(isRuntimeActive);
-        }
-
         private void TestViewControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (DataContext is TestViewModel vm)
