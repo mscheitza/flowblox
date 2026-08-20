@@ -20,9 +20,8 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 ["kind"] = "string (flowBlock|managedObject|field)",
                 ["name"] = "string",
-                ["usageHint"] = "Null properties are omitted in snapshot output to reduce traffic. " + 
-                                "If a property is missing, treat it as null. " + 
-                                "Empty collections are represented as the string EMPTY_COLLECTION."
+                ["usageHint"] = "Null properties may be omitted from the snapshot output to reduce data traffic. " + 
+                                "If a property is missing, treat it as null. "
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)

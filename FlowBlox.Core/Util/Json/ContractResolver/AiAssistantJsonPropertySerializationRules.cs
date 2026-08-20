@@ -1,14 +1,14 @@
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Util.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Collections;
 using System.Reflection;
+using FlowBlox.Core.Util.Json.ValueProvider;
 
 namespace FlowBlox.Core.Util.Json.ContractResolver
 {
     internal static class AiAssistantJsonPropertySerializationRules
     {
-        public const string EmptyCollectionKeyword = "EMPTY_COLLECTION";
-
         private static readonly HashSet<string> IgnoredComponentPropertyNames = new(StringComparer.Ordinal)
         {
             nameof(FlowBloxComponent.Version)
@@ -32,39 +32,16 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
             property.ValueProvider = new EmptyEnumerableKeywordValueProvider(property.ValueProvider);
         }
 
-        private sealed class EmptyEnumerableKeywordValueProvider : IValueProvider
+        public static void WriteEnumerableTypeAsCollectionKeyword(JsonProperty property)
         {
-            private readonly IValueProvider _inner;
-
-            public EmptyEnumerableKeywordValueProvider(IValueProvider inner)
+            if (property.Ignored ||
+                property.PropertyType == typeof(string) ||
+                !typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
             {
-                _inner = inner;
+                return;
             }
 
-            public object GetValue(object target)
-            {
-                var value = _inner.GetValue(target);
-                if (value is not IEnumerable enumerable || value is string)
-                    return value;
-
-                var enumerator = enumerable.GetEnumerator();
-                try
-                {
-                    return enumerator.MoveNext()
-                        ? value
-                        : EmptyCollectionKeyword;
-                }
-                finally
-                {
-                    if (enumerator is IDisposable disposable)
-                        disposable.Dispose();
-                }
-            }
-
-            public void SetValue(object target, object value)
-            {
-                _inner.SetValue(target, value);
-            }
+            property.Converter = new CollectionKeywordJsonConverter();
         }
     }
 }

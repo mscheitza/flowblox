@@ -51,6 +51,7 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
             }
 
             AiAssistantJsonPropertySerializationRules.WriteEmptyEnumerablesAsKeyword(property);
+            AiAssistantJsonPropertySerializationRules.WriteEnumerableTypeAsCollectionKeyword(property);
 
             return property;
         }

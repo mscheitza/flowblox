@@ -221,6 +221,38 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
+        public async Task GenerateProjectAsync_AttachesInitialProjectReasonWhenProjectWasNotTransferred()
+        {
+            var executor = new RecordingAiExecutor();
+            var service = CreateService(executor, CreateConfiguration(maxLatestMessages: 10));
+
+            await service.GenerateProjectAsync("USER-INITIAL-PROJECT", CancellationToken.None);
+
+            var initialPrompt = executor.ChatRequests.Single().Messages.Last().Content;
+            AssertContains(initialPrompt, "Project attachment note:");
+            AssertContains(initialPrompt, "has not yet been provided in this conversation");
+            AssertContains(initialPrompt, "initial project state");
+        }
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_AttachesChangedProjectReasonWhenPersistedHashDiffers()
+        {
+            var executor = new RecordingAiExecutor();
+            var service = CreateService(executor, CreateConfiguration(maxLatestMessages: 10));
+            service.RestoreSession(new AiAssistantHistoryDocument
+            {
+                LastProjectJsonHash = "STALE-PROJECT-HASH"
+            });
+
+            await service.GenerateProjectAsync("USER-CHANGED-PROJECT", CancellationToken.None);
+
+            var initialPrompt = executor.ChatRequests.Single().Messages.Last().Content;
+            AssertContains(initialPrompt, "Project attachment note:");
+            AssertContains(initialPrompt, "changed since the last conversation state was saved");
+            AssertContains(initialPrompt, "latest project state");
+        }
+
+        [TestMethod]
         public async Task RestoreSession_UsesPersistedSessionMessagesBeforeTranscriptFallback()
         {
             var executor = new RecordingAiExecutor();

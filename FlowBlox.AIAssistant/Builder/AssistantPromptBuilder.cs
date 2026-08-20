@@ -46,7 +46,10 @@ namespace FlowBlox.AIAssistant.Builder
                 .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal);
         }
 
-        public static string BuildInitialUserPrompt(string userPrompt, string? projectJson)
+        public static string BuildInitialUserPrompt(
+            string userPrompt,
+            string? projectJson,
+            ProjectAttachmentReason? projectAttachmentReason)
         {
             var sb = new StringBuilder();
             sb.AppendLine("User prompt:");
@@ -55,6 +58,14 @@ namespace FlowBlox.AIAssistant.Builder
 
             if (!string.IsNullOrWhiteSpace(projectJson))
             {
+                var attachmentReasonText = BuildProjectAttachmentReasonText(projectAttachmentReason);
+                if (!string.IsNullOrWhiteSpace(attachmentReasonText))
+                {
+                    sb.AppendLine("Project attachment note:");
+                    sb.AppendLine(attachmentReasonText);
+                    sb.AppendLine();
+                }
+
                 sb.AppendLine("Current project JSON:");
                 sb.AppendLine(projectJson);
                 sb.AppendLine();
@@ -100,6 +111,18 @@ namespace FlowBlox.AIAssistant.Builder
             }
 
             return sb.ToString().TrimEnd();
+        }
+
+        private static string BuildProjectAttachmentReasonText(ProjectAttachmentReason? projectAttachmentReason)
+        {
+            return projectAttachmentReason switch
+            {
+                ProjectAttachmentReason.InitialTransmission =>
+                    "The current project JSON is attached because it has not yet been provided in this conversation. Treat it as the initial project state.",
+                ProjectAttachmentReason.ProjectChangedSinceLastConversation =>
+                    "The current project JSON is attached because the project changed since the last conversation state was saved. Treat it as the latest project state.",
+                _ => string.Empty
+            };
         }
 
         private static string BuildExplanationManifestText()

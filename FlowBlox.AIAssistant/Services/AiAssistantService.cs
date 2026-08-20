@@ -3,14 +3,9 @@ using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Constants;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
-using FlowBlox.Grid.Elements.Util;
 using FlowBlox.Core.Logging;
-using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
-using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Constants;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Json;
@@ -202,6 +197,11 @@ namespace FlowBlox.AIAssistant.Services
             var currentProjectJson = GetCurrentProjectJson();
             var currentProjectJsonHash = ComputeProjectJsonHash(currentProjectJson);
             var shouldAttachProjectJson = !string.Equals(session.LastProjectJsonHash, currentProjectJsonHash, StringComparison.OrdinalIgnoreCase);
+            var projectAttachmentReason = shouldAttachProjectJson
+                ? string.IsNullOrWhiteSpace(session.LastProjectJsonHash)
+                    ? ProjectAttachmentReason.InitialTransmission
+                    : ProjectAttachmentReason.ProjectChangedSinceLastConversation
+                : (ProjectAttachmentReason?)null;
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = AssistantPromptBuilder.BuildSystemPrompt();
             var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions);
@@ -225,7 +225,8 @@ namespace FlowBlox.AIAssistant.Services
                     var initialUserPrompt = toolRound == 1
                         ? AssistantPromptBuilder.BuildInitialUserPrompt(
                             userPrompt,
-                            shouldAttachProjectJson ? currentProjectJson : null)
+                            shouldAttachProjectJson ? currentProjectJson : null,
+                            projectAttachmentReason)
                         : string.Empty;
                     var modelPrompt = toolRound == 1
                         ? initialUserPrompt
@@ -992,7 +993,3 @@ namespace FlowBlox.AIAssistant.Services
 
     }
 }
-
-
-
-
