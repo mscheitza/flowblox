@@ -147,7 +147,9 @@
                          BorderThickness="0"
                          Background="Transparent"
                          HorizontalContentAlignment="Stretch"
+                         ScrollViewer.CanContentScroll="False"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ItemContainerStyle="{StaticResource AIAssistantTranscriptItemContainerStyle}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -185,7 +187,6 @@
                                     <TextBlock Grid.Column="1"
                                                Text="{Binding Text}"
                                                TextWrapping="Wrap"
-                                               TextTrimming="CharacterEllipsis"
                                                VerticalAlignment="Top"
                                                Foreground="#FF1F2937" />
                                 </Grid>

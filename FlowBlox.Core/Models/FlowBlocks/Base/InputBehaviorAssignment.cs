@@ -9,7 +9,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
     {
         public InputBehaviorAssignment()
         {
-            this.Behavior = InputBehavior.Cross;
+            this.Behavior = InputBehavior.First;
         }
 
         [Required()]

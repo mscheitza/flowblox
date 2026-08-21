@@ -33,11 +33,7 @@ namespace FlowBlox.AIAssistant.Tools
                 isTopLevel: true,
                 includeAlreadySent);
 
-            return Ok(new JObject
-            {
-                ["kind"] = kind,
-                ["additionalTypeKindsInfo"] = new JArray(additionalKinds.Values.OrderBy(x => x.Value<string>("fullName")))
-            });
+            return Ok(BuildTypeInfoResponsePayload(kind, additionalKinds));
         }
 
         public static ToolResponse CreateUnifiedTypeInfoResponse(
@@ -54,8 +50,7 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 return Ok(new JObject
                 {
-                    ["kind"] = BuildEnumKindInfo(type),
-                    ["additionalTypeKindsInfo"] = new JArray()
+                    ["kind"] = BuildEnumKindInfo(type)
                 });
             }
 
@@ -74,11 +69,21 @@ namespace FlowBlox.AIAssistant.Tools
                 isTopLevel: true,
                 includeAlreadySent);
 
-            return Ok(new JObject
+            return Ok(BuildTypeInfoResponsePayload(kind, additionalKinds));
+        }
+
+        private static JObject BuildTypeInfoResponsePayload(JObject kind, Dictionary<string, JObject> additionalKinds)
+        {
+            var payload = new JObject
             {
-                ["kind"] = kind,
-                ["additionalTypeKindsInfo"] = new JArray(additionalKinds.Values.OrderBy(x => x.Value<string>("fullName")))
-            });
+                ["kind"] = kind
+            };
+
+            var additionalTypeKindsInfo = new JArray(additionalKinds.Values.OrderBy(x => x.Value<string>("fullName")));
+            if (additionalTypeKindsInfo.Count > 0)
+                payload["additionalTypeKindsInfo"] = additionalTypeKindsInfo;
+
+            return payload;
         }
 
         public static IEnumerable<JObject> GetSupportedTypeInfos(Type baseType)
@@ -166,9 +171,12 @@ namespace FlowBlox.AIAssistant.Tools
                 ["displayName"] = typeDisplayMetadata.DisplayName,
                 ["description"] = typeDisplayMetadata.Description,
                 ["inheritanceHierarchy"] = new JArray(GetTypeHierarchy(type)),
-                ["properties"] = propertyInfos,
-                ["usedTypes"] = new JArray(usedTypes.Values.OrderBy(x => x.Value<string>("fullName")))
+                ["properties"] = propertyInfos
             };
+
+            var usedTypeInfos = new JArray(usedTypes.Values.OrderBy(x => x.Value<string>("fullName")));
+            if (usedTypeInfos.Count > 0)
+                result["usedTypes"] = usedTypeInfos;
 
             var specialExplanations = BuildSpecialExplanations(type);
             if (specialExplanations.Count > 0)
@@ -250,13 +258,8 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 ["name"] = property.Name,
                 ["displayName"] = string.IsNullOrWhiteSpace(displayName) ? property.Name : displayName,
-                ["description"] = description,
                 ["type"] = propertyType.FullName ?? propertyType.Name,
-                ["nullable"] = nullable,
-                ["canWrite"] = property.CanWrite,
-                ["isSimple"] = isSimple,
-                ["isEnum"] = isEnum,
-                ["isCollection"] = isCollection,
+                ["flags"] = BuildPropertyFlags(nullable, property.CanWrite, isSimple, isEnum, isCollection),
                 ["majorTypeDescriptor"] = majorTypeDescriptor,
                 ["canUpdateViaParentPath"] = !isManagedObject,
                 ["updateRule"] = isManagedObject
@@ -264,22 +267,44 @@ namespace FlowBlox.AIAssistant.Tools
                     : "Can be updated via JSON path from the primary object."
             };
 
+            if (!string.IsNullOrWhiteSpace(description))
+                propertyInfo["description"] = description;
+
             if (flowBlockUi != null)
             {
-                propertyInfo["ui"] = new JObject
-                {
-                    ["operations"] = new JArray(uiOperations),
-                    ["uiOptions"] = new JArray(uiOptions),
-                    ["creatableTypes"] = new JArray((flowBlockUi.CreatableTypes ?? Array.Empty<Type>()).Select(x => x.FullName ?? x.Name)),
-                    ["readOnly"] = flowBlockUi.ReadOnly,
-                    ["toolboxCategory"] = flowBlockUi.ToolboxCategory ?? string.Empty
-                };
+                var uiInfo = new JObject();
+
+                var uiOperationsArray = new JArray(uiOperations);
+                if (uiOperationsArray.Count > 0)
+                    uiInfo["operations"] = uiOperationsArray;
+
+                var uiOptionsArray = new JArray(uiOptions);
+                if (uiOptionsArray.Count > 0)
+                    uiInfo["uiOptions"] = uiOptionsArray;
+
+                var creatableTypes = new JArray((flowBlockUi.CreatableTypes ?? Array.Empty<Type>()).Select(x => x.FullName ?? x.Name));
+                if (creatableTypes.Count > 0)
+                    uiInfo["creatableTypes"] = creatableTypes;
+
+                if (flowBlockUi.ReadOnly)
+                    uiInfo["readOnly"] = true;
+
+                if (!string.IsNullOrWhiteSpace(flowBlockUi.ToolboxCategory))
+                    uiInfo["toolboxCategory"] = flowBlockUi.ToolboxCategory;
+
+                if (uiInfo.HasValues)
+                    propertyInfo["ui"] = uiInfo;
             }
 
-            propertyInfo["isFlowBlockReference"] = isFlowBlockReference;
-            propertyInfo["attributes"] = new JArray(property.GetCustomAttributesData()
+            if (isFlowBlockReference)
+                propertyInfo["isFlowBlockReference"] = true;
+
+            var attributes = new JArray(property.GetCustomAttributesData()
                 .Where(ShouldExposePropertyAttribute)
                 .Select(BuildAttributeInfo));
+
+            if (attributes.Count > 0)
+                propertyInfo["attributes"] = attributes;
 
             if (isEnum)
             {
@@ -342,6 +367,29 @@ namespace FlowBlox.AIAssistant.Tools
             MarkPropertyAsDescribed(property, describedInType?.FullName ?? describedInType?.Name ?? "unknown");
 
             return propertyInfo;
+        }
+
+        private static string BuildPropertyFlags(
+            bool nullable,
+            bool canWrite,
+            bool isSimple,
+            bool isEnum,
+            bool isCollection)
+        {
+            var flags = string.Empty;
+
+            if (nullable)
+                flags += "N";
+            if (canWrite)
+                flags += "W";
+            if (isSimple)
+                flags += "S";
+            if (isEnum)
+                flags += "E";
+            if (isCollection)
+                flags += "C";
+
+            return flags;
         }
 
         private static JObject BuildAttributeInfo(CustomAttributeData attributeData)
@@ -674,6 +722,3 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
-
-
-

@@ -192,6 +192,9 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="BaseFlowBlock_InputBehaviorAssignments" xml:space="preserve">
 		<value>Eingabeverhalten</value>
 	</data>
+	<data name="BaseFlowBlock_InputBehaviorAssignments_Tooltip" xml:space="preserve">
+		<value>Definiert pro Eingangs-FlowBlock, wie dessen Eingangsdatensätze ausgewählt oder kombiniert werden. Die daraus entstehenden kombinierten Datensätze werden nacheinander verarbeitet.</value>
+	</data>
 	<data name="BaseFlowBlock_InputIgnoreDuplicates" xml:space="preserve">
 		<value>Duplikate in Eingabedatensätzen ignorieren</value>
 	</data>
@@ -3689,7 +3692,7 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
 		<value>Reservierte Antwort-Tokens</value>
 	</data>
 	<data name="AssistantConfiguration_ReservedResponseTokens_Tooltip" xml:space="preserve">
-		<value>Geschätzte Tokens, die beim Kürzen neuester Nachrichten für die Modellantwort reserviert bleiben.</value>
+		<value>Geschätzte Tokens, die beim Kürzen neuester Konversationsnachrichten für die nächste Assistant-Antwort frei bleiben.</value>
 	</data>
 	<data name="AssistantConfiguration_ApproximateCharactersPerToken" xml:space="preserve">
 		<value>Zeichen pro Token</value>

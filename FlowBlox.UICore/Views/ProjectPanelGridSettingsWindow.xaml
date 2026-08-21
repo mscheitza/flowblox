@@ -70,6 +70,19 @@
                          VerticalContentAlignment="Center"
                          PreviewTextInput="NumericTextBox_PreviewTextInput" />
 
+                <TextBlock Text="{x:Static resources:ProjectPanelGridSettingsWindow.Label_AutoIncreaseGridSize}"
+                           Margin="0,16,0,6" />
+                <mah:ToggleSwitch IsOn="{Binding AutoIncreaseGridSize, Mode=TwoWay}"
+                                  HorizontalAlignment="Left"
+                                  OffContent="{x:Static resources:ProjectPanelGridSettingsWindow.Toggle_Off}"
+                                  OnContent="{x:Static resources:ProjectPanelGridSettingsWindow.Toggle_On}">
+                    <mah:ToggleSwitch.ToolTip>
+                        <TextBlock Text="{x:Static resources:ProjectPanelGridSettingsWindow.Tooltip_AutoIncreaseGridSize}"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="480" />
+                    </mah:ToggleSwitch.ToolTip>
+                </mah:ToggleSwitch>
+
                 <TextBlock Text="{x:Static resources:ProjectPanelGridSettingsWindow.Label_ResetNotifications}"
                            Margin="0,16,0,6" />
                 <mah:ToggleSwitch IsOn="{Binding ResetNotificationsOnRuntimeFinish, Mode=TwoWay}"

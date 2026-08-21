@@ -889,6 +889,8 @@ namespace FlowBlox.AppWindow.Contents
             if (_useWpfGrid)
             {
                 _wpfProjectPanelControl?.MarkRuntimeFocus(null);
+                UpdateExecutionStatus();
+                UpdateGridWarnings();
                 _wpfProjectPanelControl?.RefreshProject();
             }
             else

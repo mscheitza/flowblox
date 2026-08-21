@@ -16,6 +16,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private int _gridWidth;
         private int _gridHeight;
+        private bool _autoIncreaseGridSize;
         private bool _resetNotificationsOnRuntimeFinish;
 
         public ProjectPanelGridSettingsViewModel(FlowBloxProject project)
@@ -24,6 +25,7 @@ namespace FlowBlox.UICore.ViewModels
 
             _gridWidth = Math.Max(MinimumGridWidth, project.GridSizeX);
             _gridHeight = Math.Max(MinimumGridHeight, project.GridSizeY);
+            _autoIncreaseGridSize = project.AutoIncreaseGridSize;
 
             var options = FlowBloxOptions.GetOptionInstance();
             _resetNotificationsOnRuntimeFinish =
@@ -69,6 +71,19 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
+        public bool AutoIncreaseGridSize
+        {
+            get => _autoIncreaseGridSize;
+            set
+            {
+                if (_autoIncreaseGridSize == value)
+                    return;
+
+                _autoIncreaseGridSize = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool TrySave(out string validationMessage)
         {
             if (GridWidth < MinimumGridWidth)
@@ -89,6 +104,7 @@ namespace FlowBlox.UICore.ViewModels
 
             _project.GridSizeX = GridWidth;
             _project.GridSizeY = GridHeight;
+            _project.AutoIncreaseGridSize = AutoIncreaseGridSize;
 
             var options = FlowBloxOptions.GetOptionInstance();
             var option = options.GetOption(ResetNotificationsOptionName);

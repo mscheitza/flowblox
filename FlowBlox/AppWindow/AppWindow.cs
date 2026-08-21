@@ -1,4 +1,3 @@
-using FlowBlox.AppWindow.ContentFactories;
 using FlowBlox.AppWindow.Contents;
 using FlowBlox.AppWindow.Handler;
 using FlowBlox.AppWindow.RecentProjects;
@@ -19,29 +18,24 @@ using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Services;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Controls;
-using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Util.WPF;
 using FlowBlox.Grid.Provider;
 using FlowBlox.Interfaces;
 using FlowBlox.Services;
-using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.ViewModels.PSProjects;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
-using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
 using static FlowBlox.Core.Interceptors.RuntimeBacktraceInterceptor;
 
 namespace FlowBlox.AppWindow
@@ -54,7 +48,7 @@ namespace FlowBlox.AppWindow
         private const string UpdateStatusNotificationId = "app.update.status";
         private const string CreatingProjectOverlayText = "Creating project...";
         private const string LoadingProjectOverlayText = "Loading project...";
-        private static readonly TimeSpan AfterProjectActivationUiDelay = TimeSpan.FromSeconds(2);
+        private static readonly TimeSpan AfterProjectActivationUiDelay = TimeSpan.FromSeconds(2.5f);
         private static readonly TimeSpan UpdateNotificationLifetime = TimeSpan.FromDays(14);
         private static readonly TimeSpan UpdateStatusNotificationLifetime = TimeSpan.FromSeconds(15);
         private static readonly TimeSpan UpdateErrorNotificationLifetime = TimeSpan.FromSeconds(15);
@@ -1591,4 +1585,3 @@ namespace FlowBlox.AppWindow
         }
     }
 }
-

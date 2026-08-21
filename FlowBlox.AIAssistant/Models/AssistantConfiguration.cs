@@ -36,14 +36,14 @@ namespace FlowBlox.AIAssistant.Models
 
         [Display(Name = "AssistantConfiguration_MaxLatestMessages", Description = "AssistantConfiguration_MaxLatestMessages_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [Range(AssistantConfigurationLimits.MinLatestMessages, AssistantConfigurationLimits.MaxLatestMessages)]
-        public int MaxLatestMessages { get; set; } = 8;
+        public int MaxLatestMessages { get; set; } = 10;
 
         [Display(Name = "AssistantConfiguration_MinLatestMessages", Description = "AssistantConfiguration_MinLatestMessages_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         [Range(AssistantConfigurationLimits.MinLatestMessages, AssistantConfigurationLimits.MaxLatestMessages)]
         public int MinLatestMessages { get; set; } = 2;
 
         [Display(Name = "AssistantConfiguration_MaxContextTokens", Description = "AssistantConfiguration_MaxContextTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        public int MaxContextTokens { get; set; } = 32000;
+        public int MaxContextTokens { get; set; } = 48000;
 
         [Display(Name = "AssistantConfiguration_ReservedResponseTokens", Description = "AssistantConfiguration_ReservedResponseTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 5)]
         public int ReservedResponseTokens { get; set; } = 4096;

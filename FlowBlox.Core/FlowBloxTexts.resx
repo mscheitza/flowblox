@@ -192,6 +192,9 @@ All inputs are collected during each referenced iteration and this flow block ex
 	<data name="BaseFlowBlock_InputBehaviorAssignments" xml:space="preserve">
 		<value>Input behavior</value>
 	</data>
+	<data name="BaseFlowBlock_InputBehaviorAssignments_Tooltip" xml:space="preserve">
+		<value>Defines per input flow block how its input datasets are selected or combined. The resulting combined datasets are processed one after another.</value>
+	</data>
 	<data name="BaseFlowBlock_InputIgnoreDuplicates" xml:space="preserve">
 		<value>Ignore duplicates in input records</value>
 	</data>
@@ -3746,7 +3749,7 @@ If a Join collector should aggregate links across all page iterations:
 		<value>Reserved response tokens</value>
 	</data>
 	<data name="AssistantConfiguration_ReservedResponseTokens_Tooltip" xml:space="preserve">
-		<value>Approximate tokens reserved for the model response when trimming latest messages.</value>
+		<value>Approximate tokens kept free for the next assistant response when trimming latest conversation messages.</value>
 	</data>
 	<data name="AssistantConfiguration_ApproximateCharactersPerToken" xml:space="preserve">
 		<value>Characters per token</value>

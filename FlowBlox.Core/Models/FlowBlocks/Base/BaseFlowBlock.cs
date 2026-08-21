@@ -9,8 +9,10 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base.DatasetSelection;
+using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Runtime.WorkItems;
+using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.DeepCopier;
@@ -266,7 +268,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             set => ExecutionIndex = value;
         }
 
-        public bool IsNotExecuted { get; set; }
+        private bool _isNotExecuted;
+        public bool IsNotExecuted
+        {
+            get => _isNotExecuted;
+            set
+            {
+                if (_isNotExecuted == value)
+                    return;
+
+                _isNotExecuted = value;
+                OnPropertyChanged();
+            }
+        }
 
         [JsonIgnore()]
         public virtual bool CanGoBack => true;
@@ -451,10 +465,23 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         protected virtual void OnAfterReferencedFlowBlocksChanged()
         {
+            RefreshNotExecutedState();
+
             if (!this.IsLoaded)
                 return;
 
             SyncReferencedFlowBlocksWithInputBehaviorAssignments();
+        }
+
+        public void RefreshNotExecutedState()
+            => IsNotExecuted = ShouldBeMarkedAsNotExecuted();
+
+        private bool ShouldBeMarkedAsNotExecuted()
+        {
+            if (this is StartFlowBlock or NoteFlowBlock)
+                return false;
+
+            return ReferencedFlowBlocks == null || !ReferencedFlowBlocks.Any();
         }
 
         private void SyncReferencedFlowBlocksWithInputBehaviorAssignments()
@@ -466,7 +493,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             {
                 this.InputBehaviorAssignments.Add(new InputBehaviorAssignment()
                 {
-                    Behavior = InputBehavior.Cross,
+                    Behavior = InputBehavior.First,
                     FlowBlock = missingFb
                 });
 
@@ -594,7 +621,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [Display(Name = "BaseFlowBlock_InputIgnoreDuplicates", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 1)]
         public bool InputIgnoreDuplicates { get; set; }
 
-        [Display(Name = "BaseFlowBlock_InputBehaviorAssignments", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 2)]
+        [Display(Name = "BaseFlowBlock_InputBehaviorAssignments", Description = "BaseFlowBlock_InputBehaviorAssignments_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 2)]
         [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.Edit)]
         public ObservableCollection<InputBehaviorAssignment> InputBehaviorAssignments { get; set; }
 

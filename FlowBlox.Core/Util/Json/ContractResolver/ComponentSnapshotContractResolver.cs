@@ -62,9 +62,17 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
                 return true;
 
             var nonNullable = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
-            if (nonNullable.IsPrimitive || nonNullable.IsEnum || nonNullable == typeof(decimal) || nonNullable == typeof(DateTime) || nonNullable == typeof(DateTimeOffset) || nonNullable == typeof(Guid) || nonNullable == typeof(TimeSpan))
+            if (nonNullable.IsPrimitive || 
+                nonNullable.IsEnum || 
+                nonNullable == typeof(decimal) || 
+                nonNullable == typeof(DateTime) || 
+                nonNullable == typeof(DateTimeOffset) || 
+                nonNullable == typeof(Guid) || 
+                nonNullable == typeof(TimeSpan))
+            {
                 return true;
-
+            }
+            
             if (nonNullable == typeof(Point) || nonNullable == typeof(Size))
                 return true;
 

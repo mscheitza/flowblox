@@ -1,5 +1,4 @@
 ﻿using FlowBlox.Core.Util.Json.ValueProvider;
-using Microsoft.IdentityModel.Tokens.Experimental;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -8,14 +7,11 @@ namespace FlowBlox.Core.Util.Json.Converters
 {
     internal sealed class CollectionKeywordJsonConverter : JsonConverter
     {
-        public const string CollectionTypeKeyword = "LIST";
+        public const string CollectionTypeKeyword = "Collection";
 
         public override bool CanRead => false;
 
-        public override bool CanConvert(Type objectType) =>
-            objectType.IsGenericType &&
-            (objectType.GetGenericTypeDefinition() == typeof(List<>) ||
-             objectType.GetGenericTypeDefinition() == typeof(ObservableCollection<>));
+        public override bool CanConvert(Type objectType) => TryGetElementType(objectType, out _);
 
         public override void WriteJson(
             JsonWriter writer,
@@ -35,7 +31,11 @@ namespace FlowBlox.Core.Util.Json.Converters
                 return;
             }
 
-            var innerType = value.GetType().GetGenericArguments()[0];
+            if (!TryGetElementType(value.GetType(), out var innerType))
+            {
+                serializer.Serialize(writer, value);
+                return;
+            }
 
             writer.WriteStartObject();
 
@@ -58,5 +58,23 @@ namespace FlowBlox.Core.Util.Json.Converters
             object? existingValue,
             JsonSerializer serializer) =>
             throw new NotSupportedException();
+
+        internal static bool TryGetElementType(Type collectionType, out Type elementType)
+        {
+            elementType = null!;
+
+            if (!collectionType.IsGenericType)
+                return false;
+
+            var genericTypeDefinition = collectionType.GetGenericTypeDefinition();
+            if (genericTypeDefinition != typeof(List<>) &&
+                genericTypeDefinition != typeof(ObservableCollection<>))
+            {
+                return false;
+            }
+
+            elementType = collectionType.GetGenericArguments()[0];
+            return true;
+        }
     }
 }

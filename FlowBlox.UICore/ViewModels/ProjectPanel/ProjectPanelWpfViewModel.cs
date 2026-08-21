@@ -3,6 +3,7 @@ using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Events;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -29,8 +30,10 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 {
     public sealed class ProjectPanelWpfViewModel : INotifyPropertyChanged, IDisposable
     {
-        private const double DefaultCanvasWidth = 3000d;
-        private const double DefaultCanvasHeight = 1400d;
+        private const double DefaultCanvasWidth = GlobalConstants.GridSizeX;
+        private const double DefaultCanvasHeight = GlobalConstants.GridSizeY;
+        private const double DefaultAutoIncreaseHorizontalReserve = 1000d;
+        private const double DefaultAutoIncreaseVerticalReserve = 700d;
         private const double CenterSnapTolerance = 10d;
         private readonly Dictionary<BaseFlowBlock, FlowBlockNodeViewModel> _nodesByFlowBlock = new();
         private readonly IFlowBloxProjectComponentProvider _componentProvider;
@@ -222,8 +225,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public string ToggleBreakpointHeader => SelectedNode?.InternalFlowBlock.BreakPoint == true
             ? FlowBloxResourceUtil.GetLocalizedString("ContextMenu_RemoveBreakpoint", typeof(Resources.ProjectPanel))
             : FlowBloxResourceUtil.GetLocalizedString("ContextMenu_SetBreakpoint", typeof(Resources.ProjectPanel));
-        public double CanvasWidth => Math.Max(DefaultCanvasWidth, _project?.GridSizeX ?? DefaultCanvasWidth);
-        public double CanvasHeight => Math.Max(DefaultCanvasHeight, _project?.GridSizeY ?? DefaultCanvasHeight);
+        public double CanvasWidth => _project?.GridSizeX > 0 ? _project.GridSizeX : DefaultCanvasWidth;
+        public double CanvasHeight => _project?.GridSizeY > 0 ? _project.GridSizeY : DefaultCanvasHeight;
         public string EditSelectionHeader => IsRuntimeActive
             ? FlowBloxResourceUtil.GetLocalizedString("ContextMenu_ViewProperties", typeof(Resources.ProjectPanel))
             : FlowBloxResourceUtil.GetLocalizedString("ContextMenu_EditProperties", typeof(Resources.ProjectPanel));
@@ -422,7 +425,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public bool CanCreateFlowBlockFromDrop(IDataObject dataObject)
             => ResolveDraggedFlowBlockType(dataObject) != null && _registry != null && !IsRuntimeActive;
 
-        public void CreateFlowBlockFromDrop(IDataObject dataObject, Point location)
+        public void CreateFlowBlockFromDrop(
+            IDataObject dataObject,
+            Point location,
+            double horizontalReserve,
+            double verticalReserve)
         {
             var flowBlockType = ResolveDraggedFlowBlockType(dataObject);
             if (flowBlockType == null || _registry == null)
@@ -445,10 +452,68 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             createAction.Invoke();
             _componentProvider?.GetCurrentChangelist()?.AddChange(createAction);
 
+            EnsureCanvasContainsBounds(
+                createdFlowBlock.Location.X,
+                createdFlowBlock.Location.Y,
+                FlowBlockNodeViewModel.FixedWidth,
+                FlowBlockNodeViewModel.MaxBlockHeight,
+                horizontalReserve,
+                verticalReserve);
+
             if (_nodesByFlowBlock.TryGetValue(createdFlowBlock, out var node))
+            {
+                EnsureCanvasContainsNode(node, horizontalReserve, verticalReserve);
                 SelectNode(node, toggle: false, extend: false);
+            }
 
             RefreshArrows();
+        }
+
+        public void EnsureCanvasContainsNode(FlowBlockNodeViewModel node, double horizontalReserve, double verticalReserve)
+        {
+            if (node == null)
+                return;
+
+            EnsureCanvasContainsBounds(
+                node.X,
+                node.Y,
+                node.Width,
+                node.Height,
+                horizontalReserve,
+                verticalReserve);
+        }
+
+        private void EnsureCanvasContainsBounds(
+            double x,
+            double y,
+            double width,
+            double height,
+            double horizontalReserve,
+            double verticalReserve)
+        {
+            if (_project?.AutoIncreaseGridSize != true)
+                return;
+
+            var requiredWidth = (int)Math.Ceiling(x + width + Math.Max(0d, horizontalReserve));
+            var requiredHeight = (int)Math.Ceiling(y + height + Math.Max(0d, verticalReserve));
+            var changed = false;
+
+            if (requiredWidth > CanvasWidth)
+            {
+                _project.GridSizeX = requiredWidth;
+                OnPropertyChanged(nameof(CanvasWidth));
+                changed = true;
+            }
+
+            if (requiredHeight > CanvasHeight)
+            {
+                _project.GridSizeY = requiredHeight;
+                OnPropertyChanged(nameof(CanvasHeight));
+                changed = true;
+            }
+
+            if (changed)
+                GridSettingsCommand.Invalidate();
         }
 
         private void ProjectManager_ProjectChanged(object sender, ProjectChangedEventArgs e)
@@ -505,6 +570,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             node.PropertyChanged += Node_PropertyChanged;
             _nodesByFlowBlock[flowBlock] = node;
             Nodes.Add(node);
+            EnsureCanvasContainsNode(node, DefaultAutoIncreaseHorizontalReserve, DefaultAutoIncreaseVerticalReserve);
             OnPropertyChanged(nameof(HasNodes));
         }
 

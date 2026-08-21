@@ -34,6 +34,7 @@ namespace FlowBlox.Core.Models.Project
         public string Notice { get; set; }
         public int GridSizeX { get; set; }
         public int GridSizeY { get; set; }
+        public bool AutoIncreaseGridSize { get; set; }
 
         [JsonIgnore]
         public FlowBloxRegistry FlowBloxRegistry { get; }
@@ -132,6 +133,7 @@ namespace FlowBlox.Core.Models.Project
             ProjectGuid = Guid.NewGuid();
             GridSizeX = GlobalConstants.GridSizeX;
             GridSizeY = GlobalConstants.GridSizeY;
+            AutoIncreaseGridSize = true;
             FlowBloxRegistry = new FlowBloxRegistry();
             Extensions = new List<FlowBloxProjectExtension>();
             ProjectDependendDataObjects = new List<IProjectDependendData>();
@@ -938,4 +940,3 @@ namespace FlowBlox.Core.Models.Project
         }
     }
 }
-

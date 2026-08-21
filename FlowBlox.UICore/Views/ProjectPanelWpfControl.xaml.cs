@@ -147,6 +147,10 @@ namespace FlowBlox.UICore.Views
             var snappedPosition = ViewModel.GetSnappedNodePosition(_draggedNode, _nodeStartX + delta.X, _nodeStartY + delta.Y);
             _draggedNode.X = snappedPosition.X;
             _draggedNode.Y = snappedPosition.Y;
+            ViewModel.EnsureCanvasContainsNode(
+                _draggedNode,
+                CanvasScrollViewer.ViewportWidth / 2d,
+                CanvasScrollViewer.ViewportHeight / 2d);
             e.Handled = true;
         }
 
@@ -226,7 +230,12 @@ namespace FlowBlox.UICore.Views
                 return;
             }
 
-            ViewModel.CreateFlowBlockFromDrop(e.Data, e.GetPosition(ProjectCanvas));
+            ViewModel.CreateFlowBlockFromDrop(
+                e.Data,
+                e.GetPosition(ProjectCanvas),
+                CanvasScrollViewer.ViewportWidth / 2d,
+                CanvasScrollViewer.ViewportHeight / 2d);
+
             e.Effects = DragDropEffects.Copy;
             e.Handled = true;
         }

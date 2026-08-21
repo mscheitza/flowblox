@@ -763,7 +763,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Approximate tokens reserved for the model response when trimming latest messages. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Approximate tokens kept free for the next assistant response when trimming latest conversation messages. ähnelt.
         /// </summary>
         public static string AssistantConfiguration_ReservedResponseTokens_Tooltip {
             get {
@@ -961,6 +961,15 @@ namespace FlowBlox.Core {
         public static string BaseFlowBlock_InputBehaviorAssignments {
             get {
                 return ResourceManager.GetString("BaseFlowBlock_InputBehaviorAssignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines per input flow block how its input datasets are selected or combined. The resulting combined datasets are processed one after another. ähnelt.
+        /// </summary>
+        public static string BaseFlowBlock_InputBehaviorAssignments_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseFlowBlock_InputBehaviorAssignments_Tooltip", resourceCulture);
             }
         }
         

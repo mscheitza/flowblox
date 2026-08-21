@@ -5,7 +5,7 @@ namespace FlowBlox.Core.Util.Json.ValueProvider
 {
     internal sealed class EmptyEnumerableKeywordValueProvider : IValueProvider
     {
-        public const string EmptyCollectionKeyword = "EMPTY_LIST";
+        public const string EmptyCollectionKeyword = "EmptyCollection";
 
         private readonly IValueProvider _inner;
 

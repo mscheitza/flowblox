@@ -12,8 +12,8 @@ Explaining IterationContext and multi-input behavior:
 - Reason: normal flow execution already guarantees that the successor is called by the predecessor. If the predecessor itself runs at `IterationContext` iteration-end, the whole downstream chain also runs in that same iteration-end dependency.
 
 3) Multi-input combination and default resolution
-- If multiple input flow blocks connect to one successor, FlowBlox combines datasets based on `InputBehavior`.
-- Default behavior is `Cross` (combinational).
+- If multiple input flow blocks connect to one successor, FlowBlox combines input datasets based on each input flow block's `InputBehavior`.
+- The default behavior is `First`: suitable when only one input dataset is expected or only the first input dataset is relevant.
 - IterationContext default for multi-input: first common upstream flow block across all incoming paths.
 - Successor executes once per resulting combined dataset.
 - For each combined dataset, mapped values are applied before execution.
@@ -47,7 +47,9 @@ Explaining IterationContext and multi-input behavior:
 - Expected default behavior:
   - IterationContext resolves to the first common upstream capture block.
   - Consumer executes once per capture iteration and writes one combined row per capture dataset.
-- Why `Cross` still works here:
-  - if each extractor returns exactly one value per capture iteration, `Cross` behaves effectively 1:1.
+- Why default `First` usually fits here:
+  - if each extractor returns exactly one value per capture iteration, selecting the first input dataset keeps the combination 1:1.
+- Why `Cross` would also work:
+  - if each extractor returns exactly one value per capture iteration, the Cartesian combination also produces exactly one combined dataset.
 - Data quality guard:
   - if columns are mandatory, enforce requirements (for example required column mapping and/or required input fields) to avoid writing partial/empty rows.

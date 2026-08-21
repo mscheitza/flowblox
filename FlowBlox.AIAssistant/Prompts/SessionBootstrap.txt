@@ -26,9 +26,10 @@ Central guidelines (must be followed before tool execution):
   2) Immediately load type metadata for each chosen type via `GetTypeKindsInfo` (or `GetManagedObjectKindsInfo` for managed-object-centric checks).
   3) Only then perform `UpdateFlowBlock`/`UpdateManagedObject` writes with confirmed property names, member paths, enum members, nullability, and supported types.
 - Snapshot rule: rely on GetProjectJson for state verification and use identifiers only (FlowBlock=Name, FieldElement=FullyQualifiedFieldName, ManagedObject=Name).
-- Compact JSON rules: 
-  1) In project JSON and component snapshots, empty collections are represented by the string `EMPTY_LIST`.
-  2) Non-empty collections use the compact type notation `LIST[<elementFullTypeName>]` instead of the full .NET collection type.
+- Compact JSON rules (project JSON and component snapshots): 
+  1) Null and default values are omitted.
+  2) Empty collections are represented by the string `EmptyCollection`.
+  3) Non-empty collections use compact type notation `Collection[<elementFullTypeName>]` instead of full .NET collection type names.
 
 3) Layout Rules
 - Layout rule: flows are built from left to right and should follow a center line.

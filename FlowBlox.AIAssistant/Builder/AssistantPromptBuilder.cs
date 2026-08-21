@@ -49,23 +49,23 @@ namespace FlowBlox.AIAssistant.Builder
         public static string BuildInitialUserPrompt(
             string userPrompt,
             string? projectJson,
-            ProjectAttachmentReason? projectAttachmentReason)
+            ProjectAttachmentInformation projectAttachmentInformation)
         {
             var sb = new StringBuilder();
             sb.AppendLine("User prompt:");
             sb.AppendLine(userPrompt);
             sb.AppendLine();
 
+            var attachmentReasonText = BuildProjectAttachmentInformationText(projectAttachmentInformation);
+            if (!string.IsNullOrWhiteSpace(attachmentReasonText))
+            {
+                sb.AppendLine("Project attachment note:");
+                sb.AppendLine(attachmentReasonText);
+                sb.AppendLine();
+            }
+
             if (!string.IsNullOrWhiteSpace(projectJson))
             {
-                var attachmentReasonText = BuildProjectAttachmentReasonText(projectAttachmentReason);
-                if (!string.IsNullOrWhiteSpace(attachmentReasonText))
-                {
-                    sb.AppendLine("Project attachment note:");
-                    sb.AppendLine(attachmentReasonText);
-                    sb.AppendLine();
-                }
-
                 sb.AppendLine("Current project JSON:");
                 sb.AppendLine(projectJson);
                 sb.AppendLine();
@@ -113,14 +113,16 @@ namespace FlowBlox.AIAssistant.Builder
             return sb.ToString().TrimEnd();
         }
 
-        private static string BuildProjectAttachmentReasonText(ProjectAttachmentReason? projectAttachmentReason)
+        private static string BuildProjectAttachmentInformationText(ProjectAttachmentInformation projectAttachmentReason)
         {
             return projectAttachmentReason switch
             {
-                ProjectAttachmentReason.InitialTransmission =>
+                ProjectAttachmentInformation.InitialTransmission =>
                     "The current project JSON is attached because it has not yet been provided in this conversation. Treat it as the initial project state.",
-                ProjectAttachmentReason.ProjectChangedSinceLastConversation =>
+                ProjectAttachmentInformation.ProjectChangedSinceLastConversation =>
                     "The current project JSON is attached because the project changed since the last conversation state was saved. Treat it as the latest project state.",
+                ProjectAttachmentInformation.ProjectUnchangedSinceLastConversation =>
+                    "The current project JSON is omitted because the project has not changed since the last conversation state was saved. Continue using the latest project state already available in this conversation.",
                 _ => string.Empty
             };
         }

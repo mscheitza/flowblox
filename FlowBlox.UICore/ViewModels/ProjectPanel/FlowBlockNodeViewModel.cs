@@ -19,11 +19,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 {
     public sealed class FlowBlockNodeViewModel : INotifyPropertyChanged, IFlowBloxUIElement, IDisposable
     {
-        private const double FixedWidth = 328d;
+        internal const double FixedWidth = 328d;
         private const double HeaderHeight = 26d;
         private const double RowHeight = 24d;
         private const double NotificationHeight = 30d;
-        private const double MaxBlockHeight = 300d;
+        internal const double MaxBlockHeight = 300d;
 
         private readonly SynchronizationContext _uiContext;
         private bool _isSelected;
@@ -42,6 +42,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             flowBlock.OnError += FlowBlock_OnError;
             flowBlock.OnUndoWarn += FlowBlock_OnUndoWarn;
             flowBlock.OnUndoError += FlowBlock_OnUndoError;
+            flowBlock.RefreshNotExecutedState();
             RefreshRows(preserveCenter: false);
         }
 

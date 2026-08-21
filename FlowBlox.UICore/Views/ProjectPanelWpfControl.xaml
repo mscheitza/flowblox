@@ -13,180 +13,182 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <projectPanelConverters:FlowBlockRowLabelVisibilityConverter x:Key="FlowBlockRowLabelVisibilityConverter"/>
-        <projectPanelConverters:FlowBlockRowIconVisibilityConverter x:Key="FlowBlockRowIconVisibilityConverter"/>
-        <projectPanelConverters:FlowBlockRowIconKindConverter x:Key="FlowBlockRowIconKindConverter"/>
-        <projectPanelConverters:FlowBlockRowIconBrushConverter x:Key="FlowBlockRowIconBrushConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <projectPanelConverters:FlowBlockRowLabelVisibilityConverter x:Key="FlowBlockRowLabelVisibilityConverter"/>
+            <projectPanelConverters:FlowBlockRowIconVisibilityConverter x:Key="FlowBlockRowIconVisibilityConverter"/>
+            <projectPanelConverters:FlowBlockRowIconKindConverter x:Key="FlowBlockRowIconKindConverter"/>
+            <projectPanelConverters:FlowBlockRowIconBrushConverter x:Key="FlowBlockRowIconBrushConverter"/>
 
-        <DrawingBrush x:Key="ProjectGridBrush"
+            <DrawingBrush x:Key="ProjectGridBrush"
                       TileMode="Tile"
                       Viewport="0,0,19.2,19.2"
                       ViewportUnits="Absolute">
-            <DrawingBrush.Drawing>
-                <DrawingGroup>
-                    <GeometryDrawing Brush="#050505">
-                        <GeometryDrawing.Geometry>
-                            <RectangleGeometry Rect="0,0,19.2,19.2"/>
-                        </GeometryDrawing.Geometry>
-                    </GeometryDrawing>
-                    <GeometryDrawing>
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#141414" Thickness="1"/>
-                        </GeometryDrawing.Pen>
-                        <GeometryDrawing.Geometry>
-                            <GeometryGroup>
-                                <LineGeometry StartPoint="19.2,0" EndPoint="19.2,19.2"/>
-                                <LineGeometry StartPoint="0,19.2" EndPoint="19.2,19.2"/>
-                            </GeometryGroup>
-                        </GeometryDrawing.Geometry>
-                    </GeometryDrawing>
-                    <GeometryDrawing>
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#202020" Thickness="1"/>
-                        </GeometryDrawing.Pen>
-                        <GeometryDrawing.Geometry>
-                            <GeometryGroup>
-                                <LineGeometry StartPoint="0,0" EndPoint="0,19.2"/>
-                                <LineGeometry StartPoint="0,0" EndPoint="19.2,0"/>
-                            </GeometryGroup>
-                        </GeometryDrawing.Geometry>
-                    </GeometryDrawing>
-                </DrawingGroup>
-            </DrawingBrush.Drawing>
-        </DrawingBrush>
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="#050505">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry Rect="0,0,19.2,19.2"/>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing>
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#141414" Thickness="1"/>
+                            </GeometryDrawing.Pen>
+                            <GeometryDrawing.Geometry>
+                                <GeometryGroup>
+                                    <LineGeometry StartPoint="19.2,0" EndPoint="19.2,19.2"/>
+                                    <LineGeometry StartPoint="0,19.2" EndPoint="19.2,19.2"/>
+                                </GeometryGroup>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing>
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="#202020" Thickness="1"/>
+                            </GeometryDrawing.Pen>
+                            <GeometryDrawing.Geometry>
+                                <GeometryGroup>
+                                    <LineGeometry StartPoint="0,0" EndPoint="0,19.2"/>
+                                    <LineGeometry StartPoint="0,0" EndPoint="19.2,0"/>
+                                </GeometryGroup>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
 
-        <Style x:Key="ProjectPanel.ToolbarButton" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#454545"/>
-            <Setter Property="Foreground" Value="#F2F2F2"/>
-            <Setter Property="BorderBrush" Value="#666666"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="8,3"/>
-            <Setter Property="Margin" Value="2,0"/>
-            <Setter Property="MinHeight" Value="24"/>
-        </Style>
+            <Style x:Key="ProjectPanel.ToolbarButton" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="#454545"/>
+                <Setter Property="Foreground" Value="#F2F2F2"/>
+                <Setter Property="BorderBrush" Value="#666666"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="8,3"/>
+                <Setter Property="Margin" Value="2,0"/>
+                <Setter Property="MinHeight" Value="24"/>
+            </Style>
 
-        <Style x:Key="ProjectPanel.ToolbarToggleButton" TargetType="{x:Type ToggleButton}">
-            <Setter Property="Background" Value="#454545"/>
-            <Setter Property="Foreground" Value="#F2F2F2"/>
-            <Setter Property="BorderBrush" Value="#666666"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="8,3"/>
-            <Setter Property="Margin" Value="2,0"/>
-            <Setter Property="MinHeight" Value="24"/>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#0A56C6"/>
-                    <Setter Property="BorderBrush" Value="#5FB4FF"/>
-                    <Setter Property="BorderThickness" Value="1"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="ProjectPanel.ToolbarToggleButton" TargetType="{x:Type ToggleButton}">
+                <Setter Property="Background" Value="#454545"/>
+                <Setter Property="Foreground" Value="#F2F2F2"/>
+                <Setter Property="BorderBrush" Value="#666666"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="8,3"/>
+                <Setter Property="Margin" Value="2,0"/>
+                <Setter Property="MinHeight" Value="24"/>
+                <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter Property="Background" Value="#0A56C6"/>
+                        <Setter Property="BorderBrush" Value="#5FB4FF"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-        <Style x:Key="ProjectPanel.ScrollThumb" TargetType="{x:Type Thumb}">
-            <Setter Property="Background" Value="#6F91A8"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="2"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#86A9C2"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="ProjectPanel.ScrollThumb" TargetType="{x:Type Thumb}">
+                <Setter Property="Background" Value="#6F91A8"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="2"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#86A9C2"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-        <ControlTemplate x:Key="ProjectPanel.HorizontalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
-            <Border Background="{TemplateBinding Background}" CornerRadius="2">
-                <Track x:Name="PART_Track">
-                    <Track.Thumb>
-                        <Thumb Style="{StaticResource ProjectPanel.ScrollThumb}"/>
-                    </Track.Thumb>
-                </Track>
-            </Border>
-        </ControlTemplate>
+            <ControlTemplate x:Key="ProjectPanel.HorizontalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
+                <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                    <Track x:Name="PART_Track">
+                        <Track.Thumb>
+                            <Thumb Style="{StaticResource ProjectPanel.ScrollThumb}"/>
+                        </Track.Thumb>
+                    </Track>
+                </Border>
+            </ControlTemplate>
 
-        <ControlTemplate x:Key="ProjectPanel.VerticalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
-            <Border Background="{TemplateBinding Background}" CornerRadius="2">
-                <Track x:Name="PART_Track" IsDirectionReversed="True">
-                    <Track.Thumb>
-                        <Thumb Style="{StaticResource ProjectPanel.ScrollThumb}"/>
-                    </Track.Thumb>
-                </Track>
-            </Border>
-        </ControlTemplate>
+            <ControlTemplate x:Key="ProjectPanel.VerticalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
+                <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                    <Track x:Name="PART_Track" IsDirectionReversed="True">
+                        <Track.Thumb>
+                            <Thumb Style="{StaticResource ProjectPanel.ScrollThumb}"/>
+                        </Track.Thumb>
+                    </Track>
+                </Border>
+            </ControlTemplate>
 
-        <Style x:Key="ProjectPanel.ThinScrollBar" TargetType="{x:Type ScrollBar}">
-            <Setter Property="Background" Value="#555555"/>
-            <Setter Property="Foreground" Value="#9A9A9A"/>
-            <Style.Triggers>
-                <Trigger Property="Orientation" Value="Vertical">
-                    <Setter Property="Width" Value="7"/>
-                    <Setter Property="MinWidth" Value="7"/>
-                    <Setter Property="Template" Value="{StaticResource ProjectPanel.VerticalScrollBarTemplate}"/>
-                </Trigger>
-                <Trigger Property="Orientation" Value="Horizontal">
-                    <Setter Property="Height" Value="7"/>
-                    <Setter Property="MinHeight" Value="7"/>
-                    <Setter Property="Template" Value="{StaticResource ProjectPanel.HorizontalScrollBarTemplate}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="ProjectPanel.ThinScrollBar" TargetType="{x:Type ScrollBar}">
+                <Setter Property="Background" Value="#555555"/>
+                <Setter Property="Foreground" Value="#9A9A9A"/>
+                <Style.Triggers>
+                    <Trigger Property="Orientation" Value="Vertical">
+                        <Setter Property="Width" Value="7"/>
+                        <Setter Property="MinWidth" Value="7"/>
+                        <Setter Property="Template" Value="{StaticResource ProjectPanel.VerticalScrollBarTemplate}"/>
+                    </Trigger>
+                    <Trigger Property="Orientation" Value="Horizontal">
+                        <Setter Property="Height" Value="7"/>
+                        <Setter Property="MinHeight" Value="7"/>
+                        <Setter Property="Template" Value="{StaticResource ProjectPanel.HorizontalScrollBarTemplate}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 
-        <Style x:Key="ProjectPanel.RowKind" TargetType="{x:Type TextBlock}">
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="Foreground" Value="#7DB7FF"/>
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Kind}" Value="field">
-                    <Setter Property="Foreground" Value="#6DE6BE"/>
-                    <Setter Property="Text" Value="fld"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Kind}" Value="modifier">
-                    <Setter Property="Foreground" Value="#90EE90"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Kind}" Value="condition">
-                    <Setter Property="Foreground" Value="#F08080"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Kind}" Value="required">
-                    <Setter Property="Foreground" Value="#FFDAB9"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Kind}" Value="activation">
-                    <Setter Property="Foreground" Value="#DAA520"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Kind}" Value="property">
-                    <Setter Property="Text" Value="⚙"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="ProjectPanel.RowKind" TargetType="{x:Type TextBlock}">
+                <Setter Property="Width" Value="28"/>
+                <Setter Property="Foreground" Value="#7DB7FF"/>
+                <Setter Property="FontSize" Value="10"/>
+                <Setter Property="TextAlignment" Value="Center"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Kind}" Value="field">
+                        <Setter Property="Foreground" Value="#6DE6BE"/>
+                        <Setter Property="Text" Value="fld"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="modifier">
+                        <Setter Property="Foreground" Value="#90EE90"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="condition">
+                        <Setter Property="Foreground" Value="#F08080"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="required">
+                        <Setter Property="Foreground" Value="#FFDAB9"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="activation">
+                        <Setter Property="Foreground" Value="#DAA520"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Kind}" Value="property">
+                        <Setter Property="Text" Value="⚙"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
 
-        <Style x:Key="ProjectPanel.BlockBorder" TargetType="{x:Type Border}">
-            <Setter Property="Background" Value="#696969"/>
-            <Setter Property="BorderBrush" Value="#202020"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="6"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                    <Setter Property="BorderBrush" Value="#0A56C6"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsReference}" Value="True">
-                    <Setter Property="BorderBrush" Value="#663399"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsRuntimeFocused}" Value="True">
-                    <Setter Property="BorderBrush" Value="#32D75F"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsNotExecuted}" Value="True">
-                    <Setter Property="Background" Value="#A03D3D"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+            <Style x:Key="ProjectPanel.BlockBorder" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#696969"/>
+                <Setter Property="BorderBrush" Value="#202020"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="6"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                        <Setter Property="BorderBrush" Value="#0A56C6"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsReference}" Value="True">
+                        <Setter Property="BorderBrush" Value="#663399"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsRuntimeFocused}" Value="True">
+                        <Setter Property="BorderBrush" Value="#32D75F"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsNotExecuted}" Value="True">
+                        <Setter Property="Background" Value="#705858"/>
+                        <Setter Property="BorderBrush" Value="#C45A5A"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -507,142 +509,142 @@
                                         </DockPanel>
                                     </Border>
                                     <Border Grid.Row="1" Background="{Binding Background, RelativeSource={RelativeSource AncestorType=Border}}" CornerRadius="0,0,5,5" ClipToBounds="True">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Border Grid.Row="0" Background="#7E8F9B" Height="24" Visibility="{Binding HasExecutionIndex, Converter={StaticResource BoolToVisibilityConverter}}">
-                                            <StackPanel Orientation="Horizontal" Margin="8,0,0,0">
-                                                <iconPacks:PackIconMaterial Kind="Numeric" Width="14" Height="14" Foreground="#FFFFFF" VerticalAlignment="Center"/>
-                                                <TextBlock Text="{Binding ExecutionIndexText}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" Margin="6,0,0,0"/>
-                                            </StackPanel>
-                                        </Border>
-                                    <ScrollViewer x:Name="FlowBlockContentScrollViewer"
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Border Grid.Row="0" Background="#7E8F9B" Height="24" Visibility="{Binding HasExecutionIndex, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                <StackPanel Orientation="Horizontal" Margin="8,0,0,0">
+                                                    <iconPacks:PackIconMaterial Kind="Numeric" Width="14" Height="14" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding ExecutionIndexText}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                                </StackPanel>
+                                            </Border>
+                                            <ScrollViewer x:Name="FlowBlockContentScrollViewer"
                                                   Grid.Row="1"
                                                   HorizontalScrollBarVisibility="Auto">
-                                        <ScrollViewer.Style>
-                                            <Style TargetType="{x:Type ScrollViewer}">
-                                                <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding HasVerticalOverflow}" Value="True">
-                                                        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ScrollViewer.Style>
-                                        <ScrollViewer.Resources>
-                                            <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ProjectPanel.ThinScrollBar}"/>
-                                            <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource ProjectPanel.ScrollThumb}"/>
-                                        </ScrollViewer.Resources>
-                                        <ItemsControl ItemsSource="{Binding Rows}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate DataType="{x:Type projectPanel:FlowBlockRenderRowViewModel}">
-                                                    <Grid Height="24"
+                                                <ScrollViewer.Style>
+                                                    <Style TargetType="{x:Type ScrollViewer}">
+                                                        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding HasVerticalOverflow}" Value="True">
+                                                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ScrollViewer.Style>
+                                                <ScrollViewer.Resources>
+                                                    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ProjectPanel.ThinScrollBar}"/>
+                                                    <Style TargetType="{x:Type Thumb}" BasedOn="{StaticResource ProjectPanel.ScrollThumb}"/>
+                                                </ScrollViewer.Resources>
+                                                <ItemsControl ItemsSource="{Binding Rows}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate DataType="{x:Type projectPanel:FlowBlockRenderRowViewModel}">
+                                                            <Grid Height="24"
                                                           MinWidth="{Binding ViewportWidth, ElementName=FlowBlockContentScrollViewer}"
                                                           ToolTip="{Binding Tooltip}"
                                                           Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                           MouseLeftButtonDown="FlowBlockRow_MouseLeftButtonDown"
                                                           PreviewMouseRightButtonDown="FlowBlockRow_PreviewMouseRightButtonDown">
-                                                        <Grid.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_CopyValue}"
+                                                                <Grid.ContextMenu>
+                                                                    <ContextMenu>
+                                                                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_CopyValue}"
                                                                           Command="{Binding PlacementTarget.Tag.CopyRowValueCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                                                           CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                                                           Visibility="{Binding PlacementTarget.DataContext.CanCopyValue, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BoolToVisibilityConverter}}">
-                                                                    <MenuItem.Icon>
-                                                                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource HostedControlContextMenuIcon.Primary}"/>
-                                                                    </MenuItem.Icon>
-                                                                </MenuItem>
-                                                            </ContextMenu>
-                                                        </Grid.ContextMenu>
-                                                        <Grid.Style>
-                                                            <Style TargetType="{x:Type Grid}">
-                                                                <Setter Property="Background" Value="Transparent"/>
-                                                                <Setter Property="Cursor" Value="Arrow"/>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding CanNavigate}" Value="True">
-                                                                        <Setter Property="Cursor" Value="Hand"/>
-                                                                    </DataTrigger>
-                                                                    <MultiDataTrigger>
-                                                                        <MultiDataTrigger.Conditions>
-                                                                            <Condition Binding="{Binding CanNavigate}" Value="True"/>
-                                                                            <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
-                                                                        </MultiDataTrigger.Conditions>
-                                                                            <Setter Property="Background" Value="#536472"/>
-                                                                    </MultiDataTrigger>
-                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                            <Setter Property="Background" Value="#2F5268"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Grid.Style>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="34"/>
-                                                            <ColumnDefinition Width="110"/>
-                                                            <ColumnDefinition Width="Auto"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Grid Grid.Column="0" VerticalAlignment="Center">
-                                                            <TextBlock Text="{Binding Label}" Style="{StaticResource ProjectPanel.RowKind}" Visibility="{Binding Kind, Converter={StaticResource FlowBlockRowLabelVisibilityConverter}}"/>
-                                                            <iconPacks:PackIconMaterial Kind="{Binding Kind, Converter={StaticResource FlowBlockRowIconKindConverter}}"
+                                                                            <MenuItem.Icon>
+                                                                                <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource HostedControlContextMenuIcon.Primary}"/>
+                                                                            </MenuItem.Icon>
+                                                                        </MenuItem>
+                                                                    </ContextMenu>
+                                                                </Grid.ContextMenu>
+                                                                <Grid.Style>
+                                                                    <Style TargetType="{x:Type Grid}">
+                                                                        <Setter Property="Background" Value="Transparent"/>
+                                                                        <Setter Property="Cursor" Value="Arrow"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding CanNavigate}" Value="True">
+                                                                                <Setter Property="Cursor" Value="Hand"/>
+                                                                            </DataTrigger>
+                                                                            <MultiDataTrigger>
+                                                                                <MultiDataTrigger.Conditions>
+                                                                                    <Condition Binding="{Binding CanNavigate}" Value="True"/>
+                                                                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                                                                </MultiDataTrigger.Conditions>
+                                                                                <Setter Property="Background" Value="#536472"/>
+                                                                            </MultiDataTrigger>
+                                                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                                <Setter Property="Background" Value="#2F5268"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Grid.Style>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="34"/>
+                                                                    <ColumnDefinition Width="110"/>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <Grid Grid.Column="0" VerticalAlignment="Center">
+                                                                    <TextBlock Text="{Binding Label}" Style="{StaticResource ProjectPanel.RowKind}" Visibility="{Binding Kind, Converter={StaticResource FlowBlockRowLabelVisibilityConverter}}"/>
+                                                                    <iconPacks:PackIconMaterial Kind="{Binding Kind, Converter={StaticResource FlowBlockRowIconKindConverter}}"
                                                                                         Width="13"
                                                                                         Height="13"
                                                                                         HorizontalAlignment="Center"
                                                                                         Foreground="{Binding Kind, Converter={StaticResource FlowBlockRowIconBrushConverter}}"
                                                                                         Visibility="{Binding Kind, Converter={StaticResource FlowBlockRowIconVisibilityConverter}}"/>
-                                                        </Grid>
-                                                        <TextBlock Grid.Column="1" Text="{Binding Label}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                                                        <TextBlock Grid.Column="2" Text="{Binding Value}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </ScrollViewer>
-                                        <Border Grid.Row="2"
+                                                                </Grid>
+                                                                <TextBlock Grid.Column="1" Text="{Binding Label}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Grid.Column="2" Text="{Binding Value}" Foreground="#FFFFFF" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                            <Border Grid.Row="2"
                                                 MinHeight="28"
                                                 Padding="7,4"
                                                 Visibility="{Binding HasNotification, Converter={StaticResource BoolToVisibilityConverter}}">
-                                            <Border.Style>
-                                                <Style TargetType="{x:Type Border}">
-                                                    <Setter Property="Background" Value="#FFF3C66A"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding HasError}" Value="True">
-                                                            <Setter Property="Background" Value="#D98578"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="22"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Grid Grid.Column="0"
+                                                <Border.Style>
+                                                    <Style TargetType="{x:Type Border}">
+                                                        <Setter Property="Background" Value="#FFF3C66A"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding HasError}" Value="True">
+                                                                <Setter Property="Background" Value="#D98578"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="22"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid Grid.Column="0"
                                                       Width="18"
                                                       Height="18"
                                                       VerticalAlignment="Center">
-                                                    <iconPacks:PackIconMaterial Kind="AlertOutline"
+                                                        <iconPacks:PackIconMaterial Kind="AlertOutline"
                                                                                 Width="15"
                                                                                 Height="15"
                                                                                 Foreground="#7C5A00"
                                                                                 Visibility="{Binding HasWarning, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                                                    <iconPacks:PackIconMaterial Kind="AlertCircleOutline"
+                                                        <iconPacks:PackIconMaterial Kind="AlertCircleOutline"
                                                                                 Width="15"
                                                                                 Height="15"
                                                                                 Foreground="#7A1717"
                                                                                 Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                                                </Grid>
-                                                <TextBlock Grid.Column="1"
+                                                    </Grid>
+                                                    <TextBlock Grid.Column="1"
                                                            Text="{Binding NotificationMessage}"
                                                            Foreground="#1F1F1F"
                                                            FontSize="11"
                                                            VerticalAlignment="Center"
                                                            TextWrapping="Wrap"
                                                            TextTrimming="CharacterEllipsis"/>
-                                            </Grid>
-                                        </Border>
-                                    </Grid>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
                                     </Border>
                                 </Grid>
                             </Border>

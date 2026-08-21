@@ -10,7 +10,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns managed object kind metadata.",
+            "Returns compact managed object kind metadata. Property flags: N=nullable, W=writable, S=simple, E=enum, C=collection.",
             new JObject
             {
                 ["typeFullName"] = "string (type full name, assembly-qualified names are supported)",

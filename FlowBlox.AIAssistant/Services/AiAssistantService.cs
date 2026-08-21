@@ -197,11 +197,11 @@ namespace FlowBlox.AIAssistant.Services
             var currentProjectJson = GetCurrentProjectJson();
             var currentProjectJsonHash = ComputeProjectJsonHash(currentProjectJson);
             var shouldAttachProjectJson = !string.Equals(session.LastProjectJsonHash, currentProjectJsonHash, StringComparison.OrdinalIgnoreCase);
-            var projectAttachmentReason = shouldAttachProjectJson
+            var projectAttachmentInformation = shouldAttachProjectJson
                 ? string.IsNullOrWhiteSpace(session.LastProjectJsonHash)
-                    ? ProjectAttachmentReason.InitialTransmission
-                    : ProjectAttachmentReason.ProjectChangedSinceLastConversation
-                : (ProjectAttachmentReason?)null;
+                    ? ProjectAttachmentInformation.InitialTransmission
+                    : ProjectAttachmentInformation.ProjectChangedSinceLastConversation
+                : ProjectAttachmentInformation.ProjectUnchangedSinceLastConversation;
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = AssistantPromptBuilder.BuildSystemPrompt();
             var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions);
@@ -226,7 +226,7 @@ namespace FlowBlox.AIAssistant.Services
                         ? AssistantPromptBuilder.BuildInitialUserPrompt(
                             userPrompt,
                             shouldAttachProjectJson ? currentProjectJson : null,
-                            projectAttachmentReason)
+                            projectAttachmentInformation)
                         : string.Empty;
                     var modelPrompt = toolRound == 1
                         ? initialUserPrompt

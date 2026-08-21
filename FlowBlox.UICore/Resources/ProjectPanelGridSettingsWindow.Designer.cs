@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Project panel settings ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project window settings ähnelt.
         /// </summary>
         public static string Header_Title {
             get {
@@ -102,6 +102,15 @@ namespace FlowBlox.UICore.Resources {
         public static string Label_GridHeight {
             get {
                 return ResourceManager.GetString("Label_GridHeight", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatically increase grid size ähnelt.
+        /// </summary>
+        public static string Label_AutoIncreaseGridSize {
+            get {
+                return ResourceManager.GetString("Label_AutoIncreaseGridSize", resourceCulture);
             }
         }
         
@@ -156,6 +165,15 @@ namespace FlowBlox.UICore.Resources {
         public static string Tooltip_ResetNotifications {
             get {
                 return ResourceManager.GetString("Tooltip_ResetNotifications", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, the project grid grows automatically when flow blocks are placed or moved beyond the current work area. ähnelt.
+        /// </summary>
+        public static string Tooltip_AutoIncreaseGridSize {
+            get {
+                return ResourceManager.GetString("Tooltip_AutoIncreaseGridSize", resourceCulture);
             }
         }
         

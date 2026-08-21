@@ -1,5 +1,6 @@
 using FlowBlox.AIAssistant.Models;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace FlowBlox.AIAssistant.Tools
 {
@@ -9,7 +10,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns type kind metadata for FlowBloxReactiveObject types (FlowBlocks, ManagedObjects, nested ReactiveObjects) and Enums.",
+            "Returns compact type kind metadata for FlowBloxReactiveObject types (FlowBlocks, ManagedObjects, nested ReactiveObjects) and Enums. Property flags: N=nullable, W=writable, S=simple, E=enum, C=collection.",
             new JObject
             {
                 ["typeFullName"] = "string",
