@@ -17,6 +17,7 @@ using FlowBlox.Views;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using WeifenLuo.WinFormsUI.Docking;
@@ -49,7 +50,7 @@ namespace FlowBlox.AppWindow.Contents
             if (_viewModel != null)
             {
                 _viewModel.FlowBlocksChanged += ViewModel_FlowBlocksChanged;
-                _viewModel.ConfigureProjectStateAccess(CaptureCurrentProjectState, RestoreProjectState);
+                _viewModel.ConfigureProjectStateAccess(CaptureCurrentProjectState, RestoreProjectStateAsync);
             }
         }
 
@@ -78,7 +79,7 @@ namespace FlowBlox.AppWindow.Contents
             };
         }
 
-        private bool RestoreProjectState(AIAssistantProjectStateSnapshot snapshot)
+        private async Task<bool> RestoreProjectStateAsync(AIAssistantProjectStateSnapshot snapshot)
         {
             if (snapshot == null || string.IsNullOrWhiteSpace(snapshot.ProjectJson))
                 return false;
@@ -92,7 +93,7 @@ namespace FlowBlox.AppWindow.Contents
                     snapshot.ProjectSpaceVersion,
                     string.IsNullOrWhiteSpace(snapshot.ProjectSpaceEndpointUri) ? null : snapshot.ProjectSpaceEndpointUri);
 
-                return AppWindow.Instance.RestoreProjectStateWithoutConfirmation(restoredProject);
+                return await AppWindow.Instance.RestoreProjectStateWithoutConfirmationAsync(restoredProject);
             }
             catch (Exception ex)
             {

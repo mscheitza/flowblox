@@ -6,7 +6,6 @@ using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Logging;
-using FlowBlox.UICore.Resources;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
@@ -16,7 +15,6 @@ using System.IO;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading;
 using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels
@@ -30,7 +28,7 @@ namespace FlowBlox.UICore.ViewModels
         private string _currentInput = string.Empty;
         private bool _isBusy;
         private Func<AIAssistantProjectStateSnapshot?>? _captureProjectState;
-        private Func<AIAssistantProjectStateSnapshot, bool>? _restoreProjectState;
+        private Func<AIAssistantProjectStateSnapshot, Task<bool>>? _restoreProjectState;
         private AIAssistantProjectStateSnapshot? _stateBeforeLastPrompt;
         private AIAssistantProjectStateSnapshot? _stateAfterLastPrompt;
         private bool _isPromptStateUndone;
@@ -138,8 +136,8 @@ namespace FlowBlox.UICore.ViewModels
             CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
             OpenTranscriptEntryInEditorCommand = new RelayCommand(OpenTranscriptEntryInEditor);
             OpenCommunicationProtocolDirectoryCommand = new RelayCommand(OpenCommunicationProtocolDirectory);
-            UndoProjectStateCommand = new RelayCommand(UndoProjectState, () => CanUndoProjectState);
-            RedoProjectStateCommand = new RelayCommand(RedoProjectState, () => CanRedoProjectState);
+            UndoProjectStateCommand = new RelayCommand(async () => await UndoProjectStateAsync(), () => CanUndoProjectState);
+            RedoProjectStateCommand = new RelayCommand(async () => await RedoProjectStateAsync(), () => CanRedoProjectState);
 
             RefreshProviderConfigurationState();
         }
@@ -246,24 +244,24 @@ namespace FlowBlox.UICore.ViewModels
             return decision == FlowBloxMessageBoxDialogResult.Yes;
         }
 
-        private void UndoProjectState()
+        private async Task UndoProjectStateAsync()
         {
             if (!CanUndoProjectState || _restoreProjectState == null || _stateBeforeLastPrompt == null)
                 return;
 
-            if (_restoreProjectState.Invoke(_stateBeforeLastPrompt))
+            if (await _restoreProjectState.Invoke(_stateBeforeLastPrompt))
             {
                 _isPromptStateUndone = true;
                 RefreshUndoRedoState();
             }
         }
 
-        private void RedoProjectState()
+        private async Task RedoProjectStateAsync()
         {
             if (!CanRedoProjectState || _restoreProjectState == null || _stateAfterLastPrompt == null)
                 return;
 
-            if (_restoreProjectState.Invoke(_stateAfterLastPrompt))
+            if (await _restoreProjectState.Invoke(_stateAfterLastPrompt))
             {
                 _isPromptStateUndone = false;
                 RefreshUndoRedoState();
@@ -503,7 +501,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public void ConfigureProjectStateAccess(
             Func<AIAssistantProjectStateSnapshot?> captureProjectState,
-            Func<AIAssistantProjectStateSnapshot, bool> restoreProjectState)
+            Func<AIAssistantProjectStateSnapshot, Task<bool>> restoreProjectState)
         {
             _captureProjectState = captureProjectState;
             _restoreProjectState = restoreProjectState;

@@ -172,7 +172,10 @@
     <value>Zurück</value>
   </data>
   <data name="Button_Save" xml:space="preserve">
-    <value>Übernehmen</value>
+    <value>Speichern</value>
+  </data>
+  <data name="Button_SaveAndClose" xml:space="preserve">
+    <value>Speichern und schließen</value>
   </data>
   <data name="Button_Execute" xml:space="preserve">
     <value>Ausführen</value>

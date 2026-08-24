@@ -1,6 +1,7 @@
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.Components.Modifier;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Fields;
@@ -21,6 +22,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
     {
         internal const double FixedWidth = 328d;
         private const double HeaderHeight = 26d;
+        private const double NoteHeight = 150d;
         private const double RowHeight = 24d;
         private const double NotificationHeight = 30d;
         internal const double MaxBlockHeight = 300d;
@@ -80,8 +82,10 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         }
 
         public double Width => FixedWidth;
-        public double Height => Math.Min(MaxBlockHeight, DesiredHeight);
-        public bool HasVerticalOverflow => DesiredHeight > MaxBlockHeight;
+        public double Height => IsNote ? NoteHeight : Math.Min(MaxBlockHeight, DesiredHeight);
+        public bool HasVerticalOverflow => !IsNote && DesiredHeight > MaxBlockHeight;
+        public bool IsNote => InternalFlowBlock is NoteFlowBlock;
+        public string NoteText => (InternalFlowBlock as NoteFlowBlock)?.Note ?? string.Empty;
         public string Title => FlowBloxComponentHelper.GetDisplayName(InternalFlowBlock);
         public string Name => InternalFlowBlock.Name;
         public bool HasBreakpoint => InternalFlowBlock.BreakPoint;
@@ -149,10 +153,17 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             void Refresh()
             {
                 Rows.Clear();
-                RenderProperties();
-                RenderFields();
-                RenderRequiredFields();
-                RenderActivationConditions();
+                if (IsNote)
+                {
+                    OnPropertyChanged(nameof(NoteText));
+                }
+                else
+                {
+                    RenderProperties();
+                    RenderFields();
+                    RenderRequiredFields();
+                    RenderActivationConditions();
+                }
 
                 OnPropertyChanged(nameof(Rows));
                 NotifyLayoutChanged();
@@ -332,6 +343,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 OnPropertyChanged(nameof(Name));
                 RefreshRows();
             }
+            else if (IsNote && e.PropertyName == nameof(NoteFlowBlock.Note))
+                OnPropertyChanged(nameof(NoteText));
             else if (e.PropertyName == nameof(BaseFlowBlock.BreakPoint))
                 NotifyRuntimeStateChanged();
             else if (e.PropertyName == nameof(BaseFlowBlock.IsNotExecuted))

@@ -121,7 +121,7 @@ namespace FlowBlox.AppWindow.Contents
             var optionValue = FlowBloxOptions.GetOptionInstance().GetOption("Grid.FrameworkType")?.Value;
             return Enum.TryParse<GridFrameworkType>(optionValue, ignoreCase: true, out var frameworkType)
                 ? frameworkType
-                : GridFrameworkType.NetWinForms;
+                : GridFrameworkType.NetWpf;
         }
 
         private void InitializeWpfGridHost()

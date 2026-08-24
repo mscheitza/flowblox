@@ -110,7 +110,7 @@ namespace FlowBlox.Core.Util
                 new OptionElement("Runtime.ProblemTracing.MaxFieldValueLength", "200", "With this option you can specify the maximum field value length recorded. Set to a low value for performance/memory reasons.", OptionElement.OptionType.Integer),
 
                 new OptionElement("Grid.DefaultSize", "3000,1000", "When a new project is created, the grid size width, height is set to this value by default.", OptionElement.OptionType.Text),
-                new OptionElement("Grid.FrameworkType", "NetWinForms", "Selects the project grid implementation. Possible values: NetWinForms, NetWpf.", OptionElement.OptionType.Text, "Grid: Framework Type"),
+                new OptionElement("Grid.FrameworkType", "NetWpf", "Selects the project grid implementation. Possible values: NetWinForms, NetWpf.", OptionElement.OptionType.Text, "Grid: Framework Type"),
                 new OptionElement("Grid.ResetNotificationsOnRuntimeFinish", "true", "Controls whether flow-block notifications (warning/error) are reset when runtime execution finishes.", OptionElement.OptionType.Boolean),
                 new OptionElement("MainPanel.DockSettings", "", "Stores the layout and visibility settings of all dockable panels within the main application window. This includes the default docking positions, size dimensions (width, height), and display states (shown/hidden) of each panel.", OptionElement.OptionType.Text),
 

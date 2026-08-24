@@ -172,7 +172,10 @@
   <value>Back</value>
 </data>
   <data name="Button_Save" xml:space="preserve">
-  <value>Apply</value>
+  <value>Save</value>
+</data>
+  <data name="Button_SaveAndClose" xml:space="preserve">
+  <value>Save and close</value>
 </data>
   <data name="Button_Execute" xml:space="preserve">
   <value>Execute</value>

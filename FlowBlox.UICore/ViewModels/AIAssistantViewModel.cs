@@ -88,7 +88,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public void ConfigureProjectStateAccess(
             Func<AIAssistantProjectStateSnapshot?> captureProjectState,
-            Func<AIAssistantProjectStateSnapshot, bool> restoreProjectState)
+            Func<AIAssistantProjectStateSnapshot, Task<bool>> restoreProjectState)
         {
             ChatViewModel.ConfigureProjectStateAccess(captureProjectState, restoreProjectState);
             HistoryViewModel.ConfigureProjectStateAccess(captureProjectState);

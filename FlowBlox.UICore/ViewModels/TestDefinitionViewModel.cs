@@ -37,6 +37,7 @@ namespace FlowBlox.UICore.ViewModels
         private Window _ownerWindow;
         private bool _hasExplicitFlowBlockContext;
         private bool _hideLastLayerNeighbours;
+        private bool _suppressDirtyTracking;
 
         public TestDefinitionViewModel()
         {
@@ -64,27 +65,47 @@ namespace FlowBlox.UICore.ViewModels
             testDefinition.PropertyChanged += _testDefinition_PropertyChanged;
             foreach (var entry in testDefinition.Entries)
             {
-                entry.PropertyChanged += (s, e) => IsDirty = true;
+                entry.PropertyChanged += Entry_PropertyChanged;
                 foreach (var config in entry.FlowBloxTestConfigurations)
                 {
-                    config.PropertyChanged += (s, e) =>
-                    {
-                        if (e.PropertyName == nameof(FlowBloxFieldTestConfiguration.SelectionMode))
-                        {
-                            if (config.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue ||
-                                config.SelectionMode == FlowBloxTestConfigurationSelectionMode.First ||
-                                config.SelectionMode == FlowBloxTestConfigurationSelectionMode.Index ||
-                                config.SelectionMode == FlowBloxTestConfigurationSelectionMode.Last)
-                            {
-                                entry.Execute = true;
-                            }
-                        }
-
-                        IsDirty = true;
-                    };
+                    config.PropertyChanged += (s, e) => Configuration_PropertyChanged(entry, config, e);
                 }
             }
         }
+
+        private void Entry_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (IsUiOnlyProperty(e.PropertyName))
+                return;
+
+            MarkDirty($"Entry property changed: {e.PropertyName}");
+        }
+
+        private void Configuration_PropertyChanged(FlowBlockTestDataset entry, FlowBloxFieldTestConfiguration config, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(FlowBloxFieldTestConfiguration.SelectionMode))
+            {
+                if (config.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue ||
+                    config.SelectionMode == FlowBloxTestConfigurationSelectionMode.First ||
+                    config.SelectionMode == FlowBloxTestConfigurationSelectionMode.Index ||
+                    config.SelectionMode == FlowBloxTestConfigurationSelectionMode.Last)
+                {
+                    entry.Execute = true;
+                }
+            }
+
+            if (IsUiOnlyProperty(e.PropertyName))
+                return;
+
+            MarkDirty($"Configuration property changed: {e.PropertyName}");
+        }
+
+        private static bool IsUiOnlyProperty(string propertyName)
+            => propertyName == nameof(FlowBlockTestDataset.UIRequiredForExecution) ||
+               propertyName == nameof(FlowBlockTestDataset.UIIsTargetFlowBlock) ||
+               propertyName == nameof(FlowBlockTestDataset.UIIsTargetNeighbour) ||
+               propertyName == nameof(FlowBlockTestDataset.UIIsVisibleInCurrentContext) ||
+               propertyName == nameof(FlowBloxFieldTestConfiguration.UIRequiredForExecution);
 
         private void LoadCurrentCondfigurations(FlowBloxTestDefinition testDefinition, BaseFlowBlock currentFlowBlock)
         {
@@ -126,7 +147,7 @@ namespace FlowBlox.UICore.ViewModels
 
             SelectedConfiguration.ExpectationConditions.Add(ec);
             SelectedExpectation = ec;
-            IsDirty = true;
+            MarkDirty("Expectation added");
         }
 
         private void DeleteExpectation()
@@ -136,7 +157,7 @@ namespace FlowBlox.UICore.ViewModels
 
             SelectedConfiguration.ExpectationConditions.Remove(SelectedExpectation);
             SelectedExpectation = null;
-            IsDirty = true;
+            MarkDirty("Expectation deleted");
         }
 
         public List<ExpectationConditionTarget> ExpectationTargets => Enum.GetValues(typeof(ExpectationConditionTarget))
@@ -163,7 +184,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void _testDefinition_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            IsDirty = true;
+            MarkDirty($"Test definition property changed: {e.PropertyName}");
             if (e.PropertyName == nameof(TestDefinition.Name))
             {
                 OnPropertyChanged(nameof(CanApply));
@@ -180,6 +201,7 @@ namespace FlowBlox.UICore.ViewModels
                     if (_testDefinition?.Entries != null)
                         _testDefinition.Entries.CollectionChanged -= Entries_CollectionChanged;
 
+                    _suppressDirtyTracking = true;
                     _testDefinition = value;
                     _testDefinition.RecalculateRequiredFlagsAcrossDefinition();
                     SubscribeToPropertyChangeEvents(_testDefinition);
@@ -188,6 +210,7 @@ namespace FlowBlox.UICore.ViewModels
                         _testDefinition.Entries.CollectionChanged += Entries_CollectionChanged;
 
                     RefreshSortedEntries();
+                    _suppressDirtyTracking = false;
                     OnPropertyChanged(nameof(TestDefinition));
                     OnPropertyChanged(nameof(CanExecute));
                 }
@@ -197,6 +220,7 @@ namespace FlowBlox.UICore.ViewModels
         private void Entries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             RefreshSortedEntries();
+            MarkDirty("Test dataset collection changed");
         }
 
         private void RefreshSortedEntries()
@@ -325,6 +349,14 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand OpenInEditorCommand { get; }
         public RelayCommand AddExpectationCommand { get; }
         public RelayCommand DeleteExpectationCommand { get; }
+
+        public void AcceptChanges(string reason)
+        {
+            if (IsDirty)
+                FlowBloxLogManager.Instance.GetLogger().Info($"TestDefinitionView dirty reset: {reason}");
+
+            IsDirty = false;
+        }
 
         private int _selectedResultTabIndex;
         public int SelectedResultTabIndex
@@ -600,6 +632,20 @@ namespace FlowBlox.UICore.ViewModels
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void MarkDirty(string reason)
+        {
+            if (_suppressDirtyTracking)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Info($"TestDefinitionView dirty suppressed: {reason}");
+                return;
+            }
+
+            if (!IsDirty)
+                FlowBloxLogManager.Instance.GetLogger().Info($"TestDefinitionView dirty: {reason}");
+
+            IsDirty = true;
         }
     }
 }

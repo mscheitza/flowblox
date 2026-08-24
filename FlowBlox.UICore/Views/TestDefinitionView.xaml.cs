@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Additions;
+using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.UICore.Enums;
@@ -37,6 +37,7 @@ namespace FlowBlox.UICore.Views
             viewModel.HasExplicitFlowBlockContext = currentFlowBlock != null;
             viewModel.TestDefinition = testDefinition;
             viewModel.CurrentFlowBlock = effectiveCurrentFlowBlock;
+            viewModel.AcceptChanges("Test definition view initialized");
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
             Loaded += TestDefinitionView_Loaded;
         }

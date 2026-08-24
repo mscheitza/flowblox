@@ -68,8 +68,16 @@ namespace FlowBlox.UICore.Views
             if (IsFlowBlockRowInteraction(e.OriginalSource))
                 return;
 
+            if (IsSelectableTextInteraction(e.OriginalSource))
+                return;
+
+            var isHeaderInteraction = IsFlowBlockHeaderInteraction(e.OriginalSource);
+
             if (ViewModel.IsConnectionMode)
             {
+                if (!ViewModel.CanStartConnectionFrom(node))
+                    return;
+
                 _connectionStartNode = node;
                 _isConnectingNodes = true;
                 var current = e.GetPosition(ProjectCanvas);
@@ -92,6 +100,12 @@ namespace FlowBlox.UICore.Views
             var toggle = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
             var extend = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
             ViewModel.SelectNode(node, toggle, extend);
+
+            if (!isHeaderInteraction)
+            {
+                e.Handled = true;
+                return;
+            }
 
             _draggedNode = node;
             _dragStart = e.GetPosition(this);
@@ -325,7 +339,7 @@ namespace FlowBlox.UICore.Views
 
             var startCenter = GetNodeCenter(startNode);
             var endNode = ViewModel.GetNodeAt(rawEnd);
-            var end = endNode != null && !ReferenceEquals(startNode, endNode)
+            var end = endNode != null && ViewModel.CanPreviewConnection(startNode, endNode)
                 ? ArrowGeometryHelper.GetEdgePoint(GetNodeBounds(endNode), GetNodeCenter(endNode), startCenter)
                 : rawEnd;
             var start = ArrowGeometryHelper.GetEdgePoint(GetNodeBounds(startNode), startCenter, end);
@@ -393,6 +407,38 @@ namespace FlowBlox.UICore.Views
             while (current != null)
             {
                 if (current is FrameworkElement { DataContext: FlowBlockRenderRowViewModel })
+                    return true;
+
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            return false;
+        }
+
+        private static bool IsFlowBlockHeaderInteraction(object originalSource)
+        {
+            if (originalSource is not DependencyObject current)
+                return false;
+
+            while (current != null)
+            {
+                if (current is FrameworkElement { Tag: "FlowBlockHeader" })
+                    return true;
+
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            return false;
+        }
+
+        private static bool IsSelectableTextInteraction(object originalSource)
+        {
+            if (originalSource is not DependencyObject current)
+                return false;
+
+            while (current != null)
+            {
+                if (current is TextBox)
                     return true;
 
                 current = VisualTreeHelper.GetParent(current);

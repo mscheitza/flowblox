@@ -48,6 +48,8 @@ namespace FlowBlox.AppWindow
         private const string UpdateStatusNotificationId = "app.update.status";
         private const string CreatingProjectOverlayText = "Creating project...";
         private const string LoadingProjectOverlayText = "Loading project...";
+        private const string RestoringProjectStateOverlayText = "Restoring state...";
+        private static readonly TimeSpan BeforeProjectRestoreUiDelay = TimeSpan.FromMilliseconds(50);
         private static readonly TimeSpan AfterProjectActivationUiDelay = TimeSpan.FromSeconds(2.5f);
         private static readonly TimeSpan UpdateNotificationLifetime = TimeSpan.FromDays(14);
         private static readonly TimeSpan UpdateStatusNotificationLifetime = TimeSpan.FromSeconds(15);
@@ -825,10 +827,15 @@ namespace FlowBlox.AppWindow
             this.UpdateUI();
         }
 
-        internal bool RestoreProjectStateWithoutConfirmation(FlowBloxProject project)
+        internal async Task<bool> RestoreProjectStateWithoutConfirmationAsync(FlowBloxProject project)
         {
             if (project == null)
                 return false;
+
+            _isProjectLoading = true;
+            UpdateUI();
+            await Task.Delay(BeforeProjectRestoreUiDelay);
+            ShowProjectLoadingOverlay(RestoringProjectStateOverlayText);
 
             try
             {
@@ -841,6 +848,7 @@ namespace FlowBlox.AppWindow
 
                 UpdateUI_ProjectName();
                 UpdateUI();
+                await Task.Delay(AfterProjectActivationUiDelay);
                 return true;
             }
             catch (Exception ex)
@@ -848,6 +856,12 @@ namespace FlowBlox.AppWindow
                 var logger = FlowBloxLogManager.Instance.GetLogger();
                 logger.Exception(ex);
                 return false;
+            }
+            finally
+            {
+                _isProjectLoading = false;
+                HideProjectLoadingOverlay();
+                UpdateUI();
             }
         }
 

@@ -79,11 +79,20 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
         public static string Button_Save {
             get {
                 return ResourceManager.GetString("Button_Save", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save and close ähnelt.
+        /// </summary>
+        public static string Button_SaveAndClose {
+            get {
+                return ResourceManager.GetString("Button_SaveAndClose", resourceCulture);
             }
         }
         

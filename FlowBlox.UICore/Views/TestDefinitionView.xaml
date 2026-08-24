@@ -1,4 +1,4 @@
-﻿<mah:MetroWindow  
+<mah:MetroWindow  
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     x:Class="FlowBlox.UICore.Views.TestDefinitionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -461,7 +461,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    
+
                     <!-- SelectedConfiguration -->
                     <StackPanel Grid.Row="0"
                                 Orientation="Horizontal" 
@@ -519,7 +519,7 @@
                       CanUserAddRows="False"
                       CanUserDeleteRows="True"
                       IsReadOnly="False">
-                        
+
                         <!-- ExpectationTarget -->
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="{x:Static resources:TestDefinitionView.Column_ExpectationTarget}" Width="Auto" MinWidth="200">
@@ -703,7 +703,7 @@
             <Button IsDefault="True" Click="OkButton_Click" IsEnabled="{Binding CanApply}" Margin="5">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconModern Kind="Save" Width="16" Height="16" Margin="0,0,5,0"/>
-                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_Save}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_SaveAndClose}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
             <Button Command="{Binding ExecuteTestCommand}" IsEnabled="{Binding CanExecute}" Margin="5">

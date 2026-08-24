@@ -239,6 +239,10 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public bool CanExecuteRuntime => HasProject() && (!IsRuntimeActive || IsRuntimePaused);
         public bool CanPauseRuntime => HasProject() && IsRuntimeActive && !IsRuntimePaused;
         public bool CanStopRuntime => HasProject() && IsRuntimeActive;
+        public bool CanStartConnectionFrom(FlowBlockNodeViewModel node)
+            => node?.InternalFlowBlock is not null and not NoteFlowBlock;
+        public bool CanPreviewConnection(FlowBlockNodeViewModel startNode, FlowBlockNodeViewModel endNode)
+            => CanConnect(startNode, endNode);
 
         public void SelectNode(FlowBlockNodeViewModel node, bool toggle, bool extend)
         {
@@ -948,6 +952,9 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             var startFlowBlock = startNode.InternalFlowBlock;
             var endFlowBlock = endNode.InternalFlowBlock;
             if (startFlowBlock == null || endFlowBlock == null)
+                return false;
+
+            if (startFlowBlock is NoteFlowBlock || endFlowBlock is NoteFlowBlock)
                 return false;
 
             if (endFlowBlock.GetInputCardinality() == FlowBlockCardinalities.None)

@@ -26,13 +26,18 @@ namespace FlowBlox.UICore.Resolver
                 .GetCustomAttributes<FlowBloxUIGroupAttribute>(true)
                 .OrderBy(x => x.Order)
                 .ToList();
+            var hiddenGroupNames = groupAttributes
+                .Where(x => x.Hide)
+                .Select(x => x.Name)
+                .ToHashSet();
 
             var groupedProperties = target.GetType().GetProperties()
                 .Where(property => property.GetCustomAttribute<DisplayAttribute>() != null)
                 .GroupBy(property => GetGroupName(property))
+                .Where(propertyGroup => !hiddenGroupNames.Contains(propertyGroup.Key))
                 .OrderBy(propertyGroup =>
                 {
-                    var groupAttribute = groupAttributes.FirstOrDefault(x => x.Name == propertyGroup.Key);
+                    var groupAttribute = groupAttributes.FirstOrDefault(x => x.Name == propertyGroup.Key && !x.Hide);
                     return groupAttribute == null ? 0 : groupAttributes.IndexOf(groupAttribute);
                 });
 

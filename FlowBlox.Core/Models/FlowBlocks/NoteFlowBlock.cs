@@ -9,6 +9,10 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks
 {
     [Display(Name = "NoteFlowBlock_DisplayName", Description = "NoteFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxUIGroup("BaseFlowBlock_Groups_Dependencies", hide: true)]
+    [FlowBloxUIGroup("BaseFlowBlock_Groups_Input", hide: true)]
+    [FlowBloxUIGroup("Global_Groups_Requirements", hide: true)]
+    [FlowBloxUIGroup("BaseFlowBlock_Groups_Tests", hide: true)]
     public class NoteFlowBlock : BaseFlowBlock
     {
         [Display(Name = "NoteFlowBlock_Note", ResourceType = typeof(FlowBloxTexts), Order = 0)]

@@ -9,16 +9,25 @@
 
         public ControlAlignment ControlAlignment { get; set; }
 
+        public bool Hide { get; set; }
+
         public FlowBloxUIGroupAttribute()
         {
 
         }
 
-        public FlowBloxUIGroupAttribute(string name, int order, ControlAlignment controlAlignment = ControlAlignment.Fill)
+        public FlowBloxUIGroupAttribute(string name, bool hide = false)
+        {
+            Name = name;
+            Hide = hide;
+        }
+
+        public FlowBloxUIGroupAttribute(string name, int order, ControlAlignment controlAlignment = ControlAlignment.Fill, bool hide = false)
         {
             Name = name;
             Order = order;
             ControlAlignment = controlAlignment;
+            Hide = hide;
         }
     }
 
