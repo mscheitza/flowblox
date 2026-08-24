@@ -71,6 +71,33 @@ function Read-AllTextSafe([string]$path) {
   }
 }
 
+function Load-ResxXml([string]$path) {
+  $xml = New-Object System.Xml.XmlDocument
+  $xml.Load($path)
+  return $xml
+}
+
+function Save-ResxXml([xml]$xml, [string]$path) {
+  $settings = New-Object System.Xml.XmlWriterSettings
+  $settings.Indent = $true
+  $settings.Encoding = New-Object System.Text.UTF8Encoding($true)
+  $settings.NewLineHandling = [System.Xml.NewLineHandling]::Replace
+
+  $writer = [System.Xml.XmlWriter]::Create($path, $settings)
+  try {
+    $xml.Save($writer)
+  } finally {
+    $writer.Close()
+  }
+}
+
+function Select-XmlNodes($xml, [string]$xpath) {
+  $nodes = $xml.SelectNodes($xpath)
+  $result = New-Object System.Collections.Generic.List[object]
+  for ($i = 0; $i -lt $nodes.Count; $i++) { $result.Add($nodes.Item($i)) | Out-Null }
+  return $result
+}
+
 function Normalize-FullPath([string]$p) {
   if (-not $p) { return $null }
   return ([IO.Path]::GetFullPath($p).TrimEnd('\','/'))
@@ -127,8 +154,8 @@ function Is-TextResxDataNode($node) {
 }
 
 function Extract-TextResxKeys([string]$resxPath) {
-  [xml]$xml = Get-Content -Path $resxPath -Raw
-  $nodes = @($xml.SelectNodes("//data[@name]"))
+  $xml = Load-ResxXml $resxPath
+  $nodes = Select-XmlNodes -xml $xml -xpath "//data[@name]"
   foreach ($n in $nodes) {
     if (Is-TextResxDataNode $n) {
       $name = $n.GetAttribute("name")
@@ -155,8 +182,11 @@ function Build-SplitRegex([string]$key, [int]$maxGap) {
   $parts = $key -split "_"
   if ($parts.Count -lt 2) { return $null }
   $gap = ".{0,$maxGap}"
-  $quotedParts = $parts | ForEach-Object { '"' + (Escape-Regex $_) + '"' }
-  return ($quotedParts -join $gap)
+  $partPatterns = $parts | ForEach-Object {
+    $p = Escape-Regex $_
+    '(?:"' + $p + '"|''' + $p + '''|nameof\s*\(\s*' + $p + '\s*\))'
+  }
+  return ($partPatterns -join $gap)
 }
 
 function ContainsInvariant([string]$haystack, [string]$needle) {
@@ -195,8 +225,8 @@ function Is-KeyUsedInTextWithMatchers($m, [string]$text) {
   if ($m.RxProp.IsMatch($text)) { return $true }
   if ($null -ne $m.RxSplit -and $m.RxSplit.IsMatch($text)) { return $true }
 
-  $cm = [regex]::Match($text, '(?m)^\s*(public|internal|private|protected)?\s*(partial\s+)?class\s+(?<n>[A-Za-z_][A-Za-z0-9_]*)\b')
-  if ($cm.Success) {
+  $classMatches = [regex]::Matches($text, '(?m)^\s*(public|internal|private|protected)?\s*(partial\s+)?class\s+(?<n>[A-Za-z_][A-Za-z0-9_]*)\b')
+  foreach ($cm in $classMatches) {
     $className = $cm.Groups['n'].Value
     if ($className) {
       $prefix = $className + "_"
@@ -435,8 +465,8 @@ foreach ($k in $keysToCheck) {
 }
 
 foreach ($rf in $resxFiles) {
-  [xml]$xml = Get-Content -Path $rf.FullName -Raw
-  $dataNodes = @($xml.SelectNodes("//data[@name]"))
+  $xml = Load-ResxXml $rf.FullName
+  $dataNodes = Select-XmlNodes -xml $xml -xpath "//data[@name]"
 
   $removed = 0
   foreach ($n in $dataNodes) {
@@ -453,14 +483,7 @@ foreach ($rf in $resxFiles) {
     if ($Backup) {
       Copy-Item -Path $rf.FullName -Destination ($rf.FullName + ".bak") -Force
     }
-    $settings = New-Object System.Xml.XmlWriterSettings
-	$settings.Indent = $true
-	$settings.Encoding = New-Object System.Text.UTF8Encoding($true)
-	$settings.NewLineHandling = [System.Xml.NewLineHandling]::Entitize
-
-	$writer = [System.Xml.XmlWriter]::Create($rf.FullName, $settings)
-	$xml.Save($writer)
-	$writer.Close()
+    Save-ResxXml -xml $xml -path $rf.FullName
     Write-Host "Updated $($rf.Name): removed $removed unused TEXT keys"
   }
 }
