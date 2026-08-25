@@ -221,6 +221,24 @@ namespace FlowBlox.UICore.Resources {
                 return ResourceManager.GetString("Tooltip_OpenCommunicationProtocolDirectory", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset token usage counter ähnelt.
+        /// </summary>
+        public static string Tooltip_ResetTokenUsage {
+            get {
+                return ResourceManager.GetString("Tooltip_ResetTokenUsage", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Estimated token usage: {0:N0} ähnelt.
+        /// </summary>
+        public static string TokenMonitor_Format {
+            get {
+                return ResourceManager.GetString("TokenMonitor_Format", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Redo last AI project state change ähnelt.

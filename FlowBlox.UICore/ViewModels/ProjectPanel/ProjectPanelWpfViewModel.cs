@@ -45,6 +45,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private FlowBlockNodeViewModel _selectedNode;
         private FlowBlockArrowViewModel _selectedArrow;
         private bool _isConnectionMode;
+        private bool _isTemporaryConnectionMode;
         private bool _isRuntimeActive;
         private bool _isRuntimePaused;
 
@@ -169,17 +170,18 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
         public bool IsConnectionMode
         {
-            get => _isConnectionMode;
+            get => _isConnectionMode || _isTemporaryConnectionMode;
             set
             {
-                if (_isConnectionMode == value)
+                var previousValue = IsConnectionMode;
+                if (_isConnectionMode == value && (!_isTemporaryConnectionMode || value))
                     return;
 
                 _isConnectionMode = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(IsSelectionMode));
-                OnPropertyChanged(nameof(ModeText));
-                InvalidateSelectionCommands();
+                if (!value)
+                    _isTemporaryConnectionMode = false;
+
+                NotifyConnectionModeChanged(previousValue);
             }
         }
 
@@ -244,6 +246,17 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public bool CanPreviewConnection(FlowBlockNodeViewModel startNode, FlowBlockNodeViewModel endNode)
             => CanConnect(startNode, endNode);
 
+        public void SetTemporaryConnectionMode(bool enabled)
+        {
+            var previousValue = IsConnectionMode;
+            var temporaryValue = enabled && !_isConnectionMode;
+            if (_isTemporaryConnectionMode == temporaryValue)
+                return;
+
+            _isTemporaryConnectionMode = temporaryValue;
+            NotifyConnectionModeChanged(previousValue);
+        }
+
         public void SelectNode(FlowBlockNodeViewModel node, bool toggle, bool extend)
         {
             if (node == null)
@@ -260,6 +273,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             node.IsSelected = toggle ? !node.IsSelected : true;
             SelectedNode = node.IsSelected ? node : SelectedNodes.LastOrDefault();
             MarkReferences();
+            PublishSelectedFlowBlocks();
             InvalidateSelectionCommands();
         }
 
@@ -274,6 +288,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             SelectedNode = null;
             SelectedArrow = arrow;
             MarkReferences();
+            PublishSelectedFlowBlocks();
             InvalidateSelectionCommands();
         }
 
@@ -296,6 +311,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
             SelectedNode = lastSelected;
             MarkReferences();
+            PublishSelectedFlowBlocks();
             InvalidateSelectionCommands();
         }
 
@@ -589,6 +605,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             Nodes.Remove(node);
             if (ReferenceEquals(SelectedNode, node))
                 SelectedNode = SelectedNodes.LastOrDefault();
+            PublishSelectedFlowBlocks();
             OnPropertyChanged(nameof(HasNodes));
         }
 
@@ -673,6 +690,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 node.IsSelected = true;
             SelectedNode = Nodes.LastOrDefault();
             MarkReferences();
+            PublishSelectedFlowBlocks();
             InvalidateSelectionCommands();
         }
 
@@ -695,6 +713,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             }
 
             MarkReferences();
+            PublishSelectedFlowBlocks();
             InvalidateSelectionCommands();
         }
 
@@ -1039,6 +1058,18 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
         private bool CanEditGrid() => HasProject() && !IsRuntimeActive;
 
+        private void NotifyConnectionModeChanged(bool previousValue)
+        {
+            if (previousValue == IsConnectionMode)
+                return;
+
+            OnPropertyChanged(nameof(IsConnectionMode));
+            OnPropertyChanged(nameof(IsSelectionMode));
+            OnPropertyChanged(nameof(ModeText));
+            OnPropertyChanged(nameof(CanStartMarqueeSelection));
+            InvalidateSelectionCommands();
+        }
+
         private bool? ShowDialog(Window window)
             => _dialogService?.ShowWPFDialog(window) ?? window.ShowDialog();
 
@@ -1084,7 +1115,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             Nodes.Clear();
             Arrows.Clear();
             SelectedNode = null;
+            PublishSelectedFlowBlocks();
         }
+
+        private void PublishSelectedFlowBlocks()
+            => _componentProvider?.SetSelectedFlowBlocks(SelectedNodes.Select(x => x.InternalFlowBlock));
 
         private void UnsubscribeRegistry()
         {

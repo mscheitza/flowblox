@@ -5,6 +5,7 @@ using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Util.Json;
 using Newtonsoft.Json;
 
 namespace FlowBlox.AIAssistant.Builder
@@ -43,6 +44,7 @@ namespace FlowBlox.AIAssistant.Builder
                 .Replace("{{ROOT_CATEGORIES}}", string.Join(", ", rootCategories), StringComparison.Ordinal)
                 .Replace("{{CENTRAL_GUIDELINES}}", BuildCentralGuidelinesText(), StringComparison.Ordinal)
                 .Replace("{{EXPLANATION_MANIFEST}}", BuildExplanationManifestText(), StringComparison.Ordinal)
+                .Replace("{{COMPACT_TYPE_ALIASES}}", AiAssistantTypeAliasHelper.AliasSummary, StringComparison.Ordinal)
                 .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal);
         }
 
@@ -123,6 +125,8 @@ namespace FlowBlox.AIAssistant.Builder
                     "The current project JSON is attached because the project changed since the last conversation state was saved. Treat it as the latest project state.",
                 ProjectAttachmentInformation.ProjectUnchangedSinceLastConversation =>
                     "The current project JSON is omitted because the project has not changed since the last conversation state was saved. Continue using the latest project state already available in this conversation.",
+                ProjectAttachmentInformation.ProjectJsonDisabled =>
+                    "The current project JSON is omitted because automatic project JSON attachment is disabled. Request the project JSON with the available project tool only if it is needed for the current task.",
                 _ => string.Empty
             };
         }

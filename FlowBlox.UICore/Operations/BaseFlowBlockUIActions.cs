@@ -15,14 +15,19 @@ namespace FlowBlox.UICore.Operations
     public class BaseFlowBlockUIActions : ComponentUIActions<BaseFlowBlock>
     {
         private FlowBloxRegistry _registry;
+        private readonly IRuntimeStateService _runtimeStateService;
 
         public BaseFlowBlockUIActions(BaseFlowBlock component) : base(component)
         {
             _registry = FlowBloxRegistryProvider.GetRegistry();
+            _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
         }
 
         public bool CanGenerate()
         {
+            if (_runtimeStateService?.IsRuntimeActive == true)
+                return false;
+
             if (!Component.TestDefinitions.Any()) 
                 return false;
 
@@ -37,6 +42,9 @@ namespace FlowBlox.UICore.Operations
         [Display(Name = "BaseResultFlowBlockUIActions_Generate", ResourceType = typeof(FlowBloxTexts))]
         public void Generate()
         {
+            if (!CanGenerate())
+                return;
+
             var generationView = new GenerationView(_registry.Reload(Component));
             var dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
             dialogService.ShowWPFDialog(generationView);

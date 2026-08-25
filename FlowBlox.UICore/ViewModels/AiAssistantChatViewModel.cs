@@ -11,6 +11,7 @@ using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Collections.ObjectModel;
@@ -36,6 +37,7 @@ namespace FlowBlox.UICore.ViewModels
         private AiAssistantHistoryDocument? _currentHistory;
         private string? _currentHistoryFilePath;
         private bool _canGoBackToHistory;
+        private int _estimatedUsedTokens;
 
         public ObservableCollection<AssistantTranscriptLine> Transcript { get; } = new ObservableCollection<AssistantTranscriptLine>();
         public RelayCommand NewHistoryCommand { get; }
@@ -47,6 +49,7 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand OpenCommunicationProtocolDirectoryCommand { get; }
         public RelayCommand UndoProjectStateCommand { get; }
         public RelayCommand RedoProjectStateCommand { get; }
+        public RelayCommand ResetTokenUsageCommand { get; }
 
         public string CurrentInput
         {
@@ -97,6 +100,29 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public bool ShowProviderConfigurationWarning => !_isProviderConfigured;
+        public bool ShowIntroHeader => Transcript.Count == 0;
+        public int EstimatedUsedTokens
+        {
+            get => _estimatedUsedTokens;
+            private set
+            {
+                if (_estimatedUsedTokens == value)
+                    return;
+
+                _estimatedUsedTokens = Math.Max(0, value);
+                OnPropertyChanged(nameof(EstimatedUsedTokens));
+                OnPropertyChanged(nameof(HasEstimatedUsedTokens));
+                OnPropertyChanged(nameof(EstimatedUsedTokensText));
+                ResetTokenUsageCommand?.Invalidate();
+            }
+        }
+
+        public bool HasEstimatedUsedTokens => EstimatedUsedTokens > 0;
+        public string EstimatedUsedTokensText => string.Format(
+            CultureInfo.CurrentCulture,
+            FlowBloxResourceUtil.GetLocalizedString("TokenMonitor_Format", typeof(Resources.AiAssistantChatView)),
+            EstimatedUsedTokens);
+
         public bool CanUndoProjectState =>
             !IsBusy &&
             _stateBeforeLastPrompt != null &&
@@ -128,6 +154,7 @@ namespace FlowBlox.UICore.ViewModels
                 FlowBloxLogManager.Instance.GetLogger());
             _service.FlowBlocksChanged += Service_FlowBlocksChanged;
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
+            _service.EstimatedUsedTokensChanged += Service_EstimatedUsedTokensChanged;
 
             NewHistoryCommand = new RelayCommand(() => NewHistoryRequested?.Invoke(this, EventArgs.Empty), () => !IsBusy);
             BackToHistoryCommand = new RelayCommand(RequestHistoryOverview, () => CanGoBackToHistory);
@@ -138,6 +165,7 @@ namespace FlowBlox.UICore.ViewModels
             OpenCommunicationProtocolDirectoryCommand = new RelayCommand(OpenCommunicationProtocolDirectory);
             UndoProjectStateCommand = new RelayCommand(async () => await UndoProjectStateAsync(), () => CanUndoProjectState);
             RedoProjectStateCommand = new RelayCommand(async () => await RedoProjectStateAsync(), () => CanRedoProjectState);
+            ResetTokenUsageCommand = new RelayCommand(ResetTokenUsage, () => HasEstimatedUsedTokens);
 
             RefreshProviderConfigurationState();
         }
@@ -278,6 +306,23 @@ namespace FlowBlox.UICore.ViewModels
             AddTranscriptLine(line);
         }
 
+        private void Service_EstimatedUsedTokensChanged(object? sender, int estimatedUsedTokens)
+        {
+            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
+            {
+                _uiContext.Post(_ => EstimatedUsedTokens = estimatedUsedTokens, null);
+                return;
+            }
+
+            EstimatedUsedTokens = estimatedUsedTokens;
+        }
+
+        private void ResetTokenUsage()
+        {
+            _service.ResetEstimatedUsedTokens();
+            SaveCurrentHistory();
+        }
+
         private bool ConfirmToolExecutionRequest(ToolRequest request)
         {
             if (request == null || !string.Equals(request.ToolName, "ExecuteInputFileCommand", StringComparison.OrdinalIgnoreCase))
@@ -370,6 +415,7 @@ namespace FlowBlox.UICore.ViewModels
             var snapshot = _captureProjectState?.Invoke();
             _service.ResetSession();
             Transcript.Clear();
+            NotifyTranscriptStateChanged();
             _currentHistory = new AiAssistantHistoryDocument
             {
                 HistoryGuid = Guid.NewGuid(),
@@ -398,6 +444,8 @@ namespace FlowBlox.UICore.ViewModels
                 Transcript.Add(line);
 
             _service.RestoreSession(history);
+            EstimatedUsedTokens = _service.EstimatedUsedTokens;
+            NotifyTranscriptStateChanged();
             CurrentInput = string.Empty;
         }
 
@@ -474,11 +522,16 @@ namespace FlowBlox.UICore.ViewModels
 
             if (_uiContext != null && _uiContext != SynchronizationContext.Current)
             {
-                _uiContext.Post(_ => Transcript.Add(line), null);
+                _uiContext.Post(_ =>
+                {
+                    Transcript.Add(line);
+                    NotifyTranscriptStateChanged();
+                }, null);
                 return;
             }
 
             Transcript.Add(line);
+            NotifyTranscriptStateChanged();
         }
 
         public void ResetForProjectInitialization()
@@ -486,6 +539,7 @@ namespace FlowBlox.UICore.ViewModels
             Stop();
             _service.ResetSession();
             Transcript.Clear();
+            NotifyTranscriptStateChanged();
             _currentHistory = null;
             _currentHistoryFilePath = null;
             RefreshHistories();
@@ -497,6 +551,11 @@ namespace FlowBlox.UICore.ViewModels
             RefreshProviderConfigurationState();
             RefreshHistories();
             RefreshUndoRedoState();
+        }
+
+        private void NotifyTranscriptStateChanged()
+        {
+            OnPropertyChanged(nameof(ShowIntroHeader));
         }
 
         public void ConfigureProjectStateAccess(

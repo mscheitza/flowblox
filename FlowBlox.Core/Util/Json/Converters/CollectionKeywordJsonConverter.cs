@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.Util.Json.ValueProvider;
 using Newtonsoft.Json;
+using FlowBlox.Core.Util.Json.ContractResolver;
 using System.Collections;
 using System.Collections.ObjectModel;
 
@@ -40,7 +41,7 @@ namespace FlowBlox.Core.Util.Json.Converters
             writer.WriteStartObject();
 
             writer.WritePropertyName("$type");
-            writer.WriteValue($"{CollectionTypeKeyword}[{innerType.FullName}]");
+            writer.WriteValue($"{CollectionTypeKeyword}[{AiAssistantJsonPropertySerializationRules.CompactTypeName(innerType.FullName)}]");
 
             writer.WritePropertyName("$values");
             writer.WriteStartArray();

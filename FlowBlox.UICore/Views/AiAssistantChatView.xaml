@@ -17,6 +17,33 @@
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
+            <Style x:Key="AIAssistantTokenResetButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="Transparent">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Opacity="0.72" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="1" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.35" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <Style x:Key="AIAssistantTranscriptItemContainerStyle" TargetType="{x:Type ListBoxItem}">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 <Setter Property="VerticalContentAlignment" Value="Top" />
@@ -109,6 +136,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -118,7 +146,8 @@
                 Background="#EDF3F9"
                 Padding="10"
                 CornerRadius="4"
-                Margin="0,0,0,6">
+                Margin="0,0,0,6"
+                Visibility="{Binding ShowIntroHeader, Converter={StaticResource BoolToVisibilityConverter}}">
             <TextBlock Text="{x:Static resources:AiAssistantChatView.Header_Description}"
                        Foreground="DarkSlateGray"
                        TextWrapping="Wrap" />
@@ -136,6 +165,44 @@
         </Border>
 
         <Border Grid.Row="2"
+                Background="#FFE8F3FF"
+                BorderBrush="#FFB7D6F3"
+                BorderThickness="1"
+                Padding="8,5"
+                CornerRadius="8"
+                Margin="0,0,0,8"
+                Visibility="{Binding HasEstimatedUsedTokens, Converter={StaticResource BoolToVisibilityConverter}}">
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Right"
+                        Width="24"
+                        Height="24"
+                        Margin="8,0,0,0"
+                        Style="{StaticResource AIAssistantTokenResetButtonStyle}"
+                        Command="{Binding ResetTokenUsageCommand}"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_ResetTokenUsage}">
+                    <iconPacks:PackIconMaterial Kind="CloseCircleOutline"
+                                                Width="14"
+                                                Height="14"
+                                                Foreground="#FF3A6EA5"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" />
+                </Button>
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="ChartDonut"
+                                                Width="16"
+                                                Height="16"
+                                                Margin="0,0,6,0"
+                                                Foreground="#FF2F6FA8" />
+                    <TextBlock Text="{Binding EstimatedUsedTokensText}"
+                               Foreground="#FF244B66"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Row="3"
                 Background="#FFFFFFFF"
                 BorderBrush="#FFD0D0D0"
                 BorderThickness="1"
@@ -223,7 +290,7 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="3"
+        <Border Grid.Row="4"
                 Margin="0,8,0,8"
                 Background="#FFFFFFFF"
                 BorderBrush="#FFD0D0D0"
@@ -243,7 +310,7 @@
                      Text="{Binding CurrentInput, UpdateSourceTrigger=PropertyChanged}" />
         </Border>
 
-        <StackPanel Grid.Row="4"
+        <StackPanel Grid.Row="5"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,0,2,0">

@@ -31,7 +31,7 @@ namespace FlowBlox
             serviceCollection.AddSingleton<IAppNotificationService, AppNotificationService>();
             serviceCollection.AddSingleton<IFlowBloxInstallerService, FlowBloxInstallerService>();
             serviceCollection.AddSingleton<IFlowBloxActionHistoryService, FlowBloxActionHistoryService>();
-            serviceCollection.AddSingleton<IRuntimeStateService, RuntimeStateService>();
+            serviceCollection.AddSingleton<IRuntimeStateService>(RuntimeStateService.Shared);
             serviceCollection.AddSingleton<ITaskManagementService, WindowsTaskManagementService>();
         }
     }

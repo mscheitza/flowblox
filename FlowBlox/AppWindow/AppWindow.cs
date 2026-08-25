@@ -213,8 +213,8 @@ namespace FlowBlox.AppWindow
             itmOpenProject.Enabled = !isRuntimeActive;
             itmRecentProjects.Enabled = !isRuntimeActive && itmRecentProjects.DropDownItems.Count > 0;
             itmCloseProject.Enabled = isProjectActive && !isRuntimeActive;
-            itmUserFields.Enabled = isProjectActive && !isRuntimeActive;
-            itmManageInputFiles.Enabled = isProjectActive && !isRuntimeActive;
+            itmUserFields.Enabled = isProjectActive;
+            itmManageInputFiles.Enabled = isProjectActive;
 
             itmEditProject.Enabled = isProjectActive && (!isRuntimeActive);
             itmSaveProject.Enabled = isProjectActive && (!isRuntimeActive);
@@ -701,7 +701,11 @@ namespace FlowBlox.AppWindow
         {
             var registry = FlowBloxRegistryProvider.GetRegistry();
             UserFieldObjectManager userFieldObjectManager = new UserFieldObjectManager(registry);
-            var propertyViewWpf = new UICore.Views.PropertyWindow(new PropertyWindowArgs(userFieldObjectManager, deepCopy: false, canSave: false));
+            var propertyViewWpf = new UICore.Views.PropertyWindow(new PropertyWindowArgs(
+                userFieldObjectManager,
+                readOnly: _dockContentProjectPanel?.IsRuntimeActive == true,
+                deepCopy: false,
+                canSave: false));
             propertyViewWpf.Height = 800;
             WindowsFormWPFHelper.ShowDialog(propertyViewWpf, this);
             UpdateUI();
@@ -1457,7 +1461,7 @@ namespace FlowBlox.AppWindow
             if (project == null)
                 return;
 
-            var dialog = new ManageInputFilesWindow(project);
+            var dialog = new ManageInputFilesWindow(project, readOnly: _dockContentProjectPanel?.IsRuntimeActive == true);
             WindowsFormWPFHelper.ShowDialog(dialog, this.FindForm());
         }
 

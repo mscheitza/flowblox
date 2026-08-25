@@ -1,4 +1,5 @@
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Util.Json;
 using FlowBlox.Core.Util.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Collections;
@@ -13,6 +14,9 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
         {
             nameof(FlowBloxComponent.Version)
         };
+
+        public static string CompactTypeName(string typeName)
+            => AiAssistantTypeAliasHelper.CompressTypeName(typeName);
 
         public static bool IsIgnoredComponentProperty(MemberInfo member, JsonProperty property)
         {

@@ -30,6 +30,7 @@ Central guidelines (must be followed before tool execution):
   1) Null and default values are omitted.
   2) Empty collections are represented by the string `EmptyCollection`.
   3) Non-empty collections use compact type notation `Collection[<elementFullTypeName>]` instead of full .NET collection type names.
+  4) Type names in responses may use namespace-prefix aliases to reduce JSON size. The most specific alias wins. Tool input parameters must use regular full type names, not aliases. Aliases: {{COMPACT_TYPE_ALIASES}}.
 
 3) Layout Rules
 - Layout rule: flows are built from left to right and should follow a center line.

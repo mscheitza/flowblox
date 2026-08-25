@@ -6,12 +6,10 @@ using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Utilities;
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -21,6 +19,7 @@ namespace FlowBlox.UICore.ViewModels
     {
         private readonly Window _ownerWindow;
         private readonly FlowBloxProject _project;
+        private readonly bool _isReadOnly;
 
         private FlowBloxInputFile _selectedInputFile;
 
@@ -38,6 +37,7 @@ namespace FlowBlox.UICore.ViewModels
         public ObservableCollection<FlowBloxInputFileSyncMode> SyncModes { get; }
 
         public string ProjectInputDirectory => _project?.ProjectInputDirectory ?? "";
+        public bool IsReadOnly => _isReadOnly;
 
         public FlowBloxInputFile SelectedInputFile
         {
@@ -50,15 +50,17 @@ namespace FlowBlox.UICore.ViewModels
                 _selectedInputFile = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsInputFileSelected));
+                InvalidateCommands();
             }
         }
 
         public bool IsInputFileSelected => SelectedInputFile != null;
 
-        public ManageInputFilesViewModel(Window ownerWindow, FlowBloxProject project)
+        public ManageInputFilesViewModel(Window ownerWindow, FlowBloxProject project, bool isReadOnly = false)
         {
             _ownerWindow = ownerWindow;
             _project = project;
+            _isReadOnly = isReadOnly;
 
             InputFiles = new ObservableCollection<FlowBloxInputFile>(_project?.InputFiles ?? new System.Collections.Generic.List<FlowBloxInputFile>());
             SyncModes = new ObservableCollection<FlowBloxInputFileSyncMode>(
@@ -68,12 +70,12 @@ namespace FlowBlox.UICore.ViewModels
 
             OpenInputDirectoryCommand = new RelayCommand(OpenInputDirectory);
 
-            CreateInputFileCommand = new RelayCommand(CreateInputFile);
-            UploadInputFileCommand = new RelayCommand(UploadInputFile, () => IsInputFileSelected);
+            CreateInputFileCommand = new RelayCommand(CreateInputFile, () => !IsReadOnly);
+            UploadInputFileCommand = new RelayCommand(UploadInputFile, () => IsInputFileSelected && !IsReadOnly);
             DownloadInputFileCommand = new RelayCommand(DownloadInputFile, () => IsInputFileSelected);
             OpenInputFileInExplorerCommand = new RelayCommand(OpenInputFileInExplorer, () => IsInputFileSelected);
-            RemoveInputFileCommand = new RelayCommand(RemoveInputFile, () => IsInputFileSelected);
-            ExecuteInputFileCommandCommand = new RelayCommand(ExecuteSelectedInputFileCommand, () => IsInputFileSelected);
+            RemoveInputFileCommand = new RelayCommand(RemoveInputFile, () => IsInputFileSelected && !IsReadOnly);
+            ExecuteInputFileCommandCommand = new RelayCommand(ExecuteSelectedInputFileCommand, () => IsInputFileSelected && !IsReadOnly);
         }
 
         private void OpenInputDirectory()
@@ -100,7 +102,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void CreateInputFile()
         {
-            if (_project == null)
+            if (_project == null || IsReadOnly)
                 return;
 
             var tpl = new FlowBloxInputFile
@@ -122,7 +124,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void UploadInputFile()
         {
-            if (SelectedInputFile == null)
+            if (SelectedInputFile == null || IsReadOnly)
                 return;
 
             var ofd = new OpenFileDialog
@@ -216,7 +218,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private void RemoveInputFile()
         {
-            if (SelectedInputFile == null || _project == null)
+            if (SelectedInputFile == null || _project == null || IsReadOnly)
                 return;
 
             try
@@ -239,12 +241,16 @@ namespace FlowBlox.UICore.ViewModels
 
         private void ExecuteSelectedInputFileCommand()
         {
-            ExecuteInputFileCommand(SelectedInputFile);
+            if (!IsReadOnly)
+                ExecuteInputFileCommand(SelectedInputFile);
         }
 
         public void ExecuteInputFileCommand(FlowBloxInputFile inputFile)
         {
             if (inputFile == null)
+                return;
+
+            if (IsReadOnly)
                 return;
 
             try
@@ -312,8 +318,15 @@ namespace FlowBlox.UICore.ViewModels
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private void InvalidateCommands()
+        {
+            CreateInputFileCommand?.Invalidate();
+            UploadInputFileCommand?.Invalidate();
+            DownloadInputFileCommand?.Invalidate();
+            OpenInputFileInExplorerCommand?.Invalidate();
+            RemoveInputFileCommand?.Invalidate();
+            ExecuteInputFileCommandCommand?.Invalidate();
+        }
     }
 }
-
-
-

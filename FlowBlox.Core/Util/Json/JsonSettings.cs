@@ -78,6 +78,7 @@ namespace FlowBlox.Core.Util.Json
             jsonSettings.NullValueHandling = NullValueHandling.Ignore;
             jsonSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
             jsonSettings.ContractResolver = new AiAssistantProjectContractResolver();
+            jsonSettings.SerializationBinder = new AiAssistantTypeAliasSerializationBinder();
             return jsonSettings;
         }
 
@@ -90,7 +91,8 @@ namespace FlowBlox.Core.Util.Json
                 DefaultValueHandling = DefaultValueHandling.Ignore,
                 TypeNameHandling = TypeNameHandling.None,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                ContractResolver = new ComponentSnapshotContractResolver()
+                ContractResolver = new ComponentSnapshotContractResolver(),
+                SerializationBinder = new AiAssistantTypeAliasSerializationBinder()
             };
 
             jsonSettings.Converters.Add(new ComponentReferenceJsonConverter());

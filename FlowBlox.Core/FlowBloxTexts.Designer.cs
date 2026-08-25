@@ -574,6 +574,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Send project JSON automatically ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_AttachProjectJsonAutomatically {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_AttachProjectJsonAutomatically", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sends the project JSON when it was not sent before or has changed. Disabling this can save tokens; the assistant will request the project JSON only when needed. Faster processing vs. token saving. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_AttachProjectJsonAutomatically_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_AttachProjectJsonAutomatically_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Configure provider, request defaults, and automatic flow layout behavior for the AI Assistant. ähnelt.
         /// </summary>
         public static string AssistantConfiguration_Description {

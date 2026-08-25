@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.UICore.Interfaces;
@@ -10,6 +14,7 @@ namespace FlowBlox.Grid.Provider
         private FlowBloxRegistry _currentRegistry;
         private FlowBloxUIRegistry _currentUIRegistry;
         private ProjectChangelist _currentChangelist;
+        private IReadOnlyCollection<BaseFlowBlock> _selectedFlowBlocks = Array.Empty<BaseFlowBlock>();
 
         public FlowBloxProjectComponentProvider()
         {
@@ -31,7 +36,11 @@ namespace FlowBlox.Grid.Provider
                 _currentUIRegistry = null;
                 _currentChangelist = null;
             }
+
+            SetSelectedFlowBlocks(Array.Empty<BaseFlowBlock>());
         }
+
+        public event EventHandler SelectedFlowBlocksChanged;
 
         public FlowBloxUIRegistry GetCurrentUIRegistry() => _currentUIRegistry;
         
@@ -39,5 +48,21 @@ namespace FlowBlox.Grid.Provider
 
         public ProjectChangelist GetCurrentChangelist() => _currentChangelist;
         public FlowBloxRegistry GetCurrentRegistry() => _currentRegistry;
+
+        public IReadOnlyCollection<BaseFlowBlock> GetSelectedFlowBlocks() => _selectedFlowBlocks;
+
+        public void SetSelectedFlowBlocks(IEnumerable<BaseFlowBlock> flowBlocks)
+        {
+            var snapshot = (flowBlocks ?? Enumerable.Empty<BaseFlowBlock>())
+                .Where(x => x != null)
+                .Distinct()
+                .ToList();
+
+            if (_selectedFlowBlocks.SequenceEqual(snapshot))
+                return;
+
+            _selectedFlowBlocks = snapshot;
+            SelectedFlowBlocksChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace FlowBlox.AIAssistant.History
         private const string HistorySearchPattern = "history_*.json*";
         private const string HistoryZipExtension = ".zip";
         private const string HistoryJsonEntryName = "history.json";
+        private const int HistoryPreviewMaxLength = 255;
         private readonly object _sync = new();
         private bool _isInitialized;
 
@@ -168,10 +169,17 @@ namespace FlowBlox.AIAssistant.History
                 ProjectGuid = document.ProjectGuid,
                 CreatedAt = document.CreatedAt,
                 UpdatedAt = document.UpdatedAt,
-                Preview = document.Transcripts
-                    .LastOrDefault(x => x.Kind == AssistantTranscriptKind.User || x.Kind == AssistantTranscriptKind.Assistant)
-                    ?.Text ?? string.Empty
+                Preview = BuildPreviewText(document)
             };
+        }
+
+        private static string BuildPreviewText(AiAssistantHistoryDocument document)
+        {
+            var text = document?.Transcripts
+                ?.LastOrDefault(x => x.Kind == AssistantTranscriptKind.User || x.Kind == AssistantTranscriptKind.Assistant)
+                ?.Text ?? string.Empty;
+
+            return TextHelper.ShortenString(text, HistoryPreviewMaxLength, removeLineBreaks: true);
         }
 
         private static bool IsSupportedHistoryFile(string filePath)

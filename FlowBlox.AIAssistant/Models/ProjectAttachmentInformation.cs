@@ -4,6 +4,7 @@ namespace FlowBlox.AIAssistant.Models
     {
         InitialTransmission,
         ProjectChangedSinceLastConversation,
-        ProjectUnchangedSinceLastConversation
+        ProjectUnchangedSinceLastConversation,
+        ProjectJsonDisabled
     }
 }

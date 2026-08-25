@@ -4,6 +4,7 @@ using FlowBlox.AIAssistant.Constants;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Logging;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
@@ -28,6 +29,7 @@ namespace FlowBlox.AIAssistant.Services
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
         public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
+        public event EventHandler<int>? EstimatedUsedTokensChanged;
 
         public AiAssistantService(
             IAiExecutor executor,
@@ -44,6 +46,7 @@ namespace FlowBlox.AIAssistant.Services
 
         public void ResetSession()
         {
+            var estimatedUsedTokens = 0;
             lock (_sessionSync)
             {
                 if (_session != null)
@@ -51,6 +54,8 @@ namespace FlowBlox.AIAssistant.Services
 
                 _session = null;
             }
+
+            RaiseEstimatedUsedTokensChanged(estimatedUsedTokens);
         }
 
 
@@ -65,7 +70,8 @@ namespace FlowBlox.AIAssistant.Services
                 {
                     ConversationSummary = history?.ConversationSummary ?? string.Empty,
                     SummarizedMessageCount = Math.Max(0, history?.SummarizedMessageCount ?? 0),
-                    LastProjectJsonHash = history?.LastProjectJsonHash ?? string.Empty
+                    LastProjectJsonHash = history?.LastProjectJsonHash ?? string.Empty,
+                    EstimatedUsedTokens = Math.Max(0, history?.EstimatedUsedTokens ?? 0)
                 };
 
                 var sessionMessages = history?.SessionMessages?
@@ -76,6 +82,7 @@ namespace FlowBlox.AIAssistant.Services
                 session.Messages.AddRange(sessionMessages);
                 session.SummarizedMessageCount = Math.Clamp(session.SummarizedMessageCount, 0, session.Messages.Count);
                 _session = session;
+                RaiseEstimatedUsedTokensChanged(session.EstimatedUsedTokens);
             }
         }
 
@@ -90,11 +97,34 @@ namespace FlowBlox.AIAssistant.Services
                 history.LastProjectJsonHash = session.LastProjectJsonHash;
                 history.ConversationSummary = session.ConversationSummary;
                 history.SummarizedMessageCount = session.SummarizedMessageCount;
+                history.EstimatedUsedTokens = session.EstimatedUsedTokens;
                 history.SessionMessages = session.Messages
                     .Where(x => !string.IsNullOrWhiteSpace(x?.CompleteMessage))
                     .Select(x => x.Clone())
                     .ToList();
             }
+        }
+
+        public int EstimatedUsedTokens
+        {
+            get
+            {
+                lock (_sessionSync)
+                    return Math.Max(0, _session?.EstimatedUsedTokens ?? 0);
+            }
+        }
+
+        public void ResetEstimatedUsedTokens()
+        {
+            int value;
+            lock (_sessionSync)
+            {
+                var session = GetOrCreateSession();
+                session.EstimatedUsedTokens = 0;
+                value = session.EstimatedUsedTokens;
+            }
+
+            RaiseEstimatedUsedTokensChanged(value);
         }
 
         public AssistantConfiguration GetConfiguration(out string error)
@@ -196,12 +226,15 @@ namespace FlowBlox.AIAssistant.Services
             ToolHandlerUtilities.SetCurrentSessionGuid(session.SessionId);
             var currentProjectJson = GetCurrentProjectJson();
             var currentProjectJsonHash = ComputeProjectJsonHash(currentProjectJson);
-            var shouldAttachProjectJson = !string.Equals(session.LastProjectJsonHash, currentProjectJsonHash, StringComparison.OrdinalIgnoreCase);
-            var projectAttachmentInformation = shouldAttachProjectJson
-                ? string.IsNullOrWhiteSpace(session.LastProjectJsonHash)
-                    ? ProjectAttachmentInformation.InitialTransmission
-                    : ProjectAttachmentInformation.ProjectChangedSinceLastConversation
-                : ProjectAttachmentInformation.ProjectUnchangedSinceLastConversation;
+            var projectJsonChanged = !string.Equals(session.LastProjectJsonHash, currentProjectJsonHash, StringComparison.OrdinalIgnoreCase);
+            var shouldAttachProjectJson = config.AttachProjectJsonAutomatically && projectJsonChanged;
+            var projectAttachmentInformation = config.AttachProjectJsonAutomatically
+                ? projectJsonChanged
+                    ? string.IsNullOrWhiteSpace(session.LastProjectJsonHash)
+                        ? ProjectAttachmentInformation.InitialTransmission
+                        : ProjectAttachmentInformation.ProjectChangedSinceLastConversation
+                    : ProjectAttachmentInformation.ProjectUnchangedSinceLastConversation
+                : ProjectAttachmentInformation.ProjectJsonDisabled;
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = AssistantPromptBuilder.BuildSystemPrompt();
             var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions);
@@ -262,6 +295,7 @@ namespace FlowBlox.AIAssistant.Services
                         chatRequest,
                         config,
                         ct).ConfigureAwait(false);
+                    AddEstimatedTokenUsage(session, EstimateTokenUsage(chatRequest, exec, tokenBudget));
                     result.RawModelOutput = exec.RawOutput ?? exec.OutputText ?? string.Empty;
 
                     if (!exec.Success)
@@ -308,7 +342,8 @@ namespace FlowBlox.AIAssistant.Services
                         result.Errors.Add("Assistant returned an invalid response format twice. Aborting execution.");
                         AddTranscript(result, AssistantTranscriptKind.Error,
                             "Invalid response format repeated after correction. Aborting.");
-                        UpdateKnownProjectJsonHash(session);
+                        if (shouldAttachProjectJson)
+                            UpdateKnownProjectJsonHash(session);
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
                     }
@@ -339,7 +374,8 @@ namespace FlowBlox.AIAssistant.Services
                             ? assistantOutput
                             : instruction.AssistantMessage;
                         AppendSingleSessionMessage(session, "assistant", finalText);
-                        UpdateKnownProjectJsonHash(session);
+                        if (shouldAttachProjectJson)
+                            UpdateKnownProjectJsonHash(session);
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
                     }
@@ -380,12 +416,7 @@ namespace FlowBlox.AIAssistant.Services
 
                             protocolWriter?.AppendToolCall(toolRound, request, response);
 
-                            roundToolTranscript.Add(JsonConvert.SerializeObject(new
-                            {
-                                tool = request.ToolName,
-                                arguments = request.Arguments,
-                                response
-                            }, Formatting.None));
+                            roundToolTranscript.Add(SerializeToolTranscript(request, response));
                             executedToolCalls.Add(new ExecutedToolCallInfo
                             {
                                 ToolName = request.ToolName,
@@ -439,7 +470,8 @@ namespace FlowBlox.AIAssistant.Services
                 result.Errors.Add($"Assistant reached max tool rounds ({maxToolRounds}) without a final response.");
                 AddTranscript(result, AssistantTranscriptKind.Error,
                     $"Reached max tool rounds ({maxToolRounds}) without a final response.");
-                UpdateKnownProjectJsonHash(session);
+                if (shouldAttachProjectJson)
+                    UpdateKnownProjectJsonHash(session);
                 await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                 return result;
             }
@@ -580,7 +612,9 @@ namespace FlowBlox.AIAssistant.Services
                     return;
 
                 var summaryRequest = AssistantSummaryRequestBuilder.Build(currentSummary, messagesToSummarize);
+                var tokenBudget = BuildTokenBudget(config);
                 var summaryResult = await _executor.ExecuteChatAsync(summaryRequest, config, ct).ConfigureAwait(false);
+                AddEstimatedTokenUsage(session, EstimateTokenUsage(summaryRequest, summaryResult, tokenBudget));
                 if (!summaryResult.Success || string.IsNullOrWhiteSpace(summaryResult.OutputText))
                 {
                     if (!string.IsNullOrWhiteSpace(summaryResult.Error))
@@ -610,6 +644,54 @@ namespace FlowBlox.AIAssistant.Services
             return HashHelper.ComputeSHA256Hash(Encoding.UTF8.GetBytes(projectJson ?? string.Empty));
         }
 
+        private void AddEstimatedTokenUsage(AssistantSessionState session, int tokenCount)
+        {
+            if (session == null || tokenCount <= 0)
+                return;
+
+            int newValue;
+            lock (_sessionSync)
+            {
+                session.EstimatedUsedTokens = Math.Max(0, session.EstimatedUsedTokens + tokenCount);
+                newValue = session.EstimatedUsedTokens;
+            }
+
+            RaiseEstimatedUsedTokensChanged(newValue);
+        }
+
+        private static int EstimateTokenUsage(
+            AIChatRequest request,
+            AiExecutorResult result,
+            AssistantTokenBudget tokenBudget)
+        {
+            if (tokenBudget == null)
+                return 0;
+
+            var promptTokens = result?.PromptTokens ?? EstimateRequestTokens(request, tokenBudget);
+            var completionTokens = result?.CompletionTokens ??
+                                   tokenBudget.EstimateTokens(result?.OutputText ?? result?.RawOutput ?? string.Empty);
+
+            return Math.Max(0, promptTokens) + Math.Max(0, completionTokens);
+        }
+
+        private static int EstimateRequestTokens(AIChatRequest request, AssistantTokenBudget tokenBudget)
+        {
+            if (request == null || tokenBudget == null)
+                return 0;
+
+            var tokens = 0;
+            foreach (var message in request.SystemMessages ?? Enumerable.Empty<AIChatMessage>())
+                tokens += tokenBudget.EstimateTokens(message?.Content);
+
+            foreach (var message in request.Messages ?? Enumerable.Empty<AIChatMessage>())
+                tokens += tokenBudget.EstimateTokens(message?.Content);
+
+            return tokens;
+        }
+
+        private void RaiseEstimatedUsedTokensChanged(int estimatedUsedTokens)
+            => EstimatedUsedTokensChanged?.Invoke(this, Math.Max(0, estimatedUsedTokens));
+
         private static void UpdateKnownProjectJsonHash(AssistantSessionState session)
         {
             ArgumentNullException.ThrowIfNull(session);
@@ -624,6 +706,40 @@ namespace FlowBlox.AIAssistant.Services
                 return "{}";
 
             return JsonConvert.SerializeObject(project, JsonSettings.ProjectExportForAiAssistant());
+        }
+
+        private static string SerializeToolTranscript(ToolRequest request, ToolResponse response)
+        {
+            var transcript = new JObject
+            {
+                ["tool"] = request.ToolName,
+                ["arguments"] = CompactTypeAliasStrings(request.Arguments ?? new JObject()),
+                ["response"] = CompactTypeAliasStrings(JToken.FromObject(response))
+            };
+
+            return transcript.ToString(Formatting.None);
+        }
+
+        private static JToken CompactTypeAliasStrings(JToken token)
+        {
+            var clone = token.DeepClone();
+            CompactTypeAliasStringsInPlace(clone);
+            return clone;
+        }
+
+        private static void CompactTypeAliasStringsInPlace(JToken token)
+        {
+            if (token is JValue { Type: JTokenType.String } valueToken)
+            {
+                var value = valueToken.Value<string>();
+                if (!string.IsNullOrEmpty(value))
+                    valueToken.Value = AiAssistantTypeAliasHelper.CompressTypeName(value);
+
+                return;
+            }
+
+            foreach (var child in token.Children())
+                CompactTypeAliasStringsInPlace(child);
         }
 
         private Dictionary<string, BaseFlowBlock> CaptureFlowBlocksByName()
@@ -988,6 +1104,7 @@ namespace FlowBlox.AIAssistant.Services
             public string ConversationSummary { get; set; } = string.Empty;
             public int SummarizedMessageCount { get; set; }
             public string LastProjectJsonHash { get; set; } = string.Empty;
+            public int EstimatedUsedTokens { get; set; }
             public List<AssistantSessionMessage> Messages { get; set; } = new();
         }
 

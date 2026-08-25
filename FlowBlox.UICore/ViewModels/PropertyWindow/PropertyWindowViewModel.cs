@@ -36,8 +36,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public string HeaderDescription { get; }
 
-        private bool _canSave = true;
-        public bool CanSaveChanges() => PropertyViewModel?.IsDirty == true;
+        private bool _readOnly;
+        public bool CanSaveChanges() => !_readOnly && PropertyViewModel?.IsDirty == true;
 
         private PropertyViewModel _propertyViewModel;
         public PropertyViewModel PropertyViewModel
@@ -68,6 +68,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         public PropertyWindowViewModel(MetroWindow window, PropertyWindowArgs propertyWindowArgs) : this()
         {
             _window = window;
+            _readOnly = propertyWindowArgs.ReadOnly;
 
             var propertyViewModel = new PropertyViewModel(window);
             propertyViewModel.Open(
@@ -234,4 +235,3 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         }
     }
 }
-

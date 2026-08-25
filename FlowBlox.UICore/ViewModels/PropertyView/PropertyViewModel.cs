@@ -220,6 +220,9 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public async Task<bool> SaveAsync(MetroWindow window, bool withoutVerification = false)
         {
+            if (_readOnly)
+                return false;
+
             if (!withoutVerification && 
                 !ValidateTarget(_transientTarget, out var validationMessages))
             {

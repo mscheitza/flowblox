@@ -22,6 +22,7 @@ namespace FlowBlox.UICore.Views
         private Point _marqueeStart;
         private FlowBlockNodeViewModel _connectionStartNode;
         private bool _isConnectingNodes;
+        private Window _hostWindow;
 
         public ProjectPanelWpfViewModel ViewModel { get; }
 
@@ -30,6 +31,9 @@ namespace FlowBlox.UICore.Views
             InitializeComponent();
             ViewModel = new ProjectPanelWpfViewModel();
             DataContext = ViewModel;
+            Loaded += ProjectPanelWpfControl_Loaded;
+            Unloaded += ProjectPanelWpfControl_Unloaded;
+            LostKeyboardFocus += ProjectPanelWpfControl_LostKeyboardFocus;
         }
 
         public void RefreshProject() => ViewModel.Refresh();
@@ -39,6 +43,50 @@ namespace FlowBlox.UICore.Views
 
         public void MarkRuntimeFocus(FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock flowBlock)
             => ViewModel.MarkRuntimeFocus(flowBlock);
+
+        private void ProjectPanelWpfControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            _hostWindow = Window.GetWindow(this);
+            if (_hostWindow == null)
+                return;
+
+            _hostWindow.PreviewKeyDown -= HostWindow_PreviewKeyChanged;
+            _hostWindow.PreviewKeyUp -= HostWindow_PreviewKeyChanged;
+            _hostWindow.PreviewKeyDown += HostWindow_PreviewKeyChanged;
+            _hostWindow.PreviewKeyUp += HostWindow_PreviewKeyChanged;
+        }
+
+        private void ProjectPanelWpfControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (_hostWindow != null)
+            {
+                _hostWindow.PreviewKeyDown -= HostWindow_PreviewKeyChanged;
+                _hostWindow.PreviewKeyUp -= HostWindow_PreviewKeyChanged;
+                _hostWindow = null;
+            }
+
+            ViewModel.SetTemporaryConnectionMode(false);
+        }
+
+        private void ProjectPanelWpfControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (!IsKeyboardFocusWithin)
+                ViewModel.SetTemporaryConnectionMode(false);
+        }
+
+        private void HostWindow_PreviewKeyChanged(object sender, KeyEventArgs e)
+            => UpdateTemporaryConnectionMode();
+
+        private void UpdateTemporaryConnectionMode()
+        {
+            var isShortcutActive =
+                (IsKeyboardFocusWithin || IsMouseOver) &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Control) &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) &&
+                ViewModel.ConnectionModeCommand.CanExecute(null);
+
+            ViewModel.SetTemporaryConnectionMode(isShortcutActive);
+        }
 
         private void Arrow_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

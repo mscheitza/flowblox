@@ -15,10 +15,12 @@ namespace FlowBlox.UICore.Operations
     public class FlowBloxComponentUIActions : ComponentUIActions<FlowBloxComponent>
     {
         private readonly IDialogService _dialogService;
+        private readonly IRuntimeStateService _runtimeStateService;
 
         public FlowBloxComponentUIActions(FlowBloxComponent component) : base(component)
         {
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
+            _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
         }
 
         public SKImage ManageUserFieldsIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.account_cog, 16, SKColors.SteelBlue);
@@ -32,6 +34,7 @@ namespace FlowBlox.UICore.Operations
 
             var propertyWindow = new PropertyWindow(new PropertyWindowArgs(
                 userFieldObjectManager,
+                readOnly: _runtimeStateService?.IsRuntimeActive == true,
                 deepCopy: false,
                 canSave: false))
             {

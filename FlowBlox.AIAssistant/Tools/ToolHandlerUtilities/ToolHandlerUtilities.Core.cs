@@ -285,7 +285,7 @@ namespace FlowBlox.AIAssistant.Tools
                 if (other == null)
                     return false;
 
-                return string.Equals(PropertyName, other.PropertyName, StringComparison.Ordinal) && 
+                return string.Equals(PropertyName, other.PropertyName, StringComparison.Ordinal) &&
                        string.Equals(DeclaringTypeName, other.DeclaringTypeName, StringComparison.Ordinal);
             }
 

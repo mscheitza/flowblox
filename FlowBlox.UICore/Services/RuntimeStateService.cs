@@ -8,6 +8,8 @@ namespace FlowBlox.UICore.Services
 {
     public sealed class RuntimeStateService : IRuntimeStateService
     {
+        public static RuntimeStateService Shared { get; } = new RuntimeStateService();
+
         private BaseRuntime _currentRuntime;
         private bool _isRuntimeActive;
         private bool _isRuntimePaused;

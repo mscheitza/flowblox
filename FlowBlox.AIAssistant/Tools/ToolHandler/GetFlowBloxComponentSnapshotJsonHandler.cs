@@ -10,7 +10,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Generic snapshot. kind=flowBlock|managedObject.",
+            "Generic compact snapshot. kind=flowBlock|managedObject.",
             new JObject
             {
                 ["kind"] = "string",

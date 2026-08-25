@@ -137,6 +137,9 @@ namespace FlowBlox.UICore.ViewModels
         {
             UnsubscribeAll();
 
+            if (_componentProvider != null)
+                _componentProvider.SelectedFlowBlocksChanged += ComponentProvider_SelectedFlowBlocksChanged;
+
             _registry = FlowBloxRegistryProvider.GetRegistry();
             if (_registry != null)
             {
@@ -157,6 +160,9 @@ namespace FlowBlox.UICore.ViewModels
             ReloadFields();
             UpdateFlowBlockSelectionState();
         }
+
+        private void ComponentProvider_SelectedFlowBlocksChanged(object? sender, EventArgs e)
+            => SynchronizationContextHelper.PostToUi(_uiContext, UpdateFlowBlockSelectionState);
 
         private void ReloadFields()
         {
@@ -331,6 +337,13 @@ namespace FlowBlox.UICore.ViewModels
                     .ToHashSet();
             }
 
+            var selectedFlowBlocks = _componentProvider?.GetSelectedFlowBlocks();
+            if (selectedFlowBlocks != null)
+            {
+                selectedFields.UnionWith(selectedFlowBlocks
+                    .SelectMany(x => (x as BaseResultFlowBlock)?.Fields ?? Enumerable.Empty<FieldElement>()));
+            }
+
             foreach (var row in _allRows)
             {
                 bool isSelectedByFlowBlock = selectedFields.Contains(row.FieldElement);
@@ -464,6 +477,9 @@ namespace FlowBlox.UICore.ViewModels
 
         private void UnsubscribeAll()
         {
+            if (_componentProvider != null)
+                _componentProvider.SelectedFlowBlocksChanged -= ComponentProvider_SelectedFlowBlocksChanged;
+
             if (_registry != null)
             {
                 _registry.OnManagedObjectAdded -= Registry_OnManagedObjectAdded;

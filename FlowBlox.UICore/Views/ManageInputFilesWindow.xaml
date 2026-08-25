@@ -61,7 +61,7 @@
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
                 <Setter Property="Foreground" Value="#C94F4F"/>
             </Style>
-            
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -179,7 +179,7 @@
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"
-                      IsReadOnly="False"
+                      IsReadOnly="{Binding IsReadOnly}"
                       Margin="0,10,0,0">
                 <DataGrid.Columns>
 

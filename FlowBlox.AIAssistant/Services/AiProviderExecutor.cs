@@ -50,7 +50,9 @@ namespace FlowBlox.AIAssistant.Services
                         OutputText = response.Text ?? string.Empty,
                         RawOutput = response.Text ?? string.Empty,
                         Error = response.Error ?? string.Empty,
-                        ResponseId = response.ResponseId ?? string.Empty
+                        ResponseId = response.ResponseId ?? string.Empty,
+                        PromptTokens = response.PromptTokens,
+                        CompletionTokens = response.CompletionTokens
                     };
                 }
                 finally

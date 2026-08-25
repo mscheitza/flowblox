@@ -68,11 +68,14 @@ namespace FlowBlox.UICore.Factory.PropertyView
             _saveButton = saveButton;
             saveButton.Click += async (s, e) =>
             {
+                if (_readOnly)
+                    return;
+
                 if (_window is MahApps.Metro.Controls.MetroWindow metro)
                 {
                     if (await _propertyViewModel.SaveAsync(metro) == true)
                     {
-                        _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: false);
+                        _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: _readOnly);
                         _propertyViewModel.IsDirty = false;
                         UpdateSaveButtonState();
                     }
@@ -176,7 +179,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 _noSelectionText.Visibility = Visibility.Collapsed;
                 _propertyView.Visibility = Visibility.Visible;
-                _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: false);
+                _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: _readOnly);
                 _propertyViewModel.IsDirty = _enableSaveForNextSelection;
                 _enableSaveForNextSelection = false;
                 UpdateSaveButtonState();
@@ -212,11 +215,14 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 return;
             }
 
-            _saveButton.IsEnabled = _propertyViewModel?.IsDirty == true;
+            _saveButton.IsEnabled = !_readOnly && _propertyViewModel?.IsDirty == true;
         }
 
         protected override void ExecuteCreate()
         {
+            if (_readOnly)
+                return;
+
             var newInstance = CreateNewInstance(_window, _listItemType);
             if (newInstance != null)
             {
@@ -235,7 +241,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
         protected override void ExecuteEdit(object item)
         {
             if (item != null)
-                _propertyViewModel.Open(item, _target, deepCopy: true, readOnly: false);
+                _propertyViewModel.Open(item, _target, deepCopy: true, readOnly: _readOnly);
         }
 
         private Button CreateSaveButton()

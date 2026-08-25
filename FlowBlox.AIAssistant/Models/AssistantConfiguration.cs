@@ -28,6 +28,9 @@ namespace FlowBlox.AIAssistant.Models
         [Display(Name = "AssistantConfiguration_EnableAutomaticAdjustment", Description = "AssistantConfiguration_EnableAutomaticAdjustment_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         public bool EnableAutomaticAdjustment { get; set; } = true;
 
+        [Display(Name = "AssistantConfiguration_AttachProjectJsonAutomatically", Description = "AssistantConfiguration_AttachProjectJsonAutomatically_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        public bool AttachProjectJsonAutomatically { get; set; } = true;
+
         [Display(Name = "AssistantConfiguration_MaxTokens", Description = "AssistantConfiguration_MaxTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         public int? MaxTokens { get; set; }
 
@@ -43,7 +46,7 @@ namespace FlowBlox.AIAssistant.Models
         public int MinLatestMessages { get; set; } = 2;
 
         [Display(Name = "AssistantConfiguration_MaxContextTokens", Description = "AssistantConfiguration_MaxContextTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        public int MaxContextTokens { get; set; } = 48000;
+        public int MaxContextTokens { get; set; } = 40000;
 
         [Display(Name = "AssistantConfiguration_ReservedResponseTokens", Description = "AssistantConfiguration_ReservedResponseTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 5)]
         public int ReservedResponseTokens { get; set; } = 4096;

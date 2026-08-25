@@ -1,11 +1,8 @@
 ﻿using FlowBlox.Core.Models.Project;
 using FlowBlox.UICore.Factory.Adapter;
 using FlowBlox.UICore.Enums;
-using FlowBlox.UICore.Models;
-using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels;
 using MahApps.Metro.Controls;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,10 +14,10 @@ namespace FlowBlox.UICore.Views
 {
     public partial class ManageInputFilesWindow : MetroWindow
     {
-        public ManageInputFilesWindow(FlowBloxProject project)
+        public ManageInputFilesWindow(FlowBloxProject project, bool readOnly = false)
         {
             InitializeComponent();
-            DataContext = new ManageInputFilesViewModel(this, project);
+            DataContext = new ManageInputFilesViewModel(this, project, readOnly);
         }
 
         private void CommandTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -57,6 +54,9 @@ namespace FlowBlox.UICore.Views
         private void OpenInputFilePlaceholderSelection(TextBox textBox, FlowBloxInputFile inputFile)
         {
             if (DataContext is not ManageInputFilesViewModel vm)
+                return;
+
+            if (vm.IsReadOnly)
                 return;
 
             var args = new FieldSelectionWindowArgs
@@ -100,4 +100,3 @@ namespace FlowBlox.UICore.Views
         }
     }
 }
-
