@@ -93,12 +93,41 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         {
             var properties = base.GetDisplayableProperties();
             properties.Add(nameof(WebBrowserEventType));
-            properties.Add(nameof(XPath));
-            properties.Add(nameof(CSSSelector));
-            properties.Add(nameof(InputText));
-            properties.Add(nameof(SpecialKey));
-            properties.Add(nameof(SpecialKeyModifier));
+
+            if (RequiresElementSelector())
+            {
+                properties.Add(nameof(XPath));
+                properties.Add(nameof(CSSSelector));
+            }
+
+            if (UsesInputText())
+                properties.Add(nameof(InputText));
+
+            if (WebBrowserEventType == WebBrowserEventTypes.SendSpecialKey)
+            {
+                properties.Add(nameof(SpecialKey));
+                properties.Add(nameof(SpecialKeyModifier));
+            }
+
             return properties;
+        }
+
+        private bool RequiresElementSelector()
+        {
+            return WebBrowserEventType == WebBrowserEventTypes.Click ||
+                   WebBrowserEventType == WebBrowserEventTypes.ClickAll ||
+                   WebBrowserEventType == WebBrowserEventTypes.Enter ||
+                   WebBrowserEventType == WebBrowserEventTypes.UpdateDOM ||
+                   WebBrowserEventType == WebBrowserEventTypes.UploadFile ||
+                   WebBrowserEventType == WebBrowserEventTypes.SendSpecialKey;
+        }
+
+        private bool UsesInputText()
+        {
+            return WebBrowserEventType == WebBrowserEventTypes.Enter ||
+                   WebBrowserEventType == WebBrowserEventTypes.UpdateDOM ||
+                   WebBrowserEventType == WebBrowserEventTypes.UploadFile ||
+                   WebBrowserEventType == WebBrowserEventTypes.SwitchToUrl;
         }
 
         public override bool Execute(BaseRuntime runtime, object data)
