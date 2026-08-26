@@ -29,7 +29,7 @@ namespace FlowBlox.AIAssistant.Models
         public bool EnableAutomaticAdjustment { get; set; } = true;
 
         [Display(Name = "AssistantConfiguration_AttachProjectJsonAutomatically", Description = "AssistantConfiguration_AttachProjectJsonAutomatically_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        public bool AttachProjectJsonAutomatically { get; set; } = true;
+        public bool AttachProjectJsonAutomatically { get; set; } = false;
 
         [Display(Name = "AssistantConfiguration_MaxTokens", Description = "AssistantConfiguration_MaxTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         public int? MaxTokens { get; set; }

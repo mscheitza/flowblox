@@ -8,5 +8,6 @@ namespace FlowBlox.AIAssistant.Models
         public JObject Result { get; set; } = new JObject();
         public string Error { get; set; } = string.Empty;
         public JArray Log { get; set; } = new JArray();
+        public bool IsLayoutRelevantForAutoAdjustment { get; set; }
     }
 }

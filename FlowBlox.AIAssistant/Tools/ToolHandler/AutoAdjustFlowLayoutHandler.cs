@@ -12,6 +12,7 @@ namespace FlowBlox.AIAssistant.Tools
     internal sealed class AutoAdjustFlowLayoutHandler : ToolHandlerBase
     {
         public override string Name => "AutoAdjustFlowLayout";
+        public override bool IsLayoutRelevantForAutoAdjustment => true;
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,

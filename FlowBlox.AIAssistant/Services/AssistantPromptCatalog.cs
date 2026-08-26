@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using FlowBlox.Core.Constants;
 
 namespace FlowBlox.AIAssistant.Services
 {
@@ -22,6 +23,8 @@ namespace FlowBlox.AIAssistant.Services
         public const string SpecialTestDrivenUnknownResourcesKey = "explaining_test_driven_unknown_resources";
         public const string SpecialModifiersAndFieldValidatorsKey = "explaining_modifiers_and_field_validators";
         public const string SpecialFlowRecursionKey = "explaining_flow_recursion";
+        public const string SpecialExtensionsKey = "explaining_extensions";
+        public const string SpecialProjectSpaceKey = "explaining_project_space";
         public const string VersionNotesKey = "explaining_version_notes";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
@@ -123,6 +126,18 @@ namespace FlowBlox.AIAssistant.Services
                     "FlowBlox.AIAssistant.Prompts.ExplainingFlowRecursion.txt",
                     "Special: on-demand guidance for RecursiveCallFlowBlock setup and paging-style recursion loops.",
                     false),
+                [SpecialExtensionsKey] = new PromptEntryDefinition(
+                    SpecialExtensionsKey,
+                    "Explaining Extensions",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingExtensions.txt",
+                    "Special: on-demand guidance for custom FlowBlox extensions, debugging, project loading, and publishing extension versions.",
+                    false),
+                [SpecialProjectSpaceKey] = new PromptEntryDefinition(
+                    SpecialProjectSpaceKey,
+                    "Explaining Project Space",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingProjectSpace.txt",
+                    "Special: on-demand guidance for Project Space, project sharing, stable versions, and remote execution by Project GUID.",
+                    false),
                 [VersionNotesKey] = new PromptEntryDefinition(
                     VersionNotesKey,
                     "Version Notes",
@@ -171,7 +186,7 @@ namespace FlowBlox.AIAssistant.Services
                 if (string.IsNullOrWhiteSpace(content))
                     continue;
 
-                var normalized = content.Replace("\r\n", "\n").Trim();
+                var normalized = ReplaceGlobalUrlTokens(content.Replace("\r\n", "\n").Trim());
                 if (normalized.Length == 0)
                     continue;
 
@@ -183,6 +198,18 @@ namespace FlowBlox.AIAssistant.Services
                     ComputeSha256Hex(normalized),
                     definition.IsIncludedInInitialPrompt);
             }
+
+            return result;
+        }
+
+        private static string ReplaceGlobalUrlTokens(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return text ?? string.Empty;
+
+            var result = text;
+            foreach (var url in GlobalUrls.GetAll())
+                result = result.Replace("{{" + url.Key + "}}", url.Value, StringComparison.Ordinal);
 
             return result;
         }
@@ -212,4 +239,3 @@ namespace FlowBlox.AIAssistant.Services
         internal sealed record PromptEntry(string Key, string Title, string Hint, string Content, string ContentHash, bool IsIncludedInInitialPrompt);
     }
 }
-

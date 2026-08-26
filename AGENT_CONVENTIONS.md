@@ -76,6 +76,7 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Keep changes consistent with annotation-driven UI architecture.
 - Do not introduce user-visible strings without localization keys.
 - For new UI-facing properties: label keys are required. Tooltip keys are strongly recommended for explanatory/complex properties (e.g., XPath/CSS selectors) and should include concise examples when useful.
+- If `dotnet restore` or a build-triggered restore gets stuck or fails because package restore cannot reach NuGet, do not keep retrying or escalate further. Report the restore problem and let the developer handle the build verification.
 
 ## Icon Workflow
 - For new/specific icons (for example for new FlowBlocks/ManagedObjects), do not copy random SVGs from `FlowBloxIcons.resx` first.

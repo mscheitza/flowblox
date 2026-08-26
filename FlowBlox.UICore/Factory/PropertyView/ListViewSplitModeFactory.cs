@@ -25,6 +25,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
             window.Closing += Window_Closing;
         }
 
+        protected override bool ShouldShowEditButton => false;
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_propertyViewModel != null)
@@ -236,12 +238,6 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
                 UpdateSaveButtonState();
             }
-        }
-
-        protected override void ExecuteEdit(object item)
-        {
-            if (item != null)
-                _propertyViewModel.Open(item, _target, deepCopy: true, readOnly: _readOnly);
         }
 
         private Button CreateSaveButton()

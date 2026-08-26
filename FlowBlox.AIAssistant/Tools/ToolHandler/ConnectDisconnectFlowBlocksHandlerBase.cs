@@ -9,6 +9,7 @@ namespace FlowBlox.AIAssistant.Tools
     internal abstract class ConnectDisconnectFlowBlocksHandlerBase : ToolHandlerBase
     {
         protected abstract bool Connect { get; }
+        public override bool IsLayoutRelevantForAutoAdjustment => true;
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {

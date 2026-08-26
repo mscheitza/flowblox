@@ -1,0 +1,68 @@
+Explaining FlowBlox Extensions:
+
+1) What extensions are for
+- Use extensions when required FlowBlocks or managed objects are missing from the standard FlowBlox installation, or when project-, customer-, or user-specific behavior must be packaged separately.
+- Extensions are .NET assemblies loaded into FlowBlox. They can provide FlowBlocks, categories and managed objects.
+- Typical extension names follow the assembly/file-name pattern `Company.ExtensionName.dll` or `Company.Project.ExtensionName.dll`.
+- Example projects:
+  - Core sample: {{FlowBloxSampleExtensionRepository}}
+  - UI sample: {{FlowBloxSampleExtensionUIRepository}}
+
+2) Project structure
+- Core extension:
+  - Create a .NET class library with target framework up to .NET 8.
+  - Reference `FlowBlox.Core.dll`.
+  - Implement FlowBlocks and/or managed objects in the core extension assembly.
+- Optional UI extension:
+  - Create a second class library named like `Company.ExtensionName.UI`.
+  - Reference the core extension project and `FlowBlox.UICore.dll`.
+  - Use this only when the extension needs UI customizations.
+- UI customizations can provide UI actions shown in the property window, for example actions such as `Manage user fields` or `Generate`.
+- UI customizations can also provide a complete custom WPF view for a managed object, similar to specialized views such as `TestDefinitionView`.
+
+3) Local debugging workflow
+- Open `Manage extensions` (`ExtensionsWindow`).
+- Use the `Offline` tab / `Manage local extensions` area to add the locally built extension DLL.
+- `Debug mode` marks a local extension as a debugging extension.
+- FlowBlox stores project extension references in a dedicated `*.fbdeps` file and makes loaded extensions available to the project.
+- After adding/changing local extensions, use `Reload extensions` to reload extensions in the current project.
+- During development, attach Visual Studio to the running FlowBlox process to debug extension code.
+- Recommended workflow: add and debug the extension offline first, then publish it.
+
+4) Loading extensions into a project
+- From the Component Library, use the toolbar action `Manage extensions`.
+- This opens `Manage extensions` in the context of the current project.
+- Online extensions can be searched, installed, updated and uninstalled from the project context.
+- Offline extensions can be selected by file path and loaded directly.
+- Use `Reload extensions` after changing extension references so FlowBlox loads them into the current project.
+- Extensions managed from the global menu are not automatically assigned to a project; project assignment is done from the project/component-library context.
+
+5) Account, registration and login
+- Publishing and managing own extensions requires a FlowBlox account.
+- Registration can be opened from `Manage extensions`, from `Project Space`, or from the main application account actions.
+- The `RegistrationWindow` asks for first name, last name, username, email, repeated email, password, repeated password, and CAPTCHA.
+- First name, last name and username are optional; if no username is provided, one is generated automatically.
+- After registration, the user must confirm the account via email before login is complete.
+- Login uses email and password in `LoginWindow`; credentials can optionally be saved.
+
+6) Publishing workflow
+- In `Manage extensions`, use `Manage own extensions` to open `ManageUserExtensionsWindow`.
+- Create the extension with `Create extension`.
+- The extension name must match the extension DLL file name without `.dll`.
+- Use `Detect metadata from library` to read name, description and detected version from a DLL where possible.
+- Create versions with `Create version`.
+- Version numbers use `Major.Minor.Patch`, and the version number must match the assembly version.
+- Assign version content as a `*.zip` archive.
+- The archive must include the extension DLL and a matching `*.deps.json` that describes dependencies.
+- Dependencies are shown in the `Dependencies` area.
+- Use `Save changes` to persist pending extension or version changes.
+- A version can only be published after valid content has been assigned and saved.
+- Once a version has been published, the version itself can no longer be removed and its content can no longer be changed.
+- To stop distributing a published extension/version, use the active flags (`Extension is active`, `Version is active`) instead of deleting published content.
+- Use `Backward compatible with previous version` only when the new version preserves compatibility with earlier versions.
+
+7) When to guide the user to extensions
+- Suggest an extension only if the requested FlowBlock, managed object, UI action or custom WPF view is not available in the current FlowBlox installation.
+- If the user asks for implementation help, point them to the sample repositories and explain the core/UI split.
+- If the user asks to use an extension in a project, guide them through `Manage extensions`, adding the extension, and `Reload extensions`.
+- If the user asks to share an extension with others, guide them through account registration, `Manage own extensions`, `Create extension`, `Create version`, `Save changes`, and `Publish`.

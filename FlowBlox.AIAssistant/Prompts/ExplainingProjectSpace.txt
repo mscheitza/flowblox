@@ -1,0 +1,55 @@
+Explaining Project Space:
+
+1) What Project Space is for
+- Project Space is the FlowBlox online area for searching, opening, uploading, versioning and sharing FlowBlox projects.
+- It contains public/example projects and user-owned projects.
+- Reading/searching public projects does not require an account.
+- Uploading, updating or versioning own projects requires a FlowBlox account and login.
+- Project Space is also used when a flow should be executed from another machine or node by Project GUID instead of by local project file path.
+
+2) Opening Project Space
+- In the main application menu, use `View projects (Project-Space)` to open `PSProjectsWindow`.
+- The window title is `Project Space`; the main header is `FlowBlox Projects`.
+- Users can search projects, open a project, or open a specific stable version.
+- `My Projects` filters the list to the logged-in user's projects and requires login.
+- `Login`, `Register` and `Logout` are available depending on account state and server capabilities.
+
+3) Account and registration
+- Registration can be opened from Project Space via `Register`.
+- The `RegistrationWindow` asks for first name, last name, username, email, repeated email, password, repeated password, and CAPTCHA.
+- First name, last name and username are optional; if no username is provided, one is generated automatically.
+- After registration, the user must confirm the account via email.
+- Login uses email and password in `LoginWindow`; credentials can optionally be saved.
+- Logged-in users can manage their own projects and project versions.
+
+4) Saving a project to Project Space
+- Use `Save to Project Space` (`CreateOrUpdatePSProjectWindow`) to upload the current project.
+- Required metadata:
+  - `Project name`
+  - `Description`
+  - `Visibility` (`Private` or `Public`)
+- If the project already has a matching Project Space GUID for the current API endpoint, the update tab is available.
+- `Create new project` clears the current Project Space GUID and creates a new online project on save.
+- `Update existing project` keeps the Project Space GUID and updates the existing online project.
+- The project content is uploaded together with metadata.
+- If `ExecuteProject` flow blocks still reference other projects by local `ProjectFile` path, these references may break after upload; referenced projects should be available in Project Space as well and should use Project Space GUIDs where appropriate.
+
+5) Stable project versions
+- In `Project Space`, select a project and use `Manage versions`.
+- Use `Create stable version` to create an immutable version snapshot from the latest project state.
+- Version comments are optional but should describe what changed or what the stable version is intended for.
+- Stable versions are immutable: once created, their content cannot be changed.
+- Existing version metadata can be edited with `Edit version metadata`; this edits comments/metadata, not the version content.
+- Versions can be downloaded, refreshed, opened, or referenced by other projects.
+
+6) Remote execution and project references
+- `ExecuteProjectFlowBlock` can load a project from Project Space when `ProjectSpaceGuid` is set.
+- `ProjectSpaceVersion` can optionally specify a stable version number.
+- If `ProjectSpaceVersion` is set, `ProjectSpaceGuid` must also be provided.
+- Field placeholders are supported for Project Space GUID input.
+- Use Project Space references when flows should run on a different machine/node without relying on local project-file paths.
+
+7) When to guide the user to Project Space
+- Use Project Space when the user wants examples, shared projects, account-bound project storage, stable project versions, or remote execution by GUID.
+- Do not require login for simply searching/opening public projects.
+- Require login for saving projects, filtering `My Projects`, editing project metadata, creating stable versions, or managing own project/version metadata.

@@ -125,8 +125,12 @@ namespace FlowBlox.AIAssistant.Builder
                     "The current project JSON is attached because the project changed since the last conversation state was saved. Treat it as the latest project state.",
                 ProjectAttachmentInformation.ProjectUnchangedSinceLastConversation =>
                     "The current project JSON is omitted because the project has not changed since the last conversation state was saved. Continue using the latest project state already available in this conversation.",
-                ProjectAttachmentInformation.ProjectJsonDisabled =>
-                    "The current project JSON is omitted because automatic project JSON attachment is disabled. Request the project JSON with the available project tool only if it is needed for the current task.",
+                ProjectAttachmentInformation.ProjectJsonDisabledInitialState =>
+                    "The current project JSON is omitted because automatic project JSON attachment is disabled. No project hash/state is stored for this conversation yet. Request the project JSON with the available project tool if project context is needed.",
+                ProjectAttachmentInformation.ProjectJsonDisabledProjectChanged =>
+                    "The current project JSON is omitted because automatic project JSON attachment is disabled. The project changed since the last saved conversation state. Request the project JSON with the available project tool if the current project state is needed.",
+                ProjectAttachmentInformation.ProjectJsonDisabledProjectUnchanged =>
+                    "The current project JSON is omitted because automatic project JSON attachment is disabled. The project has not changed since the last saved conversation state. Continue using the latest project state already available in this conversation, if one was requested earlier.",
                 _ => string.Empty
             };
         }
@@ -173,12 +177,11 @@ namespace FlowBlox.AIAssistant.Builder
             if (string.IsNullOrWhiteSpace(text))
                 return text ?? string.Empty;
 
-            return text
-                .Replace("{{FLOWBLOX_VERSION}}", GetFlowBloxApplicationVersion(), StringComparison.Ordinal)
-                .Replace("{{FLOWBLOX_GITHUB_REPOSITORY_URL}}", GlobalUrls.FlowBloxGitHubRepository, StringComparison.Ordinal)
-                .Replace("{{FLOWBLOX_SAMPLE_EXTENSION_REPOSITORY_URL}}", GlobalUrls.FlowBloxSampleExtensionRepository, StringComparison.Ordinal)
-                .Replace("{{FLOWBLOX_WEBSITE_URL}}", GlobalUrls.FlowBloxWebsite, StringComparison.Ordinal)
-                .Replace("{{FLOWBLOX_REPORT_PROBLEM_URL}}", GlobalUrls.FlowBloxReportProblem, StringComparison.Ordinal);
+            var result = text.Replace("{{FLOWBLOX_VERSION}}", GetFlowBloxApplicationVersion(), StringComparison.Ordinal);
+            foreach (var url in GlobalUrls.GetAll())
+                result = result.Replace("{{" + url.Key + "}}", url.Value, StringComparison.Ordinal);
+
+            return result;
         }
 
         private static string GetFlowBloxApplicationVersion()

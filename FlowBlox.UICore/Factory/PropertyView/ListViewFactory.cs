@@ -2,7 +2,6 @@
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Components;
-using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
@@ -167,7 +166,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Link) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.Link, FlowBloxResourceUtil.GetLocalizedString("Buttons_Link"), linkCommand, Brushes.Blue));
 
-            if (_uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
+            if (ShouldShowEditButton && _uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
                 toolBar.Items.Add(CreateButton(PackIconMaterialKind.Pencil, FlowBloxResourceUtil.GetLocalizedString("Buttons_Edit"), editCommand, Brushes.Orange));
 
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
@@ -207,6 +206,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
         }
 
         protected virtual bool CanAdd() => !_readOnly;
+
+        protected virtual bool ShouldShowEditButton => true;
 
         protected virtual bool CanEdit(object selectedItem) => selectedItem != null;
 

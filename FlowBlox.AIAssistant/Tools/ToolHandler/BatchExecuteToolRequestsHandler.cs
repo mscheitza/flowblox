@@ -32,6 +32,7 @@ namespace FlowBlox.AIAssistant.Tools
 
             var continueOnError = args.Value<bool?>("continueOnError") ?? false;
             var allOk = true;
+            var isLayoutRelevant = false;
             var batchResults = new JArray();
 
             foreach (var request in requests.OfType<JObject>())
@@ -70,6 +71,7 @@ namespace FlowBlox.AIAssistant.Tools
                     .ConfigureAwait(false);
 
                 allOk &= response.Ok;
+                isLayoutRelevant |= response.Ok && response.IsLayoutRelevantForAutoAdjustment;
                 batchResults.Add(new JObject
                 {
                     ["toolName"] = toolName,
@@ -93,10 +95,14 @@ namespace FlowBlox.AIAssistant.Tools
 
             if (allOk)
             {
-                return ToolHandlerUtilities.Ok(payload);
+                var response = ToolHandlerUtilities.Ok(payload);
+                response.IsLayoutRelevantForAutoAdjustment = isLayoutRelevant;
+                return response;
             }
 
-            return ToolHandlerUtilities.Fail("One or more batch requests failed.", payload);
+            var failure = ToolHandlerUtilities.Fail("One or more batch requests failed.", payload);
+            failure.IsLayoutRelevantForAutoAdjustment = isLayoutRelevant;
+            return failure;
         }
     }
 }

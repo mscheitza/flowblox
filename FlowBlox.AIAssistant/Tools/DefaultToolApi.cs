@@ -61,6 +61,10 @@ namespace FlowBlox.AIAssistant.Tools
                 .HandleAsync(request.Arguments ?? new JObject(), ct)
                 .ConfigureAwait(false);
 
+            response.IsLayoutRelevantForAutoAdjustment =
+                response.IsLayoutRelevantForAutoAdjustment ||
+                (response.Ok && handler.IsLayoutRelevantForAutoAdjustment);
+
             TryNotifyFlowBlockConnectionsChanged(response);
             return response;
         }
@@ -181,4 +185,3 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
-

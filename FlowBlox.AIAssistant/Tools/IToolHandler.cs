@@ -7,6 +7,7 @@ namespace FlowBlox.AIAssistant.Tools
     {
         string Name { get; }
         ToolDefinition Definition { get; }
+        bool IsLayoutRelevantForAutoAdjustment { get; }
         Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct);
     }
 }

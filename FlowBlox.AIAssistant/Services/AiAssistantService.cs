@@ -226,15 +226,13 @@ namespace FlowBlox.AIAssistant.Services
             ToolHandlerUtilities.SetCurrentSessionGuid(session.SessionId);
             var currentProjectJson = GetCurrentProjectJson();
             var currentProjectJsonHash = ComputeProjectJsonHash(currentProjectJson);
+            var hasKnownProjectJsonHash = !string.IsNullOrWhiteSpace(session.LastProjectJsonHash);
             var projectJsonChanged = !string.Equals(session.LastProjectJsonHash, currentProjectJsonHash, StringComparison.OrdinalIgnoreCase);
             var shouldAttachProjectJson = config.AttachProjectJsonAutomatically && projectJsonChanged;
-            var projectAttachmentInformation = config.AttachProjectJsonAutomatically
-                ? projectJsonChanged
-                    ? string.IsNullOrWhiteSpace(session.LastProjectJsonHash)
-                        ? ProjectAttachmentInformation.InitialTransmission
-                        : ProjectAttachmentInformation.ProjectChangedSinceLastConversation
-                    : ProjectAttachmentInformation.ProjectUnchangedSinceLastConversation
-                : ProjectAttachmentInformation.ProjectJsonDisabled;
+            var projectAttachmentInformation = ResolveProjectAttachmentInformation(
+                config.AttachProjectJsonAutomatically,
+                hasKnownProjectJsonHash,
+                projectJsonChanged);
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = AssistantPromptBuilder.BuildSystemPrompt();
             var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions);
@@ -242,7 +240,7 @@ namespace FlowBlox.AIAssistant.Services
             var knownFlowBlocksByName = CaptureFlowBlocksByName();
             var protocolWriter = TryCreateCommunicationProtocolWriter(config, userPrompt, session.SessionId);
             var formatRetryIssued = false;
-            var hasExecutedAnyToolCall = false;
+            var hasExecutedLayoutRelevantToolCall = false;
             protocolWriter?.AppendAiAssistantServiceText("System prompt prepared", systemPrompt);
             protocolWriter?.AppendAiAssistantServiceText("Session bootstrap prompt prepared", sessionBootstrapPrompt);
 
@@ -342,8 +340,7 @@ namespace FlowBlox.AIAssistant.Services
                         result.Errors.Add("Assistant returned an invalid response format twice. Aborting execution.");
                         AddTranscript(result, AssistantTranscriptKind.Error,
                             "Invalid response format repeated after correction. Aborting.");
-                        if (shouldAttachProjectJson)
-                            UpdateKnownProjectJsonHash(session);
+                        UpdateKnownProjectJsonHash(session);
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
                     }
@@ -363,7 +360,7 @@ namespace FlowBlox.AIAssistant.Services
 
                     if (instruction.ToolCalls.Count == 0 || instruction.Final)
                     {
-                        if (hasExecutedAnyToolCall)
+                        if (hasExecutedLayoutRelevantToolCall)
                             RunAutomaticAdjustmentIfEnabled("AI run completed");
 
                         result.Success = true;
@@ -374,8 +371,7 @@ namespace FlowBlox.AIAssistant.Services
                             ? assistantOutput
                             : instruction.AssistantMessage;
                         AppendSingleSessionMessage(session, "assistant", finalText);
-                        if (shouldAttachProjectJson)
-                            UpdateKnownProjectJsonHash(session);
+                        UpdateKnownProjectJsonHash(session);
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
                     }
@@ -412,7 +408,8 @@ namespace FlowBlox.AIAssistant.Services
                                 (request.Arguments ?? new JObject()).ToString(Formatting.Indented));
 
                             var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
-                            hasExecutedAnyToolCall = true;
+                            if (response.IsLayoutRelevantForAutoAdjustment)
+                                hasExecutedLayoutRelevantToolCall = true;
 
                             protocolWriter?.AppendToolCall(toolRound, request, response);
 
@@ -470,8 +467,7 @@ namespace FlowBlox.AIAssistant.Services
                 result.Errors.Add($"Assistant reached max tool rounds ({maxToolRounds}) without a final response.");
                 AddTranscript(result, AssistantTranscriptKind.Error,
                     $"Reached max tool rounds ({maxToolRounds}) without a final response.");
-                if (shouldAttachProjectJson)
-                    UpdateKnownProjectJsonHash(session);
+                UpdateKnownProjectJsonHash(session);
                 await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                 return result;
             }
@@ -691,6 +687,31 @@ namespace FlowBlox.AIAssistant.Services
 
         private void RaiseEstimatedUsedTokensChanged(int estimatedUsedTokens)
             => EstimatedUsedTokensChanged?.Invoke(this, Math.Max(0, estimatedUsedTokens));
+
+        private static ProjectAttachmentInformation ResolveProjectAttachmentInformation(
+            bool attachProjectJsonAutomatically,
+            bool hasKnownProjectJsonHash,
+            bool projectJsonChanged)
+        {
+            if (attachProjectJsonAutomatically)
+            {
+                if (!projectJsonChanged)
+                    return ProjectAttachmentInformation.ProjectUnchangedSinceLastConversation;
+
+                return hasKnownProjectJsonHash
+                    ? ProjectAttachmentInformation.ProjectChangedSinceLastConversation
+                    : ProjectAttachmentInformation.InitialTransmission;
+            }
+            else
+            {
+                if (!hasKnownProjectJsonHash)
+                    return ProjectAttachmentInformation.ProjectJsonDisabledInitialState;
+
+                return projectJsonChanged
+                    ? ProjectAttachmentInformation.ProjectJsonDisabledProjectChanged
+                    : ProjectAttachmentInformation.ProjectJsonDisabledProjectUnchanged;
+            }
+        }
 
         private static void UpdateKnownProjectJsonHash(AssistantSessionState session)
         {
