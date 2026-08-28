@@ -1,6 +1,6 @@
-﻿using FlowBlox.Core;
+﻿using FlowBlox.Components;
 using FlowBlox.Core.Util;
-using FlowBlox.Core.Util.Controls;
+using FlowBlox.Util.Controls;
 using System;
 using System.Reflection;
 using System.Windows.Forms;

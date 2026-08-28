@@ -8,8 +8,6 @@ namespace FlowBlox.UICore.Interfaces
     {
         event EventHandler SelectedFlowBlocksChanged;
 
-        IFlowBloxUIRegistry GetCurrentUIRegistry();
-
         ProjectChangelist GetCurrentChangelist();
 
         FlowBloxRegistry GetCurrentRegistry();

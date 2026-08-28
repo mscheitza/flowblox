@@ -157,6 +157,7 @@ namespace FlowBlox.AIAssistant.Builder
             AddPromptSection(sections, "Topic: Naming Conventions", AssistantPromptCatalog.NamingConventionsKey);
             AddPromptSection(sections, "Topic: Execution Requirements / Required Fields", AssistantPromptCatalog.ExecutionRequirementsKey);
             AddPromptSection(sections, "Topic: Flow Organization Patterns", AssistantPromptCatalog.FlowOrganizationPatternsKey);
+            AddPromptSection(sections, "Topic: Debugging", AssistantPromptCatalog.DebuggingKey);
             AddPromptSection(sections, "Topic: Version Notes", AssistantPromptCatalog.VersionNotesKey);
 
             if (sections.Count == 0)

@@ -28,13 +28,33 @@
 
     public class FieldValue
     {
+        private string _displayValue;
+
         public string FullyQualifiedName { get; set; }
         public string Value { get; set; }
+        public int ExecutionIndex { get; set; }
+        public string DisplayValue
+        {
+            get => _displayValue ?? Value;
+            set => _displayValue = value;
+        }
 
         public FieldValue(string fullyQualifiedName, string value)
+            : this(fullyQualifiedName, value, value)
+        {
+        }
+
+        public FieldValue(string fullyQualifiedName, string value, string displayValue)
+            : this(fullyQualifiedName, value, displayValue, 0)
+        {
+        }
+
+        public FieldValue(string fullyQualifiedName, string value, string displayValue, int executionIndex)
         {
             FullyQualifiedName = fullyQualifiedName;
             Value = value;
+            DisplayValue = displayValue;
+            ExecutionIndex = executionIndex;
         }
     }
 }

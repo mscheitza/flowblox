@@ -1,0 +1,192 @@
+Explaining FlowBlox user interface and common workflows:
+
+1) When to load this explanation
+- Use this explanation when the user asks how to use the FlowBlox UI, how to create a flow manually, what a dock panel does, or where a command can be found.
+- This guidance describes the main application window, dockable panels and common UI workflows. It does not replace tool/API rules for editing projects programmatically.
+
+2) Main window and dockable panels
+- FlowBlox is a dock-based application. Panels can be shown, hidden, docked and reset through the main menu.
+- Typical default layout:
+  - Left: `Component library`.
+  - Center: `Project`.
+  - Right: `Fields` and `AI Assistant`.
+  - Bottom: `Runtime`, `Problems`, `Tests`, and `Managed Objects`.
+- Main dock panels:
+  - `Component library`: browse available FlowBlock types and drag them into the project.
+  - `Project`: visual flow editor with FlowBlock nodes, arrows, selection, connection mode and runtime controls.
+  - `Fields`: inspect user-defined fields and result fields produced by FlowBlocks.
+  - `Managed Objects`: manage reusable objects such as data objects, tables, AI providers or other resources used by FlowBlocks.
+  - `Problems`: inspect warnings and errors recorded during runtime.
+  - `Tests`: create, edit, run and inspect FlowBlox test cases.
+  - `Runtime`: view live runtime protocol output and control an active execution.
+
+3) Main menu hierarchy
+- `Project`
+  - `Create new project`: create a new FlowBlox project.
+  - `Open project`: open a local `.fbprj` project.
+  - `Open from Project-Space`: open a shared/remote Project Space project.
+  - `Recent projects`: reopen a recently used project.
+  - `Edit properties`: edit project metadata/properties.
+  - `Save project`: save the active project.
+  - `Save to Project Space`: upload/save the project to Project Space.
+  - `Save project as`: save the project under a new file path.
+  - `Close project`: close the active project.
+  - `Exit`: close FlowBlox.
+- `Edit`
+  - `Undo`: undo the last project change.
+  - `Redo`: redo the last undone project change.
+  - `Copy`: copy the selected FlowBlock from the `Project` panel.
+  - `Paste`: paste a copied FlowBlock into the `Project` panel.
+- Project history:
+  - FlowBlox keeps an internal project history for undo/redo.
+  - `Ctrl+Z` triggers `Undo`; `Ctrl+Y` triggers `Redo`.
+  - In the current version there is no visual history browser; history entries are kept only inside the application.
+  - Common history action types derive from `FlowBloxBaseAction`: create FlowBlock, delete FlowBlock, move FlowBlock, connect FlowBlocks, disconnect FlowBlocks, disconnect recursive call, property change, edit object, and invoke action.
+- `View`
+  - `Dockable panels`: show/hide available dock panels.
+  - `Reset dockable dialogues`: restore the default docking layout.
+  - `Toolbox`: open the toolbox configuration.
+- `Tools`
+  - `Manage input files`: manage project input files; runtime mode opens it read-only.
+  - `Custom fields`: manage user-defined fields; runtime mode opens it read-only.
+  - `Automation` -> `Scheduled project executions...`: manage scheduled project runs.
+  - `View projects (Project-Space)`: browse Project Space projects.
+  - `Manage extensions`: manage FlowBlox extensions globally.
+  - `Options...`: edit FlowBlox options.
+- `Directories`
+  - `Open input directory`: open the global input directory.
+  - `Open output folder`: open the global output directory.
+  - `Open project folder`: open the active project directory.
+  - `Open project input directory`: open the active project's input directory.
+  - `Open project output directory`: open the active project's output directory.
+  - `Show runtime log file(s)`: open runtime logs after execution.
+  - `Show application log file(s)`: open application logs.
+- `Help`
+  - `Visit online`: open the FlowBlox website.
+  - `Visit us on GitHub`: open the GitHub repository.
+  - `Check for updates...`: check for available updates.
+  - `Report a problem`: open the issue/report page.
+  - `About FlowBlox`: show application information.
+
+4) Component library
+- Panel title: `Component library`.
+- Toolbar action: `Manage extensions` opens extension management for adding/removing/reloading extension-provided FlowBlocks.
+- The tree groups FlowBlock types by category. Users drag a FlowBlock type from this panel into the `Project` panel to create a node.
+- If a needed FlowBlock type is missing, suggest checking `Manage extensions` or loading `explaining_extensions`.
+
+5) Project panel
+- Panel title: `Project`.
+- Toolbar:
+  - `Refresh`: refresh the panel state.
+  - `Settings`: edit grid/project-window settings.
+  - `Auto align`: arrange the flow automatically.
+  - `Execute`: start runtime execution.
+  - `Pause`: pause runtime execution.
+  - `Stop`: stop runtime execution.
+  - `Select`: normal selection mode.
+  - `Connect [Shift, Control]`: connection mode; the shortcut temporarily enables connection mode while Shift+Control is held.
+  - `Select all elements`, `Select all elements on the left`, `Select all elements on the right`, `Select all elements above`, `Select all elements below`: bulk-select FlowBlocks by location.
+- Selection behavior:
+  - Single-click selects one FlowBlock node.
+  - In `Select` mode, drag a boxed selection rectangle over the grid to select multiple FlowBlocks at once.
+  - Selecting FlowBlocks in the `Project` panel automatically selects/highlights their related fields in the `Fields` panel.
+  - `Ctrl+A` selects all FlowBlocks.
+  - `Ctrl+Left`, `Ctrl+Right`, `Ctrl+Up`, and `Ctrl+Down` select FlowBlocks left, right, above, or below the currently selected/anchored FlowBlock.
+- FlowBlock node context menu:
+  - `Copy value`: copy a selected row value from a FlowBlock node.
+  - `Edit properties` / `View properties`: open the property window, read-only during runtime.
+  - `View input datasets` / `View output datasets`: inspect runtime datasets.
+  - `Manage notifications`: configure FlowBlock notification severities.
+  - `Set breakpoint` / `Remove breakpoint`: toggle breakpoints.
+  - `Manage execution index`, `Set execution index`, `Remove execution index`: manage explicit execution order.
+  - `Refresh`: refresh the panel.
+  - `Remove Flow Block`: delete the selected FlowBlock if dependencies allow it.
+- Arrow context menu:
+  - `Remove connection`: remove a removable association/connection arrow.
+- Visual hints:
+  - `Invocation`: normal execution dependency arrow.
+  - `Iteration context`: target executes per iteration of the referenced context.
+  - `Recursive call`: recursive flow relation through a RecursiveCall FlowBlock.
+  - Selected FlowBlocks are highlighted; currently executing FlowBlocks use a runtime highlight; not-executed FlowBlocks can be marked separately.
+  - Warning/error notifications may appear directly below a FlowBlock node.
+
+6) How to create a flow manually
+- Start in the `Component library` and drag a FlowBlock type into the `Project` panel.
+- A valid flow normally begins with a Start FlowBlock. Drag the Start FlowBlock into the project first.
+- Add additional FlowBlocks by dragging them into the project and connecting them in the `Project` panel.
+- Example workflow:
+  - Add Start.
+  - Add a table-reader FlowBlock, for example a reader for XLSX, CSV, database or another data source.
+  - Configure the data source as a managed object. Managed objects are reusable resources and are not part of the execution flow itself; they provide capabilities FlowBlocks can call, for example reading bytes from a data object or reading a data table.
+  - Add a `WebBrowser` FlowBlock to open a URL.
+  - Use values from the table-reader result fields in later FlowBlocks, for example a search URL or search text built from XLSX rows.
+  - Add `WebEvent` FlowBlocks to type into a search field, click a button, scroll, switch URL or update DOM content.
+  - Add `WebSelector` or other selector FlowBlocks to extract values using CSS selectors, XPath or other selection logic.
+  - If selectors are hard to define manually, use test/generator guidance and ask for `explaining_test_definitions` plus `explaining_generators`; `SequenceDetectionFlowBlock` can generate selectors from test cases.
+  - With a configured AI provider, `AIPropertyValueGenerationStrategy` can generate a value for any suitable flow-block property from test-case evidence; see `explaining_generators` for setup rules.
+  - Add a `TableWriter` FlowBlock to write extracted results to an output table/file.
+- After building the flow, use `Execute` in the `Project` panel and monitor `Runtime`, `Problems`, `Fields` and `Tests`.
+
+7) Fields panel
+- Panel title: `Fields`.
+- Columns: `Flow-Block`, `Field`, `Value`.
+- Toolbar/options:
+  - `Show Flow-Block column`: toggle the source FlowBlock column.
+  - `Single-line field values`: show long field values in a compact one-line mode.
+- Context menu:
+  - `Open Field Value`: open a selected field value in the default editor.
+  - `Copy`: copy selected field value(s).
+  - `Refresh`: refresh the field list.
+- Use this panel to inspect user-defined fields and result fields produced by FlowBlocks during/after execution.
+- Selecting FlowBlocks in the `Project` panel can select/highlight related fields here.
+
+8) Managed Objects panel
+- Panel title: `Managed Objects`.
+- Toolbar:
+  - `Add managed object`: create a managed object in the selected category.
+  - `Edit managed object`: edit the selected managed object.
+  - `Delete managed object`: delete the selected managed object if it is not still used.
+  - `Refresh`: reload the list.
+  - `Actions`: run managed-object-specific UI actions.
+- Columns: `Name`, `Properties`, `Used In`.
+- Managed objects are reusable resources independent from flow execution. FlowBlocks reference them when they need external capabilities or shared configuration.
+- Examples: data objects, data tables, AI providers, tokenizers, ZIP archives or extension-defined managed objects.
+- If deletion is blocked, the panel reports where the object is still used.
+
+9) Problems panel
+- Panel title: `Problems`.
+- Columns: `Timestamp`, `Name`, `Criticality`, `Message`, `Exception`.
+- Context menu: `Open details`.
+- Use this panel after runtime execution to inspect warnings and errors.
+- The detail window shows timestamp, FlowBlock name, criticality, message, exception details and monitored preceding field values.
+- If there are no records, the panel shows: `No problems have been recorded for the current runtime.`
+
+10) Runtime panel
+- Panel title: `Runtime`.
+- Toolbar:
+  - `Open log file`: open the current runtime log.
+  - `Clear output`: clear the visible protocol output.
+  - `Refresh`: reload output.
+  - `Continue`: continue from pause.
+  - `Pause`: pause execution.
+  - `Stop execution`: stop execution.
+  - `Export folder`: open the runtime export folder.
+- Options:
+  - `Stop on error`: pause/stop interaction when errors occur.
+  - `Stop on warning`: pause/stop interaction when warnings occur.
+  - `Run step by step`: execute in stepwise mode.
+- The runtime output is read-only protocol text. It uses colored log levels and auto-scrolls to the latest output.
+
+11) Tests panel
+- Panel title: `Tests`.
+- Toolbar/context actions:
+  - `Create test case`: create a test case from a valid flow chain.
+  - `Edit test case`: edit the selected test case.
+  - `Delete test case(s)`: delete selected tests if they are not still used.
+  - `Run selected or all tests`: execute tests.
+  - `Open protocol`: open the test protocol.
+  - `Reset status and protocol`: clear test result status/protocol.
+  - `Refresh`: reload tests.
+- Columns: `Name`, `Required for`, `Defined at`.
+- Use test cases to provide stable examples and expected values for FlowBlocks, selector generation and generator workflows.
+- For detailed test setup and generator use, load `explaining_test_definitions`, `explaining_test_definitions_deep_dive` and `explaining_generators` as needed.

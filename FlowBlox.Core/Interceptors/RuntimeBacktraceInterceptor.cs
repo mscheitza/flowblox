@@ -1,7 +1,8 @@
 ﻿using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
-using FlowBlox.Core.Util;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util;
 
 namespace FlowBlox.Core.Interceptors
 {
@@ -27,6 +28,8 @@ namespace FlowBlox.Core.Interceptors
                 Message = message
             };
 
+            AppendFieldValues(baseFlowBlock, trace);
+
             AppendTrace(trace);
 
             base.NotifyWarning(baseFlowBlock, message);
@@ -41,6 +44,8 @@ namespace FlowBlox.Core.Interceptors
                 Message = message,
                 Exception = exception
             };
+
+            AppendFieldValues(baseFlowBlock, trace);
 
             AppendTrace(trace);
 
@@ -77,26 +82,43 @@ namespace FlowBlox.Core.Interceptors
             }
         }
 
-        private bool GetListOfFieldValues(BaseFlowBlock baseFlowBlock, BaseFlowBlock currentFlowBlock, List<FieldValue> fieldValues)
+        private void AppendFieldValues(BaseFlowBlock baseFlowBlock, ProblemTrace trace)
         {
-            if (baseFlowBlock is BaseResultFlowBlock)
+            if (baseFlowBlock == null || trace == null)
+                return;
+
+            var registry = FlowBloxRegistryProvider.GetRegistry();
+            var startFlowBlock = registry.GetStartFlowBlock();
+            if (startFlowBlock == null)
+                return;
+
+            var orderedFlowBlocks = registry
+                .GetFlowBlocksRecursiveOrderedByExecutionFlow(startFlowBlock)
+                .ToList();
+
+            var currentFlowBlockIndex = orderedFlowBlocks.FindIndex(flowBlock => ReferenceEquals(flowBlock, baseFlowBlock));
+            if (currentFlowBlockIndex <= 0)
+                return;
+
+            foreach (var item in orderedFlowBlocks
+                .Take(currentFlowBlockIndex)
+                .Select((flowBlock, index) => new { FlowBlock = flowBlock, ExecutionIndex = index }))
             {
-                foreach (var field in ((BaseResultFlowBlock)baseFlowBlock).Fields)
+                if (item.FlowBlock is not BaseResultFlowBlock resultFlowBlock)
+                    continue;
+
+                foreach (var field in resultFlowBlock.Fields)
                 {
-                    fieldValues.Add(new FieldValue(field.FullyQualifiedName, TextHelper.ShortenString(field.StringValue, MaxFieldValueLength, false)));
+                    if (field == null)
+                        continue;
+
+                    trace.FieldValues.Add(new FieldValue(
+                        field.FullyQualifiedName,
+                        field.StringValue,
+                        TextHelper.ShortenString(field.StringValue, MaxFieldValueLength, false),
+                        item.ExecutionIndex));
                 }
             }
-
-            foreach (var nextFlowBlock in baseFlowBlock.GetNextFlowBlocks())
-            {
-                if (nextFlowBlock == currentFlowBlock)
-                    return false;
-
-                if (!GetListOfFieldValues(nextFlowBlock, currentFlowBlock, fieldValues))
-                    return false;
-            }
-
-            return true;
         }
     }
 }

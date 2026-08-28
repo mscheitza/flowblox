@@ -17,15 +17,22 @@ namespace FlowBlox.UICore.ViewModels
             {
                 _selectedProblemTrace = value;
                 OnPropertyChanged(nameof(SelectedProblemTrace));
+                OnPropertyChanged(nameof(HasFieldValues));
+                CommandManager.InvalidateRequerySuggested();
             }
         }
+
+        public bool HasFieldValues => SelectedProblemTrace?.FieldValues?.Count > 0;
 
         public ICommand OpenEditorCommand { get; }
 
         public ProblemTraceViewModel()
         {
-            OpenEditorCommand = new RelayCommand(OpenEditor);
+            OpenEditorCommand = new RelayCommand(OpenEditor, CanOpenEditor);
         }
+
+        private bool CanOpenEditor(object parameter)
+            => parameter is FieldValue fieldValue && !string.IsNullOrWhiteSpace(fieldValue.Value);
 
         private void OpenEditor(object parameter)
         {

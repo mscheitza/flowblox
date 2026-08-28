@@ -175,6 +175,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ProblemTraceWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ProblemsView.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProblemsView.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\ProjectPanelGridSettingsWindow.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -184,6 +189,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ProjectPanel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\RuntimeView.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RuntimeView.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\PropertyView.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -341,9 +351,17 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProblemTraceWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ProblemsView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProblemsView.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\ProjectPanelGridSettingsWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProjectPanelGridSettingsWindow.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\RuntimeView.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RuntimeView.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\PropertyView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

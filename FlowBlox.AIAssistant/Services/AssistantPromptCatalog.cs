@@ -16,6 +16,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string NamingConventionsKey = "naming_conventions";
         public const string ExecutionRequirementsKey = "execution_requirements_and_required_fields";
         public const string FlowOrganizationPatternsKey = "explaining_flow_organization_patterns";
+        public const string DebuggingKey = "explaining_debugging";
         public const string InputFilesKey = "explaining_input_files";
         public const string SpecialTestDefinitionsKey = "explaining_test_definitions";
         public const string SpecialTestDefinitionsDeepDiveKey = "explaining_test_definitions_deep_dive";
@@ -25,6 +26,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string SpecialFlowRecursionKey = "explaining_flow_recursion";
         public const string SpecialExtensionsKey = "explaining_extensions";
         public const string SpecialProjectSpaceKey = "explaining_project_space";
+        public const string SpecialUserInterfaceKey = "explaining_user_interface";
         public const string VersionNotesKey = "explaining_version_notes";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
@@ -84,6 +86,12 @@ namespace FlowBlox.AIAssistant.Services
                     "FlowBlox.AIAssistant.Prompts.ExplainingFlowOrganizationPatterns.txt",
                     "How to structure flows with downstream vs. stack patterns for readability and maintainability.",
                     true),
+                [DebuggingKey] = new PromptEntryDefinition(
+                    DebuggingKey,
+                    "Explaining Debugging",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingDebugging.txt",
+                    "Compact default guidance for debug/test usage, result windowing, and field-value limits.",
+                    true),
                 [InputFilesKey] = new PromptEntryDefinition(
                     InputFilesKey,
                     "Explaining Managed Input Files",
@@ -137,6 +145,12 @@ namespace FlowBlox.AIAssistant.Services
                     "Explaining Project Space",
                     "FlowBlox.AIAssistant.Prompts.ExplainingProjectSpace.txt",
                     "Special: on-demand guidance for Project Space, project sharing, stable versions, and remote execution by Project GUID.",
+                    false),
+                [SpecialUserInterfaceKey] = new PromptEntryDefinition(
+                    SpecialUserInterfaceKey,
+                    "Explaining User Interface",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingUserInterface.txt",
+                    "Special: on-demand guidance for FlowBlox UI panels, menus, toolbar actions, and common manual workflows.",
                     false),
                 [VersionNotesKey] = new PromptEntryDefinition(
                     VersionNotesKey,

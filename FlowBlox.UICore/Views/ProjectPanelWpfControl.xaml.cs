@@ -22,6 +22,9 @@ namespace FlowBlox.UICore.Views
         private Point _marqueeStart;
         private FlowBlockNodeViewModel _connectionStartNode;
         private bool _isConnectingNodes;
+        private FlowBlockNodeViewModel _floatingInsertedNode;
+        private double _floatingInsertedStartX;
+        private double _floatingInsertedStartY;
         private Window _hostWindow;
 
         public ProjectPanelWpfViewModel ViewModel { get; }
@@ -38,6 +41,75 @@ namespace FlowBlox.UICore.Views
 
         public void RefreshProject() => ViewModel.Refresh();
 
+        public bool CanHandleHostedShortcut => IsProjectPanelInteractionContextActive() && !IsTextInputFocusWithin();
+
+        public bool IsTextInputFocusActive => IsTextInputFocusWithin();
+
+        public int SelectedNodeCount => ViewModel.SelectedNodes.Count();
+
+        public void CopySelection() => ViewModel.CopySelection();
+
+        public void PasteSelection()
+        {
+            var node = ViewModel.PasteCopiedSelection(
+                CanvasScrollViewer.ViewportWidth / 2d,
+                CanvasScrollViewer.ViewportHeight / 2d);
+
+            BeginFloatingInsertedNode(node, GetPasteStartPosition());
+        }
+
+        public bool ExecuteRefreshShortcut()
+        {
+            if (ViewModel.RefreshCommand.CanExecute(null) != true)
+                return false;
+
+            ViewModel.RefreshCommand.Execute(null);
+            return true;
+        }
+
+        public bool ExecuteDeleteShortcut()
+        {
+            if (ViewModel.SelectedArrow != null && ViewModel.RemoveConnectionCommand.CanExecute(ViewModel.SelectedArrow))
+            {
+                ViewModel.RemoveConnectionCommand.Execute(ViewModel.SelectedArrow);
+                return true;
+            }
+
+            if (ViewModel.DeleteSelectionCommand.CanExecute(null) != true)
+                return false;
+
+            ViewModel.DeleteSelectionCommand.Execute(null);
+            return true;
+        }
+
+        public bool ExecuteEscapeShortcut()
+        {
+            if (_floatingInsertedNode == null)
+                return false;
+
+            CancelFloatingInsertedNode();
+            return true;
+        }
+
+        public bool ExecuteSelectionShortcut(Key key)
+        {
+            var command = key switch
+            {
+                Key.Left => ViewModel.SelectLeftCommand,
+                Key.Right => ViewModel.SelectRightCommand,
+                Key.Up => ViewModel.SelectUpCommand,
+                Key.Down => ViewModel.SelectDownCommand,
+                Key.A => ViewModel.SelectAllCommand,
+                _ => null
+            };
+
+            if (command?.CanExecute(null) != true)
+                return false;
+
+            command.Execute(null);
+            return true;
+        }
+
         public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused)
             => ViewModel.UpdateRuntimeState(isRuntimeActive, isRuntimePaused);
 
@@ -50,18 +122,18 @@ namespace FlowBlox.UICore.Views
             if (_hostWindow == null)
                 return;
 
-            _hostWindow.PreviewKeyDown -= HostWindow_PreviewKeyChanged;
-            _hostWindow.PreviewKeyUp -= HostWindow_PreviewKeyChanged;
-            _hostWindow.PreviewKeyDown += HostWindow_PreviewKeyChanged;
-            _hostWindow.PreviewKeyUp += HostWindow_PreviewKeyChanged;
+            _hostWindow.PreviewKeyDown -= HostWindow_PreviewKeyDown;
+            _hostWindow.PreviewKeyUp -= HostWindow_PreviewKeyUp;
+            _hostWindow.PreviewKeyDown += HostWindow_PreviewKeyDown;
+            _hostWindow.PreviewKeyUp += HostWindow_PreviewKeyUp;
         }
 
         private void ProjectPanelWpfControl_Unloaded(object sender, RoutedEventArgs e)
         {
             if (_hostWindow != null)
             {
-                _hostWindow.PreviewKeyDown -= HostWindow_PreviewKeyChanged;
-                _hostWindow.PreviewKeyUp -= HostWindow_PreviewKeyChanged;
+                _hostWindow.PreviewKeyDown -= HostWindow_PreviewKeyDown;
+                _hostWindow.PreviewKeyUp -= HostWindow_PreviewKeyUp;
                 _hostWindow = null;
             }
 
@@ -74,18 +146,114 @@ namespace FlowBlox.UICore.Views
                 ViewModel.SetTemporaryConnectionMode(false);
         }
 
-        private void HostWindow_PreviewKeyChanged(object sender, KeyEventArgs e)
+        private void HostWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (ExecuteEditingShortcut(e))
+                return;
+
+            ExecuteSelectionShortcut(e);
+            UpdateTemporaryConnectionMode();
+        }
+
+        private void HostWindow_PreviewKeyUp(object sender, KeyEventArgs e)
             => UpdateTemporaryConnectionMode();
+
+        private void ExecuteSelectionShortcut(KeyEventArgs e)
+        {
+            if (e.Handled ||
+                !IsProjectPanelInteractionContextActive() ||
+                IsTextInputFocusWithin() ||
+                Keyboard.Modifiers != ModifierKeys.Control)
+            {
+                return;
+            }
+
+            var command = e.Key switch
+            {
+                Key.Left => ViewModel.SelectLeftCommand,
+                Key.Right => ViewModel.SelectRightCommand,
+                Key.Up => ViewModel.SelectUpCommand,
+                Key.Down => ViewModel.SelectDownCommand,
+                Key.A => ViewModel.SelectAllCommand,
+                _ => null
+            };
+
+            if (command?.CanExecute(null) != true)
+                return;
+
+            command.Execute(null);
+            e.Handled = true;
+        }
+
+        private bool ExecuteEditingShortcut(KeyEventArgs e)
+        {
+            if (e.Handled ||
+                !IsProjectPanelInteractionContextActive() ||
+                IsTextInputFocusWithin())
+            {
+                return false;
+            }
+
+            if (e.Key == Key.Escape && _floatingInsertedNode != null)
+            {
+                ExecuteEscapeShortcut();
+                e.Handled = true;
+                return true;
+            }
+
+            if (Keyboard.Modifiers != ModifierKeys.None)
+                return false;
+
+            if (e.Key == Key.F5 && ExecuteRefreshShortcut())
+            {
+                e.Handled = true;
+                return true;
+            }
+
+            if (e.Key == Key.Delete && ExecuteDeleteShortcut())
+            {
+                e.Handled = true;
+                return true;
+            }
+
+            return false;
+        }
 
         private void UpdateTemporaryConnectionMode()
         {
             var isShortcutActive =
-                (IsKeyboardFocusWithin || IsMouseOver) &&
+                IsProjectPanelInteractionContextActive() &&
                 Keyboard.Modifiers.HasFlag(ModifierKeys.Control) &&
                 Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) &&
                 ViewModel.ConnectionModeCommand.CanExecute(null);
 
             ViewModel.SetTemporaryConnectionMode(isShortcutActive);
+        }
+
+        private bool IsProjectPanelInteractionContextActive()
+            => IsKeyboardFocusWithin || IsMouseOver;
+
+        private Point GetPasteStartPosition()
+            => ProjectCanvas.IsMouseOver
+                ? Mouse.GetPosition(ProjectCanvas)
+                : new Point(
+                    CanvasScrollViewer.HorizontalOffset + Math.Max(0d, CanvasScrollViewer.ViewportWidth / 2d),
+                    CanvasScrollViewer.VerticalOffset + Math.Max(0d, CanvasScrollViewer.ViewportHeight / 2d));
+
+        private static bool IsTextInputFocusWithin()
+        {
+            if (Keyboard.FocusedElement is not DependencyObject current)
+                return false;
+
+            while (current != null)
+            {
+                if (current is TextBox or PasswordBox)
+                    return true;
+
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            return false;
         }
 
         private void Arrow_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -109,6 +277,13 @@ namespace FlowBlox.UICore.Views
         {
             if ((sender as FrameworkElement)?.DataContext is not FlowBlockNodeViewModel node)
                 return;
+
+            if (_floatingInsertedNode != null)
+            {
+                CommitFloatingInsertedNode();
+                e.Handled = true;
+                return;
+            }
 
             if (IsScrollBarInteraction(e.OriginalSource))
                 return;
@@ -194,6 +369,13 @@ namespace FlowBlox.UICore.Views
 
         private void FlowBlock_PreviewMouseMove(object sender, MouseEventArgs e)
         {
+            if (_floatingInsertedNode != null)
+            {
+                MoveFloatingInsertedNode(e.GetPosition(ProjectCanvas));
+                e.Handled = true;
+                return;
+            }
+
             if (_isConnectingNodes)
             {
                 UpdateConnectionPreview(_connectionStartNode, e.GetPosition(ProjectCanvas));
@@ -218,6 +400,12 @@ namespace FlowBlox.UICore.Views
 
         private void FlowBlock_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (_floatingInsertedNode != null)
+            {
+                e.Handled = true;
+                return;
+            }
+
             if (_isConnectingNodes)
             {
                 FinishConnection(e.GetPosition(ProjectCanvas));
@@ -292,11 +480,12 @@ namespace FlowBlox.UICore.Views
                 return;
             }
 
-            ViewModel.CreateFlowBlockFromDrop(
+            var node = ViewModel.CreateFlowBlockFromDrop(
                 e.Data,
                 e.GetPosition(ProjectCanvas),
                 CanvasScrollViewer.ViewportWidth / 2d,
                 CanvasScrollViewer.ViewportHeight / 2d);
+            BeginFloatingInsertedNode(node, e.GetPosition(ProjectCanvas));
 
             e.Effects = DragDropEffects.Copy;
             e.Handled = true;
@@ -304,6 +493,13 @@ namespace FlowBlox.UICore.Views
 
         private void ProjectCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (_floatingInsertedNode != null)
+            {
+                CommitFloatingInsertedNode();
+                e.Handled = true;
+                return;
+            }
+
             if (!ViewModel.CanStartMarqueeSelection)
                 return;
 
@@ -317,6 +513,13 @@ namespace FlowBlox.UICore.Views
 
         private void ProjectCanvas_MouseMove(object sender, MouseEventArgs e)
         {
+            if (_floatingInsertedNode != null)
+            {
+                MoveFloatingInsertedNode(e.GetPosition(ProjectCanvas));
+                e.Handled = true;
+                return;
+            }
+
             if (_isConnectingNodes)
             {
                 UpdateConnectionPreview(_connectionStartNode, e.GetPosition(ProjectCanvas));
@@ -333,6 +536,12 @@ namespace FlowBlox.UICore.Views
 
         private void ProjectCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (_floatingInsertedNode != null)
+            {
+                e.Handled = true;
+                return;
+            }
+
             if (_isConnectingNodes)
             {
                 FinishConnection(e.GetPosition(ProjectCanvas));
@@ -361,6 +570,55 @@ namespace FlowBlox.UICore.Views
             _isMarqueeSelecting = false;
             MarqueeSelectionRectangle.Visibility = Visibility.Collapsed;
             ProjectCanvas.ReleaseMouseCapture();
+        }
+
+        private void BeginFloatingInsertedNode(FlowBlockNodeViewModel node, Point location)
+        {
+            if (node == null)
+                return;
+
+            _floatingInsertedNode = node;
+            _floatingInsertedStartX = node.X;
+            _floatingInsertedStartY = node.Y;
+            MoveFloatingInsertedNode(location);
+            Mouse.Capture(ProjectCanvas);
+        }
+
+        private void MoveFloatingInsertedNode(Point location)
+        {
+            ViewModel.MoveNodeToCanvasPosition(
+                _floatingInsertedNode,
+                location,
+                CanvasScrollViewer.ViewportWidth / 2d,
+                CanvasScrollViewer.ViewportHeight / 2d);
+        }
+
+        private void CommitFloatingInsertedNode()
+        {
+            if (_floatingInsertedNode != null)
+            {
+                var from = new System.Drawing.Point(
+                    (int)Math.Round(_floatingInsertedStartX),
+                    (int)Math.Round(_floatingInsertedStartY));
+                var to = new System.Drawing.Point(
+                    (int)Math.Round(_floatingInsertedNode.X),
+                    (int)Math.Round(_floatingInsertedNode.Y));
+                ViewModel.CommitNodeMove(_floatingInsertedNode, from, to);
+            }
+
+            EndFloatingInsertedNode();
+        }
+
+        private void CancelFloatingInsertedNode()
+        {
+            ViewModel.CancelInsertedNode(_floatingInsertedNode);
+            EndFloatingInsertedNode();
+        }
+
+        private void EndFloatingInsertedNode()
+        {
+            _floatingInsertedNode = null;
+            Mouse.Capture(null);
         }
 
         private void FinishConnection(Point endPoint)

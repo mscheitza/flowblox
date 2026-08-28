@@ -17,14 +17,12 @@ namespace FlowBlox.AppWindow
             [typeof(FieldView)] = nameof(FlowBloxMainUIImages.FieldView_16),
             [typeof(ManagedObjectsView)] = nameof(FlowBloxMainUIImages.ManagedObjectsView_16),
             [typeof(TestView)] = nameof(FlowBloxMainUIImages.DockContent_16),
-            [typeof(AIAssistantView)] = nameof(FlowBloxMainUIImages.AIAssistantView_16)
+            [typeof(AIAssistantView)] = nameof(FlowBloxMainUIImages.AIAssistantView_16),
+            [typeof(ProblemsView)] = nameof(FlowBloxMainUIImages.ProblemsView_16),
+            [typeof(RuntimeView)] = nameof(FlowBloxMainUIImages.RuntimeView_16)
         };
 
-        private static readonly Dictionary<Type, string> _resourceKeysByWrappedViewType = new()
-        {
-            [typeof(FlowBlox.Views.RuntimeView)] = nameof(FlowBloxMainUIImages.RuntimeView_16),
-            [typeof(FlowBlox.Views.ProblemsView)] = nameof(FlowBloxMainUIImages.ProblemsView_16)
-        };
+        private static readonly Dictionary<Type, string> _resourceKeysByWrappedViewType = new();
 
         private const string FallbackResourceKey = nameof(FlowBloxMainUIImages.DockContent_16);
 
@@ -81,4 +79,3 @@ namespace FlowBlox.AppWindow
         }
     }
 }
-

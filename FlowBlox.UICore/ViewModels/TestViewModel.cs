@@ -101,7 +101,7 @@ namespace FlowBlox.UICore.ViewModels
             RebindAndRefresh();
         }
 
-        public void OnAfterUIRegistryInitialized() => RebindAndRefresh();
+        public void AfterProjectFullyInitialized() => RebindAndRefresh();
 
         public void SetRuntimeActive(bool isRuntimeActive) => IsReadOnly = isRuntimeActive;
 

@@ -1,7 +1,6 @@
 ﻿using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interceptors;
 using FlowBlox.Core.Interfaces;
-using FlowBlox.Grid.Provider;
 using FlowBlox.UICore.Factory;
 using Microsoft.Extensions.DependencyInjection;
 using FlowBlox.UICore.Interfaces;
@@ -11,6 +10,7 @@ using FlowBlox.Core.Services;
 using FlowBlox.WebServices;
 using FlowBlox.Core.TaskManagement;
 using FlowBlox.UICore.Services;
+using FlowBlox.Provider;
 
 namespace FlowBlox
 {

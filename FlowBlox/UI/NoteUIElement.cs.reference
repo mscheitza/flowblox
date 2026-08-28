@@ -1,0 +1,63 @@
+﻿// LEGACY REFERENCE ONLY:
+// This is the previous implementation of the Note-FlowBlock UI representation.
+// The current implementation is represented by the active WPF ViewModel FlowBlockNodeViewModel
+// in conjunction with ProjectPanelWpf (View/ViewModel/XAML).
+// Exclude this file from compilation and use it solely for behavioral comparisons
+// during the migration.
+
+using System;
+using System.Windows.Forms;
+using FlowBlox.Components;
+using FlowBlox.Core.Models.FlowBlocks;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Grid.Elements.UserControls;
+
+namespace FlowBlox.UI
+{
+    public class NoteUIElement : FlowBlockUIElement
+    {
+        public static Type GridElementType => typeof(NoteFlowBlock);
+
+        private const int NoteElementHeight = 150;
+
+        private RichTextBox tbNote = new RichTextBox();
+
+        public NoteUIElement() : base() 
+        {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            tbNote.ReadOnly = true;
+            tbNote.BackColor = System.Drawing.Color.FloralWhite;
+            tbNote.Dock = DockStyle.Fill;
+            tbNote.Font = new System.Drawing.Font("Calibri", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            tbNote.ForeColor = System.Drawing.SystemColors.ControlText;
+            tbNote.Name = "tbNote";
+            tbNote.TabIndex = 1;
+            Controls.Add(tbNote);
+            tbNote.BringToFront();
+        }
+
+        public NoteUIElement(BaseFlowBlock baseGridElement) : base(baseGridElement)
+        {
+            Initialize();
+        }
+
+        protected override void RefreshSizeInternal()
+        {
+            Height = NoteElementHeight;
+            UpdateBackColor();
+        }
+
+        public override void UpdateContent()
+        {
+            tbNote.Text =((NoteFlowBlock)InternalFlowBlock).Note;
+            Name = InternalFlowBlock.Name;
+            FlowBloxStyle.ApplyStyle(this);
+            UpdateFlags();
+            RefreshSizeAndLocation();
+        }
+    }
+}

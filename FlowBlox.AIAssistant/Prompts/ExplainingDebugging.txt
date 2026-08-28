@@ -1,0 +1,21 @@
+Debugging Guide (compact)
+
+Target execution:
+- When debugging a target flow block, include the target execution if the target block's own result fields are needed.
+- If only predecessor output is needed, stop before the target to inspect incoming context.
+
+Result windowing:
+- BaseResultFlowBlock supports output modes: `All`, `First`, `Last`, `Range`.
+- `Range` can be controlled with `StartIndex`, `EndIndex`, and `StartValue`.
+- Use these properties to inspect a specific result dataset instead of reading all results.
+- With multiple result fields, `StartValue` matches when at least one result-field value in the dataset equals the configured start value.
+
+Field-value limiting:
+- Debug/test Tool API responses limit the total estimated tokens used by field values.
+- The limiter is always applied to field values, even for focused result requests.
+- Truncated values end with a short truncation marker.
+- Response metadata includes enough continuation information, such as start index, total length, and current returned length.
+- `RunTestDefinition` only applies limiting; it does not support field-value windowing.
+- For debug artefact inspection, use `fieldValueStartIndex` to continue reading a large value when the tool supports it.
+- If the exact character index is unknown but marker text is known, use `fieldValueSearchValues` as comma-separated marker values on debug artefact requests.
+- When `fieldValueSearchValues` matches a field value, the returned debug chunk starts at the first matching marker instead of `fieldValueStartIndex`.

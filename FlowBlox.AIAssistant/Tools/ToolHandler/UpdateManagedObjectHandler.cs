@@ -7,6 +7,7 @@ namespace FlowBlox.AIAssistant.Tools
     internal sealed class UpdateManagedObjectHandler : ToolHandlerBase
     {
         public override string Name => "UpdateManagedObject";
+        public override bool IsLayoutRelevantForAutoAdjustment => true;
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,

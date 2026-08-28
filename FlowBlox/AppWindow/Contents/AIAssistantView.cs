@@ -5,22 +5,18 @@ using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
-using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Json;
-using FlowBlox.Core.Util.FlowBlocks;
-using FlowBlox.Core.Util.WPF;
-using FlowBlox.Grid.Elements.UserControls;
-using FlowBlox.Grid.Provider;
 using FlowBlox.UICore.ViewModels;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
 using Newtonsoft.Json;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using WeifenLuo.WinFormsUI.Docking;
+using FlowBlox.Util.Controls;
+using FlowBlox.Util.WPF;
 
 namespace FlowBlox.AppWindow.Contents
 {
@@ -54,7 +50,7 @@ namespace FlowBlox.AppWindow.Contents
             }
         }
 
-        internal void OnAfterUIRegistryInitialized()
+        internal void AfterProjectFullyInitialized()
         {
             _viewModel?.ResetForProjectInitialization();
         }
@@ -193,53 +189,7 @@ namespace FlowBlox.AppWindow.Contents
                 return;
             }
 
-            var appWindow = AppWindow.Instance;
-            var projectPanel = appWindow.GetAccessibleComponent<ProjectPanel>();
-            if (projectPanel == null)
-            {
-                return;
-            }
-
-            var componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
-            var uiRegistry = componentProvider.GetCurrentUIRegistry();
-            if (uiRegistry == null)
-            {
-                return;
-            }
-
-            foreach (var flowBlock in e.AddedFlowBlocks)
-            {
-                if (flowBlock == null)
-                    continue;
-
-                if (uiRegistry.GetUIElementToGridElement(flowBlock) != null)
-                    continue;
-
-                var uiElement = projectPanel.CreateGridUIElement(flowBlock);
-                uiRegistry.RegisterGridUIElement(uiElement);
-            }
-
-            foreach (var removedFlowBlockName in e.RemovedFlowBlockNames)
-            {
-                if (string.IsNullOrWhiteSpace(removedFlowBlockName))
-                {
-                    continue;
-                }
-
-                var uiElement = uiRegistry.UIElements.FirstOrDefault(x =>
-                    string.Equals(x?.InternalFlowBlock?.Name, removedFlowBlockName, StringComparison.OrdinalIgnoreCase));
-
-                if (uiElement == null)
-                {
-                    continue;
-                }
-
-                uiElement.Parent?.Controls.Remove(uiElement);
-                uiRegistry.RemoveUIElement(uiElement);
-                uiElement.Dispose();
-            }
-
-            projectPanel.UpdateUI(gridUpdate: true, appWindowUpdate: true);
+            AppWindow.Instance.UpdateUI();
         }
     }
 }

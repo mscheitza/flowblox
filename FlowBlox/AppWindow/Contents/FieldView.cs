@@ -34,9 +34,9 @@ namespace FlowBlox.AppWindow.Contents
             _viewModel = _fieldViewControl.DataContext as FieldViewModel;
         }
 
-        internal void OnAfterUIRegistryInitialized()
+        internal void AfterProjectFullyInitialized()
         {
-            _fieldViewControl.OnAfterUIRegistryInitialized();
+            _fieldViewControl.AfterProjectFullyInitialized();
         }
 
         protected override void Dispose(bool disposing)

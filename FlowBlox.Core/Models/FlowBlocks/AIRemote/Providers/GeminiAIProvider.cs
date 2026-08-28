@@ -17,7 +17,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         public GeminiAIProvider()
         {
             BaseUrl = "https://generativelanguage.googleapis.com/v1";
-            DefaultModel = "gemini-3.5-flash";
+            DefaultModel = "gemini-3.7-flash";
             TimeoutSeconds = 60;
         }
 

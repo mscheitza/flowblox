@@ -1763,6 +1763,24 @@ namespace FlowBlox {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Multi paste is not supported in this version. Only the first selected Flow Block will be copied. ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_MultiPasteNotSupported_Message {
+            get {
+                return ResourceManager.GetString("ProjectPanel_MultiPasteNotSupported_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Multi paste not supported ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_MultiPasteNotSupported_Title {
+            get {
+                return ResourceManager.GetString("ProjectPanel_MultiPasteNotSupported_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The runtime was aborted due to an unexpected error.{1}Runtime exception:{1}{0} ähnelt.
         /// </summary>
         internal static string ProjectPanel_RuntimeAborted_Message {
@@ -1795,6 +1813,15 @@ namespace FlowBlox {
         internal static string ProjectPanel_RuntimeStartFailed_Title {
             get {
                 return ResourceManager.GetString("ProjectPanel_RuntimeStartFailed_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project ähnelt.
+        /// </summary>
+        internal static string ProjectPanel_Text {
+            get {
+                return ResourceManager.GetString("ProjectPanel_Text", resourceCulture);
             }
         }
         

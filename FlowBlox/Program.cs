@@ -1,9 +1,9 @@
 ﻿using CommandLine;
+using FlowBlox.CommandLine;
 using FlowBlox.Core.Authentication;
-using FlowBlox.Core.CommandLine;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Util;
-using FlowBlox.Core.Util.Fonts;
+using FlowBlox.Util.Fonts;
 using System;
 using System.Globalization;
 using System.IO;
@@ -120,4 +120,3 @@ namespace FlowBlox
         }
     }
 }
-    

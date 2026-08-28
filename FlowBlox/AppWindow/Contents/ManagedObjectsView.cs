@@ -28,9 +28,9 @@ namespace FlowBlox.AppWindow.Contents
             Controls.Add(_elementHost);
         }
 
-        internal void OnAfterUIRegistryInitialized()
+        internal void AfterProjectFullyInitialized()
         {
-            _managedObjectsViewControl.OnAfterUIRegistryInitialized();
+            _managedObjectsViewControl.AfterProjectFullyInitialized();
         }
 
         internal void RefreshData()

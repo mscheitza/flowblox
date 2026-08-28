@@ -471,6 +471,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 return;
 
             SyncReferencedFlowBlocksWithInputBehaviorAssignments();
+            OnPropertyChanged(nameof(IterationContext));
+            OnPropertyChanged(nameof(HasIterationContext));
         }
 
         public void RefreshNotExecutedState()
@@ -526,7 +528,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 OnPropertyChanged(nameof(this.InputBehaviorAssignments));
         }
 
-        public bool HasInputReference 
+        public bool HasIterationContext 
         {
             get
             {
@@ -552,7 +554,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             set
             {
                 ValidateAssociatedIterationContext(value);
+                if (ReferenceEquals(_associatedIterationContext, value))
+                    return;
+
                 _associatedIterationContext = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IterationContext));
+                OnPropertyChanged(nameof(HasIterationContext));
             }
         }
 
@@ -622,6 +630,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public bool InputIgnoreDuplicates { get; set; }
 
         [Display(Name = "BaseFlowBlock_InputBehaviorAssignments", Description = "BaseFlowBlock_InputBehaviorAssignments_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 2)]
+        [ActivationCondition(MemberName = nameof(HasIterationContext), Value = true)]
+        [ConditionallyRequired]
         [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.Edit)]
         public ObservableCollection<InputBehaviorAssignment> InputBehaviorAssignments { get; set; }
 
@@ -910,7 +920,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public override void RuntimeStarted(BaseRuntime runtime)
         {
-            if (this.HasInputReference)
+            if (this.HasIterationContext)
                 runtime.Report($"FlowBlock \"{Name}\": Iteration context is \"{IterationContext.Name}\". Inputs will be collected until iteration end, then this block will execute.");
 
             OnUndoWarn?.Invoke(runtime);
@@ -1058,7 +1068,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             if (!runtime.ExecutionFlowEnabled)
                 return InvokeExecutor(runtime, executor);
 
-            if (this.HasInputReference)
+            if (this.HasIterationContext)
             {
                 var callingFlowBlock = (BaseFlowBlock)data;
                 if (callingFlowBlock == null)

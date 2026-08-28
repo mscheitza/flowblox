@@ -1,8 +1,8 @@
-﻿using FlowBlox.Core;
+﻿using FlowBlox.Components;
 using FlowBlox.Core.Models.Project;
-using FlowBlox.Core.Util.Controls;
-using FlowBlox.Core.Util.Drawing;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.Util.Controls;
+using FlowBlox.Util.Drawing;
 using System;
 using System.Diagnostics;
 using System.IO;

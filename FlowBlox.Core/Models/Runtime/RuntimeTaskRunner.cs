@@ -100,7 +100,7 @@ namespace FlowBlox.Core.Models.Runtime
                 if (next == null)
                     continue;
 
-                if (next.HasInputReference)
+                if (next.HasIterationContext)
                     items.Add(new InvokeFlowBlockWorkItem(next, current));
             }
 
@@ -111,7 +111,7 @@ namespace FlowBlox.Core.Models.Runtime
                 if (next == null) 
                     continue;
 
-                if (next.HasInputReference) 
+                if (next.HasIterationContext) 
                     continue;
 
                 items.Add(new InvokeFlowBlockWorkItem(next, current));

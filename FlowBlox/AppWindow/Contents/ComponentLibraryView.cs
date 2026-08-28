@@ -1,9 +1,9 @@
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Util.Controls;
-using FlowBlox.Core.Util.WPF;
 using FlowBlox.UICore.ViewModels.ComponentLibrary;
 using FlowBlox.UICore.Views;
+using FlowBlox.Util.Controls;
+using FlowBlox.Util.WPF;
 using System;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;

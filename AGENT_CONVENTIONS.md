@@ -38,6 +38,7 @@ This file summarizes core project conventions for AI/coding agents working in th
 
 ## Localization Conventions (Mandatory)
 - Always create localization keys for new user-visible types/properties/tooltips.
+- German localization files must contain real German umlauts (`ä`, `ö`, `ü`, `Ä`, `Ö`, `Ü`, `ß`). Do not use XML character codes for normal text and avoid mojibake such as `Ã¤`.
 - Key naming format:
   - Type display name: `ClassName_DisplayName`
   - Property label: `ClassName_PropertyName`

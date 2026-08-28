@@ -1,6 +1,6 @@
 using FlowBlox.Core.Actions;
 using FlowBlox.Core.Interfaces;
-using FlowBlox.Grid.Provider;
+using FlowBlox.Provider;
 using System.Collections.Generic;
 using System.Linq;
 

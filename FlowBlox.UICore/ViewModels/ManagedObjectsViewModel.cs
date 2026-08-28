@@ -148,7 +148,7 @@ namespace FlowBlox.UICore.ViewModels
         private void RuntimeStateService_StateChanged(object? sender, RuntimeStateChangedEventArgs e)
             => SynchronizationContextHelper.PostToUi(_uiContext, () => SetRuntimeActive(e.IsRuntimeActive));
 
-        public void OnAfterUIRegistryInitialized()
+        public void AfterProjectFullyInitialized()
         {
             RebindAndRefresh();
         }

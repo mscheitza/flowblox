@@ -8,22 +8,25 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.ControlFlow;
-using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Events;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels.ProjectPanel
@@ -38,6 +41,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private readonly Dictionary<BaseFlowBlock, FlowBlockNodeViewModel> _nodesByFlowBlock = new();
         private readonly IFlowBloxProjectComponentProvider _componentProvider;
         private readonly IDialogService _dialogService;
+        private readonly IFlowBloxMessageBoxService _messageBoxService;
         private readonly IRuntimeStateService _runtimeStateService;
         private readonly SynchronizationContext _uiContext;
         private FlowBloxRegistry _registry;
@@ -48,12 +52,14 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private bool _isTemporaryConnectionMode;
         private bool _isRuntimeActive;
         private bool _isRuntimePaused;
+        private readonly List<BaseFlowBlock> _copiedFlowBlocks = new();
 
         public ProjectPanelWpfViewModel()
         {
             _uiContext = SynchronizationContext.Current;
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<IFlowBloxProjectComponentProvider>();
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
+            _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
             _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
 
             SelectModeCommand = new RelayCommand(() => IsConnectionMode = false, CanEditGrid);
@@ -227,6 +233,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public string ToggleBreakpointHeader => SelectedNode?.InternalFlowBlock.BreakPoint == true
             ? FlowBloxResourceUtil.GetLocalizedString("ContextMenu_RemoveBreakpoint", typeof(Resources.ProjectPanel))
             : FlowBloxResourceUtil.GetLocalizedString("ContextMenu_SetBreakpoint", typeof(Resources.ProjectPanel));
+        public string RefreshGestureText => GetGestureText(Key.F5);
+        public string DeleteGestureText => GetGestureText(Key.Delete);
         public double CanvasWidth => _project?.GridSizeX > 0 ? _project.GridSizeX : DefaultCanvasWidth;
         public double CanvasHeight => _project?.GridSizeY > 0 ? _project.GridSizeY : DefaultCanvasHeight;
         public string EditSelectionHeader => IsRuntimeActive
@@ -241,6 +249,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public bool CanExecuteRuntime => HasProject() && (!IsRuntimeActive || IsRuntimePaused);
         public bool CanPauseRuntime => HasProject() && IsRuntimeActive && !IsRuntimePaused;
         public bool CanStopRuntime => HasProject() && IsRuntimeActive;
+        public bool CanCopySelection => SelectedNodes.Any();
+        public bool CanPasteSelection => _copiedFlowBlocks.Count > 0 && HasProject() && !IsRuntimeActive;
         public bool CanStartConnectionFrom(FlowBlockNodeViewModel node)
             => node?.InternalFlowBlock is not null and not NoteFlowBlock;
         public bool CanPreviewConnection(FlowBlockNodeViewModel startNode, FlowBlockNodeViewModel endNode)
@@ -325,7 +335,15 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public bool ConnectNodes(FlowBlockNodeViewModel startNode, FlowBlockNodeViewModel endNode)
         {
             if (!CanConnect(startNode, endNode))
+            {
+                if (startNode != null && endNode != null)
+                    ShowMessage(
+                        FlowBloxResourceUtil.GetLocalizedString("Message_ConnectBlocked_Description", typeof(Resources.ProjectPanel)),
+                        FlowBloxResourceUtil.GetLocalizedString("Message_ConnectBlocked_Title", typeof(Resources.ProjectPanel)),
+                        FlowBloxMessageBoxTypes.Information);
+
                 return false;
+            }
 
             FlowBloxBaseAction connectAction;
             if (startNode.InternalFlowBlock is RecursiveCallFlowBlock recursiveCallFlowBlock)
@@ -445,7 +463,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public bool CanCreateFlowBlockFromDrop(IDataObject dataObject)
             => ResolveDraggedFlowBlockType(dataObject) != null && _registry != null && !IsRuntimeActive;
 
-        public void CreateFlowBlockFromDrop(
+        public FlowBlockNodeViewModel CreateFlowBlockFromDrop(
             IDataObject dataObject,
             Point location,
             double horizontalReserve,
@@ -453,15 +471,13 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         {
             var flowBlockType = ResolveDraggedFlowBlockType(dataObject);
             if (flowBlockType == null || _registry == null)
-                return;
+                return null;
 
             var createdFlowBlock = _registry.CreateFlowBlockUnregistered(flowBlockType);
-            createdFlowBlock.Location = new System.Drawing.Point(
-                Math.Max(0, (int)Math.Round(location.X)),
-                Math.Max(0, (int)Math.Round(location.Y)));
+            createdFlowBlock.Location = new System.Drawing.Point(0, 0);
 
             if (!AssignFlowBlockName(createdFlowBlock))
-                return;
+                return null;
 
             _registry.PostProcessFlowBlockCreated(createdFlowBlock);
 
@@ -484,9 +500,111 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             {
                 EnsureCanvasContainsNode(node, horizontalReserve, verticalReserve);
                 SelectNode(node, toggle: false, extend: false);
+                RefreshArrows();
+                return node;
             }
 
             RefreshArrows();
+            return null;
+        }
+
+        public void MoveNodeToCanvasPosition(
+            FlowBlockNodeViewModel node,
+            Point location,
+            double horizontalReserve,
+            double verticalReserve)
+        {
+            if (node == null)
+                return;
+
+            var snappedPosition = GetSnappedNodePosition(node, location.X, location.Y);
+            node.X = snappedPosition.X;
+            node.Y = snappedPosition.Y;
+            EnsureCanvasContainsNode(node, horizontalReserve, verticalReserve);
+        }
+
+        public void CancelInsertedNode(FlowBlockNodeViewModel node)
+        {
+            if (node == null || !Nodes.Contains(node) || IsRuntimeActive)
+                return;
+
+            var deleteAction = new FlowBloxDeleteAction
+            {
+                FlowBlock = node.InternalFlowBlock
+            };
+
+            deleteAction.Invoke();
+            _componentProvider?.GetCurrentChangelist()?.AddChange(deleteAction);
+        }
+
+        public void CopySelection()
+        {
+            _copiedFlowBlocks.Clear();
+            var node = SelectedNode ?? SelectedNodes.FirstOrDefault();
+            if (node == null)
+                return;
+
+            var copier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(node.InternalFlowBlock));
+            var copy = (BaseFlowBlock)copier.Copy(node.InternalFlowBlock);
+            copy.Name = string.Format(
+                FlowBloxResourceUtil.GetLocalizedString("Copy_NameFormat", typeof(Resources.ProjectPanel)),
+                node.Name);
+            _copiedFlowBlocks.Add(copy);
+        }
+
+        public FlowBlockNodeViewModel PasteCopiedSelection(double horizontalReserve, double verticalReserve)
+        {
+            if (!CanPasteSelection)
+                return null;
+
+            var pastedFlowBlocks = new List<BaseFlowBlock>();
+            foreach (var copiedFlowBlock in _copiedFlowBlocks)
+            {
+                var copier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(copiedFlowBlock));
+                var paste = (BaseFlowBlock)copier.Copy(copiedFlowBlock);
+                paste.Location = new System.Drawing.Point(0, 0);
+                pastedFlowBlocks.Add(paste);
+                break;
+            }
+
+            var firstPaste = pastedFlowBlocks.FirstOrDefault();
+            if (firstPaste == null)
+                return null;
+
+            var createAction = new FlowBloxCreateAction
+            {
+                FlowBlock = firstPaste
+            };
+
+            createAction.AssociatedActions.AddRange(pastedFlowBlocks.Skip(1).Select(flowBlock => new FlowBloxCreateAction
+            {
+                FlowBlock = flowBlock
+            }));
+
+            createAction.Invoke();
+            _componentProvider?.GetCurrentChangelist()?.AddChange(createAction);
+
+            foreach (var node in Nodes)
+                node.IsSelected = false;
+
+            FlowBlockNodeViewModel firstNode = null;
+            foreach (var pastedFlowBlock in pastedFlowBlocks)
+            {
+                if (!_nodesByFlowBlock.TryGetValue(pastedFlowBlock, out var node))
+                    continue;
+
+                node.IsSelected = true;
+                firstNode ??= node;
+                EnsureCanvasContainsNode(node, horizontalReserve, verticalReserve);
+            }
+
+            SelectedNode = firstNode;
+            SelectedArrow = null;
+            MarkReferences();
+            PublishSelectedFlowBlocks();
+            RefreshArrows();
+            InvalidateSelectionCommands();
+            return firstNode;
         }
 
         public void EnsureCanvasContainsNode(FlowBlockNodeViewModel node, double horizontalReserve, double verticalReserve)
@@ -649,7 +767,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                         AddArrow(new FlowBlockArrowViewModel(from, node, "invoke"), selectedArrow);
                 }
 
-                if (node.InternalFlowBlock.HasInputReference &&
+                if (node.InternalFlowBlock.HasIterationContext &&
                     node.InternalFlowBlock.IterationContext != null &&
                     _nodesByFlowBlock.TryGetValue(node.InternalFlowBlock.IterationContext, out var iterationSource))
                 {
@@ -735,6 +853,15 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             if (!HasProject())
                 return;
 
+            if (_registry?.GetStartFlowBlock() == null)
+            {
+                ShowMessage(
+                    FlowBloxResourceUtil.GetLocalizedString("Message_AutoLayoutNoStart_Description", typeof(Resources.ProjectPanel)),
+                    FlowBloxResourceUtil.GetLocalizedString("Message_AutoLayoutNoStart_Title", typeof(Resources.ProjectPanel)),
+                    FlowBloxMessageBoxTypes.Information);
+                return;
+            }
+
             SyncNodeSizesToModel();
             FlowBlockAutoLayoutAdjuster.Adjust(_registry.GetFlowBlocks());
             var moveActions = FlowBlockAutoLayoutAdjuster.GetRecordedMoveActions();
@@ -763,6 +890,12 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             var firstFlowBlock = selectedFlowBlocks.FirstOrDefault();
             if (firstFlowBlock == null)
                 return;
+
+            if (TryShowDependencyViolation(selectedFlowBlocks))
+            {
+                Refresh();
+                return;
+            }
 
             var deleteAction = new FlowBloxDeleteAction
             {
@@ -1010,7 +1143,10 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 if (!ValidationUtil.ValidateProperty(flowBlock, nameof(BaseFlowBlock.Name), out var message))
                 {
                     flowBlock.Name = oldName;
-                    MessageBox.Show(message);
+                    ShowMessage(
+                        message,
+                        FlowBloxResourceUtil.GetLocalizedString("Message_AssignFlowBlockNameInvalid_Title", typeof(Resources.ProjectPanel)),
+                        FlowBloxMessageBoxTypes.Warning);
                     return AssignFlowBlockName(flowBlock);
                 }
 
@@ -1018,6 +1154,65 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             }
 
             return false;
+        }
+
+        private bool TryShowDependencyViolation(IReadOnlyCollection<BaseFlowBlock> selectedFlowBlocks)
+        {
+            if (selectedFlowBlocks == null || selectedFlowBlocks.Count == 0)
+                return false;
+
+            var selectedDefinedManagedObjects = selectedFlowBlocks
+                .SelectMany(x => x.DefinedManagedObjects)
+                .ToList();
+            var references = new List<string>();
+
+            foreach (var selectedFlowBlock in selectedFlowBlocks)
+            {
+                if (!selectedFlowBlock.IsDeletable(out var flowBlockDependentComponents))
+                {
+                    flowBlockDependentComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
+                    references.AddRange(flowBlockDependentComponents.Select(component =>
+                        string.Format(
+                            FlowBloxResourceUtil.GetLocalizedString("Message_DeleteDependencyViolation_Entry", typeof(Resources.ProjectPanel)),
+                            selectedFlowBlock,
+                            component)));
+                }
+
+                foreach (var managedObject in selectedFlowBlock.DefinedManagedObjects)
+                {
+                    if (managedObject.IsDeletable(out var managedObjectDependentComponents))
+                        continue;
+
+                    managedObjectDependentComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
+                    managedObjectDependentComponents.RemoveAll(x => selectedDefinedManagedObjects.Contains(x));
+                    references.AddRange(managedObjectDependentComponents.Select(component =>
+                        string.Format(
+                            FlowBloxResourceUtil.GetLocalizedString("Message_DeleteDependencyViolation_Entry", typeof(Resources.ProjectPanel)),
+                            managedObject,
+                            component)));
+                }
+            }
+
+            references = references
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .ToList();
+
+            if (!references.Any())
+                return false;
+
+            ShowMessage(
+                string.Format(
+                    FlowBloxResourceUtil.GetLocalizedString("Message_DeleteDependencyViolation_Description", typeof(Resources.ProjectPanel)),
+                    string.Join(Environment.NewLine, references.Select(description => string.Concat(" - ", description)))),
+                FlowBloxResourceUtil.GetLocalizedString("Message_DeleteDependencyViolation_Title", typeof(Resources.ProjectPanel)),
+                FlowBloxMessageBoxTypes.Warning);
+            return true;
+        }
+
+        private void ShowMessage(string message, string title, FlowBloxMessageBoxTypes messageBoxType)
+        {
+            _messageBoxService?.ShowMessageBox(message, title, messageBoxType);
         }
 
         public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused)
@@ -1052,6 +1247,12 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             return AppDomain.CurrentDomain.GetAssemblies()
                 .Select(assembly => assembly.GetType(typeName, throwOnError: false))
                 .FirstOrDefault(type => type != null && typeof(BaseFlowBlock).IsAssignableFrom(type));
+        }
+
+        private static string GetGestureText(Key key)
+        {
+            var gestureText = new KeyGesture(key).GetDisplayStringForCulture(CultureInfo.CurrentUICulture);
+            return string.IsNullOrWhiteSpace(gestureText) ? key.ToString() : gestureText;
         }
 
         private bool HasProject() => _registry != null && FlowBloxProjectManager.Instance.ActiveProject != null;

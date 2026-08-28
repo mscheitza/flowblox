@@ -1,7 +1,6 @@
 using FlowBlox.AppWindow.Contents;
 using FlowBlox.AppWindow.Handler;
 using FlowBlox.AppWindow.RecentProjects;
-using FlowBlox.Core;
 using FlowBlox.Core.Authentication;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Enums;
@@ -17,14 +16,12 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Services;
 using FlowBlox.Core.Util;
-using FlowBlox.Core.Util.Controls;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Core.Util.WPF;
-using FlowBlox.Grid.Provider;
 using FlowBlox.Interfaces;
 using FlowBlox.Services;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Interfaces;
+using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.ViewModels.PSProjects;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
@@ -37,6 +34,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static FlowBlox.Core.Interceptors.RuntimeBacktraceInterceptor;
+using FlowBlox.Provider;
+using FlowBlox.Components;
+using FlowBlox.Util.Controls;
+using FlowBlox.Util.WPF;
 
 namespace FlowBlox.AppWindow
 {
@@ -82,8 +83,8 @@ namespace FlowBlox.AppWindow
         private FieldView _fieldViewPanel;
         private ManagedObjectsView _managedObjectsViewPanel;
         private TestView _testViewPanel;
-        private DockContentUserControlWrapper<RuntimeView> _runtimeViewPanel;
-        private DockContentUserControlWrapper<ProblemsView> _problemsViewPanel;
+        private Contents.RuntimeView _runtimeViewPanel;
+        private Contents.ProblemsView _problemsViewPanel;
         private AIAssistantView _aiAssistantViewPanel;
         private bool _defaultPaneActivationApplied;
         private bool _isProjectLoading;
@@ -134,13 +135,53 @@ namespace FlowBlox.AppWindow
             if (_componentLibraryPanel?.ProcessCmdKey(ref msg, keyData) == true)
                 return true;
 
-            if (_dockContentProjectPanel?.ProcessCmdKey(ref msg, keyData) == true)
-                return true;
-
-            if (_runtimeViewPanel?.UserControl.ProcessCmdKey(ref msg, keyData) == true)
+            if (ProcessProjectPanelWpfCmdKey(keyData))
                 return true;
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private ProjectPanelWpfControl ProjectPanelWpfControl => _dockContentProjectPanel?.WpfControl;
+
+        private bool ProcessProjectPanelWpfCmdKey(Keys keyData)
+        {
+            var projectPanelWpfControl = ProjectPanelWpfControl;
+            if (projectPanelWpfControl == null)
+                return false;
+
+            if (projectPanelWpfControl.IsTextInputFocusActive)
+                return false;
+
+            if (dockPanel?.ActiveContent != _dockContentProjectPanel && !projectPanelWpfControl.CanHandleHostedShortcut)
+                return false;
+
+            switch (keyData)
+            {
+                case Keys.Escape:
+                    return projectPanelWpfControl.ExecuteEscapeShortcut();
+                case Keys.F5:
+                    return projectPanelWpfControl.ExecuteRefreshShortcut();
+                case Keys.Delete:
+                    return projectPanelWpfControl.ExecuteDeleteShortcut();
+                case Keys.Control | Keys.C:
+                    CopyProjectPanelWpfSelection();
+                    return true;
+                case Keys.Control | Keys.V:
+                    projectPanelWpfControl.PasteSelection();
+                    return true;
+                case Keys.Control | Keys.Left:
+                    return projectPanelWpfControl.ExecuteSelectionShortcut(System.Windows.Input.Key.Left);
+                case Keys.Control | Keys.Right:
+                    return projectPanelWpfControl.ExecuteSelectionShortcut(System.Windows.Input.Key.Right);
+                case Keys.Control | Keys.Up:
+                    return projectPanelWpfControl.ExecuteSelectionShortcut(System.Windows.Input.Key.Up);
+                case Keys.Control | Keys.Down:
+                    return projectPanelWpfControl.ExecuteSelectionShortcut(System.Windows.Input.Key.Down);
+                case Keys.Control | Keys.A:
+                    return projectPanelWpfControl.ExecuteSelectionShortcut(System.Windows.Input.Key.A);
+                default:
+                    return false;
+            }
         }
 
         public bool IsRuntimeActive => _runtimeStateService?.IsRuntimeActive ?? _dockContentProjectPanel?.IsRuntimeActive == true;
@@ -378,7 +419,7 @@ namespace FlowBlox.AppWindow
                 {
                     FlowBloxProjectManager.Instance.ActiveProject = project;
                     FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
-                    this.OnAfterUIRegistryInitialized();
+                    this.AfterProjectFullyInitialized();
                     OnAfterProjectCreated();
                     UpdateUI_ProjectName();
                     await Task.Delay(AfterProjectActivationUiDelay);
@@ -398,15 +439,15 @@ namespace FlowBlox.AppWindow
             this.UpdateUI();
         }
 
-        private void OnAfterUIRegistryInitialized(bool exceptAiAssistantView = false)
+        private void AfterProjectFullyInitialized(bool exceptAiAssistantView = false)
         {
             InitializeDockPanel(exceptAiAssistantView: exceptAiAssistantView);
-            this._fieldViewPanel.OnAfterUIRegistryInitialized();
-            this._managedObjectsViewPanel?.OnAfterUIRegistryInitialized();
-            this._testViewPanel?.OnAfterUIRegistryInitialized();
+            this._fieldViewPanel.AfterProjectFullyInitialized();
+            this._managedObjectsViewPanel?.AfterProjectFullyInitialized();
+            this._testViewPanel?.AfterProjectFullyInitialized();
             if (!exceptAiAssistantView)
-                this._aiAssistantViewPanel?.OnAfterUIRegistryInitialized();
-            this._dockContentProjectPanel.OnAfterUIRegistryInitialized();
+                this._aiAssistantViewPanel?.AfterProjectFullyInitialized();
+            this._dockContentProjectPanel.AfterProjectFullyInitialized();
         }
 
         private void CloseProject()
@@ -769,7 +810,7 @@ namespace FlowBlox.AppWindow
 
                 FlowBloxProjectManager.Instance.ActiveProject = project;
 
-                this.OnAfterUIRegistryInitialized();
+                this.AfterProjectFullyInitialized();
                 this.OnAfterProjectOpened(project);
                 openedSuccessfully = true;
             }
@@ -847,7 +888,7 @@ namespace FlowBlox.AppWindow
                 FlowBloxProjectManager.Instance.ActiveProjectPath = null;
                 FlowBloxProjectManager.Instance.ActiveProject = project;
 
-                OnAfterUIRegistryInitialized(exceptAiAssistantView: true);
+                AfterProjectFullyInitialized(exceptAiAssistantView: true);
                 _dockContentProjectPanel?.OnAfterProjectOpened(project);
 
                 UpdateUI_ProjectName();
@@ -1064,7 +1105,7 @@ namespace FlowBlox.AppWindow
                 this.Invoke(new BaseRuntime.LogMessageCreatedEventHandler(Runtime_LogMessageCreated), new object[3] { runtime, message, logLevel });
                 return;
             }
-            _runtimeViewPanel.UserControl.Append(message, logLevel);
+            _runtimeViewPanel.Append(message, logLevel);
         }
 
         private void Runtime_ProblemTraceCreated(BaseRuntime runtime, ProblemTrace problemTrace)
@@ -1075,7 +1116,7 @@ namespace FlowBlox.AppWindow
                 return;
             }
 
-            _problemsViewPanel.UserControl.Append(problemTrace);
+            _problemsViewPanel.Append(problemTrace);
         }
 
         internal void OnBeforeRuntimeStarted(BaseRuntime runtime)
@@ -1087,7 +1128,7 @@ namespace FlowBlox.AppWindow
                 backtraceInterceptor.ProblemTraceCreated += Runtime_ProblemTraceCreated;
             }
 
-            _runtimeViewPanel.UserControl.InitializeRuntime(runtime);
+            _runtimeViewPanel.InitializeRuntime(runtime);
 
             UpdateUI();
 
@@ -1102,14 +1143,30 @@ namespace FlowBlox.AppWindow
 
         private void itmPaste_Click(object sender, EventArgs e)
         {
-            if (this._dockContentProjectPanel != null)
-                this._dockContentProjectPanel.Paste();
+            ProjectPanelWpfControl?.PasteSelection();
         }
 
         private void itmCopy_Click(object sender, EventArgs e)
         {
-            if (this._dockContentProjectPanel != null)
-                this._dockContentProjectPanel.Copy();
+            CopyProjectPanelWpfSelection();
+        }
+
+        private void CopyProjectPanelWpfSelection()
+        {
+            var projectPanelWpfControl = ProjectPanelWpfControl;
+            if (projectPanelWpfControl == null)
+                return;
+
+            if (projectPanelWpfControl.SelectedNodeCount > 1)
+            {
+                var messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
+                messageBoxService?.ShowMessageBox(
+                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_MultiPasteNotSupported_Message", typeof(FlowBloxMainUITexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_MultiPasteNotSupported_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBoxTypes.Information);
+            }
+
+            projectPanelWpfControl.CopySelection();
         }
 
 

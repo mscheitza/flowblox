@@ -1,11 +1,11 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Util.WPF;
 using FlowBlox.Interfaces;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Models.DialogService;
 using FlowBlox.UICore.Views;
+using FlowBlox.Util.WPF;
 using System.Collections;
 using System.Windows;
 

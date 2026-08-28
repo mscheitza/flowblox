@@ -619,6 +619,15 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   <data name="ProjectPanel_Copy_NameFormat" xml:space="preserve">
 		<value>{0} (Kopie)</value>
 	</data>
+	<data name="ProjectPanel_Text" xml:space="preserve">
+		<value>Projekt</value>
+	</data>
+  <data name="ProjectPanel_MultiPasteNotSupported_Title" xml:space="preserve">
+		<value>Mehrfaches Einfügen nicht unterstützt</value>
+	</data>
+  <data name="ProjectPanel_MultiPasteNotSupported_Message" xml:space="preserve">
+		<value>Mehrfaches Einfügen wird in dieser Version nicht unterstützt. Es wird nur der erste ausgewählte Flow-Block kopiert.</value>
+	</data>
   <data name="ProjectView_btApply_Text" xml:space="preserve">
 		<value>&amp;Annehmen</value>
 	</data>

@@ -3757,6 +3757,12 @@ If a Join collector should aggregate links across all page iterations:
 	<data name="AssistantConfiguration_ApproximateCharactersPerToken_Tooltip" xml:space="preserve">
 		<value>Approximate character-to-token ratio used for provider-independent context trimming.</value>
 	</data>
+	<data name="AssistantConfiguration_MaxFieldValuesTokensPerResponse" xml:space="preserve">
+		<value>Max. field-value tokens per response</value>
+	</data>
+	<data name="AssistantConfiguration_MaxFieldValuesTokensPerResponse_Tooltip" xml:space="preserve">
+		<value>Maximum estimated tokens used for all field values in one AI tool response. Large values such as HTML are truncated before being returned to the assistant.</value>
+	</data>
 	<data name="AssistantConfiguration_AttachProjectJsonAutomatically" xml:space="preserve">
 		<value>Send project JSON automatically</value>
 	</data>

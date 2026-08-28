@@ -27,6 +27,9 @@
   <data name="ContextMenu_CopyValue" xml:space="preserve">
     <value>Copy value</value>
   </data>
+  <data name="Copy_NameFormat" xml:space="preserve">
+    <value>{0} (Copy)</value>
+  </data>
   <data name="ContextMenu_DefineExecutionIndex" xml:space="preserve">
     <value>Set execution index</value>
   </data>
@@ -71,6 +74,30 @@
   </data>
   <data name="Legend_RecursiveCall" xml:space="preserve">
     <value>Recursive call</value>
+  </data>
+  <data name="Message_AssignFlowBlockNameInvalid_Title" xml:space="preserve">
+    <value>Invalid Flow Block name</value>
+  </data>
+  <data name="Message_AutoLayoutNoStart_Description" xml:space="preserve">
+    <value>The automatic alignment cannot be performed because the project does not contain a Start Flow Block.</value>
+  </data>
+  <data name="Message_AutoLayoutNoStart_Title" xml:space="preserve">
+    <value>Automatic alignment</value>
+  </data>
+  <data name="Message_ConnectBlocked_Description" xml:space="preserve">
+    <value>The selected Flow Blocks cannot be connected. Check whether the target already has the maximum number of inputs, whether one of the elements is a note, or whether the connection would create an invalid dependency.</value>
+  </data>
+  <data name="Message_ConnectBlocked_Title" xml:space="preserve">
+    <value>Connection not possible</value>
+  </data>
+  <data name="Message_DeleteDependencyViolation_Description" xml:space="preserve">
+    <value>The delete action cannot be performed because it would violate existing dependencies: {0}</value>
+  </data>
+  <data name="Message_DeleteDependencyViolation_Entry" xml:space="preserve">
+    <value>The component to be deleted "{0}" is used by "{1}"</value>
+  </data>
+  <data name="Message_DeleteDependencyViolation_Title" xml:space="preserve">
+    <value>Dependency violation</value>
   </data>
   <data name="Toolbar_AutoLayout" xml:space="preserve">
     <value>Auto align</value>

@@ -1,873 +1,231 @@
-﻿using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Grid;
+using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Exceptions;
+using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.Provider;
+using FlowBlox.UICore.Interfaces;
+using FlowBlox.UICore.Views;
 using FlowBlox.Views;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
-using FlowBlox.AppWindow.Handler;
-using FlowBlox.Core.Util.Controls;
-using FlowBlox.Core.Util;
-using FlowBlox.Core.Exceptions;
-using FlowBlox.Core.Models.Runtime;
-using FlowBlox.Core.Events;
-using FlowBlox.Core.Util.DeepCopier;
-using FlowBlox.Core.Util.FlowBlocks;
-using FlowBlox.Grid.Elements.UserControls;
-using FlowBlox.Core.Util.WPF;
-using FlowBlox.UICore.Views;
-using FlowBlox.Core.Models.Project;
-using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Provider.Registry;
-using FlowBlox.Grid.Provider;
-using FlowBlox.Core.Models.FlowBlocks;
-using FlowBlox.Core.DependencyInjection;
-using FlowBlox.Core.Util.Resources;
-using FlowBlox.Core.Interfaces;
-using FlowBlox.Core;
-using FlowBlox.Core.Models.Drawing;
-using FlowBlox.Grid.Elements.Util;
-using FlowBlox.Core.Models.Base;
-using FlowBlox.Core.Actions;
-using FlowBlox.UICore.Models;
-using FlowBlox.UICore.Utilities;
-using SkiaSharp;
-using FlowBlox.Core.Constants;
-using FlowBlox.Core.Enums;
-using FlowBlox.UICore.Interfaces;
 using System.Windows.Forms.Integration;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace FlowBlox.AppWindow.Contents
 {
     public partial class ProjectPanel : DockContent
     {
-        private const int DefaultGridWidth = 2000;
-        private const int DefaultGridHeight = 1000;
         private const string ResetNotificationsOnRuntimeFinishOptionName = "Grid.ResetNotificationsOnRuntimeFinish";
 
-        private FlowBloxProjectComponentProvider _componentProvider;
+        private readonly ElementHost _elementHost;
+        private readonly ProjectPanelWpfControl _projectPanelWpfControl;
+        private readonly IRuntimeStateService _runtimeStateService;
+        private FlowBloxRuntime _runtime;
+        private Thread _runtimeThread;
 
-        private CustomScrollHandler _customScrollHandler;
+        internal ProjectPanelWpfControl WpfControl => _projectPanelWpfControl;
 
-        public FlowBlockUIElement _recentFlowBlock = null;
+        public bool IsRuntimeActive => _runtimeStateService?.IsRuntimeActive ?? (_runtime?.Running == true && !_runtime.Aborted);
 
-        private LoadProjectView LoadProjectView = null;
-        private FlowBloxRuntime Runtime = null;
-        private System.Threading.Thread RuntimeThread = null;
-        private IRuntimeStateService _runtimeStateService;
+        public string RuntimeLogfilePath => ((_runtimeStateService?.CurrentRuntime ?? _runtime) as FlowBloxRuntime)?.GetLogfilePath();
 
-        private bool _blockGridUpdate { get; set; }
-        private bool _isPrintGridDelayPending;
-        private bool _isMoveFinishedDelayPending;
-        private bool _isScrollDelayPending;
-        private readonly ToolTip _legendToolTip = new ToolTip();
-        private readonly bool _useWpfGrid;
-        private ElementHost _wpfGridHost;
-        private FlowBlox.UICore.Views.ProjectPanelWpfControl _wpfProjectPanelControl;
-        private FlowBloxRegistry _subscribedFlowBlockRegistry;
-
-        internal void EnableGridUpdate() => _blockGridUpdate = false;
-
-        internal void DisableGridUpdate() => _blockGridUpdate = true;
-
-        private string OnInit_FilePath = string.Empty;
-
-        public bool IsRuntimeActive
+        internal void EnableGridUpdate()
         {
-            get
-            {
-                return _runtimeStateService?.IsRuntimeActive ?? (Runtime?.Running == true && !Runtime.Aborted);
-            }
         }
 
-        public string RuntimeLogfilePath
+        internal void DisableGridUpdate()
         {
-            get
-            {
-                return ((_runtimeStateService?.CurrentRuntime ?? Runtime) as FlowBloxRuntime)?.GetLogfilePath();
-            }
         }
-
-        private FlowBloxRegistry FlowBloxRegistry => _componentProvider.GetCurrentRegistry();
-
-        private FlowBloxUIRegistry FlowBloxUIRegistry => _componentProvider.GetCurrentUIRegistry();
-
-        private ProjectChangelist ProjectChangelist => _componentProvider.GetCurrentChangelist();
-
-        public object CopyAction { get; private set; }
-
-        private ShortcutManager _shortcutManager;
 
         public ProjectPanel()
         {
-            InitializeComponent();
-            _useWpfGrid = ResolveGridFrameworkType() == GridFrameworkType.NetWpf;
-            FlowBloxStyle.ApplyStyle(this);
-            FlowBloxUILocalizationUtil.Localize(this);
-            Initialize();
-            _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
+            Text = FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Text", typeof(FlowBloxMainUITexts));
+            Name = Text;
+            DockAreas = DockAreas.Document;
+            Padding = new Padding(0, 25, 0, 0);
+
             _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
+            _projectPanelWpfControl = new ProjectPanelWpfControl();
+            _projectPanelWpfControl.ViewModel.ExecuteRuntimeRequested += WpfProjectPanel_ExecuteRuntimeRequested;
+            _projectPanelWpfControl.ViewModel.PauseRuntimeRequested += WpfProjectPanel_PauseRuntimeRequested;
+            _projectPanelWpfControl.ViewModel.StopRuntimeRequested += WpfProjectPanel_StopRuntimeRequested;
 
-            if (_useWpfGrid)
-                InitializeWpfGridHost();
-        }
-
-        private static GridFrameworkType ResolveGridFrameworkType()
-        {
-            var optionValue = FlowBloxOptions.GetOptionInstance().GetOption("Grid.FrameworkType")?.Value;
-            return Enum.TryParse<GridFrameworkType>(optionValue, ignoreCase: true, out var frameworkType)
-                ? frameworkType
-                : GridFrameworkType.NetWpf;
-        }
-
-        private void InitializeWpfGridHost()
-        {
-            _wpfProjectPanelControl = new FlowBlox.UICore.Views.ProjectPanelWpfControl();
-            _wpfProjectPanelControl.ViewModel.ExecuteRuntimeRequested += WpfProjectPanel_ExecuteRuntimeRequested;
-            _wpfProjectPanelControl.ViewModel.PauseRuntimeRequested += WpfProjectPanel_PauseRuntimeRequested;
-            _wpfProjectPanelControl.ViewModel.StopRuntimeRequested += WpfProjectPanel_StopRuntimeRequested;
-
-            _wpfGridHost = new ElementHost
+            _elementHost = new ElementHost
             {
                 Dock = DockStyle.Fill,
                 Margin = new Padding(0),
-                Child = _wpfProjectPanelControl
+                Child = _projectPanelWpfControl
             };
 
-            Controls.Clear();
-            Controls.Add(_wpfGridHost);
+            Controls.Add(_elementHost);
         }
 
-        private void WpfProjectPanel_ExecuteRuntimeRequested(object sender, EventArgs e)
-            => itmExecute_Click(sender, e);
-
-        private void WpfProjectPanel_PauseRuntimeRequested(object sender, EventArgs e)
-            => btPause_Click(sender, e);
-
-        private void WpfProjectPanel_StopRuntimeRequested(object sender, EventArgs e)
-            => itmStopExecution_Click(sender, e);
-
-        private void SubscribeFlowBlockRegistryEvents()
+        protected override void OnClosed(EventArgs e)
         {
-            var registry = FlowBloxRegistry;
-            if (ReferenceEquals(_subscribedFlowBlockRegistry, registry))
-                return;
+            _projectPanelWpfControl.ViewModel.ExecuteRuntimeRequested -= WpfProjectPanel_ExecuteRuntimeRequested;
+            _projectPanelWpfControl.ViewModel.PauseRuntimeRequested -= WpfProjectPanel_PauseRuntimeRequested;
+            _projectPanelWpfControl.ViewModel.StopRuntimeRequested -= WpfProjectPanel_StopRuntimeRequested;
 
-            UnsubscribeFlowBlockRegistryEvents();
-            _subscribedFlowBlockRegistry = registry;
-            if (_subscribedFlowBlockRegistry == null)
-                return;
-
-            _subscribedFlowBlockRegistry.OnFlowBlockAdded += Registry_OnFlowBlockAdded;
-            _subscribedFlowBlockRegistry.OnFlowBlockRemoved += Registry_OnFlowBlockRemoved;
+            base.OnClosed(e);
         }
-
-        private void UnsubscribeFlowBlockRegistryEvents()
-        {
-            if (_subscribedFlowBlockRegistry == null)
-                return;
-
-            _subscribedFlowBlockRegistry.OnFlowBlockAdded -= Registry_OnFlowBlockAdded;
-            _subscribedFlowBlockRegistry.OnFlowBlockRemoved -= Registry_OnFlowBlockRemoved;
-            _subscribedFlowBlockRegistry = null;
-        }
-
-        private void Registry_OnFlowBlockAdded(FlowBlockAddedEventArgs eventArgs)
-        {
-            if (_useWpfGrid || eventArgs?.AddedFlowBlock == null || FlowBloxUIRegistry == null)
-                return;
-
-            if (FlowBloxUIRegistry.GetUIElementToGridElement(eventArgs.AddedFlowBlock) != null)
-                return;
-
-            var uiElement = CreateGridUIElement(eventArgs.AddedFlowBlock, eventArgs.AddedFlowBlock.Location);
-            FlowBloxUIRegistry.RegisterGridUIElement(uiElement);
-            PrintGrid(true);
-        }
-
-        private void Registry_OnFlowBlockRemoved(FlowBlockRemovedEventArgs eventArgs)
-        {
-            if (_useWpfGrid || eventArgs?.RemovedFlowBlock == null || FlowBloxUIRegistry == null)
-                return;
-
-            var uiElement = FlowBloxUIRegistry.GetUIElementToGridElement(eventArgs.RemovedFlowBlock);
-            if (uiElement == null)
-                return;
-
-            mainPanel.Controls.Remove(uiElement);
-            FlowBloxUIRegistry.RemoveUIElement(uiElement);
-            PrintGrid(true);
-        }
-
-        internal new bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            return false;
-        }
-
-        private void Initialize()
-        {
-            pictureBoxInvoke.Image = CreateLegendArrowImage(FlowBloxArrowColors.InvokeArrow);
-            pictureBoxRecursiveCall.Image = CreateLegendArrowImage(FlowBloxArrowColors.RecursiveCallArrow);
-            pictureBoxIterationContext.Image = CreateLegendArrowImage(FlowBloxArrowColors.IterationContextArrow);
-            InitializeLegendTooltips();
-
-            _shortcutManager = new ShortcutManager(toolStrip_Mode);
-            _shortcutManager.RegisterShortcut(Keys.Control | Keys.Shift, btConnectionMode);
-
-            this.KeyDown += new KeyEventHandler(_shortcutManager.HandleKeyDown);
-            this.KeyUp += new KeyEventHandler(_shortcutManager.HandleKeyUp);
-
-            mainPanel.MouseWheel += new MouseEventHandler(mainPanel_MouseWheel);
-            ControlHelper.EnableDoubleBuffer(toolStrip_Mode);
-            ControlHelper.EnableOptimizedDoubleBuffer(toolStrip_Mode);
-            ControlHelper.EnableDoubleBuffer(toolStrip_Runtime);
-            ControlHelper.EnableOptimizedDoubleBuffer(toolStrip_Runtime);
-            InitDoubleBuffer();
-        }
-
-        private void InitializeLegendTooltips()
-        {
-            _legendToolTip.AutoPopDelay = 15000;
-            _legendToolTip.InitialDelay = 250;
-            _legendToolTip.ReshowDelay = 150;
-            _legendToolTip.ShowAlways = true;
-
-            var inputDatasetsMenuText = FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_itmInsightInput_Text", typeof(FlowBloxMainUITexts));
-            var outputDatasetsMenuText = FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_itmInsightOutput_Text", typeof(FlowBloxMainUITexts));
-
-            var iterationTooltip = string.Format(
-                FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Legend_IterationContext_Tooltip", typeof(FlowBloxMainUITexts)),
-                inputDatasetsMenuText,
-                outputDatasetsMenuText);
-
-            var recursionTooltip = FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Legend_RecursiveCall_Tooltip", typeof(FlowBloxMainUITexts));
-
-            labelIterationContext.Cursor = Cursors.Help;
-            pictureBoxIterationContext.Cursor = Cursors.Help;
-            labelRecursiveCall.Cursor = Cursors.Help;
-            pictureBoxRecursiveCall.Cursor = Cursors.Help;
-
-            _legendToolTip.SetToolTip(labelIterationContext, iterationTooltip);
-            _legendToolTip.SetToolTip(pictureBoxIterationContext, iterationTooltip);
-
-            _legendToolTip.SetToolTip(labelRecursiveCall, recursionTooltip);
-            _legendToolTip.SetToolTip(pictureBoxRecursiveCall, recursionTooltip);
-        }
-
-        private static Image CreateLegendArrowImage(Color tintColor)
-        {
-            var sKColor = new SKColor(tintColor.R, tintColor.G, tintColor.B, tintColor.A);
-            var baseSkImage = FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.arrow_right_thin, 16, sKColor);
-            return SkiaToSystemDrawingHelper.ToSystemDrawingImage(baseSkImage);
-        }
-
-        private void mainPanel_DoScroll()
-        {
-            if (_latestGridInteraction != GridInteractions.Scroll)
-            {
-                this.ScrollGrid();
-            }
-
-            if (MouseButtons != MouseButtons.Left)
-            {
-                this._blockGridUpdate = false;
-
-                TryScheduleScroll();
-            }
-        }
-
-        private void mainPanel_MouseWheel(object sender, MouseEventArgs e)
-        {
-            mainPanel_DoScroll();
-        }
-
-        private void mainPanel_Scroll(object sender, ScrollEventArgs e)
-        {
-            mainPanel_DoScroll();
-        }
-
-        private void mainPanel_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = ResolveDraggedFlowBlockType(e) != null
-                ? DragDropEffects.Copy
-                : DragDropEffects.None;
-        }
-
-        private void mainPanel_DragDrop(object sender, DragEventArgs e)
-        {
-            var flowBlockType = ResolveDraggedFlowBlockType(e);
-
-            if (flowBlockType != null)
-            {
-                Point location = mainPanel.PointToClient(new Point(e.X, e.Y));
-                BaseFlowBlock createdFlowBlock = this.FlowBloxRegistry.CreateFlowBlockUnregistered(flowBlockType);
-                if (AssignFlowBlockName(createdFlowBlock))
-                {
-                    createdFlowBlock.Location = location;
-                    this.FlowBloxRegistry.PostProcessFlowBlockCreated(createdFlowBlock);
-
-                    var createAction = new FlowBloxCreateAction
-                    {
-                        FlowBlock = createdFlowBlock
-                    };
-                    createAction.Invoke();
-                    ProjectChangelist.AddChange(createAction);
-                }
-            }
-        }
-
-        private static Type ResolveDraggedFlowBlockType(DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(FlowBloxFlowBlockDragDropFormats.FlowBlockType) &&
-                e.Data.GetData(FlowBloxFlowBlockDragDropFormats.FlowBlockType) is string typeName)
-                return ResolveFlowBlockType(typeName);
-
-            return null;
-        }
-
-        private static Type ResolveFlowBlockType(string typeName)
-        {
-            if (string.IsNullOrWhiteSpace(typeName))
-                return null;
-
-            foreach (var type in AppDomain.CurrentDomain.GetAssemblies()
-                         .Select(assembly => assembly.GetType(typeName, throwOnError: false))
-                         .Where(type => type != null))
-            {
-                if (type != null && typeof(BaseFlowBlock).IsAssignableFrom(type))
-                    return type;
-            }
-
-            return null;
-        }
-
-        private delegate void UpdateUIMethod(bool GridUpdate, bool appWindowUpdate);
 
         public void UpdateUI(bool gridUpdate = true, bool appWindowUpdate = false)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(new UpdateUIMethod(UpdateUI), new object[] { gridUpdate, appWindowUpdate });
+                BeginInvoke(new Action(() => UpdateUI(gridUpdate, appWindowUpdate)));
                 return;
             }
 
-            if (_useWpfGrid)
-            {
-                _wpfProjectPanelControl?.UpdateRuntimeState(IsRuntimeActive, Runtime?.Pause == true);
-                _wpfProjectPanelControl?.RefreshProject();
-                if (appWindowUpdate)
-                    AppWindow.Instance.UpdateUI();
-                return;
-            }
-
-            var project = FlowBloxProjectManager.Instance.ActiveProject;
-
-            BackColor = (project != null) ? Color.FromKnownColor(KnownColor.Control) : Color.FromArgb(70, 70, 70);
-            btExecute.Enabled = (project != null) && (!IsRuntimeActive || Runtime.Pause);
-            btGridSettings.Enabled = (project != null) && (!IsRuntimeActive || Runtime.Pause);
-            btAutoAdjustFlowLayout.Enabled = (project != null) && (!IsRuntimeActive);
-            btStopExecution.Enabled = (project != null) && IsRuntimeActive;
-            btPause.Enabled = (project != null) && IsRuntimeActive && !Runtime.Pause;
-            itmEditElement.Enabled = (_recentFlowBlock != null);
-
-            string editElementText = !IsRuntimeActive ?
-                FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_itmEditElement_Edit_Text", typeof(FlowBloxMainUITexts)) :
-                FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_itmEditElement_View_Text", typeof(FlowBloxMainUITexts));
-            itmEditElement.Text = editElementText;
-
-            itmDeleteConnection.Visible = (project != null) && _selectedArrows.Any();
-            itmDeleteConnection.Enabled = (project != null) && _selectedArrows.Any() && !IsRuntimeActive;
-            itmDeleteElement.Visible = (project != null) && !_selectedArrows.Any();
-            itmDeleteElement.Enabled = (project != null) && HasSelectedGridElements() && !IsRuntimeActive;
-            itmIndex.Enabled = (_recentFlowBlock != null) && !(_recentFlowBlock.InternalFlowBlock is NoteFlowBlock) && !IsRuntimeActive;
-            itmBreakPoint.Enabled = (_recentFlowBlock != null) && !(_recentFlowBlock.InternalFlowBlock is NoteFlowBlock);
-
-            string breakPointText = ((_recentFlowBlock != null) && (_recentFlowBlock.BreakPoint)) ?
-                FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_itmBreakPoint_Remove_Text", typeof(FlowBloxMainUITexts)) :
-                FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_itmBreakPoint_Set_Text", typeof(FlowBloxMainUITexts));
-            itmBreakPoint.Text = breakPointText;
-            itmBreakPoint.Enabled = _recentFlowBlock != null;
-
-            itmManageNotifications.Enabled = (_recentFlowBlock != null) && _recentFlowBlock.InternalFlowBlock.NotificationTypes?.Any() == true;
-            itmInsightInput.Enabled = (_recentFlowBlock?.InternalFlowBlock as BaseFlowBlock)?.InputDataset_CurrentlyProcessing != null;
-            itmInsightOutput.Enabled = (_recentFlowBlock?.InternalFlowBlock as BaseResultFlowBlock)?.OutputDataset_CurrentlyProcessing != null;
-
-            this.btSelectionMode.Enabled = (project != null) && (!IsRuntimeActive);
-            this.btConnectionMode.Enabled = (project != null) && (!IsRuntimeActive);
-
+            _projectPanelWpfControl.UpdateRuntimeState(IsRuntimeActive, _runtime?.Pause == true);
             if (gridUpdate)
-            {
-                if (project != null)
-                    TrySchedulePrintGrid(PrintGridTimeunit, true);
-            }
+                _projectPanelWpfControl.RefreshProject();
 
             if (appWindowUpdate)
                 AppWindow.Instance.UpdateUI();
         }
 
-        internal void OnAfterUIRegistryInitialized()
-        {
-            if (_useWpfGrid)
-            {
-                _wpfProjectPanelControl?.RefreshProject();
-                return;
-            }
+        internal void AfterProjectFullyInitialized() => _projectPanelWpfControl.RefreshProject();
 
-            // Toolbar
-            if (!this.btSelectionMode.Checked &&
-                !this.btConnectionMode.Checked)
-            {
-                this.btSelectionMode.Checked = true;
-                this.btConnectionMode.Checked = false;
-            }
+        internal void OnAfterProjectCreated() => _projectPanelWpfControl.RefreshProject();
 
-            if (this.btSelectionMode.Checked)
-                this.ActivateSelectionMode();
+        internal void OnAfterProjectOpened(FlowBloxProject project) => _projectPanelWpfControl.RefreshProject();
 
-            if (this.btConnectionMode.Checked)
-                this.ActivateConnectionMode();
-
-
-            // Handler
-            _customScrollHandler = new CustomScrollHandler(mainPanel);
-            _customScrollHandler.Register();
-        }
-
-        internal void OnAfterProjectOpened(FlowBloxProject project)
-        {
-            if (_useWpfGrid)
-            {
-                _wpfProjectPanelControl?.RefreshProject();
-                return;
-            }
-
-            SubscribeFlowBlockRegistryEvents();
-            InitDoubleBuffer();
-
-            mainPanel.Controls.Clear();
-            mainPanel.VerticalScroll.Value = 0;
-            mainPanel.HorizontalScroll.Value = 0;
-
-            foreach (var element in FlowBloxRegistry.GetFlowBlocks())
-            {
-                var uiElement = this.CreateGridUIElement(element);
-                this.FlowBloxUIRegistry.RegisterGridUIElement(uiElement);
-            }
-
-            this.mainPanel.AutoScrollPosition = new Point(0, 0);
-
-            if ((project.GridSizeX > 0) &&
-                (project.GridSizeY > 0))
-            {
-                this.mainPanel.AutoScrollMinSize = new Size(project.GridSizeX, project.GridSizeY);
-            }
-
-            this._recentFlowBlock = null;
-
-            this.UpdateUI();
-        }
-
-        private void UpdateGridWarnings()
-        {
-            if (_notExecutedElements.Count > 0)
-            {
-                AppWindow.Instance.labelWarning.Text = string.Format(
-                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Warning_NotExecutedElements_Text", typeof(FlowBloxMainUITexts)),
-                    string.Join(", ", _notExecutedElements));
-                AppWindow.Instance.WarningStrip.Visible = true;
-            }
-            else
-            {
-                AppWindow.Instance.WarningStrip.Visible = false;
-            }
-        }
-
-        private int GetCreationIndex(BaseFlowBlock createdElement)
-        {
-            int creationIndex = 0;
-            foreach (BaseFlowBlock element in FlowBloxRegistry.GetFlowBlocks())
-            {
-                if (element.GetType() == createdElement.GetType())
-                    creationIndex++;
-            }
-            return creationIndex;
-        }
-
-        private bool AssignFlowBlockName(BaseFlowBlock flowBlock)
-        {
-            var editValueWindow = new FlowBlox.UICore.Views.EditValueWindow(flowBlock.Name, false, false)
-            {
-                Title = string.Format(FlowBloxResourceUtil.GetLocalizedString($"ProjectPanel_AssignFlowBlockName_Title"), FlowBloxComponentHelper.GetDisplayName(flowBlock)),
-                Description = FlowBloxResourceUtil.GetLocalizedString($"ProjectPanel_AssignFlowBlockName_Description"),
-                SelectionStart = flowBlock.NamePrefix.Length,
-                SelectionLength = flowBlock.Name.Length - flowBlock.NamePrefix.Length
-            };
-
-            var owner = (Form)AppWindow.Instance ?? ControlHelper.FindParentOfType<Form>(this, true) ?? this;
-            if (WindowsFormWPFHelper.ShowDialog(editValueWindow, owner) == true)
-            {
-                string oldName = flowBlock.Name;
-                string newName = editValueWindow.GetValue();
-                flowBlock.Name = newName;
-
-                string message;
-                if (!ValidationUtil.ValidateProperty(flowBlock, nameof(BaseFlowBlock.Name), out message))
-                {
-                    flowBlock.Name = oldName;
-                    FlowBloxMessageBox.Show(this, message);
-                    return AssignFlowBlockName(flowBlock);
-                }
-                return true;
-            }
-            return false;
-        }
-
-        private void EditReactiveObject(FlowBlockUIElement flowBlockUIElement, FlowBloxReactiveObject reactiveObject, string propertyName = null, object selectedInstance = null)
-        {
-            var propertyWindowArgs = new PropertyWindowArgs(
-                reactiveObject,
-                readOnly: IsRuntimeActive,
-                preselectedProperty: propertyName,
-                preselectedInstance: (FlowBloxReactiveObject)selectedInstance);
-
-            var propertyViewWpf = new UICore.Views.PropertyWindow(propertyWindowArgs);
-            var owner = ControlHelper.FindParentOfType<Form>(this, true);
-            WindowsFormWPFHelper.ShowDialog(propertyViewWpf, owner);
-
-            flowBlockUIElement.RefreshSizeAndLocation();
-            UpdateUI(appWindowUpdate: true);
-        }
-
-        private void EditFlowBlock(FlowBlockUIElement flowBlockUIElement, string propertyName = null, object selectedInstance = null)
-        {
-            var preselectedInstance = selectedInstance as FlowBloxReactiveObject;
-            var propertyWindowArgs = new PropertyWindowArgs(
-                flowBlockUIElement.InternalFlowBlock,
-                readOnly: IsRuntimeActive,
-                preselectedProperty: propertyName,
-                preselectedInstance: preselectedInstance);
-
-            var propertyViewWpf = new UICore.Views.PropertyWindow(propertyWindowArgs);
-            var owner = ControlHelper.FindParentOfType<Form>(this, true);
-            WindowsFormWPFHelper.ShowDialog(propertyViewWpf, owner);
-
-            flowBlockUIElement.RefreshSizeAndLocation();
-            UpdateUI(appWindowUpdate: true);
-        }
-
-        private void itmEditElement_Click(object sender, EventArgs e)
-        {
-            if (_recentFlowBlock == null)
-                return;
-
-            EditFlowBlock(_recentFlowBlock);
-        }
-
-        private bool HasSelectedGridElements()
-        {
-            if (FlowBloxProjectManager.Instance.ActiveProject != null)
-            {
-                foreach (var uiElement in FlowBloxUIRegistry.UIElements)
-                {
-                    if (uiElement.ElementSelected)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        private IEnumerable<FlowBlockUIElement> GetSelectedGridElements()
-        {
-            List<FlowBlockUIElement> selectedGridElements = new List<FlowBlockUIElement>();
-            if (FlowBloxUIRegistry == null)
-                return selectedGridElements;
-
-            foreach (FlowBlockUIElement uiElement in FlowBloxUIRegistry.UIElements
-                .Where(x => x.ElementSelected)
-                .OrderBy(x => x.ElementSelectedAt))
-            {
-                selectedGridElements.Add(uiElement);
-            }
-            return selectedGridElements;
-        }
-
-        private void itmDeleteElement_Click(object sender, EventArgs e)
-        {
-            var gridUIElements = GetSelectedGridElements();
-            if (gridUIElements.Count() > 0)
-            {
-                var selectedFlowBlocks = gridUIElements.Select(x => x.InternalFlowBlock);
-                var selectedDefinedManagedObjects = selectedFlowBlocks.SelectMany(x => x.DefinedManagedObjects);
-                var allFlowBlocks = FlowBloxRegistry.GetFlowBlocks();
-                var allReferences = new List<string>();
-
-                foreach (var selectedFlowBlock in selectedFlowBlocks)
-                {
-                    if (!selectedFlowBlock.IsDeletable(out List<IFlowBloxComponent> flowBlockDependendComponents))
-                    {
-                        flowBlockDependendComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
-                        if (flowBlockDependendComponents.Any())
-                            flowBlockDependendComponents.ForEach(flowBlock => allReferences.Add(
-                                string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),
-                                    selectedFlowBlock,
-                                    flowBlock)));
-                    }
-
-                    foreach (var managedObject in selectedFlowBlock.DefinedManagedObjects)
-                    {
-                        if (!managedObject.IsDeletable(out List<IFlowBloxComponent> managedObjectDependendComponents))
-                        {
-                            managedObjectDependendComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
-                            managedObjectDependendComponents.RemoveAll(x => selectedDefinedManagedObjects.Contains(x));
-                            if (managedObjectDependendComponents.Any())
-                                managedObjectDependendComponents.ForEach(comp => allReferences.Add(
-                                    string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),
-                                        managedObject,
-                                        comp)));
-                        }
-                    }
-                }
-
-                if (allReferences.Any())
-                {
-                    FlowBloxMessageBox.Show
-                        (
-                            this,
-                            string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message"), string.Join(Environment.NewLine, allReferences.Select(description => string.Concat(" - ", description)))),
-                            FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Title"),
-                            FlowBloxMessageBox.Buttons.OK,
-                            FlowBloxMessageBox.Icons.Info
-                        );
-
-                    UpdateUI();
-
-                    return;
-                }
-
-                var deleteAction = new FlowBloxDeleteAction()
-                {
-                    FlowBlock = gridUIElements.First().InternalFlowBlock
-                };
-
-                deleteAction.AssociatedActions.AddRange(gridUIElements.Skip(1).Select(uiElement =>
-                {
-                    return new FlowBloxDeleteAction()
-                    {
-                        FlowBlock = uiElement.InternalFlowBlock
-                    };
-                }));
-
-                deleteAction.Invoke();
-
-                this.ProjectChangelist.AddChange(deleteAction);
-
-                this.PrintGrid(true);
-                this.UpdateUI(false, true);
-
-                AppWindow.Instance.UpdateUI();
-            }
-        }
-
-        internal void OnAfterProjectCreated()
-        {
-            if (_useWpfGrid)
-            {
-                _wpfProjectPanelControl?.RefreshProject();
-                return;
-            }
-
-            SubscribeFlowBlockRegistryEvents();
-            InitDoubleBuffer();
-
-            int gridSizeX = DefaultGridWidth;
-            int gridSizeY = DefaultGridHeight;
-
-            if (FlowBloxOptions.GetOptionInstance().HasOption("Grid.DefaultSize"))
-            {
-                string gridSize = FlowBloxOptions.GetOptionInstance().OptionCollection["Grid.DefaultSize"].Value;
-                string[] globalGridSize = gridSize.Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-
-                int GlobalGridSizeX = int.Parse(globalGridSize[0].Trim());
-                int GlobalGridSizeY = int.Parse(globalGridSize[1].Trim());
-
-                if ((GlobalGridSizeX > 0) && (GlobalGridSizeY > 0))
-                {
-                    gridSizeX = GlobalGridSizeX;
-                    gridSizeY = GlobalGridSizeY;
-                }
-            }
-
-            this.mainPanel.AutoScrollPosition = new Point(0, 0);
-            this.mainPanel.AutoScrollMinSize = new Size(gridSizeX, gridSizeY);
-        }
-
-        internal void OnAfterProjectClosed()
-        {
-            UnsubscribeFlowBlockRegistryEvents();
-
-            if (_useWpfGrid)
-            {
-                _wpfProjectPanelControl?.RefreshProject();
-                return;
-            }
-
-            this._recentFlowBlock = null;
-            this.mainPanel.Controls.Clear();
-        }
-
-        private bool TrySchedulePrintGrid(int timeunit, bool printResult)
-        {
-            if (_isPrintGridDelayPending)
-                return false;
-
-            _isPrintGridDelayPending = true;
-            _ = ExecutePrintGridAsync(timeunit, printResult);
-            return true;
-        }
-
-        private async Task ExecutePrintGridAsync(int timeunit, bool printResult)
-        {
-            try
-            {
-                await Task.Delay(timeunit);
-                if (IsDisposed || Disposing)
-                    return;
-
-                UpdateExecutionStatus();
-                UpdateGridWarnings();
-                PrintGrid(printResult);
-                UpdateAllElementBorders();
-            }
-            finally
-            {
-                _isPrintGridDelayPending = false;
-            }
-        }
-
-        internal bool SchedulePrintGridForMouseMove()
-            => TrySchedulePrintGrid(PrintGridMouseMoveTimeunit, false);
-
-        internal bool SchedulePrintGridDefault()
-            => TrySchedulePrintGrid(PrintGridTimeunit, true);
-
-        private void itmStopExecution_Click(object sender, EventArgs e)
-        {
-            Runtime.Aborted = true;
-            _runtimeStateService?.AttachRuntime(Runtime);
-            UpdateUI();
-        }
-
-        private void btPause_Click(object sender, EventArgs e)
-        {
-            Runtime.Pause = true;
-            _runtimeStateService?.AttachRuntime(Runtime);
-            UpdateUI();
-        }
-
-        void Runtime_PauseContinue(bool IsPaused)
-        {
-            UpdateUI();
-        }
-
-        private void btStopExecution_Click(object sender, EventArgs e)
-        {
-            Runtime.Aborted = true;
-            _runtimeStateService?.AttachRuntime(Runtime);
-            UpdateUI();
-        }
+        internal void OnAfterProjectClosed() => _projectPanelWpfControl.RefreshProject();
 
         internal void OnBeforeSaveProject(FlowBloxProject project)
         {
-            if (_useWpfGrid)
+        }
+
+        internal void SaveInnerPanelBitmap(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
                 return;
 
-            project.GridSizeX = this.mainPanel.AutoScrollMinSize.Width;
-            project.GridSizeY = this.mainPanel.AutoScrollMinSize.Height;
+            using var bitmap = new Bitmap(Math.Max(1, _elementHost.Width), Math.Max(1, _elementHost.Height));
+            _elementHost.DrawToBitmap(bitmap, new Rectangle(Point.Empty, bitmap.Size));
+            bitmap.Save(fileName, ImageFormat.Png);
         }
 
-        private void itmExecute_Click(object sender, EventArgs e)
+        internal void Undo()
         {
-            if (FlowBloxProjectManager.Instance.ActiveProject != null)
-            {
-                if (IsRuntimeActive && this.Runtime.Pause)
-                {
-                    this.Runtime.Pause = false;
-                    _runtimeStateService?.AttachRuntime(Runtime);
-                    UpdateUI();
-                }
-                else
-                {
-                    try
-                    {
-                        FlowBloxRuntime runtime = new FlowBloxRuntime(FlowBloxProjectManager.Instance.ActiveProject);
-                        this.RuntimeThread = new System.Threading.Thread(new System.Threading.ThreadStart(runtime.Execute));
-                        this.Runtime = runtime;
-                        this.Runtime.Running = true;
-                        _runtimeStateService?.AttachRuntime(runtime);
-                        runtime.RuntimeStarted += new BaseRuntime.RuntimeStartedEventHandler(Runtime_Started);
-                        runtime.Finish += new BaseRuntime.FinishedEventHandler(Runtime_Finish);
-                        runtime.FocusChanged += new BaseRuntime.FocusChangedEventHandler(Runtime_FocusChanged);
-                        runtime.PauseContinue += new BaseRuntime.PauseEventHandler(Runtime_PauseContinue);
+            var changelist = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>()?.GetCurrentChangelist();
+            if (changelist?.CanUndo != true)
+                return;
 
-                        AppWindow.Instance.OnBeforeRuntimeStarted(runtime);
-
-                        RuntimeThread.Start();
-                        UpdateUI();
-                    }
-                    catch (Exception ex)
-                    {
-                        FlowBloxMessageBox.Show(this,
-                            string.Format(
-                                FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeStartFailed_Message", typeof(FlowBloxMainUITexts)),
-                                ex.Message),
-                            FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeStartFailed_Title", typeof(FlowBloxMainUITexts)),
-                            FlowBloxMessageBox.Buttons.OK,
-                            FlowBloxMessageBox.Icons.Info);
-                    }
-                }
-            }
+            changelist.Undo();
+            UpdateUI(appWindowUpdate: true);
         }
 
-        void Runtime_FocusChanged(BaseFlowBlock gridElement)
+        internal void Redo()
         {
-            if (this.InvokeRequired)
+            var changelist = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>()?.GetCurrentChangelist();
+            if (changelist?.CanRedo != true)
+                return;
+
+            changelist.Redo();
+            UpdateUI(appWindowUpdate: true);
+        }
+
+        private void WpfProjectPanel_ExecuteRuntimeRequested(object sender, EventArgs e)
+            => ExecuteRuntime();
+
+        private void WpfProjectPanel_PauseRuntimeRequested(object sender, EventArgs e)
+            => PauseRuntime();
+
+        private void WpfProjectPanel_StopRuntimeRequested(object sender, EventArgs e)
+            => StopRuntime();
+
+        private void StopRuntime()
+        {
+            if (_runtime == null)
+                return;
+
+            _runtime.Aborted = true;
+            _runtimeStateService?.AttachRuntime(_runtime);
+            UpdateUI();
+        }
+
+        private void PauseRuntime()
+        {
+            if (_runtime == null)
+                return;
+
+            _runtime.Pause = true;
+            _runtimeStateService?.AttachRuntime(_runtime);
+            UpdateUI();
+        }
+
+        private void ExecuteRuntime()
+        {
+            if (FlowBloxProjectManager.Instance.ActiveProject == null)
+                return;
+
+            if (IsRuntimeActive && _runtime?.Pause == true)
             {
-                this.Invoke(new FlowBloxRuntime.FocusChangedEventHandler(Runtime_FocusChanged), new object[1] { gridElement });
+                _runtime.Pause = false;
+                _runtimeStateService?.AttachRuntime(_runtime);
+                UpdateUI();
                 return;
             }
 
-            if (_useWpfGrid)
+            try
             {
-                _wpfProjectPanelControl?.MarkRuntimeFocus(gridElement);
+                var runtime = new FlowBloxRuntime(FlowBloxProjectManager.Instance.ActiveProject);
+                _runtimeThread = new Thread(new ThreadStart(runtime.Execute));
+                _runtime = runtime;
+                _runtime.Running = true;
+                _runtimeStateService?.AttachRuntime(runtime);
+
+                runtime.Finish += Runtime_Finish;
+                runtime.FocusChanged += Runtime_FocusChanged;
+                runtime.PauseContinue += Runtime_PauseContinue;
+
+                AppWindow.Instance.OnBeforeRuntimeStarted(runtime);
+
+                _runtimeThread.Start();
+                UpdateUI();
+            }
+            catch (Exception ex)
+            {
+                FlowBloxMessageBox.Show(
+                    this,
+                    string.Format(
+                        FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeStartFailed_Message", typeof(FlowBloxMainUITexts)),
+                        ex.Message),
+                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeStartFailed_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Info);
+            }
+        }
+
+        private void Runtime_PauseContinue(bool isPaused) => UpdateUI();
+
+        private void Runtime_FocusChanged(BaseFlowBlock flowBlock)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new FlowBloxRuntime.FocusChangedEventHandler(Runtime_FocusChanged), flowBlock);
                 return;
             }
 
-            if (gridElement != null)
-            {
-                var uiElement = FlowBloxUIRegistry.GetUIElementToGridElement(gridElement);
-                foreach (var otherUIElement in FlowBloxUIRegistry.UIElements)
-                {
-                    otherUIElement.MarkElementRuntime(false);
-                }
-                uiElement?.MarkElementRuntime(true);
-            }
+            _projectPanelWpfControl.MarkRuntimeFocus(flowBlock);
         }
 
-        private void Runtime_Started(BaseRuntime runtime)
+        private void Runtime_Finish(object result)
         {
-        }
-
-        void Runtime_Finish(object result)
-        {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(new BaseRuntime.FinishedEventHandler(Runtime_Finish), new object[1] { result });
+                BeginInvoke(new BaseRuntime.FinishedEventHandler(Runtime_Finish), result);
                 return;
             }
 
@@ -876,480 +234,31 @@ namespace FlowBlox.AppWindow.Contents
 
             if (resetNotificationsOnRuntimeFinish)
             {
-                var flowBlocks = _useWpfGrid
-                    ? this.FlowBloxRegistry.GetFlowBlocks()
-                    : this.FlowBloxUIRegistry.UIElements.Select(uiElement => uiElement.InternalFlowBlock);
-
-                foreach (var flowBlock in flowBlocks)
+                foreach (var flowBlock in FlowBloxRegistryProvider.GetRegistry().GetFlowBlocks().OfType<BaseFlowBlock>())
                 {
-                    flowBlock.ResetNotifications(this.Runtime);
+                    flowBlock.ResetNotifications(_runtime);
                 }
             }
 
-            if (_useWpfGrid)
-            {
-                _wpfProjectPanelControl?.MarkRuntimeFocus(null);
-                UpdateExecutionStatus();
-                UpdateGridWarnings();
-                _wpfProjectPanelControl?.RefreshProject();
-            }
-            else
-            {
-                foreach (var uiElement in this.FlowBloxUIRegistry.UIElements)
-                {
-                    uiElement.ResetRuntimeIterationInfo();
-                }
-            }
+            _projectPanelWpfControl.MarkRuntimeFocus(null);
+            _projectPanelWpfControl.RefreshProject();
 
-            if (result is Exception)
-            {
-                var exception = (Exception)result;
-                if (!(exception is RuntimeCancellationException))
-                {
-                    FlowBloxMessageBox.Show(this,
-                        string.Format(
-                            FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeAborted_Message", typeof(FlowBloxMainUITexts)),
-                            exception.ToString(),
-                            Environment.NewLine),
-                        FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeAborted_Title", typeof(FlowBloxMainUITexts)),
-                        FlowBloxMessageBox.Buttons.OK,
-                        FlowBloxMessageBox.Icons.Error);
-                }
-            }
-
-            this.Runtime = null;
-            AppWindow.Instance.OnAfterRuntimeFinished();
-            UpdateUI();
-        }
-
-        void RuntimeWindow_VisibleChanged(object sender, EventArgs e)
-        {
-            UpdateUI();
-        }
-
-        private void btGridSettings_Click(object sender, EventArgs e)
-        {
-            var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
-            if (activeProject == null)
-                return;
-
-            var settingsWindow = new ProjectPanelGridSettingsWindow(activeProject);
-            var owner = (Form)AppWindow.Instance ?? ControlHelper.FindParentOfType<Form>(this, true) ?? this;
-            if (WindowsFormWPFHelper.ShowDialog(settingsWindow, owner) == true)
-            {
-                mainPanel.AutoScrollMinSize = new Size(activeProject.GridSizeX, activeProject.GridSizeY);
-                UpdateUI();
-            }
-        }
-
-        private void itmDefineIndex_Click(object sender, EventArgs e)
-        {
-            if (_recentFlowBlock != null)
-            {
-                var gridElement = _recentFlowBlock.InternalFlowBlock;
-                var editExecutionIndexWindow = new ExecutionIndexWindow(gridElement.ExecutionIndex);
-                var owner = (Form)AppWindow.Instance ?? ControlHelper.FindParentOfType<Form>(this, true) ?? this;
-                if (WindowsFormWPFHelper.ShowDialog(editExecutionIndexWindow, owner) == true)
-                {
-                    gridElement.ExecutionIndex = editExecutionIndexWindow.Result;
-                }
-                _recentFlowBlock.UpdateFlags();
-                _recentFlowBlock.RefreshSizeAndLocation();
-                UpdateUI();
-            }
-        }
-
-        private void mainPanel_Click(object sender, EventArgs e)
-        {
-            foreach (var uiElement in FlowBloxUIRegistry.UIElements)
-            {
-                if (_lastMouseButton == MouseButtons.Left)
-                    uiElement.MarkElement(ElementState.Unmarked);
-            }
-            _recentFlowBlock = null;
-            if (_latestGridInteraction != GridInteractions.PrintReferenceLines)
-                PrintGrid(true);
-
-            UpdateAllElementBorders();
-            UpdateUI(false);
-        }
-
-        private void itmSelection_Left_Click(object sender, EventArgs e)
-        {
-            DoSelection(Keys.Left);
-        }
-
-        private void itmSelection_Right_Click(object sender, EventArgs e)
-        {
-            DoSelection(Keys.Right);
-        }
-
-        private void itmSelection_Up_Click(object sender, EventArgs e)
-        {
-            DoSelection(Keys.Up);
-        }
-
-        private void itmSelection_Down_Click(object sender, EventArgs e)
-        {
-            DoSelection(Keys.Down);
-        }
-
-        private void itmSelection_All_Click(object sender, EventArgs e)
-        {
-            DoSelection(Keys.A);
-        }
-
-        private void itmBreakPoint_Click(object sender, EventArgs e)
-        {
-            if (_recentFlowBlock != null)
-            {
-                _recentFlowBlock.BreakPoint = !_recentFlowBlock.BreakPoint;
-                _recentFlowBlock.UpdateFlags();
-                _recentFlowBlock.RefreshSizeAndLocation();
-            }
-            UpdateUI();
-        }
-
-        private void mainPanel_Resize(object sender, EventArgs e)
-        {
-            InitDoubleBuffer();
-            UpdateUI();
-        }
-
-        internal void Undo()
-        {
-            var changelist = this.ProjectChangelist;
-            if (changelist?.CanUndo != true)
-                return;
-
-            var action = changelist.Undo();
-            if (action == null)
-                return;
-
-            PrintGrid(action is not FlowBloxMoveAction);
-            UpdateUI(action is not FlowBloxMoveAction, true);
-        }
-
-        internal void Redo()
-        {
-            var changelist = this.ProjectChangelist;
-            if (changelist?.CanRedo != true)
-                return;
-
-            var action = changelist.Redo();
-            if (action == null)
-                return;
-
-            PrintGrid(action is not FlowBloxMoveAction);
-            UpdateUI(action is not FlowBloxMoveAction, true);
-        }
-
-        private void TryScheduleMoveFinished()
-        {
-            if (_isMoveFinishedDelayPending)
-                return;
-
-            _isMoveFinishedDelayPending = true;
-            _ = ExecuteMoveFinishedAsync();
-        }
-
-        private async Task ExecuteMoveFinishedAsync()
-        {
-            try
-            {
-                await Task.Delay(PrintGridTimeunit);
-                if (IsDisposed || Disposing)
-                    return;
-
-                if (_latestGridInteraction != GridInteractions.PrintReferenceLines)
-                {
-                    this._blockGridUpdate = false;
-                    TrySchedulePrintGrid(PrintGridTimeunit, true);
-                }
-
-                UpdateUI(false, true);
-            }
-            finally
-            {
-                _isMoveFinishedDelayPending = false;
-            }
-        }
-
-
-        private void mainPanel_Paint(object sender, PaintEventArgs e)
-        {
-            e.Graphics.DrawImage(BufferedPPC, 0, 0, mainPanel.ClientRectangle.Width, mainPanel.ClientRectangle.Height);
-        }
-
-        private HashSet<FlowBloxArrow> _selectedArrows = new HashSet<FlowBloxArrow>();
-        private MouseButtons _lastMouseButton;
-        private void mainPanel_MouseDown(object sender, MouseEventArgs e)
-        {
-            _lastMouseButton = e.Button;
-
-            if (!mainPanel.Enabled || !mainPanel.Visible)
-                return;
-
-            if (_modeHandler != null)
-            {
-                _modeHandler.DoMouseDown(e.Button, e.Location);
-                _blockGridUpdate = false;
-            }
-
-
-            // Überprüfung, ob ein Arrow ausgewählt wurde:
-            _selectedArrows.Clear();
-
-            foreach (var arrow in _drawnArrows)
-            {
-                if (arrow.IntersectsWith(e.Location))
-                {
-                    _selectedArrows.Add(arrow);
-                    break;
-                }
-            }
-        }
-
-        private void mainPanel_MouseMove(object sender, MouseEventArgs e)
-        {
-            _modeHandler?.DoMouseMove(e.Button, e.Location);
-        }
-
-        private void mainPanel_MouseUp(object sender, MouseEventArgs e)
-        {
-            _modeHandler?.DoMouseUp(e.Button);
-            UpdateUI();
-        }
-
-        private void TryScheduleScroll()
-        {
-            if (_isScrollDelayPending)
-                return;
-
-            _isScrollDelayPending = true;
-            _ = ExecuteScrollAsync();
-        }
-
-        private async Task ExecuteScrollAsync()
-        {
-            try
-            {
-                await Task.Delay(ScrollGridTimeunit);
-                if (IsDisposed || Disposing)
-                    return;
-
-                ScrollGrid();
-            }
-            finally
-            {
-                _isScrollDelayPending = false;
-            }
-        }
-
-        private void itmRemoveIndex_Click(object sender, EventArgs e)
-        {
-            if (_recentFlowBlock != null)
-            {
-                _recentFlowBlock.InternalFlowBlock.ExecutionIndex = -1;
-                _recentFlowBlock.UpdateFlags();
-                _recentFlowBlock.RefreshSizeAndLocation();
-                UpdateUI();
-            }
-        }
-
-        private ModeHandlerBase _modeHandler;
-
-        private void ActivateSelectionMode()
-        {
-            btSelectionMode.Checked = true;
-            btConnectionMode.Checked = false;
-        }
-
-        // Diese Methode wird aufgerufen, wenn der "Auswahl"-Button angeklickt wird.
-        private void buttonSelectionMode_Click(object sender, EventArgs e)
-        {
-            ActivateSelectionMode();
-        }
-
-        private void buttonSelectionMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (btSelectionMode.Checked)
-            {
-                SetFlowBlockSelectionEnabled(true);
-                _modeHandler = new SelectionModeHandler(this);
-            }
-        }
-
-        private bool _isFlowBlockSelectionEnabled;
-        private void SetFlowBlockSelectionEnabled(bool enabled)
-        {
-            this._isFlowBlockSelectionEnabled = enabled;
-            foreach (var uiElement in FlowBloxUIRegistry.UIElements.Where(x => x.CanSelect != enabled))
-            {
-                uiElement.CanSelect = enabled;
-            }
-        }
-
-        private void ActivateConnectionMode()
-        {
-            btSelectionMode.Checked = false;
-            btConnectionMode.Checked = true;
-        }
-
-        // Diese Methode wird aufgerufen, wenn der "Verbinden"-Button angeklickt wird.
-        private void buttonConnectionMode_Click(object sender, EventArgs e)
-        {
-            ActivateConnectionMode();
-        }
-
-        private void buttonConnectionMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (btConnectionMode.Checked)
-            {
-                SetFlowBlockSelectionEnabled(false);
-                _modeHandler = new ConnectionModeHandler(this);
-            }
-        }
-
-        private List<BaseFlowBlock> _copiedFlowBlocks = new List<BaseFlowBlock>();
-
-        internal void Copy()
-        {
-            _copiedFlowBlocks.Clear();
-            foreach (var uiElement in GetSelectedGridElements())
-            {
-                DynamicDeepCopier dynamicDeepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(uiElement.InternalFlowBlock));
-                var copy = (BaseFlowBlock)dynamicDeepCopier.Copy(uiElement.InternalFlowBlock);
-                copy.Location = new Point(uiElement.Location.X + uiElement.Width + 20, uiElement.Location.Y);
-                copy.Name = string.Format(
-                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_Copy_NameFormat", typeof(FlowBloxMainUITexts)),
-                    uiElement.Name);
-                _copiedFlowBlocks.Add(copy);
-            }
-        }
-
-        internal void Paste()
-        {
-            var firstCopy = _copiedFlowBlocks.FirstOrDefault();
-            if (firstCopy == null)
-                return;
-
-            var createAction = new FlowBloxCreateAction
-            {
-                FlowBlock = firstCopy
-            };
-
-            createAction.AssociatedActions.AddRange(_copiedFlowBlocks.Skip(1).Select(copy => new FlowBloxCreateAction
-            {
-                FlowBlock = copy
-            }));
-
-            createAction.Invoke();
-            ProjectChangelist.AddChange(createAction);
-        }
-
-        internal void SaveInnerPanelBitmap(string fileName)
-        {
-            Panel2Bitmap.SaveBitmap(mainPanel, fileName);
-        }
-
-        private void itmRefresh_Click(object sender, EventArgs e)
-        {
-            UpdateUI();
-        }
-
-        private void itmInsightInput_Click(object sender, EventArgs e)
-        {
-            var flowBlock = _recentFlowBlock?.InternalFlowBlock as BaseFlowBlock;
-            if (flowBlock == null)
-                return;
-
-            var results = flowBlock.InputDatasets;
-            if (results == null)
-                return;
-
-            var currentResult = flowBlock.InputDataset_CurrentlyProcessing;
-            if (currentResult == null)
-                return;
-
-            WindowsFormWPFHelper.ShowDialog(new InsightWindow(results, currentResult), this.FindForm());
-        }
-
-        private void itmInsightOutput_Click(object sender, EventArgs e)
-        {
-            var flowBlock = _recentFlowBlock?.InternalFlowBlock as BaseResultFlowBlock;
-            if (flowBlock == null)
-                return;
-
-            var results = flowBlock.GridElementResult.Results;
-            if (results == null)
-                return;
-
-            var currentResult = flowBlock.OutputDataset_CurrentlyProcessing;
-            if (currentResult == null)
-                return;
-
-            WindowsFormWPFHelper.ShowDialog(new InsightWindow(results, currentResult), this.FindForm());
-        }
-
-        private void itmManageNotifications_Click(object sender, EventArgs e)
-        {
-            if (_recentFlowBlock == null)
-                return;
-
-            var dialog = new ManageNotificationsWindow(_recentFlowBlock.InternalFlowBlock);
-            var owner = ControlHelper.FindParentOfType<Form>(this, true);
-            WindowsFormWPFHelper.ShowDialog(dialog, owner);
-            _recentFlowBlock.UpdateFlags();
-        }
-
-        private void itmDeleteConnection_Click(object sender, EventArgs e)
-        {
-            foreach (var selectedArrow in _selectedArrows)
-            {
-                var disconnectAction = new FlowBloxDisconnectAction()
-                {
-                    From = selectedArrow.From.InternalFlowBlock,
-                    To = selectedArrow.To.InternalFlowBlock
-                };
-
-                disconnectAction.Invoke();
-
-                _componentProvider.GetCurrentChangelist().AddChange(disconnectAction);
-
-                UpdateUI(true);
-            }
-        }
-
-        private async void btAutoAdjustFlowLayout_Click(object sender, EventArgs e)
-        {
-            await ExecuteAutoAdjustFlowLayout();
-        }
-
-        public async Task<FlowBlockAutoLayoutResult> ExecuteAutoAdjustFlowLayout()
-        {
-            var registry = FlowBloxRegistry;
-            var startFlowBlock = registry?.GetStartFlowBlock();
-            if (startFlowBlock == null)
+            if (result is Exception exception && exception is not RuntimeCancellationException)
             {
                 FlowBloxMessageBox.Show(
                     this,
-                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_AutoAdjust_NoStart_Message", typeof(FlowBloxMainUITexts)),
-                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_AutoAdjust_NoStart_Title", typeof(FlowBloxMainUITexts)),
+                    string.Format(
+                        FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeAborted_Message", typeof(FlowBloxMainUITexts)),
+                        exception,
+                        Environment.NewLine),
+                    FlowBloxResourceUtil.GetLocalizedString("ProjectPanel_RuntimeAborted_Title", typeof(FlowBloxMainUITexts)),
                     FlowBloxMessageBox.Buttons.OK,
-                    FlowBloxMessageBox.Icons.Info);
-
-                return new FlowBlockAutoLayoutResult();
+                    FlowBloxMessageBox.Icons.Error);
             }
 
-            var result = await Task.Run(FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout);
-            var moveActions = FlowBlockAutoLayoutAdjuster.GetRecordedMoveActions();
-            FlowBloxServiceLocator.Instance
-                .GetService<IFlowBloxActionHistoryService>()
-                ?.RegisterAutoLayoutMoves(moveActions);
-
-            UpdateUI(gridUpdate: true, appWindowUpdate: true);
-            return result;
+            _runtime = null;
+            AppWindow.Instance.OnAfterRuntimeFinished();
+            UpdateUI();
         }
     }
 }

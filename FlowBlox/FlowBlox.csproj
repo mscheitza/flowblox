@@ -48,32 +48,16 @@
     <ManifestCertificateThumbprint>06483A1741A4740855F1279FEACCA43B2BFDCFE4</ManifestCertificateThumbprint>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Core\Enums\**" />
-    <Compile Remove="Core\Repositories\**" />
-    <Compile Remove="Grid\Elements\Interfaces\**" />
-    <Compile Remove="Grid\Elements\UI\CustomActions\**" />
-    <Compile Remove="Grid\Views\FlowBlockUI\**" />
-    <EmbeddedResource Remove="Core\Enums\**" />
-    <EmbeddedResource Remove="Core\Repositories\**" />
-    <EmbeddedResource Remove="Grid\Elements\Interfaces\**" />
-    <EmbeddedResource Remove="Grid\Elements\UI\CustomActions\**" />
-    <EmbeddedResource Remove="Grid\Views\FlowBlockUI\**" />
-    <None Remove="Core\Enums\**" />
-    <None Remove="Core\Repositories\**" />
-    <None Remove="Grid\Elements\Interfaces\**" />
-    <None Remove="Grid\Elements\UI\CustomActions\**" />
-    <None Remove="Grid\Views\FlowBlockUI\**" />
-    <Page Remove="Core\Enums\**" />
-    <Page Remove="Core\Repositories\**" />
-    <Page Remove="Grid\Elements\Interfaces\**" />
-    <Page Remove="Grid\Elements\UI\CustomActions\**" />
-    <Page Remove="Grid\Views\FlowBlockUI\**" />
+    <Compile Remove="UI\CustomActions\**" />
+    <EmbeddedResource Remove="UI\CustomActions\**" />
+    <None Remove="UI\CustomActions\**" />
+    <Page Remove="UI\CustomActions\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Icons\extension.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Core\Components\NumericTextBox.cs" />
+    <Compile Update="Components\NumericTextBox.cs" />
     <Compile Update="FlowBloxMainUIImages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -84,13 +68,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>FlowBloxMainUITexts.resx</DependentUpon>
     </Compile>
-    <Compile Update="Grid\Elements\UI\NoteUIElement.cs" />
     <Compile Update="FlowBloxMainUITexts.de.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>FlowBloxMainUITexts.de.resx</DependentUpon>
     </Compile>
-    <Compile Update="Core\Components\SplitTableLayoutPanel.cs">
+    <Compile Update="Components\SplitTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -103,14 +86,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Update="Views\RuntimeView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Core\Components\DoubleBufferedPanel.cs">
+    <Compile Update="Components\DoubleBufferedPanel.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Update="Grid\Elements\UserControls\FlowBlockUIElement.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
@@ -135,6 +112,14 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UI\NoteUIElement.cs.reference" />
+    <Content Include="UserControls\FlowBlockUIElement.Designer.cs.reference" />
+    <Content Include="UserControls\FlowBlockUIElement.cs.reference">
+      <SubType>UserControl</SubType>
+    </Content>
+    <Content Include="UserControls\Renderer\FlowBlockUIElementRenderer.cs.reference" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\extension.ico" />

@@ -1,27 +1,26 @@
-﻿using FlowBlox.AppWindow.Contents;
-using FlowBlox.Views;
+using FlowBlox.AppWindow.Contents;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace FlowBlox.AppWindow.ContentFactories
 {
-    public class ProblemsViewPanelFactory : DockContentFactoryBase<DockContentUserControlWrapper<ProblemsView>>
+    public class ProblemsViewPanelFactory : DockContentFactoryBase<ProblemsView>
     {
         public ProblemsViewPanelFactory(DockPanel dockPanel) : base(dockPanel)
         {
         }
 
-        public override DockContentUserControlWrapper<ProblemsView> Create()
+        public override ProblemsView Create()
         {
-            var dockContent = new DockContentUserControlWrapper<ProblemsView>
+            var dockContent = new ProblemsView
             {
                 Dock = DockStyle.Fill,
-                Padding = new Padding(0, 0, 0, 25),
+                Padding = new Padding(0, 25, 0, 20),
                 DockAreas = DockAreas.DockBottom
             };
+
             var key = typeof(ProblemsView).FullName;
-            Create(key, dockContent);
-            return dockContent;
+            return Create(key, dockContent);
         }
 
         protected override DockContentSettings GetDefaults()

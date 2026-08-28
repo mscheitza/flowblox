@@ -17,6 +17,8 @@ namespace FlowBlox.AIAssistant.Services
 {
     public class AiAssistantService
     {
+        private const int AutomaticAdjustmentDelayMilliseconds = 500;
+
         private readonly IAiExecutor _executor;
         private readonly IFlowBloxAIToolApi _tools;
         private readonly ILogger? _logger;
@@ -361,7 +363,7 @@ namespace FlowBlox.AIAssistant.Services
                     if (instruction.ToolCalls.Count == 0 || instruction.Final)
                     {
                         if (hasExecutedLayoutRelevantToolCall)
-                            RunAutomaticAdjustmentIfEnabled("AI run completed");
+                            await DelayAndRunAutomaticAdjustmentIfEnabledAsync("AI run completed", ct).ConfigureAwait(false);
 
                         result.Success = true;
                         result.AssistantText = instruction.AssistantMessage;
@@ -484,19 +486,20 @@ namespace FlowBlox.AIAssistant.Services
                 return;
 
             FlowBlocksConnectionsChanged?.Invoke(this, e);
-
-            if (Volatile.Read(ref _activeRunCount) <= 0)
-                return;
-
-            RunAutomaticAdjustmentIfEnabled($"AI connect/disconnect (connections={e.Changes.Count})");
         }
 
-        private void RunAutomaticAdjustmentIfEnabled(string reason)
+        private async Task DelayAndRunAutomaticAdjustmentIfEnabledAsync(string reason, CancellationToken ct)
         {
             var configuration = GetConfiguration(out _);
             if (!configuration.EnableAutomaticAdjustment)
                 return;
 
+            await Task.Delay(AutomaticAdjustmentDelayMilliseconds, ct).ConfigureAwait(false);
+            RunAutomaticAdjustment(reason);
+        }
+
+        private void RunAutomaticAdjustment(string reason)
+        {
             var layoutResult = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
             _logger?.Info(
                 $"AutoAdjustFlowLayout executed ({reason}). Updated={layoutResult.UpdatedFlowBlocks}, Total={layoutResult.TotalFlowBlocks}, Components={layoutResult.ComponentsProcessed}");

@@ -59,6 +59,15 @@ namespace FlowBlox.UICore.Resources {
                 resourceCulture = value;
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
+        /// </summary>
+        public static string Button_Close {
+            get {
+                return ResourceManager.GetString("Button_Close", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Details ähnelt.
@@ -84,6 +93,15 @@ namespace FlowBlox.UICore.Resources {
         public static string Column_Value {
             get {
                 return ResourceManager.GetString("Column_Value", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No field values were recorded for this problem. ähnelt.
+        /// </summary>
+        public static string EmptyState_NoFieldValues {
+            get {
+                return ResourceManager.GetString("EmptyState_NoFieldValues", resourceCulture);
             }
         }
         

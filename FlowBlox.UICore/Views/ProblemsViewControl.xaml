@@ -1,0 +1,106 @@
+<UserControl x:Class="FlowBlox.UICore.Views.ProblemsViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+             xmlns:viewModels="clr-namespace:FlowBlox.UICore.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="900">
+    <UserControl.DataContext>
+        <viewModels:ProblemsViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="8">
+        <ListView x:Name="ProblemTraceListView"
+                  ItemsSource="{Binding ProblemTraces}"
+                  SelectedItem="{Binding SelectedProblemTrace, Mode=TwoWay}"
+                  MouseDoubleClick="ProblemTraceListView_MouseDoubleClick"
+                  Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext}">
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="Padding" Value="8,0,0,0" />
+                </Style>
+            </ListView.Resources>
+
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{x:Static resources:ProblemsView.ContextMenu_OpenDetails}"
+                              Command="{Binding PlacementTarget.Tag.OpenProblemTraceCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="OpenInNew" Width="16" Height="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+
+            <ListView.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding OpenProblemTraceCommand}" />
+            </ListView.InputBindings>
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="{x:Static resources:ProblemsView.Col_Timestamp}"
+                                    Width="150"
+                                    DisplayMemberBinding="{Binding Timestamp}" />
+                    <GridViewColumn Header="{x:Static resources:ProblemsView.Col_Name}"
+                                    Width="200"
+                                    DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="{x:Static resources:ProblemsView.Col_Criticality}"
+                                    Width="150"
+                                    DisplayMemberBinding="{Binding Criticality}" />
+                    <GridViewColumn Header="{x:Static resources:ProblemsView.Col_Message}"
+                                    Width="300"
+                                    DisplayMemberBinding="{Binding Message}" />
+                    <GridViewColumn Header="{x:Static resources:ProblemsView.Col_Exception}"
+                                    Width="300"
+                                    DisplayMemberBinding="{Binding ExceptionText}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Border IsHitTestVisible="False"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Margin="24,56,24,0">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasProblemTraces}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Grid VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <iconPacks:PackIconMaterial Kind="InformationOutline"
+                                            Margin="0,0,8,0"
+                                            VerticalAlignment="Top"
+                                            Style="{StaticResource FlowBlox.EmptyStateIconStyle}" />
+                <TextBlock Grid.Column="1"
+                           TextAlignment="Left"
+                           Text="{x:Static resources:ProblemsView.EmptyState_NoProblemTraces}"
+                           Style="{StaticResource FlowBlox.EmptyStateTextStyle}" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

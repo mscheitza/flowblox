@@ -20,11 +20,11 @@ namespace FlowBlox.UICore.Views
             AttachViewModelPropertyChangedHandler(DataContext, subscribe: true);
         }
 
-        public void OnAfterUIRegistryInitialized()
+        public void AfterProjectFullyInitialized()
         {
             if (DataContext is FieldViewModel vm)
             {
-                vm.OnAfterUIRegistryInitialized();
+                vm.AfterProjectFullyInitialized();
             }
         }
 

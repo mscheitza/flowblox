@@ -36,7 +36,7 @@ namespace FlowBlox.AIAssistant.Tools
             nameof(FlowBloxReactiveObject.Icon32),
             nameof(BaseFlowBlock.NotificationTypes),
             nameof(BaseFlowBlock.OverriddenNotificationEntries),
-            nameof(BaseFlowBlock.HasInputReference),
+            nameof(BaseFlowBlock.HasIterationContext),
             nameof(BaseFlowBlock.DefinedManagedObjects),
             nameof(BaseFlowBlock.HandleRequirements),
             nameof(BaseFlowBlock.HasErrors)

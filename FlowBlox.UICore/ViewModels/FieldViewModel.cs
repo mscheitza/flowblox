@@ -34,12 +34,10 @@ namespace FlowBlox.UICore.ViewModels
 
         private readonly Dictionary<FieldElement, FieldEntryViewModel> _rowsByField = new();
         private readonly List<FieldEntryViewModel> _allRows = new();
-        private readonly HashSet<IFlowBloxUIElement> _registeredUiElements = new();
 
         private readonly List<FieldEntryViewModel> _selectedRows = new();
 
         private FlowBloxRegistry? _registry;
-        private IFlowBloxUIRegistry? _uiRegistry;
 
         private string _filterText = string.Empty;
         private bool _showFlowBlock;
@@ -115,7 +113,7 @@ namespace FlowBlox.UICore.ViewModels
             RebindAndRefresh();
         }
 
-        public void OnAfterUIRegistryInitialized() => RebindAndRefresh();
+        public void AfterProjectFullyInitialized() => RebindAndRefresh();
 
         public void UpdateSelection(IEnumerable<FieldEntryViewModel> selectedRows)
         {
@@ -145,16 +143,6 @@ namespace FlowBlox.UICore.ViewModels
             {
                 _registry.OnManagedObjectAdded += Registry_OnManagedObjectAdded;
                 _registry.OnManagedObjectRemoved += Registry_OnManagedObjectRemoved;
-            }
-
-            _uiRegistry = _componentProvider.GetCurrentUIRegistry();
-            if (_uiRegistry != null)
-            {
-                _uiRegistry.UIElementRegistered += UiRegistry_UIElementRegistered;
-                foreach (var uiElement in _uiRegistry.UIElements)
-                {
-                    RegisterElementSelectionEvent(uiElement);
-                }
             }
 
             ReloadFields();
@@ -216,24 +204,6 @@ namespace FlowBlox.UICore.ViewModels
             });
         }
 
-        private void UiRegistry_UIElementRegistered(object? sender, FlowBloxUIElementRegisteredEventArgs e)
-        {
-            RegisterElementSelectionEvent(e?.UIElement);
-            SynchronizationContextHelper.PostToUi(_uiContext, UpdateFlowBlockSelectionState);
-        }
-
-        private void RegisterElementSelectionEvent(IFlowBloxUIElement? uiElement)
-        {
-            if (uiElement == null || !_registeredUiElements.Add(uiElement))
-                return;
-
-            uiElement.ElementSelectedChangedByUser -= UiElement_ElementSelectedChangedByUser;
-            uiElement.ElementSelectedChangedByUser += UiElement_ElementSelectedChangedByUser;
-        }
-
-        private void UiElement_ElementSelectedChangedByUser(object? sender, EventArgs e)
-            => SynchronizationContextHelper.PostToUi(_uiContext, UpdateFlowBlockSelectionState);
-
         private void AddFieldRow(FieldElement fieldElement)
         {
             if (fieldElement == null || _rowsByField.ContainsKey(fieldElement))
@@ -246,12 +216,6 @@ namespace FlowBlox.UICore.ViewModels
             row.SetMaxDisplayLength(_maxDisplayLength);
             _rowsByField[fieldElement] = row;
             _allRows.Add(row);
-
-            if (fieldElement.IsRegularField() && _uiRegistry != null)
-            {
-                var uiElement = _uiRegistry.GetUIElementToGridElement(fieldElement.Source);
-                RegisterElementSelectionEvent(uiElement);
-            }
         }
 
         private void RemoveFieldRow(FieldElement fieldElement)
@@ -327,22 +291,11 @@ namespace FlowBlox.UICore.ViewModels
 
         private void UpdateFlowBlockSelectionState()
         {
-            HashSet<FieldElement> selectedFields = new();
-
-            if (_uiRegistry != null)
-            {
-                selectedFields = _uiRegistry.UIElements
-                    .Where(x => x.ElementSelected)
-                    .SelectMany(x => (x.InternalFlowBlock as BaseResultFlowBlock)?.Fields ?? Enumerable.Empty<FieldElement>())
-                    .ToHashSet();
-            }
-
             var selectedFlowBlocks = _componentProvider?.GetSelectedFlowBlocks();
-            if (selectedFlowBlocks != null)
-            {
-                selectedFields.UnionWith(selectedFlowBlocks
-                    .SelectMany(x => (x as BaseResultFlowBlock)?.Fields ?? Enumerable.Empty<FieldElement>()));
-            }
+            var selectedFields = selectedFlowBlocks?
+                .SelectMany(x => (x as BaseResultFlowBlock)?.Fields ?? Enumerable.Empty<FieldElement>())
+                .ToHashSet()
+                ?? new HashSet<FieldElement>();
 
             foreach (var row in _allRows)
             {
@@ -486,17 +439,6 @@ namespace FlowBlox.UICore.ViewModels
                 _registry.OnManagedObjectRemoved -= Registry_OnManagedObjectRemoved;
             }
 
-            if (_uiRegistry != null)
-            {
-                _uiRegistry.UIElementRegistered -= UiRegistry_UIElementRegistered;
-            }
-
-            foreach (var uiElement in _registeredUiElements.ToList())
-            {
-                uiElement.ElementSelectedChangedByUser -= UiElement_ElementSelectedChangedByUser;
-            }
-
-            _registeredUiElements.Clear();
         }
 
         public void Dispose()

@@ -21,16 +21,16 @@ namespace FlowBlox.UICore.Views
             Unloaded += TestViewControl_Unloaded;
         }
 
-        public void OnAfterUIRegistryInitialized()
+        public void AfterProjectFullyInitialized()
         {
             if (DataContext is TestViewModel vm)
-                vm.OnAfterUIRegistryInitialized();
+                vm.AfterProjectFullyInitialized();
         }
 
         private void TestViewControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (DataContext is TestViewModel vm)
-                vm.OnAfterUIRegistryInitialized();
+                vm.AfterProjectFullyInitialized();
         }
 
         private void TestViewControl_Unloaded(object sender, RoutedEventArgs e)

@@ -289,7 +289,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     }
                 }
             }
-            else if (nextElementList.All(x => x.HasInputReference))
+            else if (nextElementList.All(x => x.HasIterationContext))
             {
                 this.Fields.ForEach(x => x.Pending = true);
                 nextElementList.ForEach(x => x.Execute(runtime, this));

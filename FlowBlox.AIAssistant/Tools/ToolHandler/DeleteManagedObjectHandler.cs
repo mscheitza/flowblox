@@ -8,6 +8,7 @@ namespace FlowBlox.AIAssistant.Tools
     internal sealed class DeleteManagedObjectHandler : ToolHandlerBase
     {
         public override string Name => "DeleteManagedObject";
+        public override bool IsLayoutRelevantForAutoAdjustment => true;
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,

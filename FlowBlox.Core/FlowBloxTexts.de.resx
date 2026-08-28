@@ -3700,6 +3700,12 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
 	<data name="AssistantConfiguration_ApproximateCharactersPerToken_Tooltip" xml:space="preserve">
 		<value>Geschätztes Zeichen-zu-Token-Verhältnis für providerunabhängiges Kürzen des Kontextes.</value>
 	</data>
+	<data name="AssistantConfiguration_MaxFieldValuesTokensPerResponse" xml:space="preserve">
+		<value>Max. Feldwert-Tokens pro Antwort</value>
+	</data>
+	<data name="AssistantConfiguration_MaxFieldValuesTokensPerResponse_Tooltip" xml:space="preserve">
+		<value>Maximale geschätzte Tokens für alle Feldwerte in einer AI-Tool-Antwort. Große Werte wie HTML werden vor der Ausgabe an den Assistenten gekürzt.</value>
+	</data>
 	<data name="AssistantConfiguration_AttachProjectJsonAutomatically" xml:space="preserve">
 		<value>Projekt-JSON automatisch mitsenden</value>
 	</data>

@@ -17,16 +17,16 @@ namespace FlowBlox.UICore.Views
             Unloaded += ManagedObjectsViewControl_Unloaded;
         }
 
-        public void OnAfterUIRegistryInitialized()
+        public void AfterProjectFullyInitialized()
         {
             if (DataContext is ManagedObjectsViewModel vm)
-                vm.OnAfterUIRegistryInitialized();
+                vm.AfterProjectFullyInitialized();
         }
 
         private void ManagedObjectsViewControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (DataContext is ManagedObjectsViewModel vm)
-                vm.OnAfterUIRegistryInitialized();
+                vm.AfterProjectFullyInitialized();
         }
 
         private void ManagedObjectsViewControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

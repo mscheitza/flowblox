@@ -574,6 +574,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Max. field-value tokens per response ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxFieldValuesTokensPerResponse {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxFieldValuesTokensPerResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum estimated tokens used for all field values in one AI tool response. Large values such as HTML are truncated before being returned to the assistant. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_MaxFieldValuesTokensPerResponse_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_MaxFieldValuesTokensPerResponse_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Send project JSON automatically ähnelt.
         /// </summary>
         public static string AssistantConfiguration_AttachProjectJsonAutomatically {

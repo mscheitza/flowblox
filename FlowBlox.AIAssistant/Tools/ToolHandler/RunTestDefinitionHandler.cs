@@ -1,3 +1,4 @@
+using FlowBlox.AIAssistant.Helper;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
@@ -20,8 +21,8 @@ namespace FlowBlox.AIAssistant.Tools
                 ["testDefinitionName"] = "string",
                 ["targetFlowBlockName"] = "string? (optional; if omitted, latest linked flow block is used)",
                 ["synchronizeBeforeRun"] = "bool? (default: true)",
-                ["maxProtocolPreviewEntries"] = "int? (default: 250)",
-                ["usageHint"] = "Prefer RunGenerationStrategies first for generator work. Use this tool when test-definition execution or detailed test-result inspection is required."
+                ["maxProtocolEntries"] = "int? (default: 250)",
+                ["usageHint"] = "Prefer RunGenerationStrategies first for generator work. Use this tool when test-definition execution or detailed test-result inspection is required. Protocol is limited to maxProtocolEntries."
             });
 
         public override async Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -34,7 +35,11 @@ namespace FlowBlox.AIAssistant.Tools
 
                 var targetFlowBlockName = (args.Value<string>("targetFlowBlockName") ?? string.Empty).Trim();
                 var synchronizeBeforeRun = args.Value<bool?>("synchronizeBeforeRun") ?? true;
-                var maxProtocolPreviewEntries = Math.Max(1, args.Value<int?>("maxProtocolPreviewEntries") ?? 250);
+                var maxProtocolEntries = Math.Max(
+                    1,
+                    args.Value<int?>("maxProtocolEntries")
+                    ?? args.Value<int?>("maxProtocolPreviewEntries")
+                    ?? 250);
 
                 var registry = ToolHandlerUtilities.GetRegistry();
                 var testDefinition = ToolHandlerUtilities.ResolveManagedObjectByName(registry, testDefinitionName) as FlowBloxTestDefinition;
@@ -124,10 +129,15 @@ namespace FlowBlox.AIAssistant.Tools
 
                 ct.ThrowIfCancellationRequested();
 
-                var protocol = new JArray(protocolEntries);
+                var protocolEntryCountTotal = protocolEntries.Count;
+                var protocol = new JArray(protocolEntries.Take(maxProtocolEntries));
                 var filteredFieldValueAssignments = (testResult?.FieldValueAssignments ?? new Dictionary<string, string>())
                     .Where(x => !x.Key.StartsWith("$user::", StringComparison.OrdinalIgnoreCase))
                     .ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+                var fieldValueLimiter = FieldValueResponseLimiter.FromConfiguration();
+                var limitedFieldValueAssignments = LimitFieldValueAssignments(
+                    filteredFieldValueAssignments,
+                    fieldValueLimiter);
 
                 var payload = new JObject
                 {
@@ -136,11 +146,13 @@ namespace FlowBlox.AIAssistant.Tools
                     ["synchronizedBeforeRun"] = synchronizeBeforeRun,
                     ["success"] = testResult?.Success ?? false,
                     ["protocolEntryCount"] = protocol.Count,
-                    ["maxProtocolPreviewEntries"] = maxProtocolPreviewEntries,
+                    ["protocolEntryCountTotal"] = protocolEntryCountTotal,
+                    ["maxProtocolEntries"] = maxProtocolEntries,
                     ["protocol"] = protocol,
-                    ["protocolPreview"] = new JArray(protocol.Take(maxProtocolPreviewEntries)),
-                    ["fieldValueAssignments"] = JObject.FromObject(filteredFieldValueAssignments),
-                    ["testResults"] = BuildTestResults(resultSnapshotFlowBlock)
+                    ["fieldValueAssignments"] = limitedFieldValueAssignments.Values,
+                    ["fieldValueAssignmentInfo"] = limitedFieldValueAssignments.Metadata,
+                    ["testResults"] = BuildTestResults(resultSnapshotFlowBlock, fieldValueLimiter),
+                    ["fieldValueOutput"] = fieldValueLimiter.CreateMetadata()
                 };
 
                 if (testResult?.Success == true)
@@ -158,7 +170,26 @@ namespace FlowBlox.AIAssistant.Tools
             }
         }
 
-        private static JObject BuildTestResults(BaseFlowBlock? flowBlock)
+        private static LimitedFieldValueAssignments LimitFieldValueAssignments(
+            IReadOnlyDictionary<string, string> fieldValueAssignments,
+            FieldValueResponseLimiter limiter)
+        {
+            var values = new JObject();
+            var metadata = new JObject();
+
+            foreach (var assignment in fieldValueAssignments)
+            {
+                var limited = limiter.Limit(assignment.Value);
+                values[assignment.Key] = limited.Value;
+                metadata[assignment.Key] = limited.ToMetadata();
+            }
+
+            return new LimitedFieldValueAssignments(values, metadata);
+        }
+
+        private static JObject BuildTestResults(
+            BaseFlowBlock? flowBlock,
+            FieldValueResponseLimiter limiter)
         {
             if (flowBlock is not BaseResultFlowBlock resultFlowBlock)
             {
@@ -192,11 +223,16 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 var row = results[i];
                 var values = new JArray(
-                    row.FieldValueMappings.Select(mapping => new JObject
+                    row.FieldValueMappings.Select(mapping =>
                     {
-                        ["fieldName"] = mapping.Field?.Name ?? string.Empty,
-                        ["fullyQualifiedFieldName"] = mapping.Field?.FullyQualifiedName ?? string.Empty,
-                        ["value"] = mapping.Value ?? string.Empty
+                        var limited = limiter.Limit(mapping.Value);
+                        return new JObject
+                        {
+                            ["fieldName"] = mapping.Field?.Name ?? string.Empty,
+                            ["fullyQualifiedFieldName"] = mapping.Field?.FullyQualifiedName ?? string.Empty,
+                            ["value"] = limited.Value,
+                            ["valueInfo"] = limited.ToMetadata()
+                        };
                     }));
 
                 rows.Add(new JObject
@@ -214,5 +250,7 @@ namespace FlowBlox.AIAssistant.Tools
                 ["rows"] = rows
             };
         }
+
+        private sealed record LimitedFieldValueAssignments(JObject Values, JObject Metadata);
     }
 }

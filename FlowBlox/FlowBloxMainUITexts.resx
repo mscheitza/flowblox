@@ -634,6 +634,15 @@ The application will now restart to restore a clean environment.</value>
   <data name="ProjectPanel_Copy_NameFormat" xml:space="preserve">
 		<value>{0} (Copy)</value>
 	</data>
+	<data name="ProjectPanel_Text" xml:space="preserve">
+		<value>Project</value>
+	</data>
+  <data name="ProjectPanel_MultiPasteNotSupported_Title" xml:space="preserve">
+		<value>Multi paste not supported</value>
+	</data>
+  <data name="ProjectPanel_MultiPasteNotSupported_Message" xml:space="preserve">
+		<value>Multi paste is not supported in this version. Only the first selected Flow Block will be copied.</value>
+	</data>
   <data name="ProjectView_btApply_Text" xml:space="preserve">
 		<value>&amp;Apply</value>
 	</data>
