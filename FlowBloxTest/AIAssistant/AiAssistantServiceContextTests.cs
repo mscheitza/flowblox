@@ -70,6 +70,7 @@ namespace FlowBloxTest.AIAssistant
                 currentUserPrompt: "C",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
+                estimatedSystemPromptCacheSavingsRate: 0d,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 14,
@@ -102,6 +103,7 @@ namespace FlowBloxTest.AIAssistant
                 currentUserPrompt: "C",
                 maxLatestMessages: 2,
                 minLatestMessages: 1,
+                estimatedSystemPromptCacheSavingsRate: 0d,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,
@@ -130,6 +132,7 @@ namespace FlowBloxTest.AIAssistant
                 currentUserPrompt: "Current prompt",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
+                estimatedSystemPromptCacheSavingsRate: 0d,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,

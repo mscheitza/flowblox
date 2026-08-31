@@ -466,6 +466,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Estimated system prompt cache savings rate ähnelt.
+        /// </summary>
+        public static string AIProvider_EstimatedSystemPromptCacheSavingsRate {
+            get {
+                return ResourceManager.GetString("AIProvider_EstimatedSystemPromptCacheSavingsRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Estimated savings rate for cacheable system prompt tokens. This is used only for internal token/cost estimation, not for provider billing. ähnelt.
+        /// </summary>
+        public static string AIProvider_EstimatedSystemPromptCacheSavingsRate_Tooltip {
+            get {
+                return ResourceManager.GetString("AIProvider_EstimatedSystemPromptCacheSavingsRate_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (seconds) ähnelt.
         /// </summary>
         public static string AIProvider_TimeoutSeconds {

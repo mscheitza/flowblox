@@ -41,12 +41,9 @@ namespace FlowBlox.AIAssistant.Helper
                 configuration.MaxFieldValuesTokensPerResponse);
         }
 
-        public LimitedFieldValue Limit(string? value, int startIndex = 0, string? searchValues = null)
+        public LimitedFieldValue Limit(string? value)
         {
             value ??= string.Empty;
-            var searchResult = ResolveSearchStartIndex(value, searchValues);
-            var normalizedStartIndex = searchResult.Index ?? Math.Clamp(startIndex, 0, value.Length);
-            var availableValue = value.Substring(normalizedStartIndex);
             var estimatedTotalTokens = _tokenBudget.EstimateTokens(value);
 
             if (RemainingTokens <= 0)
@@ -54,56 +51,79 @@ namespace FlowBlox.AIAssistant.Helper
                 _omittedValues++;
                 return new LimitedFieldValue(
                     "Limit exceeded due to max field-value tokens per response.",
-                    normalizedStartIndex,
+                    0,
                     value.Length,
                     0,
                     estimatedTotalTokens,
                     0,
                     true,
-                    true,
-                    searchResult.MatchedValue,
-                    searchResult.HasSearchValues);
+                    true);
             }
 
-            var estimatedAvailableTokens = _tokenBudget.EstimateTokens(availableValue);
-            if (estimatedAvailableTokens <= RemainingTokens)
+            if (estimatedTotalTokens <= RemainingTokens)
             {
-                _usedTokens += estimatedAvailableTokens;
+                _usedTokens += estimatedTotalTokens;
                 return new LimitedFieldValue(
-                    availableValue,
-                    normalizedStartIndex,
+                    value,
+                    0,
                     value.Length,
-                    availableValue.Length,
+                    value.Length,
                     estimatedTotalTokens,
-                    estimatedAvailableTokens,
+                    estimatedTotalTokens,
                     false,
-                    false,
-                    searchResult.MatchedValue,
-                    searchResult.HasSearchValues);
+                    false);
             }
 
             _limitedValues++;
-            var tokensForValue = RemainingTokens;
             var suffix = $"... (truncated due to max field-value tokens per response limit of {_maxTokens} tokens)";
-            var maxCharacters = Math.Max(1, tokensForValue * _tokenBudget.ApproximateCharactersPerToken);
+            var maxCharacters = Math.Max(1, RemainingTokens * _tokenBudget.ApproximateCharactersPerToken);
             var allowedCharacters = Math.Max(0, maxCharacters - suffix.Length);
             var visibleValue = allowedCharacters <= 0
                 ? suffix
-                : availableValue.Substring(0, Math.Min(allowedCharacters, availableValue.Length)) + suffix;
+                : value.Substring(0, Math.Min(allowedCharacters, value.Length)) + suffix;
             var returnedTokens = _tokenBudget.EstimateTokens(visibleValue);
             _usedTokens = _maxTokens;
 
             return new LimitedFieldValue(
                 visibleValue,
-                normalizedStartIndex,
+                0,
                 value.Length,
-                Math.Min(allowedCharacters, availableValue.Length),
+                Math.Min(allowedCharacters, value.Length),
                 estimatedTotalTokens,
                 returnedTokens,
                 true,
-                false,
+                false);
+        }
+
+        public InspectedFieldValue Inspect(string? value, FieldValueInspectionOptions options)
+        {
+            value ??= string.Empty;
+            options ??= new FieldValueInspectionOptions();
+
+            var searchResult = ResolveSearchIndex(value, options.SearchValues);
+            var searchIndex = searchResult.Index
+                ?? (options.SearchIndex.HasValue ? Math.Clamp(options.SearchIndex.Value, 0, value.Length) : 0);
+            var maxCharacters = Math.Max(1, _maxTokens * _tokenBudget.ApproximateCharactersPerToken);
+            var range = ResolveInspectionRange(value.Length, searchIndex, maxCharacters, options.SearchMode);
+            var currentValue = value.Substring(range.StartIndex, range.Length);
+            var estimatedReturnedTokens = _tokenBudget.EstimateTokens(currentValue);
+            _usedTokens = Math.Min(_maxTokens, estimatedReturnedTokens);
+            if (range.StartIndex != 0 || range.EndIndex < value.Length)
+                _limitedValues = 1;
+
+            return new InspectedFieldValue(
+                currentValue,
+                range.StartIndex,
+                range.EndIndex,
+                searchIndex,
+                value.Length,
+                currentValue.Length,
+                _tokenBudget.EstimateTokens(value),
+                estimatedReturnedTokens,
+                range.StartIndex == 0 && range.EndIndex >= value.Length,
                 searchResult.MatchedValue,
-                searchResult.HasSearchValues);
+                searchResult.HasSearchValues,
+                NormalizeSearchMode(options.SearchMode));
         }
 
         public JObject CreateMetadata()
@@ -127,11 +147,11 @@ namespace FlowBlox.AIAssistant.Helper
             return parseResult.Configuration ?? new AssistantConfiguration();
         }
 
-        private static SearchStartIndexResult ResolveSearchStartIndex(string value, string? searchValues)
+        private static SearchIndexResult ResolveSearchIndex(string value, string? searchValues)
         {
             var candidates = ParseSearchValues(searchValues);
             if (candidates.Count == 0)
-                return SearchStartIndexResult.Empty;
+                return SearchIndexResult.Empty;
 
             int? bestIndex = null;
             string? matchedValue = null;
@@ -148,7 +168,7 @@ namespace FlowBlox.AIAssistant.Helper
                 }
             }
 
-            return new SearchStartIndexResult(bestIndex, matchedValue, true);
+            return new SearchIndexResult(bestIndex, matchedValue, true);
         }
 
         private static IReadOnlyList<string> ParseSearchValues(string? searchValues)
@@ -163,9 +183,49 @@ namespace FlowBlox.AIAssistant.Helper
                 .ToList();
         }
 
-        private sealed record SearchStartIndexResult(int? Index, string? MatchedValue, bool HasSearchValues)
+        private static InspectionRange ResolveInspectionRange(
+            int totalLength,
+            int searchIndex,
+            int maxCharacters,
+            string? searchMode)
         {
-            public static SearchStartIndexResult Empty { get; } = new(null, null, false);
+            if (string.Equals(searchMode, "LookAround", StringComparison.OrdinalIgnoreCase))
+            {
+                var half = Math.Max(1, maxCharacters / 2);
+                var startIndex = Math.Max(0, searchIndex - half);
+                var endIndex = Math.Min(totalLength, searchIndex + half);
+
+                if (endIndex - startIndex < maxCharacters)
+                {
+                    var missing = maxCharacters - (endIndex - startIndex);
+                    startIndex = Math.Max(0, startIndex - missing);
+                    endIndex = Math.Min(totalLength, endIndex + missing);
+                }
+
+                return new InspectionRange(startIndex, endIndex);
+            }
+
+            var normalizedStartIndex = Math.Clamp(searchIndex, 0, totalLength);
+            return new InspectionRange(
+                normalizedStartIndex,
+                Math.Min(totalLength, normalizedStartIndex + maxCharacters));
+        }
+
+        private static string NormalizeSearchMode(string? searchMode)
+        {
+            return string.Equals(searchMode, "LookAround", StringComparison.OrdinalIgnoreCase)
+                ? "LookAround"
+                : "StartAt";
+        }
+
+        private sealed record SearchIndexResult(int? Index, string? MatchedValue, bool HasSearchValues)
+        {
+            public static SearchIndexResult Empty { get; } = new(null, null, false);
+        }
+
+        private sealed record InspectionRange(int StartIndex, int EndIndex)
+        {
+            public int Length => Math.Max(0, EndIndex - StartIndex);
         }
     }
 
@@ -177,13 +237,16 @@ namespace FlowBlox.AIAssistant.Helper
         int EstimatedTotalTokens,
         int EstimatedReturnedTokens,
         bool Truncated,
-        bool LimitExceeded,
-        string? MatchedSearchValue,
-        bool HasSearchValues)
+        bool LimitExceeded)
     {
+        public bool IsComplete => !Truncated && !LimitExceeded;
+
         public JObject ToMetadata()
         {
-            var metadata = new JObject
+            if (IsComplete)
+                return new JObject();
+
+            return new JObject
             {
                 ["startIndex"] = StartIndex,
                 ["totalLength"] = TotalLength,
@@ -192,6 +255,43 @@ namespace FlowBlox.AIAssistant.Helper
                 ["estimatedReturnedTokens"] = EstimatedReturnedTokens,
                 ["truncated"] = Truncated,
                 ["limitExceeded"] = LimitExceeded
+            };
+        }
+    }
+
+    internal sealed class FieldValueInspectionOptions
+    {
+        public int? SearchIndex { get; set; }
+        public string? SearchValues { get; set; }
+        public string SearchMode { get; set; } = "StartAt";
+    }
+
+    internal sealed record InspectedFieldValue(
+        string Value,
+        int StartIndex,
+        int EndIndex,
+        int SearchIndex,
+        int TotalLength,
+        int CurrentLength,
+        int EstimatedTotalTokens,
+        int EstimatedReturnedTokens,
+        bool IsComplete,
+        string? MatchedSearchValue,
+        bool HasSearchValues,
+        string SearchMode)
+    {
+        public JObject ToMetadata()
+        {
+            var metadata = new JObject
+            {
+                ["searchMode"] = SearchMode,
+                ["startIndex"] = StartIndex,
+                ["endIndex"] = EndIndex,
+                ["searchIndex"] = SearchIndex,
+                ["totalLength"] = TotalLength,
+                ["currentLength"] = CurrentLength,
+                ["estimatedTotalTokens"] = EstimatedTotalTokens,
+                ["estimatedReturnedTokens"] = EstimatedReturnedTokens
             };
 
             if (HasSearchValues)

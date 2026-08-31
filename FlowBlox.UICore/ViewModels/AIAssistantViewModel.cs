@@ -48,6 +48,8 @@ namespace FlowBlox.UICore.ViewModels
         public bool IsChatVisible => !IsHistoryOverviewVisible;
 
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
+        public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
+        public event EventHandler<FlowBlocksLayoutChangedEventArgs>? FlowBlocksLayoutChanged;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public AIAssistantViewModel()
@@ -67,6 +69,8 @@ namespace FlowBlox.UICore.ViewModels
                 () => ChatViewModel.OpenCommunicationProtocolDirectoryCommand.CanExecute(null));
 
             ChatViewModel.FlowBlocksChanged += (_, e) => FlowBlocksChanged?.Invoke(this, e);
+            ChatViewModel.FlowBlocksConnectionsChanged += (_, e) => FlowBlocksConnectionsChanged?.Invoke(this, e);
+            ChatViewModel.FlowBlocksLayoutChanged += (_, e) => FlowBlocksLayoutChanged?.Invoke(this, e);
             ChatViewModel.NewHistoryRequested += (_, _) => StartNewChat();
             ChatViewModel.HistoryRequested += (_, _) => ShowHistoryOverview();
             ChatViewModel.PropertyChanged += (_, _) => InvalidateToolbarCommands();

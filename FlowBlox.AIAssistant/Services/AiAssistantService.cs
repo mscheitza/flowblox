@@ -30,6 +30,7 @@ namespace FlowBlox.AIAssistant.Services
 
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
         public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
+        public event EventHandler<FlowBlocksLayoutChangedEventArgs>? FlowBlocksLayoutChanged;
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
         public event EventHandler<int>? EstimatedUsedTokensChanged;
 
@@ -274,6 +275,7 @@ namespace FlowBlox.AIAssistant.Services
                         modelPrompt,
                         maxLatestMessages,
                         minLatestMessages,
+                        config.Provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
                         tokenBudget);
                     summaryTargetMessageCount = Math.Max(summaryTargetMessageCount, chatRequestResult.FirstIncludedHistoryMessageIndex);
                     await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
@@ -286,6 +288,7 @@ namespace FlowBlox.AIAssistant.Services
                         modelPrompt,
                         maxLatestMessages,
                         minLatestMessages,
+                        config.Provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
                         tokenBudget);
                     var chatRequest = chatRequestResult.Request;
                     if (toolRound == 1)
@@ -295,7 +298,7 @@ namespace FlowBlox.AIAssistant.Services
                         chatRequest,
                         config,
                         ct).ConfigureAwait(false);
-                    AddEstimatedTokenUsage(session, EstimateTokenUsage(chatRequest, exec, tokenBudget));
+                    AddEstimatedTokenUsage(session, EstimateTokenUsage(chatRequest, exec, tokenBudget, config.Provider));
                     result.RawModelOutput = exec.RawOutput ?? exec.OutputText ?? string.Empty;
 
                     if (!exec.Success)
@@ -503,6 +506,13 @@ namespace FlowBlox.AIAssistant.Services
             var layoutResult = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
             _logger?.Info(
                 $"AutoAdjustFlowLayout executed ({reason}). Updated={layoutResult.UpdatedFlowBlocks}, Total={layoutResult.TotalFlowBlocks}, Components={layoutResult.ComponentsProcessed}");
+
+            FlowBlocksLayoutChanged?.Invoke(this, new FlowBlocksLayoutChangedEventArgs
+            {
+                UpdatedFlowBlocks = layoutResult.UpdatedFlowBlocks,
+                TotalFlowBlocks = layoutResult.TotalFlowBlocks,
+                ComponentsProcessed = layoutResult.ComponentsProcessed
+            });
         }
 
         private AiCommunicationProtocolWriter? TryCreateCommunicationProtocolWriter(AssistantConfiguration config, string userPrompt, string sessionId)
@@ -613,7 +623,7 @@ namespace FlowBlox.AIAssistant.Services
                 var summaryRequest = AssistantSummaryRequestBuilder.Build(currentSummary, messagesToSummarize);
                 var tokenBudget = BuildTokenBudget(config);
                 var summaryResult = await _executor.ExecuteChatAsync(summaryRequest, config, ct).ConfigureAwait(false);
-                AddEstimatedTokenUsage(session, EstimateTokenUsage(summaryRequest, summaryResult, tokenBudget));
+                AddEstimatedTokenUsage(session, EstimateTokenUsage(summaryRequest, summaryResult, tokenBudget, config.Provider));
                 if (!summaryResult.Success || string.IsNullOrWhiteSpace(summaryResult.OutputText))
                 {
                     if (!string.IsNullOrWhiteSpace(summaryResult.Error))
@@ -661,31 +671,51 @@ namespace FlowBlox.AIAssistant.Services
         private static int EstimateTokenUsage(
             AIChatRequest request,
             AiExecutorResult result,
-            AssistantTokenBudget tokenBudget)
+            AssistantTokenBudget tokenBudget,
+            AIProviderBase? provider)
         {
             if (tokenBudget == null)
                 return 0;
 
-            var promptTokens = result?.PromptTokens ?? EstimateRequestTokens(request, tokenBudget);
+            var promptTokens = EstimateRequestTokens(
+                request,
+                tokenBudget,
+                provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d);
             var completionTokens = result?.CompletionTokens ??
                                    tokenBudget.EstimateTokens(result?.OutputText ?? result?.RawOutput ?? string.Empty);
 
             return Math.Max(0, promptTokens) + Math.Max(0, completionTokens);
         }
 
-        private static int EstimateRequestTokens(AIChatRequest request, AssistantTokenBudget tokenBudget)
+        private static int EstimateRequestTokens(
+            AIChatRequest request,
+            AssistantTokenBudget tokenBudget,
+            double estimatedSystemPromptCacheSavingsRate)
         {
             if (request == null || tokenBudget == null)
                 return 0;
 
             var tokens = 0;
             foreach (var message in request.SystemMessages ?? Enumerable.Empty<AIChatMessage>())
-                tokens += tokenBudget.EstimateTokens(message?.Content);
+                tokens += EstimateEffectiveSystemMessageTokens(message, tokenBudget, estimatedSystemPromptCacheSavingsRate);
 
             foreach (var message in request.Messages ?? Enumerable.Empty<AIChatMessage>())
                 tokens += tokenBudget.EstimateTokens(message?.Content);
 
             return tokens;
+        }
+
+        private static int EstimateEffectiveSystemMessageTokens(
+            AIChatMessage message,
+            AssistantTokenBudget tokenBudget,
+            double estimatedSystemPromptCacheSavingsRate)
+        {
+            var tokens = tokenBudget.EstimateTokens(message?.Content);
+            if (tokens <= 0 || message?.CacheBehavior != AIChatCacheBehavior.PreferCache)
+                return tokens;
+
+            var savingsRate = Math.Clamp(estimatedSystemPromptCacheSavingsRate, 0d, 1d);
+            return Math.Max(0, (int)Math.Ceiling(tokens * (1d - savingsRate)));
         }
 
         private void RaiseEstimatedUsedTokensChanged(int estimatedUsedTokens)

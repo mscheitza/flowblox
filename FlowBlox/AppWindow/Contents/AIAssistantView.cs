@@ -46,6 +46,8 @@ namespace FlowBlox.AppWindow.Contents
             if (_viewModel != null)
             {
                 _viewModel.FlowBlocksChanged += ViewModel_FlowBlocksChanged;
+                _viewModel.FlowBlocksConnectionsChanged += ViewModel_FlowBlocksConnectionsChanged;
+                _viewModel.FlowBlocksLayoutChanged += ViewModel_FlowBlocksLayoutChanged;
                 _viewModel.ConfigureProjectStateAccess(CaptureCurrentProjectState, RestoreProjectStateAsync);
             }
         }
@@ -107,6 +109,8 @@ namespace FlowBlox.AppWindow.Contents
                 if (_viewModel != null)
                 {
                     _viewModel.FlowBlocksChanged -= ViewModel_FlowBlocksChanged;
+                    _viewModel.FlowBlocksConnectionsChanged -= ViewModel_FlowBlocksConnectionsChanged;
+                    _viewModel.FlowBlocksLayoutChanged -= ViewModel_FlowBlocksLayoutChanged;
                 }
             }
 
@@ -185,6 +189,40 @@ namespace FlowBlox.AppWindow.Contents
 
             var project = FlowBloxProjectManager.Instance.ActiveProject;
             if (project == null || e == null || !e.HasChanges)
+            {
+                return;
+            }
+
+            AppWindow.Instance.UpdateUI();
+        }
+
+        private void ViewModel_FlowBlocksConnectionsChanged(object sender, FlowBlocksConnectionsChangedEventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => ViewModel_FlowBlocksConnectionsChanged(sender, e)));
+                return;
+            }
+
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            if (project == null || e == null || !e.HasChanges)
+            {
+                return;
+            }
+
+            AppWindow.Instance.UpdateUI();
+        }
+
+        private void ViewModel_FlowBlocksLayoutChanged(object sender, FlowBlocksLayoutChangedEventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => ViewModel_FlowBlocksLayoutChanged(sender, e)));
+                return;
+            }
+
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            if (project == null || e == null)
             {
                 return;
             }

@@ -13,6 +13,7 @@ namespace FlowBlox.AIAssistant.Builder
             string currentUserPrompt,
             int maxLatestMessages,
             int minLatestMessages,
+            double estimatedSystemPromptCacheSavingsRate,
             AssistantTokenBudget tokenBudget)
         {
             var request = new AIChatRequest();
@@ -38,7 +39,11 @@ namespace FlowBlox.AIAssistant.Builder
                 });
             }
 
-            var remainingHistoryTokens = CalculateRemainingHistoryTokens(request.SystemMessages, currentUserPrompt, tokenBudget);
+            var remainingHistoryTokens = CalculateRemainingHistoryTokens(
+                request.SystemMessages,
+                currentUserPrompt,
+                estimatedSystemPromptCacheSavingsRate,
+                tokenBudget);
             var latestSelection = SelectLatestMessages(
                 sessionMessages,
                 maxLatestMessages,
@@ -74,6 +79,7 @@ namespace FlowBlox.AIAssistant.Builder
         private static int CalculateRemainingHistoryTokens(
             IReadOnlyList<AIChatMessage> systemMessages,
             string currentUserPrompt,
+            double estimatedSystemPromptCacheSavingsRate,
             AssistantTokenBudget tokenBudget)
         {
             ArgumentNullException.ThrowIfNull(tokenBudget);
@@ -85,9 +91,22 @@ namespace FlowBlox.AIAssistant.Builder
             var reservedResponseTokens = Math.Max(AssistantConfigurationLimits.MinReservedResponseTokens, tokenBudget.ReservedResponseTokens);
             var fixedTokens = tokenBudget.EstimateTokens(currentUserPrompt);
             foreach (var systemMessage in systemMessages ?? Array.Empty<AIChatMessage>())
-                fixedTokens += tokenBudget.EstimateTokens(systemMessage?.Content ?? string.Empty);
+                fixedTokens += EstimateEffectiveSystemMessageTokens(systemMessage, estimatedSystemPromptCacheSavingsRate, tokenBudget);
 
             return Math.Max(AssistantConfigurationLimits.MinContextTokens, maxContextTokens - reservedResponseTokens - fixedTokens);
+        }
+
+        private static int EstimateEffectiveSystemMessageTokens(
+            AIChatMessage systemMessage,
+            double estimatedSystemPromptCacheSavingsRate,
+            AssistantTokenBudget tokenBudget)
+        {
+            var tokens = tokenBudget.EstimateTokens(systemMessage?.Content ?? string.Empty);
+            if (tokens <= 0 || systemMessage?.CacheBehavior != AIChatCacheBehavior.PreferCache)
+                return tokens;
+
+            var savingsRate = Math.Clamp(estimatedSystemPromptCacheSavingsRate, 0d, 1d);
+            return Math.Max(0, (int)Math.Ceiling(tokens * (1d - savingsRate)));
         }
 
         private static LatestMessageSelection SelectLatestMessages(

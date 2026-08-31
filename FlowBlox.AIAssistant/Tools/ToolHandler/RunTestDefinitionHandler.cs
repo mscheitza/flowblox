@@ -150,10 +150,12 @@ namespace FlowBlox.AIAssistant.Tools
                     ["maxProtocolEntries"] = maxProtocolEntries,
                     ["protocol"] = protocol,
                     ["fieldValueAssignments"] = limitedFieldValueAssignments.Values,
-                    ["fieldValueAssignmentInfo"] = limitedFieldValueAssignments.Metadata,
                     ["testResults"] = BuildTestResults(resultSnapshotFlowBlock, fieldValueLimiter),
                     ["fieldValueOutput"] = fieldValueLimiter.CreateMetadata()
                 };
+
+                if (limitedFieldValueAssignments.Metadata.HasValues)
+                    payload["fieldValueAssignmentInfo"] = limitedFieldValueAssignments.Metadata;
 
                 if (testResult?.Success == true)
                     return ToolHandlerUtilities.Ok(payload);
@@ -181,7 +183,9 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 var limited = limiter.Limit(assignment.Value);
                 values[assignment.Key] = limited.Value;
-                metadata[assignment.Key] = limited.ToMetadata();
+                var valueInfo = limited.ToMetadata();
+                if (valueInfo.HasValues)
+                    metadata[assignment.Key] = valueInfo;
             }
 
             return new LimitedFieldValueAssignments(values, metadata);
@@ -226,13 +230,17 @@ namespace FlowBlox.AIAssistant.Tools
                     row.FieldValueMappings.Select(mapping =>
                     {
                         var limited = limiter.Limit(mapping.Value);
-                        return new JObject
+                        var valueObject = new JObject
                         {
                             ["fieldName"] = mapping.Field?.Name ?? string.Empty,
                             ["fullyQualifiedFieldName"] = mapping.Field?.FullyQualifiedName ?? string.Empty,
-                            ["value"] = limited.Value,
-                            ["valueInfo"] = limited.ToMetadata()
+                            ["value"] = limited.Value
                         };
+                        var valueInfo = limited.ToMetadata();
+                        if (valueInfo.HasValues)
+                            valueObject["valueInfo"] = valueInfo;
+
+                        return valueObject;
                     }));
 
                 rows.Add(new JObject

@@ -1,25 +1,21 @@
-using FlowBlox.Core.Attributes;
-using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Util.Fields;
 using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.Connectors.Google;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 
-namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
+namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
 {
-    [Display(Name = "GeminiAIProvider_DisplayName", ResourceType = typeof(FlowBloxTexts))]
-    [PluralDisplayName("GeminiAIProvider_DisplayName_Plural", typeof(FlowBloxTexts))]
-    public sealed class GeminiAIProvider : AIProviderBase
+    public abstract class OpenAICompatibleProviderBase : AIProviderBase
     {
-        public override string ProviderType => "Gemini";
+        protected abstract string ProviderDisplayName { get; }
+
+        protected virtual string? OrganizationIdForRequest => null;
 
         protected override bool SupportsReasoningEffort => true;
 
-        public GeminiAIProvider()
+        protected OpenAICompatibleProviderBase(string baseUrl, string defaultModel)
         {
-            BaseUrl = "https://generativelanguage.googleapis.com/v1";
-            DefaultModel = "gemini-3.7-flash";
-            EstimatedSystemPromptCacheSavingsRate = 0.60d;
+            BaseUrl = baseUrl;
+            DefaultModel = defaultModel;
         }
 
         protected override async Task<AIResponse> ExecuteChatCoreAsync(AIChatRequest request, CancellationToken ct)
@@ -30,7 +26,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
                 return new AIResponse
                 {
                     Success = false,
-                    Error = "Gemini API key is empty after field resolution."
+                    Error = $"{ProviderDisplayName} API key is empty after field resolution."
                 };
             }
 
@@ -40,22 +36,20 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
             var resolvedBaseUrl = FlowBloxFieldHelper.ReplaceFieldsInString(BaseUrl);
             if (string.IsNullOrWhiteSpace(resolvedBaseUrl))
-                throw new InvalidOperationException("Gemini base URL is empty after field resolution.");
+                throw new InvalidOperationException($"{ProviderDisplayName} base URL is empty after field resolution.");
 
+            var resolvedOrganizationId = FlowBloxFieldHelper.ReplaceFieldsInString(OrganizationIdForRequest);
             var timeoutSeconds = ResolveTimeoutSeconds(request);
             using var httpClient = new HttpClient
             {
                 Timeout = TimeSpan.FromSeconds(timeoutSeconds)
             };
 
-#pragma warning disable SKEXP0070
-            var chatService = new GoogleAIGeminiChatCompletionService(
-                resolvedModel,
-                resolvedApiKey,
-                ResolveApiVersion(resolvedBaseUrl),
-                httpClient,
-                loggerFactory: null);
-#pragma warning restore SKEXP0070
+#pragma warning disable SKEXP0010
+            var chatService = string.Equals(resolvedBaseUrl.TrimEnd('/'), "https://api.openai.com/v1", StringComparison.OrdinalIgnoreCase)
+                ? new OpenAIChatCompletionService(resolvedModel, resolvedApiKey, resolvedOrganizationId, httpClient, loggerFactory: null)
+                : new OpenAIChatCompletionService(resolvedModel, new Uri(resolvedBaseUrl.TrimEnd('/')), resolvedApiKey, resolvedOrganizationId, httpClient, loggerFactory: null);
+#pragma warning restore SKEXP0010
 
             var response = await chatService.GetChatMessageContentAsync(
                 BuildChatHistory(request),
@@ -70,30 +64,28 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             };
         }
 
-        private GeminiPromptExecutionSettings BuildExecutionSettings(AIChatRequest request)
+        protected virtual OpenAIPromptExecutionSettings BuildExecutionSettings(AIChatRequest request)
         {
-            var settings = new GeminiPromptExecutionSettings();
-            if (request.Temperature is >= 0 and <= 1)
+            var settings = new OpenAIPromptExecutionSettings();
+            if (request.Temperature is >= 0 and <= 2)
                 settings.Temperature = request.Temperature;
 
             if (request.MaxTokens is > 0)
                 settings.MaxTokens = request.MaxTokens;
 
-            settings.ThinkingConfig = new GeminiThinkingConfig
-            {
-                ThinkingLevel = ToReasoningEffortValue(ReasoningEffort)
-            };
+            settings.ReasoningEffort = GetReasoningEffortValue();
+            ConfigureExecutionSettings(settings, request);
 
             return settings;
         }
 
-        private static GoogleAIVersion ResolveApiVersion(string resolvedBaseUrl)
+        protected virtual string GetReasoningEffortValue()
         {
-            var trimmedBaseUrl = resolvedBaseUrl.Trim().TrimEnd('/');
-            if (trimmedBaseUrl.EndsWith("/v1", StringComparison.OrdinalIgnoreCase))
-                return GoogleAIVersion.V1;
+            return ToReasoningEffortValue(ReasoningEffort);
+        }
 
-            return GoogleAIVersion.V1_Beta;
+        protected virtual void ConfigureExecutionSettings(OpenAIPromptExecutionSettings settings, AIChatRequest request)
+        {
         }
 
         private static ChatHistory BuildChatHistory(AIChatRequest request)

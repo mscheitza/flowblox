@@ -2026,6 +2026,18 @@ Note: Once a provider is loaded, switching providers within the same process is 
 	<data name="AIProvider_DefaultModel_Tooltip" xml:space="preserve">
 		<value>The default model used when the request does not specify a model override.</value>
 	</data>
+	<data name="AIProvider_EstimatedSystemPromptCacheSavingsRate" xml:space="preserve">
+		<value>Estimated system prompt cache savings rate</value>
+	</data>
+	<data name="AIProvider_EstimatedSystemPromptCacheSavingsRate_Tooltip" xml:space="preserve">
+		<value>Estimated savings rate for cacheable system prompt tokens. This is used only for internal token/cost estimation, not for provider billing.</value>
+	</data>
+	<data name="AIProvider_ReasoningEffort" xml:space="preserve">
+		<value>Reasoning effort</value>
+	</data>
+	<data name="AIProvider_ReasoningEffort_Tooltip" xml:space="preserve">
+		<value>Preferred reasoning effort for providers and models that support it. Lower values can reduce latency and reasoning token usage.</value>
+	</data>
 	<data name="AIProvider_TimeoutSeconds" xml:space="preserve">
 		<value>Timeout (seconds)</value>
 	</data>
@@ -2061,6 +2073,54 @@ Note: Once a provider is loaded, switching providers within the same process is 
 	</data>
 	<data name="AnthropicAIProvider_DisplayName_Plural" xml:space="preserve">
 		<value>Anthropic Providers</value>
+	</data>
+	<data name="TypeNames_DeepSeekAIProvider" xml:space="preserve">
+		<value>DeepSeek Provider</value>
+	</data>
+	<data name="DeepSeekAIProvider_DisplayName" xml:space="preserve">
+		<value>DeepSeek Provider</value>
+	</data>
+	<data name="DeepSeekAIProvider_DisplayName_Plural" xml:space="preserve">
+		<value>DeepSeek Providers</value>
+	</data>
+	<data name="DeepSeekAIProvider_Description" xml:space="preserve">
+		<value>Uses DeepSeek through its OpenAI-compatible API. This provider behaves like the OpenAI provider and only presets the DeepSeek platform URL and model defaults.</value>
+	</data>
+	<data name="TypeNames_KimiAIProvider" xml:space="preserve">
+		<value>Kimi Provider</value>
+	</data>
+	<data name="KimiAIProvider_DisplayName" xml:space="preserve">
+		<value>Kimi Provider</value>
+	</data>
+	<data name="KimiAIProvider_DisplayName_Plural" xml:space="preserve">
+		<value>Kimi Providers</value>
+	</data>
+	<data name="KimiAIProvider_Description" xml:space="preserve">
+		<value>Uses Kimi models through Moonshot's OpenAI-compatible API with a strong default model for coding and reasoning workflows.</value>
+	</data>
+	<data name="TypeNames_MistralAIProvider" xml:space="preserve">
+		<value>Mistral Provider</value>
+	</data>
+	<data name="MistralAIProvider_DisplayName" xml:space="preserve">
+		<value>Mistral Provider</value>
+	</data>
+	<data name="MistralAIProvider_DisplayName_Plural" xml:space="preserve">
+		<value>Mistral Providers</value>
+	</data>
+	<data name="MistralAIProvider_Description" xml:space="preserve">
+		<value>Uses Mistral's OpenAI-compatible chat API with the current large-model default.</value>
+	</data>
+	<data name="TypeNames_XAIProvider" xml:space="preserve">
+		<value>xAI Provider</value>
+	</data>
+	<data name="XAIProvider_DisplayName" xml:space="preserve">
+		<value>xAI Provider</value>
+	</data>
+	<data name="XAIProvider_DisplayName_Plural" xml:space="preserve">
+		<value>xAI Providers</value>
+	</data>
+	<data name="XAIProvider_Description" xml:space="preserve">
+		<value>Uses xAI Grok models through xAI's OpenAI-compatible API with a frontier-model default.</value>
 	</data>
 	<data name="OpenAIProvider_OrganizationId" xml:space="preserve">
 		<value>Organization ID</value>

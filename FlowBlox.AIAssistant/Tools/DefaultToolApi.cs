@@ -180,6 +180,7 @@ namespace FlowBlox.AIAssistant.Tools
                 new RunTestDefinitionHandler(),
                 new RunGenerationStrategiesHandler(),
                 new GetLastDebugArtefactHandler(),
+                new InspectFieldValueHandler(),
                 new BatchExecuteToolRequestsHandler(ExecuteAsync)
             ];
         }

@@ -1953,6 +1953,18 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="AIProvider_DefaultModel_Tooltip" xml:space="preserve">
 		<value>Das Standardmodell, falls im Request kein Modell überschrieben wird.</value>
 	</data>
+	<data name="AIProvider_EstimatedSystemPromptCacheSavingsRate" xml:space="preserve">
+		<value>Geschätzte System-Prompt-Cache-Sparrate</value>
+	</data>
+	<data name="AIProvider_EstimatedSystemPromptCacheSavingsRate_Tooltip" xml:space="preserve">
+		<value>Geschätzte Sparrate für cachefähige System-Prompt-Tokens. Wird nur für interne Token-/Kostenschätzungen verwendet, nicht für die Provider-Abrechnung.</value>
+	</data>
+	<data name="AIProvider_ReasoningEffort" xml:space="preserve">
+		<value>Reasoning-Aufwand</value>
+	</data>
+	<data name="AIProvider_ReasoningEffort_Tooltip" xml:space="preserve">
+		<value>Bevorzugter Reasoning-Aufwand für Provider und Modelle, die diese Einstellung unterstützen. Niedrigere Werte können Latenz und Reasoning-Tokenverbrauch reduzieren.</value>
+	</data>
 	<data name="AIProvider_TimeoutSeconds" xml:space="preserve">
 		<value>Timeout (Sekunden)</value>
 	</data>
@@ -1982,6 +1994,54 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		</data>
 	<data name="GeminiAIProvider_DisplayName_Plural" xml:space="preserve">
 			<value>Gemini-Provider</value>
+		</data>
+	<data name="TypeNames_DeepSeekAIProvider" xml:space="preserve">
+			<value>DeepSeek-Provider</value>
+		</data>
+	<data name="DeepSeekAIProvider_DisplayName" xml:space="preserve">
+			<value>DeepSeek-Provider</value>
+		</data>
+	<data name="DeepSeekAIProvider_DisplayName_Plural" xml:space="preserve">
+			<value>DeepSeek-Provider</value>
+		</data>
+	<data name="DeepSeekAIProvider_Description" xml:space="preserve">
+			<value>Nutzt DeepSeek über die OpenAI-kompatible API. Dieser Provider verhält sich wie der OpenAI-Provider und bringt lediglich die passende DeepSeek-Plattform-URL und Modellvorgaben mit.</value>
+		</data>
+	<data name="TypeNames_KimiAIProvider" xml:space="preserve">
+			<value>Kimi-Provider</value>
+		</data>
+	<data name="KimiAIProvider_DisplayName" xml:space="preserve">
+			<value>Kimi-Provider</value>
+		</data>
+	<data name="KimiAIProvider_DisplayName_Plural" xml:space="preserve">
+			<value>Kimi-Provider</value>
+		</data>
+	<data name="KimiAIProvider_Description" xml:space="preserve">
+			<value>Nutzt Kimi-Modelle über die OpenAI-kompatible API von Moonshot mit einem starken Standardmodell für Coding- und Reasoning-Workflows.</value>
+		</data>
+	<data name="TypeNames_MistralAIProvider" xml:space="preserve">
+			<value>Mistral-Provider</value>
+		</data>
+	<data name="MistralAIProvider_DisplayName" xml:space="preserve">
+			<value>Mistral-Provider</value>
+		</data>
+	<data name="MistralAIProvider_DisplayName_Plural" xml:space="preserve">
+			<value>Mistral-Provider</value>
+		</data>
+	<data name="MistralAIProvider_Description" xml:space="preserve">
+			<value>Nutzt die OpenAI-kompatible Chat-API von Mistral mit dem aktuellen Large-Model als Vorgabe.</value>
+		</data>
+	<data name="TypeNames_XAIProvider" xml:space="preserve">
+			<value>xAI-Provider</value>
+		</data>
+	<data name="XAIProvider_DisplayName" xml:space="preserve">
+			<value>xAI-Provider</value>
+		</data>
+	<data name="XAIProvider_DisplayName_Plural" xml:space="preserve">
+			<value>xAI-Provider</value>
+		</data>
+	<data name="XAIProvider_Description" xml:space="preserve">
+			<value>Nutzt xAI-Grok-Modelle über die OpenAI-kompatible API von xAI mit einem Frontier-Modell als Vorgabe.</value>
 		</data>
 	<data name="OpenAIProvider_OrganizationId" xml:space="preserve">
 		<value>Organisations-ID</value>

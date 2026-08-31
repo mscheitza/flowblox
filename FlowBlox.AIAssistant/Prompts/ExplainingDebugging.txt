@@ -1,8 +1,11 @@
 Debugging Guide (compact)
 
 Target execution:
+- Unless the user explicitly asks for a full debug run, avoid running project debugging without `targetFlowBlockName`; full runs can take a long time and produce large debug content.
+- Prefer focused debug runs with `targetFlowBlockName` first.
 - When debugging a target flow block, include the target execution if the target block's own result fields are needed.
 - If only predecessor output is needed, stop before the target to inspect incoming context.
+- To start a result flow block at a specific dataset value, set its `StartValue` property before the focused debug/test run.
 
 Result windowing:
 - BaseResultFlowBlock supports output modes: `All`, `First`, `Last`, `Range`.
@@ -14,8 +17,11 @@ Field-value limiting:
 - Debug/test Tool API responses limit the total estimated tokens used by field values.
 - The limiter is always applied to field values, even for focused result requests.
 - Truncated values end with a short truncation marker.
-- Response metadata includes enough continuation information, such as start index, total length, and current returned length.
+- Complete field values may omit value metadata.
+- Truncated or omitted values include navigation metadata such as start index, total length, and current returned length.
 - `RunTestDefinition` only applies limiting; it does not support field-value windowing.
-- For debug artefact inspection, use `fieldValueStartIndex` to continue reading a large value when the tool supports it.
-- If the exact character index is unknown but marker text is known, use `fieldValueSearchValues` as comma-separated marker values on debug artefact requests.
-- When `fieldValueSearchValues` matches a field value, the returned debug chunk starts at the first matching marker instead of `fieldValueStartIndex`.
+- `GetLastDebugArtefact` lists field changes and result datasets with limiting; it does not navigate inside large strings.
+- For detailed navigation inside truncated or oversized debug field values, use `InspectFieldValue`.
+- `InspectFieldValue.searchMode=StartAt` returns content starting at `searchIndex` or the first matched `searchValues` marker.
+- `InspectFieldValue.searchMode=LookAround` treats `searchIndex` or the first matched `searchValues` marker as the center and returns context before and after it.
+- For generated result datasets, `GetLastDebugArtefact` returns `resultDatasetCount`, `includedDatasetCount`, and whether later datasets were omitted due to the field-value token limit.

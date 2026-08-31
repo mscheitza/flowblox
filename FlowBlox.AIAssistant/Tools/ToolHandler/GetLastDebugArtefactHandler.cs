@@ -18,13 +18,11 @@ namespace FlowBlox.AIAssistant.Tools
                 ["generatedResultId"] = "int? (use this for GeneratedResult artefact retrieval)",
                 ["datasetSelectionMode"] = "string? (First|Last|Index, only relevant for generatedResultId; default: First)",
                 ["datasetIndex"] = "int? (0-based; when set, only this generated-result dataset is returned)",
-                ["fieldValueStartIndex"] = "int? (default: 0; character offset used when continuing a truncated field value)",
-                ["fieldValueSearchValues"] = "string? (comma-separated; when provided, each field value starts at the first matching search value instead of fieldValueStartIndex)",
                 ["runId"] = "string? (optional safety check)",
                 ["usageHint"] =
                     "Use fieldChangeId only for field-change artefacts. " +
                     "Use generatedResultId for generated-result artefacts. " + 
-                    "Use datasetIndex plus fieldValueStartIndex or fieldValueSearchValues to inspect large values in focused chunks."
+                    "Use InspectFieldValue for detailed navigation inside truncated or oversized field-value strings."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -43,8 +41,6 @@ namespace FlowBlox.AIAssistant.Tools
 
             var fieldChangeId = args.Value<int?>("fieldChangeId");
             var generatedResultId = args.Value<int?>("generatedResultId");
-            var fieldValueStartIndex = Math.Max(0, args.Value<int?>("fieldValueStartIndex") ?? 0);
-            var fieldValueSearchValues = args.Value<string>("fieldValueSearchValues");
             var hasFieldChangeId = fieldChangeId.HasValue && fieldChangeId.Value > 0;
             var hasGeneratedResultId = generatedResultId.HasValue && generatedResultId.Value > 0;
 
@@ -72,7 +68,7 @@ namespace FlowBlox.AIAssistant.Tools
                     return Task.FromResult(ToolHandlerUtilities.Fail($"FieldChangeId '{requestedFieldChangeId}' not found in last debug run."));
 
                 var outputLimiter = FieldValueResponseLimiter.FromConfiguration();
-                var limitedFieldChange = LimitFieldChange(fieldChange, outputLimiter, fieldValueStartIndex, fieldValueSearchValues);
+                var limitedFieldChange = LimitFieldChange(fieldChange, outputLimiter);
                 return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
                 {
                     ["runId"] = snapshot.RunId,
@@ -104,65 +100,84 @@ namespace FlowBlox.AIAssistant.Tools
                 return Task.FromResult(ToolHandlerUtilities.Fail(requestedDatasetIndex.ErrorMessage));
 
             var generatedResultOutputLimiter = FieldValueResponseLimiter.FromConfiguration();
-            var limitedGeneratedResult = LimitGeneratedResult(
+            var limitedGeneratedResultInfo = LimitGeneratedResult(
                 generatedResult,
                 requestedDatasetIndex.Index,
-                generatedResultOutputLimiter,
-                fieldValueStartIndex,
-                fieldValueSearchValues);
+                generatedResultOutputLimiter);
 
-            return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
+            var payload = new JObject
             {
                 ["runId"] = snapshot.RunId,
                 ["createdUtc"] = snapshot.CreatedUtc,
                 ["artefactType"] = "GeneratedResult",
-                ["generatedResult"] = limitedGeneratedResult,
+                ["generatedResult"] = limitedGeneratedResultInfo.Value,
                 ["selectedDatasetIndex"] = selectedDatasetInfo.SelectedIndex,
-                ["includedDatasetIndex"] = requestedDatasetIndex.Index == null
-                    ? JValue.CreateNull()
-                    : requestedDatasetIndex.Index,
+                ["includedDatasetIndex"] = requestedDatasetIndex.Index.HasValue
+                    ? new JValue(requestedDatasetIndex.Index.Value)
+                    : JValue.CreateNull(),
+                ["resultDatasetCount"] = limitedGeneratedResultInfo.TotalDatasetCount,
+                ["includedDatasetCount"] = limitedGeneratedResultInfo.IncludedDatasetCount,
+                ["resultDatasetsOmittedDueToLimit"] = limitedGeneratedResultInfo.LimitStoppedDatasetOutput,
                 ["fieldValueOutput"] = generatedResultOutputLimiter.CreateMetadata()
-            }));
+            };
+
+            if (limitedGeneratedResultInfo.LimitStoppedDatasetOutput)
+            {
+                payload["resultDatasetLimitMessage"] =
+                    "Additional result datasets were omitted due to max field-value tokens per response.";
+            }
+
+            return Task.FromResult(ToolHandlerUtilities.Ok(payload));
         }
 
-        private static JObject LimitFieldChange(
-            JObject fieldChange,
-            FieldValueResponseLimiter limiter,
-            int fieldValueStartIndex,
-            string? fieldValueSearchValues)
+        private static JObject LimitFieldChange(JObject fieldChange, FieldValueResponseLimiter limiter)
         {
             var result = (JObject)fieldChange.DeepClone();
-            LimitStringProperty(result, "OldValue", "oldValue", "oldValueInfo", limiter, fieldValueStartIndex, fieldValueSearchValues);
-            LimitStringProperty(result, "NewValue", "newValue", "newValueInfo", limiter, fieldValueStartIndex, fieldValueSearchValues);
+            LimitStringProperty(result, "OldValue", "oldValue", "oldValueInfo", limiter);
+            LimitStringProperty(result, "NewValue", "newValue", "newValueInfo", limiter);
             return result;
         }
 
-        private static JObject LimitGeneratedResult(
+        private static LimitedGeneratedResult LimitGeneratedResult(
             JObject generatedResult,
             int? datasetIndex,
-            FieldValueResponseLimiter limiter,
-            int fieldValueStartIndex,
-            string? fieldValueSearchValues)
+            FieldValueResponseLimiter limiter)
         {
             var result = (JObject)generatedResult.DeepClone();
             var datasets = GetArrayIgnoreCase(result, "Datasets", "datasets");
+            var totalDatasetCount = datasets.Count;
             if (datasetIndex.HasValue)
             {
-                var filteredDatasets = new JArray(datasets
+                var matchedDataset = datasets
                     .OfType<JObject>()
-                    .Where(x => (GetIntIgnoreCase(x, "DatasetIndex", "datasetIndex") ?? -1) == datasetIndex.Value));
+                    .FirstOrDefault(x => (GetIntIgnoreCase(x, "DatasetIndex", "datasetIndex") ?? -1) == datasetIndex.Value)
+                    ?? datasets[datasetIndex.Value] as JObject;
+                var filteredDatasets = matchedDataset == null
+                    ? new JArray()
+                    : new JArray(matchedDataset);
                 SetArrayIgnoreCase(result, filteredDatasets, "Datasets", "datasets");
                 datasets = filteredDatasets;
             }
 
+            var limitedDatasets = new JArray();
+            var stoppedDueToLimit = false;
             foreach (var dataset in datasets.OfType<JObject>())
             {
-                var mappings = GetArrayIgnoreCase(dataset, "FieldValueMappings", "fieldValueMappings");
-                foreach (var mapping in mappings.OfType<JObject>())
-                    LimitStringProperty(mapping, "Value", "value", "valueInfo", limiter, fieldValueStartIndex, fieldValueSearchValues);
+                if (limiter.RemainingTokens <= 0)
+                {
+                    stoppedDueToLimit = true;
+                    break;
+                }
+
+                var limitedDataset = (JObject)dataset.DeepClone();
+                limitedDatasets.Add(limitedDataset);
+                var limitedMappings = GetArrayIgnoreCase(limitedDataset, "FieldValueMappings", "fieldValueMappings");
+                foreach (var mapping in limitedMappings.OfType<JObject>())
+                    LimitStringProperty(mapping, "Value", "value", "valueInfo", limiter);
             }
 
-            return result;
+            SetArrayIgnoreCase(result, limitedDatasets, "Datasets", "datasets");
+            return new LimitedGeneratedResult(result, totalDatasetCount, limitedDatasets.Count, stoppedDueToLimit);
         }
 
         private static void LimitStringProperty(
@@ -170,17 +185,17 @@ namespace FlowBlox.AIAssistant.Tools
             string pascalName,
             string camelName,
             string infoName,
-            FieldValueResponseLimiter limiter,
-            int fieldValueStartIndex,
-            string? fieldValueSearchValues)
+            FieldValueResponseLimiter limiter)
         {
             var property = GetPropertyIgnoreCase(obj, pascalName, camelName);
             if (property == null)
                 return;
 
-            var limited = limiter.Limit(property.Value.Value<string>() ?? string.Empty, fieldValueStartIndex, fieldValueSearchValues);
+            var limited = limiter.Limit(property.Value.Value<string>() ?? string.Empty);
             property.Value = limited.Value;
-            obj[infoName] = limited.ToMetadata();
+            var metadata = limited.ToMetadata();
+            if (metadata.HasValues)
+                obj[infoName] = metadata;
         }
 
         private static DatasetSelectionResult SelectDataset(
@@ -307,5 +322,11 @@ namespace FlowBlox.AIAssistant.Tools
             public static DatasetIndexValidationResult Success(int? index) => new(index, string.Empty);
             public static DatasetIndexValidationResult Fail(string errorMessage) => new(null, errorMessage);
         }
+
+        private sealed record LimitedGeneratedResult(
+            JObject Value,
+            int TotalDatasetCount,
+            int IncludedDatasetCount,
+            bool LimitStoppedDatasetOutput);
     }
 }

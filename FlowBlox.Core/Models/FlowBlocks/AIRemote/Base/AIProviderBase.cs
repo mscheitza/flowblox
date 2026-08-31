@@ -1,15 +1,10 @@
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
-using FlowBlox.Core.Logging;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Enums;
 using FlowBlox.Core.Models.Base;
-using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Resources;
 
@@ -32,18 +27,29 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string DefaultModel { get; set; }
 
-        [Display(Name = "AIProvider_TimeoutSeconds", Description = "AIProvider_TimeoutSeconds_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [Display(Name = "AIProvider_EstimatedSystemPromptCacheSavingsRate", Description = "AIProvider_EstimatedSystemPromptCacheSavingsRate_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [Range(0d, 1d)]
+        public double EstimatedSystemPromptCacheSavingsRate { get; set; }
+
+        [Display(Name = "AIProvider_ReasoningEffort", Description = "AIProvider_ReasoningEffort_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [ActivationCondition(ActivationMethod = nameof(IsReasoningEffortActive))]
+        public AIReasoningEffort ReasoningEffort { get; set; }
+
+        [Display(Name = "AIProvider_TimeoutSeconds", Description = "AIProvider_TimeoutSeconds_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
         public int TimeoutSeconds { get; set; }
 
-        [Display(Name = "AIProvider_BaseUrl", Description = "AIProvider_BaseUrl_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [Display(Name = "AIProvider_BaseUrl", Description = "AIProvider_BaseUrl_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string BaseUrl { get; set; }
 
         public abstract string ProviderType { get; }
 
+        protected virtual bool SupportsReasoningEffort => false;
+
         protected AIProviderBase()
         {
-            TimeoutSeconds = 60;
+            ReasoningEffort = AIReasoningEffort.Medium;
+            TimeoutSeconds = AiProviderDefaults.DefaultTimeoutSeconds;
         }
 
         public Task<AIResponse> ExecuteChatAsync(AIChatRequest request, CancellationToken ct)
@@ -129,9 +135,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             if (string.IsNullOrWhiteSpace(request.Model))
                 request.Model = DefaultModel;
 
-            var timeoutSeconds = request.TimeoutSecondsOverride ?? TimeoutSeconds;
-            if (timeoutSeconds <= 0)
-                timeoutSeconds = 60;
+            var timeoutSeconds = ResolveTimeoutSeconds(request);
 
             using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
             cts.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
@@ -218,17 +222,26 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         {
         }
 
-        protected abstract Task<AIResponse> ExecuteChatCoreAsync(AIChatRequest request, CancellationToken ct);
+        public bool IsReasoningEffortActive() => SupportsReasoningEffort;
 
-        public override void OptionsInit(List<OptionElement> defaults)
+        protected int ResolveTimeoutSeconds(AIChatRequest request)
         {
-            defaults.Add(new OptionElement(
-                "AI.DefaultTimeoutSeconds",
-                "60",
-                "Default timeout for AI provider calls.",
-                OptionElement.OptionType.Integer));
+            var timeoutSeconds = request?.TimeoutSecondsOverride ?? TimeoutSeconds;
+            return timeoutSeconds > 0
+                ? timeoutSeconds
+                : AiProviderDefaults.DefaultTimeoutSeconds;
         }
+
+        protected static string ToReasoningEffortValue(AIReasoningEffort reasoningEffort)
+        {
+            return reasoningEffort switch
+            {
+                AIReasoningEffort.Low => "low",
+                AIReasoningEffort.High => "high",
+                _ => "medium"
+            };
+        }
+
+        protected abstract Task<AIResponse> ExecuteChatCoreAsync(AIChatRequest request, CancellationToken ct);
     }
 }
-
-

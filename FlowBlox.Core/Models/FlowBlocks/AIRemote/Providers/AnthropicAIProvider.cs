@@ -3,7 +3,6 @@ using Anthropic.SDK.Messaging;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Util.Fields;
-using FlowBlox.Core.Util.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
@@ -18,7 +17,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         {
             BaseUrl = "https://api.anthropic.com/v1";
             DefaultModel = "claude-fable-5";
-            TimeoutSeconds = 60;
+            EstimatedSystemPromptCacheSavingsRate = 0.70d;
         }
 
         protected override async Task<AIResponse> ExecuteChatCoreAsync(AIChatRequest request, CancellationToken ct)
@@ -37,7 +36,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             if (string.IsNullOrWhiteSpace(resolvedBaseUrl))
                 throw new InvalidOperationException("Anthropic base URL is empty after field resolution.");
 
-            var response = await new AnthropicClient(new APIAuthentication(resolvedApiKey))
+            var timeoutSeconds = ResolveTimeoutSeconds(request);
+            using var httpClient = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(timeoutSeconds)
+            };
+            using var client = new AnthropicClient(new APIAuthentication(resolvedApiKey), httpClient, requestInterceptor: null)
+            {
+                ApiUrlFormat = BuildApiUrlFormat(resolvedBaseUrl)
+            };
+
+            var response = await client
                 .Messages
                 .GetClaudeMessageAsync(BuildMessageParameters(request), ct)
                 .ConfigureAwait(false);
@@ -47,6 +56,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
                 Success = true,
                 Text = response?.Message?.ToString() ?? string.Empty
             };
+        }
+
+        private static string BuildApiUrlFormat(string resolvedBaseUrl)
+        {
+            var trimmedBaseUrl = resolvedBaseUrl.Trim().TrimEnd('/');
+            return trimmedBaseUrl.Contains("{0}", StringComparison.Ordinal)
+                ? trimmedBaseUrl
+                : trimmedBaseUrl + "/{0}";
         }
 
         private static MessageParameters BuildMessageParameters(AIChatRequest request)
