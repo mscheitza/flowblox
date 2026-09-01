@@ -86,7 +86,10 @@ namespace FlowBlox.AppWindow.Contents
                 return;
             }
 
-            _projectPanelWpfControl.UpdateRuntimeState(IsRuntimeActive, _runtime?.Pause == true);
+            _projectPanelWpfControl.UpdateRuntimeState(
+                IsRuntimeActive,
+                _runtime?.Pause == true,
+                _runtimeStateService?.IsRuntimeStartBlocked == true);
             if (gridUpdate)
                 _projectPanelWpfControl.RefreshProject();
 
@@ -168,6 +171,9 @@ namespace FlowBlox.AppWindow.Contents
         private void ExecuteRuntime()
         {
             if (FlowBloxProjectManager.Instance.ActiveProject == null)
+                return;
+
+            if (_runtimeStateService?.IsRuntimeStartBlocked == true)
                 return;
 
             if (IsRuntimeActive && _runtime?.Pause == true)

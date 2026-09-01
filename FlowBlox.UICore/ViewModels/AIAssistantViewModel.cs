@@ -18,7 +18,7 @@ namespace FlowBlox.UICore.ViewModels
         public string ProjectSpaceEndpointUri { get; init; }
     }
 
-    public sealed class AIAssistantViewModel : INotifyPropertyChanged
+    public sealed class AIAssistantViewModel : INotifyPropertyChanged, IDisposable
     {
         private bool _isHistoryOverviewVisible = true;
 
@@ -154,6 +154,11 @@ namespace FlowBlox.UICore.ViewModels
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            ChatViewModel.Dispose();
         }
     }
 }

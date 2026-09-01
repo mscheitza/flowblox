@@ -9,7 +9,6 @@ namespace FlowBlox.Core.Models.Runtime.Debugging
         public int MaxRuntimeSeconds { get; set; }
         public bool IncludeTargetExecution { get; set; }
         public int MaxCapturedFieldValueChanges { get; set; }
-        public int MaxFieldValueLength { get; set; }
         public bool Aborted { get; set; }
         public RuntimeCancellationContext Cancellation { get; set; }
         public int TotalFieldValueChanges { get; set; }

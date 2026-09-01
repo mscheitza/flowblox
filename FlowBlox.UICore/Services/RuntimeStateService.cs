@@ -13,6 +13,7 @@ namespace FlowBlox.UICore.Services
         private BaseRuntime _currentRuntime;
         private bool _isRuntimeActive;
         private bool _isRuntimePaused;
+        private bool _isRuntimeStartBlocked;
 
         public BaseRuntime CurrentRuntime
         {
@@ -53,11 +54,25 @@ namespace FlowBlox.UICore.Services
             }
         }
 
+        public bool IsRuntimeStartBlocked
+        {
+            get => _isRuntimeStartBlocked;
+            private set
+            {
+                if (_isRuntimeStartBlocked == value)
+                    return;
+
+                _isRuntimeStartBlocked = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<RuntimeStateChangedEventArgs> StateChanged;
         public event EventHandler<RuntimeStateChangedEventArgs> RuntimeStarted;
         public event EventHandler<RuntimeStateChangedEventArgs> RuntimePausedChanged;
         public event EventHandler<RuntimeStateChangedEventArgs> RuntimeFinished;
+        public event EventHandler<RuntimeStateChangedEventArgs> RuntimeStartBlockedChanged;
 
         public void AttachRuntime(BaseRuntime runtime)
         {
@@ -90,6 +105,17 @@ namespace FlowBlox.UICore.Services
             UpdateState(previousRuntime, false, false, RuntimeFinished);
         }
 
+        public void SetRuntimeStartBlocked(bool isBlocked)
+        {
+            if (IsRuntimeStartBlocked == isBlocked)
+                return;
+
+            IsRuntimeStartBlocked = isBlocked;
+            var args = CreateStateChangedEventArgs(CurrentRuntime);
+            RuntimeStartBlockedChanged?.Invoke(this, args);
+            StateChanged?.Invoke(this, args);
+        }
+
         private void CurrentRuntime_RuntimeStarted(BaseRuntime runtime)
             => UpdateState(runtime, runtime.Running && !runtime.Aborted, runtime.Pause, RuntimeStarted);
 
@@ -108,10 +134,13 @@ namespace FlowBlox.UICore.Services
             IsRuntimePaused = isRuntimePaused;
             IsRuntimeActive = isRuntimeActive;
 
-            var args = new RuntimeStateChangedEventArgs(runtime, IsRuntimeActive, IsRuntimePaused);
+            var args = CreateStateChangedEventArgs(runtime);
             specificEvent?.Invoke(this, args);
             StateChanged?.Invoke(this, args);
         }
+
+        private RuntimeStateChangedEventArgs CreateStateChangedEventArgs(BaseRuntime runtime)
+            => new RuntimeStateChangedEventArgs(runtime, IsRuntimeActive, IsRuntimePaused, IsRuntimeStartBlocked);
 
         private void DetachRuntime(BaseRuntime runtime)
         {

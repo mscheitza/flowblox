@@ -23,7 +23,6 @@ namespace FlowBlox.AIAssistant.Tools
                 ["maxRuntimeSeconds"] = "int? (default: 30)",
                 ["includeTargetExecution"] = "bool? (default: false, only relevant when target is set)",
                 ["maxCapturedFieldValueChanges"] = "int? (default: 100)",
-                ["maxFieldValueLength"] = "int? (default: 2000)",
                 ["maxProtocolEntries"] = "int? (default: 250)",
                 ["usageHint"] = "Use this call for protocol output only. Read FieldValueChanges/GeneratedResults via GetLastDebugArtefact. Prefer one optimistic debug run first (usually includeTargetExecution=false). Tune maxProtocolEntries as needed."
             });
@@ -39,7 +38,6 @@ namespace FlowBlox.AIAssistant.Tools
                 var includeTargetExecution = args.Value<bool?>("includeTargetExecution") ?? false;
                 var targetFlowBlockName = (args.Value<string>("targetFlowBlockName") ?? string.Empty).Trim();
                 var maxCapturedChanges = Math.Max(0, args.Value<int?>("maxCapturedFieldValueChanges") ?? 100);
-                var maxFieldValueLength = Math.Max(1, args.Value<int?>("maxFieldValueLength") ?? 2000);
                 var maxProtocolEntries = Math.Max(
                     1,
                     args.Value<int?>("maxProtocolEntries")
@@ -76,7 +74,6 @@ namespace FlowBlox.AIAssistant.Tools
                         TargetFlowBlockName = string.IsNullOrWhiteSpace(targetFlowBlockName) ? null : targetFlowBlockName,
                         IncludeTargetExecution = includeTargetExecution,
                         MaxCapturedFieldValueChanges = maxCapturedChanges,
-                        MaxFieldValueLength = maxFieldValueLength,
                         DebuggingResultFilePath = debuggingResultFile
                     }
                 };

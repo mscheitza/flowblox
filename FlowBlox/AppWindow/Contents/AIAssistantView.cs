@@ -111,6 +111,7 @@ namespace FlowBlox.AppWindow.Contents
                     _viewModel.FlowBlocksChanged -= ViewModel_FlowBlocksChanged;
                     _viewModel.FlowBlocksConnectionsChanged -= ViewModel_FlowBlocksConnectionsChanged;
                     _viewModel.FlowBlocksLayoutChanged -= ViewModel_FlowBlocksLayoutChanged;
+                    _viewModel.Dispose();
                 }
             }
 

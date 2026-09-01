@@ -52,6 +52,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private bool _isTemporaryConnectionMode;
         private bool _isRuntimeActive;
         private bool _isRuntimePaused;
+        private bool _isRuntimeStartBlocked;
         private readonly List<BaseFlowBlock> _copiedFlowBlocks = new();
 
         public ProjectPanelWpfViewModel()
@@ -94,7 +95,10 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             if (_runtimeStateService != null)
             {
                 _runtimeStateService.StateChanged += RuntimeStateService_StateChanged;
-                UpdateRuntimeState(_runtimeStateService.IsRuntimeActive, _runtimeStateService.IsRuntimePaused);
+                UpdateRuntimeState(
+                    _runtimeStateService.IsRuntimeActive,
+                    _runtimeStateService.IsRuntimePaused,
+                    _runtimeStateService.IsRuntimeStartBlocked);
             }
 
             Rebind(FlowBloxProjectManager.Instance.ActiveProject);
@@ -224,6 +228,21 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             }
         }
 
+        public bool IsRuntimeStartBlocked
+        {
+            get => _isRuntimeStartBlocked;
+            private set
+            {
+                if (_isRuntimeStartBlocked == value)
+                    return;
+
+                _isRuntimeStartBlocked = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanExecuteRuntime));
+                ExecuteRuntimeCommand.Invalidate();
+            }
+        }
+
         public IEnumerable<FlowBlockNodeViewModel> SelectedNodes => Nodes.Where(x => x.IsSelected);
         public bool HasNodes => Nodes.Count > 0;
         public bool IsSelectionMode => !IsConnectionMode;
@@ -246,7 +265,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public bool CanShowOutputInsight => SelectedNode?.InternalFlowBlock is BaseResultFlowBlock resultFlowBlock &&
                                             resultFlowBlock.OutputDataset_CurrentlyProcessing != null;
         public bool CanStartMarqueeSelection => CanEditGrid() && !IsConnectionMode;
-        public bool CanExecuteRuntime => HasProject() && (!IsRuntimeActive || IsRuntimePaused);
+        public bool CanExecuteRuntime => HasProject() && !IsRuntimeStartBlocked && (!IsRuntimeActive || IsRuntimePaused);
         public bool CanPauseRuntime => HasProject() && IsRuntimeActive && !IsRuntimePaused;
         public bool CanStopRuntime => HasProject() && IsRuntimeActive;
         public bool CanCopySelection => SelectedNodes.Any();
@@ -1215,10 +1234,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             _messageBoxService?.ShowMessageBox(message, title, messageBoxType);
         }
 
-        public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused)
+        public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused, bool isRuntimeStartBlocked)
         {
             IsRuntimePaused = isRuntimePaused;
             IsRuntimeActive = isRuntimeActive;
+            IsRuntimeStartBlocked = isRuntimeStartBlocked;
             OnPropertyChanged(nameof(CanExecuteRuntime));
             OnPropertyChanged(nameof(CanPauseRuntime));
             OnPropertyChanged(nameof(CanStopRuntime));
@@ -1228,7 +1248,9 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         }
 
         private void RuntimeStateService_StateChanged(object? sender, RuntimeStateChangedEventArgs e)
-            => SynchronizationContextHelper.PostToUi(_uiContext, () => UpdateRuntimeState(e.IsRuntimeActive, e.IsRuntimePaused));
+            => SynchronizationContextHelper.PostToUi(
+                _uiContext,
+                () => UpdateRuntimeState(e.IsRuntimeActive, e.IsRuntimePaused, e.IsRuntimeStartBlocked));
 
         private static Type ResolveDraggedFlowBlockType(IDataObject dataObject)
         {

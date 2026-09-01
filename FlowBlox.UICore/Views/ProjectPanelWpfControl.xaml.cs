@@ -110,8 +110,8 @@ namespace FlowBlox.UICore.Views
             return true;
         }
 
-        public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused)
-            => ViewModel.UpdateRuntimeState(isRuntimeActive, isRuntimePaused);
+        public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused, bool isRuntimeStartBlocked)
+            => ViewModel.UpdateRuntimeState(isRuntimeActive, isRuntimePaused, isRuntimeStartBlocked);
 
         public void MarkRuntimeFocus(FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock flowBlock)
             => ViewModel.MarkRuntimeFocus(flowBlock);

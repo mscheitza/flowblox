@@ -3,21 +3,77 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
-    <Style x:Key="FlowBlox.RoundedActionButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Padding" Value="10,5" />
+    <Style x:Key="FlowBlox.RoundedActionButtonStyle"
+       TargetType="{x:Type Button}">
+        <Setter Property="MinWidth" Value="96" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Padding" Value="12,0" />
+
+        <Setter Property="Background" Value="#FFF3F6FA" />
+        <Setter Property="Foreground" Value="#FF244B66" />
+        <Setter Property="BorderBrush" Value="#FFD1D9E2" />
+        <Setter Property="BorderThickness" Value="1" />
+
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border
+                    <Border x:Name="ButtonBorder"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="8">
+                        CornerRadius="7"
+                        SnapsToDevicePixels="True">
+
                         <ContentPresenter
-                            Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
+                        Margin="{TemplateBinding Padding}"
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        RecognizesAccessKey="True" />
                     </Border>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsMouseOver"
+                             Value="True">
+                            <Setter TargetName="ButtonBorder"
+                                Property="Background"
+                                Value="#FFE8F3FF" />
+                            <Setter TargetName="ButtonBorder"
+                                Property="BorderBrush"
+                                Value="#FF9CC5E8" />
+                            <Setter Property="Foreground"
+                                Value="#FF1565C0" />
+                        </Trigger>
+
+                        <Trigger Property="IsPressed"
+                             Value="True">
+                            <Setter TargetName="ButtonBorder"
+                                Property="Background"
+                                Value="#FFD9EBFA" />
+                            <Setter TargetName="ButtonBorder"
+                                Property="BorderBrush"
+                                Value="#FF6EA4D2" />
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled"
+                             Value="False">
+                            <Setter TargetName="ButtonBorder"
+                                Property="Background"
+                                Value="#FFF3F4F6" />
+                            <Setter TargetName="ButtonBorder"
+                                Property="BorderBrush"
+                                Value="#FFE1E4E8" />
+                            <Setter Property="Foreground"
+                                Value="#FF9CA3AF" />
+                            <Setter Property="Opacity"
+                                Value="0.72" />
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

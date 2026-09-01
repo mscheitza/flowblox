@@ -1,14 +1,18 @@
 Debugging Guide (compact)
 
 Target execution:
-- Unless the user explicitly asks for a full debug run, avoid running project debugging without `targetFlowBlockName`; full runs can take a long time and produce large debug content.
-- Prefer focused debug runs with `targetFlowBlockName` first.
+- Prefer focused debug runs with `targetFlowBlockName` for diagnosing individual flow blocks.
+- Use a full debug run when needed to verify the actual end-to-end result or complete the user's goal.
+- Before starting a full run, set `maxProtocolEntries` to a reasonable limit to avoid excessive debug output; limit captured field-value changes with `maxCapturedFieldValueChanges` where appropriate.
+- Before starting a full run, tell the user that a full run will be executed and which limits are applied. 
+- After a full run, report `protocolEntryCountTotal` versus the number of returned protocol entries, warnings/errors, and the final result so truncation is transparent.
+- For potentially expensive full runs (e.g. long runtime, many external requests, or writes to external systems), ask the user before running.
 - When debugging a target flow block, include the target execution if the target block's own result fields are needed.
 - If only predecessor output is needed, stop before the target to inspect incoming context.
 - To start a result flow block at a specific dataset value, set its `StartValue` property before the focused debug/test run.
 
 Result windowing:
-- BaseResultFlowBlock supports output modes: `All`, `First`, `Last`, `Range`.
+- `BaseResultFlowBlock` supports output modes: `All`, `First`, `Last`, `Range`.
 - `Range` can be controlled with `StartIndex`, `EndIndex`, and `StartValue`.
 - Use these properties to inspect a specific result dataset instead of reading all results.
 - With multiple result fields, `StartValue` matches when at least one result-field value in the dataset equals the configured start value.

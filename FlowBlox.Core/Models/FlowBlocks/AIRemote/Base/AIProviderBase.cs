@@ -12,6 +12,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
 {
     [Display(Name = "AIProviderBase_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     [PluralDisplayName("AIProviderBase_DisplayName_Plural", typeof(FlowBloxTexts))]
+    [FlowBloxUIGroup("Global_Groups_Requirements", hide: true)]
     public abstract class AIProviderBase : ManagedObject, IAIProvider
     {
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.robot_outline, 16, new SKColor(3, 105, 161));
@@ -168,7 +169,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
                             ? $"AI request timed out after {timeoutSeconds}s."
                             : $"AI request timed out after {timeoutSeconds}s. Details: {innerMessage}"
                     };
-                }   
+                }
             }
             catch (HttpRequestException ex)
             {

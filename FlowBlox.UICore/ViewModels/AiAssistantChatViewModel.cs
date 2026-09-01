@@ -20,14 +20,16 @@ using System.Windows;
 
 namespace FlowBlox.UICore.ViewModels
 {
-    public class AiAssistantChatViewModel : INotifyPropertyChanged
+    public class AiAssistantChatViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly AiAssistantService _service;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
+        private readonly IRuntimeStateService _runtimeStateService;
         private readonly SynchronizationContext? _uiContext;
         private CancellationTokenSource? _cts;
         private string _currentInput = string.Empty;
         private bool _isBusy;
+        private bool _isRuntimeActive;
         private Func<AIAssistantProjectStateSnapshot?>? _captureProjectState;
         private Func<AIAssistantProjectStateSnapshot, Task<bool>>? _restoreProjectState;
         private AIAssistantProjectStateSnapshot? _stateBeforeLastPrompt;
@@ -146,6 +148,7 @@ namespace FlowBlox.UICore.ViewModels
         {
             _uiContext = SynchronizationContext.Current;
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
+            _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
             var toolApi = new DefaultToolApi
             {
                 ToolExecutionConfirmationCallback = ConfirmToolExecutionRequest
@@ -171,12 +174,18 @@ namespace FlowBlox.UICore.ViewModels
             RedoProjectStateCommand = new RelayCommand(async () => await RedoProjectStateAsync(), () => CanRedoProjectState);
             ResetTokenUsageCommand = new RelayCommand(ResetTokenUsage, () => HasEstimatedUsedTokens);
 
+            if (_runtimeStateService != null)
+            {
+                _runtimeStateService.StateChanged += RuntimeStateService_StateChanged;
+                _isRuntimeActive = _runtimeStateService.IsRuntimeActive;
+            }
+
             RefreshProviderConfigurationState();
         }
 
         private bool CanSubmit()
         {
-            return !IsBusy && !string.IsNullOrWhiteSpace(CurrentInput);
+            return !IsBusy && !_isRuntimeActive && !string.IsNullOrWhiteSpace(CurrentInput);
         }
 
         private async Task SubmitAsync()
@@ -197,6 +206,7 @@ namespace FlowBlox.UICore.ViewModels
             });
 
             IsBusy = true;
+            _runtimeStateService?.SetRuntimeStartBlocked(true);
             _cts = new CancellationTokenSource();
 
             try
@@ -240,9 +250,22 @@ namespace FlowBlox.UICore.ViewModels
 
                 CurrentInput = string.Empty;
                 IsBusy = false;
+                _runtimeStateService?.SetRuntimeStartBlocked(false);
                 _cts?.Dispose();
                 _cts = null;
             }
+        }
+
+        private void RuntimeStateService_StateChanged(object? sender, Events.RuntimeStateChangedEventArgs e)
+        {
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
+            {
+                if (_isRuntimeActive == e.IsRuntimeActive)
+                    return;
+
+                _isRuntimeActive = e.IsRuntimeActive;
+                SubmitCommand.Invalidate();
+            });
         }
 
         private void Stop()
@@ -559,6 +582,7 @@ namespace FlowBlox.UICore.ViewModels
             RefreshHistories();
             CurrentInput = string.Empty;
             IsBusy = false;
+            _runtimeStateService?.SetRuntimeStartBlocked(false);
             _stateBeforeLastPrompt = null;
             _stateAfterLastPrompt = null;
             _isPromptStateUndone = false;
@@ -625,6 +649,12 @@ namespace FlowBlox.UICore.ViewModels
             RefreshHistories();
 
             return success;
+        }
+
+        public void Dispose()
+        {
+            if (_runtimeStateService != null)
+                _runtimeStateService.StateChanged -= RuntimeStateService_StateChanged;
         }
     }
 }

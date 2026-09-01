@@ -75,6 +75,14 @@
     <EmbeddedResource Include="Resources\**\*.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Models\FlowBlocks\SequenceDetection\**" />
+    <Compile Remove="Models\FlowBlocks\WebRequest\**" />
+    <EmbeddedResource Remove="Models\FlowBlocks\SequenceDetection\**" />
+    <EmbeddedResource Remove="Models\FlowBlocks\WebRequest\**" />
+    <None Remove="Models\FlowBlocks\SequenceDetection\**" />
+    <None Remove="Models\FlowBlocks\WebRequest\**" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Files\globalToolbox_chattemplates.json" />
     <EmbeddedResource Include="Files\globalToolbox_aipropertyvaluegenerationprompts.json" />
     <EmbeddedResource Include="Files\globalToolbox_dbconnection.json" />
@@ -105,9 +113,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FlowBlox.SequenceDetection\FlowBlox.SequenceDetection.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\FlowBlocks\SequenceDetection\" />
-    <Folder Include="Models\FlowBlocks\WebRequest\" />
   </ItemGroup>
 </Project>
