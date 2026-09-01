@@ -13,6 +13,10 @@ namespace FlowBlox.UICore.Models
         public bool CanRedo => ChangeIndex < Changes.Count - 1;
 
         public event EventHandler Changed;
+        public event EventHandler<ProjectChangelistActionEventArgs> BeforeUndo;
+        public event EventHandler<ProjectChangelistActionEventArgs> AfterUndo;
+        public event EventHandler<ProjectChangelistActionEventArgs> BeforeRedo;
+        public event EventHandler<ProjectChangelistActionEventArgs> AfterRedo;
 
         public ProjectChangelist()
         {
@@ -46,8 +50,10 @@ namespace FlowBlox.UICore.Models
                 return null;
 
             var action = Changes[ChangeIndex];
+            OnBeforeUndo(action, ChangeIndex);
             action.Undo();
             ChangeIndex--;
+            OnAfterUndo(action, ChangeIndex);
             OnChanged();
             return action;
         }
@@ -59,11 +65,39 @@ namespace FlowBlox.UICore.Models
 
             ChangeIndex++;
             var action = Changes[ChangeIndex];
+            OnBeforeRedo(action, ChangeIndex);
             action.Invoke();
+            OnAfterRedo(action, ChangeIndex);
             OnChanged();
             return action;
         }
 
         private void OnChanged() => Changed?.Invoke(this, EventArgs.Empty);
+
+        private void OnBeforeUndo(FlowBloxBaseAction action, int changeIndex)
+            => BeforeUndo?.Invoke(this, new ProjectChangelistActionEventArgs(action, "Undo", changeIndex));
+
+        private void OnAfterUndo(FlowBloxBaseAction action, int changeIndex)
+            => AfterUndo?.Invoke(this, new ProjectChangelistActionEventArgs(action, "Undo", changeIndex));
+
+        private void OnBeforeRedo(FlowBloxBaseAction action, int changeIndex)
+            => BeforeRedo?.Invoke(this, new ProjectChangelistActionEventArgs(action, "Redo", changeIndex));
+
+        private void OnAfterRedo(FlowBloxBaseAction action, int changeIndex)
+            => AfterRedo?.Invoke(this, new ProjectChangelistActionEventArgs(action, "Redo", changeIndex));
+    }
+
+    public sealed class ProjectChangelistActionEventArgs : EventArgs
+    {
+        public ProjectChangelistActionEventArgs(FlowBloxBaseAction action, string operation, int changeIndex)
+        {
+            Action = action;
+            Operation = operation;
+            ChangeIndex = changeIndex;
+        }
+
+        public FlowBloxBaseAction Action { get; }
+        public string Operation { get; }
+        public int ChangeIndex { get; }
     }
 }

@@ -1062,6 +1062,9 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="OnnxBaseFlowBlock_Groups_ExtendedSettings" xml:space="preserve">
 		<value>Erweiterte ONNX-Einstellungen</value>
 	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings" xml:space="preserve">
+		<value>Erweiterte ONNX-Einstellungen</value>
+	</data>
 	<data name="OnnxQuestionAnsweringFlowBlock_Context" xml:space="preserve">
 		<value>Kontext</value>
 	</data>
@@ -1985,6 +1988,9 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		</data>
 	<data name="OpenAIProvider_DisplayName_Plural" xml:space="preserve">
 			<value>OpenAI-Provider</value>
+		</data>
+	<data name="OpenAICompatibleProviderBase_DisplayName_Plural" xml:space="preserve">
+			<value>OpenAI-kompatible Provider</value>
 		</data>
 	<data name="TypeNames_GeminiAIProvider" xml:space="preserve">
 			<value>Gemini-Provider</value>

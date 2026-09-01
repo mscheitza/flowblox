@@ -1063,6 +1063,9 @@ Use the "+" button to add entries to the table.</value>
 	<data name="OnnxBaseFlowBlock_Groups_ExtendedSettings" xml:space="preserve">
 		<value>Advanced ONNX settings</value>
 	</data>
+	<data name="OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings" xml:space="preserve">
+		<value>Advanced ONNX settings</value>
+	</data>
 	<data name="OnnxQuestionAnsweringFlowBlock_Context" xml:space="preserve">
 		<value>Context</value>
 	</data>
@@ -2058,6 +2061,9 @@ Note: Once a provider is loaded, switching providers within the same process is 
 	</data>
 	<data name="OpenAIProvider_DisplayName_Plural" xml:space="preserve">
 		<value>OpenAI Providers</value>
+	</data>
+	<data name="OpenAICompatibleProviderBase_DisplayName_Plural" xml:space="preserve">
+		<value>OpenAI-compatible Providers</value>
 	</data>
 	<data name="TypeNames_GeminiAIProvider" xml:space="preserve">
 		<value>Gemini Provider</value>

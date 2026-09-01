@@ -1,9 +1,12 @@
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util.Fields;
+using FlowBlox.Core.Util.Resources;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
 {
+    [PluralDisplayName("OpenAICompatibleProviderBase_DisplayName_Plural", typeof(FlowBloxTexts))]
     public abstract class OpenAICompatibleProviderBase : AIProviderBase
     {
         protected abstract string ProviderDisplayName { get; }
@@ -57,10 +60,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
                 kernel: null,
                 cancellationToken: ct).ConfigureAwait(false);
 
+            var usage = new OpenAICompatibleUsageReporter(ProviderDisplayName).ReportUsage(response);
+
             return new AIResponse
             {
                 Success = true,
-                Text = response?.Content ?? string.Empty
+                Text = response?.Content ?? string.Empty,
+                PromptTokens = usage.PromptTokens,
+                CompletionTokens = usage.CompletionTokens
             };
         }
 

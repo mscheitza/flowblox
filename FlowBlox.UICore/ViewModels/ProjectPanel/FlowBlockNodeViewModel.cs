@@ -31,11 +31,13 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private bool _isRuntimeFocused;
         private string _warningMessage = string.Empty;
         private string _errorMessage = string.Empty;
+        private readonly FlowBlockNodeCenterPreservationGuard _centerPreservationGuard;
 
         public FlowBlockNodeViewModel(BaseFlowBlock flowBlock)
         {
             _uiContext = SynchronizationContext.Current;
             InternalFlowBlock = flowBlock ?? throw new ArgumentNullException(nameof(flowBlock));
+            _centerPreservationGuard = new FlowBlockNodeCenterPreservationGuard(this);
             flowBlock.PropertyChanged += FlowBlock_PropertyChanged;
             flowBlock.OnPropertyValuesChanged += FlowBlock_OnPropertyValuesChanged;
             flowBlock.OnWarn += FlowBlock_OnWarn;
@@ -146,6 +148,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
         public void RefreshRows() => RefreshRows(preserveCenter: true);
 
+        public void RefreshRowsWithoutCenterPreservation() => RefreshRows(preserveCenter: false);
+
+        public void SetCenterPreservationSuspended(bool suspended)
+            => _centerPreservationGuard.SetSuspended(suspended);
+
         private void RefreshRows(bool preserveCenter)
         {
             void Refresh()
@@ -168,7 +175,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 NotifyRuntimeStateChanged(preserveCenter: false);
             }
 
-            if (preserveCenter)
+            if (preserveCenter && !_centerPreservationGuard.IsSuspended)
                 UpdatePreservingCenter(Refresh);
             else
                 Refresh();
@@ -178,7 +185,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
         private void NotifyRuntimeStateChanged(bool preserveCenter)
         {
-            if (preserveCenter)
+            if (preserveCenter && !_centerPreservationGuard.IsSuspended)
             {
                 UpdatePreservingCenter(() => NotifyRuntimeStateChanged(preserveCenter: false));
                 return;
@@ -399,20 +406,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         }
 
         private void UpdatePreservingCenter(Action update)
-        {
-            var oldHeight = Height;
-            var centerY = Y + oldHeight / 2d;
-
-            update?.Invoke();
-
-            var newHeight = Height;
-            if (Math.Abs(oldHeight - newHeight) < 0.1d)
-                return;
-
-            var newY = Math.Max(0d, centerY - newHeight / 2d);
-            if (Math.Abs(Y - newY) > 0.1d)
-                Y = newY;
-        }
+            => _centerPreservationGuard.PreserveCenter(update);
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -425,6 +419,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             InternalFlowBlock.OnError -= FlowBlock_OnError;
             InternalFlowBlock.OnUndoWarn -= FlowBlock_OnUndoWarn;
             InternalFlowBlock.OnUndoError -= FlowBlock_OnUndoError;
+            _centerPreservationGuard.Dispose();
         }
     }
 }

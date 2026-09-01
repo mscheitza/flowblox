@@ -16,6 +16,7 @@ using System.Text;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AI
 {
+    [FlowBloxUIGroup("OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", 10)]
     [Display(Name = "OnnxRuntimeGenAIFlowBlock_DisplayName", Description = "OnnxRuntimeGenAIFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
     public class OnnxGenAIFlowBlock : BaseSingleResultFlowBlock
@@ -42,7 +43,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         [JsonIgnore()]
         [DeepCopierIgnore()]
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_AiExecutionProvider", Description = "OnnxRuntimeGenAIFlowBlock_AiExecutionProvider_Tooltip",
-            GroupName = "OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+            GroupName = "°", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
         [Required]
         public AiExecutionProviders AiExecutionProvider

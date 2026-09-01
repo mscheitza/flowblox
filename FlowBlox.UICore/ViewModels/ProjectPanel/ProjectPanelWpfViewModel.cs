@@ -20,10 +20,12 @@ using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Events;
 using FlowBlox.UICore.Interfaces;
+using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -54,6 +56,9 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private bool _isRuntimePaused;
         private bool _isRuntimeStartBlocked;
         private readonly List<BaseFlowBlock> _copiedFlowBlocks = new();
+        private readonly Dictionary<FlowBlockNodeViewModel, FlowBloxCreateAction> _pendingInsertedCreateActions = new();
+        private readonly Dictionary<FlowBlockNodeViewModel, NodeLayoutSnapshot> _historyActionLayoutSnapshots = new();
+        private ProjectChangelist _subscribedChangelist;
 
         public ProjectPanelWpfViewModel()
         {
@@ -457,8 +462,19 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         }
 
         public void CommitNodeMove(FlowBlockNodeViewModel node, System.Drawing.Point from, System.Drawing.Point to)
+            => CommitNodeMove(node, from, to, null);
+
+        public void CommitNodeMove(
+            FlowBlockNodeViewModel node,
+            System.Drawing.Point from,
+            System.Drawing.Point to,
+            IReadOnlyDictionary<FlowBlockNodeViewModel, Point> movedNodeStartPositions)
         {
-            if (node == null || from == to)
+            if (node == null)
+                return;
+
+            _pendingInsertedCreateActions.Remove(node, out var pendingCreateAction);
+            if (from == to && pendingCreateAction == null)
                 return;
 
             var moveAction = new FlowBloxMoveAction
@@ -468,7 +484,43 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 To = to
             };
 
+            if (pendingCreateAction != null)
+                moveAction.AssociatedActions.Add(pendingCreateAction);
+
+            AddAssociatedMoveActions(moveAction, node, movedNodeStartPositions);
             _componentProvider?.GetCurrentChangelist()?.AddChange(moveAction);
+        }
+
+        private static void AddAssociatedMoveActions(
+            FlowBloxMoveAction rootMoveAction,
+            FlowBlockNodeViewModel rootNode,
+            IReadOnlyDictionary<FlowBlockNodeViewModel, Point> movedNodeStartPositions)
+        {
+            if (rootMoveAction == null || movedNodeStartPositions == null)
+                return;
+
+            foreach (var item in movedNodeStartPositions)
+            {
+                var node = item.Key;
+                if (node == null || ReferenceEquals(node, rootNode))
+                    continue;
+
+                var from = new System.Drawing.Point(
+                    (int)Math.Round(item.Value.X),
+                    (int)Math.Round(item.Value.Y));
+                var to = new System.Drawing.Point(
+                    (int)Math.Round(node.X),
+                    (int)Math.Round(node.Y));
+                if (from == to)
+                    continue;
+
+                rootMoveAction.AssociatedActions.Add(new FlowBloxMoveAction
+                {
+                    FlowBlock = node.InternalFlowBlock,
+                    From = from,
+                    To = to
+                });
+            }
         }
 
         public void Refresh()
@@ -493,7 +545,9 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 return null;
 
             var createdFlowBlock = _registry.CreateFlowBlockUnregistered(flowBlockType);
-            createdFlowBlock.Location = new System.Drawing.Point(0, 0);
+            createdFlowBlock.Location = new System.Drawing.Point(
+                Math.Max(0, (int)Math.Round(location.X)),
+                Math.Max(0, (int)Math.Round(location.Y)));
 
             if (!AssignFlowBlockName(createdFlowBlock))
                 return null;
@@ -546,6 +600,12 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         {
             if (node == null || !Nodes.Contains(node) || IsRuntimeActive)
                 return;
+
+            if (_pendingInsertedCreateActions.Remove(node, out var pendingCreateAction))
+            {
+                pendingCreateAction.Undo();
+                return;
+            }
 
             var deleteAction = new FlowBloxDeleteAction
             {
@@ -601,7 +661,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             }));
 
             createAction.Invoke();
-            _componentProvider?.GetCurrentChangelist()?.AddChange(createAction);
 
             foreach (var node in Nodes)
                 node.IsSelected = false;
@@ -623,6 +682,10 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             PublishSelectedFlowBlocks();
             RefreshArrows();
             InvalidateSelectionCommands();
+
+            if (firstNode != null)
+                _pendingInsertedCreateActions[firstNode] = createAction;
+
             return firstNode;
         }
 
@@ -678,6 +741,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
         private void Rebind(FlowBloxProject project)
         {
+            SubscribeCurrentChangelist();
             UnsubscribeRegistry();
             ClearNodes();
 
@@ -738,12 +802,157 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
             node.PropertyChanged -= Node_PropertyChanged;
             node.Dispose();
+            _pendingInsertedCreateActions.Remove(node);
             _nodesByFlowBlock.Remove(flowBlock);
             Nodes.Remove(node);
             if (ReferenceEquals(SelectedNode, node))
                 SelectedNode = SelectedNodes.LastOrDefault();
             PublishSelectedFlowBlocks();
             OnPropertyChanged(nameof(HasNodes));
+        }
+
+        private void SubscribeCurrentChangelist()
+        {
+            var changelist = _componentProvider?.GetCurrentChangelist();
+            if (ReferenceEquals(_subscribedChangelist, changelist))
+                return;
+
+            UnsubscribeCurrentChangelist();
+            _subscribedChangelist = changelist;
+            if (_subscribedChangelist == null)
+                return;
+
+            _subscribedChangelist.BeforeUndo += Changelist_BeforeHistoryAction;
+            _subscribedChangelist.BeforeRedo += Changelist_BeforeHistoryAction;
+            _subscribedChangelist.AfterUndo += Changelist_AfterHistoryAction;
+            _subscribedChangelist.AfterRedo += Changelist_AfterHistoryAction;
+        }
+
+        private void UnsubscribeCurrentChangelist()
+        {
+            if (_subscribedChangelist == null)
+                return;
+
+            _subscribedChangelist.BeforeUndo -= Changelist_BeforeHistoryAction;
+            _subscribedChangelist.BeforeRedo -= Changelist_BeforeHistoryAction;
+            _subscribedChangelist.AfterUndo -= Changelist_AfterHistoryAction;
+            _subscribedChangelist.AfterRedo -= Changelist_AfterHistoryAction;
+            _subscribedChangelist = null;
+        }
+
+        private void Changelist_BeforeHistoryAction(object sender, ProjectChangelistActionEventArgs e)
+        {
+            LogLayoutTrace(
+                $"Before {e.Operation}: index={e.ChangeIndex}, action={FormatAction(e.Action)}, nodes={Nodes.Count}");
+            CaptureHistoryActionLayoutSnapshots(e);
+        }
+
+        private void Changelist_AfterHistoryAction(object sender, ProjectChangelistActionEventArgs e)
+        {
+            LogLayoutTrace(
+                $"After {e.Operation}: index={e.ChangeIndex}, action={FormatAction(e.Action)}, nodes={Nodes.Count}, snapshots={_historyActionLayoutSnapshots.Count}");
+            RestoreHistoryActionLayoutCenters(e);
+        }
+
+        private void CaptureHistoryActionLayoutSnapshots(ProjectChangelistActionEventArgs e)
+        {
+            _historyActionLayoutSnapshots.Clear();
+            foreach (var node in Nodes)
+            {
+                node.SetCenterPreservationSuspended(true);
+                _historyActionLayoutSnapshots[node] = new NodeLayoutSnapshot(
+                    node.InternalFlowBlock.Location,
+                    node.Y + node.Height / 2d);
+
+                LogLayoutTrace(
+                    $"Snapshot {e.Operation}: node={FormatNode(node)}, location={node.InternalFlowBlock.Location}, y={node.Y:0.##}, height={node.Height:0.##}, centerY={(node.Y + node.Height / 2d):0.##}, rows={node.Rows.Count}");
+            }
+        }
+
+        private void RestoreHistoryActionLayoutCenters(ProjectChangelistActionEventArgs e)
+        {
+            if (_historyActionLayoutSnapshots.Count == 0)
+            {
+                LogLayoutTrace($"Restore {e.Operation}: no snapshots available.");
+                foreach (var node in Nodes)
+                    node.SetCenterPreservationSuspended(false);
+
+                return;
+            }
+
+            try
+            {
+                foreach (var node in Nodes)
+                {
+                    var locationBeforeRefresh = node.InternalFlowBlock.Location;
+                    var yBeforeRefresh = node.Y;
+                    var heightBeforeRefresh = node.Height;
+                    var rowsBeforeRefresh = node.Rows.Count;
+
+                    node.RefreshRowsWithoutCenterPreservation();
+                    if (!_historyActionLayoutSnapshots.TryGetValue(node, out var snapshot))
+                    {
+                        LogLayoutTrace(
+                            $"Restore {e.Operation}: skipped no snapshot, node={FormatNode(node)}, locationBeforeRefresh={locationBeforeRefresh}, locationAfterRefresh={node.InternalFlowBlock.Location}, yBeforeRefresh={yBeforeRefresh:0.##}, yAfterRefresh={node.Y:0.##}, heightBeforeRefresh={heightBeforeRefresh:0.##}, heightAfterRefresh={node.Height:0.##}, rowsBeforeRefresh={rowsBeforeRefresh}, rowsAfterRefresh={node.Rows.Count}");
+                        continue;
+                    }
+
+                    if (IsNodeMovedByAction(e.Action, node))
+                    {
+                        LogLayoutTrace(
+                            $"Restore {e.Operation}: skipped moved by action, node={FormatNode(node)}, snapshotLocation={snapshot.Location}, currentLocation={node.InternalFlowBlock.Location}, yBeforeRefresh={yBeforeRefresh:0.##}, yAfterRefresh={node.Y:0.##}, heightBeforeRefresh={heightBeforeRefresh:0.##}, heightAfterRefresh={node.Height:0.##}, snapshotCenterY={snapshot.CenterY:0.##}, rowsBeforeRefresh={rowsBeforeRefresh}, rowsAfterRefresh={node.Rows.Count}");
+                        continue;
+                    }
+
+                    var newY = Math.Max(0d, snapshot.CenterY - node.Height / 2d);
+                    if (Math.Abs(node.Y - newY) > 0.1d)
+                    {
+                        LogLayoutTrace(
+                            $"Restore {e.Operation}: applying center, node={FormatNode(node)}, oldY={node.Y:0.##}, newY={newY:0.##}, heightBeforeRefresh={heightBeforeRefresh:0.##}, heightAfterRefresh={node.Height:0.##}, snapshotCenterY={snapshot.CenterY:0.##}, rowsBeforeRefresh={rowsBeforeRefresh}, rowsAfterRefresh={node.Rows.Count}");
+                        node.Y = newY;
+                    }
+                    else
+                    {
+                        LogLayoutTrace(
+                            $"Restore {e.Operation}: no y change needed, node={FormatNode(node)}, y={node.Y:0.##}, heightBeforeRefresh={heightBeforeRefresh:0.##}, heightAfterRefresh={node.Height:0.##}, snapshotCenterY={snapshot.CenterY:0.##}, rowsBeforeRefresh={rowsBeforeRefresh}, rowsAfterRefresh={node.Rows.Count}");
+                    }
+                }
+            }
+            finally
+            {
+                foreach (var node in Nodes)
+                    node.SetCenterPreservationSuspended(false);
+            }
+
+            _historyActionLayoutSnapshots.Clear();
+            RefreshArrows();
+        }
+
+        private static void LogLayoutTrace(string message)
+            => Trace.TraceInformation($"ProjectPanel layout trace: {message}");
+
+        private static string FormatAction(FlowBloxBaseAction action)
+            => action == null
+                ? "<null>"
+                : $"{action.GetType().Name}(associated={action.AssociatedActions?.Count ?? 0})";
+
+        private static string FormatNode(FlowBlockNodeViewModel node)
+            => node == null
+                ? "<null>"
+                : $"{node.Name} [{node.InternalFlowBlock?.GetType().Name}]";
+
+        private static bool IsNodeMovedByAction(FlowBloxBaseAction action, FlowBlockNodeViewModel node)
+        {
+            if (action == null || node?.InternalFlowBlock == null)
+                return false;
+
+            if (action is FlowBloxMoveAction moveAction &&
+                ReferenceEquals(moveAction.FlowBlock, node.InternalFlowBlock))
+            {
+                return true;
+            }
+
+            return action.AssociatedActions?.Any(associatedAction => IsNodeMovedByAction(associatedAction, node)) == true;
         }
 
         private void Node_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -1363,9 +1572,12 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             if (_runtimeStateService != null)
                 _runtimeStateService.StateChanged -= RuntimeStateService_StateChanged;
 
+            UnsubscribeCurrentChangelist();
             UnsubscribeRegistry();
             ClearNodes();
         }
+
+        private readonly record struct NodeLayoutSnapshot(System.Drawing.Point Location, double CenterY);
 
         private enum Direction
         {

@@ -2,7 +2,6 @@ using Anthropic.SDK;
 using Anthropic.SDK.Messaging;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
-using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Util.Fields;
 using System.ComponentModel.DataAnnotations;
@@ -86,29 +85,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
                 };
             }
 
-            LogPromptCachingUsage(response);
+            var usage = new AnthropicUsageReporter().ReportUsage(response);
 
             return new AIResponse
             {
                 Success = true,
                 Text = responseText,
-                PromptTokens = response?.Usage?.InputTokens,
-                CompletionTokens = response?.Usage?.OutputTokens
+                PromptTokens = usage.PromptTokens,
+                CompletionTokens = usage.CompletionTokens
             };
-        }
-
-        private static void LogPromptCachingUsage(MessageResponse? response)
-        {
-            var usage = response?.Usage;
-            if (usage == null)
-                return;
-
-            FlowBloxLogManager.Instance.GetLogger().Info(
-                "Anthropic usage: " +
-                $"input_tokens={usage.InputTokens}, " +
-                $"output_tokens={usage.OutputTokens}, " +
-                $"cache_creation_input_tokens={usage.CacheCreationInputTokens}, " +
-                $"cache_read_input_tokens={usage.CacheReadInputTokens}");
         }
 
         private static string BuildApiUrlFormat(string resolvedBaseUrl)

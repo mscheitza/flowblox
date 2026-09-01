@@ -14,6 +14,7 @@ namespace FlowBlox.UICore.Views
         private Point _dragStart;
         private double _nodeStartX;
         private double _nodeStartY;
+        private readonly Dictionary<FlowBlockNodeViewModel, Point> _draggedNodeStartPositions = new();
         private bool _isCanvasPanning;
         private Point _panStart;
         private double _panStartHorizontalOffset;
@@ -322,7 +323,14 @@ namespace FlowBlox.UICore.Views
 
             var toggle = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
             var extend = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
-            ViewModel.SelectNode(node, toggle, extend);
+            var keepExistingSelectionForDrag =
+                !toggle &&
+                !extend &&
+                node.IsSelected &&
+                ViewModel.SelectedNodes.Count() > 1;
+
+            if (!keepExistingSelectionForDrag)
+                ViewModel.SelectNode(node, toggle, extend);
 
             if (!isHeaderInteraction)
             {
@@ -334,6 +342,7 @@ namespace FlowBlox.UICore.Views
             _dragStart = e.GetPosition(this);
             _nodeStartX = node.X;
             _nodeStartY = node.Y;
+            CaptureDraggedNodeStartPositions(node);
             Mouse.Capture(sender as IInputElement);
             e.Handled = true;
         }
@@ -389,8 +398,10 @@ namespace FlowBlox.UICore.Views
             var current = e.GetPosition(this);
             var delta = current - _dragStart;
             var snappedPosition = ViewModel.GetSnappedNodePosition(_draggedNode, _nodeStartX + delta.X, _nodeStartY + delta.Y);
+            var effectiveDelta = snappedPosition - new Point(_nodeStartX, _nodeStartY);
             _draggedNode.X = snappedPosition.X;
             _draggedNode.Y = snappedPosition.Y;
+            MoveSelectedNodesWithDraggedNode(effectiveDelta);
             ViewModel.EnsureCanvasContainsNode(
                 _draggedNode,
                 CanvasScrollViewer.ViewportWidth / 2d,
@@ -418,10 +429,11 @@ namespace FlowBlox.UICore.Views
 
             var from = new System.Drawing.Point((int)Math.Round(_nodeStartX), (int)Math.Round(_nodeStartY));
             var to = new System.Drawing.Point((int)Math.Round(_draggedNode.X), (int)Math.Round(_draggedNode.Y));
-            ViewModel.CommitNodeMove(_draggedNode, from, to);
+            ViewModel.CommitNodeMove(_draggedNode, from, to, _draggedNodeStartPositions);
 
             Mouse.Capture(null);
             _draggedNode = null;
+            _draggedNodeStartPositions.Clear();
             e.Handled = true;
         }
 
@@ -480,12 +492,12 @@ namespace FlowBlox.UICore.Views
                 return;
             }
 
-            var node = ViewModel.CreateFlowBlockFromDrop(
+            var dropPosition = e.GetPosition(ProjectCanvas);
+            ViewModel.CreateFlowBlockFromDrop(
                 e.Data,
-                e.GetPosition(ProjectCanvas),
+                dropPosition,
                 CanvasScrollViewer.ViewportWidth / 2d,
                 CanvasScrollViewer.ViewportHeight / 2d);
-            BeginFloatingInsertedNode(node, e.GetPosition(ProjectCanvas));
 
             e.Effects = DragDropEffects.Copy;
             e.Handled = true;
@@ -591,6 +603,33 @@ namespace FlowBlox.UICore.Views
                 location,
                 CanvasScrollViewer.ViewportWidth / 2d,
                 CanvasScrollViewer.ViewportHeight / 2d);
+        }
+
+        private void CaptureDraggedNodeStartPositions(FlowBlockNodeViewModel draggedNode)
+        {
+            _draggedNodeStartPositions.Clear();
+            foreach (var node in ViewModel.SelectedNodes)
+                _draggedNodeStartPositions[node] = new Point(node.X, node.Y);
+
+            if (draggedNode != null && !_draggedNodeStartPositions.ContainsKey(draggedNode))
+                _draggedNodeStartPositions[draggedNode] = new Point(draggedNode.X, draggedNode.Y);
+        }
+
+        private void MoveSelectedNodesWithDraggedNode(Vector effectiveDelta)
+        {
+            foreach (var item in _draggedNodeStartPositions)
+            {
+                var node = item.Key;
+                if (ReferenceEquals(node, _draggedNode))
+                    continue;
+
+                node.X = item.Value.X + effectiveDelta.X;
+                node.Y = item.Value.Y + effectiveDelta.Y;
+                ViewModel.EnsureCanvasContainsNode(
+                    node,
+                    CanvasScrollViewer.ViewportWidth / 2d,
+                    CanvasScrollViewer.ViewportHeight / 2d);
+            }
         }
 
         private void CommitFloatingInsertedNode()
