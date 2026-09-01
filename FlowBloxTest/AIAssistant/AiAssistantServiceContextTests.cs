@@ -227,7 +227,9 @@ namespace FlowBloxTest.AIAssistant
         public async Task GenerateProjectAsync_AttachesInitialProjectReasonWhenProjectWasNotTransferred()
         {
             var executor = new RecordingAiExecutor();
-            var service = CreateService(executor, CreateConfiguration(maxLatestMessages: 10));
+            var config = CreateConfiguration(maxLatestMessages: 10);
+            config.AttachProjectJsonAutomatically = true;
+            var service = CreateService(executor, config);
 
             await service.GenerateProjectAsync("USER-INITIAL-PROJECT", CancellationToken.None);
 
@@ -241,7 +243,9 @@ namespace FlowBloxTest.AIAssistant
         public async Task GenerateProjectAsync_AttachesChangedProjectReasonWhenPersistedHashDiffers()
         {
             var executor = new RecordingAiExecutor();
-            var service = CreateService(executor, CreateConfiguration(maxLatestMessages: 10));
+            var config = CreateConfiguration(maxLatestMessages: 10);
+            config.AttachProjectJsonAutomatically = true;
+            var service = CreateService(executor, config);
             service.RestoreSession(new AiAssistantHistoryDocument
             {
                 LastProjectJsonHash = "STALE-PROJECT-HASH"
@@ -359,6 +363,42 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(pair.AssistantRequest, "GetProjectJson");
             AssertDoesNotContain(pair.AssistantRequest, "preface that should not be persisted");
             AssertDoesNotContain(pair.AssistantRequest, "trailing text");
+        }
+
+        [TestMethod]
+        public void AssistantInstructionParser_CapturesJsonParseExceptionAndResponseContent()
+        {
+            var parser = new AiAssistantInstructionParser();
+            const string output = "{\"assistantMessage\":\"Broken\",\"final\":false,\"toolCalls\":[}";
+
+            var result = parser.Parse(output);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsNotNull(result.Exception);
+            AssertIsInstanceOfType<Newtonsoft.Json.JsonReaderException>(result.Exception);
+            Assert.AreEqual(output, result.ResponseContent);
+        }
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_AddsFormatFailureDetailsToRetryPrompt()
+        {
+            var executor = new QueuedAiExecutor(
+                "{\"assistantMessage\":\"Broken\",\"final\":false,\"toolCalls\":[}",
+                "{\"assistantMessage\":\"Recovered.\",\"final\":true,\"toolCalls\":[]}");
+            var config = CreateConfiguration(maxLatestMessages: 10);
+            config.MaxToolRounds = 2;
+            var service = CreateService(executor, config);
+
+            var result = await service.GenerateProjectAsync("USER-FORMAT-RETRY", CancellationToken.None);
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(2, executor.ChatRequests.Count);
+            var retryPrompt = executor.ChatRequests[1].Messages.Last().Content;
+            AssertContains(retryPrompt, "System note:");
+            AssertContains(retryPrompt, "FlowBlox failed to parse it");
+            AssertContains(retryPrompt, "JsonReaderException");
+            AssertContains(retryPrompt, "Previous assistant response content:");
+            AssertContains(retryPrompt, "{\"assistantMessage\":\"Broken\"");
         }
 
         private static AiAssistantService CreateService(RecordingAiExecutor executor, AssistantConfiguration configuration)
@@ -509,11 +549,18 @@ namespace FlowBloxTest.AIAssistant
                 _responses = new Queue<string>(responses ?? Array.Empty<string>());
             }
 
+            public List<AIChatRequest> Requests { get; } = new();
+            public List<AIChatRequest> ChatRequests => Requests
+                .Where(x => x.Source != "FlowBloxAIAssistantSummary")
+                .ToList();
+
             public Task<AiExecutorResult> ExecuteChatAsync(
                 AIChatRequest request,
                 AssistantConfiguration configuration,
                 CancellationToken ct)
             {
+                Requests.Add(request);
+
                 if (request.Source == "FlowBloxAIAssistantSummary")
                 {
                     return Task.FromResult(new AiExecutorResult

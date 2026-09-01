@@ -28,6 +28,8 @@ namespace FlowBlox.Core.Models.Components
 
         private string _internalValue { get; set; }
 
+        internal bool HasStoredValue => !string.IsNullOrWhiteSpace(_internalValue);
+
         public string Value
         {
             get

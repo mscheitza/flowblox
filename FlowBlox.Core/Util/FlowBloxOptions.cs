@@ -136,7 +136,7 @@ namespace FlowBlox.Core.Util
                 {
                     bool hasOptionValue = false;
                     if (OptionCollection.TryGetValue(option.Name, out OptionElement resolvedOption))
-                        hasOptionValue = !string.IsNullOrWhiteSpace(resolvedOption.Value);
+                        hasOptionValue = resolvedOption.HasStoredValue;
 
                     if (!hasOptionValue || overwrite)
                         OptionCollection[option.Name] = option;

@@ -21,6 +21,8 @@ namespace FlowBlox.AIAssistant.Services
 
         private readonly IAiExecutor _executor;
         private readonly IFlowBloxAIToolApi _tools;
+        private readonly AiAssistantInstructionParser _instructionParser;
+        private readonly AssistantOutputFormatFeedbackQueue _outputFormatFeedbackQueue;
         private readonly ILogger? _logger;
         private readonly Func<AssistantConfiguration>? _configurationProvider;
         private readonly StringComparer _nameComparer = StringComparer.OrdinalIgnoreCase;
@@ -42,6 +44,8 @@ namespace FlowBlox.AIAssistant.Services
         {
             _executor = executor ?? throw new ArgumentNullException(nameof(executor));
             _tools = tools ?? throw new ArgumentNullException(nameof(tools));
+            _instructionParser = new AiAssistantInstructionParser();
+            _outputFormatFeedbackQueue = new AssistantOutputFormatFeedbackQueue();
             _logger = logger;
             _configurationProvider = configurationProvider;
             _tools.FlowBlocksConnectionsChanged += Tools_FlowBlocksConnectionsChanged;
@@ -226,6 +230,7 @@ namespace FlowBlox.AIAssistant.Services
                 maxLatestMessages);
             var tokenBudget = BuildTokenBudget(config);
             var session = GetOrCreateSession();
+            _outputFormatFeedbackQueue.ClearIncorrectOutputFormatData();
             ToolHandlerUtilities.SetCurrentSessionGuid(session.SessionId);
             var currentProjectJson = GetCurrentProjectJson();
             var currentProjectJsonHash = ComputeProjectJsonHash(currentProjectJson);
@@ -239,7 +244,6 @@ namespace FlowBlox.AIAssistant.Services
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = AssistantPromptBuilder.BuildSystemPrompt();
             var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions);
-            var latestToolTranscript = new List<string>();
             var knownFlowBlocksByName = CaptureFlowBlocksByName();
             var protocolWriter = TryCreateCommunicationProtocolWriter(config, userPrompt, session.SessionId);
             var formatRetryIssued = false;
@@ -265,6 +269,15 @@ namespace FlowBlox.AIAssistant.Services
                     var modelPrompt = toolRound == 1
                         ? initialUserPrompt
                         : "Continue from the latest stored Tool API response in the conversation history. Return the next assistant JSON response.";
+
+                    var outputFormatFeedback = _outputFormatFeedbackQueue.DequeuePromptOrEmpty();
+                    if (!string.IsNullOrWhiteSpace(outputFormatFeedback))
+                    {
+                        modelPrompt = string.IsNullOrWhiteSpace(modelPrompt)
+                            ? outputFormatFeedback
+                            : modelPrompt.TrimEnd() + Environment.NewLine + outputFormatFeedback;
+                        protocolWriter?.AppendAiAssistantServiceText("Output format feedback attached", outputFormatFeedback);
+                    }
                     protocolWriter?.AppendAiAssistantServiceText($"Round {toolRound} prompt prepared", modelPrompt);
 
                     var chatRequestResult = AssistantChatRequestBuilder.Build(
@@ -313,7 +326,8 @@ namespace FlowBlox.AIAssistant.Services
 
                     var assistantOutput = exec.OutputText ?? string.Empty;
 
-                    if (!TryParseAssistantInstruction(assistantOutput, out var instruction))
+                    var parseResult = _instructionParser.Parse(assistantOutput);
+                    if (!parseResult.Success || parseResult.Instruction == null)
                     {
                         AppendSingleSessionMessage(session, "assistant", assistantOutput);
                         protocolWriter?.AppendAiText(toolRound, assistantOutput);
@@ -326,17 +340,12 @@ namespace FlowBlox.AIAssistant.Services
                         if (!formatRetryIssued)
                         {
                             formatRetryIssued = true;
-                            const string formatGuidance =
-                                "FORMAT_VALIDATION: Your previous response did not follow the required JSON schema. " +
-                                "For the next response, return exactly one JSON object in this format: " +
-                                "{\"assistantMessage\":\"short status or final answer\",\"final\":false,\"toolCalls\":[{\"toolName\":\"ToolName\",\"arguments\":{}}]} " +
-                                "Set \"final\" to true only for the final answer. Do not output additional text outside this JSON object.";
+                            var formatGuidance = _outputFormatFeedbackQueue.Enqueue(parseResult);
 
                             AddTranscript(result, AssistantTranscriptKind.Status,
                                 "Response format invalid. Retrying once.");
                             result.Warnings.Add("Assistant response format invalid; retrying once with explicit format guidance.");
                             protocolWriter?.AppendAiAssistantServiceText("Format validation guidance issued", formatGuidance);
-                            latestToolTranscript = [formatGuidance];
 
                             continue;
                         }
@@ -350,11 +359,13 @@ namespace FlowBlox.AIAssistant.Services
                         return result;
                     }
 
+                    _outputFormatFeedbackQueue.ClearIncorrectOutputFormatData();
+                    var instruction = parseResult.Instruction;
                     var assistantInstructionContent = string.IsNullOrWhiteSpace(instruction.InternalContent)
                         ? assistantOutput
                         : instruction.InternalContent;
 
-                    protocolWriter?.AppendAiJson(toolRound, TryParseFirstJsonObject(assistantOutput));
+                    protocolWriter?.AppendAiJson(toolRound, parseResult.JsonObject);
 
                     var assistantRoundMessage = BuildAssistantRoundMessage(instruction, assistantOutput);
                     AddTranscript(
@@ -435,8 +446,7 @@ namespace FlowBlox.AIAssistant.Services
                             knownFlowBlocksByName = NotifyFlowBlockChanges(knownFlowBlocksByName);
                         }
 
-                        latestToolTranscript = roundToolTranscript;
-                        var toolApiResponse = AssistantPromptBuilder.BuildToolApiResponsePrompt(latestToolTranscript);
+                        var toolApiResponse = AssistantPromptBuilder.BuildToolApiResponsePrompt(roundToolTranscript);
                         AppendMessagePair(session, assistantInstructionContent, toolApiResponse);
                         assistantToolRequestPersisted = true;
                     }
@@ -847,55 +857,6 @@ namespace FlowBlox.AIAssistant.Services
             TranscriptLineAdded?.Invoke(this, line);
         }
 
-        private static bool TryParseAssistantInstruction(string output, out AssistantInstruction instruction)
-        {
-            instruction = new AssistantInstruction();
-            if (string.IsNullOrWhiteSpace(output))
-                return false;
-
-            var root = TryParseFirstJsonObject(output);
-            if (root == null)
-                return false;
-
-            instruction.AssistantMessage = root.Value<string>("assistantMessage")
-                ?? root.Value<string>("message")
-                ?? root.Value<string>("finalResponse")
-                ?? string.Empty;
-            instruction.InternalContent = root.ToString(Formatting.Indented);
-
-            instruction.Final = root.Value<bool?>("final") == true;
-
-            if (root["toolCalls"] is JArray toolCalls)
-            {
-                foreach (var token in toolCalls.OfType<JObject>())
-                {
-                    var toolName = token.Value<string>("toolName") ?? token.Value<string>("tool") ?? string.Empty;
-                    if (string.IsNullOrWhiteSpace(toolName))
-                        continue;
-
-                    instruction.ToolCalls.Add(new AssistantToolCall
-                    {
-                        ToolName = toolName,
-                        Arguments = token["arguments"] as JObject ?? new JObject()
-                    });
-                }
-            }
-            else if (root["toolName"] != null || root["tool"] != null)
-            {
-                var toolName = root.Value<string>("toolName") ?? root.Value<string>("tool") ?? string.Empty;
-                if (!string.IsNullOrWhiteSpace(toolName))
-                {
-                    instruction.ToolCalls.Add(new AssistantToolCall
-                    {
-                        ToolName = toolName,
-                        Arguments = root["arguments"] as JObject ?? new JObject()
-                    });
-                }
-            }
-
-            return true;
-        }
-
         private static string BuildToolExecutionTranscript(
             int requestedOperationCount,
             int successfulOperationCount,
@@ -1081,59 +1042,6 @@ namespace FlowBlox.AIAssistant.Services
                 return assistantOutput;
 
             return "[no assistant message]";
-        }
-
-        private static JObject? TryParseFirstJsonObject(string output)
-        {
-            if (string.IsNullOrWhiteSpace(output))
-                return null;
-
-            try
-            {
-                if (TextHelper.TrySubstringFromFirstOccurrence(output, '{', out var objectCandidate) &&
-                    !string.IsNullOrWhiteSpace(objectCandidate))
-                {
-                    output = objectCandidate;
-                }
-
-                using var stringReader = new StringReader(output);
-                using var jsonReader = new JsonTextReader(stringReader)
-                {
-                    SupportMultipleContent = true
-                };
-
-                while (jsonReader.Read())
-                {
-                    if (jsonReader.TokenType != JsonToken.StartObject)
-                        continue;
-
-                    var token = JToken.ReadFrom(jsonReader);
-                    if (token is JObject obj)
-                        return obj;
-
-                    return null;
-                }
-            }
-            catch
-            {
-                // ignored - caller handles parse failure
-            }
-
-            return null;
-        }
-
-        private sealed class AssistantInstruction
-        {
-            public string AssistantMessage { get; set; } = string.Empty;
-            public string InternalContent { get; set; } = string.Empty;
-            public bool Final { get; set; }
-            public List<AssistantToolCall> ToolCalls { get; set; } = new();
-        }
-
-        private sealed class AssistantToolCall
-        {
-            public string ToolName { get; set; } = string.Empty;
-            public JObject Arguments { get; set; } = new JObject();
         }
 
         private sealed class ExecutedToolCallInfo

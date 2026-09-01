@@ -1,9 +1,12 @@
 using Anthropic.SDK;
 using Anthropic.SDK.Messaging;
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Util.Fields;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 {
@@ -16,7 +19,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         public AnthropicAIProvider()
         {
             BaseUrl = "https://api.anthropic.com/v1";
-            DefaultModel = "claude-fable-5";
+            DefaultModel = "claude-opus-5";
             EstimatedSystemPromptCacheSavingsRate = 0.70d;
         }
 
@@ -36,42 +39,102 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             if (string.IsNullOrWhiteSpace(resolvedBaseUrl))
                 throw new InvalidOperationException("Anthropic base URL is empty after field resolution.");
 
+            var resolvedModel = FlowBloxFieldHelper.ReplaceFieldsInString(request.Model);
+            if (string.IsNullOrWhiteSpace(resolvedModel))
+                resolvedModel = FlowBloxFieldHelper.ReplaceFieldsInString(DefaultModel);
+
             var timeoutSeconds = ResolveTimeoutSeconds(request);
             using var httpClient = new HttpClient
             {
                 Timeout = TimeSpan.FromSeconds(timeoutSeconds)
             };
+            var apiUrlFormat = BuildApiUrlFormat(resolvedBaseUrl);
             using var client = new AnthropicClient(new APIAuthentication(resolvedApiKey), httpClient, requestInterceptor: null)
             {
-                ApiUrlFormat = BuildApiUrlFormat(resolvedBaseUrl)
+                ApiUrlFormat = apiUrlFormat
             };
 
-            var response = await client
-                .Messages
-                .GetClaudeMessageAsync(BuildMessageParameters(request), ct)
-                .ConfigureAwait(false);
+            var messageParameters = BuildMessageParameters(request, resolvedModel);
+
+            MessageResponse response;
+            try
+            {
+                response = await client
+                    .Messages
+                    .GetClaudeMessageAsync(messageParameters, ct)
+                    .ConfigureAwait(false);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new HttpRequestException(
+                    $"Anthropic request failed. Model: '{resolvedModel}', BaseUrl: '{resolvedBaseUrl}', ApiUrlFormat: '{apiUrlFormat}'. Details: {ex.Message}",
+                    ex,
+                    ex.StatusCode);
+            }
+
+            var responseText = response?.Message?.ToString() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(responseText) &&
+                string.Equals(Convert.ToString(response?.StopReason), "max_tokens", StringComparison.OrdinalIgnoreCase))
+            {
+                return new AIResponse
+                {
+                    Success = false,
+                    Error =
+                        $"Anthropic returned no text because the response stopped at the max_tokens limit ({messageParameters.MaxTokens}). " +
+                        "Claude may have used the complete output budget for thinking before producing the required JSON response. " +
+                        "Increase the assistant MaxTokens setting and retry."
+                };
+            }
+
+            LogPromptCachingUsage(response);
 
             return new AIResponse
             {
                 Success = true,
-                Text = response?.Message?.ToString() ?? string.Empty
+                Text = responseText,
+                PromptTokens = response?.Usage?.InputTokens,
+                CompletionTokens = response?.Usage?.OutputTokens
             };
+        }
+
+        private static void LogPromptCachingUsage(MessageResponse? response)
+        {
+            var usage = response?.Usage;
+            if (usage == null)
+                return;
+
+            FlowBloxLogManager.Instance.GetLogger().Info(
+                "Anthropic usage: " +
+                $"input_tokens={usage.InputTokens}, " +
+                $"output_tokens={usage.OutputTokens}, " +
+                $"cache_creation_input_tokens={usage.CacheCreationInputTokens}, " +
+                $"cache_read_input_tokens={usage.CacheReadInputTokens}");
         }
 
         private static string BuildApiUrlFormat(string resolvedBaseUrl)
         {
             var trimmedBaseUrl = resolvedBaseUrl.Trim().TrimEnd('/');
-            return trimmedBaseUrl.Contains("{0}", StringComparison.Ordinal)
-                ? trimmedBaseUrl
-                : trimmedBaseUrl + "/{0}";
+
+            if (trimmedBaseUrl.Contains("{0}", StringComparison.Ordinal) &&
+                trimmedBaseUrl.Contains("{1}", StringComparison.Ordinal))
+                return trimmedBaseUrl;
+
+            if (trimmedBaseUrl.Contains("{0}", StringComparison.Ordinal))
+                return trimmedBaseUrl.Replace("{0}", "{0}/{1}", StringComparison.Ordinal);
+
+            var versionSuffix = Regex.Match(trimmedBaseUrl, @"/v\d+$", RegexOptions.IgnoreCase);
+            if (versionSuffix.Success)
+                return trimmedBaseUrl.Substring(0, versionSuffix.Index) + "/{0}/{1}";
+
+            return trimmedBaseUrl + "/{0}/{1}";
         }
 
-        private static MessageParameters BuildMessageParameters(AIChatRequest request)
+        private static MessageParameters BuildMessageParameters(AIChatRequest request, string resolvedModel)
         {
             var parameters = new MessageParameters
             {
-                Model = request.Model,
-                MaxTokens = request.MaxTokens.GetValueOrDefault(1024),
+                Model = resolvedModel,
+                MaxTokens = request.MaxTokens.GetValueOrDefault(AiProviderDefaults.Anthropic.DefaultMaxTokens),
                 Stream = false,
                 System = BuildSystemMessages(request),
                 Messages = BuildMessages(request),
