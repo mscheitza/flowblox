@@ -3,9 +3,11 @@ using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Constants;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
+using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.FlowBlocks;
@@ -32,6 +34,7 @@ namespace FlowBlox.AIAssistant.Services
 
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
         public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
+        public event EventHandler<FlowBlocksLayoutChangedEventArgs>? BeforeFlowBlocksLayoutChanged;
         public event EventHandler<FlowBlocksLayoutChangedEventArgs>? FlowBlocksLayoutChanged;
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
         public event EventHandler<int>? EstimatedUsedTokensChanged;
@@ -215,6 +218,22 @@ namespace FlowBlox.AIAssistant.Services
                 AddTranscript(result, AssistantTranscriptKind.Error, configurationError);
                 return result;
             }
+
+            IDisposable registryUseScope;
+            try
+            {
+                registryUseScope = FlowBloxRegistryProvider.MarkRegistryInUse();
+            }
+            catch (RegistryCurrentlyInUseException)
+            {
+                result.Success = false;
+                var message = "The project is currently being edited in a property window. Close or save that dialog before starting the AI Assistant.";
+                result.Errors.Add(message);
+                AddTranscript(result, AssistantTranscriptKind.Error, message);
+                return result;
+            }
+
+            using var _ = registryUseScope;
 
             var maxToolRounds = Math.Clamp(
                 config.MaxToolRounds,
@@ -513,6 +532,8 @@ namespace FlowBlox.AIAssistant.Services
 
         private void RunAutomaticAdjustment(string reason)
         {
+            BeforeFlowBlocksLayoutChanged?.Invoke(this, new FlowBlocksLayoutChangedEventArgs());
+
             var layoutResult = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
             _logger?.Info(
                 $"AutoAdjustFlowLayout executed ({reason}). Updated={layoutResult.UpdatedFlowBlocks}, Total={layoutResult.TotalFlowBlocks}, Components={layoutResult.ComponentsProcessed}");

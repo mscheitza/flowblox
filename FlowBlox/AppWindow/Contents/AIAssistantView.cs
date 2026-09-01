@@ -1,5 +1,4 @@
-﻿using FlowBlox.AppWindow;
-using FlowBlox.AIAssistant.Models;
+﻿using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Project;
@@ -47,6 +46,7 @@ namespace FlowBlox.AppWindow.Contents
             {
                 _viewModel.FlowBlocksChanged += ViewModel_FlowBlocksChanged;
                 _viewModel.FlowBlocksConnectionsChanged += ViewModel_FlowBlocksConnectionsChanged;
+                _viewModel.BeforeFlowBlocksLayoutChanged += ViewModel_BeforeFlowBlocksLayoutChanged;
                 _viewModel.FlowBlocksLayoutChanged += ViewModel_FlowBlocksLayoutChanged;
                 _viewModel.ConfigureProjectStateAccess(CaptureCurrentProjectState, RestoreProjectStateAsync);
             }
@@ -110,6 +110,7 @@ namespace FlowBlox.AppWindow.Contents
                 {
                     _viewModel.FlowBlocksChanged -= ViewModel_FlowBlocksChanged;
                     _viewModel.FlowBlocksConnectionsChanged -= ViewModel_FlowBlocksConnectionsChanged;
+                    _viewModel.BeforeFlowBlocksLayoutChanged -= ViewModel_BeforeFlowBlocksLayoutChanged;
                     _viewModel.FlowBlocksLayoutChanged -= ViewModel_FlowBlocksLayoutChanged;
                     _viewModel.Dispose();
                 }
@@ -210,6 +211,21 @@ namespace FlowBlox.AppWindow.Contents
             {
                 return;
             }
+
+            AppWindow.Instance.UpdateUI();
+        }
+
+        private void ViewModel_BeforeFlowBlocksLayoutChanged(object sender, FlowBlocksLayoutChangedEventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => ViewModel_BeforeFlowBlocksLayoutChanged(sender, e)));
+                return;
+            }
+
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            if (project == null)
+                return;
 
             AppWindow.Instance.UpdateUI();
         }

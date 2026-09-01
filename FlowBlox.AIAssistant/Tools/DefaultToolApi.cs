@@ -158,7 +158,6 @@ namespace FlowBlox.AIAssistant.Tools
                 new DeleteFlowBlockHandler(),
                 new ConnectFlowBlocksHandler(),
                 new DisconnectFlowBlocksHandler(),
-                new AutoAdjustFlowLayoutHandler(),
                 new CreateManagedObjectHandler(),
                 new CreateUserFieldHandler(),
                 new UpdateManagedObjectHandler(),

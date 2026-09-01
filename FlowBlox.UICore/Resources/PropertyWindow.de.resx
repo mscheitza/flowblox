@@ -132,4 +132,10 @@
 	<data name="ReadMore" xml:space="preserve">
 		<value>Mehr lesen</value>
 	</data>
+	<data name="Message_RegistryCurrentlyInUse_Title" xml:space="preserve">
+		<value>Projekt wird gerade bearbeitet</value>
+	</data>
+	<data name="Message_RegistryCurrentlyInUse" xml:space="preserve">
+		<value>Das Projekt wird gerade vom AI Assistant geändert. Bitte warten Sie, bis der AI Assistant fertig ist, bevor Sie Eigenschaften öffnen oder bearbeiten.</value>
+	</data>
 </root>

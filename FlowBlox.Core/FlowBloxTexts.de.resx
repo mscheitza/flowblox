@@ -3790,6 +3790,57 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="FlowBloxTaskScheduleType_Interval" xml:space="preserve">
     <value>Intervall</value>
   </data>
+  <data name="MappingFlowBlock_DisplayName" xml:space="preserve">
+    <value>Mapping</value>
+  </data>
+  <data name="MappingFlowBlock_Description" xml:space="preserve">
+    <value>Ordnet den Wert eines Eingabefelds anhand geordneter Schlüssel- oder RegEx-Regeln einem Ausgabewert zu. Wenn keine Regel passt, wird optional ein Standardwert verwendet.</value>
+  </data>
+  <data name="MappingFlowBlock_Groups_Mapping" xml:space="preserve">
+    <value>Mapping-Regeln</value>
+  </data>
+  <data name="MappingFlowBlock_MappingEntries" xml:space="preserve">
+    <value>Mapping-Einträge</value>
+  </data>
+  <data name="MappingFlowBlock_MappingEntries_Tooltip" xml:space="preserve">
+    <value>Geordnete Regelliste. Jede Zeile definiert entweder einen Schlüsselwert oder einen regulären Ausdruck und gibt bei Treffer den konfigurierten Wert zurück.</value>
+  </data>
+  <data name="MappingFlowBlock_DefaultValue" xml:space="preserve">
+    <value>Standardwert</value>
+  </data>
+  <data name="MappingFlowBlock_DefaultValue_Tooltip" xml:space="preserve">
+    <value>Wert, der verwendet wird, wenn kein Mapping-Eintrag passt. Unterstützt Feld-Platzhalter. Leer lassen, um keinen Wert auszugeben und eine Warnung zu erzeugen.</value>
+  </data>
+  <data name="MappingFlowBlock_MappingEntry_DisplayName" xml:space="preserve">
+    <value>Mapping-Eintrag</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Key" xml:space="preserve">
+    <value>Schlüsselwert</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Key_Tooltip" xml:space="preserve">
+    <value>Literalwert, der exakt mit dem Wert des Eingabefelds übereinstimmen muss. Leer lassen, wenn ein regulärer Ausdruck verwendet wird.</value>
+  </data>
+  <data name="MappingFlowBlockEntry_RegularExpression" xml:space="preserve">
+    <value>Regulärer Ausdruck</value>
+  </data>
+  <data name="MappingFlowBlockEntry_RegularExpression_Tooltip" xml:space="preserve">
+    <value>Regulärer Ausdruck, der gegen den Wert des Eingabefelds geprüft wird. Leer lassen, wenn ein Schlüsselwert verwendet wird.</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Value" xml:space="preserve">
+    <value>Wert</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Value_Tooltip" xml:space="preserve">
+    <value>Ausgabewert für dieses Mapping. Unterstützt Feld-Platzhalter.</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Validation_KeyOrRegexRequired" xml:space="preserve">
+    <value>Bitte entweder einen Schlüsselwert oder einen regulären Ausdruck angeben, aber nicht beides.</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Validation_InvalidRegex" xml:space="preserve">
+    <value>Der reguläre Ausdruck ist ungültig.</value>
+  </data>
+  <data name="MappingFlowBlockNotifications_NoMappingFound" xml:space="preserve">
+    <value>Es wurde kein passender Mapping-Eintrag gefunden und kein Standardwert angegeben.</value>
+  </data>
   <data name="SplitFlowBlock_Description" xml:space="preserve">
     <value>Zerlegt einen Eingabetext anhand eines oder mehrerer Separatoren in mehrere Ausgabewerte.</value>
   </data>

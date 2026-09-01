@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Reflection;
 using FlowBlox.AIAssistant.Models;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
@@ -166,7 +168,7 @@ namespace FlowBlox.AIAssistant.Tools
 
                     if (isLast)
                     {
-                        ApplyPropertyTerminalOperation(current, property, operation, value, registry, path);
+                        ApplyPropertyTerminalOperation(current, currentCollectionOwner, property, operation, value, registry, path);
                         return;
                     }
 
@@ -385,6 +387,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         private static void ApplyPropertyTerminalOperation(
             object current,
+            object? parent,
             PropertyInfo property,
             TerminalOperation operation,
             JToken value,
@@ -394,7 +397,9 @@ namespace FlowBlox.AIAssistant.Tools
             if (operation == TerminalOperation.Set)
             {
                 EnsureNoDirectReactiveObjectJsonAssignment(property.PropertyType, value, path);
-                property.SetValue(current, ConvertToken(value, property.PropertyType, registry));
+                var convertedValue = ConvertToken(value, property.PropertyType, registry);
+                EnsureReferenceValueIsSelectable(current, parent, property, convertedValue, path);
+                property.SetValue(current, convertedValue);
                 return;
             }
 
@@ -404,7 +409,7 @@ namespace FlowBlox.AIAssistant.Tools
                 return;
             }
 
-            ApplyReferenceLinkOperationToProperty(current, property, operation, value, registry, path);
+            ApplyReferenceLinkOperationToProperty(current, parent, property, operation, value, registry, path);
         }
 
         private static void ApplyIndexedTerminalOperation(
@@ -572,6 +577,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         private static void ApplyReferenceLinkOperationToProperty(
             object current,
+            object? parent,
             PropertyInfo property,
             TerminalOperation operation,
             JToken value,
@@ -619,6 +625,8 @@ namespace FlowBlox.AIAssistant.Tools
                         throw new InvalidOperationException(
                             $"Path '{path}' link operation requires a resolvable reference value.");
                     }
+
+                    EnsureReferenceValueIsSelectable(current, parent, property, toLink, path);
 
                     for (var i = 0; i < collection.Count; i++)
                     {
@@ -670,6 +678,7 @@ namespace FlowBlox.AIAssistant.Tools
                         $"Path '{path}' link operation requires a resolvable reference value.");
                 }
 
+                EnsureReferenceValueIsSelectable(current, parent, property, resolved, path);
                 property.SetValue(current, resolved);
                 return;
             }
@@ -909,6 +918,136 @@ namespace FlowBlox.AIAssistant.Tools
             return null;
         }
 
+        private static void EnsureReferenceValueIsSelectable(
+            object target,
+            object? parent,
+            PropertyInfo property,
+            object? value,
+            string path)
+        {
+            if (value == null)
+                return;
+
+            var uiAttribute = property.GetCustomAttribute<FlowBloxUIAttribute>();
+            if (string.IsNullOrWhiteSpace(uiAttribute?.SelectionFilterMethod))
+                return;
+
+            if (!IsReferenceComponentType(value.GetType()))
+                return;
+
+            if (!TryResolveSelectionFilterMethod(target, parent, uiAttribute.SelectionFilterMethod, out var invocationTarget, out var selectionMethod))
+                return;
+
+            var selectionResult = selectionMethod.Invoke(invocationTarget, null);
+            if (selectionResult is not IEnumerable selectableValues)
+            {
+                throw new InvalidOperationException(
+                    $"Path '{path}' cannot validate property '{property.Name}' because selection filter method '{uiAttribute.SelectionFilterMethod}' did not return a selectable list.");
+            }
+
+            var selectableList = selectableValues
+                .Cast<object?>()
+                .Where(x => x != null)
+                .Cast<object>()
+                .ToList();
+
+            if (selectableList.Any(selectableValue => ReferenceEquals(selectableValue, value) || IsSameReferenceComponent(selectableValue, value)))
+                return;
+
+            throw new InvalidOperationException(
+                BuildNotSelectableMessage(path, target, property, uiAttribute.SelectionFilterMethod, value, selectableList));
+        }
+
+        private static bool TryResolveSelectionFilterMethod(
+            object target,
+            object? parent,
+            string methodName,
+            out object invocationTarget,
+            out MethodInfo method)
+        {
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+            method = target.GetType().GetMethod(methodName, flags);
+            if (method != null)
+            {
+                invocationTarget = target;
+                return true;
+            }
+
+            if (parent != null)
+            {
+                method = parent.GetType().GetMethod(methodName, flags);
+                if (method != null)
+                {
+                    invocationTarget = parent;
+                    return true;
+                }
+            }
+
+            invocationTarget = target;
+            return false;
+        }
+
+        private static bool IsSameReferenceComponent(object selectableValue, object value)
+        {
+            if (selectableValue is FieldElement selectableField && value is FieldElement field)
+            {
+                return string.Equals(selectableField.FullyQualifiedName, field.FullyQualifiedName, StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (selectableValue is BaseFlowBlock selectableFlowBlock && value is BaseFlowBlock flowBlock)
+            {
+                return string.Equals(selectableFlowBlock.Name, flowBlock.Name, StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (selectableValue is IManagedObject selectableManagedObject && value is IManagedObject managedObject)
+            {
+                return string.Equals(selectableManagedObject.Name, managedObject.Name, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return Equals(selectableValue, value);
+        }
+
+        private static string BuildNotSelectableMessage(
+            string path,
+            object target,
+            PropertyInfo property,
+            string selectionFilterMethod,
+            object value,
+            IReadOnlyCollection<object> selectableValues)
+        {
+            var selectedName = GetReferenceComponentName(value);
+            var allowedNames = selectableValues
+                .Select(GetReferenceComponentName)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Take(12)
+                .ToList();
+
+            var allowedText = allowedNames.Count == 0
+                ? "No values are currently selectable."
+                : $"Selectable values are: {string.Join(", ", allowedNames)}{(selectableValues.Count > allowedNames.Count ? ", ..." : ".")}";
+
+            return
+                $"Path '{path}' cannot set property '{property.Name}' on '{target.GetType().Name}' to '{selectedName}' because that value is not selectable by '{selectionFilterMethod}'. " +
+                $"{allowedText} " +
+                "Use one of the selectable values or change the flow design first. " + 
+                "Special hint: For BasePipeFlowBlock input fields this usually means using a field from the directly associated predecessor flow block.";
+        }
+
+        private static string GetReferenceComponentName(object value)
+        {
+            if (value is FieldElement fieldElement)
+                return fieldElement.FullyQualifiedName;
+
+            if (value is BaseFlowBlock flowBlock)
+                return flowBlock.Name;
+
+            if (value is IManagedObject managedObject)
+                return managedObject.Name;
+
+            return value.ToString() ?? value.GetType().Name;
+        }
+
         private static BaseFlowBlock? ResolveFlowBlockReference(JToken token, FlowBloxRegistry registry)
         {
             if (token.Type == JTokenType.Object && token is JObject objToken)
@@ -1037,5 +1176,3 @@ namespace FlowBlox.AIAssistant.Tools
         }
     }
 }
-
-

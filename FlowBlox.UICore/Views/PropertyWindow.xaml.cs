@@ -1,7 +1,12 @@
 ﻿using FlowBlox.UICore.ViewModels.PropertyView;
 using MahApps.Metro.Controls;
 using System.ComponentModel;
+using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Interfaces;
 
 namespace FlowBlox.UICore.Views
 {
@@ -59,8 +64,27 @@ namespace FlowBlox.UICore.Views
 
         public PropertyWindow(PropertyWindowArgs propertyWindowArgs) : this()
         {
-            this.DataContext = new PropertyWindowViewModel(this, propertyWindowArgs);
+            try
+            {
+                this.DataContext = new PropertyWindowViewModel(this, propertyWindowArgs);
+            }
+            catch (RegistryCurrentlyInUseException)
+            {
+                ShowRegistryCurrentlyInUseMessage();
+                Loaded += (_, _) => Close();
+                return;
+            }
+
             this.Closing += PropertyView_Closing;
+        }
+
+        private static void ShowRegistryCurrentlyInUseMessage()
+        {
+            var messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
+            messageBoxService?.ShowMessageBox(
+                FlowBloxResourceUtil.GetLocalizedString("Message_RegistryCurrentlyInUse", typeof(Resources.PropertyWindow)),
+                FlowBloxResourceUtil.GetLocalizedString("Message_RegistryCurrentlyInUse_Title", typeof(Resources.PropertyWindow)),
+                FlowBloxMessageBoxTypes.Warning);
         }
 
         private void PropertyView_Closing(object sender, CancelEventArgs e)

@@ -139,6 +139,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
         public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
+        public event EventHandler<FlowBlocksLayoutChangedEventArgs>? BeforeFlowBlocksLayoutChanged;
         public event EventHandler<FlowBlocksLayoutChangedEventArgs>? FlowBlocksLayoutChanged;
         public event EventHandler? NewHistoryRequested;
         public event EventHandler? HistoryRequested;
@@ -159,6 +160,7 @@ namespace FlowBlox.UICore.ViewModels
                 FlowBloxLogManager.Instance.GetLogger());
             _service.FlowBlocksChanged += Service_FlowBlocksChanged;
             _service.FlowBlocksConnectionsChanged += Service_FlowBlocksConnectionsChanged;
+            _service.BeforeFlowBlocksLayoutChanged += Service_BeforeFlowBlocksLayoutChanged;
             _service.FlowBlocksLayoutChanged += Service_FlowBlocksLayoutChanged;
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged += Service_EstimatedUsedTokensChanged;
@@ -331,6 +333,11 @@ namespace FlowBlox.UICore.ViewModels
         private void Service_FlowBlocksConnectionsChanged(object? sender, FlowBlocksConnectionsChangedEventArgs e)
         {
             FlowBlocksConnectionsChanged?.Invoke(this, e);
+        }
+
+        private void Service_BeforeFlowBlocksLayoutChanged(object? sender, FlowBlocksLayoutChangedEventArgs e)
+        {
+            BeforeFlowBlocksLayoutChanged?.Invoke(this, e);
         }
 
         private void Service_FlowBlocksLayoutChanged(object? sender, FlowBlocksLayoutChangedEventArgs e)
@@ -655,6 +662,13 @@ namespace FlowBlox.UICore.ViewModels
         {
             if (_runtimeStateService != null)
                 _runtimeStateService.StateChanged -= RuntimeStateService_StateChanged;
+
+            _service.FlowBlocksChanged -= Service_FlowBlocksChanged;
+            _service.FlowBlocksConnectionsChanged -= Service_FlowBlocksConnectionsChanged;
+            _service.BeforeFlowBlocksLayoutChanged -= Service_BeforeFlowBlocksLayoutChanged;
+            _service.FlowBlocksLayoutChanged -= Service_FlowBlocksLayoutChanged;
+            _service.TranscriptLineAdded -= Service_TranscriptLineAdded;
+            _service.EstimatedUsedTokensChanged -= Service_EstimatedUsedTokensChanged;
         }
     }
 }

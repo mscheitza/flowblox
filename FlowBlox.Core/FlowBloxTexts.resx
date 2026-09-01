@@ -3847,6 +3847,57 @@ If a Join collector should aggregate links across all page iterations:
   <data name="FlowBloxTaskScheduleType_Interval" xml:space="preserve">
     <value>Interval</value>
   </data>
+  <data name="MappingFlowBlock_DisplayName" xml:space="preserve">
+    <value>Mapping</value>
+  </data>
+  <data name="MappingFlowBlock_Description" xml:space="preserve">
+    <value>Maps an input field value to an output value using ordered key or regular-expression rules. If no rule matches, an optional default value is used.</value>
+  </data>
+  <data name="MappingFlowBlock_Groups_Mapping" xml:space="preserve">
+    <value>Mapping rules</value>
+  </data>
+  <data name="MappingFlowBlock_MappingEntries" xml:space="preserve">
+    <value>Mapping entries</value>
+  </data>
+  <data name="MappingFlowBlock_MappingEntries_Tooltip" xml:space="preserve">
+    <value>Ordered rule list. Each row must define either a key or a regular expression and returns the configured value when it matches.</value>
+  </data>
+  <data name="MappingFlowBlock_DefaultValue" xml:space="preserve">
+    <value>Default value</value>
+  </data>
+  <data name="MappingFlowBlock_DefaultValue_Tooltip" xml:space="preserve">
+    <value>Value used when no mapping entry matches. Supports field placeholders. Leave empty to output no value and create a warning.</value>
+  </data>
+  <data name="MappingFlowBlock_MappingEntry_DisplayName" xml:space="preserve">
+    <value>Mapping entry</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Key_Tooltip" xml:space="preserve">
+    <value>Literal value that must exactly match the input field value. Leave empty when using a regular expression.</value>
+  </data>
+  <data name="MappingFlowBlockEntry_RegularExpression" xml:space="preserve">
+    <value>Regular expression</value>
+  </data>
+  <data name="MappingFlowBlockEntry_RegularExpression_Tooltip" xml:space="preserve">
+    <value>Regular expression matched against the input field value. Leave empty when using a key.</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Value_Tooltip" xml:space="preserve">
+    <value>Output value for this mapping. Supports field placeholders.</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Validation_KeyOrRegexRequired" xml:space="preserve">
+    <value>Specify either a key or a regular expression, but not both.</value>
+  </data>
+  <data name="MappingFlowBlockEntry_Validation_InvalidRegex" xml:space="preserve">
+    <value>The regular expression is invalid.</value>
+  </data>
+  <data name="MappingFlowBlockNotifications_NoMappingFound" xml:space="preserve">
+    <value>No mapping entry matched and no default value is configured.</value>
+  </data>
   <data name="SplitFlowBlock_Description" xml:space="preserve">
     <value>Splits one input text into multiple output values using one or more separators.</value>
   </data>

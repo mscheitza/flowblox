@@ -1,4 +1,7 @@
 ﻿using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Exceptions;
+using FlowBlox.Core.Util.Resources;
+using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Views;
 using System.Windows;
 using FlowBlox.UICore.Interfaces;
@@ -12,19 +15,27 @@ namespace FlowBlox.UICore.Factory.PropertyView
     {
         public static bool CreatePropertyWindowAndShowDialog(Window owner, object target, object instance, bool readOnly, bool isNew = false)
         {
-            var propertyWindowViewFactory = GetPropertyWindowViewFactoryForType(instance.GetType());
-            if (propertyWindowViewFactory != null)
+            try
             {
-                return InvokeWPFViewUsingTransaction(owner, instance, target, readOnly, propertyWindowViewFactory, isNew);
-            }
-            else
-            {
-                var propertyView = new PropertyWindow(new PropertyWindowArgs(instance, parent: target, readOnly: readOnly, isNew: isNew))
+                var propertyWindowViewFactory = GetPropertyWindowViewFactoryForType(instance.GetType());
+                if (propertyWindowViewFactory != null)
                 {
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                    Owner = owner
-                };
-                return propertyView.ShowDialog() == true;
+                    return InvokeWPFViewUsingTransaction(owner, instance, target, readOnly, propertyWindowViewFactory, isNew);
+                }
+                else
+                {
+                    var propertyView = new PropertyWindow(new PropertyWindowArgs(instance, parent: target, readOnly: readOnly, isNew: isNew))
+                    {
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                        Owner = owner
+                    };
+                    return propertyView.ShowDialog() == true;
+                }
+            }
+            catch (RegistryCurrentlyInUseException)
+            {
+                ShowRegistryCurrentlyInUseMessage();
+                return false;
             }
         }
 
@@ -63,6 +74,15 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             manager.Cancel();
             return false;
+        }
+
+        private static void ShowRegistryCurrentlyInUseMessage()
+        {
+            var messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
+            messageBoxService?.ShowMessageBox(
+                FlowBloxResourceUtil.GetLocalizedString("Message_RegistryCurrentlyInUse", typeof(Resources.PropertyWindow)),
+                FlowBloxResourceUtil.GetLocalizedString("Message_RegistryCurrentlyInUse_Title", typeof(Resources.PropertyWindow)),
+                FlowBloxMessageBoxTypes.Warning);
         }
 
         private static void MarkDialogAsDirtyIfNew(object dialog, bool isNew)
