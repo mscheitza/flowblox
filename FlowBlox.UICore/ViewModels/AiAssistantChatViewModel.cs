@@ -138,10 +138,6 @@ namespace FlowBlox.UICore.ViewModels
             _stateAfterLastPrompt != null &&
             _isPromptStateUndone;
 
-        public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
-        public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
-        public event EventHandler<FlowBlocksLayoutChangedEventArgs>? BeforeFlowBlocksLayoutChanged;
-        public event EventHandler<FlowBlocksLayoutChangedEventArgs>? FlowBlocksLayoutChanged;
         public event EventHandler? NewHistoryRequested;
         public event EventHandler? HistoryRequested;
         private bool _isProviderConfigured;
@@ -159,10 +155,6 @@ namespace FlowBlox.UICore.ViewModels
                 new AiProviderExecutor(),
                 toolApi,
                 FlowBloxLogManager.Instance.GetLogger());
-            _service.FlowBlocksChanged += Service_FlowBlocksChanged;
-            _service.FlowBlocksConnectionsChanged += Service_FlowBlocksConnectionsChanged;
-            _service.BeforeFlowBlocksLayoutChanged += Service_BeforeFlowBlocksLayoutChanged;
-            _service.FlowBlocksLayoutChanged += Service_FlowBlocksLayoutChanged;
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged += Service_EstimatedUsedTokensChanged;
 
@@ -338,26 +330,6 @@ namespace FlowBlox.UICore.ViewModels
                 _isPromptStateUndone = false;
                 RefreshUndoRedoState();
             }
-        }
-
-        private void Service_FlowBlocksChanged(object? sender, FlowBlocksChangedEventArgs e)
-        {
-            FlowBlocksChanged?.Invoke(this, e);
-        }
-
-        private void Service_FlowBlocksConnectionsChanged(object? sender, FlowBlocksConnectionsChangedEventArgs e)
-        {
-            FlowBlocksConnectionsChanged?.Invoke(this, e);
-        }
-
-        private void Service_BeforeFlowBlocksLayoutChanged(object? sender, FlowBlocksLayoutChangedEventArgs e)
-        {
-            BeforeFlowBlocksLayoutChanged?.Invoke(this, e);
-        }
-
-        private void Service_FlowBlocksLayoutChanged(object? sender, FlowBlocksLayoutChangedEventArgs e)
-        {
-            FlowBlocksLayoutChanged?.Invoke(this, e);
         }
 
         private void Service_TranscriptLineAdded(object? sender, AssistantTranscriptLine line)
@@ -678,10 +650,6 @@ namespace FlowBlox.UICore.ViewModels
             if (_runtimeStateService != null)
                 _runtimeStateService.StateChanged -= RuntimeStateService_StateChanged;
 
-            _service.FlowBlocksChanged -= Service_FlowBlocksChanged;
-            _service.FlowBlocksConnectionsChanged -= Service_FlowBlocksConnectionsChanged;
-            _service.BeforeFlowBlocksLayoutChanged -= Service_BeforeFlowBlocksLayoutChanged;
-            _service.FlowBlocksLayoutChanged -= Service_FlowBlocksLayoutChanged;
             _service.TranscriptLineAdded -= Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged -= Service_EstimatedUsedTokensChanged;
         }

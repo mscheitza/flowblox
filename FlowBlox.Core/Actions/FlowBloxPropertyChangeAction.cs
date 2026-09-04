@@ -1,4 +1,5 @@
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Interfaces;
 using System.Reflection;
 
 namespace FlowBlox.Core.Actions
@@ -33,8 +34,8 @@ namespace FlowBlox.Core.Actions
 
             property.SetValue(Target, value);
 
-            if (Target is BaseFlowBlock flowBlock)
-                flowBlock.PropertyValuesChanged();
+            if (Target is IFlowBloxComponent component)
+                component.OnAfterSave();
         }
     }
 }

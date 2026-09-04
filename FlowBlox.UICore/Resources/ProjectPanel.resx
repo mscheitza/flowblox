@@ -45,9 +45,6 @@
   <data name="ContextMenu_ManageNotifications" xml:space="preserve">
     <value>Manage notifications</value>
   </data>
-  <data name="ContextMenu_Refresh" xml:space="preserve">
-    <value>Refresh</value>
-  </data>
   <data name="ContextMenu_RemoveConnection" xml:space="preserve">
     <value>Remove connection</value>
   </data>
@@ -110,9 +107,6 @@
   </data>
   <data name="Toolbar_Pause" xml:space="preserve">
     <value>Pause</value>
-  </data>
-  <data name="Toolbar_Refresh" xml:space="preserve">
-    <value>Refresh</value>
   </data>
   <data name="Toolbar_Select" xml:space="preserve">
     <value>Select</value>

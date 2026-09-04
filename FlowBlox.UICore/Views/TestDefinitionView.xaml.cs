@@ -73,6 +73,9 @@ namespace FlowBlox.UICore.Views
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
+            if (DataContext is TestDefinitionViewModel { IsDirty: true } viewModel)
+                viewModel.TestDefinition?.OnAfterSave();
+
             DialogResult = true;
             Close();
         }

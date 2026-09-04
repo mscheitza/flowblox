@@ -70,9 +70,6 @@
   <data name="Toolbar_Delete_Tooltip" xml:space="preserve">
     <value>Verwaltetes Objekt löschen</value>
   </data>
-  <data name="Toolbar_Refresh_Tooltip" xml:space="preserve">
-    <value>Aktualisieren</value>
-  </data>
   <data name="Toolbar_Actions" xml:space="preserve">
     <value>Aktionen</value>
   </data>

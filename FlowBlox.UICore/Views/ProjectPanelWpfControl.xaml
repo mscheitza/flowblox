@@ -202,9 +202,6 @@
         </Grid.RowDefinitions>
 
         <ToolBar Grid.Row="0" Background="#454545" Foreground="#F5F5F5" HorizontalAlignment="Right">
-            <Button Command="{Binding RefreshCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_Refresh}">
-                <iconPacks:PackIconMaterial Kind="Refresh" Width="14" Height="14"/>
-            </Button>
             <Button Command="{Binding GridSettingsCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_Settings}">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="CogOutline" Width="14" Height="14" Foreground="#7DB7FF"/>
@@ -294,17 +291,6 @@
                   MouseLeftButtonDown="ProjectCanvas_MouseLeftButtonDown"
                   MouseMove="ProjectCanvas_MouseMove"
                   MouseLeftButtonUp="ProjectCanvas_MouseLeftButtonUp">
-                <Grid.ContextMenu>
-                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="{x:Static resources:ProjectPanel.ContextMenu_Refresh}"
-                                  Command="{Binding RefreshCommand}"
-                                  InputGestureText="{Binding RefreshGestureText}">
-                            <MenuItem.Icon>
-                                <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource HostedControlContextMenuIcon.Neutral}"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </ContextMenu>
-                </Grid.ContextMenu>
                 <ItemsControl ItemsSource="{Binding Arrows}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

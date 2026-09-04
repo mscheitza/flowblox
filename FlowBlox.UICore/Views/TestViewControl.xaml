@@ -97,11 +97,6 @@
                         <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource HostedControlToolbarIconBase}" />
                     </Button>
 
-                    <Button Command="{Binding RefreshCommand}"
-                            Style="{StaticResource TestView.ToolbarButtonStyle}"
-                            ToolTip="{x:Static resources:TestView.Toolbar_Refresh_Tooltip}">
-                        <iconPacks:PackIconMaterial Kind="Reload" Style="{StaticResource HostedControlToolbarIconBase}" />
-                    </Button>
                 </ToolBar>
             </ToolBarTray>
         </Border>
@@ -120,7 +115,6 @@
                 </ListView.Resources>
 
                 <ListView.InputBindings>
-                    <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
                     <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
                     <KeyBinding Key="F6" Command="{Binding RunCommand}" />
                 </ListView.InputBindings>
@@ -162,13 +156,6 @@
                                   Command="{Binding ResetStatusCommand}">
                             <MenuItem.Icon>
                                 <iconPacks:PackIconMaterial Kind="Refresh" Width="14" Height="14" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator />
-                        <MenuItem Header="{x:Static resources:TestView.Toolbar_Refresh_Tooltip}"
-                                  Command="{Binding RefreshCommand}">
-                            <MenuItem.Icon>
-                                <iconPacks:PackIconMaterial Kind="Reload" Width="14" Height="14" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>

@@ -205,15 +205,6 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Refresh ähnelt.
-        /// </summary>
-        public static string Toolbar_Refresh_Tooltip {
-            get {
-                return ResourceManager.GetString("Toolbar_Refresh_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Additional Managed Objects ähnelt.
         /// </summary>
         public static string Tree_UncategorizedManagedObjects {

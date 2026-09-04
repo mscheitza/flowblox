@@ -59,15 +59,6 @@ namespace FlowBlox.UICore.Views
             BeginFloatingInsertedNode(node, GetPasteStartPosition());
         }
 
-        public bool ExecuteRefreshShortcut()
-        {
-            if (ViewModel.RefreshCommand.CanExecute(null) != true)
-                return false;
-
-            ViewModel.RefreshCommand.Execute(null);
-            return true;
-        }
-
         public bool ExecuteDeleteShortcut()
         {
             if (ViewModel.SelectedArrow != null && ViewModel.RemoveConnectionCommand.CanExecute(ViewModel.SelectedArrow))
@@ -204,12 +195,6 @@ namespace FlowBlox.UICore.Views
 
             if (Keyboard.Modifiers != ModifierKeys.None)
                 return false;
-
-            if (e.Key == Key.F5 && ExecuteRefreshShortcut())
-            {
-                e.Handled = true;
-                return true;
-            }
 
             if (e.Key == Key.Delete && ExecuteDeleteShortcut())
             {

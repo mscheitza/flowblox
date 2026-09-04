@@ -5,6 +5,7 @@ using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
@@ -32,13 +33,14 @@ namespace FlowBlox.UICore.ViewModels
         private readonly IRuntimeStateService? _runtimeStateService;
         private readonly FlowBloxTestDefinitionLatestFlowBlockResolver _targetResolver;
         private readonly List<TestCaseEntryViewModel> _selectedEntries = new();
+        private readonly HashSet<FlowBloxTestDefinition> _subscribedTestDefinitions = new();
+        private FlowBloxProject? _project;
         private FlowBloxRegistry? _registry;
         private bool _isReadOnly;
         private string _summaryText = string.Empty;
 
         public ObservableCollection<TestCaseEntryViewModel> TestCases { get; } = new();
 
-        public RelayCommand RefreshCommand { get; }
         public RelayCommand CreateCommand { get; }
         public RelayCommand EditCommand { get; }
         public RelayCommand DeleteCommand { get; }
@@ -83,7 +85,6 @@ namespace FlowBlox.UICore.ViewModels
             _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
             _targetResolver = new FlowBloxTestDefinitionLatestFlowBlockResolver();
 
-            RefreshCommand = new RelayCommand(Refresh);
             CreateCommand = new RelayCommand(CreateTestCase, CanCreateTestCase);
             EditCommand = new RelayCommand(EditTestCase, CanEditTestCase);
             DeleteCommand = new RelayCommand(DeleteTestCases, CanDeleteTestCases);
@@ -134,11 +135,14 @@ namespace FlowBlox.UICore.ViewModels
         {
             Unsubscribe();
 
-            _registry = FlowBloxRegistryProvider.GetRegistry();
+            _project = FlowBloxProjectManager.Instance.ActiveProject;
+            _registry = _project?.FlowBloxRegistry;
             if (_registry != null)
             {
                 _registry.OnManagedObjectAdded += Registry_OnManagedObjectAdded;
                 _registry.OnManagedObjectRemoved += Registry_OnManagedObjectRemoved;
+                foreach (var testDefinition in _registry.GetManagedObjects<FlowBloxTestDefinition>())
+                    SubscribeTestDefinitionChanged(testDefinition);
             }
 
             Refresh();
@@ -146,22 +150,46 @@ namespace FlowBlox.UICore.ViewModels
 
         private void Registry_OnManagedObjectAdded(ManagedObjectAddedEventArgs eventArgs)
         {
-            if (eventArgs?.AddedObject is not FlowBloxTestDefinition)
+            if (eventArgs?.AddedObject is not FlowBloxTestDefinition testDefinition)
                 return;
 
+            SubscribeTestDefinitionChanged(testDefinition);
             SynchronizationContextHelper.PostToUi(_uiContext, Refresh);
         }
 
         private void Registry_OnManagedObjectRemoved(ManagedObjectRemovedEventArgs eventArgs)
         {
-            if (eventArgs?.RemovedObject is not FlowBloxTestDefinition)
+            if (eventArgs?.RemovedObject is not FlowBloxTestDefinition testDefinition)
                 return;
 
+            UnsubscribeTestDefinitionChanged(testDefinition);
             SynchronizationContextHelper.PostToUi(_uiContext, Refresh);
         }
 
+        private void SubscribeTestDefinitionChanged(FlowBloxTestDefinition testDefinition)
+        {
+            if (testDefinition == null || !_subscribedTestDefinitions.Add(testDefinition))
+                return;
+
+            testDefinition.ComponentChanged += TestDefinition_ComponentChanged;
+        }
+
+        private void UnsubscribeTestDefinitionChanged(FlowBloxTestDefinition testDefinition)
+        {
+            if (testDefinition == null || !_subscribedTestDefinitions.Remove(testDefinition))
+                return;
+
+            testDefinition.ComponentChanged -= TestDefinition_ComponentChanged;
+        }
+
+        private void TestDefinition_ComponentChanged(object? sender, EventArgs e)
+            => SynchronizationContextHelper.PostToUi(_uiContext, Refresh);
+
         private void Refresh()
         {
+            if (!EnsureBoundToActiveProject())
+                return;
+
             var previouslySelectedDefinitions = _selectedEntries
                 .Select(x => x.TestDefinition)
                 .Where(x => x != null)
@@ -209,6 +237,19 @@ namespace FlowBlox.UICore.ViewModels
             UpdateSummary();
             OnPropertyChanged(nameof(HasTestCases));
             InvalidateCommands();
+        }
+
+        private bool EnsureBoundToActiveProject()
+        {
+            var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
+            if (ReferenceEquals(_project, activeProject) &&
+                ReferenceEquals(_registry, activeProject?.FlowBloxRegistry))
+            {
+                return true;
+            }
+
+            RebindAndRefresh();
+            return false;
         }
 
         private string BuildRequiredForText(FlowBloxTestDefinition testDefinition)
@@ -300,7 +341,6 @@ namespace FlowBlox.UICore.ViewModels
 
             var view = new TestDefinitionView(selectedTest, currentFlowBlock: null);
             _dialogService.ShowWPFDialog(view, isModal: true);
-            Refresh();
         }
 
         private bool CanEditTestCase()
@@ -565,6 +605,11 @@ namespace FlowBlox.UICore.ViewModels
                 _registry.OnManagedObjectAdded -= Registry_OnManagedObjectAdded;
                 _registry.OnManagedObjectRemoved -= Registry_OnManagedObjectRemoved;
             }
+
+            foreach (var testDefinition in _subscribedTestDefinitions.ToList())
+                testDefinition.ComponentChanged -= TestDefinition_ComponentChanged;
+
+            _subscribedTestDefinitions.Clear();
         }
 
         public void Dispose()

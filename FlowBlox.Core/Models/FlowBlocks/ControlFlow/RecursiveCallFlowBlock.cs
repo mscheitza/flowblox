@@ -66,8 +66,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.ControlFlow
             }
             set
             {
+                if (ReferenceEquals(_targetFlowBlock, value))
+                    return;
+
                 _targetFlowBlock = value;
                 OnPropertyChanged(nameof(FieldTransferConfigs));
+                if (IsLoaded)
+                    NotifyComponentChanged();
             }
         }
 
@@ -257,4 +262,3 @@ namespace FlowBlox.Core.Models.FlowBlocks.ControlFlow
         }
     }
 }
-

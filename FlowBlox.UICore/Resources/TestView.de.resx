@@ -33,9 +33,6 @@
   <data name="Toolbar_ResetStatus_Tooltip">
     <value>Status und Protokoll zurücksetzen</value>
   </data>
-  <data name="Toolbar_Refresh_Tooltip">
-    <value>Aktualisieren</value>
-  </data>
   <data name="Col_Name">
     <value>Name</value>
   </data>

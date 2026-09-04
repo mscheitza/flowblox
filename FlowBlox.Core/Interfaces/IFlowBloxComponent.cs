@@ -6,6 +6,8 @@ namespace FlowBlox.Core.Interfaces
 {
     public interface IFlowBloxComponent
     {
+        event EventHandler ComponentChanged;
+
         string Name { get; set; }
 
         bool HandleRequirements { get; }
@@ -29,6 +31,8 @@ namespace FlowBlox.Core.Interfaces
         void OnBeforeSave();
 
         void OnAfterSave();
+
+        void NotifyComponentChanged();
 
         void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions);
 

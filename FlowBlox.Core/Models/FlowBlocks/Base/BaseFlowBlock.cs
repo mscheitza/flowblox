@@ -1,6 +1,7 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Events;
 using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Interfaces;
@@ -48,6 +49,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public delegate void FlowBlockNameChangeEventHandler(BaseFlowBlock flowBlock, string oldName, string newName);
         public delegate void PropertyChangeEventHandler(string propertyName);
+        public delegate void ReferencedFlowBlocksChangedEventHandler(ReferencedFlowBlocksChangedEventArgs eventArgs);
 
         public delegate void IterationStartHandler(BaseRuntime runtime);
         public delegate void IterationEndHandler(BaseRuntime runtime);
@@ -55,6 +57,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public delegate void OnBeforeInputProcessingEventHandler();
 
         public event OnPropertyValuesChangedEventHandler OnPropertyValuesChanged;
+        public event ReferencedFlowBlocksChangedEventHandler ReferencedFlowBlocksChanged;
         public event UndoNotificationEventHandler OnUndoWarn;
         public event UndoNotificationEventHandler OnUndoError;
         public event WarnEventHandler OnWarn;
@@ -357,6 +360,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 if (value == null)
                     throw new NotSupportedException($"Setting {nameof(ReferencedFlowBlocks)} to null is not supported.");
 
+                var previousReferences = _referencedFlowBlocks?.ToList() ?? new List<BaseFlowBlock>();
+
                 if (_referencedFlowBlocks != null)
                     _referencedFlowBlocks.CollectionChanged -= _referencedFlowBlocks_CollectionChanged;
 
@@ -365,13 +370,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 _referencedFlowBlocks.CollectionChanged -= _referencedFlowBlocks_CollectionChanged;
                 _referencedFlowBlocks.CollectionChanged += _referencedFlowBlocks_CollectionChanged;
 
-                OnAfterReferencedFlowBlocksChanged();
+                OnAfterReferencedFlowBlocksChanged(
+                    value.Except(previousReferences).ToList(),
+                    previousReferences.Except(value).ToList());
             }
         }
 
         private void _referencedFlowBlocks_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            OnAfterReferencedFlowBlocksChanged();
+            var addedFlowBlocks = e.NewItems?.OfType<BaseFlowBlock>().ToList() ?? new List<BaseFlowBlock>();
+            var removedFlowBlocks = e.OldItems?.OfType<BaseFlowBlock>().ToList() ?? new List<BaseFlowBlock>();
+            OnAfterReferencedFlowBlocksChanged(addedFlowBlocks, removedFlowBlocks);
         }
 
         /// <summary>
@@ -463,7 +472,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             return new FlowBloxTestDeletionEnsurer().EnsureFlowBlockDeletable(this, dependencies);
         }
 
-        protected virtual void OnAfterReferencedFlowBlocksChanged()
+        protected virtual void OnAfterReferencedFlowBlocksChanged(
+            IReadOnlyCollection<BaseFlowBlock> addedFlowBlocks = null,
+            IReadOnlyCollection<BaseFlowBlock> removedFlowBlocks = null)
         {
             RefreshNotExecutedState();
 
@@ -473,6 +484,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             SyncReferencedFlowBlocksWithInputBehaviorAssignments();
             OnPropertyChanged(nameof(IterationContext));
             OnPropertyChanged(nameof(HasIterationContext));
+            ReferencedFlowBlocksChanged?.Invoke(new ReferencedFlowBlocksChangedEventArgs(
+                this,
+                addedFlowBlocks ?? Array.Empty<BaseFlowBlock>(),
+                removedFlowBlocks ?? Array.Empty<BaseFlowBlock>()));
+            NotifyComponentChanged();
         }
 
         public void RefreshNotExecutedState()
@@ -1293,8 +1309,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public override void OnAfterSave()
         {
-            this.PropertyValuesChanged();
             base.OnAfterSave();
+            this.PropertyValuesChanged();
         }
 
         public override List<string> GetDisplayableProperties() => base.GetDisplayableProperties();

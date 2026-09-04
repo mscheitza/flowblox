@@ -78,6 +78,7 @@ namespace FlowBlox.UICore.ViewModels
                 _flowBlock.OverrideNotificationType(item.EnumValue, item.SelectedNotificationType);
             }
 
+            _flowBlock.OnAfterSave();
             _ownerWindow.Close();
         }
 

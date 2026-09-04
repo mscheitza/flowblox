@@ -138,12 +138,6 @@
                                 <iconPacks:PackIconMaterial Kind="DeleteOutline" Style="{StaticResource HostedControlToolbarIconBase}" />
                             </Button>
 
-                            <Button Command="{Binding RefreshCommand}"
-                                    Style="{StaticResource ManagedObjects.ToolbarButtonStyle}"
-                                    ToolTip="{x:Static resources:ManagedObjectsView.Toolbar_Refresh_Tooltip}">
-                                <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource HostedControlToolbarIconBase}" />
-                            </Button>
-
                             <Menu VerticalAlignment="Center"
                                   Margin="4,0,0,0"
                                   IsEnabled="{Binding HasSelectedEntryActions}">
@@ -204,12 +198,6 @@
                                           Command="{Binding DeleteCommand}">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconMaterial Kind="DeleteOutline" Width="14" Height="14" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                                <MenuItem Header="{x:Static resources:ManagedObjectsView.Toolbar_Refresh_Tooltip}"
-                                          Command="{Binding RefreshCommand}">
-                                    <MenuItem.Icon>
-                                        <iconPacks:PackIconMaterial Kind="Refresh" Width="14" Height="14" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <Separator />

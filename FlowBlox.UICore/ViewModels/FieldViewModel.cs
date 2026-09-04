@@ -3,7 +3,9 @@ using FlowBlox.Core.Events;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.UICore.Commands;
@@ -38,6 +40,7 @@ namespace FlowBlox.UICore.ViewModels
         private readonly List<FieldEntryViewModel> _selectedRows = new();
 
         private FlowBloxRegistry? _registry;
+        private FlowBloxProject? _project;
 
         private string _filterText = string.Empty;
         private bool _showFlowBlock;
@@ -46,7 +49,6 @@ namespace FlowBlox.UICore.ViewModels
 
         public ObservableCollection<FieldEntryViewModel> Fields { get; } = new();
 
-        public RelayCommand RefreshCommand { get; }
         public RelayCommand CopyCommand { get; }
         public RelayCommand OpenFieldValueCommand { get; }
 
@@ -106,7 +108,6 @@ namespace FlowBlox.UICore.ViewModels
             _showFlowBlock = ResolveFieldViewShowFlowBlock();
             _isSingleLineFieldValues = ResolveFieldViewSingleLineFieldValues();
 
-            RefreshCommand = new RelayCommand(Refresh);
             CopyCommand = new RelayCommand(CopySelection, () => _selectedRows.Count > 0);
             OpenFieldValueCommand = new RelayCommand(OpenFieldValue, () => _selectedRows.Count == 1);
 
@@ -127,6 +128,9 @@ namespace FlowBlox.UICore.ViewModels
 
         private void Refresh()
         {
+            if (!EnsureBoundToActiveProject())
+                return;
+
             ReloadFields();
             UpdateFlowBlockSelectionState();
         }
@@ -138,7 +142,8 @@ namespace FlowBlox.UICore.ViewModels
             if (_componentProvider != null)
                 _componentProvider.SelectedFlowBlocksChanged += ComponentProvider_SelectedFlowBlocksChanged;
 
-            _registry = FlowBloxRegistryProvider.GetRegistry();
+            _project = FlowBloxProjectManager.Instance.ActiveProject;
+            _registry = _project?.FlowBloxRegistry;
             if (_registry != null)
             {
                 _registry.OnManagedObjectAdded += Registry_OnManagedObjectAdded;
@@ -151,6 +156,19 @@ namespace FlowBlox.UICore.ViewModels
 
         private void ComponentProvider_SelectedFlowBlocksChanged(object? sender, EventArgs e)
             => SynchronizationContextHelper.PostToUi(_uiContext, UpdateFlowBlockSelectionState);
+
+        private bool EnsureBoundToActiveProject()
+        {
+            var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
+            if (ReferenceEquals(_project, activeProject) &&
+                ReferenceEquals(_registry, activeProject?.FlowBloxRegistry))
+            {
+                return true;
+            }
+
+            RebindAndRefresh();
+            return false;
+        }
 
         private void ReloadFields()
         {
@@ -234,6 +252,9 @@ namespace FlowBlox.UICore.ViewModels
 
         private void SubscribeFieldEvents(FieldElement fieldElement)
         {
+            fieldElement.ComponentChanged -= FieldElement_ComponentChanged;
+            fieldElement.ComponentChanged += FieldElement_ComponentChanged;
+
             fieldElement.OnNameChanged -= FieldElement_OnNameChanged;
             fieldElement.OnNameChanged += FieldElement_OnNameChanged;
 
@@ -246,9 +267,26 @@ namespace FlowBlox.UICore.ViewModels
 
         private void UnsubscribeFieldEvents(FieldElement fieldElement)
         {
+            fieldElement.ComponentChanged -= FieldElement_ComponentChanged;
             fieldElement.OnNameChanged -= FieldElement_OnNameChanged;
             fieldElement.OnValueChanged -= FieldElement_OnValueChanged;
             fieldElement.PropertyChanged -= FieldElement_PropertyChanged;
+        }
+
+        private void FieldElement_ComponentChanged(object? sender, EventArgs e)
+        {
+            if (sender is not FieldElement field)
+                return;
+
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
+            {
+                if (_rowsByField.TryGetValue(field, out var row))
+                {
+                    row.UpdateName();
+                    row.UpdateValue(field.StringValue, field.Pending);
+                    ApplyFilter();
+                }
+            });
         }
 
         private void FieldElement_OnNameChanged(FieldElement field, string oldName, string newName)

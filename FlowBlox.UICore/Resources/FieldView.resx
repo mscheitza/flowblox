@@ -24,9 +24,6 @@
   <data name="ContextMenu_Copy">
     <value>Copy</value>
   </data>
-  <data name="ContextMenu_Refresh">
-    <value>Refresh</value>
-  </data>
   <data name="Col_FlowBlock">
     <value>Flow-Block</value>
   </data>

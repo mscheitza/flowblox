@@ -118,12 +118,6 @@ namespace FlowBlox.UICore.Resources {
             }
         }
 
-        public static string ContextMenu_Refresh {
-            get {
-                return ResourceManager.GetString("ContextMenu_Refresh", resourceCulture);
-            }
-        }
-
         public static string ContextMenu_RemoveConnection {
             get {
                 return ResourceManager.GetString("ContextMenu_RemoveConnection", resourceCulture);
@@ -202,12 +196,6 @@ namespace FlowBlox.UICore.Resources {
         public static string Toolbar_Pause {
             get {
                 return ResourceManager.GetString("Toolbar_Pause", resourceCulture);
-            }
-        }
-
-        public static string Toolbar_Refresh {
-            get {
-                return ResourceManager.GetString("Toolbar_Refresh", resourceCulture);
             }
         }
 

@@ -106,15 +106,6 @@ namespace FlowBlox.UICore.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Refresh ähnelt.
-        /// </summary>
-        public static string ContextMenu_Refresh {
-            get {
-                return ResourceManager.GetString("ContextMenu_Refresh", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No fields have been created yet. As soon as user-defined fields or fields from generated result flow blocks are available, they will appear here. ähnelt.
         /// </summary>
         public static string EmptyState_NoFields {

@@ -24,9 +24,6 @@
   <data name="ContextMenu_Copy" xml:space="preserve">
     <value>Kopieren</value>
   </data>
-  <data name="ContextMenu_Refresh" xml:space="preserve">
-    <value>Aktualisieren</value>
-  </data>
   <data name="Col_FlowBlock" xml:space="preserve">
     <value>Flow-Block</value>
   </data>

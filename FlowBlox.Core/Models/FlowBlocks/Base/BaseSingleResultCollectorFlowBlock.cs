@@ -57,7 +57,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
                 if (ReferencedFlowBlocks.OfType<BaseResultFlowBlock>().Count() == 1)
                 {
-                    var referencedFlowBlock = ReferencedFlowBlocks.Single();
+                    var referencedFlowBlock = ReferencedFlowBlocks.OfType<BaseResultFlowBlock>().Single();
                     if (referencedFlowBlock.ReferencedFlowBlocks.Count == 1)
                         return referencedFlowBlock.ReferencedFlowBlocks.Single();
 

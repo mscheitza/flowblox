@@ -32,14 +32,17 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private string _warningMessage = string.Empty;
         private string _errorMessage = string.Empty;
         private readonly FlowBlockNodeCenterPreservationGuard _centerPreservationGuard;
+        private readonly FlowBloxComponentChangeSubscription _componentChangeSubscription;
 
         public FlowBlockNodeViewModel(BaseFlowBlock flowBlock)
         {
             _uiContext = SynchronizationContext.Current;
             InternalFlowBlock = flowBlock ?? throw new ArgumentNullException(nameof(flowBlock));
             _centerPreservationGuard = new FlowBlockNodeCenterPreservationGuard(this);
+            _componentChangeSubscription = new FlowBloxComponentChangeSubscription(
+                flowBlock,
+                _ => FlowBlock_OnComponentChanged());
             flowBlock.PropertyChanged += FlowBlock_PropertyChanged;
-            flowBlock.OnPropertyValuesChanged += FlowBlock_OnPropertyValuesChanged;
             flowBlock.OnWarn += FlowBlock_OnWarn;
             flowBlock.OnError += FlowBlock_OnError;
             flowBlock.OnUndoWarn += FlowBlock_OnUndoWarn;
@@ -321,7 +324,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private static string CleanValue(string value)
             => string.IsNullOrEmpty(value) ? string.Empty : value.Replace(Environment.NewLine, " ").Trim();
 
-        private void FlowBlock_OnPropertyValuesChanged()
+        private void FlowBlock_OnComponentChanged()
             => SynchronizationContextHelper.PostToUi(_uiContext, RefreshRows);
 
         private void FlowBlock_OnWarn(BaseRuntime runtime, string message)
@@ -414,11 +417,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public void Dispose()
         {
             InternalFlowBlock.PropertyChanged -= FlowBlock_PropertyChanged;
-            InternalFlowBlock.OnPropertyValuesChanged -= FlowBlock_OnPropertyValuesChanged;
             InternalFlowBlock.OnWarn -= FlowBlock_OnWarn;
             InternalFlowBlock.OnError -= FlowBlock_OnError;
             InternalFlowBlock.OnUndoWarn -= FlowBlock_OnUndoWarn;
             InternalFlowBlock.OnUndoError -= FlowBlock_OnUndoError;
+            _componentChangeSubscription.Dispose();
             _centerPreservationGuard.Dispose();
         }
     }

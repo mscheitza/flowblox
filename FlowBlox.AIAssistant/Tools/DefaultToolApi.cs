@@ -9,7 +9,6 @@ namespace FlowBlox.AIAssistant.Tools
         private readonly Dictionary<string, IToolHandler> _handlers;
         private readonly List<ToolDefinition> _definitions;
         public Func<ToolRequest, bool>? ToolExecutionConfirmationCallback { get; set; }
-        public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
 
         public DefaultToolApi()
         {
@@ -65,58 +64,7 @@ namespace FlowBlox.AIAssistant.Tools
                 response.IsLayoutRelevantForAutoAdjustment ||
                 (response.Ok && handler.IsLayoutRelevantForAutoAdjustment);
 
-            TryNotifyFlowBlockConnectionsChanged(response);
             return response;
-        }
-
-        private void TryNotifyFlowBlockConnectionsChanged(ToolResponse response)
-        {
-            if (response?.Ok != true || response.Result == null)
-                return;
-
-            var modeToken = response.Result.Value<string>("mode");
-            var from = response.Result.Value<string>("from");
-            var to = response.Result.Value<string>("to");
-
-            if (string.IsNullOrWhiteSpace(modeToken) ||
-                string.IsNullOrWhiteSpace(from) ||
-                string.IsNullOrWhiteSpace(to))
-            {
-                return;
-            }
-
-            FlowBlockConnectionChangeMode? changeMode = null;
-            var changed = false;
-
-            if (response.Result.Value<bool?>("connected") == true)
-            {
-                changed = response.Result.Value<bool?>("changed") ?? true;
-                changeMode = FlowBlockConnectionChangeMode.Connect;
-            }
-            else if (response.Result.Value<bool?>("disconnected") == true)
-            {
-                changed = response.Result.Value<bool?>("wasConnected") == true;
-                changeMode = FlowBlockConnectionChangeMode.Disconnect;
-            }
-
-            if (!changed || changeMode == null)
-                return;
-
-            FlowBlocksConnectionsChanged?.Invoke(
-                this,
-                new FlowBlocksConnectionsChangedEventArgs
-                {
-                    Changes =
-                    [
-                        new FlowBlockConnectionChange
-                        {
-                            From = from,
-                            To = to,
-                            LinkMode = modeToken,
-                            Mode = changeMode.Value
-                        }
-                    ]
-                });
         }
 
         private static bool RequiresUserConfirmation(ToolRequest request)

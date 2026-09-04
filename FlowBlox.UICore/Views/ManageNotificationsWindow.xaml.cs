@@ -1,6 +1,6 @@
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.UICore.ViewModels;
 using MahApps.Metro.Controls;
+using FlowBlox.UICore.ViewModels;
 
 namespace FlowBlox.UICore.Views
 {

@@ -21,6 +21,8 @@ namespace FlowBlox.Core.Models.Base
     {
         private string _name;
 
+        public event EventHandler ComponentChanged;
+
         [Required()]
         [Display(Name = "PropertyNames_Name", ResourceType = typeof(FlowBloxTexts), Order = -1)]
         [CustomValidation(typeof(FlowBloxComponent), nameof(ValidateName))]
@@ -269,7 +271,10 @@ namespace FlowBlox.Core.Models.Base
         public virtual void OnAfterSave()
         {
             this.RegisterPropertyChangedEventHandlers();
+            NotifyComponentChanged();
         }
+
+        public void NotifyComponentChanged() => ComponentChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
         /// Initializes option defaults for this component or FlowBlock.

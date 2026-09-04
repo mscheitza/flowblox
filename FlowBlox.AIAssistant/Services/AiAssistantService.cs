@@ -26,15 +26,10 @@ namespace FlowBlox.AIAssistant.Services
         private readonly AssistantOutputFormatFeedbackQueue _outputFormatFeedbackQueue;
         private readonly ILogger? _logger;
         private readonly Func<AssistantConfiguration>? _configurationProvider;
-        private readonly StringComparer _nameComparer = StringComparer.OrdinalIgnoreCase;
         private readonly object _sessionSync = new();
         private int _activeRunCount;
         private AssistantSessionState? _session;
 
-        public event EventHandler<FlowBlocksChangedEventArgs>? FlowBlocksChanged;
-        public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged;
-        public event EventHandler<FlowBlocksLayoutChangedEventArgs>? BeforeFlowBlocksLayoutChanged;
-        public event EventHandler<FlowBlocksLayoutChangedEventArgs>? FlowBlocksLayoutChanged;
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
         public event EventHandler<int>? EstimatedUsedTokensChanged;
 
@@ -50,7 +45,6 @@ namespace FlowBlox.AIAssistant.Services
             _outputFormatFeedbackQueue = new AssistantOutputFormatFeedbackQueue();
             _logger = logger;
             _configurationProvider = configurationProvider;
-            _tools.FlowBlocksConnectionsChanged += Tools_FlowBlocksConnectionsChanged;
         }
 
         public void ResetSession()
@@ -248,7 +242,6 @@ namespace FlowBlox.AIAssistant.Services
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = AssistantPromptBuilder.BuildSystemPrompt();
             var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions);
-            var knownFlowBlocksByName = CaptureFlowBlocksByName();
             var protocolWriter = TryCreateCommunicationProtocolWriter(config, userPrompt, session.SessionId);
             var formatRetryIssued = false;
             var hasExecutedLayoutRelevantToolCall = false;
@@ -447,7 +440,6 @@ namespace FlowBlox.AIAssistant.Services
                                 _logger?.Warn($"Assistant tool call reported a problem. Tool={request.ToolName}, Error={response.Error}");
                             }
 
-                            knownFlowBlocksByName = NotifyFlowBlockChanges(knownFlowBlocksByName);
                         }
 
                         var toolApiResponse = AssistantPromptBuilder.BuildToolApiResponsePrompt(roundToolTranscript);
@@ -497,14 +489,6 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
-        private void Tools_FlowBlocksConnectionsChanged(object? sender, FlowBlocksConnectionsChangedEventArgs e)
-        {
-            if (e == null || !e.HasChanges)
-                return;
-
-            FlowBlocksConnectionsChanged?.Invoke(this, e);
-        }
-
         private async Task DelayAndRunAutomaticAdjustmentIfEnabledAsync(string reason, CancellationToken ct)
         {
             var configuration = GetConfiguration(out _);
@@ -517,18 +501,9 @@ namespace FlowBlox.AIAssistant.Services
 
         private void RunAutomaticAdjustment(string reason)
         {
-            BeforeFlowBlocksLayoutChanged?.Invoke(this, new FlowBlocksLayoutChangedEventArgs());
-
             var layoutResult = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
             _logger?.Info(
                 $"AutoAdjustFlowLayout executed ({reason}). Updated={layoutResult.UpdatedFlowBlocks}, Total={layoutResult.TotalFlowBlocks}, Components={layoutResult.ComponentsProcessed}");
-
-            FlowBlocksLayoutChanged?.Invoke(this, new FlowBlocksLayoutChangedEventArgs
-            {
-                UpdatedFlowBlocks = layoutResult.UpdatedFlowBlocks,
-                TotalFlowBlocks = layoutResult.TotalFlowBlocks,
-                ComponentsProcessed = layoutResult.ComponentsProcessed
-            });
         }
 
         private AiCommunicationProtocolWriter? TryCreateCommunicationProtocolWriter(AssistantConfiguration config, string userPrompt, string sessionId)
@@ -810,43 +785,6 @@ namespace FlowBlox.AIAssistant.Services
 
             foreach (var child in token.Children())
                 CompactTypeAliasStringsInPlace(child);
-        }
-
-        private Dictionary<string, BaseFlowBlock> CaptureFlowBlocksByName()
-        {
-            var project = FlowBloxProjectManager.Instance.ActiveProject;
-            if (project == null)
-                return new Dictionary<string, BaseFlowBlock>(_nameComparer);
-
-            return project.FlowBloxRegistry.GetFlowBlocks()
-                .Where(x => !string.IsNullOrWhiteSpace(x.Name))
-                .GroupBy(x => x.Name, _nameComparer)
-                .ToDictionary(x => x.Key, x => x.First(), _nameComparer);
-        }
-
-        private Dictionary<string, BaseFlowBlock> NotifyFlowBlockChanges(Dictionary<string, BaseFlowBlock> knownFlowBlocksByName)
-        {
-            var currentFlowBlocksByName = CaptureFlowBlocksByName();
-
-            var added = currentFlowBlocksByName
-                .Where(x => !knownFlowBlocksByName.ContainsKey(x.Key))
-                .Select(x => x.Value)
-                .ToList();
-
-            var removed = knownFlowBlocksByName.Keys
-                .Where(x => !currentFlowBlocksByName.ContainsKey(x))
-                .ToList();
-
-            if (added.Count == 0 && removed.Count == 0)
-                return currentFlowBlocksByName;
-
-            FlowBlocksChanged?.Invoke(this, new FlowBlocksChangedEventArgs
-            {
-                AddedFlowBlocks = added,
-                RemovedFlowBlockNames = removed
-            });
-
-            return currentFlowBlocksByName;
         }
 
         private void AddTranscript(AssistantResult result, AssistantTranscriptKind kind, string text, string? internalContent = null)

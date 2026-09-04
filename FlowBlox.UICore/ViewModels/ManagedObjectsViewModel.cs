@@ -43,6 +43,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private FlowBloxRegistry? _registry;
         private FlowBloxProject? _project;
+        private readonly Dictionary<IManagedObject, FlowBloxComponentChangeSubscription> _managedObjectChangeSubscriptions = new();
 
         public ObservableCollection<ManagedObjectTypeNodeViewModel> TypeNodes { get; } = new();
 
@@ -100,7 +101,6 @@ namespace FlowBlox.UICore.ViewModels
             => SelectedEntry?.Actions ?? Enumerable.Empty<UIActionViewModel>();
         public bool HasSelectedEntryActions => SelectedEntry != null && SelectedEntryActions.Any();
 
-        public RelayCommand RefreshCommand { get; }
         public RelayCommand AddCommand { get; }
         public RelayCommand EditCommand { get; }
         public RelayCommand DeleteCommand { get; }
@@ -112,7 +112,6 @@ namespace FlowBlox.UICore.ViewModels
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
             _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
 
-            RefreshCommand = new RelayCommand(RefreshAll);
             AddCommand = new RelayCommand(AddManagedObject, CanAddManagedObject);
             EditCommand = new RelayCommand(EditSelectedManagedObject, CanEditManagedObject);
             DeleteCommand = new RelayCommand(DeleteSelectedManagedObject, CanDeleteManagedObject);
@@ -164,14 +163,20 @@ namespace FlowBlox.UICore.ViewModels
         {
             Unsubscribe();
 
-            _registry = FlowBloxRegistryProvider.GetRegistry();
+            _project = FlowBloxProjectManager.Instance.ActiveProject;
+            _registry = _project?.FlowBloxRegistry;
             if (_registry != null)
             {
                 _registry.OnManagedObjectAdded += Registry_OnManagedObjectAdded;
                 _registry.OnManagedObjectRemoved += Registry_OnManagedObjectRemoved;
+                foreach (var managedObject in _registry.GetManagedObjects()
+                    .OfType<IManagedObject>()
+                    .Where(x => IsSupportedManagedObjectType(x.GetType())))
+                {
+                    SubscribeManagedObjectChanged(managedObject);
+                }
             }
 
-            _project = FlowBloxProjectManager.Instance.ActiveProject;
             if (_project != null)
             {
                 _project.ExtensionsReloaded += Project_ExtensionsReloaded;
@@ -205,6 +210,7 @@ namespace FlowBlox.UICore.ViewModels
                 !IsSupportedManagedObjectType(addedManagedObject.GetType()))
                 return;
 
+            SubscribeManagedObjectChanged(addedManagedObject);
             SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 RebuildTypeTree();
@@ -218,6 +224,7 @@ namespace FlowBlox.UICore.ViewModels
                 !IsSupportedManagedObjectType(removedManagedObject.GetType()))
                 return;
 
+            UnsubscribeManagedObjectChanged(removedManagedObject);
             SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 RebuildTypeTree();
@@ -225,11 +232,60 @@ namespace FlowBlox.UICore.ViewModels
             });
         }
 
+        private void SubscribeManagedObjectChanged(IManagedObject managedObject)
+        {
+            if (managedObject == null || _managedObjectChangeSubscriptions.ContainsKey(managedObject))
+                return;
+
+            _managedObjectChangeSubscriptions[managedObject] = new FlowBloxComponentChangeSubscription(
+                managedObject,
+                _ => ManagedObject_ComponentChanged(managedObject));
+        }
+
+        private void UnsubscribeManagedObjectChanged(IManagedObject managedObject)
+        {
+            if (managedObject == null)
+                return;
+
+            if (!_managedObjectChangeSubscriptions.Remove(managedObject, out var subscription))
+                return;
+
+            subscription.Dispose();
+        }
+
+        private void ManagedObject_ComponentChanged(IManagedObject managedObject)
+        {
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
+            {
+                if (managedObject != null && _managedObjectChangeSubscriptions.TryGetValue(managedObject, out var subscription))
+                    subscription.Rebind();
+
+                RebuildTypeTree();
+                RefreshManagedObjects();
+            });
+        }
+
         private void RefreshAll()
         {
+            if (!EnsureBoundToActiveProject())
+                return;
+
             RebuildTypeTree();
             RefreshManagedObjects();
             InvalidateCommands();
+        }
+
+        private bool EnsureBoundToActiveProject()
+        {
+            var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
+            if (ReferenceEquals(_project, activeProject) &&
+                ReferenceEquals(_registry, activeProject?.FlowBloxRegistry))
+            {
+                return true;
+            }
+
+            RebindAndRefresh();
+            return false;
         }
 
         private void RebuildTypeTree()
@@ -369,7 +425,9 @@ namespace FlowBlox.UICore.ViewModels
         {
             var selectedTypeNode = SelectedTypeNode;
             var selectedType = selectedTypeNode?.ManagedObjectType;
-            if (_registry == null || selectedType == null || selectedTypeNode.IsCategoryOnly)
+            if (_registry == null || 
+                selectedType == null || 
+                selectedTypeNode.IsCategoryOnly)
             {
                 ManagedObjects.Clear();
                 SelectedEntry = null;
@@ -619,7 +677,6 @@ namespace FlowBlox.UICore.ViewModels
 
             var propertyWindow = new Views.PropertyWindow(new PropertyWindowArgs(managedObject, readOnly: IsReadOnly));
             _dialogService.ShowWPFDialog(propertyWindow, isModal: true);
-            RefreshManagedObjects();
         }
 
         private bool CanEditManagedObject()
@@ -771,6 +828,10 @@ namespace FlowBlox.UICore.ViewModels
 
         private void Unsubscribe()
         {
+            foreach (var subscription in _managedObjectChangeSubscriptions.Values)
+                subscription.Dispose();
+            _managedObjectChangeSubscriptions.Clear();
+
             if (_registry != null)
             {
                 _registry.OnManagedObjectAdded -= Registry_OnManagedObjectAdded;

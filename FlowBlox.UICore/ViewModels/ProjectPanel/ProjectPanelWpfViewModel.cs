@@ -78,7 +78,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             AutoLayoutCommand = new RelayCommand(AutoLayout, () => HasProject() && !IsProjectEditingReadOnly);
             DeleteSelectionCommand = new RelayCommand(DeleteSelection, () => HasProject() && SelectedArrow == null && SelectedNodes.Any() && !IsProjectEditingReadOnly);
             EditSelectionCommand = new RelayCommand(EditSelection, () => SelectedNode != null);
-            RefreshCommand = new RelayCommand(Refresh);
             ExecuteRuntimeCommand = new RelayCommand(() => ExecuteRuntimeRequested?.Invoke(this, EventArgs.Empty), () => CanExecuteRuntime);
             PauseRuntimeCommand = new RelayCommand(() => PauseRuntimeRequested?.Invoke(this, EventArgs.Empty), () => CanPauseRuntime);
             StopRuntimeCommand = new RelayCommand(() => StopRuntimeRequested?.Invoke(this, EventArgs.Empty), () => CanStopRuntime);
@@ -122,7 +121,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public RelayCommand AutoLayoutCommand { get; }
         public RelayCommand DeleteSelectionCommand { get; }
         public RelayCommand EditSelectionCommand { get; }
-        public RelayCommand RefreshCommand { get; }
         public RelayCommand ExecuteRuntimeCommand { get; }
         public RelayCommand PauseRuntimeCommand { get; }
         public RelayCommand StopRuntimeCommand { get; }
@@ -261,7 +259,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public string ToggleBreakpointHeader => SelectedNode?.InternalFlowBlock.BreakPoint == true
             ? FlowBloxResourceUtil.GetLocalizedString("ContextMenu_RemoveBreakpoint", typeof(Resources.ProjectPanel))
             : FlowBloxResourceUtil.GetLocalizedString("ContextMenu_SetBreakpoint", typeof(Resources.ProjectPanel));
-        public string RefreshGestureText => GetGestureText(Key.F5);
         public string DeleteGestureText => GetGestureText(Key.Delete);
         public double CanvasWidth => _project?.GridSizeX > 0 ? _project.GridSizeX : DefaultCanvasWidth;
         public double CanvasHeight => _project?.GridSizeY > 0 ? _project.GridSizeY : DefaultCanvasHeight;
@@ -530,6 +527,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
         public void Refresh()
         {
+            if (!EnsureBoundToActiveProject())
+                return;
+
+            SyncNodesWithRegistry();
+
             foreach (var node in Nodes)
                 node.RefreshRows();
 
@@ -769,6 +771,34 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             GridSettingsCommand.Invalidate();
         }
 
+        private bool EnsureBoundToActiveProject()
+        {
+            var activeProject = FlowBloxProjectManager.Instance.ActiveProject;
+            if (ReferenceEquals(_project, activeProject))
+                return _registry != null;
+
+            Rebind(activeProject);
+            return _registry != null;
+        }
+
+        private void SyncNodesWithRegistry()
+        {
+            if (_registry == null)
+            {
+                ClearNodes();
+                return;
+            }
+
+            var flowBlocks = _registry.GetFlowBlocks().ToList();
+            var flowBlockSet = flowBlocks.ToHashSet();
+
+            foreach (var staleFlowBlock in _nodesByFlowBlock.Keys.Where(x => !flowBlockSet.Contains(x)).ToList())
+                RemoveNode(staleFlowBlock);
+
+            foreach (var flowBlock in flowBlocks)
+                AddNode(flowBlock);
+        }
+
         private void Registry_OnFlowBlockAdded(FlowBlockAddedEventArgs eventArgs)
         {
             SynchronizationContextHelper.PostToUi(_uiContext, () =>
@@ -794,6 +824,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
             var node = new FlowBlockNodeViewModel(flowBlock);
             node.PropertyChanged += Node_PropertyChanged;
+            flowBlock.ComponentChanged += FlowBlock_ComponentChanged;
+            flowBlock.ReferencedFlowBlocksChanged += FlowBlock_ReferencedFlowBlocksChanged;
             _nodesByFlowBlock[flowBlock] = node;
             Nodes.Add(node);
             EnsureCanvasContainsNode(node, DefaultAutoIncreaseHorizontalReserve, DefaultAutoIncreaseVerticalReserve);
@@ -806,6 +838,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 return;
 
             node.PropertyChanged -= Node_PropertyChanged;
+            flowBlock.ComponentChanged -= FlowBlock_ComponentChanged;
+            flowBlock.ReferencedFlowBlocksChanged -= FlowBlock_ReferencedFlowBlocksChanged;
             node.Dispose();
             _pendingInsertedCreateActions.Remove(node);
             _nodesByFlowBlock.Remove(flowBlock);
@@ -960,6 +994,28 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             return action.AssociatedActions?.Any(associatedAction => IsNodeMovedByAction(associatedAction, node)) == true;
         }
 
+        private void FlowBlock_ComponentChanged(object sender, EventArgs e)
+        {
+            if (sender is not BaseFlowBlock flowBlock)
+                return;
+
+            SynchronizationContextHelper.PostToUi(_uiContext, () => RefreshArrowsFor(flowBlock));
+        }
+
+        private void FlowBlock_ReferencedFlowBlocksChanged(ReferencedFlowBlocksChangedEventArgs eventArgs)
+        {
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
+            {
+                if (eventArgs == null)
+                {
+                    RefreshArrows();
+                    return;
+                }
+
+                RefreshArrowsFor(eventArgs.AffectedFlowBlocks.ToArray());
+            });
+        }
+
         private void Node_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FlowBlockNodeViewModel.X) ||
@@ -991,48 +1047,96 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private void RefreshArrows()
         {
             var selectedArrow = SelectedArrow;
-            Arrows.Clear();
-            foreach (var node in Nodes)
+            var desiredArrows = BuildArrowViewModels();
+
+            foreach (var arrow in Arrows.ToList())
+                if (!desiredArrows.Any(x => x.HasSameIdentity(arrow)))
+                    Arrows.Remove(arrow);
+
+            for (var i = 0; i < desiredArrows.Count; i++)
             {
-                foreach (var reference in node.InternalFlowBlock.ReferencedFlowBlocks)
+                var desiredArrow = desiredArrows[i];
+                var existingArrow = Arrows.FirstOrDefault(x => desiredArrow.HasSameIdentity(x));
+                if (existingArrow != null)
                 {
-                    if (_nodesByFlowBlock.TryGetValue(reference, out var from))
-                        AddArrow(new FlowBlockArrowViewModel(from, node, "invoke"), selectedArrow);
+                    var currentIndex = Arrows.IndexOf(existingArrow);
+                    if (currentIndex != i)
+                        Arrows.Move(currentIndex, i);
+
+                    continue;
                 }
 
-                if (node.InternalFlowBlock.HasIterationContext &&
-                    node.InternalFlowBlock.IterationContext != null &&
-                    _nodesByFlowBlock.TryGetValue(node.InternalFlowBlock.IterationContext, out var iterationSource))
+                if (desiredArrow.HasSameIdentity(selectedArrow))
                 {
-                    AddArrow(new FlowBlockArrowViewModel(node, iterationSource, "iteration", 10d), selectedArrow);
+                    desiredArrow.IsSelected = true;
+                    _selectedArrow = desiredArrow;
                 }
 
-                if (node.InternalFlowBlock is RecursiveCallFlowBlock recursive &&
-                    recursive.TargetFlowBlock != null &&
-                    _nodesByFlowBlock.TryGetValue(recursive.TargetFlowBlock, out var recursionTarget))
-                {
-                    AddArrow(new FlowBlockArrowViewModel(
-                        node,
-                        recursionTarget,
-                        "recursive",
-                        18d,
-                        FlowBloxResourceUtil.GetLocalizedString("ArrowLabel_RecursiveCall", typeof(Resources.ProjectPanel))), selectedArrow);
-                }
+                Arrows.Insert(i, desiredArrow);
             }
 
             if (selectedArrow != null && !Arrows.Any(x => x.IsSelected))
                 SelectedArrow = null;
         }
 
-        private void AddArrow(FlowBlockArrowViewModel arrow, FlowBlockArrowViewModel selectedArrow)
+        private void RefreshArrowsFor(params BaseFlowBlock[] flowBlocks)
         {
-            if (arrow.HasSameIdentity(selectedArrow))
+            if (flowBlocks == null || flowBlocks.Length == 0)
             {
-                arrow.IsSelected = true;
-                _selectedArrow = arrow;
+                RefreshArrows();
+                return;
             }
 
-            Arrows.Add(arrow);
+            var affectedNodes = flowBlocks
+                .Where(x => x != null)
+                .Select(x => _nodesByFlowBlock.TryGetValue(x, out var node) ? node : null)
+                .Where(x => x != null)
+                .ToHashSet();
+
+            if (affectedNodes.Count == 0)
+                return;
+
+            RefreshArrows();
+
+            foreach (var arrow in Arrows)
+            {
+                if (affectedNodes.Contains(arrow.From) || affectedNodes.Contains(arrow.To))
+                    arrow.NotifyGeometryChanged();
+            }
+        }
+
+        private List<FlowBlockArrowViewModel> BuildArrowViewModels()
+        {
+            var arrows = new List<FlowBlockArrowViewModel>();
+            foreach (var node in Nodes)
+            {
+                foreach (var reference in node.InternalFlowBlock.ReferencedFlowBlocks)
+                {
+                    if (_nodesByFlowBlock.TryGetValue(reference, out var from))
+                        arrows.Add(new FlowBlockArrowViewModel(from, node, "invoke"));
+                }
+
+                if (node.InternalFlowBlock.HasIterationContext &&
+                    node.InternalFlowBlock.IterationContext != null &&
+                    _nodesByFlowBlock.TryGetValue(node.InternalFlowBlock.IterationContext, out var iterationSource))
+                {
+                    arrows.Add(new FlowBlockArrowViewModel(node, iterationSource, "iteration", 10d));
+                }
+
+                if (node.InternalFlowBlock is RecursiveCallFlowBlock recursive &&
+                    recursive.TargetFlowBlock != null &&
+                    _nodesByFlowBlock.TryGetValue(recursive.TargetFlowBlock, out var recursionTarget))
+                {
+                    arrows.Add(new FlowBlockArrowViewModel(
+                        node,
+                        recursionTarget,
+                        "recursive",
+                        18d,
+                        FlowBloxResourceUtil.GetLocalizedString("ArrowLabel_RecursiveCall", typeof(Resources.ProjectPanel))));
+                }
+            }
+
+            return arrows;
         }
 
         private void SelectAll()
@@ -1150,7 +1254,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 return;
 
             ShowPropertyWindow(SelectedNode.InternalFlowBlock);
-            SelectedNode.RefreshRows();
         }
 
         public void OpenRowTarget(FlowBlockRenderRowViewModel row)
@@ -1162,7 +1265,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 row.Target,
                 row.PreselectedProperty,
                 row.PreselectedInstance as FlowBloxReactiveObject);
-            Refresh();
         }
 
         public void SelectRow(FlowBlockRenderRowViewModel row)
@@ -1221,7 +1323,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             };
             action.Invoke();
             _componentProvider?.GetCurrentChangelist()?.AddChange(action);
-            SelectedNode.NotifyRuntimeStateChanged();
             OnPropertyChanged(nameof(ToggleBreakpointHeader));
         }
 
@@ -1242,7 +1343,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 };
                 action.Invoke();
                 _componentProvider?.GetCurrentChangelist()?.AddChange(action);
-                SelectedNode.RefreshRows();
             }
         }
 
@@ -1260,7 +1360,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             };
             action.Invoke();
             _componentProvider?.GetCurrentChangelist()?.AddChange(action);
-            SelectedNode.RefreshRows();
         }
 
         private void ShowInputInsight()
@@ -1293,7 +1392,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 return;
 
             ShowDialog(new ManageNotificationsWindow(SelectedNode.InternalFlowBlock));
-            SelectedNode.NotifyRuntimeStateChanged();
         }
 
         private void RemoveConnection(FlowBlockArrowViewModel arrow)
@@ -1545,6 +1643,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             foreach (var node in Nodes)
             {
                 node.PropertyChanged -= Node_PropertyChanged;
+                node.InternalFlowBlock.ComponentChanged -= FlowBlock_ComponentChanged;
+                node.InternalFlowBlock.ReferencedFlowBlocksChanged -= FlowBlock_ReferencedFlowBlocksChanged;
                 node.Dispose();
             }
 

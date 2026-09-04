@@ -159,8 +159,6 @@ namespace FlowBlox.AppWindow
             {
                 case Keys.Escape:
                     return projectPanelWpfControl.ExecuteEscapeShortcut();
-                case Keys.F5:
-                    return projectPanelWpfControl.ExecuteRefreshShortcut();
                 case Keys.Delete:
                     return projectPanelWpfControl.ExecuteDeleteShortcut();
                 case Keys.Control | Keys.C:

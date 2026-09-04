@@ -33,14 +33,6 @@ namespace FlowBlox.AppWindow.Contents
             _managedObjectsViewControl.AfterProjectFullyInitialized();
         }
 
-        internal void RefreshData()
-        {
-            if (_managedObjectsViewControl.DataContext is FlowBlox.UICore.ViewModels.ManagedObjectsViewModel vm)
-            {
-                vm.RefreshCommand.Execute(null);
-            }
-        }
-
         internal void UpdateUI()
         {
         }
