@@ -3748,6 +3748,12 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
 	<data name="AssistantConfiguration_MinLatestMessages_Tooltip" xml:space="preserve">
 		<value>Minimale Anzahl neuester Nachrichten, die auch bei überschrittenem geschätztem Tokenbudget unverändert behalten werden.</value>
 	</data>
+	<data name="AssistantConfiguration_SummaryCompactionRate" xml:space="preserve">
+		<value>Verdichtungsrate der Zusammenfassung</value>
+	</data>
+	<data name="AssistantConfiguration_SummaryCompactionRate_Tooltip" xml:space="preserve">
+		<value>Anteil der zusammenfassbaren Konversationsnachrichten, der auf einmal komprimiert wird, sobald der Assistent die Zusammenfassung aktualisieren muss. Zum Beispiel komprimiert 0,4 insgesamt 40%, behält aber weiterhin die konfigurierte Mindestanzahl neuester Nachrichten unverändert bei.</value>
+	</data>
 	<data name="AssistantConfiguration_MaxContextTokens" xml:space="preserve">
 		<value>Maximale Kontext-Tokens</value>
 	</data>

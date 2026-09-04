@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:aiModels="clr-namespace:FlowBlox.AIAssistant.Models;assembly=FlowBlox.AIAssistant"
              xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
              mc:Ignorable="d"
@@ -209,7 +210,13 @@
                 CornerRadius="10"
                 Padding="6">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
                 <ListBox x:Name="TranscriptListBox"
+                         Grid.Row="0"
                          ItemsSource="{Binding Transcript}"
                          BorderThickness="0"
                          Background="Transparent"
@@ -263,6 +270,7 @@
                 </ListBox>
 
                 <StackPanel IsHitTestVisible="False"
+                            Grid.Row="0"
                             Opacity="0.16"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
@@ -287,6 +295,29 @@
                                HorizontalAlignment="Center"
                                Margin="0,8,0,0" />
                 </StackPanel>
+
+                <Border Grid.Row="1"
+                        Margin="2,4,2,0"
+                        Padding="8,6"
+                        CornerRadius="8"
+                        Background="#FFF4EEFF"
+                        BorderBrush="#FFD9C7FF"
+                        BorderThickness="1"
+                        Visibility="{Binding HasCommunicationStatus, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <mah:ProgressRing IsActive="{Binding HasCommunicationStatus}"
+                                          Width="16"
+                                          Height="16"
+                                          MinWidth="16"
+                                          MinHeight="16"
+                                          Margin="0,0,8,0"
+                                          Foreground="#FF7C3AED" />
+                        <TextBlock Text="{Binding CommunicationStatusText}"
+                                   VerticalAlignment="Center"
+                                   Foreground="#FF4C1D95" />
+                    </StackPanel>
+                </Border>
             </Grid>
         </Border>
 

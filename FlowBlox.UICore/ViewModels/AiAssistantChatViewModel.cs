@@ -41,6 +41,7 @@ namespace FlowBlox.UICore.ViewModels
         private string? _currentHistoryFilePath;
         private bool _canGoBackToHistory;
         private int _estimatedUsedTokens;
+        private string _communicationStatusText = string.Empty;
 
         public ObservableCollection<AssistantTranscriptLine> Transcript { get; } = new ObservableCollection<AssistantTranscriptLine>();
         public RelayCommand NewHistoryCommand { get; }
@@ -121,6 +122,23 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public bool HasEstimatedUsedTokens => EstimatedUsedTokens > 0;
+        public string CommunicationStatusText
+        {
+            get => _communicationStatusText;
+            private set
+            {
+                var normalizedValue = value ?? string.Empty;
+                if (string.Equals(_communicationStatusText, normalizedValue, StringComparison.Ordinal))
+                    return;
+
+                _communicationStatusText = normalizedValue;
+                OnPropertyChanged(nameof(CommunicationStatusText));
+                OnPropertyChanged(nameof(HasCommunicationStatus));
+            }
+        }
+
+        public bool HasCommunicationStatus => !string.IsNullOrWhiteSpace(CommunicationStatusText);
+
         public string EstimatedUsedTokensText => string.Format(
             CultureInfo.CurrentCulture,
             FlowBloxResourceUtil.GetLocalizedString("TokenMonitor_Format", typeof(Resources.AiAssistantChatView)),
@@ -157,6 +175,7 @@ namespace FlowBlox.UICore.ViewModels
                 FlowBloxLogManager.Instance.GetLogger());
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged += Service_EstimatedUsedTokensChanged;
+            _service.CommunicationStatusChanged += Service_CommunicationStatusChanged;
 
             NewHistoryCommand = new RelayCommand(() => NewHistoryRequested?.Invoke(this, EventArgs.Empty), () => !IsBusy);
             BackToHistoryCommand = new RelayCommand(RequestHistoryOverview, () => CanGoBackToHistory);
@@ -240,6 +259,7 @@ namespace FlowBlox.UICore.ViewModels
 
                 _cts?.Dispose();
                 _cts = null;
+                ClearCommunicationStatus();
 
                 SaveCurrentHistory();
                 CapturePromptUndoRedoState(promptCompleted, stateBeforePrompt);
@@ -348,6 +368,18 @@ namespace FlowBlox.UICore.ViewModels
             EstimatedUsedTokens = estimatedUsedTokens;
         }
 
+        private void Service_CommunicationStatusChanged(object? sender, AssistantCommunicationStatusChangedEventArgs e)
+        {
+            var text = e?.IsVisible == true ? e.Text : string.Empty;
+            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
+            {
+                _uiContext.Post(_ => CommunicationStatusText = text, null);
+                return;
+            }
+
+            CommunicationStatusText = text;
+        }
+
         private void ResetTokenUsage()
         {
             _service.ResetEstimatedUsedTokens();
@@ -447,6 +479,7 @@ namespace FlowBlox.UICore.ViewModels
             _service.ResetSession();
             Transcript.Clear();
             NotifyTranscriptStateChanged();
+            ClearCommunicationStatus();
             _currentHistory = new AiAssistantHistoryDocument
             {
                 HistoryGuid = Guid.NewGuid(),
@@ -476,6 +509,7 @@ namespace FlowBlox.UICore.ViewModels
 
             _service.RestoreSession(history);
             EstimatedUsedTokens = _service.EstimatedUsedTokens;
+            ClearCommunicationStatus();
             NotifyTranscriptStateChanged();
             CurrentInput = string.Empty;
         }
@@ -571,6 +605,7 @@ namespace FlowBlox.UICore.ViewModels
             _service.ResetSession();
             Transcript.Clear();
             NotifyTranscriptStateChanged();
+            ClearCommunicationStatus();
             _currentHistory = null;
             _currentHistoryFilePath = null;
             RefreshHistories();
@@ -588,6 +623,11 @@ namespace FlowBlox.UICore.ViewModels
         private void NotifyTranscriptStateChanged()
         {
             OnPropertyChanged(nameof(ShowIntroHeader));
+        }
+
+        private void ClearCommunicationStatus()
+        {
+            CommunicationStatusText = string.Empty;
         }
 
         public void ConfigureProjectStateAccess(
@@ -652,6 +692,7 @@ namespace FlowBlox.UICore.ViewModels
 
             _service.TranscriptLineAdded -= Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged -= Service_EstimatedUsedTokensChanged;
+            _service.CommunicationStatusChanged -= Service_CommunicationStatusChanged;
         }
     }
 }

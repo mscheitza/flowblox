@@ -3805,6 +3805,12 @@ If a Join collector should aggregate links across all page iterations:
 	<data name="AssistantConfiguration_MinLatestMessages_Tooltip" xml:space="preserve">
 		<value>Minimum number of latest messages kept verbatim even if the approximate token budget is exceeded.</value>
 	</data>
+	<data name="AssistantConfiguration_SummaryCompactionRate" xml:space="preserve">
+		<value>Summary compaction rate</value>
+	</data>
+	<data name="AssistantConfiguration_SummaryCompactionRate_Tooltip" xml:space="preserve">
+		<value>Fraction of summarizable conversation messages compressed at once when the assistant needs to update the summary. For example, 0.4 compresses 40% while still keeping the configured minimum latest messages verbatim.</value>
+	</data>
 	<data name="AssistantConfiguration_MaxContextTokens" xml:space="preserve">
 		<value>Maximum context tokens</value>
 	</data>

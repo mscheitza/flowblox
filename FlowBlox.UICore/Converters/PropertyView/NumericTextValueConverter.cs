@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
 
@@ -7,6 +8,9 @@ namespace FlowBlox.UICore.Converters.PropertyView
 {
     public sealed class NumericTextValueConverter : IValueConverter
     {
+        private static readonly Regex IntegerTextRegex = new(@"^[+-]?\d*$", RegexOptions.Compiled);
+        private static readonly Regex FloatingPointTextRegex = new(@"^[+-]?\d*(?:[,.]\d*)?$", RegexOptions.Compiled);
+
         private readonly Type _targetType;
         private readonly Type _underlyingType;
         private readonly bool _isNullable;
@@ -41,54 +45,87 @@ namespace FlowBlox.UICore.Converters.PropertyView
                 return Binding.DoNothing;
             }
 
-            var currentCulture = culture ?? CultureInfo.CurrentCulture;
             var invariant = CultureInfo.InvariantCulture;
 
             if (_underlyingType == typeof(int))
             {
-                if (int.TryParse(text, NumberStyles.Integer, currentCulture, out var parsedCurrent))
-                    return parsedCurrent;
+                if (!IntegerTextRegex.IsMatch(text))
+                    return DependencyProperty.UnsetValue;
 
-                if (int.TryParse(text, NumberStyles.Integer, invariant, out var parsedInvariant))
-                    return parsedInvariant;
+                if (IsSignOnly(text))
+                    return Binding.DoNothing;
+
+                if (int.TryParse(text, NumberStyles.Integer, invariant, out var parsed))
+                    return parsed;
 
                 return DependencyProperty.UnsetValue;
             }
 
             if (_underlyingType == typeof(long))
             {
-                if (long.TryParse(text, NumberStyles.Integer, currentCulture, out var parsedCurrent))
-                    return parsedCurrent;
+                if (!IntegerTextRegex.IsMatch(text))
+                    return DependencyProperty.UnsetValue;
 
-                if (long.TryParse(text, NumberStyles.Integer, invariant, out var parsedInvariant))
-                    return parsedInvariant;
+                if (IsSignOnly(text))
+                    return Binding.DoNothing;
+
+                if (long.TryParse(text, NumberStyles.Integer, invariant, out var parsed))
+                    return parsed;
 
                 return DependencyProperty.UnsetValue;
             }
 
             if (_underlyingType == typeof(float))
             {
-                if (float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, currentCulture, out var parsedCurrent))
-                    return parsedCurrent;
+                if (!FloatingPointTextRegex.IsMatch(text))
+                    return DependencyProperty.UnsetValue;
 
-                if (float.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, invariant, out var parsedInvariant))
-                    return parsedInvariant;
+                if (IsIncompleteFloatingPointText(text))
+                    return Binding.DoNothing;
+
+                if (float.TryParse(NormalizeDecimalSeparator(text), NumberStyles.Float, invariant, out var parsed))
+                    return (float)parsed;
 
                 return DependencyProperty.UnsetValue;
             }
 
             if (_underlyingType == typeof(double))
             {
-                if (double.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, currentCulture, out var parsedCurrent))
-                    return parsedCurrent;
+                if (!FloatingPointTextRegex.IsMatch(text))
+                    return DependencyProperty.UnsetValue;
 
-                if (double.TryParse(text, NumberStyles.Float | NumberStyles.AllowThousands, invariant, out var parsedInvariant))
-                    return parsedInvariant;
+                if (IsIncompleteFloatingPointText(text))
+                    return Binding.DoNothing;
+
+                if (double.TryParse(NormalizeDecimalSeparator(text), NumberStyles.Float, invariant, out var parsed))
+                    return parsed;
 
                 return DependencyProperty.UnsetValue;
             }
 
             return DependencyProperty.UnsetValue;
+        }
+
+        private static string NormalizeDecimalSeparator(string text) => text.Replace(',', '.');
+
+        private static bool IsSignOnly(string text) => text is "+" or "-";
+
+        private static bool IsIncompleteFloatingPointText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return false;
+
+            var trimmed = text.Trim();
+            if (trimmed is "+" or "-" or "." or "," or "+." or "-." or "+," or "-,")
+                return true;
+
+            if (trimmed.EndsWith(".", StringComparison.Ordinal) ||
+                trimmed.EndsWith(",", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

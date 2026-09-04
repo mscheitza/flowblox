@@ -18,8 +18,12 @@ namespace FlowBlox.AIAssistant.Builder
                 Content =
                     "You maintain a compact, durable structured summary for the FlowBlox AI Assistant conversation. " +
                     "Merge only the provided new messages into the current summary and return the full updated summary. " +
-                    "Use exactly these Markdown sections: Goals, Decisions, Completed Changes, Open Points, User Preferences, Provider And Configuration Constraints, Important Identifiers. " +
-                    "Use concise bullet points. Write '(none)' for empty sections. Do not include chat messages verbatim unless an exact identifier or name is important."
+                    "Use exactly these Markdown sections: Goals, Decisions, Completed Changes, Open Points, User Preferences, Provider And Configuration Constraints, Important Identifiers, Tool API Working Memory. " +
+                    "Use concise bullet points. Write '(none)' for empty sections. Do not include chat messages verbatim unless an exact identifier, property path, type name, resolver value, tool name, or error message is important. " +
+                    "In Tool API Working Memory, preserve reusable technical facts learned from tool responses, especially GetTypeKindsInfo, GetManagedObjectKindsInfo, GetComponentSnapshot, GetFlowBlockSnapshot, UpdateFlowBlock, UpdateManagedObject, ConnectFlowBlocks, and failed tool calls. " +
+                    "Keep exact FlowBlox type names, property/update paths, collection paths, supported enum values, placeholder names, option names, resolver syntax and concrete resolver values like {\"resolveFieldElementByFQName\":\"$FlowBlock::Field\"}, referenced flow block names, connection direction, selection-filter constraints, and design hints needed for later updates or connections. " +
+                    "Prefer compact grouped bullets by FlowBlock/ManagedObject/type. " +
+                    "Remove obsolete technical facts when newer tool responses clearly supersede them."
             });
 
             var sb = new StringBuilder();

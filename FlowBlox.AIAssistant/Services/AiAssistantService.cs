@@ -31,6 +31,7 @@ namespace FlowBlox.AIAssistant.Services
 
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
         public event EventHandler<int>? EstimatedUsedTokensChanged;
+        public event EventHandler<AssistantCommunicationStatusChangedEventArgs>? CommunicationStatusChanged;
 
         public AiAssistantService(
             IAiExecutor executor,
@@ -191,7 +192,6 @@ namespace FlowBlox.AIAssistant.Services
         public async Task<AssistantResult> GenerateProjectAsync(string userPrompt, CancellationToken ct)
         {
             var result = new AssistantResult();
-            AddTranscript(result, AssistantTranscriptKind.Status, "Running...");
 
             if (string.IsNullOrWhiteSpace(userPrompt))
             {
@@ -225,6 +225,10 @@ namespace FlowBlox.AIAssistant.Services
                 config.MinLatestMessages,
                 AssistantConfigurationLimits.MinLatestMessages,
                 maxLatestMessages);
+            var summaryCompactionRate = Math.Clamp(
+                config.SummaryCompactionRate,
+                AssistantConfigurationLimits.MinSummaryCompactionRate,
+                AssistantConfigurationLimits.MaxSummaryCompactionRate);
             var tokenBudget = BuildTokenBudget(config);
             var session = GetOrCreateSession();
             _outputFormatFeedbackQueue.ClearIncorrectOutputFormatData();
@@ -246,8 +250,6 @@ namespace FlowBlox.AIAssistant.Services
             var hasExecutedLayoutRelevantToolCall = false;
             protocolWriter?.AppendAiAssistantServiceText("System prompt prepared", systemPrompt);
             protocolWriter?.AppendAiAssistantServiceText("Session bootstrap prompt prepared", sessionBootstrapPrompt);
-
-            AddTranscript(result, AssistantTranscriptKind.Status, "Thinking...");
 
             try
             {
@@ -288,7 +290,13 @@ namespace FlowBlox.AIAssistant.Services
                         minLatestMessages,
                         config.Provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
                         tokenBudget);
-                    summaryTargetMessageCount = Math.Max(summaryTargetMessageCount, chatRequestResult.FirstIncludedHistoryMessageIndex);
+                    summaryTargetMessageCount = Math.Max(
+                        summaryTargetMessageCount,
+                        CalculateSummaryCompactionTarget(
+                            session,
+                            chatRequestResult.FirstIncludedHistoryMessageIndex,
+                            minLatestMessages,
+                            summaryCompactionRate));
                     await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
 
                     chatRequestResult = AssistantChatRequestBuilder.Build(
@@ -305,9 +313,10 @@ namespace FlowBlox.AIAssistant.Services
                     if (toolRound == 1)
                         AppendSingleSessionMessage(session, "user", initialUserPrompt);
 
-                    var exec = await _executor.ExecuteChatAsync(
+                    var exec = await ExecuteChatWithCommunicationStatusAsync(
                         chatRequest,
                         config,
+                        "Thinking...",
                         ct).ConfigureAwait(false);
                     AddEstimatedTokenUsage(session, EstimateTokenUsage(chatRequest, exec, tokenBudget, config.Provider));
                     result.RawModelOutput = exec.RawOutput ?? exec.OutputText ?? string.Empty;
@@ -616,7 +625,11 @@ namespace FlowBlox.AIAssistant.Services
 
                 var summaryRequest = AssistantSummaryRequestBuilder.Build(currentSummary, messagesToSummarize);
                 var tokenBudget = BuildTokenBudget(config);
-                var summaryResult = await _executor.ExecuteChatAsync(summaryRequest, config, ct).ConfigureAwait(false);
+                var summaryResult = await ExecuteChatWithCommunicationStatusAsync(
+                    summaryRequest,
+                    config,
+                    "Summarize...",
+                    ct).ConfigureAwait(false);
                 AddEstimatedTokenUsage(session, EstimateTokenUsage(summaryRequest, summaryResult, tokenBudget, config.Provider));
                 if (!summaryResult.Success || string.IsNullOrWhiteSpace(summaryResult.OutputText))
                 {
@@ -639,6 +652,33 @@ namespace FlowBlox.AIAssistant.Services
             catch (Exception ex)
             {
                 _logger?.Warn($"AI Assistant summary update failed: {ex.Message}");
+            }
+        }
+
+        private int CalculateSummaryCompactionTarget(
+            AssistantSessionState session,
+            int firstIncludedHistoryMessageIndex,
+            int latestMessagesToKeep,
+            double compactionRate)
+        {
+            if (session == null)
+                return 0;
+
+            lock (_sessionSync)
+            {
+                if (firstIncludedHistoryMessageIndex <= session.SummarizedMessageCount)
+                    return session.SummarizedMessageCount;
+
+                var clampedLatestMessagesToKeep = Math.Clamp(latestMessagesToKeep, 0, session.Messages.Count);
+                var summarizableMessageCount = Math.Max(
+                    0,
+                    session.Messages.Count - clampedLatestMessagesToKeep - session.SummarizedMessageCount);
+                var rateCompactionTarget = session.SummarizedMessageCount +
+                                           (int)Math.Ceiling(summarizableMessageCount * compactionRate);
+
+                return Math.Max(
+                    firstIncludedHistoryMessageIndex,
+                    rateCompactionTarget);
             }
         }
 
@@ -714,6 +754,32 @@ namespace FlowBlox.AIAssistant.Services
 
         private void RaiseEstimatedUsedTokensChanged(int estimatedUsedTokens)
             => EstimatedUsedTokensChanged?.Invoke(this, Math.Max(0, estimatedUsedTokens));
+
+        private async Task<AiExecutorResult> ExecuteChatWithCommunicationStatusAsync(
+            AIChatRequest request,
+            AssistantConfiguration config,
+            string statusText,
+            CancellationToken ct)
+        {
+            RaiseCommunicationStatus(statusText);
+            try
+            {
+                return await _executor.ExecuteChatAsync(request, config, ct).ConfigureAwait(false);
+            }
+            finally
+            {
+                RaiseCommunicationStatus(null);
+            }
+        }
+
+        private void RaiseCommunicationStatus(string? text)
+        {
+            var args = string.IsNullOrWhiteSpace(text)
+                ? AssistantCommunicationStatusChangedEventArgs.Hidden
+                : new AssistantCommunicationStatusChangedEventArgs(text);
+
+            CommunicationStatusChanged?.Invoke(this, args);
+        }
 
         private static ProjectAttachmentInformation ResolveProjectAttachmentInformation(
             bool attachProjectJsonAutomatically,

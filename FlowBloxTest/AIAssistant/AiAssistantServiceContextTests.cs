@@ -14,7 +14,7 @@ namespace FlowBloxTest.AIAssistant
         public async Task GenerateProjectAsync_SummarizesOnlyMessagesLeavingLatestWindow()
         {
             var executor = new RecordingAiExecutor();
-            var service = CreateService(executor, CreateConfiguration(maxLatestMessages: 2));
+            var service = CreateService(executor, CreateConfiguration(maxLatestMessages: 2, minLatestMessages: 2));
 
             await service.GenerateProjectAsync("USER-1", CancellationToken.None);
             await service.GenerateProjectAsync("USER-2", CancellationToken.None);
@@ -28,6 +28,33 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(summaryRequests[0].Messages.Single().Content, "USER-1");
             AssertContains(summaryRequests[0].Messages.Single().Content, "ASSISTANT-USER-1");
             AssertDoesNotContain(summaryRequests[0].Messages.Single().Content, "USER-2");
+        }
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_CompactsSummaryByConfiguredRateWhenSummaryIsRequired()
+        {
+            var executor = new RecordingAiExecutor();
+            var service = CreateService(executor, CreateConfiguration(
+                maxLatestMessages: 6,
+                minLatestMessages: 2,
+                summaryCompactionRate: 0.4d));
+
+            await service.GenerateProjectAsync("USER-1", CancellationToken.None);
+            await service.GenerateProjectAsync("USER-2", CancellationToken.None);
+            await service.GenerateProjectAsync("USER-3", CancellationToken.None);
+            await service.GenerateProjectAsync("USER-4", CancellationToken.None);
+            await service.GenerateProjectAsync("USER-5", CancellationToken.None);
+
+            var summaryRequests = executor.Requests
+                .Where(x => x.Source == "FlowBloxAIAssistantSummary")
+                .ToList();
+
+            Assert.AreEqual(1, summaryRequests.Count);
+            var summaryContent = summaryRequests[0].Messages.Single().Content;
+            AssertContains(summaryContent, "USER-1");
+            AssertContains(summaryContent, "ASSISTANT-USER-1");
+            AssertContains(summaryContent, "USER-2");
+            AssertDoesNotContain(summaryContent, "ASSISTANT-USER-2");
         }
 
         [TestMethod]
@@ -187,6 +214,12 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(systemMessage, "Completed Changes");
             AssertContains(systemMessage, "Open Points");
             AssertContains(systemMessage, "Provider And Configuration Constraints");
+            AssertContains(systemMessage, "Tool API Working Memory");
+            AssertContains(systemMessage, "GetTypeKindsInfo");
+            AssertContains(systemMessage, "property/update paths");
+            AssertContains(systemMessage, "placeholder names");
+            AssertContains(systemMessage, "option names");
+            AssertContains(systemMessage, "selection-filter constraints");
             AssertContains(request.Messages.Single().Content, "ASSISTANT-REQUEST-1");
             AssertContains(request.Messages.Single().Content, "TOOL-RESPONSE-1");
             AssertContains(request.Messages.Single().Content, "MessagePair (AssistantRequest + ToolApiResponse):");
@@ -428,7 +461,10 @@ namespace FlowBloxTest.AIAssistant
                 configurationProvider: () => configuration);
         }
 
-        private static AssistantConfiguration CreateConfiguration(int maxLatestMessages)
+        private static AssistantConfiguration CreateConfiguration(
+            int maxLatestMessages,
+            int minLatestMessages = 1,
+            double summaryCompactionRate = 0.4d)
         {
             return new AssistantConfiguration
             {
@@ -437,7 +473,8 @@ namespace FlowBloxTest.AIAssistant
                 MaxContextTokens = 100000,
                 ReservedResponseTokens = 0,
                 ApproximateCharactersPerToken = 4,
-                MinLatestMessages = 1,
+                MinLatestMessages = minLatestMessages,
+                SummaryCompactionRate = summaryCompactionRate,
                 EnableAutomaticAdjustment = false
             };
         }
