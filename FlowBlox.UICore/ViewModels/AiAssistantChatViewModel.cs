@@ -209,12 +209,15 @@ namespace FlowBlox.UICore.ViewModels
                 Timestamp = DateTime.Now
             });
 
-            IsBusy = true;
-            _runtimeStateService?.SetExternalProjectEditActive(true);
-            _cts = new CancellationTokenSource();
+            var externalProjectEditActivated = false;
 
             try
             {
+                IsBusy = true;
+                externalProjectEditActivated = true;
+                _runtimeStateService?.SetExternalProjectEditActive(true);
+                _cts = new CancellationTokenSource();
+
                 await _service.GenerateProjectAsync(input, _cts.Token);
                 promptCompleted = true;
             }
@@ -238,26 +241,34 @@ namespace FlowBlox.UICore.ViewModels
             }
             finally
             {
-                SaveCurrentHistory();
-
-                if (promptCompleted && stateBeforePrompt != null)
-                {
-                    var stateAfterPrompt = _captureProjectState?.Invoke();
-                    if (stateAfterPrompt != null)
-                    {
-                        _stateBeforeLastPrompt = stateBeforePrompt;
-                        _stateAfterLastPrompt = stateAfterPrompt;
-                        _isPromptStateUndone = false;
-                        RefreshUndoRedoState();
-                    }
-                }
-
                 CurrentInput = string.Empty;
                 IsBusy = false;
-                _runtimeStateService?.SetExternalProjectEditActive(false);
+                if (externalProjectEditActivated)
+                    _runtimeStateService?.SetExternalProjectEditActive(false);
+
                 _cts?.Dispose();
                 _cts = null;
+
+                SaveCurrentHistory();
+                CapturePromptUndoRedoState(promptCompleted, stateBeforePrompt);
             }
+        }
+
+        private void CapturePromptUndoRedoState(
+            bool promptCompleted,
+            AIAssistantProjectStateSnapshot? stateBeforePrompt)
+        {
+            if (!promptCompleted || stateBeforePrompt == null)
+                return;
+
+            var stateAfterPrompt = _captureProjectState?.Invoke();
+            if (stateAfterPrompt == null)
+                return;
+
+            _stateBeforeLastPrompt = stateBeforePrompt;
+            _stateAfterLastPrompt = stateAfterPrompt;
+            _isPromptStateUndone = false;
+            RefreshUndoRedoState();
         }
 
         private void RuntimeStateService_StateChanged(object? sender, Events.RuntimeStateChangedEventArgs e)

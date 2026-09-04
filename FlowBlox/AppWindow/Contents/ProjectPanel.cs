@@ -25,10 +25,12 @@ namespace FlowBlox.AppWindow.Contents
     public partial class ProjectPanel : DockContent
     {
         private const string ResetNotificationsOnRuntimeFinishOptionName = "Grid.ResetNotificationsOnRuntimeFinish";
+        private const int RuntimeFocusUpdateThrottleMilliseconds = 50;
 
         private readonly ElementHost _elementHost;
         private readonly ProjectPanelWpfControl _projectPanelWpfControl;
         private readonly IRuntimeStateService _runtimeStateService;
+        private readonly RuntimeFocusUpdateThrottler _runtimeFocusUpdateThrottler;
         private FlowBloxRuntime _runtime;
         private Thread _runtimeThread;
 
@@ -56,6 +58,10 @@ namespace FlowBlox.AppWindow.Contents
 
             _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
             _projectPanelWpfControl = new ProjectPanelWpfControl();
+            _runtimeFocusUpdateThrottler = new RuntimeFocusUpdateThrottler(
+                this,
+                _projectPanelWpfControl.MarkRuntimeFocus,
+                RuntimeFocusUpdateThrottleMilliseconds);
             _projectPanelWpfControl.ViewModel.ExecuteRuntimeRequested += WpfProjectPanel_ExecuteRuntimeRequested;
             _projectPanelWpfControl.ViewModel.PauseRuntimeRequested += WpfProjectPanel_PauseRuntimeRequested;
             _projectPanelWpfControl.ViewModel.StopRuntimeRequested += WpfProjectPanel_StopRuntimeRequested;
@@ -75,6 +81,7 @@ namespace FlowBlox.AppWindow.Contents
             _projectPanelWpfControl.ViewModel.ExecuteRuntimeRequested -= WpfProjectPanel_ExecuteRuntimeRequested;
             _projectPanelWpfControl.ViewModel.PauseRuntimeRequested -= WpfProjectPanel_PauseRuntimeRequested;
             _projectPanelWpfControl.ViewModel.StopRuntimeRequested -= WpfProjectPanel_StopRuntimeRequested;
+            _runtimeFocusUpdateThrottler.Dispose();
 
             base.OnClosed(e);
         }
@@ -218,15 +225,7 @@ namespace FlowBlox.AppWindow.Contents
         private void Runtime_PauseContinue(bool isPaused) => UpdateUI();
 
         private void Runtime_FocusChanged(BaseFlowBlock flowBlock)
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new FlowBloxRuntime.FocusChangedEventHandler(Runtime_FocusChanged), flowBlock);
-                return;
-            }
-
-            _projectPanelWpfControl.MarkRuntimeFocus(flowBlock);
-        }
+            => _runtimeFocusUpdateThrottler.Schedule(flowBlock);
 
         private void Runtime_Finish(object result)
         {
@@ -247,6 +246,7 @@ namespace FlowBlox.AppWindow.Contents
                 }
             }
 
+            _runtimeFocusUpdateThrottler.ClearPending();
             _projectPanelWpfControl.MarkRuntimeFocus(null);
             _projectPanelWpfControl.RefreshProject();
 

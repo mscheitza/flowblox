@@ -1101,11 +1101,6 @@ namespace FlowBlox.AppWindow
 
         private void Runtime_LogMessageCreated(BaseRuntime runtime, string message, FlowBloxLogLevel logLevel)
         {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new BaseRuntime.LogMessageCreatedEventHandler(Runtime_LogMessageCreated), new object[3] { runtime, message, logLevel });
-                return;
-            }
             _runtimeViewPanel.Append(message, logLevel);
         }
 
