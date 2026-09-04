@@ -34,7 +34,8 @@ namespace FlowBlox.UICore.Operations
 
             var propertyWindow = new PropertyWindow(new PropertyWindowArgs(
                 userFieldObjectManager,
-                readOnly: _runtimeStateService?.IsRuntimeActive == true,
+                readOnly: _runtimeStateService?.IsRuntimeActive == true ||
+                    _runtimeStateService?.IsExternalProjectEditActive == true,
                 deepCopy: false,
                 canSave: false))
             {

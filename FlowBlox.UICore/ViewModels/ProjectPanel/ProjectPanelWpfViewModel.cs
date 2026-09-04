@@ -54,7 +54,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private bool _isTemporaryConnectionMode;
         private bool _isRuntimeActive;
         private bool _isRuntimePaused;
-        private bool _isRuntimeStartBlocked;
+        private bool _isExternalProjectEditActive;
         private readonly List<BaseFlowBlock> _copiedFlowBlocks = new();
         private readonly Dictionary<FlowBlockNodeViewModel, FlowBloxCreateAction> _pendingInsertedCreateActions = new();
         private readonly Dictionary<FlowBlockNodeViewModel, NodeLayoutSnapshot> _historyActionLayoutSnapshots = new();
@@ -75,14 +75,14 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             SelectRightCommand = new RelayCommand(() => SelectDirectional(Direction.Right), CanEditGrid);
             SelectUpCommand = new RelayCommand(() => SelectDirectional(Direction.Up), CanEditGrid);
             SelectDownCommand = new RelayCommand(() => SelectDirectional(Direction.Down), CanEditGrid);
-            AutoLayoutCommand = new RelayCommand(AutoLayout, () => HasProject() && !IsRuntimeActive);
-            DeleteSelectionCommand = new RelayCommand(DeleteSelection, () => HasProject() && SelectedArrow == null && SelectedNodes.Any() && !IsRuntimeActive);
+            AutoLayoutCommand = new RelayCommand(AutoLayout, () => HasProject() && !IsProjectEditingReadOnly);
+            DeleteSelectionCommand = new RelayCommand(DeleteSelection, () => HasProject() && SelectedArrow == null && SelectedNodes.Any() && !IsProjectEditingReadOnly);
             EditSelectionCommand = new RelayCommand(EditSelection, () => SelectedNode != null);
             RefreshCommand = new RelayCommand(Refresh);
             ExecuteRuntimeCommand = new RelayCommand(() => ExecuteRuntimeRequested?.Invoke(this, EventArgs.Empty), () => CanExecuteRuntime);
             PauseRuntimeCommand = new RelayCommand(() => PauseRuntimeRequested?.Invoke(this, EventArgs.Empty), () => CanPauseRuntime);
             StopRuntimeCommand = new RelayCommand(() => StopRuntimeRequested?.Invoke(this, EventArgs.Empty), () => CanStopRuntime);
-            GridSettingsCommand = new RelayCommand(ShowGridSettings, () => HasProject() && (!IsRuntimeActive || IsRuntimePaused));
+            GridSettingsCommand = new RelayCommand(ShowGridSettings, () => HasProject() && !IsExternalProjectEditActive && (!IsRuntimeActive || IsRuntimePaused));
             ToggleBreakpointCommand = new RelayCommand(ToggleBreakpoint, () => SelectedNode != null);
             DefineExecutionIndexCommand = new RelayCommand(DefineExecutionIndex, () => CanManageExecutionIndex);
             RemoveExecutionIndexCommand = new RelayCommand(RemoveExecutionIndex, () => CanManageExecutionIndex);
@@ -94,7 +94,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 parameter => parameter is FlowBlockRenderRowViewModel row && row.CanCopyValue);
             RemoveConnectionCommand = new RelayCommand(
                 parameter => RemoveConnection(parameter as FlowBlockArrowViewModel),
-                parameter => parameter is FlowBlockArrowViewModel arrow && arrow.CanRemove && HasProject() && !IsRuntimeActive);
+                parameter => parameter is FlowBlockArrowViewModel arrow && arrow.CanRemove && HasProject() && !IsProjectEditingReadOnly);
 
             FlowBloxProjectManager.Instance.ProjectChanged += ProjectManager_ProjectChanged;
             if (_runtimeStateService != null)
@@ -103,7 +103,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 UpdateRuntimeState(
                     _runtimeStateService.IsRuntimeActive,
                     _runtimeStateService.IsRuntimePaused,
-                    _runtimeStateService.IsRuntimeStartBlocked);
+                    _runtimeStateService.IsExternalProjectEditActive);
             }
 
             Rebind(FlowBloxProjectManager.Instance.ActiveProject);
@@ -210,6 +210,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
                 _isRuntimeActive = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsProjectEditingReadOnly));
                 OnPropertyChanged(nameof(EditSelectionHeader));
                 OnPropertyChanged(nameof(CanManageExecutionIndex));
                 InvalidateAllCommands();
@@ -233,18 +234,21 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             }
         }
 
-        public bool IsRuntimeStartBlocked
+        public bool IsExternalProjectEditActive
         {
-            get => _isRuntimeStartBlocked;
+            get => _isExternalProjectEditActive;
             private set
             {
-                if (_isRuntimeStartBlocked == value)
+                if (_isExternalProjectEditActive == value)
                     return;
 
-                _isRuntimeStartBlocked = value;
+                _isExternalProjectEditActive = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsProjectEditingReadOnly));
+                OnPropertyChanged(nameof(EditSelectionHeader));
+                OnPropertyChanged(nameof(CanManageExecutionIndex));
                 OnPropertyChanged(nameof(CanExecuteRuntime));
-                ExecuteRuntimeCommand.Invalidate();
+                InvalidateAllCommands();
             }
         }
 
@@ -261,22 +265,23 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public string DeleteGestureText => GetGestureText(Key.Delete);
         public double CanvasWidth => _project?.GridSizeX > 0 ? _project.GridSizeX : DefaultCanvasWidth;
         public double CanvasHeight => _project?.GridSizeY > 0 ? _project.GridSizeY : DefaultCanvasHeight;
-        public string EditSelectionHeader => IsRuntimeActive
+        public bool IsProjectEditingReadOnly => IsRuntimeActive || IsExternalProjectEditActive;
+        public string EditSelectionHeader => IsProjectEditingReadOnly
             ? FlowBloxResourceUtil.GetLocalizedString("ContextMenu_ViewProperties", typeof(Resources.ProjectPanel))
             : FlowBloxResourceUtil.GetLocalizedString("ContextMenu_EditProperties", typeof(Resources.ProjectPanel));
-        public bool CanManageExecutionIndex => SelectedNode != null && SelectedNode.InternalFlowBlock is not NoteFlowBlock && !IsRuntimeActive;
+        public bool CanManageExecutionIndex => SelectedNode != null && SelectedNode.InternalFlowBlock is not NoteFlowBlock && !IsProjectEditingReadOnly;
         public bool CanManageNotifications => SelectedNode?.InternalFlowBlock.NotificationTypes?.Any() == true;
         public bool CanShowInputInsight => SelectedNode?.InternalFlowBlock.InputDataset_CurrentlyProcessing != null;
         public bool CanShowOutputInsight => SelectedNode?.InternalFlowBlock is BaseResultFlowBlock resultFlowBlock &&
                                             resultFlowBlock.OutputDataset_CurrentlyProcessing != null;
         public bool CanStartMarqueeSelection => CanEditGrid() && !IsConnectionMode;
-        public bool CanExecuteRuntime => HasProject() && !IsRuntimeStartBlocked && (!IsRuntimeActive || IsRuntimePaused);
+        public bool CanExecuteRuntime => HasProject() && !IsExternalProjectEditActive && (!IsRuntimeActive || IsRuntimePaused);
         public bool CanPauseRuntime => HasProject() && IsRuntimeActive && !IsRuntimePaused;
         public bool CanStopRuntime => HasProject() && IsRuntimeActive;
         public bool CanCopySelection => SelectedNodes.Any();
-        public bool CanPasteSelection => _copiedFlowBlocks.Count > 0 && HasProject() && !IsRuntimeActive;
+        public bool CanPasteSelection => _copiedFlowBlocks.Count > 0 && HasProject() && !IsProjectEditingReadOnly;
         public bool CanStartConnectionFrom(FlowBlockNodeViewModel node)
-            => node?.InternalFlowBlock is not null and not NoteFlowBlock;
+            => !IsProjectEditingReadOnly && node?.InternalFlowBlock is not null and not NoteFlowBlock;
         public bool CanPreviewConnection(FlowBlockNodeViewModel startNode, FlowBlockNodeViewModel endNode)
             => CanConnect(startNode, endNode);
 
@@ -532,7 +537,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         }
 
         public bool CanCreateFlowBlockFromDrop(IDataObject dataObject)
-            => ResolveDraggedFlowBlockType(dataObject) != null && _registry != null && !IsRuntimeActive;
+            => ResolveDraggedFlowBlockType(dataObject) != null && _registry != null && !IsProjectEditingReadOnly;
 
         public FlowBlockNodeViewModel CreateFlowBlockFromDrop(
             IDataObject dataObject,
@@ -598,7 +603,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
         public void CancelInsertedNode(FlowBlockNodeViewModel node)
         {
-            if (node == null || !Nodes.Contains(node) || IsRuntimeActive)
+            if (node == null || !Nodes.Contains(node) || IsProjectEditingReadOnly)
                 return;
 
             if (_pendingInsertedCreateActions.Remove(node, out var pendingCreateAction))
@@ -1183,7 +1188,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
             var dialog = new FlowBlox.UICore.Views.PropertyWindow(new FlowBlox.UICore.Views.PropertyWindowArgs(
                 target,
-                readOnly: IsRuntimeActive,
+                readOnly: IsProjectEditingReadOnly,
                 preselectedProperty: preselectedProperty,
                 preselectedInstance: preselectedInstance));
             ShowDialog(dialog);
@@ -1443,11 +1448,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             _messageBoxService?.ShowMessageBox(message, title, messageBoxType);
         }
 
-        public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused, bool isRuntimeStartBlocked)
+        public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused, bool isExternalProjectEditActive)
         {
             IsRuntimePaused = isRuntimePaused;
             IsRuntimeActive = isRuntimeActive;
-            IsRuntimeStartBlocked = isRuntimeStartBlocked;
+            IsExternalProjectEditActive = isExternalProjectEditActive;
             OnPropertyChanged(nameof(CanExecuteRuntime));
             OnPropertyChanged(nameof(CanPauseRuntime));
             OnPropertyChanged(nameof(CanStopRuntime));
@@ -1459,7 +1464,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private void RuntimeStateService_StateChanged(object? sender, RuntimeStateChangedEventArgs e)
             => SynchronizationContextHelper.PostToUi(
                 _uiContext,
-                () => UpdateRuntimeState(e.IsRuntimeActive, e.IsRuntimePaused, e.IsRuntimeStartBlocked));
+                () => UpdateRuntimeState(e.IsRuntimeActive, e.IsRuntimePaused, e.IsExternalProjectEditActive));
 
         private static Type ResolveDraggedFlowBlockType(IDataObject dataObject)
         {
@@ -1488,7 +1493,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
         private bool HasProject() => _registry != null && FlowBloxProjectManager.Instance.ActiveProject != null;
 
-        private bool CanEditGrid() => HasProject() && !IsRuntimeActive;
+        private bool CanEditGrid() => HasProject() && !IsProjectEditingReadOnly;
 
         private void NotifyConnectionModeChanged(bool previousValue)
         {

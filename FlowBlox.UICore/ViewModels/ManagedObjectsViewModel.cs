@@ -121,15 +121,15 @@ namespace FlowBlox.UICore.ViewModels
             if (_runtimeStateService != null)
             {
                 _runtimeStateService.StateChanged += RuntimeStateService_StateChanged;
-                SetRuntimeActive(_runtimeStateService.IsRuntimeActive);
+                SetProjectEditingReadOnly(_runtimeStateService.IsRuntimeActive || _runtimeStateService.IsExternalProjectEditActive);
             }
 
             RebindAndRefresh();
         }
 
-        public void SetRuntimeActive(bool isRuntimeActive)
+        public void SetProjectEditingReadOnly(bool isReadOnly)
         {
-            IsReadOnly = isRuntimeActive;
+            IsReadOnly = isReadOnly;
             // During project shutdown the shell may still propagate runtime state updates.
             // Avoid rebuilding entries/actions against a registry that has already been detached.
             if (_project == null || _registry == null)
@@ -146,7 +146,9 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         private void RuntimeStateService_StateChanged(object? sender, RuntimeStateChangedEventArgs e)
-            => SynchronizationContextHelper.PostToUi(_uiContext, () => SetRuntimeActive(e.IsRuntimeActive));
+            => SynchronizationContextHelper.PostToUi(
+                _uiContext,
+                () => SetProjectEditingReadOnly(e.IsRuntimeActive || e.IsExternalProjectEditActive));
 
         public void AfterProjectFullyInitialized()
         {

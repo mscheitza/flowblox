@@ -35,6 +35,7 @@ namespace FlowBlox.AppWindow.Contents
         internal ProjectPanelWpfControl WpfControl => _projectPanelWpfControl;
 
         public bool IsRuntimeActive => _runtimeStateService?.IsRuntimeActive ?? (_runtime?.Running == true && !_runtime.Aborted);
+        public bool IsExternalProjectEditActive => _runtimeStateService?.IsExternalProjectEditActive == true;
 
         public string RuntimeLogfilePath => ((_runtimeStateService?.CurrentRuntime ?? _runtime) as FlowBloxRuntime)?.GetLogfilePath();
 
@@ -89,7 +90,7 @@ namespace FlowBlox.AppWindow.Contents
             _projectPanelWpfControl.UpdateRuntimeState(
                 IsRuntimeActive,
                 _runtime?.Pause == true,
-                _runtimeStateService?.IsRuntimeStartBlocked == true);
+                IsExternalProjectEditActive);
             if (gridUpdate)
                 _projectPanelWpfControl.RefreshProject();
 
@@ -173,7 +174,7 @@ namespace FlowBlox.AppWindow.Contents
             if (FlowBloxProjectManager.Instance.ActiveProject == null)
                 return;
 
-            if (_runtimeStateService?.IsRuntimeStartBlocked == true)
+            if (IsExternalProjectEditActive)
                 return;
 
             if (IsRuntimeActive && _runtime?.Pause == true)

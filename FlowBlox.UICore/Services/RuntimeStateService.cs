@@ -13,7 +13,7 @@ namespace FlowBlox.UICore.Services
         private BaseRuntime _currentRuntime;
         private bool _isRuntimeActive;
         private bool _isRuntimePaused;
-        private bool _isRuntimeStartBlocked;
+        private bool _isExternalProjectEditActive;
 
         public BaseRuntime CurrentRuntime
         {
@@ -54,15 +54,15 @@ namespace FlowBlox.UICore.Services
             }
         }
 
-        public bool IsRuntimeStartBlocked
+        public bool IsExternalProjectEditActive
         {
-            get => _isRuntimeStartBlocked;
+            get => _isExternalProjectEditActive;
             private set
             {
-                if (_isRuntimeStartBlocked == value)
+                if (_isExternalProjectEditActive == value)
                     return;
 
-                _isRuntimeStartBlocked = value;
+                _isExternalProjectEditActive = value;
                 OnPropertyChanged();
             }
         }
@@ -72,7 +72,7 @@ namespace FlowBlox.UICore.Services
         public event EventHandler<RuntimeStateChangedEventArgs> RuntimeStarted;
         public event EventHandler<RuntimeStateChangedEventArgs> RuntimePausedChanged;
         public event EventHandler<RuntimeStateChangedEventArgs> RuntimeFinished;
-        public event EventHandler<RuntimeStateChangedEventArgs> RuntimeStartBlockedChanged;
+        public event EventHandler<RuntimeStateChangedEventArgs> ExternalProjectEditActiveChanged;
 
         public void AttachRuntime(BaseRuntime runtime)
         {
@@ -105,14 +105,14 @@ namespace FlowBlox.UICore.Services
             UpdateState(previousRuntime, false, false, RuntimeFinished);
         }
 
-        public void SetRuntimeStartBlocked(bool isBlocked)
+        public void SetExternalProjectEditActive(bool isActive)
         {
-            if (IsRuntimeStartBlocked == isBlocked)
+            if (IsExternalProjectEditActive == isActive)
                 return;
 
-            IsRuntimeStartBlocked = isBlocked;
+            IsExternalProjectEditActive = isActive;
             var args = CreateStateChangedEventArgs(CurrentRuntime);
-            RuntimeStartBlockedChanged?.Invoke(this, args);
+            ExternalProjectEditActiveChanged?.Invoke(this, args);
             StateChanged?.Invoke(this, args);
         }
 
@@ -140,7 +140,7 @@ namespace FlowBlox.UICore.Services
         }
 
         private RuntimeStateChangedEventArgs CreateStateChangedEventArgs(BaseRuntime runtime)
-            => new RuntimeStateChangedEventArgs(runtime, IsRuntimeActive, IsRuntimePaused, IsRuntimeStartBlocked);
+            => new RuntimeStateChangedEventArgs(runtime, IsRuntimeActive, IsRuntimePaused, IsExternalProjectEditActive);
 
         private void DetachRuntime(BaseRuntime runtime)
         {

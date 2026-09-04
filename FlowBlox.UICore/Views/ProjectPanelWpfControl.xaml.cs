@@ -111,8 +111,8 @@ namespace FlowBlox.UICore.Views
             return true;
         }
 
-        public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused, bool isRuntimeStartBlocked)
-            => ViewModel.UpdateRuntimeState(isRuntimeActive, isRuntimePaused, isRuntimeStartBlocked);
+        public void UpdateRuntimeState(bool isRuntimeActive, bool isRuntimePaused, bool isExternalProjectEditActive)
+            => ViewModel.UpdateRuntimeState(isRuntimeActive, isRuntimePaused, isExternalProjectEditActive);
 
         public void MarkRuntimeFocus(FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock flowBlock)
             => ViewModel.MarkRuntimeFocus(flowBlock);
@@ -331,6 +331,12 @@ namespace FlowBlox.UICore.Views
 
             if (!keepExistingSelectionForDrag)
                 ViewModel.SelectNode(node, toggle, extend);
+
+            if (ViewModel.IsProjectEditingReadOnly)
+            {
+                e.Handled = true;
+                return;
+            }
 
             if (!isHeaderInteraction)
             {

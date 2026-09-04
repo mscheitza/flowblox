@@ -8,17 +8,17 @@ namespace FlowBlox.UICore.Events
             BaseRuntime runtime,
             bool isRuntimeActive,
             bool isRuntimePaused,
-            bool isRuntimeStartBlocked)
+            bool isExternalProjectEditActive)
         {
             Runtime = runtime;
             IsRuntimeActive = isRuntimeActive;
             IsRuntimePaused = isRuntimePaused;
-            IsRuntimeStartBlocked = isRuntimeStartBlocked;
+            IsExternalProjectEditActive = isExternalProjectEditActive;
         }
 
         public BaseRuntime Runtime { get; }
         public bool IsRuntimeActive { get; }
         public bool IsRuntimePaused { get; }
-        public bool IsRuntimeStartBlocked { get; }
+        public bool IsExternalProjectEditActive { get; }
     }
 }

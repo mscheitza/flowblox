@@ -30,6 +30,7 @@ namespace FlowBlox.UICore.ViewModels
         private string _currentInput = string.Empty;
         private bool _isBusy;
         private bool _isRuntimeActive;
+        private bool _isExternalProjectEditActive;
         private Func<AIAssistantProjectStateSnapshot?>? _captureProjectState;
         private Func<AIAssistantProjectStateSnapshot, Task<bool>>? _restoreProjectState;
         private AIAssistantProjectStateSnapshot? _stateBeforeLastPrompt;
@@ -180,6 +181,7 @@ namespace FlowBlox.UICore.ViewModels
             {
                 _runtimeStateService.StateChanged += RuntimeStateService_StateChanged;
                 _isRuntimeActive = _runtimeStateService.IsRuntimeActive;
+                _isExternalProjectEditActive = _runtimeStateService.IsExternalProjectEditActive;
             }
 
             RefreshProviderConfigurationState();
@@ -187,7 +189,7 @@ namespace FlowBlox.UICore.ViewModels
 
         private bool CanSubmit()
         {
-            return !IsBusy && !_isRuntimeActive && !string.IsNullOrWhiteSpace(CurrentInput);
+            return !IsBusy && !_isRuntimeActive && !_isExternalProjectEditActive && !string.IsNullOrWhiteSpace(CurrentInput);
         }
 
         private async Task SubmitAsync()
@@ -208,7 +210,7 @@ namespace FlowBlox.UICore.ViewModels
             });
 
             IsBusy = true;
-            _runtimeStateService?.SetRuntimeStartBlocked(true);
+            _runtimeStateService?.SetExternalProjectEditActive(true);
             _cts = new CancellationTokenSource();
 
             try
@@ -252,7 +254,7 @@ namespace FlowBlox.UICore.ViewModels
 
                 CurrentInput = string.Empty;
                 IsBusy = false;
-                _runtimeStateService?.SetRuntimeStartBlocked(false);
+                _runtimeStateService?.SetExternalProjectEditActive(false);
                 _cts?.Dispose();
                 _cts = null;
             }
@@ -262,10 +264,12 @@ namespace FlowBlox.UICore.ViewModels
         {
             SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
-                if (_isRuntimeActive == e.IsRuntimeActive)
+                if (_isRuntimeActive == e.IsRuntimeActive &&
+                    _isExternalProjectEditActive == e.IsExternalProjectEditActive)
                     return;
 
                 _isRuntimeActive = e.IsRuntimeActive;
+                _isExternalProjectEditActive = e.IsExternalProjectEditActive;
                 SubmitCommand.Invalidate();
             });
         }
@@ -589,7 +593,7 @@ namespace FlowBlox.UICore.ViewModels
             RefreshHistories();
             CurrentInput = string.Empty;
             IsBusy = false;
-            _runtimeStateService?.SetRuntimeStartBlocked(false);
+            _runtimeStateService?.SetExternalProjectEditActive(false);
             _stateBeforeLastPrompt = null;
             _stateAfterLastPrompt = null;
             _isPromptStateUndone = false;

@@ -697,4 +697,3 @@ namespace FlowBlox.UICore.Factory.PropertyView
         }
     }
 }
-

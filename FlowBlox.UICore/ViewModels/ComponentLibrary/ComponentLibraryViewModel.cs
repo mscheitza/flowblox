@@ -27,7 +27,7 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
         private readonly SynchronizationContext _uiContext;
         private FlowBloxProject _project;
         private string _filterText;
-        private bool _isRuntimeActive;
+        private bool _isProjectEditingReadOnly;
 
         public ObservableCollection<ComponentLibraryNodeViewModel> Nodes { get; } = new();
         public RelayCommand ManageExtensionsCommand { get; }
@@ -44,7 +44,7 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
             if (_runtimeStateService != null)
             {
                 _runtimeStateService.StateChanged += RuntimeStateService_StateChanged;
-                UpdateRuntimeState(_runtimeStateService.IsRuntimeActive);
+                UpdateProjectEditingReadOnly(_runtimeStateService.IsRuntimeActive || _runtimeStateService.IsExternalProjectEditActive);
             }
         }
 
@@ -62,30 +62,32 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
             }
         }
 
-        public bool IsLibraryEnabled => _project != null && !IsRuntimeActive;
+        public bool IsLibraryEnabled => _project != null && !IsProjectEditingReadOnly;
 
-        public bool IsRuntimeActive
+        public bool IsProjectEditingReadOnly
         {
-            get => _isRuntimeActive;
+            get => _isProjectEditingReadOnly;
             private set
             {
-                if (_isRuntimeActive == value)
+                if (_isProjectEditingReadOnly == value)
                     return;
 
-                _isRuntimeActive = value;
+                _isProjectEditingReadOnly = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsLibraryEnabled));
             }
         }
 
-        public void UpdateRuntimeState(bool isRuntimeActive)
+        public void UpdateProjectEditingReadOnly(bool isReadOnly)
         {
-            IsRuntimeActive = isRuntimeActive;
+            IsProjectEditingReadOnly = isReadOnly;
             ManageExtensionsCommand.Invalidate();
         }
 
         private void RuntimeStateService_StateChanged(object? sender, RuntimeStateChangedEventArgs e)
-            => SynchronizationContextHelper.PostToUi(_uiContext, () => UpdateRuntimeState(e.IsRuntimeActive));
+            => SynchronizationContextHelper.PostToUi(
+                _uiContext,
+                () => UpdateProjectEditingReadOnly(e.IsRuntimeActive || e.IsExternalProjectEditActive));
 
         private static bool TypeMatchesFilter(Type type, string filter)
         {

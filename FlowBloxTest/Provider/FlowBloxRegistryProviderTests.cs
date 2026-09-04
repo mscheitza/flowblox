@@ -1,4 +1,3 @@
-using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
@@ -9,26 +8,18 @@ namespace FlowBloxTest.Provider
     public class FlowBloxRegistryProviderTests
     {
         [TestMethod]
-        public void OpenTransaction_ThrowsWhenRegistryIsMarkedInUse()
+        public void BeginProjectRegistryScope_ReturnsProjectRegistryWhenTransactionIsOpen()
         {
-            FlowBloxProjectManager.Instance.ActiveProject = new FlowBloxProject();
+            var project = new FlowBloxProject();
+            FlowBloxProjectManager.Instance.ActiveProject = project;
 
-            using var registryUseScope = FlowBloxRegistryProvider.MarkRegistryInUse();
-
-            AssertThrowsRegistryCurrentlyInUse(
-                () => FlowBloxRegistryProvider.OpenTransaction(detached: true));
-        }
-
-        [TestMethod]
-        public void MarkRegistryInUse_ThrowsWhenTransactionIsOpen()
-        {
-            FlowBloxProjectManager.Instance.ActiveProject = new FlowBloxProject();
             _ = FlowBloxRegistryProvider.OpenTransaction(detached: true);
 
             try
             {
-                AssertThrowsRegistryCurrentlyInUse(
-                    () => FlowBloxRegistryProvider.MarkRegistryInUse());
+                using var scope = FlowBloxRegistryProvider.BeginProjectRegistryScope();
+
+                Assert.AreSame(project.FlowBloxRegistry, FlowBloxRegistryProvider.GetRegistry());
             }
             finally
             {
@@ -36,18 +27,26 @@ namespace FlowBloxTest.Provider
             }
         }
 
-        private static void AssertThrowsRegistryCurrentlyInUse(Action action)
+        [TestMethod]
+        public async Task BeginProjectRegistryScope_FlowsAcrossAwait()
         {
+            var project = new FlowBloxProject();
+            FlowBloxProjectManager.Instance.ActiveProject = project;
+
+            _ = FlowBloxRegistryProvider.OpenTransaction(detached: true);
+
             try
             {
-                action();
-            }
-            catch (RegistryCurrentlyInUseException)
-            {
-                return;
-            }
+                using var scope = FlowBloxRegistryProvider.BeginProjectRegistryScope();
 
-            Assert.Fail($"Expected {nameof(RegistryCurrentlyInUseException)}.");
+                await Task.Delay(1);
+
+                Assert.AreSame(project.FlowBloxRegistry, FlowBloxRegistryProvider.GetRegistry());
+            }
+            finally
+            {
+                FlowBloxRegistryProvider.CancelTransaction();
+            }
         }
     }
 }

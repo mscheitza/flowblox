@@ -185,6 +185,7 @@ namespace FlowBlox.AppWindow
         }
 
         public bool IsRuntimeActive => _runtimeStateService?.IsRuntimeActive ?? _dockContentProjectPanel?.IsRuntimeActive == true;
+        public bool IsProjectEditingReadOnly => IsRuntimeActive || _runtimeStateService?.IsExternalProjectEditActive == true;
 
         private string _runtimeLogfilePath;
         public string RuntimeLogfilePath
@@ -744,7 +745,7 @@ namespace FlowBlox.AppWindow
             UserFieldObjectManager userFieldObjectManager = new UserFieldObjectManager(registry);
             var propertyViewWpf = new UICore.Views.PropertyWindow(new PropertyWindowArgs(
                 userFieldObjectManager,
-                readOnly: _dockContentProjectPanel?.IsRuntimeActive == true,
+                readOnly: IsProjectEditingReadOnly,
                 deepCopy: false,
                 canSave: false));
             propertyViewWpf.Height = 800;
@@ -1518,7 +1519,7 @@ namespace FlowBlox.AppWindow
             if (project == null)
                 return;
 
-            var dialog = new ManageInputFilesWindow(project, readOnly: _dockContentProjectPanel?.IsRuntimeActive == true);
+            var dialog = new ManageInputFilesWindow(project, readOnly: IsProjectEditingReadOnly);
             WindowsFormWPFHelper.ShowDialog(dialog, this.FindForm());
         }
 

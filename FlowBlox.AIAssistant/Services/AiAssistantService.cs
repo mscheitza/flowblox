@@ -3,7 +3,6 @@ using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Constants;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
-using FlowBlox.Core.Exceptions;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base;
@@ -219,21 +218,7 @@ namespace FlowBlox.AIAssistant.Services
                 return result;
             }
 
-            IDisposable registryUseScope;
-            try
-            {
-                registryUseScope = FlowBloxRegistryProvider.MarkRegistryInUse();
-            }
-            catch (RegistryCurrentlyInUseException)
-            {
-                result.Success = false;
-                var message = "The project is currently being edited in a property window. Close or save that dialog before starting the AI Assistant.";
-                result.Errors.Add(message);
-                AddTranscript(result, AssistantTranscriptKind.Error, message);
-                return result;
-            }
-
-            using var _ = registryUseScope;
+            using var registryScope = FlowBloxRegistryProvider.BeginProjectRegistryScope();
 
             var maxToolRounds = Math.Clamp(
                 config.MaxToolRounds,

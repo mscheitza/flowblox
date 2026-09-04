@@ -25,7 +25,8 @@ namespace FlowBlox.UICore.Operations
 
         public bool CanGenerate()
         {
-            if (_runtimeStateService?.IsRuntimeActive == true)
+            if (_runtimeStateService?.IsRuntimeActive == true ||
+                _runtimeStateService?.IsExternalProjectEditActive == true)
                 return false;
 
             if (!Component.TestDefinitions.Any()) 
