@@ -460,12 +460,6 @@ namespace FlowBloxTest.AIAssistant
 
         private sealed class EmptyToolApi : IFlowBloxAIToolApi
         {
-            public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged
-            {
-                add { }
-                remove { }
-            }
-
             public Task<ToolResponse> ExecuteAsync(ToolRequest request, CancellationToken ct)
             {
                 return Task.FromResult(new ToolResponse { Ok = true });
@@ -479,12 +473,6 @@ namespace FlowBloxTest.AIAssistant
 
         private sealed class CancelingToolApi : IFlowBloxAIToolApi
         {
-            public event EventHandler<FlowBlocksConnectionsChangedEventArgs>? FlowBlocksConnectionsChanged
-            {
-                add { }
-                remove { }
-            }
-
             public Task<ToolResponse> ExecuteAsync(ToolRequest request, CancellationToken ct)
             {
                 throw new OperationCanceledException();

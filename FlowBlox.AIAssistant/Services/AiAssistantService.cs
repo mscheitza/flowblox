@@ -5,7 +5,6 @@ using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
-using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
@@ -265,7 +264,9 @@ namespace FlowBlox.AIAssistant.Services
                         : string.Empty;
                     var modelPrompt = toolRound == 1
                         ? initialUserPrompt
-                        : "Continue from the latest stored Tool API response in the conversation history. Return the next assistant JSON response.";
+                        : "Continue from the latest stored Tool API response in the conversation history. " +
+                          "Return exactly one assistant JSON object using the required schema. " +
+                          "Do not write prose outside the JSON object.";
 
                     var outputFormatFeedback = _outputFormatFeedbackQueue.DequeuePromptOrEmpty();
                     if (!string.IsNullOrWhiteSpace(outputFormatFeedback))
@@ -355,6 +356,8 @@ namespace FlowBlox.AIAssistant.Services
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
                     }
+
+                    formatRetryIssued = false;
 
                     _outputFormatFeedbackQueue.ClearIncorrectOutputFormatData();
                     var instruction = parseResult.Instruction;

@@ -181,6 +181,10 @@ namespace FlowBlox.AIAssistant.Tools
             if (resolved != null)
                 return resolved;
 
+            resolved = ReflectionHelper.GetTypeByFullNameFromLastPart(typeNameOnly);
+            if (resolved != null)
+                return resolved;
+
             return ReflectionHelper.GetTypeByClass(requested);
         }
 

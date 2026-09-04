@@ -17,6 +17,67 @@ namespace FlowBlox.Core.Util
             return null;
         }
 
+        public static Type? GetTypeByFullNameFromLastPart(string typeName)
+        {
+            if (string.IsNullOrWhiteSpace(typeName))
+                return null;
+
+            var requested = typeName.Trim();
+            var typeNameParts = requested
+                .Split('.', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            if (typeNameParts.Length == 0)
+                return null;
+
+            for (var partCount = 1; partCount <= typeNameParts.Length; partCount++)
+            {
+                var ending = string.Join(".", typeNameParts.Skip(typeNameParts.Length - partCount));
+                var candidates = GetLoadedTypesSafely()
+                    .Where(type => IsFullNameEndingMatch(type, ending))
+                    .Take(2)
+                    .ToList();
+
+                if (candidates.Count == 1)
+                    return candidates[0];
+            }
+
+            return null;
+        }
+
+        private static bool IsFullNameEndingMatch(Type type, string ending)
+        {
+            var fullName = type?.FullName;
+            return !string.IsNullOrWhiteSpace(fullName) &&
+                   (string.Equals(fullName, ending, StringComparison.Ordinal) ||
+                    fullName.EndsWith("." + ending, StringComparison.Ordinal));
+        }
+
+        private static IEnumerable<Type> GetLoadedTypesSafely()
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type[] types;
+                try
+                {
+                    types = assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    types = ex.Types.Where(x => x != null).ToArray()!;
+                }
+                catch
+                {
+                    continue;
+                }
+
+                foreach (var type in types)
+                {
+                    if (type != null)
+                        yield return type;
+                }
+            }
+        }
+
         public static Type TryMakeGenericType(Type genericTypeDefinition, Type typeArgument)
         {
             if (genericTypeDefinition.IsGenericTypeDefinition &&

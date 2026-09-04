@@ -307,7 +307,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         private void ApplyOutputBehavior(BaseRuntime runtime, ref IEnumerable<Dictionary<FieldElement, string>> resultMap)
         {
-            if (resultMap == null)
+            if (resultMap == null || !resultMap.Any())
                 return;
 
             if (this.OutputBehavior == OutputBehavior.First)

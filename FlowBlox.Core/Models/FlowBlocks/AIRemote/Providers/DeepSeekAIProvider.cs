@@ -1,7 +1,6 @@
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Enums;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
-using FlowBlox.Core.Util.Resources;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,10 +14,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
         protected override string ProviderDisplayName => "DeepSeek";
 
-        public DeepSeekAIProvider() : base("https://api.deepseek.com", "deepseek-v4-flash")
+        public DeepSeekAIProvider() : base("https://api.deepseek.com", "deepseek-v4-pro")
         {
             EstimatedSystemPromptCacheSavingsRate = 0.60d;
-            ReasoningEffort = AIReasoningEffort.Low;
         }
 
         protected override string GetReasoningEffortValue()
