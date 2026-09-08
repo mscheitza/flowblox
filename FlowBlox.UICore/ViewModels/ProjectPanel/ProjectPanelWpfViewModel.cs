@@ -1208,7 +1208,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             RefreshArrows();
         }
 
-        private void SyncNodeSizesToModel()
+        internal void SyncNodeSizesToModel()
         {
             foreach (var node in Nodes)
             {

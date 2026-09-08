@@ -53,6 +53,11 @@ namespace FlowBlox.AppWindow.Contents
             _viewModel?.ResetForProjectInitialization();
         }
 
+        internal void ConfigureBeforeAutomaticLayoutAdjustment(Action beforeAutomaticLayoutAdjustment)
+        {
+            _viewModel?.ConfigureBeforeAutomaticLayoutAdjustment(beforeAutomaticLayoutAdjustment);
+        }
+
         private AIAssistantProjectStateSnapshot? CaptureCurrentProjectState()
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;

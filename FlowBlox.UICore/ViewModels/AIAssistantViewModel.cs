@@ -93,6 +93,11 @@ namespace FlowBlox.UICore.ViewModels
             ShowHistoryOverview();
         }
 
+        public void ConfigureBeforeAutomaticLayoutAdjustment(Action beforeAutomaticLayoutAdjustment)
+        {
+            ChatViewModel.ConfigureBeforeAutomaticLayoutAdjustment(beforeAutomaticLayoutAdjustment);
+        }
+
         public AssistantConfiguration GetConfiguration(out string error) =>
             ChatViewModel.GetConfiguration(out error);
 

@@ -59,6 +59,9 @@ namespace FlowBlox.AppWindow
             var runtimeViewPanelFactory = new RuntimeViewPanelFactory(dockPanel);
             _runtimeViewPanel = runtimeViewPanelFactory.Create();
 
+            _aiAssistantViewPanel?.ConfigureBeforeAutomaticLayoutAdjustment(
+                () => _dockContentProjectPanel?.SyncNodeSizesToModel());
+
             this.dockPanel.ResumeLayout();
             ApplyDefaultPaneActivationOnce();
         }

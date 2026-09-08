@@ -79,6 +79,15 @@ namespace FlowBlox.UICore.Resources {
         }
 
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete chat ähnelt.
+        /// </summary>
+        public static string ContextMenu_DeleteHistory {
+            get {
+                return ResourceManager.GetString("ContextMenu_DeleteHistory", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No chat histories have been created for this project yet. Use the plus button to start a new chat. ähnelt.
         /// </summary>
         public static string Empty_Description {
@@ -102,6 +111,42 @@ namespace FlowBlox.UICore.Resources {
         public static string History_Title {
             get {
                 return ResourceManager.GetString("History_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to delete this complete chat history? This cannot be undone. ähnelt.
+        /// </summary>
+        public static string Message_DeleteHistory_Confirm_Description {
+            get {
+                return ResourceManager.GetString("Message_DeleteHistory_Confirm_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete chat history? ähnelt.
+        /// </summary>
+        public static string Message_DeleteHistory_Confirm_Title {
+            get {
+                return ResourceManager.GetString("Message_DeleteHistory_Confirm_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The chat history could not be deleted. Details: {0} ähnelt.
+        /// </summary>
+        public static string Message_DeleteHistory_Failed_Description {
+            get {
+                return ResourceManager.GetString("Message_DeleteHistory_Failed_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delete chat history ähnelt.
+        /// </summary>
+        public static string Message_DeleteHistory_Failed_Title {
+            get {
+                return ResourceManager.GetString("Message_DeleteHistory_Failed_Title", resourceCulture);
             }
         }
     }

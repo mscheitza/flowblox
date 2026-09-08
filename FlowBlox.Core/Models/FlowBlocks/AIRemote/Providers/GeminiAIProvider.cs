@@ -58,7 +58,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 #pragma warning restore SKEXP0070
 
             var response = await chatService.GetChatMessageContentAsync(
-                BuildChatHistory(request),
+                AIChatHistoryBuilder.Build(request),
                 BuildExecutionSettings(request),
                 kernel: null,
                 cancellationToken: ct).ConfigureAwait(false);
@@ -96,28 +96,5 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             return GoogleAIVersion.V1_Beta;
         }
 
-        private static ChatHistory BuildChatHistory(AIChatRequest request)
-        {
-            var history = new ChatHistory();
-
-            foreach (var systemMessage in request?.SystemMessages ?? Enumerable.Empty<AIChatMessage>())
-            {
-                if (!string.IsNullOrWhiteSpace(systemMessage?.Content))
-                    history.AddSystemMessage(systemMessage.Content);
-            }
-
-            foreach (var message in request?.Messages ?? Enumerable.Empty<AIChatMessage>())
-            {
-                if (string.IsNullOrWhiteSpace(message?.Content))
-                    continue;
-
-                if (string.Equals(message.Role, "assistant", StringComparison.OrdinalIgnoreCase))
-                    history.AddAssistantMessage(message.Content);
-                else
-                    history.AddUserMessage(message.Content);
-            }
-
-            return history;
-        }
     }
 }

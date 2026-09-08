@@ -1,16 +1,29 @@
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using FlowBlox.Core.Logging;
 
 namespace FlowBlox.AIAssistant.Services
 {
     internal sealed class AiAssistantInstructionParser
     {
-        public AssistantInstructionParseResult Parse(string output)
+        private readonly AssistantInstructionFallbackParserProvider _fallbackParserProvider;
+
+        public AiAssistantInstructionParser()
+        {
+            _fallbackParserProvider = new AssistantInstructionFallbackParserProvider();
+        }
+
+        public AssistantInstructionParseResult Parse(string output, AIProviderBase? provider = null)
         {
             var jsonResult = ParseFirstJsonObject(output);
             if (jsonResult.JsonObject == null)
             {
+                var fallbackResult = TryParseWithFallbackParsers(output, jsonResult.Exception, provider);
+                if (fallbackResult.Success)
+                    return fallbackResult;
+
                 return new AssistantInstructionParseResult
                 {
                     ResponseContent = output ?? string.Empty,
@@ -65,6 +78,33 @@ namespace FlowBlox.AIAssistant.Services
             };
         }
 
+        private AssistantInstructionParseResult TryParseWithFallbackParsers(
+            string output,
+            Exception primaryParseException,
+            AIProviderBase? provider)
+        {
+            foreach (var parser in _fallbackParserProvider.GetParsers(provider))
+            {
+                try
+                {
+                    if (parser.TryParse(output, primaryParseException, out var result) && result?.Success == true)
+                        return result;
+                }
+                catch(Exception e)
+                {
+                    FlowBloxLogManager.Instance.GetLogger().Error(
+                        $"A problem has occurred during fallback instruction parsing. Parser={parser.GetType().FullName}",
+                        e);
+                }
+            }
+
+            return new AssistantInstructionParseResult
+            {
+                ResponseContent = output ?? string.Empty,
+                Exception = primaryParseException
+            };
+        }
+
         public AssistantInstructionParseResult ParseFirstJsonObject(string output)
         {
             if (string.IsNullOrWhiteSpace(output))
@@ -78,8 +118,16 @@ namespace FlowBlox.AIAssistant.Services
 
             try
             {
-                if (TextHelper.TrySubstringFromFirstOccurrence(output, '{', out var objectCandidate) && !string.IsNullOrWhiteSpace(objectCandidate))
-                    output = objectCandidate;
+                if (!TextHelper.TrySubstringFromFirstOccurrence(output, '{', out var objectCandidate) || string.IsNullOrWhiteSpace(objectCandidate))
+                {
+                    return new AssistantInstructionParseResult
+                    {
+                        ResponseContent = output,
+                        Exception = new FormatException("Assistant response did not contain a JSON object.")
+                    };
+                }
+
+                output = objectCandidate;
 
                 using var stringReader = new StringReader(output);
                 using var jsonReader = new JsonTextReader(stringReader)

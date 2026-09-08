@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Services
 {
-    internal sealed class AssistantInstructionParseResult
+    public sealed class AssistantInstructionParseResult
     {
         public AssistantInstruction Instruction { get; init; }
         public JObject JsonObject { get; init; }

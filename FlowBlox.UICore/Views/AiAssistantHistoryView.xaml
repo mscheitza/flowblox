@@ -40,7 +40,21 @@
                             BorderThickness="0"
                             Background="Transparent"
                             Padding="0"
-                            HorizontalContentAlignment="Stretch">
+                            HorizontalContentAlignment="Stretch"
+                            Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}">
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{x:Static resources:AiAssistantHistoryView.ContextMenu_DeleteHistory}"
+                                          Command="{Binding PlacementTarget.Tag.DeleteHistoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                          CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconMaterial Kind="TrashCanOutline"
+                                                                    Width="16"
+                                                                    Height="16" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Button.ContextMenu>
                         <Border Padding="10"
                                 BorderBrush="#FFE5E7EB"
                                 BorderThickness="0,0,0,1">

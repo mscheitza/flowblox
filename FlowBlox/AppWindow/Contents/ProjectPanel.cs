@@ -25,7 +25,7 @@ namespace FlowBlox.AppWindow.Contents
     public partial class ProjectPanel : DockContent
     {
         private const string ResetNotificationsOnRuntimeFinishOptionName = "Grid.ResetNotificationsOnRuntimeFinish";
-        private const int RuntimeFocusUpdateThrottleMilliseconds = 50;
+        private const int RuntimeFocusUpdateThrottleMilliseconds = 25;
 
         private readonly ElementHost _elementHost;
         private readonly ProjectPanelWpfControl _projectPanelWpfControl;
@@ -112,6 +112,8 @@ namespace FlowBlox.AppWindow.Contents
         internal void OnAfterProjectOpened(FlowBloxProject project) => _projectPanelWpfControl.RefreshProject();
 
         internal void OnAfterProjectClosed() => _projectPanelWpfControl.RefreshProject();
+
+        internal void SyncNodeSizesToModel() => _projectPanelWpfControl.SyncNodeSizesToModel();
 
         internal void OnBeforeSaveProject(FlowBloxProject project)
         {

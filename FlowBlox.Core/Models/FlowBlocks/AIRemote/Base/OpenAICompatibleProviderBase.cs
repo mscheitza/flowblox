@@ -1,6 +1,7 @@
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
+using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 
@@ -54,11 +55,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
                 : new OpenAIChatCompletionService(resolvedModel, new Uri(resolvedBaseUrl.TrimEnd('/')), resolvedApiKey, resolvedOrganizationId, httpClient, loggerFactory: null);
 #pragma warning restore SKEXP0010
 
-            var response = await chatService.GetChatMessageContentAsync(
-                BuildChatHistory(request),
+            var response = await SendChatMessageContentAsync(
+                chatService,
+                request,
+                AIChatHistoryBuilder.Build(request),
                 BuildExecutionSettings(request),
-                kernel: null,
-                cancellationToken: ct).ConfigureAwait(false);
+                ct).ConfigureAwait(false);
 
             var usage = new OpenAICompatibleUsageReporter(ProviderDisplayName).ReportUsage(response);
 
@@ -95,28 +97,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         {
         }
 
-        private static ChatHistory BuildChatHistory(AIChatRequest request)
+        protected virtual Task<ChatMessageContent> SendChatMessageContentAsync(
+            IChatCompletionService chatService,
+            AIChatRequest request,
+            ChatHistory chatHistory,
+            OpenAIPromptExecutionSettings executionSettings,
+            CancellationToken ct)
         {
-            var history = new ChatHistory();
-
-            foreach (var systemMessage in request?.SystemMessages ?? Enumerable.Empty<AIChatMessage>())
-            {
-                if (!string.IsNullOrWhiteSpace(systemMessage?.Content))
-                    history.AddSystemMessage(systemMessage.Content);
-            }
-
-            foreach (var message in request?.Messages ?? Enumerable.Empty<AIChatMessage>())
-            {
-                if (string.IsNullOrWhiteSpace(message?.Content))
-                    continue;
-
-                if (string.Equals(message.Role, "assistant", StringComparison.OrdinalIgnoreCase))
-                    history.AddAssistantMessage(message.Content);
-                else
-                    history.AddUserMessage(message.Content);
-            }
-
-            return history;
+            return chatService.GetChatMessageContentAsync(
+                chatHistory,
+                executionSettings,
+                kernel: null,
+                cancellationToken: ct);
         }
     }
 }

@@ -3,7 +3,13 @@ using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
+using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Provider.Project;
+using FlowBloxTest.Services;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace FlowBloxTest.AIAssistant
 {
@@ -77,6 +83,17 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(combinedContext, "USER-2");
             AssertContains(combinedContext, "ASSISTANT-USER-2");
             AssertContains(combinedContext, "USER-3");
+
+            var nonSummaryContext = string.Join(
+                "\n",
+                thirdChatRequest.Messages
+                    .Where(x => !string.Equals(x.Role, "summary", StringComparison.OrdinalIgnoreCase))
+                    .Select(x => x.Content));
+
+            AssertDoesNotContain(nonSummaryContext, "USER-1");
+            AssertDoesNotContain(nonSummaryContext, "ASSISTANT-USER-1");
+            AssertContains(nonSummaryContext, "USER-2");
+            AssertContains(nonSummaryContext, "ASSISTANT-USER-2");
         }
 
         [TestMethod]
@@ -94,7 +111,7 @@ namespace FlowBloxTest.AIAssistant
                         ToolApiResponse = "PAIR-TOOL-RESPONSE-FITS"
                     }
                 ],
-                currentUserPrompt: "C",
+                modelPrompt: "C",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
                 estimatedSystemPromptCacheSavingsRate: 0d,
@@ -108,9 +125,11 @@ namespace FlowBloxTest.AIAssistant
             var request = requestResult.Request;
             var historyMessages = request.Messages.Take(request.Messages.Count - 1).ToList();
 
-            Assert.AreEqual(1, historyMessages.Count);
+            Assert.AreEqual(2, historyMessages.Count);
             AssertContains(historyMessages[0].Content, "PAIR-ASSISTANT-REQUEST-TOO-LONG-FOR-BUDGET");
-            AssertContains(historyMessages[0].Content, "PAIR-TOOL-RESPONSE-FITS");
+            Assert.AreEqual("assistant", historyMessages[0].Role);
+            AssertContains(historyMessages[1].Content, "PAIR-TOOL-RESPONSE-FITS");
+            Assert.AreEqual("tool", historyMessages[1].Role);
             Assert.AreEqual("C", request.Messages.Last().Content);
         }
 
@@ -127,7 +146,7 @@ namespace FlowBloxTest.AIAssistant
                     new AssistantMessagePair { AssistantRequest = "PAIR-2-REQUEST", ToolApiResponse = "PAIR-2-RESPONSE" },
                     new AssistantMessagePair { AssistantRequest = "PAIR-3-REQUEST", ToolApiResponse = "PAIR-3-RESPONSE" }
                 ],
-                currentUserPrompt: "C",
+                modelPrompt: "C",
                 maxLatestMessages: 2,
                 minLatestMessages: 1,
                 estimatedSystemPromptCacheSavingsRate: 0d,
@@ -140,23 +159,59 @@ namespace FlowBloxTest.AIAssistant
 
             var historyMessages = requestResult.Request.Messages.Take(requestResult.Request.Messages.Count - 1).ToList();
 
-            Assert.AreEqual(2, historyMessages.Count);
+            Assert.AreEqual(4, historyMessages.Count);
             AssertContains(historyMessages[0].Content, "PAIR-2-REQUEST");
-            AssertContains(historyMessages[0].Content, "PAIR-2-RESPONSE");
-            AssertContains(historyMessages[1].Content, "PAIR-3-REQUEST");
-            AssertContains(historyMessages[1].Content, "PAIR-3-RESPONSE");
+            AssertContains(historyMessages[1].Content, "PAIR-2-RESPONSE");
+            AssertContains(historyMessages[2].Content, "PAIR-3-REQUEST");
+            AssertContains(historyMessages[3].Content, "PAIR-3-RESPONSE");
             Assert.AreEqual(1, requestResult.FirstIncludedHistoryMessageIndex);
         }
 
         [TestMethod]
-        public void BuildChatRequest_MarksOnlyStableSystemMessagesForCaching()
+        public void BuildChatRequest_ExcludesAlreadySummarizedSessionMessages()
+        {
+            var requestResult = AssistantChatRequestBuilder.Build(
+                systemPrompt: "S",
+                sessionBootstrapPrompt: "B",
+                conversationSummary: "Summary contains earlier context",
+                sessionMessages:
+                [
+                    new AssistantSingleMessage { MessageRole = "user", Message = "OLD-USER" },
+                    new AssistantMessagePair { AssistantRequest = "OLD-REQUEST", ToolApiResponse = "OLD-RESPONSE" },
+                    new AssistantMessagePair { AssistantRequest = "CURRENT-REQUEST", ToolApiResponse = "CURRENT-RESPONSE" }
+                ],
+                modelPrompt: "C",
+                maxLatestMessages: 5,
+                minLatestMessages: 1,
+                estimatedSystemPromptCacheSavingsRate: 0d,
+                tokenBudget: new AssistantTokenBudget
+                {
+                    MaxContextTokens = 1000,
+                    ReservedResponseTokens = 0,
+                    ApproximateCharactersPerToken = 4
+                },
+                summarizedMessageCount: 2);
+
+            var context = string.Join("\n", requestResult.Request.Messages.Select(x => x.Content));
+
+            AssertContains(context, "Summary contains earlier context");
+            AssertDoesNotContain(context, "OLD-USER");
+            AssertDoesNotContain(context, "OLD-REQUEST");
+            AssertDoesNotContain(context, "OLD-RESPONSE");
+            AssertContains(context, "CURRENT-REQUEST");
+            AssertContains(context, "CURRENT-RESPONSE");
+            Assert.AreEqual(2, requestResult.FirstIncludedHistoryMessageIndex);
+        }
+
+        [TestMethod]
+        public void BuildChatRequest_MarksStableSystemMessagesAndSummaryForCaching()
         {
             var requestResult = AssistantChatRequestBuilder.Build(
                 systemPrompt: "Stable system",
                 sessionBootstrapPrompt: "Stable bootstrap",
                 conversationSummary: "Variable summary",
                 sessionMessages: [],
-                currentUserPrompt: "Current prompt",
+                modelPrompt: "Current prompt",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
                 estimatedSystemPromptCacheSavingsRate: 0d,
@@ -169,9 +224,160 @@ namespace FlowBloxTest.AIAssistant
 
             var request = requestResult.Request;
 
+            Assert.AreEqual(2, request.SystemMessages.Count);
             Assert.AreEqual(AIChatCacheBehavior.PreferCache, request.SystemMessages[0].CacheBehavior);
             Assert.AreEqual(AIChatCacheBehavior.PreferCache, request.SystemMessages[1].CacheBehavior);
-            Assert.AreEqual(AIChatCacheBehavior.Default, request.SystemMessages[2].CacheBehavior);
+            Assert.AreEqual("summary", request.Messages[0].Role);
+            AssertContains(request.Messages[0].Content, "Conversation Summary:");
+            Assert.AreEqual(AIChatCacheBehavior.PreferCache, request.Messages[0].CacheBehavior);
+            Assert.AreEqual(AuthorRole.User, request.Messages[0].SemanticContent?.Role);
+        }
+
+        [TestMethod]
+        public void BuildChatRequest_ExpandsMessagePairsToNativeFunctionMessages()
+        {
+            var assistantRequest = """
+            {
+              "assistantMessage": "Reading project",
+              "final": false,
+              "toolCalls": [
+                { "toolName": "GetProjectJson", "arguments": { "includeLayout": true } }
+              ]
+            }
+            """;
+            var toolApiResponse =
+                "Tool execution updates since last assistant request:\n" +
+                "{\"tool\":\"GetProjectJson\",\"arguments\":{\"includeLayout\":true},\"response\":{\"ok\":true,\"result\":{\"project\":\"Demo\"},\"error\":\"\",\"log\":[]}}";
+
+            var requestResult = AssistantChatRequestBuilder.Build(
+                systemPrompt: "S",
+                sessionBootstrapPrompt: "B",
+                conversationSummary: "Existing summary",
+                sessionMessages:
+                [
+                    new AssistantMessagePair
+                    {
+                        AssistantRequest = assistantRequest,
+                        ToolApiResponse = toolApiResponse
+                    }
+                ],
+                modelPrompt: "C",
+                maxLatestMessages: 5,
+                minLatestMessages: 1,
+                estimatedSystemPromptCacheSavingsRate: 0d,
+                tokenBudget: new AssistantTokenBudget
+                {
+                    MaxContextTokens = 1000,
+                    ReservedResponseTokens = 0,
+                    ApproximateCharactersPerToken = 4
+                });
+
+            var messages = requestResult.Request.Messages;
+
+            Assert.AreEqual("summary", messages[0].Role);
+            AssertContains(messages[0].Content, "Existing summary");
+            Assert.AreEqual(AIChatCacheBehavior.PreferCache, messages[0].CacheBehavior);
+            Assert.AreEqual(AuthorRole.User, messages[0].SemanticContent?.Role);
+
+            Assert.AreEqual("assistant", messages[1].Role);
+            Assert.AreEqual(AuthorRole.Assistant, messages[1].SemanticContent?.Role);
+            var functionCall = messages[1].SemanticContent?.Items.OfType<FunctionCallContent>().Single();
+            Assert.IsNotNull(functionCall);
+            Assert.AreEqual("GetProjectJson", functionCall.FunctionName);
+
+            Assert.AreEqual("tool", messages[2].Role);
+            Assert.AreEqual(AuthorRole.Tool, messages[2].SemanticContent?.Role);
+            var functionResult = messages[2].SemanticContent?.Items.OfType<FunctionResultContent>().Single();
+            Assert.IsNotNull(functionResult);
+            Assert.AreEqual(functionCall.Id, functionResult.CallId);
+            AssertContains(functionResult.Result?.ToString() ?? string.Empty, "\"project\":\"Demo\"");
+        }
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_CompactsHistoryAndSendsNativeSemanticKernelToolMessages()
+        {
+            FlowBloxProjectManager.Instance.ActiveProject = new FlowBloxProject();
+
+            var getBaseFlowBlockRequest = BuildToolCallResponse(
+                "Inspect base flow block",
+                "GetTypeKindsInfo",
+                new JObject
+                {
+                    ["typeFullName"] = "FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock"
+                });
+            var createStartRequest = BuildToolCallResponse(
+                "Create start",
+                "CreateFlowBlock",
+                new JObject
+                {
+                    ["typeFullName"] = "FlowBlox.Core.Models.FlowBlocks.SequenceFlow.StartFlowBlock",
+                    ["name"] = "Start"
+                });
+            var getBaseResultFlowBlockRequest = BuildToolCallResponse(
+                "Inspect base result flow block",
+                "GetTypeKindsInfo",
+                new JObject
+                {
+                    ["typeFullName"] = "FlowBlox.Core.Models.FlowBlocks.Base.BaseResultFlowBlock"
+                });
+            var createNodeRequest = BuildToolCallResponse(
+                "Create node",
+                "CreateFlowBlock",
+                new JObject
+                {
+                    ["typeFullName"] = "FlowBlox.Core.Models.FlowBlocks.SequenceFlow.NodeFlowBlock",
+                    ["name"] = "Node"
+                });
+
+            var provider = new RecordingOpenAICompatibleProvider(
+                getBaseFlowBlockRequest,
+                createStartRequest,
+                getBaseResultFlowBlockRequest,
+                createNodeRequest,
+                "{\"assistantMessage\":\"Done.\",\"final\":true,\"toolCalls\":[]}");
+            var toolApi = new SizedToolApi();
+            var config = CreateConfiguration(maxLatestMessages: 50, minLatestMessages: 1, summaryCompactionRate: 1d);
+            config.Provider = provider;
+            config.MaxToolRounds = 5;
+            config.ApproximateCharactersPerToken = 1;
+            config.MaxContextTokens = AiAssistantService.ContinuationModelPrompt.Length + SizedToolApi.TypeInfoResponseLength + 50;
+
+            var service = CreateService(new AiProviderExecutor(), toolApi, config);
+
+            var result = await service.GenerateProjectAsync("USER-MESSAGE-1", CancellationToken.None);
+
+            Assert.IsTrue(result.Success, string.Join(Environment.NewLine, result.Errors));
+            Assert.IsTrue(provider.SummaryRequestCount > 0);
+
+            var postSummaryChat = provider.NormalChatHistories
+                .First(history => history.Any(IsSummaryMessage));
+            var summaryMessage = postSummaryChat.First(IsSummaryMessage);
+            Assert.AreEqual(AuthorRole.User, summaryMessage.Role);
+            AssertContains(summaryMessage.Content ?? string.Empty, "SUMMARY-");
+
+            var postSummaryHistoryMessages = postSummaryChat
+                .Where(IsAssistantOrToolHistoryMessage)
+                .ToList();
+            Assert.AreEqual(2, postSummaryHistoryMessages.Count);
+            Assert.AreEqual(AuthorRole.Assistant, postSummaryHistoryMessages[0].Role);
+            Assert.AreEqual(AuthorRole.Tool, postSummaryHistoryMessages[1].Role);
+
+            var functionCall = postSummaryHistoryMessages[0].Items.OfType<FunctionCallContent>().Single();
+            var functionResult = postSummaryHistoryMessages[1].Items.OfType<FunctionResultContent>().Single();
+            Assert.AreEqual(functionCall.Id, functionResult.CallId);
+
+            var finalChat = provider.NormalChatHistories.Last();
+            var finalHistoryMessages = finalChat
+                .Where(IsAssistantOrToolHistoryMessage)
+                .ToList();
+            Assert.AreEqual(2, finalHistoryMessages.Count);
+
+            var latestFunctionCall = finalHistoryMessages[0].Items.OfType<FunctionCallContent>().Single();
+            var latestFunctionResult = finalHistoryMessages[1].Items.OfType<FunctionResultContent>().Single();
+            Assert.AreEqual("CreateFlowBlock", latestFunctionCall.FunctionName);
+            Assert.IsNotNull(latestFunctionCall.Arguments);
+            AssertContains(latestFunctionCall.Arguments!["typeFullName"]?.ToString() ?? string.Empty, "NodeFlowBlock");
+            Assert.AreEqual(latestFunctionCall.Id, latestFunctionResult.CallId);
         }
 
 
@@ -200,6 +406,7 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(combinedContext, "ASSISTANT-USER-2-LONG");
             AssertContains(combinedContext, "USER-3-LONG");
         }
+
         [TestMethod]
         public void BuildSummaryRequest_UsesStructuredSummaryContract()
         {
@@ -413,6 +620,21 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
+        public void AssistantInstructionParser_ReturnsFormatExceptionWhenNoJsonObjectStartExists()
+        {
+            var parser = new AiAssistantInstructionParser();
+            const string output = "plain assistant text without a JSON object";
+
+            var result = parser.ParseFirstJsonObject(output);
+
+            Assert.IsFalse(result.Success);
+            Assert.IsNotNull(result.Exception);
+            var exception = AssertIsInstanceOfType<FormatException>(result.Exception);
+            Assert.AreEqual("Assistant response did not contain a JSON object.", exception.Message);
+            Assert.AreEqual(output, result.ResponseContent);
+        }
+
+        [TestMethod]
         public async Task GenerateProjectAsync_AddsFormatFailureDetailsToRetryPrompt()
         {
             var executor = new QueuedAiExecutor(
@@ -489,120 +711,38 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsFalse(actual.Contains(unexpected, StringComparison.Ordinal), $"Did not expect '{unexpected}' in:\n{actual}");
         }
 
+        private static string BuildToolCallResponse(string assistantMessage, string toolName, JObject arguments)
+        {
+            return new JObject
+            {
+                ["assistantMessage"] = assistantMessage,
+                ["final"] = false,
+                ["toolCalls"] = new JArray
+                {
+                    new JObject
+                    {
+                        ["toolName"] = toolName,
+                        ["arguments"] = arguments
+                    }
+                }
+            }.ToString(Formatting.None);
+        }
+
+        private static bool IsSummaryMessage(ChatMessageContent message)
+        {
+            return message.Role == AuthorRole.User &&
+                   (message.Content ?? string.Empty).Contains("SUMMARY-", StringComparison.Ordinal);
+        }
+
+        private static bool IsAssistantOrToolHistoryMessage(ChatMessageContent message)
+        {
+            return message.Role == AuthorRole.Assistant || message.Role == AuthorRole.Tool;
+        }
+
         private static T AssertIsInstanceOfType<T>(object value)
         {
             Assert.IsInstanceOfType(value, typeof(T));
             return (T)value;
-        }
-
-        private sealed class EmptyToolApi : IFlowBloxAIToolApi
-        {
-            public Task<ToolResponse> ExecuteAsync(ToolRequest request, CancellationToken ct)
-            {
-                return Task.FromResult(new ToolResponse { Ok = true });
-            }
-
-            public IReadOnlyList<ToolDefinition> GetToolDefinitions()
-            {
-                return Array.Empty<ToolDefinition>();
-            }
-        }
-
-        private sealed class CancelingToolApi : IFlowBloxAIToolApi
-        {
-            public Task<ToolResponse> ExecuteAsync(ToolRequest request, CancellationToken ct)
-            {
-                throw new OperationCanceledException();
-            }
-
-            public IReadOnlyList<ToolDefinition> GetToolDefinitions()
-            {
-                return Array.Empty<ToolDefinition>();
-            }
-        }
-
-        private sealed class RecordingAiExecutor : IAiExecutor
-        {
-            public List<AIChatRequest> Requests { get; } = new();
-            public List<AIChatRequest> ChatRequests => Requests
-                .Where(x => x.Source != "FlowBloxAIAssistantSummary")
-                .ToList();
-
-            public Task<AiExecutorResult> ExecuteChatAsync(
-                AIChatRequest request,
-                AssistantConfiguration configuration,
-                CancellationToken ct)
-            {
-                Requests.Add(request);
-
-                if (request.Source == "FlowBloxAIAssistantSummary")
-                {
-                    return Task.FromResult(new AiExecutorResult
-                    {
-                        Success = true,
-                        OutputText = "[SUMMARIZED]\n" + request.Messages.Single().Content
-                    });
-                }
-
-                var userPrompt = ExtractUserPrompt(request.Messages.Last().Content);
-                return Task.FromResult(new AiExecutorResult
-                {
-                    Success = true,
-                    OutputText = "{\"assistantMessage\":\"ASSISTANT-" + userPrompt + "\",\"final\":true,\"toolCalls\":[]}"
-                });
-            }
-
-            private static string ExtractUserPrompt(string roundPrompt)
-            {
-                var marker = "User prompt:";
-                var markerIndex = roundPrompt.IndexOf(marker, StringComparison.Ordinal);
-                if (markerIndex < 0)
-                    return roundPrompt.Trim();
-
-                var afterMarker = roundPrompt[(markerIndex + marker.Length)..].TrimStart();
-                using var reader = new StringReader(afterMarker);
-                return reader.ReadLine()?.Trim() ?? string.Empty;
-            }
-        }
-
-        private sealed class QueuedAiExecutor : IAiExecutor
-        {
-            private readonly Queue<string> _responses;
-
-            public QueuedAiExecutor(params string[] responses)
-            {
-                _responses = new Queue<string>(responses ?? Array.Empty<string>());
-            }
-
-            public List<AIChatRequest> Requests { get; } = new();
-            public List<AIChatRequest> ChatRequests => Requests
-                .Where(x => x.Source != "FlowBloxAIAssistantSummary")
-                .ToList();
-
-            public Task<AiExecutorResult> ExecuteChatAsync(
-                AIChatRequest request,
-                AssistantConfiguration configuration,
-                CancellationToken ct)
-            {
-                Requests.Add(request);
-
-                if (request.Source == "FlowBloxAIAssistantSummary")
-                {
-                    return Task.FromResult(new AiExecutorResult
-                    {
-                        Success = true,
-                        OutputText = "[SUMMARIZED]\n" + request.Messages.Single().Content
-                    });
-                }
-
-                return Task.FromResult(new AiExecutorResult
-                {
-                    Success = true,
-                    OutputText = _responses.Count == 0
-                        ? "{\"assistantMessage\":\"Done.\",\"final\":true,\"toolCalls\":[]}"
-                        : _responses.Dequeue()
-                });
-            }
         }
     }
 }

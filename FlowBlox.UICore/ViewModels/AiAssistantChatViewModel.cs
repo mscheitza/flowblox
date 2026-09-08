@@ -33,6 +33,7 @@ namespace FlowBlox.UICore.ViewModels
         private bool _isExternalProjectEditActive;
         private Func<AIAssistantProjectStateSnapshot?>? _captureProjectState;
         private Func<AIAssistantProjectStateSnapshot, Task<bool>>? _restoreProjectState;
+        private Action? _beforeAutomaticLayoutAdjustment;
         private AIAssistantProjectStateSnapshot? _stateBeforeLastPrompt;
         private AIAssistantProjectStateSnapshot? _stateAfterLastPrompt;
         private bool _isPromptStateUndone;
@@ -158,6 +159,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public event EventHandler? NewHistoryRequested;
         public event EventHandler? HistoryRequested;
+        public event EventHandler? BeforeAutomaticLayoutAdjustment;
         private bool _isProviderConfigured;
 
         public AiAssistantChatViewModel()
@@ -176,6 +178,7 @@ namespace FlowBlox.UICore.ViewModels
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged += Service_EstimatedUsedTokensChanged;
             _service.CommunicationStatusChanged += Service_CommunicationStatusChanged;
+            _service.BeforeAutomaticLayoutAdjustment += Service_BeforeAutomaticLayoutAdjustment;
 
             NewHistoryCommand = new RelayCommand(() => NewHistoryRequested?.Invoke(this, EventArgs.Empty), () => !IsBusy);
             BackToHistoryCommand = new RelayCommand(RequestHistoryOverview, () => CanGoBackToHistory);
@@ -201,6 +204,12 @@ namespace FlowBlox.UICore.ViewModels
         private bool CanSubmit()
         {
             return !IsBusy && !_isRuntimeActive && !_isExternalProjectEditActive && !string.IsNullOrWhiteSpace(CurrentInput);
+        }
+
+        private void Service_BeforeAutomaticLayoutAdjustment(object? sender, EventArgs e)
+        {
+            _beforeAutomaticLayoutAdjustment?.Invoke();
+            BeforeAutomaticLayoutAdjustment?.Invoke(this, EventArgs.Empty);
         }
 
         private async Task SubmitAsync()
@@ -644,6 +653,11 @@ namespace FlowBlox.UICore.ViewModels
             RefreshUndoRedoState();
         }
 
+        public void ConfigureBeforeAutomaticLayoutAdjustment(Action beforeAutomaticLayoutAdjustment)
+        {
+            _beforeAutomaticLayoutAdjustment = beforeAutomaticLayoutAdjustment;
+        }
+
         public AssistantConfiguration GetConfiguration(out string error) => _service.GetConfiguration(out error);
 
         public bool SaveConfiguration(AssistantConfiguration configuration, out string error) =>
@@ -693,6 +707,7 @@ namespace FlowBlox.UICore.ViewModels
             _service.TranscriptLineAdded -= Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged -= Service_EstimatedUsedTokensChanged;
             _service.CommunicationStatusChanged -= Service_CommunicationStatusChanged;
+            _service.BeforeAutomaticLayoutAdjustment -= Service_BeforeAutomaticLayoutAdjustment;
         }
     }
 }

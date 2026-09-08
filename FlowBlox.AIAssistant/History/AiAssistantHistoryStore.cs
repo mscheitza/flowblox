@@ -119,6 +119,28 @@ namespace FlowBlox.AIAssistant.History
             return filePath;
         }
 
+        public void Delete(AiAssistantHistoryListItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            if (string.IsNullOrWhiteSpace(item.FilePath))
+                throw new ArgumentException("AI assistant history file path is missing.", nameof(item));
+
+            lock (_sync)
+            {
+                if (File.Exists(item.FilePath))
+                    File.Delete(item.FilePath);
+
+                var existing = Histories.FirstOrDefault(x =>
+                    x.HistoryGuid == item.HistoryGuid ||
+                    string.Equals(x.FilePath, item.FilePath, StringComparison.OrdinalIgnoreCase));
+
+                if (existing != null)
+                    Histories.Remove(existing);
+            }
+        }
+
         private void UpsertListItem(AiAssistantHistoryListItem item)
         {
             var existing = Histories.FirstOrDefault(x => x.HistoryGuid == item.HistoryGuid);

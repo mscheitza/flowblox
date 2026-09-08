@@ -42,6 +42,17 @@ namespace FlowBlox.UICore.Views
 
         public void RefreshProject() => ViewModel.Refresh();
 
+        public void SyncNodeSizesToModel()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(SyncNodeSizesToModel);
+                return;
+            }
+
+            ViewModel.SyncNodeSizesToModel();
+        }
+
         public bool CanHandleHostedShortcut => IsProjectPanelInteractionContextActive() && !IsTextInputFocusWithin();
 
         public bool IsTextInputFocusActive => IsTextInputFocusWithin();

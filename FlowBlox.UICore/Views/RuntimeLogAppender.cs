@@ -12,12 +12,14 @@ namespace FlowBlox.UICore.Views
     {
         private const int TextBoxMaxLength = 30000;
         private const int LogFlushIntervalMilliseconds = 100;
+        private const double ScrollEndTolerance = 2d;
 
         private readonly RichTextBox _logTextBox;
         private readonly object _sync = new();
         private readonly Queue<RuntimeLogEntry> _pendingLogEntries = new();
         private readonly DispatcherTimer _flushTimer;
         private bool _flushScheduled;
+        private bool _isScrolledToBottom = true;
         private int _textLength;
 
         public RuntimeLogAppender(RichTextBox logTextBox)
@@ -29,6 +31,9 @@ namespace FlowBlox.UICore.Views
                 (_, _) => FlushPendingLogEntries(),
                 _logTextBox.Dispatcher);
             _flushTimer.Stop();
+            _logTextBox.AddHandler(
+                ScrollViewer.ScrollChangedEvent,
+                new ScrollChangedEventHandler(LogTextBox_ScrollChanged));
         }
 
         public void Append(string message, FlowBloxLogLevel logLevel)
@@ -106,6 +111,7 @@ namespace FlowBlox.UICore.Views
                     entries.Add(_pendingLogEntries.Dequeue());
             }
 
+            var shouldScrollToEnd = _isScrolledToBottom;
             _logTextBox.BeginChange();
             try
             {
@@ -117,7 +123,8 @@ namespace FlowBlox.UICore.Views
                 _logTextBox.EndChange();
             }
 
-            _logTextBox.ScrollToEnd();
+            if (shouldScrollToEnd)
+                _logTextBox.ScrollToEnd();
 
             lock (_sync)
             {
@@ -187,6 +194,14 @@ namespace FlowBlox.UICore.Views
             _logTextBox.Document.Blocks.Clear();
             _logTextBox.Document.Blocks.Add(new Paragraph { Margin = new Thickness(0) });
             _textLength = 0;
+            _isScrolledToBottom = true;
+        }
+
+        private void LogTextBox_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            var scrollableHeight = Math.Max(0d, e.ExtentHeight - e.ViewportHeight);
+            _isScrolledToBottom = scrollableHeight <= 0d ||
+                                  e.VerticalOffset >= scrollableHeight - ScrollEndTolerance;
         }
 
         private static void AppendRun(Paragraph paragraph, StringBuilder builder, FlowBloxLogLevel logLevel)

@@ -1026,12 +1026,16 @@ namespace FlowBlox.AIAssistant.Tools
             var allowedText = allowedNames.Count == 0
                 ? "No values are currently selectable."
                 : $"Selectable values are: {string.Join(", ", allowedNames)}{(selectableValues.Count > allowedNames.Count ? ", ..." : ".")}";
+            var noSelectableValuesHint = allowedNames.Count == 0
+                ? " Special hint: If no values are selectable, the flow block may not reference a BaseResultFlowBlock that can provide selectable values."
+                : string.Empty;
 
             return
                 $"Path '{path}' cannot set property '{property.Name}' on '{target.GetType().Name}' to '{selectedName}' because that value is not selectable by '{selectionFilterMethod}'. " +
                 $"{allowedText} " +
                 "Use one of the selectable values or change the flow design first. " + 
-                "Special hint: For BasePipeFlowBlock input fields this usually means using a field from the directly associated predecessor flow block.";
+                "Special hint: For BasePipeFlowBlock input fields this usually means using a field from the directly associated predecessor flow block." +
+                noSelectableValuesHint;
         }
 
         private static string GetReferenceComponentName(object value)

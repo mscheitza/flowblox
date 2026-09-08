@@ -18,6 +18,10 @@ namespace FlowBlox.AIAssistant.Services
     public class AiAssistantService
     {
         private const int AutomaticAdjustmentDelayMilliseconds = 500;
+        internal const string ContinuationModelPrompt =
+            "Continue from the latest stored Tool API response in the conversation history. " +
+            "Return exactly one assistant JSON object using the required schema. " +
+            "Do not write prose outside the JSON object.";
 
         private readonly IAiExecutor _executor;
         private readonly IFlowBloxAIToolApi _tools;
@@ -32,6 +36,7 @@ namespace FlowBlox.AIAssistant.Services
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
         public event EventHandler<int>? EstimatedUsedTokensChanged;
         public event EventHandler<AssistantCommunicationStatusChangedEventArgs>? CommunicationStatusChanged;
+        public event EventHandler? BeforeAutomaticLayoutAdjustment;
 
         public AiAssistantService(
             IAiExecutor executor,
@@ -266,9 +271,7 @@ namespace FlowBlox.AIAssistant.Services
                         : string.Empty;
                     var modelPrompt = toolRound == 1
                         ? initialUserPrompt
-                        : "Continue from the latest stored Tool API response in the conversation history. " +
-                          "Return exactly one assistant JSON object using the required schema. " +
-                          "Do not write prose outside the JSON object.";
+                        : ContinuationModelPrompt;
 
                     var outputFormatFeedback = _outputFormatFeedbackQueue.DequeuePromptOrEmpty();
                     if (!string.IsNullOrWhiteSpace(outputFormatFeedback))
@@ -289,7 +292,8 @@ namespace FlowBlox.AIAssistant.Services
                         maxLatestMessages,
                         minLatestMessages,
                         config.Provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
-                        tokenBudget);
+                        tokenBudget,
+                        session.SummarizedMessageCount);
                     summaryTargetMessageCount = Math.Max(
                         summaryTargetMessageCount,
                         CalculateSummaryCompactionTarget(
@@ -308,7 +312,8 @@ namespace FlowBlox.AIAssistant.Services
                         maxLatestMessages,
                         minLatestMessages,
                         config.Provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
-                        tokenBudget);
+                        tokenBudget,
+                        session.SummarizedMessageCount);
                     var chatRequest = chatRequestResult.Request;
                     if (toolRound == 1)
                         AppendSingleSessionMessage(session, "user", initialUserPrompt);
@@ -333,7 +338,7 @@ namespace FlowBlox.AIAssistant.Services
 
                     var assistantOutput = exec.OutputText ?? string.Empty;
 
-                    var parseResult = _instructionParser.Parse(assistantOutput);
+                    var parseResult = _instructionParser.Parse(assistantOutput, config.Provider);
                     if (!parseResult.Success || parseResult.Instruction == null)
                     {
                         AppendSingleSessionMessage(session, "assistant", assistantOutput);
@@ -513,9 +518,22 @@ namespace FlowBlox.AIAssistant.Services
 
         private void RunAutomaticAdjustment(string reason)
         {
+            OnBeforeAutomaticLayoutAdjustment();
             var layoutResult = FlowBlockAutoLayoutAdjuster.AdjustCurrentRegistryLayout();
             _logger?.Info(
                 $"AutoAdjustFlowLayout executed ({reason}). Updated={layoutResult.UpdatedFlowBlocks}, Total={layoutResult.TotalFlowBlocks}, Components={layoutResult.ComponentsProcessed}");
+        }
+
+        private void OnBeforeAutomaticLayoutAdjustment()
+        {
+            try
+            {
+                BeforeAutomaticLayoutAdjustment?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                _logger?.Warn($"Before auto layout adjustment handler failed: {ex.Message}", ex);
+            }
         }
 
         private AiCommunicationProtocolWriter? TryCreateCommunicationProtocolWriter(AssistantConfiguration config, string userPrompt, string sessionId)

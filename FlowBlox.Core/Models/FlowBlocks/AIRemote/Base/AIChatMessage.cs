@@ -1,4 +1,6 @@
-﻿namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
+using Microsoft.SemanticKernel;
+
+namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
 {
     public enum AIChatCacheBehavior
     {
@@ -11,5 +13,6 @@
         public string Role { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public AIChatCacheBehavior CacheBehavior { get; set; } = AIChatCacheBehavior.Default;
+        public ChatMessageContent? SemanticContent { get; set; }
     }
 }

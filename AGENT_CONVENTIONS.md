@@ -77,7 +77,9 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Keep changes consistent with annotation-driven UI architecture.
 - Do not introduce user-visible strings without localization keys.
 - For new UI-facing properties: label keys are required. Tooltip keys are strongly recommended for explanatory/complex properties (e.g., XPath/CSS selectors) and should include concise examples when useful.
-- If `dotnet restore` or a build-triggered restore gets stuck or fails because package restore cannot reach NuGet, do not keep retrying or escalate further. Report the restore problem and let the developer handle the build verification.
+- Build and test with `--no-restore` by default, especially after NuGet restore hangs or fails because NuGet cannot be reached.
+- Run restore only when NuGet package references were newly added or changed. If restore is required and cannot reach NuGet, do not keep retrying; report the restore problem and let the developer handle that verification step.
+- Do not use ad-hoc reflection/introspection projects to discover NuGet API shapes; this has proven unreliable in this repository. Prefer the local package XML documentation, installed package docs, existing code usage, and compiler feedback.
 
 ## Icon Workflow
 - For new/specific icons (for example for new FlowBlocks/ManagedObjects), do not copy random SVGs from `FlowBloxIcons.resx` first.

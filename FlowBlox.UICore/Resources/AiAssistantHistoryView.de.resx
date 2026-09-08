@@ -9,4 +9,9 @@
   <data name="Button_OpenHistory" xml:space="preserve"><value>Öffnen</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Noch keine Chat-Verläufe</value></data>
   <data name="Empty_Description" xml:space="preserve"><value>Für dieses Projekt wurden noch keine Chat-Verläufe angelegt. Nutzen Sie die Plus-Schaltfläche, um einen neuen Chat zu beginnen.</value></data>
+  <data name="ContextMenu_DeleteHistory" xml:space="preserve"><value>Chat l&#xF6;schen</value></data>
+  <data name="Message_DeleteHistory_Confirm_Title" xml:space="preserve"><value>Chat-Verlauf l&#xF6;schen?</value></data>
+  <data name="Message_DeleteHistory_Confirm_Description" xml:space="preserve"><value>M&#xF6;chten Sie diesen vollst&#xE4;ndigen Chat-Verlauf wirklich l&#xF6;schen? Dies kann nicht r&#xFC;ckg&#xE4;ngig gemacht werden.</value></data>
+  <data name="Message_DeleteHistory_Failed_Title" xml:space="preserve"><value>Chat-Verlauf l&#xF6;schen</value></data>
+  <data name="Message_DeleteHistory_Failed_Description" xml:space="preserve"><value>Der Chat-Verlauf konnte nicht gel&#xF6;scht werden. Details: {0}</value></data>
 </root>

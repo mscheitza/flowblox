@@ -4,7 +4,10 @@ using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Util.Fields;
+using Microsoft.SemanticKernel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
@@ -157,17 +160,101 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
             foreach (var message in request?.Messages ?? Enumerable.Empty<AIChatMessage>())
             {
-                if (string.IsNullOrWhiteSpace(message?.Content))
+                if (message?.SemanticContent == null && string.IsNullOrWhiteSpace(message?.Content))
                     continue;
 
-                var role = string.Equals(message.Role, "assistant", StringComparison.OrdinalIgnoreCase)
-                    ? RoleType.Assistant
-                    : RoleType.User;
+                var role = ToAnthropicRole(message.Role);
+                var anthropicMessage = new Message(role, message.Content?.Trim() ?? string.Empty)
+                {
+                    Content = ToAnthropicContent(message)
+                };
 
-                messages.Add(new Message(role, message.Content.Trim()));
+                messages.Add(anthropicMessage);
             }
 
             return messages;
+        }
+
+        private static RoleType ToAnthropicRole(string role)
+        {
+            return string.Equals(role, "assistant", StringComparison.OrdinalIgnoreCase)
+                ? RoleType.Assistant
+                : RoleType.User;
+        }
+
+        private static List<ContentBase> ToAnthropicContent(AIChatMessage message)
+        {
+            List<ContentBase> content;
+            if (message.SemanticContent == null)
+            {
+                content = ToAnthropicTextContent(message.Content);
+            }
+            else
+            {
+                var contentItems = new List<ContentBase>();
+                foreach (var item in message.SemanticContent.Items)
+                {
+                    switch (item)
+                    {
+                        case FunctionCallContent functionCall:
+                            contentItems.Add(new ToolUseContent
+                            {
+                                Id = functionCall.Id,
+                                Name = functionCall.FunctionName,
+                                Input = ToJsonNode(ToAnthropicArguments(functionCall.Arguments ?? new KernelArguments()))
+                            });
+                            break;
+
+                        case FunctionResultContent functionResult:
+                            contentItems.Add(new ToolResultContent
+                            {
+                                ToolUseId = functionResult.CallId,
+                                Content = ToAnthropicTextContent(functionResult.Result?.ToString() ?? string.Empty)
+                            });
+                            break;
+                    }
+                }
+
+                content = contentItems.Count > 0
+                    ? contentItems
+                    : ToAnthropicTextContent(message.Content);
+            }
+
+            if (message.CacheBehavior == AIChatCacheBehavior.PreferCache)
+                ApplyCacheControl(content);
+
+            return content;
+        }
+
+        private static Dictionary<string, object?> ToAnthropicArguments(KernelArguments arguments)
+        {
+            var result = new Dictionary<string, object?>(StringComparer.Ordinal);
+            foreach (var argument in arguments ?? new KernelArguments())
+                result[argument.Key] = argument.Value;
+
+            return result;
+        }
+
+        private static List<ContentBase> ToAnthropicTextContent(string content)
+        {
+            return new List<ContentBase>
+            {
+                new Anthropic.SDK.Messaging.TextContent
+                {
+                    Text = content?.Trim() ?? string.Empty
+                }
+            };
+        }
+
+        private static void ApplyCacheControl(IEnumerable<ContentBase> contentItems)
+        {
+            foreach (var contentItem in contentItems ?? Enumerable.Empty<ContentBase>())
+                contentItem.CacheControl = new CacheControl { Type = CacheControlType.ephemeral };
+        }
+
+        private static JsonNode ToJsonNode(object value)
+        {
+            return JsonSerializer.SerializeToNode(value) ?? new JsonObject();
         }
     }
 }
