@@ -26,6 +26,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         private ObservableCollection<TableColumnDefinition> _tableColumnDefinitions;
         private DataTable _currentTableData;
         private List<string> _keyColumns;
+        private IReadableTable _subscribedReadableTable;
+        private Action _readableTableDataSourceChangedListener;
 
         [Required()]
         [Display(Name = "TableWriterFlowBlock_ReferencedTable", ResourceType = typeof(FlowBloxTexts), Order = 0)]
@@ -273,11 +275,35 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             if (ReferencedTable is IReadableTable)
             {
                 var readableTable = (IReadableTable)ReferencedTable;
-                readableTable.AddDataSourceChangedListener(() => OnReadableTableInitializedOrChanged(readableTable, runtime));
+                SubscribeReadableTableDataSourceChanged(readableTable, runtime);
                 OnReadableTableInitializedOrChanged(readableTable, runtime);
             }
             base.RuntimeStarted(runtime);
         }
-    }
 
+        public override void RuntimeFinished(BaseRuntime runtime)
+        {
+            UnsubscribeReadableTableDataSourceChanged();
+            base.RuntimeFinished(runtime);
+        }
+
+        private void SubscribeReadableTableDataSourceChanged(IReadableTable readableTable, BaseRuntime runtime)
+        {
+            UnsubscribeReadableTableDataSourceChanged();
+
+            _subscribedReadableTable = readableTable;
+            _readableTableDataSourceChangedListener = () => OnReadableTableInitializedOrChanged(readableTable, runtime);
+            _subscribedReadableTable.AddDataSourceChangedListener(_readableTableDataSourceChangedListener);
+        }
+
+        private void UnsubscribeReadableTableDataSourceChanged()
+        {
+            if (_subscribedReadableTable == null || _readableTableDataSourceChangedListener == null)
+                return;
+
+            _subscribedReadableTable.RemoveDataSourceChangedListener(_readableTableDataSourceChangedListener);
+            _subscribedReadableTable = null;
+            _readableTableDataSourceChangedListener = null;
+        }
+    }
 }

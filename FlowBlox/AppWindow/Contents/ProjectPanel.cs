@@ -25,7 +25,7 @@ namespace FlowBlox.AppWindow.Contents
     public partial class ProjectPanel : DockContent
     {
         private const string ResetNotificationsOnRuntimeFinishOptionName = "Grid.ResetNotificationsOnRuntimeFinish";
-        private const int RuntimeFocusUpdateThrottleMilliseconds = 25;
+        private const int RuntimeFocusUpdateThrottleMilliseconds = 50;
 
         private readonly ElementHost _elementHost;
         private readonly ProjectPanelWpfControl _projectPanelWpfControl;

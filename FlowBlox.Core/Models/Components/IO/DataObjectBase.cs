@@ -29,12 +29,24 @@ namespace FlowBlox.Core.Models.Components.IO
 
         public void AddDataSourceChangedListener(Action listener)
         {
+            if (listener == null || _dataSourceChangedHandlers.Contains(listener))
+                return;
+
             _dataSourceChangedHandlers.Add(listener);
+        }
+
+        public void RemoveDataSourceChangedListener(Action listener)
+        {
+            if (listener == null)
+                return;
+
+            _dataSourceChangedHandlers.Remove(listener);
         }
 
         protected void TriggerDataSourceChanged()
         {
-            _dataSourceChangedHandlers.ForEach(handler => handler.Invoke());
+            foreach (var handler in _dataSourceChangedHandlers.ToList())
+                handler.Invoke();
         }
     }
 }

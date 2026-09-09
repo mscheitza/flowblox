@@ -4,6 +4,7 @@ using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace FlowBlox.UICore.Views
@@ -24,6 +25,9 @@ namespace FlowBlox.UICore.Views
             InitializeComponent();
             ClearCommand = new RelayCommand(Clear);
             _logAppender = new RuntimeLogAppender(LogTextBox);
+            DebuggingStepTimeunitSlider.AddHandler(
+                Thumb.DragCompletedEvent,
+                new DragCompletedEventHandler(DebuggingStepTimeunitSlider_DragCompleted));
         }
 
         public ICommand ClearCommand
@@ -45,6 +49,35 @@ namespace FlowBlox.UICore.Views
         public void StopExecutionByUser() => ViewModel?.StopExecutionByUser();
 
         private void Clear() => _logAppender.Clear();
+
+        private void DebuggingStepTimeunitSlider_DragCompleted(object sender, DragCompletedEventArgs e)
+            => CommitDebuggingStepTimeunit();
+
+        private void DebuggingStepTimeunitSlider_Commit(object sender, MouseButtonEventArgs e)
+            => CommitDebuggingStepTimeunit();
+
+        private void DebuggingStepTimeunitSlider_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left ||
+                e.Key == Key.Right ||
+                e.Key == Key.Up ||
+                e.Key == Key.Down ||
+                e.Key == Key.Home ||
+                e.Key == Key.End ||
+                e.Key == Key.PageUp ||
+                e.Key == Key.PageDown)
+            {
+                CommitDebuggingStepTimeunit();
+            }
+        }
+
+        private void CommitDebuggingStepTimeunit()
+        {
+            if (ViewModel == null)
+                return;
+
+            ViewModel.DebuggingStepTimeunit = DebuggingStepTimeunitSlider.Value;
+        }
 
         private void LogTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {

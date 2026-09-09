@@ -19,6 +19,7 @@ namespace FlowBlox.UICore.ViewModels
         {
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
             OpenProblemTraceCommand = new RelayCommand(OpenSelectedProblemTrace, CanOpenSelectedProblemTrace);
+            ClearProblemTracesCommand = new RelayCommand(ClearProblemTraces, () => HasProblemTraces);
         }
 
         public ObservableCollection<ProblemTraceEntryViewModel> ProblemTraces { get; } = new ObservableCollection<ProblemTraceEntryViewModel>();
@@ -41,6 +42,8 @@ namespace FlowBlox.UICore.ViewModels
 
         public ICommand OpenProblemTraceCommand { get; }
 
+        public ICommand ClearProblemTracesCommand { get; }
+
         public void Append(ProblemTrace problemTrace)
         {
             if (problemTrace == null)
@@ -48,6 +51,18 @@ namespace FlowBlox.UICore.ViewModels
 
             ProblemTraces.Add(new ProblemTraceEntryViewModel(problemTrace));
             OnPropertyChanged(nameof(HasProblemTraces));
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        public void ClearProblemTraces()
+        {
+            if (ProblemTraces.Count == 0)
+                return;
+
+            SelectedProblemTrace = null;
+            ProblemTraces.Clear();
+            OnPropertyChanged(nameof(HasProblemTraces));
+            CommandManager.InvalidateRequerySuggested();
         }
 
         private bool CanOpenSelectedProblemTrace()

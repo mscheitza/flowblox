@@ -68,12 +68,24 @@ namespace FlowBlox.Core.Models.Components.IO
 
         public void AddDataSourceChangedListener(Action listener)
         {
+            if (listener == null || _readableTableDataSourceChangedHandler.Contains(listener))
+                return;
+
             _readableTableDataSourceChangedHandler.Add(listener);
+        }
+
+        public void RemoveDataSourceChangedListener(Action listener)
+        {
+            if (listener == null)
+                return;
+
+            _readableTableDataSourceChangedHandler.Remove(listener);
         }
 
         private void FieldElement_ValueChange(FieldElement field, string oldValue, string newValue)
         {
-            _readableTableDataSourceChangedHandler.ForEach(x => x.Invoke());
+            foreach (var handler in _readableTableDataSourceChangedHandler.ToList())
+                handler.Invoke();
         }
 
         public DataTable Read()

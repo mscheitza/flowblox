@@ -99,9 +99,9 @@ namespace FlowBlox.Views
             bool stopOnWarning;
             bool stopOnError;
 
-            bool.TryParse(FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StepwiseExecution"].Value, out stepwiseExecution);
-            bool.TryParse(FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StopOnWarning"].Value, out stopOnWarning);
-            bool.TryParse(FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StopOnError"].Value, out stopOnError);
+            bool.TryParse(FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.Debugging.StepwiseExecution"].Value, out stepwiseExecution);
+            bool.TryParse(FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.Debugging.StopOnWarning"].Value, out stopOnWarning);
+            bool.TryParse(FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.Debugging.StopOnError"].Value, out stopOnError);
 
             this.cbStepwiseExecution.Checked = stepwiseExecution;
             this.cbStopOnWarning.Checked = stopOnWarning;
@@ -249,7 +249,7 @@ namespace FlowBlox.Views
                 {
                     runtime.StepwiseExecution = value;
                 }
-                FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StepwiseExecution"].Value = value.ToString().ToLower();
+                FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.Debugging.StepwiseExecution"].Value = value.ToString().ToLower();
                 FlowBloxOptions.GetOptionInstance().Save();
             }
         }
@@ -271,7 +271,7 @@ namespace FlowBlox.Views
                 bool Value = cbStopOnWarning.Checked;
                 if (runtime != null)
                     runtime.StopOnWarning = Value;
-                FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StopOnWarning"].Value = Value.ToString().ToLower();
+                FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.Debugging.StopOnWarning"].Value = Value.ToString().ToLower();
                 FlowBloxOptions.GetOptionInstance().Save();
             }
         }

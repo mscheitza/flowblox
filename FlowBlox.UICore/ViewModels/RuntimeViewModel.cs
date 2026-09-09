@@ -15,6 +15,12 @@ namespace FlowBlox.UICore.ViewModels
 {
     public class RuntimeViewModel : INotifyPropertyChanged, IDisposable
     {
+        private const string DebuggingStepTimeunitOptionName = "Runtime.Debugging.StepTimeunit";
+        private const string StepwiseExecutionOptionName = "Runtime.Debugging.StepwiseExecution";
+        private const string StopOnWarningOptionName = "Runtime.Debugging.StopOnWarning";
+        private const string StopOnErrorOptionName = "Runtime.Debugging.StopOnError";
+        private const int DebuggingStepTimeunitMinimum = 20;
+        private const int DebuggingStepTimeunitMaximum = 1000;
         private readonly IRuntimeStateService _runtimeStateService;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
         private BaseRuntime _runtime;
@@ -22,6 +28,7 @@ namespace FlowBlox.UICore.ViewModels
         private bool _stepwiseExecution;
         private bool _stopOnWarning;
         private bool _stopOnError;
+        private int _debuggingStepTimeunit;
 
         public RuntimeViewModel()
         {
@@ -57,7 +64,7 @@ namespace FlowBlox.UICore.ViewModels
 
                 _stepwiseExecution = value;
                 OnPropertyChanged(nameof(StepwiseExecution));
-                ApplyBooleanRuntimeOption("Runtime.StepwiseExecution", value, runtime => runtime.StepwiseExecution = value);
+                ApplyBooleanRuntimeOption(StepwiseExecutionOptionName, value, runtime => runtime.StepwiseExecution = value);
             }
         }
 
@@ -71,7 +78,7 @@ namespace FlowBlox.UICore.ViewModels
 
                 _stopOnWarning = value;
                 OnPropertyChanged(nameof(StopOnWarning));
-                ApplyBooleanRuntimeOption("Runtime.StopOnWarning", value, runtime => runtime.StopOnWarning = value);
+                ApplyBooleanRuntimeOption(StopOnWarningOptionName, value, runtime => runtime.StopOnWarning = value);
             }
         }
 
@@ -85,7 +92,7 @@ namespace FlowBlox.UICore.ViewModels
 
                 _stopOnError = value;
                 OnPropertyChanged(nameof(StopOnError));
-                ApplyBooleanRuntimeOption("Runtime.StopOnError", value, runtime => runtime.StopOnError = value);
+                ApplyBooleanRuntimeOption(StopOnErrorOptionName, value, runtime => runtime.StopOnError = value);
             }
         }
 
@@ -93,6 +100,33 @@ namespace FlowBlox.UICore.ViewModels
         public bool CanContinue => _runtime?.Running == true && _runtime.Pause;
         public bool CanStop => _runtime?.Running == true && !_runtime.Aborted;
         public bool CanOpenLogFile => _runtime?.Running == true && !_runtime.Aborted && _runtime is FlowBloxRuntime;
+
+        public double DebuggingStepTimeunit
+        {
+            get => _debuggingStepTimeunit;
+            set
+            {
+                var stepTimeunit = CoerceDebuggingStepTimeunit((int)Math.Round(value));
+                if (_debuggingStepTimeunit == stepTimeunit)
+                    return;
+
+                _debuggingStepTimeunit = stepTimeunit;
+                OnPropertyChanged(nameof(DebuggingStepTimeunit));
+                OnPropertyChanged(nameof(DebuggingStepTimeunitText));
+                ApplyIntegerRuntimeOption(DebuggingStepTimeunitOptionName, stepTimeunit, runtime => runtime.DebuggingStepTimeunit = stepTimeunit);
+            }
+        }
+
+        public string DebuggingStepTimeunitText
+        {
+            get
+            {
+                if (_debuggingStepTimeunit >= 1000)
+                    return $"{_debuggingStepTimeunit / 1000d:0.#} s";
+
+                return $"{_debuggingStepTimeunit} ms";
+            }
+        }
 
         public void InitializeRuntime(BaseRuntime runtime)
         {
@@ -136,13 +170,16 @@ namespace FlowBlox.UICore.ViewModels
         {
             _initialized = false;
 
-            _stepwiseExecution = GetBooleanOption("Runtime.StepwiseExecution");
-            _stopOnWarning = GetBooleanOption("Runtime.StopOnWarning");
-            _stopOnError = GetBooleanOption("Runtime.StopOnError");
+            _stepwiseExecution = GetBooleanOption(StepwiseExecutionOptionName);
+            _stopOnWarning = GetBooleanOption(StopOnWarningOptionName);
+            _stopOnError = GetBooleanOption(StopOnErrorOptionName);
+            _debuggingStepTimeunit = CoerceDebuggingStepTimeunit(GetIntegerOption(DebuggingStepTimeunitOptionName));
 
             OnPropertyChanged(nameof(StepwiseExecution));
             OnPropertyChanged(nameof(StopOnWarning));
             OnPropertyChanged(nameof(StopOnError));
+            OnPropertyChanged(nameof(DebuggingStepTimeunit));
+            OnPropertyChanged(nameof(DebuggingStepTimeunitText));
 
             _initialized = true;
         }
@@ -151,6 +188,12 @@ namespace FlowBlox.UICore.ViewModels
         {
             var option = FlowBloxOptions.GetOptionInstance().OptionCollection[optionName];
             return bool.TryParse(option?.Value, out var value) && value;
+        }
+
+        private static int GetIntegerOption(string optionName)
+        {
+            var option = FlowBloxOptions.GetOptionInstance().OptionCollection[optionName];
+            return int.TryParse(option?.Value, out var value) ? value : 0;
         }
 
         private void ApplyBooleanRuntimeOption(string optionName, bool value, Action<BaseRuntime> applyToRuntime)
@@ -165,6 +208,18 @@ namespace FlowBlox.UICore.ViewModels
             FlowBloxOptions.GetOptionInstance().Save();
         }
 
+        private void ApplyIntegerRuntimeOption(string optionName, int value, Action<BaseRuntime> applyToRuntime)
+        {
+            if (!_initialized)
+                return;
+
+            if (_runtime != null)
+                applyToRuntime(_runtime);
+
+            FlowBloxOptions.GetOptionInstance().OptionCollection[optionName].Value = value.ToString();
+            FlowBloxOptions.GetOptionInstance().Save();
+        }
+
         private void ApplyCurrentSettingsToRuntime()
         {
             if (_runtime == null)
@@ -173,6 +228,15 @@ namespace FlowBlox.UICore.ViewModels
             _runtime.StepwiseExecution = StepwiseExecution;
             _runtime.StopOnWarning = StopOnWarning;
             _runtime.StopOnError = StopOnError;
+            _runtime.DebuggingStepTimeunit = _debuggingStepTimeunit;
+        }
+
+        private static int CoerceDebuggingStepTimeunit(int value)
+        {
+            if (value <= 0)
+                return 0;
+
+            return Math.Clamp(value, DebuggingStepTimeunitMinimum, DebuggingStepTimeunitMaximum);
         }
 
         private void OpenLogFile()

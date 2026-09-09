@@ -19,9 +19,9 @@ namespace FlowBlox.Core.Models.Runtime
         public FlowBloxRuntime(FlowBloxProject project) : base(project)
         {
             this.StepTimeunit = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StepTimeunit"].GetValueInt();
-            this.StepwiseExecution = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StepwiseExecution"].Value.ToLower().Equals("true");
-            this.StopOnWarning = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StopOnWarning"].Value.ToLower().Equals("true");
-            this.StopOnError = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.StopOnError"].Value.ToLower().Equals("true");
+            this.StepwiseExecution = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.Debugging.StepwiseExecution"].Value.ToLower().Equals("true");
+            this.StopOnWarning = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.Debugging.StopOnWarning"].Value.ToLower().Equals("true");
+            this.StopOnError = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.Debugging.StopOnError"].Value.ToLower().Equals("true");
             this.AutoRestart = FlowBloxOptions.GetOptionInstance().OptionCollection["Runtime.AutoRestart"].Value.ToLower().Equals("true");
         }
 

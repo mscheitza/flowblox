@@ -61,6 +61,14 @@ namespace FlowBlox.Core.Interceptors
             ProblemTraceCreated?.Invoke(Runtime, trace);
         }
 
+        public override void NotifyRuntimeFinished()
+        {
+            if (_problemsTracer.IsValueCreated)
+                _problemsTracer.Value.Dispose();
+
+            base.NotifyRuntimeFinished();
+        }
+
         private int? _maxFieldValueLength;
         private int MaxFieldValueLength
         {

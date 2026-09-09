@@ -44,6 +44,13 @@
                             <iconPacks:PackIconMaterial Kind="OpenInNew" Width="16" Height="16" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <Separator />
+                    <MenuItem Header="{x:Static resources:ProblemsView.ContextMenu_ClearProblemTraces}"
+                              Command="{Binding PlacementTarget.Tag.ClearProblemTracesCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial Kind="DeleteSweep" Style="{StaticResource HostedControlContextMenuIcon.Danger}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
 

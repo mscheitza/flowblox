@@ -890,8 +890,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
             runtime.HandlePause();
 
-            if (runtime.StepTimeunit > 0)
-                Thread.Sleep(runtime.StepTimeunit);
+            if (runtime.EffectiveStepTimeunit > 0)
+                Thread.Sleep(runtime.EffectiveStepTimeunit);
         }
 
         public void SetParentElement(object parentElement)

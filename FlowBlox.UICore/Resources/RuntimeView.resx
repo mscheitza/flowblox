@@ -14,6 +14,8 @@
   <data name="CheckBox_StepwiseExecution" xml:space="preserve"><value>Run step by step</value></data>
   <data name="CheckBox_StopOnError" xml:space="preserve"><value>Stop on error</value></data>
   <data name="CheckBox_StopOnWarning" xml:space="preserve"><value>Stop on warning</value></data>
+  <data name="Label_DebuggingSpeedSlow" xml:space="preserve"><value>Slow</value></data>
+  <data name="Label_DebuggingSpeedFast" xml:space="preserve"><value>Fast</value></data>
   <data name="Message_LogFileNotFound" xml:space="preserve"><value>The runtime log file could not be found.</value></data>
   <data name="Message_OpenExportDirectoryFailed" xml:space="preserve"><value>The export folder could not be opened. Details: {0}</value></data>
   <data name="Title_OpenExportDirectoryFailed" xml:space="preserve"><value>Failed to open export folder</value></data>

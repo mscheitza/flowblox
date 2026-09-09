@@ -52,11 +52,14 @@ namespace FlowBlox.Core.Models.Components.IO
             DataSource.AddDataSourceChangedListener(value);
         }
 
+        public void RemoveDataSourceChangedListener(Action value)
+        {
+            DataSource.RemoveDataSourceChangedListener(value);
+        }
+
         public abstract DataTable Read();
 
         public abstract void Write(DataTable dataTable);
        
     }
 }
-
-

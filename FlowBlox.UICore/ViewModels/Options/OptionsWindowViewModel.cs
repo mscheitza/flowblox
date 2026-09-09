@@ -311,6 +311,8 @@ namespace FlowBlox.UICore.ViewModels.Options
                 AddOptionToTree(option, expand: !string.IsNullOrWhiteSpace(filter));
             }
 
+            SortNodes(OptionNodes);
+
             if (preSelectedOption != null)
                 SelectedNode = FindNodeByOption(OptionNodes, preSelectedOption);
         }
@@ -345,6 +347,21 @@ namespace FlowBlox.UICore.ViewModels.Options
 
             if (currentNode != null && expand)
                 currentNode.IsExpanded = true;
+        }
+
+        private static void SortNodes(ObservableCollection<OptionTreeNodeViewModel> nodes)
+        {
+            foreach (var node in nodes)
+                SortNodes(node.Children);
+
+            var orderedNodes = nodes
+                .OrderBy(node => node.IsOption ? 1 : 0)
+                .ThenBy(node => node.DisplayName, StringComparer.CurrentCultureIgnoreCase)
+                .ToList();
+
+            nodes.Clear();
+            foreach (var node in orderedNodes)
+                nodes.Add(node);
         }
 
         private static OptionTreeNodeViewModel FindNodeByOption(IEnumerable<OptionTreeNodeViewModel> nodes, OptionElement option)

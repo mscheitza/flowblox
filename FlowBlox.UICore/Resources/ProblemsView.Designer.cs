@@ -113,6 +113,15 @@ namespace FlowBlox.UICore.Resources {
                 return ResourceManager.GetString("ContextMenu_OpenDetails", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove all problem reports ähnelt.
+        /// </summary>
+        public static string ContextMenu_ClearProblemTraces {
+            get {
+                return ResourceManager.GetString("ContextMenu_ClearProblemTraces", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No problems have been recorded for the current runtime. ähnelt.

@@ -30,6 +30,9 @@
   <data name="ContextMenu_OpenDetails" xml:space="preserve">
     <value>Open details</value>
   </data>
+  <data name="ContextMenu_ClearProblemTraces" xml:space="preserve">
+    <value>Remove all problem reports</value>
+  </data>
   <data name="EmptyState_NoProblemTraces" xml:space="preserve">
     <value>No problems have been recorded for the current runtime.</value>
   </data>

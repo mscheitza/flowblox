@@ -149,6 +149,24 @@ namespace FlowBlox.UICore.Resources {
                 return ResourceManager.GetString("CheckBox_StopOnWarning", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fast ähnelt.
+        /// </summary>
+        public static string Label_DebuggingSpeedFast {
+            get {
+                return ResourceManager.GetString("Label_DebuggingSpeedFast", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Slow ähnelt.
+        /// </summary>
+        public static string Label_DebuggingSpeedSlow {
+            get {
+                return ResourceManager.GetString("Label_DebuggingSpeedSlow", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The runtime log file could not be found. ähnelt.

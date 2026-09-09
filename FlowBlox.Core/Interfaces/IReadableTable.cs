@@ -10,5 +10,7 @@ namespace FlowBlox.Core.Interfaces
         bool CanRead(BaseRuntime runtime = null);
 
         void AddDataSourceChangedListener(Action value);
+
+        void RemoveDataSourceChangedListener(Action value);
     }
 }

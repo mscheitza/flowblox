@@ -38,6 +38,10 @@ namespace FlowBlox.Core.Models.Runtime
         public bool StopOnWarning { get; set; }
         public bool StopOnError { get; set; }
         public int StepTimeunit { get; set; }
+        public int? DebuggingStepTimeunit { get; set; }
+        public int EffectiveStepTimeunit => DebuggingStepTimeunit.GetValueOrDefault() > 0
+            ? DebuggingStepTimeunit!.Value
+            : StepTimeunit;
         public bool ExecutionFlowEnabled { get; set; }
         internal int ExecutionLayer { get; private set; }
         public bool DisableInterceptors { get; set; }
