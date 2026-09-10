@@ -1,5 +1,10 @@
 Debugging Guide (compact)
 
+Verification default:
+- After creating a complete flow or making larger flow behavior changes, verify the changed behavior with a debug/test run before finishing, unless the user explicitly says not to run verification.
+- Prefer the smallest focused debug run that proves the changed path; use a full debug run only when the end-to-end result must be proven.
+- If verification cannot be run, explain the blocker and do not present the work as fully verified.
+
 Target execution:
 - Prefer focused debug runs with `targetFlowBlockName` for diagnosing individual flow blocks.
 - Use a full debug run when needed to verify the actual end-to-end result or complete the user's goal.
