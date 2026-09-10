@@ -17,6 +17,12 @@ namespace FlowBlox.Core.Util.Json.ContractResolver
                 property.Ignored = true;
             }
 
+            if (member.DeclaringType == typeof(BaseFlowBlock) &&
+                string.Equals(property.PropertyName, nameof(BaseFlowBlock.NextFlowBlocks), StringComparison.Ordinal))
+            {
+                property.Ignored = true;
+            }
+
             return property;
         }
     }

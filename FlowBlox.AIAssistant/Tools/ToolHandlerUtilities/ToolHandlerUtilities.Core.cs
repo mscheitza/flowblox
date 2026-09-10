@@ -38,6 +38,7 @@ namespace FlowBlox.AIAssistant.Tools
             nameof(BaseFlowBlock.OverriddenNotificationEntries),
             nameof(BaseFlowBlock.HasIterationContext),
             nameof(BaseFlowBlock.DefinedManagedObjects),
+            nameof(BaseFlowBlock.NextFlowBlocks),
             nameof(BaseFlowBlock.HandleRequirements),
             nameof(BaseFlowBlock.HasErrors)
         };

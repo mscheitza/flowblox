@@ -376,6 +376,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
         }
 
+        /// <summary>
+        /// Returns the flow blocks that directly follow this flow block through <see cref="ReferencedFlowBlocks"/>.
+        /// Prefer <see cref="GetNextFlowBlocks"/> in code; this property exists for serialization scenarios.
+        /// </summary>
+        [DeepCopierIgnore()]
+        public List<BaseFlowBlock> NextFlowBlocks => GetNextFlowBlocks();
+
         private void _referencedFlowBlocks_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             var addedFlowBlocks = e.NewItems?.OfType<BaseFlowBlock>().ToList() ?? new List<BaseFlowBlock>();
