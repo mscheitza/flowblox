@@ -7,6 +7,8 @@ using FlowBlox.Core.Models.FlowBlocks.AIRemote.Enums;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Resources;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
 {
@@ -46,6 +48,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         public abstract string ProviderType { get; }
 
         protected virtual bool SupportsReasoningEffort => false;
+
+        public virtual bool SupportsNativeFunctionCallHistory => true;
 
         protected AIProviderBase()
         {
@@ -224,6 +228,20 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
         }
 
         public bool IsReasoningEffortActive() => SupportsReasoningEffort;
+
+        public virtual IReadOnlyDictionary<string, object>? BuildChatMessageMetadata(AIChatMessageMetadata? metadata)
+        {
+            return null;
+        }
+
+        public virtual bool TryParseInstruction(
+            string output,
+            Exception? primaryParseException,
+            out JObject instructionJson)
+        {
+            instructionJson = new JObject();
+            return false;
+        }
 
         protected int ResolveTimeoutSeconds(AIChatRequest request)
         {

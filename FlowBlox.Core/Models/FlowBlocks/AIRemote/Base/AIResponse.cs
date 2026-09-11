@@ -6,6 +6,7 @@
         public string Text { get; set; }
         public string Error { get; set; }
         public string ResponseId { get; set; }
+        public AIChatMessageMetadata MessageMetadata { get; set; } = new();
 
         public int? PromptTokens { get; set; }
         public int? CompletionTokens { get; set; }

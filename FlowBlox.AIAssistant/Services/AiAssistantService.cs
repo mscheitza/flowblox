@@ -291,7 +291,7 @@ namespace FlowBlox.AIAssistant.Services
                         modelPrompt,
                         maxLatestMessages,
                         minLatestMessages,
-                        config.Provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
+                        config.Provider,
                         tokenBudget,
                         session.SummarizedMessageCount);
                     summaryTargetMessageCount = Math.Max(
@@ -311,7 +311,7 @@ namespace FlowBlox.AIAssistant.Services
                         modelPrompt,
                         maxLatestMessages,
                         minLatestMessages,
-                        config.Provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
+                        config.Provider,
                         tokenBudget,
                         session.SummarizedMessageCount);
                     var chatRequest = chatRequestResult.Request;
@@ -460,7 +460,7 @@ namespace FlowBlox.AIAssistant.Services
                         }
 
                         var toolApiResponse = AssistantPromptBuilder.BuildToolApiResponsePrompt(roundToolTranscript);
-                        AppendMessagePair(session, assistantInstructionContent, toolApiResponse);
+                        AppendMessagePair(session, assistantInstructionContent, toolApiResponse, exec.MessageMetadata);
                         assistantToolRequestPersisted = true;
                     }
                     finally
@@ -594,7 +594,11 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
-        private void AppendMessagePair(AssistantSessionState session, string assistantRequest, string toolApiResponse)
+        private void AppendMessagePair(
+            AssistantSessionState session,
+            string assistantRequest,
+            string toolApiResponse,
+            AIChatMessageMetadata? metadata)
         {
             if (session == null ||
                 string.IsNullOrWhiteSpace(assistantRequest) ||
@@ -606,7 +610,8 @@ namespace FlowBlox.AIAssistant.Services
                 session.Messages.Add(new AssistantMessagePair
                 {
                     AssistantRequest = assistantRequest.Trim(),
-                    ToolApiResponse = toolApiResponse.Trim()
+                    ToolApiResponse = toolApiResponse.Trim(),
+                    Metadata = metadata?.Clone() ?? new AIChatMessageMetadata()
                 });
             }
         }

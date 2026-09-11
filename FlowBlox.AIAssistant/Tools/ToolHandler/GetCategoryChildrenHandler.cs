@@ -15,12 +15,12 @@ namespace FlowBlox.AIAssistant.Tools
             "Returns child categories and flow block kinds for categoryPath, including displayName and description metadata for flow block kinds.",
             new JObject
             {
-                ["categoryPath"] = "string[]"
+                ["categoryPath"] = "string[] | string"
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {
-            var categoryPath = args["categoryPath"]?.ToObject<string[]>() ?? Array.Empty<string>();
+            var categoryPath = ReadCategoryPath(args);
 
             var category = FlowBlockCategory.GetAll()
                 .FirstOrDefault(x => ToolHandlerUtilities.PathOf(x).SequenceEqual(categoryPath));
@@ -56,6 +56,23 @@ namespace FlowBlox.AIAssistant.Tools
             };
 
             return Task.FromResult(ToolHandlerUtilities.Ok(payload));
+        }
+
+        private static string[] ReadCategoryPath(JObject args)
+        {
+            var token = args["categoryPath"];
+            if (token == null || token.Type == JTokenType.Null)
+                return Array.Empty<string>();
+
+            if (token.Type == JTokenType.String)
+            {
+                var path = token.Value<string>();
+                return string.IsNullOrWhiteSpace(path)
+                    ? Array.Empty<string>()
+                    : [path];
+            }
+
+            return token.ToObject<string[]>() ?? Array.Empty<string>();
         }
     }
 }

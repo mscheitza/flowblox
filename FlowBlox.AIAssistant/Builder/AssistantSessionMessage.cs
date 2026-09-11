@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 
 namespace FlowBlox.AIAssistant.Builder
 {
@@ -37,6 +38,7 @@ namespace FlowBlox.AIAssistant.Builder
     {
         public string AssistantRequest { get; set; } = string.Empty;
         public string ToolApiResponse { get; set; } = string.Empty;
+        public AIChatMessageMetadata Metadata { get; set; } = new();
 
         public override string Role => "user";
 
@@ -59,7 +61,8 @@ namespace FlowBlox.AIAssistant.Builder
             return new AssistantMessagePair
             {
                 AssistantRequest = AssistantRequest,
-                ToolApiResponse = ToolApiResponse
+                ToolApiResponse = ToolApiResponse,
+                Metadata = Metadata?.Clone() ?? new AIChatMessageMetadata()
             };
         }
     }
@@ -79,6 +82,11 @@ namespace FlowBlox.AIAssistant.Builder
                     writer.WriteValue(pair.AssistantRequest);
                     writer.WritePropertyName(nameof(AssistantMessagePair.ToolApiResponse));
                     writer.WriteValue(pair.ToolApiResponse);
+                    if (pair.Metadata?.HasValues == true)
+                    {
+                        writer.WritePropertyName(nameof(AssistantMessagePair.Metadata));
+                        serializer.Serialize(writer, pair.Metadata);
+                    }
                     break;
 
                 case AssistantSingleMessage single:
@@ -118,7 +126,9 @@ namespace FlowBlox.AIAssistant.Builder
                 return new AssistantMessagePair
                 {
                     AssistantRequest = obj.Value<string>(nameof(AssistantMessagePair.AssistantRequest)) ?? string.Empty,
-                    ToolApiResponse = obj.Value<string>(nameof(AssistantMessagePair.ToolApiResponse)) ?? string.Empty
+                    ToolApiResponse = obj.Value<string>(nameof(AssistantMessagePair.ToolApiResponse)) ?? string.Empty,
+                    Metadata = obj[nameof(AssistantMessagePair.Metadata)]?.ToObject<AIChatMessageMetadata>(serializer)
+                        ?? new AIChatMessageMetadata()
                 };
             }
 

@@ -3,6 +3,7 @@ using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBloxTest.Services;
@@ -114,7 +115,7 @@ namespace FlowBloxTest.AIAssistant
                 modelPrompt: "C",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
-                estimatedSystemPromptCacheSavingsRate: 0d,
+                provider: null,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 14,
@@ -149,7 +150,7 @@ namespace FlowBloxTest.AIAssistant
                 modelPrompt: "C",
                 maxLatestMessages: 2,
                 minLatestMessages: 1,
-                estimatedSystemPromptCacheSavingsRate: 0d,
+                provider: null,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,
@@ -183,7 +184,7 @@ namespace FlowBloxTest.AIAssistant
                 modelPrompt: "C",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
-                estimatedSystemPromptCacheSavingsRate: 0d,
+                provider: null,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,
@@ -214,7 +215,7 @@ namespace FlowBloxTest.AIAssistant
                 modelPrompt: "Current prompt",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
-                estimatedSystemPromptCacheSavingsRate: 0d,
+                provider: null,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,
@@ -264,7 +265,7 @@ namespace FlowBloxTest.AIAssistant
                 modelPrompt: "C",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
-                estimatedSystemPromptCacheSavingsRate: 0d,
+                provider: null,
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,
@@ -291,6 +292,84 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsNotNull(functionResult);
             Assert.AreEqual(functionCall.Id, functionResult.CallId);
             AssertContains(functionResult.Result?.ToString() ?? string.Empty, "\"project\":\"Demo\"");
+        }
+
+        [TestMethod]
+        public void BuildChatRequest_MapsStoredMessageMetadataWithProvider()
+        {
+            var assistantRequest = """
+            {
+              "assistantMessage": "Reading project",
+              "final": false,
+              "toolCalls": [
+                { "toolName": "GetProjectJson", "arguments": { "includeLayout": true } }
+              ]
+            }
+            """;
+
+            var requestResult = AssistantChatRequestBuilder.Build(
+                systemPrompt: "S",
+                sessionBootstrapPrompt: "B",
+                conversationSummary: string.Empty,
+                sessionMessages:
+                [
+                    new AssistantMessagePair
+                    {
+                        AssistantRequest = assistantRequest,
+                        ToolApiResponse = "{\"response\":{\"ok\":true}}",
+                        Metadata = new AIChatMessageMetadata
+                        {
+                            Values =
+                            {
+                                ["providerSpecificValue"] = "OPAQUE_VALUE"
+                            }
+                        }
+                    }
+                ],
+                modelPrompt: "C",
+                maxLatestMessages: 5,
+                minLatestMessages: 1,
+                provider: new MetadataMappingProvider(),
+                tokenBudget: new AssistantTokenBudget
+                {
+                    MaxContextTokens = 1000,
+                    ReservedResponseTokens = 0,
+                    ApproximateCharactersPerToken = 4
+                });
+
+            var assistantMessage = requestResult.Request.Messages.Single(x => x.Role == "assistant");
+
+            Assert.IsNotNull(assistantMessage.SemanticContent?.Metadata);
+            Assert.AreEqual("OPAQUE_VALUE", assistantMessage.SemanticContent!.Metadata!["ProviderSpecificKey"]);
+        }
+
+        [TestMethod]
+        public void HistoryDocument_RoundTripsMessagePairMetadata()
+        {
+            var history = new AiAssistantHistoryDocument
+            {
+                SessionMessages =
+                [
+                    new AssistantMessagePair
+                    {
+                        AssistantRequest = "ASSISTANT-REQUEST",
+                        ToolApiResponse = "TOOL-RESPONSE",
+                        Metadata = new AIChatMessageMetadata
+                        {
+                            Values =
+                            {
+                                ["providerSpecificValue"] = "OPAQUE_VALUE"
+                            }
+                        }
+                    }
+                ]
+            };
+
+            var json = JsonConvert.SerializeObject(history);
+            var restored = JsonConvert.DeserializeObject<AiAssistantHistoryDocument>(json);
+
+            var pair = AssertIsInstanceOfType<AssistantMessagePair>(restored!.SessionMessages.Single());
+            Assert.AreEqual("OPAQUE_VALUE", pair.Metadata.Values["providerSpecificValue"]);
         }
 
         [TestMethod]
@@ -743,6 +822,27 @@ namespace FlowBloxTest.AIAssistant
         {
             Assert.IsInstanceOfType(value, typeof(T));
             return (T)value;
+        }
+
+        private sealed class MetadataMappingProvider : AIProviderBase
+        {
+            public override string ProviderType => "MetadataMappingTest";
+
+            public override IReadOnlyDictionary<string, object>? BuildChatMessageMetadata(AIChatMessageMetadata? metadata)
+            {
+                if (metadata?.Values.TryGetValue("providerSpecificValue", out var value) != true)
+                    return null;
+
+                return new Dictionary<string, object>(StringComparer.Ordinal)
+                {
+                    ["ProviderSpecificKey"] = value
+                };
+            }
+
+            protected override Task<AIResponse> ExecuteChatCoreAsync(AIChatRequest request, CancellationToken ct)
+            {
+                throw new NotSupportedException();
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Enums;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
@@ -17,7 +18,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         public DeepSeekAIProvider() : base("https://api.deepseek.com", "deepseek-v4-pro")
         {
             EstimatedSystemPromptCacheSavingsRate = 0.60d;
-            ReasoningEffort = AIReasoningEffort.Low;
         }
 
         protected override string GetReasoningEffortValue()
@@ -38,6 +38,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
                 }
             };
 #pragma warning restore SKEXP0010
+        }
+
+        public override bool TryParseInstruction(
+            string output,
+            Exception? primaryParseException,
+            out JObject instructionJson)
+        {
+            return DeepSeekDsmlInstructionParser.TryParse(output, out instructionJson);
         }
     }
 }

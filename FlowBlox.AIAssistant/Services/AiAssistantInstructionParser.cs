@@ -2,28 +2,19 @@ using FlowBlox.Core.Util;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using FlowBlox.Core.Logging;
 
 namespace FlowBlox.AIAssistant.Services
 {
     internal sealed class AiAssistantInstructionParser
     {
-        private readonly AssistantInstructionFallbackParserProvider _fallbackParserProvider;
-
-        public AiAssistantInstructionParser()
-        {
-            _fallbackParserProvider = new AssistantInstructionFallbackParserProvider();
-        }
-
         public AssistantInstructionParseResult Parse(string output, AIProviderBase? provider = null)
         {
+            if (provider?.TryParseInstruction(output, null, out var providerInstructionJson) == true)
+                return ParseInstructionJson(providerInstructionJson, output);
+
             var jsonResult = ParseFirstJsonObject(output);
             if (jsonResult.JsonObject == null)
             {
-                var fallbackResult = TryParseWithFallbackParsers(output, jsonResult.Exception, provider);
-                if (fallbackResult.Success)
-                    return fallbackResult;
-
                 return new AssistantInstructionParseResult
                 {
                     ResponseContent = output ?? string.Empty,
@@ -31,7 +22,11 @@ namespace FlowBlox.AIAssistant.Services
                 };
             }
 
-            var root = jsonResult.JsonObject;
+            return ParseInstructionJson(jsonResult.JsonObject, output);
+        }
+
+        private static AssistantInstructionParseResult ParseInstructionJson(JObject root, string output)
+        {
             var instruction = new AssistantInstruction
             {
                 AssistantMessage = root.Value<string>("assistantMessage")
@@ -75,33 +70,6 @@ namespace FlowBlox.AIAssistant.Services
                 Instruction = instruction,
                 JsonObject = root,
                 ResponseContent = output ?? string.Empty
-            };
-        }
-
-        private AssistantInstructionParseResult TryParseWithFallbackParsers(
-            string output,
-            Exception primaryParseException,
-            AIProviderBase? provider)
-        {
-            foreach (var parser in _fallbackParserProvider.GetParsers(provider))
-            {
-                try
-                {
-                    if (parser.TryParse(output, primaryParseException, out var result) && result?.Success == true)
-                        return result;
-                }
-                catch(Exception e)
-                {
-                    FlowBloxLogManager.Instance.GetLogger().Error(
-                        $"A problem has occurred during fallback instruction parsing. Parser={parser.GetType().FullName}",
-                        e);
-                }
-            }
-
-            return new AssistantInstructionParseResult
-            {
-                ResponseContent = output ?? string.Empty,
-                Exception = primaryParseException
             };
         }
 

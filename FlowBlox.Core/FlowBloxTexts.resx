@@ -2065,15 +2065,6 @@ Note: Once a provider is loaded, switching providers within the same process is 
 	<data name="OpenAICompatibleProviderBase_DisplayName_Plural" xml:space="preserve">
 		<value>OpenAI-compatible Providers</value>
 	</data>
-	<data name="TypeNames_GeminiAIProvider" xml:space="preserve">
-		<value>Gemini Provider</value>
-	</data>
-	<data name="GeminiAIProvider_DisplayName" xml:space="preserve">
-		<value>Gemini Provider</value>
-	</data>
-	<data name="GeminiAIProvider_DisplayName_Plural" xml:space="preserve">
-		<value>Gemini Providers</value>
-	</data>
 	<data name="AnthropicAIProvider_DisplayName" xml:space="preserve">
 		<value>Anthropic Provider</value>
 	</data>

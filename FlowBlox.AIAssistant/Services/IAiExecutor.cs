@@ -10,6 +10,7 @@ namespace FlowBlox.AIAssistant.Services
         public string Error { get; set; }
         public string RawOutput { get; set; }
         public string ResponseId { get; set; }
+        public AIChatMessageMetadata MessageMetadata { get; set; } = new();
         public int? PromptTokens { get; set; }
         public int? CompletionTokens { get; set; }
     }

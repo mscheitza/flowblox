@@ -1992,15 +1992,6 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="OpenAICompatibleProviderBase_DisplayName_Plural" xml:space="preserve">
 			<value>OpenAI-kompatible Provider</value>
 		</data>
-	<data name="TypeNames_GeminiAIProvider" xml:space="preserve">
-			<value>Gemini-Provider</value>
-		</data>
-	<data name="GeminiAIProvider_DisplayName" xml:space="preserve">
-			<value>Gemini-Provider</value>
-		</data>
-	<data name="GeminiAIProvider_DisplayName_Plural" xml:space="preserve">
-			<value>Gemini-Provider</value>
-		</data>
 	<data name="TypeNames_DeepSeekAIProvider" xml:space="preserve">
 			<value>DeepSeek-Provider</value>
 		</data>

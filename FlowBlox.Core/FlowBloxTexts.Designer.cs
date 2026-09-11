@@ -4124,24 +4124,6 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gemini Provider ähnelt.
-        /// </summary>
-        public static string GeminiAIProvider_DisplayName {
-            get {
-                return ResourceManager.GetString("GeminiAIProvider_DisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gemini Providers ähnelt.
-        /// </summary>
-        public static string GeminiAIProvider_DisplayName_Plural {
-            get {
-                return ResourceManager.GetString("GeminiAIProvider_DisplayName_Plural", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
         public static string Global_Add {
@@ -8762,15 +8744,6 @@ namespace FlowBlox.Core {
         public static string TypeNames_DataTable_Plural {
             get {
                 return ResourceManager.GetString("TypeNames_DataTable_Plural", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Gemini Provider ähnelt.
-        /// </summary>
-        public static string TypeNames_GeminiAIProvider {
-            get {
-                return ResourceManager.GetString("TypeNames_GeminiAIProvider", resourceCulture);
             }
         }
         

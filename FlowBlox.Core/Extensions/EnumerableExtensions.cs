@@ -17,5 +17,13 @@
             
             return source.Where(item => !string.IsNullOrEmpty(item));
         }
+
+        public static IEnumerable<string> ExceptNullOrWhitespace(this IEnumerable<string> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return source.Where(item => !string.IsNullOrWhiteSpace(item));
+        }
     }
 }

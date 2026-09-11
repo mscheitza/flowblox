@@ -51,6 +51,7 @@ namespace FlowBlox.AIAssistant.Services
                         RawOutput = response.Text ?? string.Empty,
                         Error = response.Error ?? string.Empty,
                         ResponseId = response.ResponseId ?? string.Empty,
+                        MessageMetadata = response.MessageMetadata?.Clone() ?? new AIChatMessageMetadata(),
                         PromptTokens = response.PromptTokens,
                         CompletionTokens = response.CompletionTokens
                     };

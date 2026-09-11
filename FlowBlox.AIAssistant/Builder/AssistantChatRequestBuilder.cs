@@ -20,7 +20,7 @@ namespace FlowBlox.AIAssistant.Builder
             string modelPrompt,
             int maxLatestMessages,
             int minLatestMessages,
-            double estimatedSystemPromptCacheSavingsRate,
+            AIProviderBase? provider,
             AssistantTokenBudget tokenBudget,
             int summarizedMessageCount = 0)
         {
@@ -69,7 +69,7 @@ namespace FlowBlox.AIAssistant.Builder
             var remainingHistoryTokens = CalculateRemainingHistoryTokens(
                 fixedMessagesForBudget,
                 modelPrompt,
-                estimatedSystemPromptCacheSavingsRate,
+                provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
                 tokenBudget);
             var latestSelection = SelectLatestMessages(
                 messagesAvailableForHistory,
@@ -80,7 +80,11 @@ namespace FlowBlox.AIAssistant.Builder
                 historyStartIndex);
 
             for (var i = 0; i < latestSelection.Messages.Count; i++)
-                AddSessionMessage(request.Messages, latestSelection.Messages[i], latestSelection.FirstIncludedHistoryMessageIndex + i);
+                AddSessionMessage(
+                    request.Messages,
+                    latestSelection.Messages[i],
+                    latestSelection.FirstIncludedHistoryMessageIndex + i,
+                    provider);
 
             request.Messages.Add(new AIChatMessage
             {
@@ -99,11 +103,12 @@ namespace FlowBlox.AIAssistant.Builder
         private static void AddSessionMessage(
             List<AIChatMessage> requestMessages,
             AssistantSessionMessage message,
-            int sessionMessageIndex)
+            int sessionMessageIndex,
+            AIProviderBase? provider)
         {
             if (message is AssistantMessagePair pair)
             {
-                AddMessagePair(requestMessages, pair, sessionMessageIndex);
+                AddMessagePair(requestMessages, pair, sessionMessageIndex, provider);
                 return;
             }
 
@@ -119,12 +124,28 @@ namespace FlowBlox.AIAssistant.Builder
         private static void AddMessagePair(
             List<AIChatMessage> requestMessages,
             AssistantMessagePair pair,
-            int sessionMessageIndex)
+            int sessionMessageIndex,
+            AIProviderBase? provider)
         {
             var assistantRequest = pair.AssistantRequest?.Trim() ?? string.Empty;
             var toolApiResponse = pair.ToolApiResponse?.Trim() ?? string.Empty;
             var assistantRequestContent = "Assistant request:\n" + assistantRequest;
             var toolApiResponseContent = "Tool API response:\n" + toolApiResponse;
+            if (provider?.SupportsNativeFunctionCallHistory != true)
+            {
+                requestMessages.Add(new AIChatMessage
+                {
+                    Role = "assistant",
+                    Content = assistantRequestContent
+                });
+                requestMessages.Add(new AIChatMessage
+                {
+                    Role = "tool",
+                    Content = toolApiResponseContent
+                });
+                return;
+            }
+
             var functionCalls = BuildFunctionCalls(assistantRequest, sessionMessageIndex);
 
             if (functionCalls.Count == 0)
@@ -142,7 +163,10 @@ namespace FlowBlox.AIAssistant.Builder
                 return;
             }
 
-            var assistantContent = new ChatMessageContent(AuthorRole.Assistant, new ChatMessageContentItemCollection());
+            var assistantContent = new ChatMessageContent(
+                AuthorRole.Assistant,
+                new ChatMessageContentItemCollection(),
+                metadata: provider?.BuildChatMessageMetadata(pair.Metadata));
             foreach (var functionCall in functionCalls)
                 assistantContent.Items.Add(functionCall);
 
