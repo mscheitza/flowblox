@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class FlowBloxTaskManagementWindow {
+    public class FlowBloxTaskManagementWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal FlowBloxTaskManagementWindow() {
+        internal FlowBloxTaskManagementWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.FlowBloxTaskManagementWindow", typeof(FlowBloxTaskManagementWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
-        public static string Button_Close {
-            get {
+        public static string Button_Close
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Close", resourceCulture);
             }
         }
@@ -72,65 +83,76 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project ähnelt.
         /// </summary>
-        public static string Detail_Header {
-            get {
+        public static string Detail_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("Detail_Header", resourceCulture);
             }
         }
-
-        public static string Detail_Scheduling_Header {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timing ähnelt.
+        /// </summary>
+        public static string Detail_Scheduling_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("Detail_Scheduling_Header", resourceCulture);
-            }
-        }
-
-        public static string Tab_Project {
-            get {
-                return ResourceManager.GetString("Tab_Project", resourceCulture);
-            }
-        }
-
-        public static string Tab_InputParameters {
-            get {
-                return ResourceManager.GetString("Tab_InputParameters", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Task names must be unique. ähnelt.
         /// </summary>
-        public static string Error_DuplicateTaskName {
-            get {
+        public static string Error_DuplicateTaskName
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_DuplicateTaskName", resourceCulture);
             }
         }
-
-        public static string Error_InvalidTaskName {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The task name contains characters that are not supported by Windows Task Scheduler. ähnelt.
+        /// </summary>
+        public static string Error_InvalidTaskName
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_InvalidTaskName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input parameters could not be loaded. ähnelt.
+        /// </summary>
+        public static string Error_LoadInputParametersFailed
+        {
+            get
+            {
+                return ResourceManager.GetString("Error_LoadInputParametersFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project could not be loaded. ähnelt.
         /// </summary>
-        public static string Error_LoadProjectFailed {
-            get {
+        public static string Error_LoadProjectFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_LoadProjectFailed", resourceCulture);
-            }
-        }
-
-        public static string Error_LoadInputParametersFailed {
-            get {
-                return ResourceManager.GetString("Error_LoadInputParametersFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tasks could not be loaded. ähnelt.
         /// </summary>
-        public static string Error_LoadTasksFailed {
-            get {
+        public static string Error_LoadTasksFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_LoadTasksFailed", resourceCulture);
             }
         }
@@ -138,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die A project file or Project Space GUID is required. ähnelt.
         /// </summary>
-        public static string Error_ProjectReferenceMissing {
-            get {
+        public static string Error_ProjectReferenceMissing
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_ProjectReferenceMissing", resourceCulture);
             }
         }
@@ -147,29 +171,43 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Task could not be started. ähnelt.
         /// </summary>
-        public static string Error_RunTaskFailed {
-            get {
+        public static string Error_RunTaskFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_RunTaskFailed", resourceCulture);
-            }
-        }
-
-        public static string Error_StopTaskFailed {
-            get {
-                return ResourceManager.GetString("Error_StopTaskFailed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tasks could not be saved. ähnelt.
         /// </summary>
-        public static string Error_SaveFailed {
-            get {
+        public static string Error_SaveFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_SaveFailed", resourceCulture);
             }
         }
-
-        public static string Error_TaskSchedulerPermissionDenied {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Task could not be stopped. ähnelt.
+        /// </summary>
+        public static string Error_StopTaskFailed
+        {
+            get
+            {
+                return ResourceManager.GetString("Error_StopTaskFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Windows Task Scheduler rejected the operation because the current user does not have the required permissions. Please start FlowBlox as administrator and try again. ähnelt.
+        /// </summary>
+        public static string Error_TaskSchedulerPermissionDenied
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_TaskSchedulerPermissionDenied", resourceCulture);
             }
         }
@@ -177,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Started sessions ähnelt.
         /// </summary>
-        public static string Expander_Sessions_Header {
-            get {
+        public static string Expander_Sessions_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("Expander_Sessions_Header", resourceCulture);
             }
         }
@@ -186,38 +226,43 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage FlowBlox project executions stored in the native Windows Task Scheduler folder &quot;\FlowBlox and contributors&quot;. ähnelt.
         /// </summary>
-        public static string Header_Description_Main {
-            get {
+        public static string Header_Description_Main
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Dirty ähnelt.
+        /// </summary>
+        public static string Header_Dirty
+        {
+            get
+            {
+                return ResourceManager.GetString("Header_Dirty", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enabled ähnelt.
         /// </summary>
-        public static string Header_Enabled {
-            get {
+        public static string Header_Enabled
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Enabled", resourceCulture);
-            }
-        }
-
-        public static string Header_Dirty {
-            get {
-                return ResourceManager.GetString("Header_Dirty", resourceCulture);
-            }
-        }
-
-        public static string Header_Running {
-            get {
-                return ResourceManager.GetString("Header_Running", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Interval min. ähnelt.
         /// </summary>
-        public static string Header_IntervalMinutes {
-            get {
+        public static string Header_IntervalMinutes
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_IntervalMinutes", resourceCulture);
             }
         }
@@ -225,8 +270,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Result ähnelt.
         /// </summary>
-        public static string Header_LastResult {
-            get {
+        public static string Header_LastResult
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_LastResult", resourceCulture);
             }
         }
@@ -234,17 +281,32 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Next run ähnelt.
         /// </summary>
-        public static string Header_NextRun {
-            get {
+        public static string Header_NextRun
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_NextRun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Running ähnelt.
+        /// </summary>
+        public static string Header_Running
+        {
+            get
+            {
+                return ResourceManager.GetString("Header_Running", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Schedule ähnelt.
         /// </summary>
-        public static string Header_ScheduleType {
-            get {
+        public static string Header_ScheduleType
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_ScheduleType", resourceCulture);
             }
         }
@@ -252,8 +314,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Created at ähnelt.
         /// </summary>
-        public static string Header_SessionCreatedAt {
-            get {
+        public static string Header_SessionCreatedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_SessionCreatedAt", resourceCulture);
             }
         }
@@ -261,8 +325,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Unique ID ähnelt.
         /// </summary>
-        public static string Header_SessionId {
-            get {
+        public static string Header_SessionId
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_SessionId", resourceCulture);
             }
         }
@@ -270,20 +336,32 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Log file ähnelt.
         /// </summary>
-        public static string Header_SessionLogFile {
-            get {
+        public static string Header_SessionLogFile
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_SessionLogFile", resourceCulture);
             }
         }
-
-        public static string Header_SessionMessage {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Message ähnelt.
+        /// </summary>
+        public static string Header_SessionMessage
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_SessionMessage", resourceCulture);
             }
         }
-
-        public static string Header_SessionStatus {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Status ähnelt.
+        /// </summary>
+        public static string Header_SessionStatus
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_SessionStatus", resourceCulture);
             }
         }
@@ -291,8 +369,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Start ähnelt.
         /// </summary>
-        public static string Header_StartAt {
-            get {
+        public static string Header_StartAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_StartAt", resourceCulture);
             }
         }
@@ -300,8 +380,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Task name ähnelt.
         /// </summary>
-        public static string Header_TaskName {
-            get {
+        public static string Header_TaskName
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_TaskName", resourceCulture);
             }
         }
@@ -309,170 +391,296 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Scheduled project executions ähnelt.
         /// </summary>
-        public static string Header_Title_Main {
-            get {
+        public static string Header_Title_Main
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title_Main", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Interval in minutes ähnelt.
+        /// </summary>
+        public static string Label_IntervalMinutes
+        {
+            get
+            {
+                return ResourceManager.GetString("Label_IntervalMinutes", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project name ähnelt.
         /// </summary>
-        public static string Label_ProjectName {
-            get {
+        public static string Label_ProjectName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectName", resourceCulture);
-            }
-        }
-
-        public static string Label_IntervalMinutes {
-            get {
-                return ResourceManager.GetString("Label_IntervalMinutes", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reference ähnelt.
         /// </summary>
-        public static string Label_ProjectReference {
-            get {
+        public static string Label_ProjectReference
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Schedule ähnelt.
+        /// </summary>
+        public static string Label_ScheduleType
+        {
+            get
+            {
+                return ResourceManager.GetString("Label_ScheduleType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start date and time ähnelt.
+        /// </summary>
+        public static string Label_StartAt
+        {
+            get
+            {
+                return ResourceManager.GetString("Label_StartAt", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Task directory ähnelt.
         /// </summary>
-        public static string Label_TaskDirectory {
-            get {
+        public static string Label_TaskDirectory
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_TaskDirectory", resourceCulture);
             }
         }
-
-        public static string Label_ScheduleType {
-            get {
-                return ResourceManager.GetString("Label_ScheduleType", resourceCulture);
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die There are unsaved task changes. Discard them and reload from Windows Task Scheduler? ähnelt.
+        /// </summary>
+        public static string Message_DiscardChangesQuestion
+        {
+            get
+            {
+                return ResourceManager.GetString("Message_DiscardChangesQuestion", resourceCulture);
             }
         }
-
-        public static string Label_StartAt {
-            get {
-                return ResourceManager.GetString("Label_StartAt", resourceCulture);
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select this tab to load project input parameters. ähnelt.
+        /// </summary>
+        public static string Message_InputParametersLoadPrompt
+        {
+            get
+            {
+                return ResourceManager.GetString("Message_InputParametersLoadPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Loading input parameters... ähnelt.
+        /// </summary>
+        public static string Message_LoadingInputParameters
+        {
+            get
+            {
+                return ResourceManager.GetString("Message_LoadingInputParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No input parameters were defined in the project. ähnelt.
+        /// </summary>
+        public static string Message_NoInputParameters
+        {
+            get
+            {
+                return ResourceManager.GetString("Message_NoInputParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please save the task before starting it. ähnelt.
+        /// </summary>
+        public static string Message_SaveBeforeRun
+        {
+            get
+            {
+                return ResourceManager.GetString("Message_SaveBeforeRun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Please save the task before stopping it. ähnelt.
+        /// </summary>
+        public static string Message_SaveBeforeStop
+        {
+            get
+            {
+                return ResourceManager.GetString("Message_SaveBeforeStop", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Task changes were saved. ähnelt.
         /// </summary>
-        public static string Message_SaveSuccessful {
-            get {
+        public static string Message_SaveSuccessful
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_SaveSuccessful", resourceCulture);
             }
         }
-
-        public static string Message_DiscardChangesQuestion {
-            get {
-                return ResourceManager.GetString("Message_DiscardChangesQuestion", resourceCulture);
-            }
-        }
-
-        public static string Message_SaveBeforeRun {
-            get {
-                return ResourceManager.GetString("Message_SaveBeforeRun", resourceCulture);
-            }
-        }
-
-        public static string Message_SaveBeforeStop {
-            get {
-                return ResourceManager.GetString("Message_SaveBeforeStop", resourceCulture);
-            }
-        }
-
-        public static string Message_TaskAlreadyRunning {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The selected task is already running. ähnelt.
+        /// </summary>
+        public static string Message_TaskAlreadyRunning
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_TaskAlreadyRunning", resourceCulture);
             }
         }
-
-        public static string Message_TaskNotRunning {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The selected task is not running. ähnelt.
+        /// </summary>
+        public static string Message_TaskNotRunning
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_TaskNotRunning", resourceCulture);
             }
         }
-
-        public static string Message_LoadingInputParameters {
-            get {
-                return ResourceManager.GetString("Message_LoadingInputParameters", resourceCulture);
-            }
-        }
-
-        public static string Message_InputParametersLoadPrompt {
-            get {
-                return ResourceManager.GetString("Message_InputParametersLoadPrompt", resourceCulture);
-            }
-        }
-
-        public static string Message_NoInputParameters {
-            get {
-                return ResourceManager.GetString("Message_NoInputParameters", resourceCulture);
-            }
-        }
-
-        public static string Toggle_On {
-            get {
-                return ResourceManager.GetString("Toggle_On", resourceCulture);
-            }
-        }
-
-        public static string Toggle_Off {
-            get {
-                return ResourceManager.GetString("Toggle_Off", resourceCulture);
-            }
-        }
-
-        public static string SessionMessage_Running {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Response file has not been written yet. ähnelt.
+        /// </summary>
+        public static string SessionMessage_Running
+        {
+            get
+            {
                 return ResourceManager.GetString("SessionMessage_Running", resourceCulture);
             }
         }
-
-        public static string SessionMessage_Successful {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execution completed successfully. ähnelt.
+        /// </summary>
+        public static string SessionMessage_Successful
+        {
+            get
+            {
                 return ResourceManager.GetString("SessionMessage_Successful", resourceCulture);
             }
         }
-
-        public static string SessionStatus_Failed {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Failed ähnelt.
+        /// </summary>
+        public static string SessionStatus_Failed
+        {
+            get
+            {
                 return ResourceManager.GetString("SessionStatus_Failed", resourceCulture);
             }
         }
-
-        public static string SessionStatus_Running {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Running ähnelt.
+        /// </summary>
+        public static string SessionStatus_Running
+        {
+            get
+            {
                 return ResourceManager.GetString("SessionStatus_Running", resourceCulture);
             }
         }
-
-        public static string SessionStatus_Successful {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Successful ähnelt.
+        /// </summary>
+        public static string SessionStatus_Successful
+        {
+            get
+            {
                 return ResourceManager.GetString("SessionStatus_Successful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input parameters ähnelt.
+        /// </summary>
+        public static string Tab_InputParameters
+        {
+            get
+            {
+                return ResourceManager.GetString("Tab_InputParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Project ähnelt.
+        /// </summary>
+        public static string Tab_Project
+        {
+            get
+            {
+                return ResourceManager.GetString("Tab_Project", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Scheduled FlowBlox tasks ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Off ähnelt.
+        /// </summary>
+        public static string Toggle_Off
+        {
+            get
+            {
+                return ResourceManager.GetString("Toggle_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die On ähnelt.
+        /// </summary>
+        public static string Toggle_On
+        {
+            get
+            {
+                return ResourceManager.GetString("Toggle_On", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Link project by project file ähnelt.
         /// </summary>
-        public static string Tooltip_AddProjectFile {
-            get {
+        public static string Tooltip_AddProjectFile
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_AddProjectFile", resourceCulture);
             }
         }
@@ -480,8 +688,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Link project by Project Space ähnelt.
         /// </summary>
-        public static string Tooltip_AddProjectSpace {
-            get {
+        public static string Tooltip_AddProjectSpace
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_AddProjectSpace", resourceCulture);
             }
         }
@@ -489,14 +699,21 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Apply changes ähnelt.
         /// </summary>
-        public static string Tooltip_Apply {
-            get {
+        public static string Tooltip_Apply
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Apply", resourceCulture);
             }
         }
-
-        public static string Tooltip_IntervalMinutes {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Only used for interval schedules. Defines how many minutes should pass between automatic project executions. ähnelt.
+        /// </summary>
+        public static string Tooltip_IntervalMinutes
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_IntervalMinutes", resourceCulture);
             }
         }
@@ -504,8 +721,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open session directory ähnelt.
         /// </summary>
-        public static string Tooltip_OpenSessionDirectory {
-            get {
+        public static string Tooltip_OpenSessionDirectory
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_OpenSessionDirectory", resourceCulture);
             }
         }
@@ -513,8 +732,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open session log file ähnelt.
         /// </summary>
-        public static string Tooltip_OpenSessionLog {
-            get {
+        public static string Tooltip_OpenSessionLog
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_OpenSessionLog", resourceCulture);
             }
         }
@@ -522,68 +743,98 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open task directory ähnelt.
         /// </summary>
-        public static string Tooltip_OpenTaskDirectory {
-            get {
+        public static string Tooltip_OpenTaskDirectory
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_OpenTaskDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Refresh sessions ähnelt.
+        /// </summary>
+        public static string Tooltip_RefreshSessions
+        {
+            get
+            {
+                return ResourceManager.GetString("Tooltip_RefreshSessions", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reload tasks ähnelt.
         /// </summary>
-        public static string Tooltip_Reload {
-            get {
+        public static string Tooltip_Reload
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Reload", resourceCulture);
-            }
-        }
-
-        public static string Tooltip_RefreshSessions {
-            get {
-                return ResourceManager.GetString("Tooltip_RefreshSessions", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove selected task ähnelt.
         /// </summary>
-        public static string Tooltip_RemoveTask {
-            get {
+        public static string Tooltip_RemoveTask
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_RemoveTask", resourceCulture);
-            }
-        }
-
-        public static string Tooltip_ScheduleType {
-            get {
-                return ResourceManager.GetString("Tooltip_ScheduleType", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Run selected task now ähnelt.
         /// </summary>
-        public static string Tooltip_RunTask {
-            get {
+        public static string Tooltip_RunTask
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_RunTask", resourceCulture);
             }
         }
-
-        public static string Tooltip_StopTask {
-            get {
-                return ResourceManager.GetString("Tooltip_StopTask", resourceCulture);
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manual tasks are saved without an automatic trigger and can be started manually from FlowBlox or Windows Task Scheduler. At startup runs when Windows starts. Daily runs once per day using the time from the start value. Interval runs repeatedly from the start value using the configured interval. ähnelt.
+        /// </summary>
+        public static string Tooltip_ScheduleType
+        {
+            get
+            {
+                return ResourceManager.GetString("Tooltip_ScheduleType", resourceCulture);
             }
         }
-
-        public static string Tooltip_StartAt {
-            get {
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Used for daily and interval schedules. For daily schedules, the time part defines when the project runs each day. For interval schedules, this is the first possible start time. ähnelt.
+        /// </summary>
+        public static string Tooltip_StartAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_StartAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Stop selected task ähnelt.
+        /// </summary>
+        public static string Tooltip_StopTask
+        {
+            get
+            {
+                return ResourceManager.GetString("Tooltip_StopTask", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enable or disable selected task ähnelt.
         /// </summary>
-        public static string Tooltip_ToggleEnabled {
-            get {
+        public static string Tooltip_ToggleEnabled
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_ToggleEnabled", resourceCulture);
             }
         }

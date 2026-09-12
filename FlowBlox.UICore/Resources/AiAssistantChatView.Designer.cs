@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AiAssistantChatView {
+    public class AiAssistantChatView
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AiAssistantChatView() {
+        internal AiAssistantChatView()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.AiAssistantChatView", typeof(AiAssistantChatView).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Stop ähnelt.
         /// </summary>
-        public static string Button_Cancel {
-            get {
+        public static string Button_Cancel
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Cancel", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Submit ähnelt.
         /// </summary>
-        public static string Button_Submit {
-            get {
+        public static string Button_Submit
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Submit", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Copy ähnelt.
         /// </summary>
-        public static string ContextMenu_Copy {
-            get {
+        public static string ContextMenu_Copy
+        {
+            get
+            {
                 return ResourceManager.GetString("ContextMenu_Copy", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open in Editor ähnelt.
         /// </summary>
-        public static string ContextMenu_OpenInEditor {
-            get {
+        public static string ContextMenu_OpenInEditor
+        {
+            get
+            {
                 return ResourceManager.GetString("ContextMenu_OpenInEditor", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The AI Assistant can help you adjust the current flow or create a complete flow from a description. ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die AI Assistant ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The communication protocol directory does not exist: {0} ähnelt.
         /// </summary>
-        public static string Message_CommunicationProtocolDirectory_NotFound_Description {
-            get {
+        public static string Message_CommunicationProtocolDirectory_NotFound_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CommunicationProtocolDirectory_NotFound_Description", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Communication Protocol Directory Not Found ähnelt.
         /// </summary>
-        public static string Message_CommunicationProtocolDirectory_NotFound_Title {
-            get {
+        public static string Message_CommunicationProtocolDirectory_NotFound_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CommunicationProtocolDirectory_NotFound_Title", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The communication protocol directory could not be opened. Details: {0} ähnelt.
         /// </summary>
-        public static string Message_CommunicationProtocolDirectory_OpenFailed_Description {
-            get {
+        public static string Message_CommunicationProtocolDirectory_OpenFailed_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CommunicationProtocolDirectory_OpenFailed_Description", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to Open Communication Protocol Directory ähnelt.
         /// </summary>
-        public static string Message_CommunicationProtocolDirectory_OpenFailed_Title {
-            get {
+        public static string Message_CommunicationProtocolDirectory_OpenFailed_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CommunicationProtocolDirectory_OpenFailed_Title", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Your message has not been sent yet. If you leave this chat now, the draft will be lost. Do you want to continue? ähnelt.
         /// </summary>
-        public static string Message_DiscardUnsentDraft_Description {
-            get {
+        public static string Message_DiscardUnsentDraft_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DiscardUnsentDraft_Description", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Discard Unsent Message? ähnelt.
         /// </summary>
-        public static string Message_DiscardUnsentDraft_Title {
-            get {
+        public static string Message_DiscardUnsentDraft_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DiscardUnsentDraft_Title", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The AI Assistant requested execution of the input-file script for &apos;{0}&apos;. Do you want to continue? ähnelt.
         /// </summary>
-        public static string Message_ExecuteInputFileCommand_Confirm_Description {
-            get {
+        public static string Message_ExecuteInputFileCommand_Confirm_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_ExecuteInputFileCommand_Confirm_Description", resourceCulture);
             }
         }
@@ -180,17 +215,32 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Confirm Script Execution ähnelt.
         /// </summary>
-        public static string Message_ExecuteInputFileCommand_Confirm_Title {
-            get {
+        public static string Message_ExecuteInputFileCommand_Confirm_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_ExecuteInputFileCommand_Confirm_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Estimated token usage: {0:N0} ähnelt.
+        /// </summary>
+        public static string TokenMonitor_Format
+        {
+            get
+            {
+                return ResourceManager.GetString("TokenMonitor_Format", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back to histories ähnelt.
         /// </summary>
-        public static string Tooltip_BackToHistory {
-            get {
+        public static string Tooltip_BackToHistory
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_BackToHistory", resourceCulture);
             }
         }
@@ -198,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Configure AI Assistant ähnelt.
         /// </summary>
-        public static string Tooltip_Configure {
-            get {
+        public static string Tooltip_Configure
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Configure", resourceCulture);
             }
         }
@@ -207,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Start new chat ähnelt.
         /// </summary>
-        public static string Tooltip_NewHistory {
-            get {
+        public static string Tooltip_NewHistory
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_NewHistory", resourceCulture);
             }
         }
@@ -216,44 +270,43 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open communication protocol directory ähnelt.
         /// </summary>
-        public static string Tooltip_OpenCommunicationProtocolDirectory {
-            get {
+        public static string Tooltip_OpenCommunicationProtocolDirectory
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_OpenCommunicationProtocolDirectory", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reset token usage counter ähnelt.
-        /// </summary>
-        public static string Tooltip_ResetTokenUsage {
-            get {
-                return ResourceManager.GetString("Tooltip_ResetTokenUsage", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Estimated token usage: {0:N0} ähnelt.
-        /// </summary>
-        public static string TokenMonitor_Format {
-            get {
-                return ResourceManager.GetString("TokenMonitor_Format", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Redo last AI project state change ähnelt.
         /// </summary>
-        public static string Tooltip_Redo {
-            get {
+        public static string Tooltip_Redo
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Redo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset token usage counter ähnelt.
+        /// </summary>
+        public static string Tooltip_ResetTokenUsage
+        {
+            get
+            {
+                return ResourceManager.GetString("Tooltip_ResetTokenUsage", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Undo last AI project state change ähnelt.
         /// </summary>
-        public static string Tooltip_Undo {
-            get {
+        public static string Tooltip_Undo
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Undo", resourceCulture);
             }
         }
@@ -261,8 +314,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please configure your AI provider first. API key required. ähnelt.
         /// </summary>
-        public static string Warning_MissingProvider {
-            get {
+        public static string Warning_MissingProvider
+        {
+            get
+            {
                 return ResourceManager.GetString("Warning_MissingProvider", resourceCulture);
             }
         }
@@ -270,8 +325,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox AI-Assistant ähnelt.
         /// </summary>
-        public static string Watermark_Title {
-            get {
+        public static string Watermark_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Watermark_Title", resourceCulture);
             }
         }

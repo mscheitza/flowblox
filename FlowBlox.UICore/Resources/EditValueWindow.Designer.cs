@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class EditValueWindow {
+    public class EditValueWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal EditValueWindow() {
+        internal EditValueWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.EditValueWindow", typeof(EditValueWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
-        public static string ButtonApply {
-            get {
+        public static string ButtonApply
+        {
+            get
+            {
                 return ResourceManager.GetString("ButtonApply", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
         /// </summary>
-        public static string ButtonCancel {
-            get {
+        public static string ButtonCancel
+        {
+            get
+            {
                 return ResourceManager.GetString("ButtonCancel", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please enter the value. ähnelt.
         /// </summary>
-        public static string DefaultDescription {
-            get {
+        public static string DefaultDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("DefaultDescription", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Parameter: ähnelt.
         /// </summary>
-        public static string LabelParameter {
-            get {
+        public static string LabelParameter
+        {
+            get
+            {
                 return ResourceManager.GetString("LabelParameter", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Escape regex characters ähnelt.
         /// </summary>
-        public static string MaskRegex {
-            get {
+        public static string MaskRegex
+        {
+            get
+            {
                 return ResourceManager.GetString("MaskRegex", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit value ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create value ähnelt.
         /// </summary>
-        public static string TitleCreateValue {
-            get {
+        public static string TitleCreateValue
+        {
+            get
+            {
                 return ResourceManager.GetString("TitleCreateValue", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit value ähnelt.
         /// </summary>
-        public static string TitleEditValue {
-            get {
+        public static string TitleEditValue
+        {
+            get
+            {
                 return ResourceManager.GetString("TitleEditValue", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please enter a value. ähnelt.
         /// </summary>
-        public static string ValidationErrorMessage {
-            get {
+        public static string ValidationErrorMessage
+        {
+            get
+            {
                 return ResourceManager.GetString("ValidationErrorMessage", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Invalid input ähnelt.
         /// </summary>
-        public static string ValidationErrorTitle {
-            get {
+        public static string ValidationErrorTitle
+        {
+            get
+            {
                 return ResourceManager.GetString("ValidationErrorTitle", resourceCulture);
             }
         }

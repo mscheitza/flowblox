@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ManageUserExtensionsWindow {
+    public class ManageUserExtensionsWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ManageUserExtensionsWindow() {
+        internal ManageUserExtensionsWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ManageUserExtensionsWindow", typeof(ManageUserExtensionsWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create extension ähnelt.
         /// </summary>
-        public static string Button_CreateExtension {
-            get {
+        public static string Button_CreateExtension
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_CreateExtension", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create a new extension. ähnelt.
         /// </summary>
-        public static string Button_CreateExtension_Tooltip {
-            get {
+        public static string Button_CreateExtension_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_CreateExtension_Tooltip", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create version ähnelt.
         /// </summary>
-        public static string Button_CreateVersion {
-            get {
+        public static string Button_CreateVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_CreateVersion", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create a new version for the selected extension. ähnelt.
         /// </summary>
-        public static string Button_CreateVersion_Tooltip {
-            get {
+        public static string Button_CreateVersion_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_CreateVersion_Tooltip", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete extension ähnelt.
         /// </summary>
-        public static string Button_DeleteExtension {
-            get {
+        public static string Button_DeleteExtension
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_DeleteExtension", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete the selected extension. Published versions cannot be deleted. ähnelt.
         /// </summary>
-        public static string Button_DeleteExtension_Tooltip {
-            get {
+        public static string Button_DeleteExtension_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_DeleteExtension_Tooltip", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete version ähnelt.
         /// </summary>
-        public static string Button_DeleteVersion {
-            get {
+        public static string Button_DeleteVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_DeleteVersion", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete the selected version if it has not been published. ähnelt.
         /// </summary>
-        public static string Button_DeleteVersion_Tooltip {
-            get {
+        public static string Button_DeleteVersion_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_DeleteVersion_Tooltip", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Publish ähnelt.
         /// </summary>
-        public static string Button_PublishVersion {
-            get {
+        public static string Button_PublishVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_PublishVersion", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die A version can only be published once valid content has been assigned to it. ähnelt.
         /// </summary>
-        public static string Button_PublishVersion_Tooltip {
-            get {
+        public static string Button_PublishVersion_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_PublishVersion_Tooltip", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save changes ähnelt.
         /// </summary>
-        public static string Button_SaveChanges {
-            get {
+        public static string Button_SaveChanges
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_SaveChanges", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die This saves the pending changes on the extension platform. ähnelt.
         /// </summary>
-        public static string Button_SaveChanges_Tooltip {
-            get {
+        public static string Button_SaveChanges_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_SaveChanges_Tooltip", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Extension is active ähnelt.
         /// </summary>
-        public static string CheckBox_Extension_Active {
-            get {
+        public static string CheckBox_Extension_Active
+        {
+            get
+            {
                 return ResourceManager.GetString("CheckBox_Extension_Active", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version is active ähnelt.
         /// </summary>
-        public static string CheckBox_ExtensionVersion_Active {
-            get {
+        public static string CheckBox_ExtensionVersion_Active
+        {
+            get
+            {
                 return ResourceManager.GetString("CheckBox_ExtensionVersion_Active", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Backward compatible with previous version ähnelt.
         /// </summary>
-        public static string CheckBox_ExtensionVersion_BackwardsCompatible {
-            get {
+        public static string CheckBox_ExtensionVersion_BackwardsCompatible
+        {
+            get
+            {
                 return ResourceManager.GetString("CheckBox_ExtensionVersion_BackwardsCompatible", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
         /// </summary>
-        public static string Column_Dependency_ExtensionName {
-            get {
+        public static string Column_Dependency_ExtensionName
+        {
+            get
+            {
                 return ResourceManager.GetString("Column_Dependency_ExtensionName", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die GUID ähnelt.
         /// </summary>
-        public static string Column_Dependency_Guid {
-            get {
+        public static string Column_Dependency_Guid
+        {
+            get
+            {
                 return ResourceManager.GetString("Column_Dependency_Guid", resourceCulture);
             }
         }
@@ -216,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version ähnelt.
         /// </summary>
-        public static string Column_Dependency_Version {
-            get {
+        public static string Column_Dependency_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("Column_Dependency_Version", resourceCulture);
             }
         }
@@ -225,8 +270,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The extensions could not be loaded from the server. ähnelt.
         /// </summary>
-        public static string Error_LoadExtensionsFailed {
-            get {
+        public static string Error_LoadExtensionsFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_LoadExtensionsFailed", resourceCulture);
             }
         }
@@ -237,8 +284,10 @@ namespace FlowBlox.UICore.Resources {
         ///You can add, edit, disable, or remove extensions, as well as create and manage different versions of your extensions.
         ///   ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -246,8 +295,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage custom extensions ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -255,8 +306,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Archive path (*.zip) ähnelt.
         /// </summary>
-        public static string Label_ArchivePath {
-            get {
+        public static string Label_ArchivePath
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ArchivePath", resourceCulture);
             }
         }
@@ -264,8 +317,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Changes ähnelt.
         /// </summary>
-        public static string Label_Changes {
-            get {
+        public static string Label_Changes
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Changes", resourceCulture);
             }
         }
@@ -273,8 +328,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
-        public static string Label_Description {
-            get {
+        public static string Label_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Description", resourceCulture);
             }
         }
@@ -282,8 +339,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Extension name ähnelt.
         /// </summary>
-        public static string Label_ExtensionName {
-            get {
+        public static string Label_ExtensionName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ExtensionName", resourceCulture);
             }
         }
@@ -291,8 +350,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die GUID ähnelt.
         /// </summary>
-        public static string Label_Guid {
-            get {
+        public static string Label_Guid
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Guid", resourceCulture);
             }
         }
@@ -300,8 +361,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Runtime version ähnelt.
         /// </summary>
-        public static string Label_RuntimeVersion {
-            get {
+        public static string Label_RuntimeVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_RuntimeVersion", resourceCulture);
             }
         }
@@ -309,8 +372,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version number ähnelt.
         /// </summary>
-        public static string Label_Version {
-            get {
+        public static string Label_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Version", resourceCulture);
             }
         }
@@ -318,8 +383,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Saving changes and uploading extension content. Please wait... ähnelt.
         /// </summary>
-        public static string Loading_SaveInProgress {
-            get {
+        public static string Loading_SaveInProgress
+        {
+            get
+            {
                 return ResourceManager.GetString("Loading_SaveInProgress", resourceCulture);
             }
         }
@@ -327,8 +394,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The extension for the selected version could not be resolved. ähnelt.
         /// </summary>
-        public static string Message_ExtensionNotResolvable {
-            get {
+        public static string Message_ExtensionNotResolvable
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_ExtensionNotResolvable", resourceCulture);
             }
         }
@@ -336,8 +405,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The changes were saved successfully. ähnelt.
         /// </summary>
-        public static string Message_SaveChangesSuccessful {
-            get {
+        public static string Message_SaveChangesSuccessful
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_SaveChangesSuccessful", resourceCulture);
             }
         }
@@ -345,8 +416,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No extension with the name &quot;{0}&quot; could be found. ähnelt.
         /// </summary>
-        public static string Message_UnableToLocateExtension {
-            get {
+        public static string Message_UnableToLocateExtension
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_UnableToLocateExtension", resourceCulture);
             }
         }
@@ -354,8 +427,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage own extensions ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -363,8 +438,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Dependencies ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Header {
-            get {
+        public static string VersionView_Expander_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Header", resourceCulture);
             }
         }
@@ -372,8 +449,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die What should be considered when uploading a version? ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Notes_Header {
-            get {
+        public static string VersionView_Expander_Notes_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Header", resourceCulture);
             }
         }
@@ -381,8 +460,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The content of a version is stored as a *.zip archive. ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Notes_Note1 {
-            get {
+        public static string VersionView_Expander_Notes_Note1
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Note1", resourceCulture);
             }
         }
@@ -390,8 +471,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The extension name must match the file name of the *.dll. ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Notes_Note2 {
-            get {
+        public static string VersionView_Expander_Notes_Note2
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Note2", resourceCulture);
             }
         }
@@ -399,8 +482,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The *.dll must be compatible with .NET 6. ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Notes_Note3 {
-            get {
+        public static string VersionView_Expander_Notes_Note3
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Note3", resourceCulture);
             }
         }
@@ -408,8 +493,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die A *.deps.json file must be included that contains the dependencies of the extension. ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Notes_Note4 {
-            get {
+        public static string VersionView_Expander_Notes_Note4
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Note4", resourceCulture);
             }
         }
@@ -417,8 +504,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The version number of the DLL must match the version of the extension. ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Notes_Note5 {
-            get {
+        public static string VersionView_Expander_Notes_Note5
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Note5", resourceCulture);
             }
         }
@@ -426,8 +515,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Once an uploaded version has been published, the version itself can no longer be removed or its content changed. ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Notes_Note6 {
-            get {
+        public static string VersionView_Expander_Notes_Note6
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Note6", resourceCulture);
             }
         }
@@ -435,8 +526,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please use the active flag to prevent further distribution of the version. ähnelt.
         /// </summary>
-        public static string VersionView_Expander_Notes_Note7 {
-            get {
+        public static string VersionView_Expander_Notes_Note7
+        {
+            get
+            {
                 return ResourceManager.GetString("VersionView_Expander_Notes_Note7", resourceCulture);
             }
         }
@@ -444,8 +537,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die What changed compared to the previous version? ähnelt.
         /// </summary>
-        public static string Watermark_Changes {
-            get {
+        public static string Watermark_Changes
+        {
+            get
+            {
                 return ResourceManager.GetString("Watermark_Changes", resourceCulture);
             }
         }
@@ -453,8 +548,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automatically detected from archive ZIP ähnelt.
         /// </summary>
-        public static string Watermark_RuntimeVersion {
-            get {
+        public static string Watermark_RuntimeVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Watermark_RuntimeVersion", resourceCulture);
             }
         }

@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class CreateProjectVersionWindow {
+    public class CreateProjectVersionWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CreateProjectVersionWindow() {
+        internal CreateProjectVersionWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.CreateProjectVersionWindow", typeof(CreateProjectVersionWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
         /// </summary>
-        public static string Button_Cancel {
-            get {
+        public static string Button_Cancel
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Cancel", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create version ähnelt.
         /// </summary>
-        public static string Button_Create {
-            get {
+        public static string Button_Create
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Create", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to create the project version. ähnelt.
         /// </summary>
-        public static string Error_CreateVersionFailed {
-            get {
+        public static string Error_CreateVersionFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_CreateVersionFailed", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die You are not logged in. Please log in first to create a project version. ähnelt.
         /// </summary>
-        public static string Error_NotLoggedIn {
-            get {
+        public static string Error_NotLoggedIn
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_NotLoggedIn", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create an immutable version snapshot from the latest project state. This version can later be referenced by other projects to ensure stable execution. ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create a stable project version ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project versions are immutable. Once created, they cannot be changed. ähnelt.
         /// </summary>
-        public static string Hint_Immutable {
-            get {
+        public static string Hint_Immutable
+        {
+            get
+            {
                 return ResourceManager.GetString("Hint_Immutable", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Comment ähnelt.
         /// </summary>
-        public static string Label_Comment {
-            get {
+        public static string Label_Comment
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Comment", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project ähnelt.
         /// </summary>
-        public static string Label_Project {
-            get {
+        public static string Label_Project
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Project", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project GUID ähnelt.
         /// </summary>
-        public static string Label_ProjectGuid {
-            get {
+        public static string Label_ProjectGuid
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectGuid", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project name ähnelt.
         /// </summary>
-        public static string Label_ProjectName {
-            get {
+        public static string Label_ProjectName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectName", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version comment ähnelt.
         /// </summary>
-        public static string Label_VersionComment {
-            get {
+        public static string Label_VersionComment
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_VersionComment", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The project version was created successfully. ähnelt.
         /// </summary>
-        public static string Message_CreateVersionSuccess {
-            get {
+        public static string Message_CreateVersionSuccess
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CreateVersionSuccess", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enter a comment (optional) ähnelt.
         /// </summary>
-        public static string Placeholder_Comment {
-            get {
+        public static string Placeholder_Comment
+        {
+            get
+            {
                 return ResourceManager.GetString("Placeholder_Comment", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Optional: describe what changed (e.g., &quot;Stable release for customer X&quot;). ähnelt.
         /// </summary>
-        public static string Placeholder_VersionComment {
-            get {
+        public static string Placeholder_VersionComment
+        {
+            get
+            {
                 return ResourceManager.GetString("Placeholder_VersionComment", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create project version ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The comment helps you identify this version later. It does not affect the project content. ähnelt.
         /// </summary>
-        public static string Tooltip_VersionComment {
-            get {
+        public static string Tooltip_VersionComment
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_VersionComment", resourceCulture);
             }
         }

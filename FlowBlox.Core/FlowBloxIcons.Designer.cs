@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.Core {
+namespace FlowBlox.Core
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.Core {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class FlowBloxIcons {
+    public class FlowBloxIcons
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal FlowBloxIcons() {
+        internal FlowBloxIcons()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.Core.FlowBloxIcons", typeof(FlowBloxIcons).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.Core {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] account_cog {
-            get {
+        public static byte[] account_cog
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("account_cog", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -73,8 +84,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] arrow_right_thin {
-            get {
+        public static byte[] arrow_right_thin
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("arrow_right_thin", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -83,8 +96,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] auto_fix {
-            get {
+        public static byte[] auto_fix
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("auto_fix", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -93,8 +108,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] calculator_variant {
-            get {
+        public static byte[] calculator_variant
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("calculator_variant", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -103,8 +120,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] calendar_clock {
-            get {
+        public static byte[] calendar_clock
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("calendar_clock", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -113,8 +132,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] calendar_plus {
-            get {
+        public static byte[] calendar_plus
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("calendar_plus", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -123,8 +144,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] call_merge {
-            get {
+        public static byte[] call_merge
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("call_merge", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -133,8 +156,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] call_split {
-            get {
+        public static byte[] call_split
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("call_split", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -143,8 +168,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] code_braces {
-            get {
+        public static byte[] code_braces
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("code_braces", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -153,8 +180,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] code_json {
-            get {
+        public static byte[] code_json
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("code_json", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -163,8 +192,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] code_tags {
-            get {
+        public static byte[] code_tags
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("code_tags", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -173,8 +204,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] comment_question {
-            get {
+        public static byte[] comment_question
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("comment_question", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -183,8 +216,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] compare {
-            get {
+        public static byte[] compare
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("compare", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -193,8 +228,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] component {
-            get {
+        public static byte[] component
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("component", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -203,8 +240,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] counter {
-            get {
+        public static byte[] counter
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("counter", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -213,8 +252,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] cube_outline {
-            get {
+        public static byte[] cube_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("cube_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -223,8 +264,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] cube_send {
-            get {
+        public static byte[] cube_send
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("cube_send", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -233,8 +276,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] cursor_default_click {
-            get {
+        public static byte[] cursor_default_click
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("cursor_default_click", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -243,8 +288,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] database_cog {
-            get {
+        public static byte[] database_cog
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("database_cog", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -253,8 +300,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] database_cog1 {
-            get {
+        public static byte[] database_cog1
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("database_cog1", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -263,8 +312,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] database_outline {
-            get {
+        public static byte[] database_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("database_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -273,8 +324,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] download {
-            get {
+        public static byte[] download
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("download", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -283,8 +336,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] email_send_outline {
-            get {
+        public static byte[] email_send_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("email_send_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -293,8 +348,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] file_delimited_outline {
-            get {
+        public static byte[] file_delimited_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("file_delimited_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -303,8 +360,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] file_document_outline {
-            get {
+        public static byte[] file_document_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("file_document_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -313,8 +372,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] file_document_remove {
-            get {
+        public static byte[] file_document_remove
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("file_document_remove", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -323,8 +384,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] file_edit {
-            get {
+        public static byte[] file_edit
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("file_edit", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -333,8 +396,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] file_export {
-            get {
+        public static byte[] file_export
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("file_export", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -343,8 +408,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] file_import {
-            get {
+        public static byte[] file_import
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("file_import", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -353,8 +420,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] file_move_outline {
-            get {
+        public static byte[] file_move_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("file_move_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -363,8 +432,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] file_pdf_box {
-            get {
+        public static byte[] file_pdf_box
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("file_pdf_box", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -373,8 +444,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] folder_open {
-            get {
+        public static byte[] folder_open
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("folder_open", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -383,8 +456,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] folder_search_outline {
-            get {
+        public static byte[] folder_search_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("folder_search_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -393,8 +468,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] folder_zip_outline {
-            get {
+        public static byte[] folder_zip_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("folder_zip_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -403,8 +480,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] form_textbox {
-            get {
+        public static byte[] form_textbox
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("form_textbox", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -413,8 +492,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] format_line_style {
-            get {
+        public static byte[] format_line_style
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("format_line_style", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -423,8 +504,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] format_list_bulleted {
-            get {
+        public static byte[] format_list_bulleted
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("format_list_bulleted", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -433,8 +516,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] identifier {
-            get {
+        public static byte[] identifier
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("identifier", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -443,8 +528,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] inbox_arrow_down_outline {
-            get {
+        public static byte[] inbox_arrow_down_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("inbox_arrow_down_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -453,8 +540,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] lightning_bolt_outline {
-            get {
+        public static byte[] lightning_bolt_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("lightning_bolt_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -463,8 +552,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] link {
-            get {
+        public static byte[] link
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("link", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -473,8 +564,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] magnify_scan {
-            get {
+        public static byte[] magnify_scan
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("magnify_scan", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -483,8 +576,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] memory {
-            get {
+        public static byte[] memory
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("memory", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -493,8 +588,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] microsoft_excel {
-            get {
+        public static byte[] microsoft_excel
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("microsoft_excel", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -503,8 +600,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] note_text {
-            get {
+        public static byte[] note_text
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("note_text", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -513,8 +612,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] play_box_outline {
-            get {
+        public static byte[] play_box_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("play_box_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -523,8 +624,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] playlist_play {
-            get {
+        public static byte[] playlist_play
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("playlist_play", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -533,8 +636,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] ray_start_arrow {
-            get {
+        public static byte[] ray_start_arrow
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("ray_start_arrow", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -543,8 +648,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] regex {
-            get {
+        public static byte[] regex
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("regex", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -553,8 +660,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] repeat {
-            get {
+        public static byte[] repeat
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("repeat", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -563,8 +672,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] robot {
-            get {
+        public static byte[] robot
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("robot", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -573,8 +684,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] robot_outline {
-            get {
+        public static byte[] robot_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("robot_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -583,8 +696,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] selection_ellipse_arrow_inside {
-            get {
+        public static byte[] selection_ellipse_arrow_inside
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("selection_ellipse_arrow_inside", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -593,8 +708,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] set_all {
-            get {
+        public static byte[] set_all
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("set_all", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -603,8 +720,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] set_merge {
-            get {
+        public static byte[] set_merge
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("set_merge", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -613,8 +732,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] shape_outline {
-            get {
+        public static byte[] shape_outline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("shape_outline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -623,8 +744,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] shape_outline1 {
-            get {
+        public static byte[] shape_outline1
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("shape_outline1", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -633,8 +756,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] source_branch {
-            get {
+        public static byte[] source_branch
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("source_branch", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -643,8 +768,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] source_merge {
-            get {
+        public static byte[] source_merge
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("source_merge", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -653,8 +780,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] source_merge1 {
-            get {
+        public static byte[] source_merge1
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("source_merge1", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -663,8 +792,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] table_arrow_down {
-            get {
+        public static byte[] table_arrow_down
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("table_arrow_down", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -673,8 +804,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] table_arrow_up {
-            get {
+        public static byte[] table_arrow_up
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("table_arrow_up", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -683,8 +816,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] table_large {
-            get {
+        public static byte[] table_large
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("table_large", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -693,8 +828,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] text_long {
-            get {
+        public static byte[] text_long
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("text_long", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -703,8 +840,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] timeline_clock {
-            get {
+        public static byte[] timeline_clock
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("timeline_clock", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -713,8 +852,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] tray_arrow_up {
-            get {
+        public static byte[] tray_arrow_up
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("tray_arrow_up", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -723,8 +864,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] vector_arrange_below {
-            get {
+        public static byte[] vector_arrange_below
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("vector_arrange_below", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -733,8 +876,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] vector_polyline {
-            get {
+        public static byte[] vector_polyline
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("vector_polyline", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -743,8 +888,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] web {
-            get {
+        public static byte[] web
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("web", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -753,8 +900,10 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] xml {
-            get {
+        public static byte[] xml
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("xml", resourceCulture);
                 return ((byte[])(obj));
             }

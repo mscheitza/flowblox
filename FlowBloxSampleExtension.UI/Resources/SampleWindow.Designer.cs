@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBloxSampleExtension.UI.Resources {
+namespace FlowBloxSampleExtension.UI.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBloxSampleExtension.UI.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SampleWindow {
+    public class SampleWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SampleWindow() {
+        internal SampleWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBloxSampleExtension.UI.Resources.SampleWindow", typeof(SampleWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,38 +57,47 @@ namespace FlowBloxSampleExtension.UI.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Schließen ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
-        public static string CloseButton {
-            get {
+        public static string CloseButton
+        {
+            get
+            {
                 return ResourceManager.GetString("CloseButton", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dieses Fenster dient als Beispiel für eine benutzerdefinierte UI-Aktion in einer FlowBlox-Extension. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This window serves as an example of a custom UI action in a FlowBlox extension. ähnelt.
         /// </summary>
-        public static string Description {
-            get {
+        public static string Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Beispiel-Fenster ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sample Window ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }

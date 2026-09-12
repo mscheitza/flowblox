@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ProblemTraceWindow {
+    public class ProblemTraceWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ProblemTraceWindow() {
+        internal ProblemTraceWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ProblemTraceWindow", typeof(ProblemTraceWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,20 +57,25 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
-        public static string Button_Close {
-            get {
+        public static string Button_Close
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Close", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Details ähnelt.
         /// </summary>
-        public static string Column_Details {
-            get {
+        public static string Column_Details
+        {
+            get
+            {
                 return ResourceManager.GetString("Column_Details", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Fully qualified field name ähnelt.
         /// </summary>
-        public static string Column_FullyQualifiedName {
-            get {
+        public static string Column_FullyQualifiedName
+        {
+            get
+            {
                 return ResourceManager.GetString("Column_FullyQualifiedName", resourceCulture);
             }
         }
@@ -90,17 +105,21 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
-        public static string Column_Value {
-            get {
+        public static string Column_Value
+        {
+            get
+            {
                 return ResourceManager.GetString("Column_Value", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No field values were recorded for this problem. ähnelt.
         /// </summary>
-        public static string EmptyState_NoFieldValues {
-            get {
+        public static string EmptyState_NoFieldValues
+        {
+            get
+            {
                 return ResourceManager.GetString("EmptyState_NoFieldValues", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Criticality: ähnelt.
         /// </summary>
-        public static string Label_Criticality {
-            get {
+        public static string Label_Criticality
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Criticality", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Exception: ähnelt.
         /// </summary>
-        public static string Label_Exception {
-            get {
+        public static string Label_Exception
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Exception", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field values: ähnelt.
         /// </summary>
-        public static string Label_FieldValues {
-            get {
+        public static string Label_FieldValues
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_FieldValues", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Message: ähnelt.
         /// </summary>
-        public static string Label_Message {
-            get {
+        public static string Label_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Message", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name: ähnelt.
         /// </summary>
-        public static string Label_Name {
-            get {
+        public static string Label_Name
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Name", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Timestamp: ähnelt.
         /// </summary>
-        public static string Label_Timestamp {
-            get {
+        public static string Label_Timestamp
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Timestamp", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Issue tracking ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }

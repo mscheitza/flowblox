@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class OptionsWindow {
+    public class OptionsWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal OptionsWindow() {
+        internal OptionsWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.OptionsWindow", typeof(OptionsWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,17 +72,21 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enter the name of the new option. ähnelt.
         /// </summary>
-        public static string AddOption_Description {
-            get {
+        public static string AddOption_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("AddOption_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
-        public static string Button_Apply {
-            get {
+        public static string Button_Apply
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Apply", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select an option to edit its details. ähnelt.
         /// </summary>
-        public static string EmptyState {
-            get {
+        public static string EmptyState
+        {
+            get
+            {
                 return ResourceManager.GetString("EmptyState", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit option ähnelt.
         /// </summary>
-        public static string Header_EditOption {
-            get {
+        public static string Header_EditOption
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_EditOption", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description: ähnelt.
         /// </summary>
-        public static string Label_Description {
-            get {
+        public static string Label_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Description", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name: ähnelt.
         /// </summary>
-        public static string Label_Name {
-            get {
+        public static string Label_Name
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Name", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Available as placeholder: ähnelt.
         /// </summary>
-        public static string Label_PlaceholderEnabled {
-            get {
+        public static string Label_PlaceholderEnabled
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_PlaceholderEnabled", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Type: ähnelt.
         /// </summary>
-        public static string Label_Type {
-            get {
+        public static string Label_Type
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Type", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Value: ähnelt.
         /// </summary>
-        public static string Label_Value {
-            get {
+        public static string Label_Value
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Value", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die This command resets existing option values to their defaults. Do you really want to restore the default options? ähnelt.
         /// </summary>
-        public static string ResetOptions_Message {
-            get {
+        public static string ResetOptions_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("ResetOptions_Message", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Options ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Add option ähnelt.
         /// </summary>
-        public static string Tooltip_Add {
-            get {
+        public static string Tooltip_Add
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Add", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove option ähnelt.
         /// </summary>
-        public static string Tooltip_Delete {
-            get {
+        public static string Tooltip_Delete
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Delete", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reset options ähnelt.
         /// </summary>
-        public static string Tooltip_Reset {
-            get {
+        public static string Tooltip_Reset
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Reset", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save option ähnelt.
         /// </summary>
-        public static string Tooltip_Save {
-            get {
+        public static string Tooltip_Save
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Save", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die An option named &apos;{0}&apos; already exists. ähnelt.
         /// </summary>
-        public static string Validation_OptionAlreadyExists {
-            get {
+        public static string Validation_OptionAlreadyExists
+        {
+            get
+            {
                 return ResourceManager.GetString("Validation_OptionAlreadyExists", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The option name is required. ähnelt.
         /// </summary>
-        public static string Validation_OptionNameRequired {
-            get {
+        public static string Validation_OptionNameRequired
+        {
+            get
+            {
                 return ResourceManager.GetString("Validation_OptionNameRequired", resourceCulture);
             }
         }
@@ -216,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No ähnelt.
         /// </summary>
-        public static string Value_No {
-            get {
+        public static string Value_No
+        {
+            get
+            {
                 return ResourceManager.GetString("Value_No", resourceCulture);
             }
         }
@@ -225,8 +270,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Yes ähnelt.
         /// </summary>
-        public static string Value_Yes {
-            get {
+        public static string Value_Yes
+        {
+            get
+            {
                 return ResourceManager.GetString("Value_Yes", resourceCulture);
             }
         }

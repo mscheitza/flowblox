@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class LoginWindow {
+    public class LoginWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal LoginWindow() {
+        internal LoginWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.LoginWindow", typeof(LoginWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
-        public static string Button_Back {
-            get {
+        public static string Button_Back
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Log in ähnelt.
         /// </summary>
-        public static string Button_Login {
-            get {
+        public static string Button_Login
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Login", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save credentials ähnelt.
         /// </summary>
-        public static string CheckBox_SaveCredentials {
-            get {
+        public static string CheckBox_SaveCredentials
+        {
+            get
+            {
                 return ResourceManager.GetString("CheckBox_SaveCredentials", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The API metadata could not be retrieved. The service may be unavailable or does not provide metadata through this endpoint. ähnelt.
         /// </summary>
-        public static string Error_LoadApiMetadataFailed {
-            get {
+        public static string Error_LoadApiMetadataFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_LoadApiMetadataFailed", resourceCulture);
             }
         }
@@ -102,8 +119,10 @@ namespace FlowBlox.UICore.Resources {
         ///After completing the registration, you can log in here using your credentials.
         ///   ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -111,8 +130,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Sign in to FlowBlox ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -120,8 +141,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Api-URL ähnelt.
         /// </summary>
-        public static string Label_ApiUrl {
-            get {
+        public static string Label_ApiUrl
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ApiUrl", resourceCulture);
             }
         }
@@ -129,8 +152,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Email ähnelt.
         /// </summary>
-        public static string Label_Email {
-            get {
+        public static string Label_Email
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Email", resourceCulture);
             }
         }
@@ -138,8 +163,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
         /// </summary>
-        public static string Label_Password {
-            get {
+        public static string Label_Password
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Password", resourceCulture);
             }
         }
@@ -147,8 +174,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Forgot your password? ähnelt.
         /// </summary>
-        public static string Link_ForgotPassword {
-            get {
+        public static string Link_ForgotPassword
+        {
+            get
+            {
                 return ResourceManager.GetString("Link_ForgotPassword", resourceCulture);
             }
         }
@@ -156,8 +185,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Login ähnelt.
         /// </summary>
-        public static string LoginWindow_Title {
-            get {
+        public static string LoginWindow_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("LoginWindow_Title", resourceCulture);
             }
         }
@@ -165,8 +196,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die An error occurred during login. Please check your connection and try again. ähnelt.
         /// </summary>
-        public static string Message_Login_Failed {
-            get {
+        public static string Message_Login_Failed
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_Login_Failed", resourceCulture);
             }
         }
@@ -174,8 +207,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Login failed. User data could not be retrieved. ähnelt.
         /// </summary>
-        public static string Message_Login_GetUserDataFailed {
-            get {
+        public static string Message_Login_GetUserDataFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_Login_GetUserDataFailed", resourceCulture);
             }
         }
@@ -183,8 +218,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Login failed. Please check your email and password. ähnelt.
         /// </summary>
-        public static string Message_Login_InvalidCredentials {
-            get {
+        public static string Message_Login_InvalidCredentials
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_Login_InvalidCredentials", resourceCulture);
             }
         }
@@ -192,8 +229,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please select an API URL. ähnelt.
         /// </summary>
-        public static string Message_Login_NoApiUrlSelected {
-            get {
+        public static string Message_Login_NoApiUrlSelected
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_Login_NoApiUrlSelected", resourceCulture);
             }
         }

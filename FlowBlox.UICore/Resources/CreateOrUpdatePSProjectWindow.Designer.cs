@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class CreateOrUpdatePSProjectWindow {
+    public class CreateOrUpdatePSProjectWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CreateOrUpdatePSProjectWindow() {
+        internal CreateOrUpdatePSProjectWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.CreateOrUpdatePSProjectWindow", typeof(CreateOrUpdatePSProjectWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
         /// </summary>
-        public static string Button_Cancel {
-            get {
+        public static string Button_Cancel
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Cancel", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create new project ähnelt.
         /// </summary>
-        public static string Button_CreateNewProject {
-            get {
+        public static string Button_CreateNewProject
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_CreateNewProject", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
-        public static string Button_Save {
-            get {
+        public static string Button_Save
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Save", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Update existing project ähnelt.
         /// </summary>
-        public static string Button_UpdateExistingProject {
-            get {
+        public static string Button_UpdateExistingProject
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_UpdateExistingProject", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die You are not logged in. Please log in first: Go to &quot;Extras&quot;, &quot;View projects&quot; and click &quot;Login&quot;. ähnelt.
         /// </summary>
-        public static string CreateOrUpdatePSProjectWindow_Message_LoginRequired {
-            get {
+        public static string CreateOrUpdatePSProjectWindow_Message_LoginRequired
+        {
+            get
+            {
                 return ResourceManager.GetString("CreateOrUpdatePSProjectWindow_Message_LoginRequired", resourceCulture);
             }
         }
@@ -113,8 +132,10 @@ namespace FlowBlox.UICore.Resources {
         ///Examples (max {1}):
         ///{2} ähnelt.
         /// </summary>
-        public static string CreateOrUpdatePSProjectWindow_Warning_ExternalProjectReferences {
-            get {
+        public static string CreateOrUpdatePSProjectWindow_Warning_ExternalProjectReferences
+        {
+            get
+            {
                 return ResourceManager.GetString("CreateOrUpdatePSProjectWindow_Warning_ExternalProjectReferences", resourceCulture);
             }
         }
@@ -122,8 +143,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to create the project in Project Space. ähnelt.
         /// </summary>
-        public static string Error_CreateFailed {
-            get {
+        public static string Error_CreateFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_CreateFailed", resourceCulture);
             }
         }
@@ -131,8 +154,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die You must be logged in to save to Project Space. ähnelt.
         /// </summary>
-        public static string Error_NotLoggedIn {
-            get {
+        public static string Error_NotLoggedIn
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_NotLoggedIn", resourceCulture);
             }
         }
@@ -140,8 +165,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The project metadata could not be refreshed after saving. ähnelt.
         /// </summary>
-        public static string Error_RefreshMetadataFailed {
-            get {
+        public static string Error_RefreshMetadataFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_RefreshMetadataFailed", resourceCulture);
             }
         }
@@ -149,8 +176,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to update project metadata. ähnelt.
         /// </summary>
-        public static string Error_UpdateFailed {
-            get {
+        public static string Error_UpdateFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_UpdateFailed", resourceCulture);
             }
         }
@@ -158,8 +187,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to upload project content. ähnelt.
         /// </summary>
-        public static string Error_UploadFailed {
-            get {
+        public static string Error_UploadFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_UploadFailed", resourceCulture);
             }
         }
@@ -167,8 +198,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save the current project to your Project Space. If the project already exists, metadata and content will be updated. ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -176,8 +209,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save to Project Space ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -185,8 +220,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Created at ähnelt.
         /// </summary>
-        public static string Label_CreatedAt {
-            get {
+        public static string Label_CreatedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_CreatedAt", resourceCulture);
             }
         }
@@ -194,8 +231,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
-        public static string Label_ProjectDescription {
-            get {
+        public static string Label_ProjectDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectDescription", resourceCulture);
             }
         }
@@ -203,8 +242,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project GUID ähnelt.
         /// </summary>
-        public static string Label_ProjectGuid {
-            get {
+        public static string Label_ProjectGuid
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectGuid", resourceCulture);
             }
         }
@@ -212,8 +253,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project name ähnelt.
         /// </summary>
-        public static string Label_ProjectName {
-            get {
+        public static string Label_ProjectName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectName", resourceCulture);
             }
         }
@@ -221,8 +264,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Last updated at ähnelt.
         /// </summary>
-        public static string Label_UpdatedAt {
-            get {
+        public static string Label_UpdatedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_UpdatedAt", resourceCulture);
             }
         }
@@ -230,8 +275,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Visibility ähnelt.
         /// </summary>
-        public static string Label_Visibility {
-            get {
+        public static string Label_Visibility
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Visibility", resourceCulture);
             }
         }
@@ -239,8 +286,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Saving project and uploading content. Please wait... ähnelt.
         /// </summary>
-        public static string Loading_SaveInProgress {
-            get {
+        public static string Loading_SaveInProgress
+        {
+            get
+            {
                 return ResourceManager.GetString("Loading_SaveInProgress", resourceCulture);
             }
         }
@@ -248,8 +297,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project was saved successfully to Project Space. ähnelt.
         /// </summary>
-        public static string Message_SaveSuccessful {
-            get {
+        public static string Message_SaveSuccessful
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_SaveSuccessful", resourceCulture);
             }
         }
@@ -257,8 +308,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Briefly describe the purpose and usage of this project… ähnelt.
         /// </summary>
-        public static string Placeholder_ProjectDescription {
-            get {
+        public static string Placeholder_ProjectDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("Placeholder_ProjectDescription", resourceCulture);
             }
         }
@@ -266,8 +319,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die GUID will be assigned after saving ähnelt.
         /// </summary>
-        public static string Placeholder_ProjectGuid {
-            get {
+        public static string Placeholder_ProjectGuid
+        {
+            get
+            {
                 return ResourceManager.GetString("Placeholder_ProjectGuid", resourceCulture);
             }
         }
@@ -275,8 +330,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die e.g. Contoso.Demo.Flow ähnelt.
         /// </summary>
-        public static string Placeholder_ProjectName {
-            get {
+        public static string Placeholder_ProjectName
+        {
+            get
+            {
                 return ResourceManager.GetString("Placeholder_ProjectName", resourceCulture);
             }
         }
@@ -284,8 +341,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create new project ähnelt.
         /// </summary>
-        public static string Tab_CreateNewProject {
-            get {
+        public static string Tab_CreateNewProject
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_CreateNewProject", resourceCulture);
             }
         }
@@ -293,8 +352,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Update existing project ähnelt.
         /// </summary>
-        public static string Tab_UpdateExistingProject {
-            get {
+        public static string Tab_UpdateExistingProject
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_UpdateExistingProject", resourceCulture);
             }
         }
@@ -302,8 +363,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save to Project Space ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -311,8 +374,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Clears the current ProjectSpace GUID. On save, a new ProjectSpace project will be created with a new GUID. ähnelt.
         /// </summary>
-        public static string Tooltip_CreateNewProject {
-            get {
+        public static string Tooltip_CreateNewProject
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_CreateNewProject", resourceCulture);
             }
         }
@@ -320,8 +385,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create a new Project Space project and upload its content afterwards. ähnelt.
         /// </summary>
-        public static string Tooltip_Tab_CreateNewProject {
-            get {
+        public static string Tooltip_Tab_CreateNewProject
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Tab_CreateNewProject", resourceCulture);
             }
         }
@@ -329,8 +396,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Update an existing Project Space project (requires a project GUID). ähnelt.
         /// </summary>
-        public static string Tooltip_Tab_UpdateExistingProject {
-            get {
+        public static string Tooltip_Tab_UpdateExistingProject
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_Tab_UpdateExistingProject", resourceCulture);
             }
         }
@@ -338,8 +407,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Uses the existing ProjectSpace GUID and updates the current ProjectSpace project. ähnelt.
         /// </summary>
-        public static string Tooltip_UpdateExistingProject {
-            get {
+        public static string Tooltip_UpdateExistingProject
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_UpdateExistingProject", resourceCulture);
             }
         }
@@ -347,8 +418,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Private ähnelt.
         /// </summary>
-        public static string Visibility_Private {
-            get {
+        public static string Visibility_Private
+        {
+            get
+            {
                 return ResourceManager.GetString("Visibility_Private", resourceCulture);
             }
         }
@@ -356,8 +429,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Public ähnelt.
         /// </summary>
-        public static string Visibility_Public {
-            get {
+        public static string Visibility_Public
+        {
+            get
+            {
                 return ResourceManager.GetString("Visibility_Public", resourceCulture);
             }
         }

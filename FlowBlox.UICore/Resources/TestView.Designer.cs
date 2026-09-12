@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class TestView {
+    public class TestView
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal TestView() {
+        internal TestView()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.TestView", typeof(TestView).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Defined at ähnelt.
         /// </summary>
-        public static string Col_DefinedAt {
-            get {
+        public static string Col_DefinedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_DefinedAt", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
         /// </summary>
-        public static string Col_Name {
-            get {
+        public static string Col_Name
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Name", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Required for ähnelt.
         /// </summary>
-        public static string Col_RequiredFor {
-            get {
+        public static string Col_RequiredFor
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_RequiredFor", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No test cases are available yet. ähnelt.
         /// </summary>
-        public static string EmptyState_NoTests {
-            get {
+        public static string EmptyState_NoTests
+        {
+            get
+            {
                 return ResourceManager.GetString("EmptyState_NoTests", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No valid start flow chain could be resolved. Please ensure a Start-FlowBlock exists and has at least one subsequent FlowBlock before creating test cases. ähnelt.
         /// </summary>
-        public static string Message_CreateBlockedMissingFlowChain_Description {
-            get {
+        public static string Message_CreateBlockedMissingFlowChain_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CreateBlockedMissingFlowChain_Description", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cannot create test case ähnelt.
         /// </summary>
-        public static string Message_CreateBlockedMissingFlowChain_Title {
-            get {
+        public static string Message_CreateBlockedMissingFlowChain_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CreateBlockedMissingFlowChain_Title", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The test case &quot;{0}&quot; cannot be deleted because it is still used by: {1} ähnelt.
         /// </summary>
-        public static string Message_DeleteBlocked_Description {
-            get {
+        public static string Message_DeleteBlocked_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteBlocked_Description", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete blocked ähnelt.
         /// </summary>
-        public static string Message_DeleteBlocked_Title {
-            get {
+        public static string Message_DeleteBlocked_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteBlocked_Title", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to delete {0} test case(s)? ähnelt.
         /// </summary>
-        public static string Message_DeleteConfirm_Description {
-            get {
+        public static string Message_DeleteConfirm_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteConfirm_Description", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete test cases ähnelt.
         /// </summary>
-        public static string Message_DeleteConfirm_Title {
-            get {
+        public static string Message_DeleteConfirm_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteConfirm_Title", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No valid start flow chain could be resolved. Please ensure a Start-FlowBlock exists and has at least one subsequent FlowBlock before editing test cases. ähnelt.
         /// </summary>
-        public static string Message_EditBlockedMissingFlowChain_Description {
-            get {
+        public static string Message_EditBlockedMissingFlowChain_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_EditBlockedMissingFlowChain_Description", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cannot edit test case ähnelt.
         /// </summary>
-        public static string Message_EditBlockedMissingFlowChain_Title {
-            get {
+        public static string Message_EditBlockedMissingFlowChain_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_EditBlockedMissingFlowChain_Title", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Successful: {0} | Failed: {1} | Total: {2} ähnelt.
         /// </summary>
-        public static string StatusSummary_Format {
-            get {
+        public static string StatusSummary_Format
+        {
+            get
+            {
                 return ResourceManager.GetString("StatusSummary_Format", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die None ähnelt.
         /// </summary>
-        public static string Text_None {
-            get {
+        public static string Text_None
+        {
+            get
+            {
                 return ResourceManager.GetString("Text_None", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tests ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create test case ähnelt.
         /// </summary>
-        public static string Toolbar_Create_Tooltip {
-            get {
+        public static string Toolbar_Create_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_Create_Tooltip", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete test case(s) ähnelt.
         /// </summary>
-        public static string Toolbar_Delete_Tooltip {
-            get {
+        public static string Toolbar_Delete_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_Delete_Tooltip", resourceCulture);
             }
         }
@@ -216,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit test case ähnelt.
         /// </summary>
-        public static string Toolbar_Edit_Tooltip {
-            get {
+        public static string Toolbar_Edit_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_Edit_Tooltip", resourceCulture);
             }
         }
@@ -225,8 +270,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open protocol ähnelt.
         /// </summary>
-        public static string Toolbar_OpenProtocol_Tooltip {
-            get {
+        public static string Toolbar_OpenProtocol_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_OpenProtocol_Tooltip", resourceCulture);
             }
         }
@@ -234,8 +281,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reset status and protocol ähnelt.
         /// </summary>
-        public static string Toolbar_ResetStatus_Tooltip {
-            get {
+        public static string Toolbar_ResetStatus_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_ResetStatus_Tooltip", resourceCulture);
             }
         }
@@ -243,8 +292,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Run selected or all tests ähnelt.
         /// </summary>
-        public static string Toolbar_Run_Tooltip {
-            get {
+        public static string Toolbar_Run_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_Run_Tooltip", resourceCulture);
             }
         }

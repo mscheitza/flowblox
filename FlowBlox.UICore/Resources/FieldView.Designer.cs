@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class FieldView {
+    public class FieldView
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal FieldView() {
+        internal FieldView()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.FieldView", typeof(FieldView).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field ähnelt.
         /// </summary>
-        public static string Col_Field {
-            get {
+        public static string Col_Field
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Field", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Flow-Block ähnelt.
         /// </summary>
-        public static string Col_FlowBlock {
-            get {
+        public static string Col_FlowBlock
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_FlowBlock", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
-        public static string Col_Value {
-            get {
+        public static string Col_Value
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Value", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Copy ähnelt.
         /// </summary>
-        public static string ContextMenu_Copy {
-            get {
+        public static string ContextMenu_Copy
+        {
+            get
+            {
                 return ResourceManager.GetString("ContextMenu_Copy", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open Field Value ähnelt.
         /// </summary>
-        public static string ContextMenu_OpenFieldValue {
-            get {
+        public static string ContextMenu_OpenFieldValue
+        {
+            get
+            {
                 return ResourceManager.GetString("ContextMenu_OpenFieldValue", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No fields have been created yet. As soon as user-defined fields or fields from generated result flow blocks are available, they will appear here. ähnelt.
         /// </summary>
-        public static string EmptyState_NoFields {
-            get {
+        public static string EmptyState_NoFields
+        {
+            get
+            {
                 return ResourceManager.GetString("EmptyState_NoFields", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field value(s) could not be copied to the clipboard. Cause: {0} ähnelt.
         /// </summary>
-        public static string Message_CopyFailed_Description {
-            get {
+        public static string Message_CopyFailed_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CopyFailed_Description", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Copy failed ähnelt.
         /// </summary>
-        public static string Message_CopyFailed_Title {
-            get {
+        public static string Message_CopyFailed_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CopyFailed_Title", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Fields ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Show Flow-Block column ähnelt.
         /// </summary>
-        public static string Tooltip_ToggleFlowBlockColumn {
-            get {
+        public static string Tooltip_ToggleFlowBlockColumn
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_ToggleFlowBlockColumn", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Single-line field values ähnelt.
         /// </summary>
-        public static string Tooltip_ToggleSingleLineFieldValues {
-            get {
+        public static string Tooltip_ToggleSingleLineFieldValues
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_ToggleSingleLineFieldValues", resourceCulture);
             }
         }

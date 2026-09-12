@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AiAssistantHistoryView {
+    public class AiAssistantHistoryView
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AiAssistantHistoryView() {
+        internal AiAssistantHistoryView()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.AiAssistantHistoryView", typeof(AiAssistantHistoryView).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die New chat ähnelt.
         /// </summary>
-        public static string Button_NewHistory {
-            get {
+        public static string Button_NewHistory
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_NewHistory", resourceCulture);
             }
         }
@@ -72,35 +83,43 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open ähnelt.
         /// </summary>
-        public static string Button_OpenHistory {
-            get {
+        public static string Button_OpenHistory
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_OpenHistory", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete chat ähnelt.
         /// </summary>
-        public static string ContextMenu_DeleteHistory {
-            get {
+        public static string ContextMenu_DeleteHistory
+        {
+            get
+            {
                 return ResourceManager.GetString("ContextMenu_DeleteHistory", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No chat histories have been created for this project yet. Use the plus button to start a new chat. ähnelt.
         /// </summary>
-        public static string Empty_Description {
-            get {
+        public static string Empty_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Empty_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No chat histories yet ähnelt.
         /// </summary>
-        public static string Empty_Title {
-            get {
+        public static string Empty_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Empty_Title", resourceCulture);
             }
         }
@@ -108,44 +127,54 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Assistant histories ähnelt.
         /// </summary>
-        public static string History_Title {
-            get {
+        public static string History_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("History_Title", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to delete this complete chat history? This cannot be undone. ähnelt.
         /// </summary>
-        public static string Message_DeleteHistory_Confirm_Description {
-            get {
+        public static string Message_DeleteHistory_Confirm_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteHistory_Confirm_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete chat history? ähnelt.
         /// </summary>
-        public static string Message_DeleteHistory_Confirm_Title {
-            get {
+        public static string Message_DeleteHistory_Confirm_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteHistory_Confirm_Title", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The chat history could not be deleted. Details: {0} ähnelt.
         /// </summary>
-        public static string Message_DeleteHistory_Failed_Description {
-            get {
+        public static string Message_DeleteHistory_Failed_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteHistory_Failed_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete chat history ähnelt.
         /// </summary>
-        public static string Message_DeleteHistory_Failed_Title {
-            get {
+        public static string Message_DeleteHistory_Failed_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteHistory_Failed_Title", resourceCulture);
             }
         }

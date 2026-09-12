@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ProjectPanelGridSettingsWindow {
+    public class ProjectPanelGridSettingsWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ProjectPanelGridSettingsWindow() {
+        internal ProjectPanelGridSettingsWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ProjectPanelGridSettingsWindow", typeof(ProjectPanelGridSettingsWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
-        public static string Button_Apply {
-            get {
+        public static string Button_Apply
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Apply", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
-        public static string Button_Back {
-            get {
+        public static string Button_Back
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Configure the project grid size and runtime behavior for flow block notifications. ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -90,35 +105,43 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project window settings ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatically increase grid size ähnelt.
+        /// </summary>
+        public static string Label_AutoIncreaseGridSize
+        {
+            get
+            {
+                return ResourceManager.GetString("Label_AutoIncreaseGridSize", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Grid height ähnelt.
         /// </summary>
-        public static string Label_GridHeight {
-            get {
+        public static string Label_GridHeight
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_GridHeight", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatically increase grid size ähnelt.
-        /// </summary>
-        public static string Label_AutoIncreaseGridSize {
-            get {
-                return ResourceManager.GetString("Label_AutoIncreaseGridSize", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Grid width ähnelt.
         /// </summary>
-        public static string Label_GridWidth {
-            get {
+        public static string Label_GridWidth
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_GridWidth", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reset flow-block notifications when runtime finishes ähnelt.
         /// </summary>
-        public static string Label_ResetNotifications {
-            get {
+        public static string Label_ResetNotifications
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ResetNotifications", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Settings ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Disabled ähnelt.
         /// </summary>
-        public static string Toggle_Off {
-            get {
+        public static string Toggle_Off
+        {
+            get
+            {
                 return ResourceManager.GetString("Toggle_Off", resourceCulture);
             }
         }
@@ -153,35 +182,43 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enabled ähnelt.
         /// </summary>
-        public static string Toggle_On {
-            get {
+        public static string Toggle_On
+        {
+            get
+            {
                 return ResourceManager.GetString("Toggle_On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, the project grid grows automatically when flow blocks are placed or moved beyond the current work area. ähnelt.
+        /// </summary>
+        public static string Tooltip_AutoIncreaseGridSize
+        {
+            get
+            {
+                return ResourceManager.GetString("Tooltip_AutoIncreaseGridSize", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, warnings and errors shown on flow blocks are reset after runtime completion. ähnelt.
         /// </summary>
-        public static string Tooltip_ResetNotifications {
-            get {
+        public static string Tooltip_ResetNotifications
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_ResetNotifications", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, the project grid grows automatically when flow blocks are placed or moved beyond the current work area. ähnelt.
-        /// </summary>
-        public static string Tooltip_AutoIncreaseGridSize {
-            get {
-                return ResourceManager.GetString("Tooltip_AutoIncreaseGridSize", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please enter a valid grid height. Minimum value: {0}px. ähnelt.
         /// </summary>
-        public static string Validation_InvalidHeight_Message {
-            get {
+        public static string Validation_InvalidHeight_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("Validation_InvalidHeight_Message", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please enter a valid grid width. Minimum value: {0}px. ähnelt.
         /// </summary>
-        public static string Validation_InvalidWidth_Message {
-            get {
+        public static string Validation_InvalidWidth_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("Validation_InvalidWidth_Message", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Invalid input ähnelt.
         /// </summary>
-        public static string Validation_Title {
-            get {
+        public static string Validation_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Validation_Title", resourceCulture);
             }
         }

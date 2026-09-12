@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ProblemsView {
+    public class ProblemsView
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ProblemsView() {
+        internal ProblemsView()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ProblemsView", typeof(ProblemsView).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Criticality ähnelt.
         /// </summary>
-        public static string Col_Criticality {
-            get {
+        public static string Col_Criticality
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Criticality", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Exception ähnelt.
         /// </summary>
-        public static string Col_Exception {
-            get {
+        public static string Col_Exception
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Exception", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Message ähnelt.
         /// </summary>
-        public static string Col_Message {
-            get {
+        public static string Col_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Message", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
         /// </summary>
-        public static string Col_Name {
-            get {
+        public static string Col_Name
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Name", resourceCulture);
             }
         }
@@ -99,35 +116,43 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Timestamp ähnelt.
         /// </summary>
-        public static string Col_Timestamp {
-            get {
+        public static string Col_Timestamp
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Timestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove all problem reports ähnelt.
+        /// </summary>
+        public static string ContextMenu_ClearProblemTraces
+        {
+            get
+            {
+                return ResourceManager.GetString("ContextMenu_ClearProblemTraces", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open details ähnelt.
         /// </summary>
-        public static string ContextMenu_OpenDetails {
-            get {
+        public static string ContextMenu_OpenDetails
+        {
+            get
+            {
                 return ResourceManager.GetString("ContextMenu_OpenDetails", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Remove all problem reports ähnelt.
-        /// </summary>
-        public static string ContextMenu_ClearProblemTraces {
-            get {
-                return ResourceManager.GetString("ContextMenu_ClearProblemTraces", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No problems have been recorded for the current runtime. ähnelt.
         /// </summary>
-        public static string EmptyState_NoProblemTraces {
-            get {
+        public static string EmptyState_NoProblemTraces
+        {
+            get
+            {
                 return ResourceManager.GetString("EmptyState_NoProblemTraces", resourceCulture);
             }
         }

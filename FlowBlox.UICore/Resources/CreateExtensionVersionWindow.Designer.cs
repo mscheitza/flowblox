@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class CreateExtensionVersionWindow {
+    public class CreateExtensionVersionWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CreateExtensionVersionWindow() {
+        internal CreateExtensionVersionWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.CreateExtensionVersionWindow", typeof(CreateExtensionVersionWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
         /// </summary>
-        public static string Button_Cancel {
-            get {
+        public static string Button_Cancel
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Cancel", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create ähnelt.
         /// </summary>
-        public static string Button_Create {
-            get {
+        public static string Button_Create
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Create", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Metadata could not be extracted from the selected library. ähnelt.
         /// </summary>
-        public static string Error_ExtractMetadataFailed {
-            get {
+        public static string Error_ExtractMetadataFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_ExtractMetadataFailed", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select your extension DLL to detect metadata. The version is normalized to the required three-part format Major.Minor.Patch. ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create extension version ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The detected version is mapped to Major.Minor.Patch and can be adjusted before creating the extension version. ähnelt.
         /// </summary>
-        public static string Hint_Metadata {
-            get {
+        public static string Hint_Metadata
+        {
+            get
+            {
                 return ResourceManager.GetString("Hint_Metadata", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enter the version number of your extension library here in the format &apos;Major.Minor.Patch&apos;. Note that the entered version number must match the version number of the assembly. ähnelt.
         /// </summary>
-        public static string Hint_VersionFormat {
-            get {
+        public static string Hint_VersionFormat
+        {
+            get
+            {
                 return ResourceManager.GetString("Hint_VersionFormat", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Assembly description ähnelt.
         /// </summary>
-        public static string Label_AssemblyDescription {
-            get {
+        public static string Label_AssemblyDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_AssemblyDescription", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Assembly name ähnelt.
         /// </summary>
-        public static string Label_AssemblyName {
-            get {
+        public static string Label_AssemblyName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_AssemblyName", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Library path ähnelt.
         /// </summary>
-        public static string Label_LibraryPath {
-            get {
+        public static string Label_LibraryPath
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_LibraryPath", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version number: ähnelt.
         /// </summary>
-        public static string Label_Version {
-            get {
+        public static string Label_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Version", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create extension version ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Detect metadata from library ähnelt.
         /// </summary>
-        public static string Toolbar_ExtractMetadata {
-            get {
+        public static string Toolbar_ExtractMetadata
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_ExtractMetadata", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select a DLL file to detect assembly name, description and version. ähnelt.
         /// </summary>
-        public static string Toolbar_ExtractMetadata_Tooltip {
-            get {
+        public static string Toolbar_ExtractMetadata_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_ExtractMetadata_Tooltip", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Enter the version number in the format &apos;Major.Minor.Patch&apos;. ähnelt.
         /// </summary>
-        public static string ToolTip_Format {
-            get {
+        public static string ToolTip_Format
+        {
+            get
+            {
                 return ResourceManager.GetString("ToolTip_Format", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automatically detected from selected DLL ähnelt.
         /// </summary>
-        public static string Watermark_AssemblyName {
-            get {
+        public static string Watermark_AssemblyName
+        {
+            get
+            {
                 return ResourceManager.GetString("Watermark_AssemblyName", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automatically detected from selected DLL metadata ähnelt.
         /// </summary>
-        public static string Watermark_Description {
-            get {
+        public static string Watermark_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Watermark_Description", resourceCulture);
             }
         }
@@ -216,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die e.g. 1.2.3 ähnelt.
         /// </summary>
-        public static string Watermark_Version {
-            get {
+        public static string Watermark_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("Watermark_Version", resourceCulture);
             }
         }

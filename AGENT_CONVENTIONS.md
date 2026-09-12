@@ -46,6 +46,10 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Add keys in both:
   - `FlowBlox.Core/FlowBloxTexts.resx`
   - `FlowBlox.Core/FlowBloxTexts.de.resx`
+- After changing `.resx` keys, regenerate the strongly typed designer for the neutral/main `.resx` file so `DisplayAttribute(ResourceType = ...)` can find the generated static string properties. Passing a localized file is okay; the script maps it to the neutral file:
+  - `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Update-StronglyTypedResourceDesigner.ps1 -ResxPath FlowBlox.Core/FlowBloxTexts.resx`
+  - `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Update-StronglyTypedResourceDesigner.ps1 -ResxPath FlowBlox.Core/FlowBloxTexts.de.resx`
+- The designer regeneration script uses `StronglyTypedResourceBuilder` with an explicit `.resx` base path so image/SVG `ResXFileRef` entries resolve correctly. It processes only existing strongly typed resource designers and skips WinForms/WPF control designers.
 - Encoding requirement:
   - `FlowBlox.Core/FlowBloxTexts.de.resx` must be saved as `UTF-8` **without BOM**.
 - Rule: provide tooltip text for explanatory/complex properties (recommended), especially for selectors/patterns (e.g., XPath, CSS selector, regex). Include short examples to improve UX where helpful.

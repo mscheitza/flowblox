@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class PasswordResetWindow {
+    public class PasswordResetWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal PasswordResetWindow() {
+        internal PasswordResetWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.PasswordResetWindow", typeof(PasswordResetWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
-        public static string Button_Close {
-            get {
+        public static string Button_Close
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Close", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Confirm password change ähnelt.
         /// </summary>
-        public static string Button_ConfirmPasswordChange {
-            get {
+        public static string Button_ConfirmPasswordChange
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_ConfirmPasswordChange", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reset password ähnelt.
         /// </summary>
-        public static string Button_ResetPassword {
-            get {
+        public static string Button_ResetPassword
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_ResetPassword", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The captcha could not be loaded. Please try again. ähnelt.
         /// </summary>
-        public static string Error_LoadCaptchaFailed {
-            get {
+        public static string Error_LoadCaptchaFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_LoadCaptchaFailed", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Captcha ähnelt.
         /// </summary>
-        public static string Label_Captcha {
-            get {
+        public static string Label_Captcha
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Captcha", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please enter the captcha code: ähnelt.
         /// </summary>
-        public static string Label_CaptchaInstruction {
-            get {
+        public static string Label_CaptchaInstruction
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_CaptchaInstruction", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Email or username ähnelt.
         /// </summary>
-        public static string Label_EmailOrUsername {
-            get {
+        public static string Label_EmailOrUsername
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_EmailOrUsername", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die New password ähnelt.
         /// </summary>
-        public static string Label_NewPassword {
-            get {
+        public static string Label_NewPassword
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_NewPassword", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Repeat new password ähnelt.
         /// </summary>
-        public static string Label_NewPasswordRepeat {
-            get {
+        public static string Label_NewPasswordRepeat
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_NewPasswordRepeat", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reset code ähnelt.
         /// </summary>
-        public static string Label_ResetCode {
-            get {
+        public static string Label_ResetCode
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ResetCode", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die An email has been sent. Please enter the code. ähnelt.
         /// </summary>
-        public static string Message_EmailSent {
-            get {
+        public static string Message_EmailSent
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_EmailSent", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Password was changed successfully. ähnelt.
         /// </summary>
-        public static string Message_PasswordChanged {
-            get {
+        public static string Message_PasswordChanged
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_PasswordChanged", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reset password ähnelt.
         /// </summary>
-        public static string Window_Title {
-            get {
+        public static string Window_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Window_Title", resourceCulture);
             }
         }

@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class FieldSelectionWindow {
+    public class FieldSelectionWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal FieldSelectionWindow() {
+        internal FieldSelectionWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.FieldSelectionWindow", typeof(FieldSelectionWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
-        public static string Button_Back {
-            get {
+        public static string Button_Back
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die OK ähnelt.
         /// </summary>
-        public static string Button_Ok {
-            get {
+        public static string Button_Ok
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Ok", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field ähnelt.
         /// </summary>
-        public static string Col_Field {
-            get {
+        public static string Col_Field
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Field", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
-        public static string Col_OptionDescription {
-            get {
+        public static string Col_OptionDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_OptionDescription", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
         /// </summary>
-        public static string Col_OptionName {
-            get {
+        public static string Col_OptionName
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_OptionName", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Type ähnelt.
         /// </summary>
-        public static string Col_OptionType {
-            get {
+        public static string Col_OptionType
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_OptionType", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
-        public static string Col_OptionValue {
-            get {
+        public static string Col_OptionValue
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_OptionValue", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
-        public static string Col_ProjectPropertyDescription {
-            get {
+        public static string Col_ProjectPropertyDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_ProjectPropertyDescription", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Key ähnelt.
         /// </summary>
-        public static string Col_ProjectPropertyKey {
-            get {
+        public static string Col_ProjectPropertyKey
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_ProjectPropertyKey", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
         /// </summary>
-        public static string Col_ProjectPropertyName {
-            get {
+        public static string Col_ProjectPropertyName
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_ProjectPropertyName", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
-        public static string Col_ProjectPropertyValue {
-            get {
+        public static string Col_ProjectPropertyValue
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_ProjectPropertyValue", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Source ähnelt.
         /// </summary>
-        public static string Col_Source {
-            get {
+        public static string Col_Source
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Source", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select one or multiple entries and confirm with OK. ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select fields or options ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die When enabled, the flow block is executed only if the selected field has a valid value. ähnelt.
         /// </summary>
-        public static string Required_HintShort {
-            get {
+        public static string Required_HintShort
+        {
+            get
+            {
                 return ResourceManager.GetString("Required_HintShort", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die „Required“ binds this field to the parent managed object / flow block. The flow block is executed only when a valid value is present. ähnelt.
         /// </summary>
-        public static string Required_InfoText {
-            get {
+        public static string Required_InfoText
+        {
+            get
+            {
                 return ResourceManager.GetString("Required_InfoText", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No ähnelt.
         /// </summary>
-        public static string Required_Off {
-            get {
+        public static string Required_Off
+        {
+            get
+            {
                 return ResourceManager.GetString("Required_Off", resourceCulture);
             }
         }
@@ -216,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Yes ähnelt.
         /// </summary>
-        public static string Required_On {
-            get {
+        public static string Required_On
+        {
+            get
+            {
                 return ResourceManager.GetString("Required_On", resourceCulture);
             }
         }
@@ -225,8 +270,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Required ähnelt.
         /// </summary>
-        public static string Required_ToggleHeader {
-            get {
+        public static string Required_ToggleHeader
+        {
+            get
+            {
                 return ResourceManager.GetString("Required_ToggleHeader", resourceCulture);
             }
         }
@@ -234,8 +281,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Generation strategy data ähnelt.
         /// </summary>
-        public static string Tab_GenerationStrategyData {
-            get {
+        public static string Tab_GenerationStrategyData
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_GenerationStrategyData", resourceCulture);
             }
         }
@@ -243,8 +292,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Input files ähnelt.
         /// </summary>
-        public static string Tab_InputFiles {
-            get {
+        public static string Tab_InputFiles
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_InputFiles", resourceCulture);
             }
         }
@@ -252,8 +303,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Options ähnelt.
         /// </summary>
-        public static string Tab_Options {
-            get {
+        public static string Tab_Options
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_Options", resourceCulture);
             }
         }
@@ -261,8 +314,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project fields ähnelt.
         /// </summary>
-        public static string Tab_ProjectFields {
-            get {
+        public static string Tab_ProjectFields
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_ProjectFields", resourceCulture);
             }
         }
@@ -270,8 +325,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project properties ähnelt.
         /// </summary>
-        public static string Tab_ProjectProperties {
-            get {
+        public static string Tab_ProjectProperties
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_ProjectProperties", resourceCulture);
             }
         }
@@ -279,8 +336,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field selection ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }

@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBloxSampleExtension {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,27 +20,32 @@ namespace FlowBloxSampleExtension {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SampleExtensionResources {
+    public class UnusedRequiredFieldsWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SampleExtensionResources() {
+        internal UnusedRequiredFieldsWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBloxSampleExtension.SampleExtensionResources", typeof(SampleExtensionResources).Assembly);
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.UnusedRequiredFieldsWindow", typeof(UnusedRequiredFieldsWindow).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,112 +57,147 @@ namespace FlowBloxSampleExtension {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
-        public static byte[] cube {
-            get {
-                object obj = ResourceManager.GetObject("cube", resourceCulture);
-                return ((byte[])(obj));
+        public static string Button_Back
+        {
+            get
+            {
+                return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Sample category ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Continue ähnelt.
         /// </summary>
-        public static string SampleCategory_Sample {
-            get {
-                return ResourceManager.GetString("SampleCategory_Sample", resourceCulture);
+        public static string Button_Continue
+        {
+            get
+            {
+                return ResourceManager.GetString("Button_Continue", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Demo flow block that returns an output value from an input field and applies configured value replacement mappings. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove and continue ähnelt.
         /// </summary>
-        public static string SampleExtensionFlowBlock_Description {
-            get {
-                return ResourceManager.GetString("SampleExtensionFlowBlock_Description", resourceCulture);
+        public static string Button_RemoveAndContinue
+        {
+            get
+            {
+                return ResourceManager.GetString("Button_RemoveAndContinue", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Sample Extension Flow Block ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field ähnelt.
         /// </summary>
-        public static string SampleExtensionFlowBlock_DisplayName {
-            get {
-                return ResourceManager.GetString("SampleExtensionFlowBlock_DisplayName", resourceCulture);
+        public static string Column_FieldName
+        {
+            get
+            {
+                return ResourceManager.GetString("Column_FieldName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Output text ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field type ähnelt.
         /// </summary>
-        public static string SampleExtensionFlowBlock_OutputText {
-            get {
-                return ResourceManager.GetString("SampleExtensionFlowBlock_OutputText", resourceCulture);
+        public static string Column_FieldType
+        {
+            get
+            {
+                return ResourceManager.GetString("Column_FieldType", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Value replacements ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fully qualified field name ähnelt.
         /// </summary>
-        public static string SampleExtensionFlowBlock_ValueReplacements {
-            get {
-                return ResourceManager.GetString("SampleExtensionFlowBlock_ValueReplacements", resourceCulture);
+        public static string Column_QualifiedName
+        {
+            get
+            {
+                return ResourceManager.GetString("Column_QualifiedName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Configured value replacement mappings that are applied in order before the result is emitted. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die All ähnelt.
         /// </summary>
-        public static string SampleExtensionFlowBlock_ValueReplacements_Tooltip {
-            get {
-                return ResourceManager.GetString("SampleExtensionFlowBlock_ValueReplacements_Tooltip", resourceCulture);
+        public static string Column_Select
+        {
+            get
+            {
+                return ResourceManager.GetString("Column_Select", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Sample action ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The current component has required fields that are no longer referenced. Remove references that are no longer needed. ähnelt.
         /// </summary>
-        public static string SampleExtensionFlowBlockUIActions_SampleAction {
-            get {
-                return ResourceManager.GetString("SampleExtensionFlowBlockUIActions_SampleAction", resourceCulture);
+        public static string Header_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Value replacement mapping ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unused required fields ähnelt.
         /// </summary>
-        public static string SampleExtensionMappingEntry_DisplayName {
-            get {
-                return ResourceManager.GetString("SampleExtensionMappingEntry_DisplayName", resourceCulture);
+        public static string Header_Title
+        {
+            get
+            {
+                return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Replacement value ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Unused required fields ähnelt.
         /// </summary>
-        public static string SampleExtensionMappingEntry_ReplacementValue {
-            get {
-                return ResourceManager.GetString("SampleExtensionMappingEntry_ReplacementValue", resourceCulture);
+        public static string Title
+        {
+            get
+            {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Source value ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Deselect all ähnelt.
         /// </summary>
-        public static string SampleExtensionMappingEntry_SourceValue {
-            get {
-                return ResourceManager.GetString("SampleExtensionMappingEntry_SourceValue", resourceCulture);
+        public static string Toolbar_DeselectAll
+        {
+            get
+            {
+                return ResourceManager.GetString("Toolbar_DeselectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select all ähnelt.
+        /// </summary>
+        public static string Toolbar_SelectAll
+        {
+            get
+            {
+                return ResourceManager.GetString("Toolbar_SelectAll", resourceCulture);
             }
         }
     }

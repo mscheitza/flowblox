@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ManagedObjectsView {
+    public class ManagedObjectsView
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ManagedObjectsView() {
+        internal ManagedObjectsView()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ManagedObjectsView", typeof(ManagedObjectsView).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Properties ähnelt.
         /// </summary>
-        public static string Col_DisplayableProperties {
-            get {
+        public static string Col_DisplayableProperties
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_DisplayableProperties", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
         /// </summary>
-        public static string Col_Name {
-            get {
+        public static string Col_Name
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_Name", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Used In ähnelt.
         /// </summary>
-        public static string Col_UsedIn {
-            get {
+        public static string Col_UsedIn
+        {
+            get
+            {
                 return ResourceManager.GetString("Col_UsedIn", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die - ähnelt.
         /// </summary>
-        public static string DisplayableProperties_None {
-            get {
+        public static string DisplayableProperties_None
+        {
+            get
+            {
                 return ResourceManager.GetString("DisplayableProperties_None", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No managed objects are available for the selected category. ähnelt.
         /// </summary>
-        public static string EmptyState_NoManagedObjects {
-            get {
+        public static string EmptyState_NoManagedObjects
+        {
+            get
+            {
                 return ResourceManager.GetString("EmptyState_NoManagedObjects", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No default constructor is available for &apos;{0}&apos;. ähnelt.
         /// </summary>
-        public static string Message_CannotCreateInstance_Description {
-            get {
+        public static string Message_CannotCreateInstance_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CannotCreateInstance_Description", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Creation not possible ähnelt.
         /// </summary>
-        public static string Message_CannotCreateInstance_Title {
-            get {
+        public static string Message_CannotCreateInstance_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_CannotCreateInstance_Title", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The managed object &apos;{0}&apos; is still used in: {1} ähnelt.
         /// </summary>
-        public static string Message_DeleteBlocked_Description {
-            get {
+        public static string Message_DeleteBlocked_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteBlocked_Description", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete blocked ähnelt.
         /// </summary>
-        public static string Message_DeleteBlocked_Title {
-            get {
+        public static string Message_DeleteBlocked_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteBlocked_Title", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to delete &apos;{0}&apos;? ähnelt.
         /// </summary>
-        public static string Message_DeleteConfirm_Description {
-            get {
+        public static string Message_DeleteConfirm_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteConfirm_Description", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete managed object ähnelt.
         /// </summary>
-        public static string Message_DeleteConfirm_Title {
-            get {
+        public static string Message_DeleteConfirm_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_DeleteConfirm_Title", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Managed Objects ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Actions ähnelt.
         /// </summary>
-        public static string Toolbar_Actions {
-            get {
+        public static string Toolbar_Actions
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_Actions", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Add managed object ähnelt.
         /// </summary>
-        public static string Toolbar_Add_Tooltip {
-            get {
+        public static string Toolbar_Add_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_Add_Tooltip", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delete managed object ähnelt.
         /// </summary>
-        public static string Toolbar_Delete_Tooltip {
-            get {
+        public static string Toolbar_Delete_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_Delete_Tooltip", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit managed object ähnelt.
         /// </summary>
-        public static string Toolbar_Edit_Tooltip {
-            get {
+        public static string Toolbar_Edit_Tooltip
+        {
+            get
+            {
                 return ResourceManager.GetString("Toolbar_Edit_Tooltip", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Additional Managed Objects ähnelt.
         /// </summary>
-        public static string Tree_UncategorizedManagedObjects {
-            get {
+        public static string Tree_UncategorizedManagedObjects
+        {
+            get
+            {
                 return ResourceManager.GetString("Tree_UncategorizedManagedObjects", resourceCulture);
             }
         }
@@ -216,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die - ähnelt.
         /// </summary>
-        public static string UsedIn_None {
-            get {
+        public static string UsedIn_None
+        {
+            get
+            {
                 return ResourceManager.GetString("UsedIn_None", resourceCulture);
             }
         }

@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ManageNotificationsWindow {
+    public class ManageNotificationsWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ManageNotificationsWindow() {
+        internal ManageNotificationsWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ManageNotificationsWindow", typeof(ManageNotificationsWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
-        public static string Button_Apply {
-            get {
+        public static string Button_Apply
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Apply", resourceCulture);
             }
         }
@@ -72,17 +83,21 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
-        public static string Button_Back {
-            get {
+        public static string Button_Back
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reset ähnelt.
         /// </summary>
-        public static string Button_Reset {
-            get {
+        public static string Button_Reset
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Reset", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage ähnelt.
         /// </summary>
-        public static string Description {
-            get {
+        public static string Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Description", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Message ähnelt.
         /// </summary>
-        public static string GridColumn_Message {
-            get {
+        public static string GridColumn_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("GridColumn_Message", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Notification type ähnelt.
         /// </summary>
-        public static string GridColumn_NotificationType {
-            get {
+        public static string GridColumn_NotificationType
+        {
+            get
+            {
                 return ResourceManager.GetString("GridColumn_NotificationType", resourceCulture);
             }
         }
@@ -117,17 +138,21 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die In this view, you can customize the notification type of individual messages generated by this flow block. You can suppress warnings or errors or change their severity. ähnelt.
         /// </summary>
-        public static string HeaderDescription {
-            get {
+        public static string HeaderDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("HeaderDescription", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to reset all custom notification settings for this flow block? ähnelt.
         /// </summary>
-        public static string ResetConfirmation_Message {
-            get {
+        public static string ResetConfirmation_Message
+        {
+            get
+            {
                 return ResourceManager.GetString("ResetConfirmation_Message", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage notifications ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }

@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class PSProjectsWindow {
+    public class PSProjectsWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal PSProjectsWindow() {
+        internal PSProjectsWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.PSProjectsWindow", typeof(PSProjectsWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
-        public static string Button_Close {
-            get {
+        public static string Button_Close
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Close", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create stable version ähnelt.
         /// </summary>
-        public static string Button_CreateStableVersion {
-            get {
+        public static string Button_CreateStableVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_CreateStableVersion", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Download ähnelt.
         /// </summary>
-        public static string Button_DownloadVersion {
-            get {
+        public static string Button_DownloadVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_DownloadVersion", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
         /// </summary>
-        public static string Button_Edit {
-            get {
+        public static string Button_Edit
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Edit", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit version metadata ähnelt.
         /// </summary>
-        public static string Button_EditVersionMetadata {
-            get {
+        public static string Button_EditVersionMetadata
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_EditVersionMetadata", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Login ähnelt.
         /// </summary>
-        public static string Button_Login {
-            get {
+        public static string Button_Login
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Login", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Logout ähnelt.
         /// </summary>
-        public static string Button_Logout {
-            get {
+        public static string Button_Logout
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Logout", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open ähnelt.
         /// </summary>
-        public static string Button_Open {
-            get {
+        public static string Button_Open
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Open", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open version ähnelt.
         /// </summary>
-        public static string Button_OpenVersion {
-            get {
+        public static string Button_OpenVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_OpenVersion", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Refresh ähnelt.
         /// </summary>
-        public static string Button_RefreshVersions {
-            get {
+        public static string Button_RefreshVersions
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_RefreshVersions", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Search ähnelt.
         /// </summary>
-        public static string Button_Search {
-            get {
+        public static string Button_Search
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Search", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to download the project version. ähnelt.
         /// </summary>
-        public static string Error_DownloadProjectVersionFailed {
-            get {
+        public static string Error_DownloadProjectVersionFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_DownloadProjectVersionFailed", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to load project versions. ähnelt.
         /// </summary>
-        public static string Error_LoadProjectVersionsFailed {
-            get {
+        public static string Error_LoadProjectVersionsFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_LoadProjectVersionsFailed", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The projects could not be loaded from the server. ähnelt.
         /// </summary>
-        public static string Error_SearchProjectsFailed {
-            get {
+        public static string Error_SearchProjectsFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_SearchProjectsFailed", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Comment ähnelt.
         /// </summary>
-        public static string Header_Comment {
-            get {
+        public static string Header_Comment
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Comment", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Created at ähnelt.
         /// </summary>
-        public static string Header_CreatedAt {
-            get {
+        public static string Header_CreatedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_CreatedAt", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -216,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Search and open FlowBlox projects. You can upload and open your own projects and create stable versions that can then be used in external projects. ähnelt.
         /// </summary>
-        public static string Header_Description_Main {
-            get {
+        public static string Header_Description_Main
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description_Main", resourceCulture);
             }
         }
@@ -225,8 +270,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
         /// </summary>
-        public static string Header_Name {
-            get {
+        public static string Header_Name
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Name", resourceCulture);
             }
         }
@@ -234,8 +281,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die FlowBlox Projects ähnelt.
         /// </summary>
-        public static string Header_Title_Main {
-            get {
+        public static string Header_Title_Main
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title_Main", resourceCulture);
             }
         }
@@ -243,8 +292,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Last updated ähnelt.
         /// </summary>
-        public static string Header_UpdatedAt {
-            get {
+        public static string Header_UpdatedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_UpdatedAt", resourceCulture);
             }
         }
@@ -252,8 +303,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version ähnelt.
         /// </summary>
-        public static string Header_Version {
-            get {
+        public static string Header_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Version", resourceCulture);
             }
         }
@@ -261,8 +314,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Created at ähnelt.
         /// </summary>
-        public static string Label_CreatedAt {
-            get {
+        public static string Label_CreatedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_CreatedAt", resourceCulture);
             }
         }
@@ -270,8 +325,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
-        public static string Label_ProjectDescription {
-            get {
+        public static string Label_ProjectDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectDescription", resourceCulture);
             }
         }
@@ -279,8 +336,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project GUID ähnelt.
         /// </summary>
-        public static string Label_ProjectGuid {
-            get {
+        public static string Label_ProjectGuid
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectGuid", resourceCulture);
             }
         }
@@ -288,8 +347,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project name ähnelt.
         /// </summary>
-        public static string Label_ProjectName {
-            get {
+        public static string Label_ProjectName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ProjectName", resourceCulture);
             }
         }
@@ -297,8 +358,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Last updated ähnelt.
         /// </summary>
-        public static string Label_UpdatedAt {
-            get {
+        public static string Label_UpdatedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_UpdatedAt", resourceCulture);
             }
         }
@@ -306,8 +369,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Comment ähnelt.
         /// </summary>
-        public static string Label_VersionComment {
-            get {
+        public static string Label_VersionComment
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_VersionComment", resourceCulture);
             }
         }
@@ -315,8 +380,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Created at ähnelt.
         /// </summary>
-        public static string Label_VersionCreatedAt {
-            get {
+        public static string Label_VersionCreatedAt
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_VersionCreatedAt", resourceCulture);
             }
         }
@@ -324,8 +391,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version details ähnelt.
         /// </summary>
-        public static string Label_VersionDetailsHeader {
-            get {
+        public static string Label_VersionDetailsHeader
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_VersionDetailsHeader", resourceCulture);
             }
         }
@@ -333,8 +402,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version number ähnelt.
         /// </summary>
-        public static string Label_VersionNumber {
-            get {
+        public static string Label_VersionNumber
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_VersionNumber", resourceCulture);
             }
         }
@@ -342,8 +413,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Visibility ähnelt.
         /// </summary>
-        public static string Label_Visibility {
-            get {
+        public static string Label_Visibility
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Visibility", resourceCulture);
             }
         }
@@ -351,8 +424,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The project version was downloaded successfully. ähnelt.
         /// </summary>
-        public static string Message_ProjectVersionDownloaded {
-            get {
+        public static string Message_ProjectVersionDownloaded
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_ProjectVersionDownloaded", resourceCulture);
             }
         }
@@ -360,8 +435,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Details ähnelt.
         /// </summary>
-        public static string Tab_Details {
-            get {
+        public static string Tab_Details
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_Details", resourceCulture);
             }
         }
@@ -369,8 +446,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage versions ähnelt.
         /// </summary>
-        public static string Tab_ProjectVersions {
-            get {
+        public static string Tab_ProjectVersions
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_ProjectVersions", resourceCulture);
             }
         }
@@ -378,8 +457,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No projects found. ähnelt.
         /// </summary>
-        public static string Text_NoSearchResults {
-            get {
+        public static string Text_NoSearchResults
+        {
+            get
+            {
                 return ResourceManager.GetString("Text_NoSearchResults", resourceCulture);
             }
         }
@@ -387,8 +468,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project Space ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -396,17 +479,21 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die My Projects ähnelt.
         /// </summary>
-        public static string Toggle_MyProjects {
-            get {
+        public static string Toggle_MyProjects
+        {
+            get
+            {
                 return ResourceManager.GetString("Toggle_MyProjects", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die  ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Copy to clipboard ähnelt.
         /// </summary>
-        public static string Tooltip_CopyToClipboard {
-            get {
+        public static string Tooltip_CopyToClipboard
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_CopyToClipboard", resourceCulture);
             }
         }
@@ -414,8 +501,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Create stable version ähnelt.
         /// </summary>
-        public static string Tooltip_CreateStableVersion {
-            get {
+        public static string Tooltip_CreateStableVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_CreateStableVersion", resourceCulture);
             }
         }
@@ -423,8 +512,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Download version ähnelt.
         /// </summary>
-        public static string Tooltip_DownloadVersion {
-            get {
+        public static string Tooltip_DownloadVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_DownloadVersion", resourceCulture);
             }
         }
@@ -432,8 +523,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit version details ähnelt.
         /// </summary>
-        public static string Tooltip_EditVersionMetadata {
-            get {
+        public static string Tooltip_EditVersionMetadata
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_EditVersionMetadata", resourceCulture);
             }
         }
@@ -441,8 +534,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Shows only your own projects (login required). ähnelt.
         /// </summary>
-        public static string Tooltip_FilterMine {
-            get {
+        public static string Tooltip_FilterMine
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_FilterMine", resourceCulture);
             }
         }
@@ -450,8 +545,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Refresh versions ähnelt.
         /// </summary>
-        public static string Tooltip_RefreshVersions {
-            get {
+        public static string Tooltip_RefreshVersions
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_RefreshVersions", resourceCulture);
             }
         }

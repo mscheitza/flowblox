@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox {
+namespace FlowBlox
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class FlowBloxMainUIImages {
+    public class FlowBloxMainUIImages
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal FlowBloxMainUIImages() {
+        internal FlowBloxMainUIImages()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.FlowBloxMainUIImages", typeof(FlowBloxMainUIImages).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap add_field_16 {
-            get {
+        public static System.Drawing.Bitmap add_field_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("add_field_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -73,8 +84,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap add_value_16 {
-            get {
+        public static System.Drawing.Bitmap add_value_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("add_value_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -83,8 +96,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap AIAssistantView_16 {
-            get {
+        public static System.Drawing.Bitmap AIAssistantView_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("AIAssistantView_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -93,8 +108,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap arrow_down_16 {
-            get {
+        public static System.Drawing.Bitmap arrow_down_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("arrow_down_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -103,8 +120,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap arrow_left_16 {
-            get {
+        public static System.Drawing.Bitmap arrow_left_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("arrow_left_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -113,8 +132,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap arrow_right_16 {
-            get {
+        public static System.Drawing.Bitmap arrow_right_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("arrow_right_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -123,8 +144,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap arrow_up_16 {
-            get {
+        public static System.Drawing.Bitmap arrow_up_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("arrow_up_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -133,8 +156,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap checkbox_checked_24 {
-            get {
+        public static System.Drawing.Bitmap checkbox_checked_24
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("checkbox_checked_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -143,8 +168,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap checkbox_disabled_24 {
-            get {
+        public static System.Drawing.Bitmap checkbox_disabled_24
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("checkbox_disabled_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -153,8 +180,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap checkbox_unchecked_24 {
-            get {
+        public static System.Drawing.Bitmap checkbox_unchecked_24
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("checkbox_unchecked_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -163,8 +192,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap component_16 {
-            get {
+        public static System.Drawing.Bitmap component_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("component_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -173,8 +204,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ComponentLibraryPanel_16 {
-            get {
+        public static System.Drawing.Bitmap ComponentLibraryPanel_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("ComponentLibraryPanel_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -183,8 +216,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap create_16 {
-            get {
+        public static System.Drawing.Bitmap create_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("create_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -193,8 +228,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap create_48 {
-            get {
+        public static System.Drawing.Bitmap create_48
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("create_48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -203,8 +240,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap DataTableManager_16 {
-            get {
+        public static System.Drawing.Bitmap DataTableManager_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("DataTableManager_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -213,8 +252,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap DockContent_16 {
-            get {
+        public static System.Drawing.Bitmap DockContent_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("DockContent_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -223,8 +264,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap edit_16 {
-            get {
+        public static System.Drawing.Bitmap edit_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("edit_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -233,8 +276,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap edit_48 {
-            get {
+        public static System.Drawing.Bitmap edit_48
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("edit_48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -243,8 +288,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap edit_value_16 {
-            get {
+        public static System.Drawing.Bitmap edit_value_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("edit_value_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -253,8 +300,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Error_16 {
-            get {
+        public static System.Drawing.Bitmap Error_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("Error_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -263,8 +312,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap execute_16 {
-            get {
+        public static System.Drawing.Bitmap execute_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("execute_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -273,8 +324,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap extension_16 {
-            get {
+        public static System.Drawing.Bitmap extension_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("extension_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -283,8 +336,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap field_small_12 {
-            get {
+        public static System.Drawing.Bitmap field_small_12
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("field_small_12", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -293,8 +348,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap FieldView_16 {
-            get {
+        public static System.Drawing.Bitmap FieldView_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("FieldView_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -303,8 +360,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap grid_pattern {
-            get {
+        public static System.Drawing.Bitmap grid_pattern
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("grid_pattern", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -313,8 +372,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap library_category_16 {
-            get {
+        public static System.Drawing.Bitmap library_category_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("library_category_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -323,8 +384,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap link_16 {
-            get {
+        public static System.Drawing.Bitmap link_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("link_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -333,8 +396,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ManagedObjectsView_16 {
-            get {
+        public static System.Drawing.Bitmap ManagedObjectsView_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("ManagedObjectsView_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -343,8 +408,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap movedown_16 {
-            get {
+        public static System.Drawing.Bitmap movedown_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("movedown_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -353,8 +420,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap moveup_16 {
-            get {
+        public static System.Drawing.Bitmap moveup_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("moveup_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -363,8 +432,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap no_content_72 {
-            get {
+        public static System.Drawing.Bitmap no_content_72
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("no_content_72", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -373,8 +444,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ProblemsView_16 {
-            get {
+        public static System.Drawing.Bitmap ProblemsView_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("ProblemsView_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -383,8 +456,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ProjectPanel_16 {
-            get {
+        public static System.Drawing.Bitmap ProjectPanel_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("ProjectPanel_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -393,8 +468,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap property_small_12 {
-            get {
+        public static System.Drawing.Bitmap property_small_12
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("property_small_12", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -403,8 +480,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap remove_value_16 {
-            get {
+        public static System.Drawing.Bitmap remove_value_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("remove_value_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -413,8 +492,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap RequirementsNotMet_16 {
-            get {
+        public static System.Drawing.Bitmap RequirementsNotMet_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("RequirementsNotMet_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -423,8 +504,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap RuntimeView_16 {
-            get {
+        public static System.Drawing.Bitmap RuntimeView_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("RuntimeView_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -433,8 +516,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
         /// </summary>
-        public static byte[] spinner {
-            get {
+        public static byte[] spinner
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("spinner", resourceCulture);
                 return ((byte[])(obj));
             }
@@ -443,8 +528,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Toolbox_16 {
-            get {
+        public static System.Drawing.Bitmap Toolbox_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("Toolbox_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -453,8 +540,10 @@ namespace FlowBlox {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap unlink_16 {
-            get {
+        public static System.Drawing.Bitmap unlink_16
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("unlink_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }

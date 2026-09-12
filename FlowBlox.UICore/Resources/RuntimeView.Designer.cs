@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class RuntimeView {
+    public class RuntimeView
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal RuntimeView() {
+        internal RuntimeView()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.RuntimeView", typeof(RuntimeView).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Clear output ähnelt.
         /// </summary>
-        public static string Button_ClearOutput {
-            get {
+        public static string Button_ClearOutput
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_ClearOutput", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Continue ähnelt.
         /// </summary>
-        public static string Button_Continue {
-            get {
+        public static string Button_Continue
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Continue", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Export folder ähnelt.
         /// </summary>
-        public static string Button_ExportDirectory {
-            get {
+        public static string Button_ExportDirectory
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_ExportDirectory", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open log file ähnelt.
         /// </summary>
-        public static string Button_OpenLogFile {
-            get {
+        public static string Button_OpenLogFile
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_OpenLogFile", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Pause ähnelt.
         /// </summary>
-        public static string Button_Pause {
-            get {
+        public static string Button_Pause
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Pause", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Refresh ähnelt.
         /// </summary>
-        public static string Button_Refresh {
-            get {
+        public static string Button_Refresh
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Refresh", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Stop execution ähnelt.
         /// </summary>
-        public static string Button_StopExecution {
-            get {
+        public static string Button_StopExecution
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_StopExecution", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Run step by step ähnelt.
         /// </summary>
-        public static string CheckBox_StepwiseExecution {
-            get {
+        public static string CheckBox_StepwiseExecution
+        {
+            get
+            {
                 return ResourceManager.GetString("CheckBox_StepwiseExecution", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Stop on error ähnelt.
         /// </summary>
-        public static string CheckBox_StopOnError {
-            get {
+        public static string CheckBox_StopOnError
+        {
+            get
+            {
                 return ResourceManager.GetString("CheckBox_StopOnError", resourceCulture);
             }
         }
@@ -144,26 +171,32 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Stop on warning ähnelt.
         /// </summary>
-        public static string CheckBox_StopOnWarning {
-            get {
+        public static string CheckBox_StopOnWarning
+        {
+            get
+            {
                 return ResourceManager.GetString("CheckBox_StopOnWarning", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Fast ähnelt.
         /// </summary>
-        public static string Label_DebuggingSpeedFast {
-            get {
+        public static string Label_DebuggingSpeedFast
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_DebuggingSpeedFast", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Slow ähnelt.
         /// </summary>
-        public static string Label_DebuggingSpeedSlow {
-            get {
+        public static string Label_DebuggingSpeedSlow
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_DebuggingSpeedSlow", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The runtime log file could not be found. ähnelt.
         /// </summary>
-        public static string Message_LogFileNotFound {
-            get {
+        public static string Message_LogFileNotFound
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_LogFileNotFound", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The export folder could not be opened. Details: {0} ähnelt.
         /// </summary>
-        public static string Message_OpenExportDirectoryFailed {
-            get {
+        public static string Message_OpenExportDirectoryFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_OpenExportDirectoryFailed", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to open export folder ähnelt.
         /// </summary>
-        public static string Title_OpenExportDirectoryFailed {
-            get {
+        public static string Title_OpenExportDirectoryFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Title_OpenExportDirectoryFailed", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Failed to open log file ähnelt.
         /// </summary>
-        public static string Title_OpenLogFileFailed {
-            get {
+        public static string Title_OpenLogFileFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Title_OpenLogFileFailed", resourceCulture);
             }
         }

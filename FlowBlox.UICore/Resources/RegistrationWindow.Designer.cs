@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class RegistrationWindow {
+    public class RegistrationWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal RegistrationWindow() {
+        internal RegistrationWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.RegistrationWindow", typeof(RegistrationWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
-        public static string Button_Back {
-            get {
+        public static string Button_Back
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
@@ -72,17 +83,21 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Register ähnelt.
         /// </summary>
-        public static string Button_Register {
-            get {
+        public static string Button_Register
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Register", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Das Captcha konnte nicht geladen werden. Bitte versuchen Sie es erneut. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The CAPTCHA could not be loaded. Please try again. ähnelt.
         /// </summary>
-        public static string Error_LoadCaptchaFailed {
-            get {
+        public static string Error_LoadCaptchaFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_LoadCaptchaFailed", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please enter your details to create a new account. Required fields are marked with an asterisk (*). ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Registration ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Captcha ähnelt.
         /// </summary>
-        public static string Label_Captcha {
-            get {
+        public static string Label_Captcha
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Captcha", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please enter the captcha code: ähnelt.
         /// </summary>
-        public static string Label_CaptchaCode {
-            get {
+        public static string Label_CaptchaCode
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_CaptchaCode", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Email ähnelt.
         /// </summary>
-        public static string Label_Email {
-            get {
+        public static string Label_Email
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Email", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Repeat email ähnelt.
         /// </summary>
-        public static string Label_EmailRepeat {
-            get {
+        public static string Label_EmailRepeat
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_EmailRepeat", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die First name ähnelt.
         /// </summary>
-        public static string Label_FirstName {
-            get {
+        public static string Label_FirstName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_FirstName", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Last name ähnelt.
         /// </summary>
-        public static string Label_LastName {
-            get {
+        public static string Label_LastName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_LastName", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
         /// </summary>
-        public static string Label_Password {
-            get {
+        public static string Label_Password
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Password", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Repeat password ähnelt.
         /// </summary>
-        public static string Label_PasswordRepeat {
-            get {
+        public static string Label_PasswordRepeat
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_PasswordRepeat", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Username ähnelt.
         /// </summary>
-        public static string Label_UserName {
-            get {
+        public static string Label_UserName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_UserName", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The email address &quot;{0}&quot; already exists. ähnelt.
         /// </summary>
-        public static string Message_EmailExists {
-            get {
+        public static string Message_EmailExists
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_EmailExists", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Email addresses do not match. ähnelt.
         /// </summary>
-        public static string Message_EmailMismatch {
-            get {
+        public static string Message_EmailMismatch
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_EmailMismatch", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The CAPTCHA is invalid or has expired. Please try again. ähnelt.
         /// </summary>
-        public static string Message_InvalidCaptcha {
-            get {
+        public static string Message_InvalidCaptcha
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_InvalidCaptcha", resourceCulture);
             }
         }
@@ -216,17 +259,21 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Passwords do not match. ähnelt.
         /// </summary>
-        public static string Message_PasswordMismatch {
-            get {
+        public static string Message_PasswordMismatch
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_PasswordMismatch", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Service error: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Service error:  ähnelt.
         /// </summary>
-        public static string Message_ServiceError {
-            get {
+        public static string Message_ServiceError
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_ServiceError", resourceCulture);
             }
         }
@@ -234,8 +281,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Registration successful. Please check your email and confirm your account to complete the registration. ähnelt.
         /// </summary>
-        public static string Message_Success {
-            get {
+        public static string Message_Success
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_Success", resourceCulture);
             }
         }
@@ -243,8 +292,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Optional ähnelt.
         /// </summary>
-        public static string Placeholder_FirstName {
-            get {
+        public static string Placeholder_FirstName
+        {
+            get
+            {
                 return ResourceManager.GetString("Placeholder_FirstName", resourceCulture);
             }
         }
@@ -252,8 +303,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Optional ähnelt.
         /// </summary>
-        public static string Placeholder_LastName {
-            get {
+        public static string Placeholder_LastName
+        {
+            get
+            {
                 return ResourceManager.GetString("Placeholder_LastName", resourceCulture);
             }
         }
@@ -261,8 +314,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Optional (auto-generated if omitted) ähnelt.
         /// </summary>
-        public static string Placeholder_UserName {
-            get {
+        public static string Placeholder_UserName
+        {
+            get
+            {
                 return ResourceManager.GetString("Placeholder_UserName", resourceCulture);
             }
         }
@@ -270,8 +325,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Register ähnelt.
         /// </summary>
-        public static string Title {
-            get {
+        public static string Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -279,8 +336,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Optional. If no username is provided, one will be generated automatically. ähnelt.
         /// </summary>
-        public static string Tooltip_UserName {
-            get {
+        public static string Tooltip_UserName
+        {
+            get
+            {
                 return ResourceManager.GetString("Tooltip_UserName", resourceCulture);
             }
         }
@@ -288,8 +347,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The username &quot;{0}&quot; already exists. ähnelt.
         /// </summary>
-        public static string UsernameExists {
-            get {
+        public static string UsernameExists
+        {
+            get
+            {
                 return ResourceManager.GetString("UsernameExists", resourceCulture);
             }
         }

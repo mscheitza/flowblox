@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources {
+namespace FlowBlox.UICore.Resources
+{
     using System;
     
     
@@ -19,26 +20,31 @@ namespace FlowBlox.UICore.Resources {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ExtensionsWindow {
+    public class ExtensionsWindow
+    {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ExtensionsWindow() {
+        internal ExtensionsWindow()
+        {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ExtensionsWindow", typeof(ExtensionsWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -51,11 +57,14 @@ namespace FlowBlox.UICore.Resources {
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -63,8 +72,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
-        public static string Button_Add {
-            get {
+        public static string Button_Add
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Add", resourceCulture);
             }
         }
@@ -72,8 +83,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
-        public static string Button_Close {
-            get {
+        public static string Button_Close
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Close", resourceCulture);
             }
         }
@@ -81,8 +94,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Log in ähnelt.
         /// </summary>
-        public static string Button_Login {
-            get {
+        public static string Button_Login
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Login", resourceCulture);
             }
         }
@@ -90,8 +105,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Log out ähnelt.
         /// </summary>
-        public static string Button_Logout {
-            get {
+        public static string Button_Logout
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Logout", resourceCulture);
             }
         }
@@ -99,8 +116,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage own extensions ähnelt.
         /// </summary>
-        public static string Button_ManageOwnExtensions {
-            get {
+        public static string Button_ManageOwnExtensions
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_ManageOwnExtensions", resourceCulture);
             }
         }
@@ -108,8 +127,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Register ähnelt.
         /// </summary>
-        public static string Button_Register {
-            get {
+        public static string Button_Register
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Register", resourceCulture);
             }
         }
@@ -117,8 +138,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reload extensions ähnelt.
         /// </summary>
-        public static string Button_ReloadExtensions {
-            get {
+        public static string Button_ReloadExtensions
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_ReloadExtensions", resourceCulture);
             }
         }
@@ -126,8 +149,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
-        public static string Button_Remove {
-            get {
+        public static string Button_Remove
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Remove", resourceCulture);
             }
         }
@@ -135,8 +160,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
-        public static string Button_Save {
-            get {
+        public static string Button_Save
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Save", resourceCulture);
             }
         }
@@ -144,8 +171,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Search ähnelt.
         /// </summary>
-        public static string Button_Search {
-            get {
+        public static string Button_Search
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Search", resourceCulture);
             }
         }
@@ -153,8 +182,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select file path ähnelt.
         /// </summary>
-        public static string Button_SelectFilePath {
-            get {
+        public static string Button_SelectFilePath
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_SelectFilePath", resourceCulture);
             }
         }
@@ -162,8 +193,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Uninstall ähnelt.
         /// </summary>
-        public static string Button_Uninstall {
-            get {
+        public static string Button_Uninstall
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Uninstall", resourceCulture);
             }
         }
@@ -171,8 +204,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Update ähnelt.
         /// </summary>
-        public static string Button_Update {
-            get {
+        public static string Button_Update
+        {
+            get
+            {
                 return ResourceManager.GetString("Button_Update", resourceCulture);
             }
         }
@@ -180,8 +215,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The API metadata could not be retrieved. The service may be unavailable or does not provide metadata through this endpoint. ähnelt.
         /// </summary>
-        public static string Error_LoadApiMetadataFailed {
-            get {
+        public static string Error_LoadApiMetadataFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Error_LoadApiMetadataFailed", resourceCulture);
             }
         }
@@ -189,8 +226,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Additional information ähnelt.
         /// </summary>
-        public static string Expander_Hints_Header {
-            get {
+        public static string Expander_Hints_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("Expander_Hints_Header", resourceCulture);
             }
         }
@@ -198,8 +237,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage extensions ähnelt.
         /// </summary>
-        public static string ExtensionsWindow_Title {
-            get {
+        public static string ExtensionsWindow_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("ExtensionsWindow_Title", resourceCulture);
             }
         }
@@ -207,8 +248,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Debug mode ähnelt.
         /// </summary>
-        public static string Header_DebugMode {
-            get {
+        public static string Header_DebugMode
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_DebugMode", resourceCulture);
             }
         }
@@ -216,8 +259,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
         /// </summary>
-        public static string Header_Description {
-            get {
+        public static string Header_Description
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Description", resourceCulture);
             }
         }
@@ -225,8 +270,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Add online or offline extensions to your FlowBlox project. Extensions are stored in a dedicated *.fbdeps file and are available in the project immediately after loading. ähnelt.
         /// </summary>
-        public static string Header_DescriptionMain {
-            get {
+        public static string Header_DescriptionMain
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_DescriptionMain", resourceCulture);
             }
         }
@@ -234,8 +281,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die File path ähnelt.
         /// </summary>
-        public static string Header_FilePath {
-            get {
+        public static string Header_FilePath
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_FilePath", resourceCulture);
             }
         }
@@ -243,8 +292,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die GUID ähnelt.
         /// </summary>
-        public static string Header_Guid {
-            get {
+        public static string Header_Guid
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Guid", resourceCulture);
             }
         }
@@ -252,8 +303,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Latest version ähnelt.
         /// </summary>
-        public static string Header_LatestVersion {
-            get {
+        public static string Header_LatestVersion
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_LatestVersion", resourceCulture);
             }
         }
@@ -261,8 +314,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
         /// </summary>
-        public static string Header_Name {
-            get {
+        public static string Header_Name
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Name", resourceCulture);
             }
         }
@@ -270,8 +325,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Online ähnelt.
         /// </summary>
-        public static string Header_Online {
-            get {
+        public static string Header_Online
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Online", resourceCulture);
             }
         }
@@ -279,8 +336,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Extensions ähnelt.
         /// </summary>
-        public static string Header_Title {
-            get {
+        public static string Header_Title
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Title", resourceCulture);
             }
         }
@@ -288,8 +347,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version ähnelt.
         /// </summary>
-        public static string Header_Version {
-            get {
+        public static string Header_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("Header_Version", resourceCulture);
             }
         }
@@ -297,8 +358,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Recommended workflow: add and debug the extension offline first, then publish it. ähnelt.
         /// </summary>
-        public static string Hint_OfflineFirst {
-            get {
+        public static string Hint_OfflineFirst
+        {
+            get
+            {
                 return ResourceManager.GetString("Hint_OfflineFirst", resourceCulture);
             }
         }
@@ -306,8 +369,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Online extensions can be searched, installed and updated directly from your account context. ähnelt.
         /// </summary>
-        public static string Hint_Online {
-            get {
+        public static string Hint_Online
+        {
+            get
+            {
                 return ResourceManager.GetString("Hint_Online", resourceCulture);
             }
         }
@@ -315,8 +380,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die To publish: create an account, open &quot;Manage own extensions&quot;, then add a new extension and version. ähnelt.
         /// </summary>
-        public static string Hint_PublishWorkflow {
-            get {
+        public static string Hint_PublishWorkflow
+        {
+            get
+            {
                 return ResourceManager.GetString("Hint_PublishWorkflow", resourceCulture);
             }
         }
@@ -324,8 +391,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Extensions are .NET assemblies and can provide FlowBlocks, categories and managed objects. ähnelt.
         /// </summary>
-        public static string Hint_Storage {
-            get {
+        public static string Hint_Storage
+        {
+            get
+            {
                 return ResourceManager.GetString("Hint_Storage", resourceCulture);
             }
         }
@@ -333,8 +402,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Changes ähnelt.
         /// </summary>
-        public static string Label_Changes {
-            get {
+        public static string Label_Changes
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Changes", resourceCulture);
             }
         }
@@ -342,8 +413,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Extension description ähnelt.
         /// </summary>
-        public static string Label_ExtensionDescription {
-            get {
+        public static string Label_ExtensionDescription
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ExtensionDescription", resourceCulture);
             }
         }
@@ -351,8 +424,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Extension name ähnelt.
         /// </summary>
-        public static string Label_ExtensionName {
-            get {
+        public static string Label_ExtensionName
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ExtensionName", resourceCulture);
             }
         }
@@ -360,8 +435,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Installed extensions ähnelt.
         /// </summary>
-        public static string Label_InstalledExtensions {
-            get {
+        public static string Label_InstalledExtensions
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_InstalledExtensions", resourceCulture);
             }
         }
@@ -369,8 +446,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage local extensions ähnelt.
         /// </summary>
-        public static string Label_ManageLocalExtensions {
-            get {
+        public static string Label_ManageLocalExtensions
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_ManageLocalExtensions", resourceCulture);
             }
         }
@@ -378,8 +457,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Version ähnelt.
         /// </summary>
-        public static string Label_Version {
-            get {
+        public static string Label_Version
+        {
+            get
+            {
                 return ResourceManager.GetString("Label_Version", resourceCulture);
             }
         }
@@ -387,8 +468,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The extension could not be added. Please check the log files for more information. ähnelt.
         /// </summary>
-        public static string Message_AddExtension_Failed {
-            get {
+        public static string Message_AddExtension_Failed
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_AddExtension_Failed", resourceCulture);
             }
         }
@@ -396,8 +479,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The project could not be saved to: {0}. Please check the log files for more information. ähnelt.
         /// </summary>
-        public static string Message_ProjectSaveFailed {
-            get {
+        public static string Message_ProjectSaveFailed
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_ProjectSaveFailed", resourceCulture);
             }
         }
@@ -405,8 +490,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The extensions could not be reloaded in the project. Please check the log files for more information. ähnelt.
         /// </summary>
-        public static string Message_ReloadExtensions_Failed {
-            get {
+        public static string Message_ReloadExtensions_Failed
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_ReloadExtensions_Failed", resourceCulture);
             }
         }
@@ -414,8 +501,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The following assemblies could not be unloaded: {0}. It is recommended to close the application and the project and then restart them. ähnelt.
         /// </summary>
-        public static string Message_RemainingAssemblies {
-            get {
+        public static string Message_RemainingAssemblies
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_RemainingAssemblies", resourceCulture);
             }
         }
@@ -423,8 +512,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The following assemblies could not be unloaded: {0}. Do you want to save the project and reload it together with the application? (Recommended) ähnelt.
         /// </summary>
-        public static string Message_RemainingAssemblies_RestartPrompt {
-            get {
+        public static string Message_RemainingAssemblies_RestartPrompt
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_RemainingAssemblies_RestartPrompt", resourceCulture);
             }
         }
@@ -432,8 +523,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The following extensions could not be loaded: {0}. Please check the extensions and try again, or restart the application and the project. ähnelt.
         /// </summary>
-        public static string Message_UnloadableExtensions {
-            get {
+        public static string Message_UnloadableExtensions
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_UnloadableExtensions", resourceCulture);
             }
         }
@@ -441,8 +534,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The extension could not be updated. Please check the log files for more information. ähnelt.
         /// </summary>
-        public static string Message_UpdateExtension_Failed {
-            get {
+        public static string Message_UpdateExtension_Failed
+        {
+            get
+            {
                 return ResourceManager.GetString("Message_UpdateExtension_Failed", resourceCulture);
             }
         }
@@ -450,8 +545,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Installed ähnelt.
         /// </summary>
-        public static string Tab_Installed {
-            get {
+        public static string Tab_Installed
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_Installed", resourceCulture);
             }
         }
@@ -459,8 +556,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Offline ähnelt.
         /// </summary>
-        public static string Tab_Offline {
-            get {
+        public static string Tab_Offline
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_Offline", resourceCulture);
             }
         }
@@ -468,8 +567,10 @@ namespace FlowBlox.UICore.Resources {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Online ähnelt.
         /// </summary>
-        public static string Tab_Online {
-            get {
+        public static string Tab_Online
+        {
+            get
+            {
                 return ResourceManager.GetString("Tab_Online", resourceCulture);
             }
         }
@@ -478,8 +579,10 @@ namespace FlowBlox.UICore.Resources {
         ///   Sucht eine lokalisierte Zeichenfolge, die No results found.
         ///Adjust the search criteria or try a different search term. ähnelt.
         /// </summary>
-        public static string Text_NoSearchResults {
-            get {
+        public static string Text_NoSearchResults
+        {
+            get
+            {
                 return ResourceManager.GetString("Text_NoSearchResults", resourceCulture);
             }
         }
