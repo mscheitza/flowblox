@@ -23,13 +23,17 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public void PreserveCenter(Action update)
         {
             var oldHeight = _node.Height;
+            var oldRows = _node.Rows.Count;
             var centerY = _node.Y + oldHeight / 2d;
 
             update?.Invoke();
 
             var newHeight = _node.Height;
+            var newRows = _node.Rows.Count;
             if (Math.Abs(oldHeight - newHeight) < 0.1d)
             {
+                Log(
+                    $"Node preserve center no size change, node={FormatNode()}, y={_node.Y:0.##}, height={newHeight:0.##}, oldRows={oldRows}, newRows={newRows}, centerY={centerY:0.##}");
                 ClearLastPreservedHeightChange();
                 return;
             }
@@ -38,14 +42,14 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             if (IsDuplicateHeightPreservation(oldHeight, newHeight))
             {
                 Log(
-                    $"Node preserve center skipped duplicate, node={FormatNode()}, y={_node.Y:0.##}, calculatedY={newY:0.##}, oldHeight={oldHeight:0.##}, newHeight={newHeight:0.##}, centerY={centerY:0.##}, rows={_node.Rows.Count}");
+                    $"Node preserve center skipped duplicate, node={FormatNode()}, y={_node.Y:0.##}, calculatedY={newY:0.##}, oldHeight={oldHeight:0.##}, newHeight={newHeight:0.##}, centerY={centerY:0.##}, oldRows={oldRows}, newRows={newRows}");
                 return;
             }
 
             if (Math.Abs(_node.Y - newY) > 0.1d)
             {
                 Log(
-                    $"Node preserve center, node={FormatNode()}, oldY={_node.Y:0.##}, newY={newY:0.##}, oldHeight={oldHeight:0.##}, newHeight={newHeight:0.##}, centerY={centerY:0.##}, rows={_node.Rows.Count}");
+                    $"Node preserve center, node={FormatNode()}, oldY={_node.Y:0.##}, newY={newY:0.##}, oldHeight={oldHeight:0.##}, newHeight={newHeight:0.##}, centerY={centerY:0.##}, oldRows={oldRows}, newRows={newRows}");
                 _node.Y = newY;
             }
 
@@ -81,7 +85,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         }
 
         private string FormatNode()
-            => $"{_node.Name} [{_node.InternalFlowBlock.GetType().Name}]";
+            => _node.FormatLayoutTraceNode();
 
         private static void Log(string message)
             => Trace.TraceInformation($"ProjectPanel layout trace: {message}");

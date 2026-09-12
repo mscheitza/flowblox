@@ -10,6 +10,7 @@ using FlowBlox.UICore.Utilities;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -24,6 +25,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private const double RowHeight = 24d;
         private const double NotificationHeight = 30d;
         internal const double MaxBlockHeight = 300d;
+        private static int _nextLayoutTraceId;
 
         private readonly SynchronizationContext _uiContext;
         private bool _isSelected;
@@ -38,6 +40,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         {
             _uiContext = SynchronizationContext.Current;
             InternalFlowBlock = flowBlock ?? throw new ArgumentNullException(nameof(flowBlock));
+            LayoutTraceId = Interlocked.Increment(ref _nextLayoutTraceId);
             _centerPreservationGuard = new FlowBlockNodeCenterPreservationGuard(this);
             _componentChangeSubscription = new FlowBloxComponentChangeSubscription(
                 flowBlock,
@@ -49,8 +52,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             flowBlock.OnUndoError += FlowBlock_OnUndoError;
             flowBlock.RefreshNotExecutedState();
             RefreshRows(preserveCenter: false);
+            LogLayoutTrace(
+                $"Node VM created, node={FormatLayoutTraceNode()}, y={Y:0.##}, height={Height:0.##}, rows={Rows.Count}");
         }
 
+        internal int LayoutTraceId { get; }
         public BaseFlowBlock InternalFlowBlock { get; }
         public ObservableCollection<FlowBlockRenderRowViewModel> Rows { get; } = new();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -329,6 +335,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             => SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
                 OnPropertyChanged(nameof(HasOverriddenNotifications));
+                LogRefreshRowsRequested("ComponentChanged");
                 RefreshRows();
             });
 
@@ -354,6 +361,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             else if (e.PropertyName == nameof(BaseFlowBlock.Name))
             {
                 OnPropertyChanged(nameof(Name));
+                LogRefreshRowsRequested($"PropertyChanged:{e.PropertyName}");
                 RefreshRows();
             }
             else if (IsNote && e.PropertyName == nameof(NoteFlowBlock.Note))
@@ -367,7 +375,10 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             else if (e.PropertyName == nameof(BaseFlowBlock.ExecutionIndex))
                 NotifyRuntimeStateChanged();
             else if (!string.IsNullOrWhiteSpace(e.PropertyName))
+            {
+                LogRefreshRowsRequested($"PropertyChanged:{e.PropertyName}");
                 RefreshRows();
+            }
         }
 
         private void OnPositionChanged()
@@ -418,11 +429,23 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private void UpdatePreservingCenter(Action update)
             => _centerPreservationGuard.PreserveCenter(update);
 
+        private void LogRefreshRowsRequested(string reason)
+            => LogLayoutTrace(
+                $"Node refresh requested, reason={reason}, node={FormatLayoutTraceNode()}, y={Y:0.##}, height={Height:0.##}, rows={Rows.Count}");
+
+        internal string FormatLayoutTraceNode()
+            => $"{Name} [{InternalFlowBlock.GetType().Name}], vm={LayoutTraceId}, flowBlock={RuntimeHelpers.GetHashCode(InternalFlowBlock)}";
+
+        private static void LogLayoutTrace(string message)
+            => Trace.TraceInformation($"ProjectPanel layout trace: {message}");
+
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public void Dispose()
         {
+            LogLayoutTrace(
+                $"Node VM disposed, node={FormatLayoutTraceNode()}, y={Y:0.##}, height={Height:0.##}, rows={Rows.Count}");
             InternalFlowBlock.PropertyChanged -= FlowBlock_PropertyChanged;
             InternalFlowBlock.OnWarn -= FlowBlock_OnWarn;
             InternalFlowBlock.OnError -= FlowBlock_OnError;

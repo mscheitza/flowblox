@@ -33,6 +33,7 @@ namespace FlowBlox.AppWindow.Contents
         private readonly RuntimeFocusUpdateThrottler _runtimeFocusUpdateThrottler;
         private FlowBloxRuntime _runtime;
         private Thread _runtimeThread;
+        private bool _disposed;
 
         internal ProjectPanelWpfControl WpfControl => _projectPanelWpfControl;
 
@@ -78,12 +79,30 @@ namespace FlowBlox.AppWindow.Contents
 
         protected override void OnClosed(EventArgs e)
         {
+            DisposeProjectPanelResources();
+
+            base.OnClosed(e);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                DisposeProjectPanelResources();
+
+            base.Dispose(disposing);
+        }
+
+        private void DisposeProjectPanelResources()
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
             _projectPanelWpfControl.ViewModel.ExecuteRuntimeRequested -= WpfProjectPanel_ExecuteRuntimeRequested;
             _projectPanelWpfControl.ViewModel.PauseRuntimeRequested -= WpfProjectPanel_PauseRuntimeRequested;
             _projectPanelWpfControl.ViewModel.StopRuntimeRequested -= WpfProjectPanel_StopRuntimeRequested;
+            _projectPanelWpfControl.ViewModel.Dispose();
             _runtimeFocusUpdateThrottler.Dispose();
-
-            base.OnClosed(e);
         }
 
         public void UpdateUI(bool gridUpdate = true, bool appWindowUpdate = false)

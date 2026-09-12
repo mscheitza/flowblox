@@ -27,6 +27,8 @@ namespace FlowBlox.AppWindow
                 .ToList())
             {
                 dockContent.Close();
+                if (!dockContent.IsDisposed)
+                    dockContent.Dispose();
             }
 
             if (!exceptProjectPanel)
