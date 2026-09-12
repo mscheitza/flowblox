@@ -78,7 +78,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.ShellExecution
                 properties.Add(nameof(TimeoutMilliseconds));
                 properties.Add(nameof(FailOnNonZeroExitCode));
                 properties.Add(nameof(ReportStandardOutput));
-                properties.Add(nameof(ResultFields));
                 return properties;
             }
 

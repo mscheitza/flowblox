@@ -7,11 +7,6 @@
     <Version>1.0.0</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Company>FlowBlox and contributors</Company>
-    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
-    <Authors>FlowBlox and contributors</Authors>
-    <Product>FlowBlox</Product>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />

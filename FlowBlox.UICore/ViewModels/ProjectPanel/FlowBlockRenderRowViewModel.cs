@@ -26,6 +26,9 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public string Label { get; }
         public string Value { get; }
         public string Tooltip { get; }
+        public string EffectiveTooltip => string.Equals(Kind, "header", StringComparison.Ordinal) || string.IsNullOrWhiteSpace(Tooltip)
+            ? null
+            : Tooltip;
         public object Target { get; }
         public string PreselectedProperty { get; }
         public object PreselectedInstance { get; }

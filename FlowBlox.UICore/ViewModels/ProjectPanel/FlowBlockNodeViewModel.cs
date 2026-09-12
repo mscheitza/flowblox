@@ -92,6 +92,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public string Title => FlowBloxComponentHelper.GetDisplayName(InternalFlowBlock);
         public string Name => InternalFlowBlock.Name;
         public bool HasBreakpoint => InternalFlowBlock.BreakPoint;
+        public bool HasOverriddenNotifications => InternalFlowBlock.HasOverriddenNotifications;
         public bool IsNotExecuted => InternalFlowBlock.IsNotExecuted;
         public bool HasExecutionIndex => InternalFlowBlock.ExecutionIndex >= 0;
         public string ExecutionIndexText => HasExecutionIndex ? $"#{InternalFlowBlock.ExecutionIndex}" : string.Empty;
@@ -325,7 +326,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             => string.IsNullOrEmpty(value) ? string.Empty : value.Replace(Environment.NewLine, " ").Trim();
 
         private void FlowBlock_OnComponentChanged()
-            => SynchronizationContextHelper.PostToUi(_uiContext, RefreshRows);
+            => SynchronizationContextHelper.PostToUi(_uiContext, () =>
+            {
+                OnPropertyChanged(nameof(HasOverriddenNotifications));
+                RefreshRows();
+            });
 
         private void FlowBlock_OnWarn(BaseRuntime runtime, string message)
             => SynchronizationContextHelper.PostToUi(_uiContext, () => SetWarning(message));
@@ -355,6 +360,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 OnPropertyChanged(nameof(NoteText));
             else if (e.PropertyName == nameof(BaseFlowBlock.BreakPoint))
                 NotifyRuntimeStateChanged();
+            else if (e.PropertyName == nameof(BaseFlowBlock.HasOverriddenNotifications))
+                OnPropertyChanged(nameof(HasOverriddenNotifications));
             else if (e.PropertyName == nameof(BaseFlowBlock.IsNotExecuted))
                 OnPropertyChanged(nameof(IsNotExecuted));
             else if (e.PropertyName == nameof(BaseFlowBlock.ExecutionIndex))

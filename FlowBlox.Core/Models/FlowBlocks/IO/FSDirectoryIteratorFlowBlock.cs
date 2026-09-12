@@ -88,7 +88,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             properties.Add(nameof(DirectoryPath));
             properties.Add(nameof(Recursive));
             properties.Add(nameof(FilterExpression));
-            properties.Add(nameof(ResultFields));
             return properties;
         }
 

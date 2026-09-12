@@ -134,6 +134,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [DeepCopierIgnore()]
         public ObservableCollection<OverriddenNotificationEntry> OverriddenNotificationEntries { get; set; }
 
+        [JsonIgnore]
+        public bool HasOverriddenNotifications =>
+            OverriddenNotificationEntries?.Any(x => x?.Overrides?.Count > 0) == true;
+
         public NotificationType GetCurrentNotificationType(Enum enumValue)
         {
             var enumType = enumValue.GetType();
@@ -166,6 +170,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 if (entry != null && entry.Overrides.Remove(enumKey) && entry.Overrides.Count == 0)
                     OverriddenNotificationEntries.Remove(entry);
 
+                OnPropertyChanged(nameof(OverriddenNotificationEntries));
+                OnPropertyChanged(nameof(HasOverriddenNotifications));
                 return;
             }
 
@@ -179,6 +185,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
 
             entry.Overrides[enumKey] = notificationType;
+            OnPropertyChanged(nameof(OverriddenNotificationEntries));
+            OnPropertyChanged(nameof(HasOverriddenNotifications));
+        }
+
+        public void ResetNotificationOverrides()
+        {
+            if (OverriddenNotificationEntries == null || OverriddenNotificationEntries.Count == 0)
+                return;
+
+            OverriddenNotificationEntries.Clear();
+            OnPropertyChanged(nameof(OverriddenNotificationEntries));
+            OnPropertyChanged(nameof(HasOverriddenNotifications));
         }
 
         private NotificationType GetDefaultNotificationType(Enum enumValue)

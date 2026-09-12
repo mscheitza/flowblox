@@ -10,6 +10,7 @@ namespace FlowBlox.UICore.Converters.ProjectPanel
         {
             var color = value?.ToString() switch
             {
+                "header" => "#F5F5F5",
                 "field" => "#6DE6BE",
                 "modifier" => "#90EE90",
                 "condition" => "#F08080",

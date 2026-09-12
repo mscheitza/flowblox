@@ -36,16 +36,11 @@ $Projects = @(
 
 $AssemblyVersion = "$Version.0"
 
-# Metadata for all csproj
+# Version metadata for all csproj. Shared assembly/package metadata lives in Directory.Build.props.
 $Meta = @{
-  "Company"                  = "FlowBlox and contributors"
-  "Product"                  = "FlowBlox"
-  "Authors"                  = "FlowBlox and contributors"
-  "Copyright"                = "Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License."
-  "PackageLicenseExpression" = "MIT"
-  "Version"                  = $Version
-  "AssemblyVersion"          = $AssemblyVersion
-  "FileVersion"              = $AssemblyVersion
+  "Version"         = $Version
+  "AssemblyVersion" = $AssemblyVersion
+  "FileVersion"     = $AssemblyVersion
 }
 
 # ---- Helpers ----

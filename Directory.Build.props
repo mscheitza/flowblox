@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <FlowBloxCopyrightStartYear Condition="'$(FlowBloxCopyrightStartYear)' == ''">2026</FlowBloxCopyrightStartYear>
+    <FlowBloxCopyrightCurrentYear Condition="'$(FlowBloxCopyrightCurrentYear)' == ''">$([System.DateTime]::UtcNow.Year)</FlowBloxCopyrightCurrentYear>
+    <FlowBloxCopyrightYears Condition="'$(FlowBloxCopyrightCurrentYear)' == '$(FlowBloxCopyrightStartYear)'">$(FlowBloxCopyrightStartYear)</FlowBloxCopyrightYears>
+    <FlowBloxCopyrightYears Condition="'$(FlowBloxCopyrightYears)' == ''">$(FlowBloxCopyrightStartYear)-$(FlowBloxCopyrightCurrentYear)</FlowBloxCopyrightYears>
+
+    <Company Condition="'$(Company)' == ''">FlowBlox and contributors</Company>
+    <Authors Condition="'$(Authors)' == ''">FlowBlox and contributors</Authors>
+    <Product Condition="'$(Product)' == ''">FlowBlox</Product>
+    <PackageLicenseExpression Condition="'$(PackageLicenseExpression)' == ''">MIT</PackageLicenseExpression>
+    <Copyright Condition="'$(Copyright)' == ''">Copyright © $(FlowBloxCopyrightYears) FlowBlox contributors. Licensed under the MIT License.</Copyright>
+  </PropertyGroup>
+</Project>

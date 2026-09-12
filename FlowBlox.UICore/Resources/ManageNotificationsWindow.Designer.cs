@@ -77,6 +77,15 @@ namespace FlowBlox.UICore.Resources {
                 return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset ähnelt.
+        /// </summary>
+        public static string Button_Reset {
+            get {
+                return ResourceManager.GetString("Button_Reset", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Manage ähnelt.
@@ -111,6 +120,15 @@ namespace FlowBlox.UICore.Resources {
         public static string HeaderDescription {
             get {
                 return ResourceManager.GetString("HeaderDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do you really want to reset all custom notification settings for this flow block? ähnelt.
+        /// </summary>
+        public static string ResetConfirmation_Message {
+            get {
+                return ResourceManager.GetString("ResetConfirmation_Message", resourceCulture);
             }
         }
         

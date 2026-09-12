@@ -1,6 +1,9 @@
 ﻿using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Resources;
+using FlowBlox.UICore.Utilities;
+using MahApps.Metro.Controls;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -27,11 +30,13 @@ namespace FlowBlox.UICore.ViewModels
 
         public ICommand OkCommand { get; }
         public ICommand CancelCommand { get; }
+        public ICommand ResetCommand { get; }
 
         public ManageNotificationOverridesViewModel()
         {
             OkCommand = new RelayCommand(Ok);
             CancelCommand = new RelayCommand(Cancel);
+            ResetCommand = new RelayCommand(Reset);
 
             Items = new ObservableCollection<NotificationOverrideItem>();
             NotificationTypes = new ObservableCollection<NotificationType>();
@@ -85,6 +90,21 @@ namespace FlowBlox.UICore.ViewModels
         private void Cancel()
         {
             _ownerWindow.Close();
+        }
+
+        private async void Reset()
+        {
+            var confirmed = await MessageBoxHelper.ShowQuestionAsync(
+                _ownerWindow as MetroWindow,
+                ManageNotificationsWindow.ResetConfirmation_Message);
+
+            if (confirmed != true)
+                return;
+
+            _flowBlock.ResetNotificationOverrides();
+            Items.Clear();
+            LoadItems();
+            _flowBlock.OnAfterSave();
         }
     }
 

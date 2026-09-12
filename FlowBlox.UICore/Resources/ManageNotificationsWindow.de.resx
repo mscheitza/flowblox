@@ -138,4 +138,10 @@
   <data name="Title" xml:space="preserve">
     <value>Meldungen verwalten</value>
   </data>
+  <data name="Button_Reset" xml:space="preserve">
+    <value>Zurücksetzen</value>
+  </data>
+  <data name="ResetConfirmation_Message" xml:space="preserve">
+    <value>Möchten Sie wirklich alle benutzerdefinierten Meldungseinstellungen für diesen Flow-Block zurücksetzen?</value>
+  </data>
 </root>

@@ -105,7 +105,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
             properties.Add(nameof(DownloadPath));
             properties.Add(nameof(DownloadDirectory));
             properties.Add(nameof(TimeoutSeconds));
-            properties.Add(nameof(ResultFields));
             return properties;
         }
 

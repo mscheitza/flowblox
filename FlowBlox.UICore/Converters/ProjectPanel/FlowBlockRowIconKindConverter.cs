@@ -10,6 +10,7 @@ namespace FlowBlox.UICore.Converters.ProjectPanel
         {
             return value?.ToString() switch
             {
+                "header" => PackIconMaterialKind.Minus,
                 "field" => PackIconMaterialKind.DatabaseOutline,
                 "modifier" => PackIconMaterialKind.FunctionVariant,
                 "condition" => PackIconMaterialKind.SourceBranch,

@@ -97,7 +97,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
             var properties = base.GetDisplayableProperties();
             properties.Add(nameof(ZipArchiveObject));
             properties.Add(nameof(Password));
-            properties.Add(nameof(ResultFields));
             return properties;
         }
 

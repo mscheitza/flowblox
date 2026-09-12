@@ -8,11 +8,6 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Company>FlowBlox and contributors</Company>
-    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
-    <Authors>FlowBlox and contributors</Authors>
-    <Product>FlowBlox</Product>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\Highlighting\SQL.xshd" />

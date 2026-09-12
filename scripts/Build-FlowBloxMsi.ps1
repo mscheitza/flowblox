@@ -67,6 +67,14 @@ if (-not (Test-Path $publishDirResolved)) {
     throw "Publish directory not found: $publishDirResolved"
 }
 
+$licenseFile = Join-Path $repoRoot "LICENSE.txt"
+if (Test-Path $licenseFile) {
+    Copy-Item -Path $licenseFile -Destination (Join-Path $publishDirResolved "LICENSE.txt") -Force
+}
+else {
+    Write-Warning "LICENSE.txt not found at repository root. MSI payload will not include the project license file."
+}
+
 if (-not (Test-Path $msiOutputDirResolved)) {
     New-Item -Path $msiOutputDirResolved -ItemType Directory | Out-Null
 }

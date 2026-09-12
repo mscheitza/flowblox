@@ -7,11 +7,6 @@
     <Version>1.0.0</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Company>FlowBlox and contributors</Company>
-    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
-    <Authors>FlowBlox and contributors</Authors>
-    <Product>FlowBlox</Product>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Files\globalToolbox_chattemplates.json" />
@@ -41,6 +36,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.9" />
     <PackageReference Include="MailKit" Version="4.17.0" />
+    <PackageReference Include="AWSSDK.Rekognition" Version="3.7.500.48" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.27.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntimeGenAI.Managed" Version="0.14.1" />
     <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />

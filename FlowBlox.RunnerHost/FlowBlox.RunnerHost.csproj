@@ -6,12 +6,7 @@
     <Nullable>enable</Nullable>
     <ApplicationIcon>FlowBloxMainIcon.ico</ApplicationIcon>
     <Version>1.0.0</Version>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <FileVersion>1.0.0.0</FileVersion>
-    <Company>FlowBlox and contributors</Company>
-    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
-    <Authors>FlowBlox and contributors</Authors>
-    <Product>FlowBlox</Product>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>

@@ -11,11 +11,6 @@
     <FileVersion>1.0.0.0</FileVersion>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <ApplicationIcon>FlowBloxMainIcon.ico</ApplicationIcon>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Company>FlowBlox and contributors</Company>
-    <Copyright>Copyright © 2025 FlowBlox and contributors. Licensed under the MIT License.</Copyright>
-    <Authors>FlowBlox and contributors</Authors>
-    <Product>FlowBlox</Product>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="FlowBloxMainIcon.ico" />

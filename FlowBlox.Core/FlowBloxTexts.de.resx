@@ -858,16 +858,16 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Alle Felder des Ziel-Flow-Blocks müssen abgebildet werden. Es fehlen Übertragungen für folgende Felder: {0}</value>
 	</data>
 	<data name="JoinFlowBlock_Description" xml:space="preserve">
-		<value>Fügt ausgewählte Feldwerte des aktuellen Datensatzes mit einem Trennzeichen zu einem Ausgabewert zusammen.</value>
+		<value>Fügt ausgewählte Feldwerte aus dem Datensatz der aktuellen Iteration mit einem Trennzeichen zu einem Ausgabewert zusammen.</value>
 	</data>
 	<data name="JoinFlowBlock_DisplayName" xml:space="preserve">
-		<value>Zusammenführen</value>
+		<value>Feldwerte der aktuellen Iteration zusammenführen</value>
 	</data>
 	<data name="JoinCollectorFlowBlock_DisplayName" xml:space="preserve">
-		<value>Zusammenführen (Collector)</value>
+		<value>Iterativ zusammenführen</value>
 	</data>
 	<data name="JoinCollectorFlowBlock_Description" xml:space="preserve">
-		<value>Sammelt ausgewählte Feldwerte über mehrere Datensätze und führt sie mit einem Trennzeichen zu einem Ausgabewert zusammen.</value>
+		<value>Sammelt ausgewählte Feldwerte über alle Datensätze des aktiven Iterationskontexts und führt sie mit einem Trennzeichen zu einem Ausgabewert zusammen.</value>
 	</data>
 	<data name="JoinFlowBlock_JoinedParameters" xml:space="preserve">
 		<value>Zusammenzuführende Feldwerte</value>
@@ -885,13 +885,13 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Es wurde kein Trennzeichen angegeben. Bitte geben Sie entweder ein Trennzeichen oder ein spezielles Trennzeichen an.</value>
 	</data>
 	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_IterationScope" xml:space="preserve">
-		<value>Dieser Collector-Flow-Block sammelt Werte über den aktiven Iterationskontext und erzeugt genau ein Ergebnis, wenn das letzte Input-Dataset erreicht ist. Sollen alle Datensätze eines Flow-Blocks erfasst werden, setzen Sie den Iterationskontext auf dessen Vorgänger.</value>
+		<value>Dieser Collector-Flow-Block sammelt Werte über alle Datensätze des aktiven Iterationskontexts und erzeugt genau ein Ergebnis, wenn das letzte Input-Dataset erreicht ist.</value>
 	</data>
 	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_AutoIterationContext" xml:space="preserve">
-		<value>Automatische Ermittlung des Iterationskontexts: Der Iterationskontext wird auf den Vorgänger des direkt assoziierten Vorgängers oder, falls vorhanden, auf dessen Iterationskontext festgelegt. Wenn mehrere Vorgänger vorhanden sind, wird standardmäßig der erste gemeinsame vorgelagerte Flow-Block verwendet.</value>
+		<value>Automatische Ermittlung des Iterationskontexts: Der Kontext wird auf den Vorgänger des aufrufenden Flow-Blocks gesetzt. Wenn dieser Vorgänger bereits einen Iterationskontext besitzt, wird dieser Kontext übernommen.</value>
 	</data>
 	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_ManualOverride" xml:space="preserve">
-		<value>Der Iterationskontext kann manuell überschrieben werden. Nutzen Sie dies, um den Aggregations-Scope zu vergrößern.</value>
+		<value>Der Iterationskontext kann manuell überschrieben werden, wenn Werte über einen größeren oder anderen Bereich gesammelt werden sollen.</value>
 	</data>
 	<data name="JsonObjectFlowBlock_Description" xml:space="preserve">
 		<value>Erstellt aus dem angegebenen Inhalt ein JSON-Objekt, verwaltet das interne JSON-Objekt und stellt es anderen Flow-Blocks zur Verfügung.</value>
@@ -1991,6 +1991,141 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		</data>
 	<data name="OpenAICompatibleProviderBase_DisplayName_Plural" xml:space="preserve">
 			<value>OpenAI-kompatible Provider</value>
+		</data>
+	<data name="TypeNames_AmazonWebServicesProvider" xml:space="preserve">
+			<value>Amazon-Web-Services-Provider</value>
+		</data>
+	<data name="AmazonWebServicesProvider_DisplayName" xml:space="preserve">
+			<value>Amazon-Web-Services-Provider</value>
+		</data>
+	<data name="AmazonWebServicesProvider_DisplayName_Plural" xml:space="preserve">
+			<value>Amazon-Web-Services-Provider</value>
+		</data>
+	<data name="AmazonWebServicesProvider_ApiKey" xml:space="preserve">
+			<value>API-Schlüssel</value>
+		</data>
+	<data name="AmazonWebServicesProvider_ApiKey_Tooltip" xml:space="preserve">
+			<value>AWS-Access-Key-ID, die zum Erzeugen der Service-Clients verwendet wird.</value>
+		</data>
+	<data name="AmazonWebServicesProvider_SecretKey" xml:space="preserve">
+			<value>Secret Key</value>
+		</data>
+	<data name="AmazonWebServicesProvider_SecretKey_Tooltip" xml:space="preserve">
+			<value>AWS-Secret-Access-Key, der zusammen mit dem API-Schlüssel verwendet wird.</value>
+		</data>
+	<data name="AmazonWebServicesProvider_Region" xml:space="preserve">
+			<value>Region</value>
+		</data>
+	<data name="AmazonWebServicesProvider_Region_Tooltip" xml:space="preserve">
+			<value>AWS-Region als Systemname, zum Beispiel eu-central-1.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_DisplayName" xml:space="preserve">
+			<value>AWS-Gesichter vergleichen</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_Description" xml:space="preserve">
+			<value>Vergleicht ein Zielbild mit konfigurierten Quellbildern über AWS Rekognition CompareFaces und gibt die erkannten Personenschlüssel zurück.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_Provider" xml:space="preserve">
+			<value>AWS-Provider</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_Provider_Tooltip" xml:space="preserve">
+			<value>Gemeinsame AWS-Zugangsdaten und Regionskonfiguration.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_ComparisonImage" xml:space="preserve">
+			<value>Vergleichsbild</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_ComparisonImage_Tooltip" xml:space="preserve">
+			<value>Zielbild, in dem die konfigurierten Quellgesichter erkannt werden sollen.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_SimilarityThreshold" xml:space="preserve">
+			<value>Ähnlichkeitsschwelle</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_SimilarityThreshold_Tooltip" xml:space="preserve">
+			<value>Minimale Rekognition-Ähnlichkeit für einen Treffer. AWS liefert nur Treffer ab diesem Wert zurück.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_QualityFilter" xml:space="preserve">
+			<value>Qualitätsfilter</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_QualityFilter_Tooltip" xml:space="preserve">
+			<value>Filtert erkannte Gesichter vor dem Vergleich nach Bildqualität. Höhere Werte können falsche Treffer reduzieren, aber schwache oder unscharfe Gesichter ignorieren.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_MaxResults" xml:space="preserve">
+			<value>Maximale Ergebnisse</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_MaxResults_Tooltip" xml:space="preserve">
+			<value>Maximale Anzahl erkannter Personen-Ergebnisse, die dieser Block ausgibt, sortiert nach höchster Ähnlichkeit.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_Groups_InputImages" xml:space="preserve">
+			<value>Eingangsbilder</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_InputImageMappings" xml:space="preserve">
+			<value>Eingangsbild-Zuordnungen</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_InputImageMappings_Tooltip" xml:space="preserve">
+			<value>Bekannte Quellbilder und die Personenschlüssel, die bei Erkennung im Vergleichsbild zurückgegeben werden.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_Groups_ResultFields" xml:space="preserve">
+			<value>Ergebnisfelder</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_ResultFields" xml:space="preserve">
+			<value>Ergebnisfelder</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_ResultFields_Tooltip" xml:space="preserve">
+			<value>Ordnet Rekognition-Ergebniswerte den FlowBlox-Ergebnisfeldern zu.</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_Notifications_NoInputImageMappings" xml:space="preserve">
+			<value>Keine Eingangsbild-Zuordnungen konfiguriert</value>
+		</data>
+	<data name="AWSCompareFacesFlowBlock_Notifications_NoFacesMatched" xml:space="preserve">
+			<value>Keine Gesichter mit der konfigurierten Ähnlichkeitsschwelle gefunden</value>
+		</data>
+	<data name="InputImageMappingEntry_DisplayName" xml:space="preserve">
+			<value>Eingangsbild-Zuordnung</value>
+		</data>
+	<data name="InputImageMappingEntry_FieldElement" xml:space="preserve">
+			<value>Bildfeld</value>
+		</data>
+	<data name="InputImageMappingEntry_FieldElement_Tooltip" xml:space="preserve">
+			<value>Feld, das das bekannte Quellbild als ByteArray, Base64 oder Dateipfad enthält.</value>
+		</data>
+	<data name="InputImageMappingEntry_Key" xml:space="preserve">
+			<value>Schlüssel</value>
+		</data>
+	<data name="InputImageMappingEntry_Key_Tooltip" xml:space="preserve">
+			<value>Wert, der zurückgegeben wird, wenn dieses Bild im Vergleichsbild erkannt wird.</value>
+		</data>
+	<data name="InputImageMappingEntry_NotSet" xml:space="preserve">
+			<value>Nicht gesetzt</value>
+		</data>
+	<data name="InputImageMappingEntry_Validation_FieldElementRequired" xml:space="preserve">
+			<value>Das Bildfeld ist erforderlich.</value>
+		</data>
+	<data name="InputImageMappingEntry_Validation_KeyRequired" xml:space="preserve">
+			<value>Der Schlüssel ist erforderlich.</value>
+		</data>
+	<data name="AWSCompareFacesDestinations_PersonKey" xml:space="preserve">
+			<value>Personenschlüssel</value>
+		</data>
+	<data name="AWSCompareFacesDestinations_Similarity" xml:space="preserve">
+			<value>Ähnlichkeit</value>
+		</data>
+	<data name="AWSCompareFacesDestinations_MatchCount" xml:space="preserve">
+			<value>Trefferzahl</value>
+		</data>
+	<data name="AWSCompareFacesQualityFilter_None" xml:space="preserve">
+			<value>Keiner</value>
+		</data>
+	<data name="AWSCompareFacesQualityFilter_Auto" xml:space="preserve">
+			<value>Automatisch</value>
+		</data>
+	<data name="AWSCompareFacesQualityFilter_Low" xml:space="preserve">
+			<value>Niedrig</value>
+		</data>
+	<data name="AWSCompareFacesQualityFilter_Medium" xml:space="preserve">
+			<value>Mittel</value>
+		</data>
+	<data name="AWSCompareFacesQualityFilter_High" xml:space="preserve">
+			<value>Hoch</value>
 		</data>
 	<data name="TypeNames_DeepSeekAIProvider" xml:space="preserve">
 			<value>DeepSeek-Provider</value>
