@@ -311,7 +311,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 {
                     var itemType = prop.PropertyType.GetGenericArguments()[0];
 
-                    if (typeof(FlowBloxReactiveObject).IsAssignableFrom(itemType))
+                    if (ShouldValidateCollectionItems(itemType))
                     {
                         var collection = prop.GetValue(target) as IEnumerable;
                         if (collection == null) 
@@ -345,6 +345,11 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
             return isValid;
         }
+
+        private static bool ShouldValidateCollectionItems(Type itemType)
+            => typeof(FlowBloxReactiveObject).IsAssignableFrom(itemType) &&
+               !typeof(BaseFlowBlock).IsAssignableFrom(itemType) &&
+               !typeof(IManagedObject).IsAssignableFrom(itemType);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
