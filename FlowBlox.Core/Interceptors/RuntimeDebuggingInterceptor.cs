@@ -256,7 +256,7 @@ namespace FlowBlox.Core.Interceptors
                 details: details);
         }
 
-        public override void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
+        public override void NotifyWarning(BaseFlowBlock baseFlowBlock, string message, Exception exception = null)
         {
             if (!IsEnabled)
                 return;
@@ -273,11 +273,12 @@ namespace FlowBlox.Core.Interceptors
                 {
                     Elapsed = GetElapsed(),
                     FlowBlockName = flowBlockName,
-                    Message = text
+                    Message = text,
+                    Exception = exception?.ToString() ?? string.Empty
                 });
             }
 
-            AppendProtocol("Warning", text, flowBlockName);
+            AppendProtocol("Warning", text, flowBlockName, details: exception?.ToString());
         }
 
         public override void NotifyError(BaseFlowBlock baseFlowBlock, string message, Exception exception = null)

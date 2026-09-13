@@ -103,7 +103,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             if (notificationType == NotificationType.Warning)
             {
                 runtime.Report(message, FlowBloxLogLevel.Warning, e);
-                runtime.NotifyWarning(this, message);
+                runtime.NotifyWarning(this, message, e);
                 OnWarn?.Invoke(runtime, message);
             }
             else

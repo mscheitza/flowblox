@@ -25,6 +25,11 @@
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="PopUp\Resources\SequenceDetectionPopUpImages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SequenceDetectionPopUpImages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\AiAssistantControl.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -225,11 +230,20 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="PopUp\Resources\SequenceDetectionPopUpTexts.Designer.cs">
+      <DependentUpon>SequenceDetectionPopUpTexts.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Views\PropertyWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="PopUp\Resources\SequenceDetectionPopUpImages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SequenceDetectionPopUpImages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\AiAssistantControl.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AiAssistantControl.Designer.cs</LastGenOutput>
@@ -384,6 +398,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ToolboxWindow.resx">
       <LastGenOutput>ToolboxWindow.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PopUp\Resources\SequenceDetectionPopUpTexts.resx">
+      <LastGenOutput>SequenceDetectionPopUpTexts.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>

@@ -1,4 +1,5 @@
 using FlowBlox.Core.Models.FlowBlocks.Web.InternalWebBrowser;
+using FlowBlox.Core.Models.FlowBlocks.Web;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -419,6 +420,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
         }
 
         public virtual WebBrowserContentsActionResult GetContents(string selector, WebEventSelectionMode mode, bool innerContent)
+            => GetContents(selector, mode, innerContent, WebSelectorOutputMode.Element, null);
+
+        public virtual WebBrowserContentsActionResult GetContents(
+            string selector,
+            WebEventSelectionMode mode,
+            bool innerContent,
+            WebSelectorOutputMode outputMode,
+            string attributeName)
         {
             List<string> contents = new();
             var actionResult = this.Invoke(() =>
@@ -434,9 +443,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
                 }
 
                 contents = elements
-                    .Select(elem => innerContent ? 
-                        elem.GetAttribute("innerHTML") : 
-                        elem.GetAttribute("outerHTML"))
+                    .Select(elem => GetElementContent(elem, innerContent, outputMode, attributeName))
                     .ToList();
 
                 return new WebBrowserActionResult
@@ -452,6 +459,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
                 Status = actionResult.Status,
                 Success = actionResult.Success
             };
+        }
+
+        private static string GetElementContent(
+            IWebElement element,
+            bool innerContent,
+            WebSelectorOutputMode outputMode,
+            string attributeName)
+        {
+            return outputMode switch
+            {
+                WebSelectorOutputMode.Attribute => element.GetAttribute(attributeName) ?? string.Empty,
+                _ => innerContent
+                    ? element.GetAttribute("innerHTML")
+                    : element.GetAttribute("outerHTML")
+            } ?? string.Empty;
         }
     }
 }

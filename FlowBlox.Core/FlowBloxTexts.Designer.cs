@@ -13195,6 +13195,17 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Attribute name ähnelt.
+        /// </summary>
+        public static string WebSelectorFlowBlock_AttributeName
+        {
+            get
+            {
+                return ResourceManager.GetString("WebSelectorFlowBlock_AttributeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die CSS selector ähnelt.
         /// </summary>
         public static string WebSelectorFlowBlock_CSSSelector
@@ -13235,6 +13246,17 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("WebSelectorFlowBlock_InnerContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output mode ähnelt.
+        /// </summary>
+        public static string WebSelectorFlowBlock_OutputMode
+        {
+            get
+            {
+                return ResourceManager.GetString("WebSelectorFlowBlock_OutputMode", resourceCulture);
             }
         }
         

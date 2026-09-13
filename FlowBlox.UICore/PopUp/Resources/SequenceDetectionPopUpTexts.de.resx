@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Window_Title" xml:space="preserve"><value>Sequenz-Erkennung</value></data>
+  <data name="Step1_Headline" xml:space="preserve"><value>Mindestens zwei Testfälle sind erforderlich</value></data>
+  <data name="Step1_Description" xml:space="preserve"><value>Mindestens zwei Testfälle sind erforderlich.</value></data>
+  <data name="Step2_Headline" xml:space="preserve"><value>Erwartetes Ergebnis festlegen</value></data>
+  <data name="Step2_Description" xml:space="preserve"><value>Jeder Testfall benötigt die Anzahl der Datensätze und einen Suchwert</value></data>
+  <data name="Step3_Headline" xml:space="preserve"><value>Sequenzmuster generieren</value></data>
+  <data name="Step3_Description" xml:space="preserve"><value>Das Sequenzmuster wird aus den beiden Testfällen generiert und findet den Suchwert zuverlässig</value></data>
+  <data name="Button_Next" xml:space="preserve"><value>Weiter</value></data>
+  <data name="Button_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="CheckBox_ShowAgain" xml:space="preserve"><value>Beim nächsten Mal wieder anzeigen</value></data>
+  <data name="Image_Placeholder" xml:space="preserve"><value>Bild-Resource nicht zugewiesen</value></data>
+  <data name="Option_ShowQuickStart_DisplayName" xml:space="preserve"><value>Sequenz-Erkennung: QuickStart anzeigen</value></data>
+  <data name="Option_ShowQuickStart_Description" xml:space="preserve"><value>Legt fest, ob der QuickStart-Dialog für die Sequenz-Erkennung angezeigt wird.</value></data>
+</root>

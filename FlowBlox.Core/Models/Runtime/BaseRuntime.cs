@@ -281,7 +281,7 @@ namespace FlowBlox.Core.Models.Runtime
             }
         }
 
-        public void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
+        public void NotifyWarning(BaseFlowBlock baseFlowBlock, string message, Exception exception = null)
         {
             if (StopOnWarning)
                 Pause = true;
@@ -290,7 +290,7 @@ namespace FlowBlox.Core.Models.Runtime
             {
                 foreach (var interceptor in _interceptors)
                 {
-                    interceptor.NotifyWarning(baseFlowBlock, message);
+                    interceptor.NotifyWarning(baseFlowBlock, message, exception);
                 }
             }
         }

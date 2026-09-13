@@ -101,13 +101,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
             if (result.Exception != null)
                 runtime.Report("A problem occurred while executing the web action.", FlowBloxLogLevel.Error, result.Exception);
 
-            HandleFailure(runtime, result.Status);
+            HandleFailure(runtime, result.Status, result.Exception);
         }
 
-        protected virtual void HandleFailure(BaseRuntime runtime, Enum? enumValue)
+        protected virtual void HandleFailure(BaseRuntime runtime, Enum? enumValue, Exception exception = null)
         {
             if (enumValue != null)
-                CreateNotification(runtime, enumValue);
+                CreateNotification(runtime, enumValue, exception);
             
             GenerateResult(runtime);
         }

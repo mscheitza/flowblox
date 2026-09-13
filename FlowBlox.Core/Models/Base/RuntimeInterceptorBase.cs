@@ -98,7 +98,7 @@ namespace FlowBlox.Core.Models.Base
 
         }
 
-        public virtual void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
+        public virtual void NotifyWarning(BaseFlowBlock baseFlowBlock, string message, Exception exception = null)
         {
             
         }

@@ -19,20 +19,21 @@ namespace FlowBlox.Core.Interceptors
             _problemsTracer = new Lazy<ProblemsTracer>(() => new ProblemsTracer(this.Runtime));
         }
 
-        public override void NotifyWarning(BaseFlowBlock baseFlowBlock, string message)
+        public override void NotifyWarning(BaseFlowBlock baseFlowBlock, string message, Exception exception = null)
         {
             var trace = new ProblemTrace
             {
                 Name = baseFlowBlock.Name,
                 Criticality = "Warning",
-                Message = message
+                Message = message,
+                Exception = exception
             };
 
             AppendFieldValues(baseFlowBlock, trace);
 
             AppendTrace(trace);
 
-            base.NotifyWarning(baseFlowBlock, message);
+            base.NotifyWarning(baseFlowBlock, message, exception);
         }
 
         public override void NotifyError(BaseFlowBlock baseFlowBlock, string message, Exception exception = null)
@@ -49,7 +50,7 @@ namespace FlowBlox.Core.Interceptors
 
             AppendTrace(trace);
 
-            base.NotifyError(baseFlowBlock, message);
+            base.NotifyError(baseFlowBlock, message, exception);
         }
 
         private void AppendTrace(ProblemTrace trace)

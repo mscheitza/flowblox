@@ -1723,6 +1723,9 @@ Use the "+" button to add entries to the table.</value>
 	<data name="WebSelectorFlowBlock_CSSSelector" xml:space="preserve">
 		<value>CSS selector</value>
 	</data>
+	<data name="WebSelectorFlowBlock_AttributeName" xml:space="preserve">
+		<value>Attribute name</value>
+	</data>
 	<data name="WebSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Selects elements from a web page using CSS selectors or XPath.</value>
 	</data>
@@ -1731,6 +1734,9 @@ Use the "+" button to add entries to the table.</value>
 	</data>
 	<data name="WebSelectorFlowBlock_InnerContent" xml:space="preserve">
 		<value>Inner HTML</value>
+	</data>
+	<data name="WebSelectorFlowBlock_OutputMode" xml:space="preserve">
+		<value>Output mode</value>
 	</data>
 	<data name="WebSelectorFlowBlock_XPath" xml:space="preserve">
 		<value>X-Path</value>

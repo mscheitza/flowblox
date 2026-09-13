@@ -12,7 +12,7 @@ namespace FlowBlox.Core.Interfaces
 
         BaseRuntime Runtime { get; set; }
 
-        void NotifyWarning(BaseFlowBlock flowBlock, string message);
+        void NotifyWarning(BaseFlowBlock flowBlock, string message, Exception exception = null);
 
         void NotifyError(BaseFlowBlock flowBlock, string message, Exception exception = null);
 

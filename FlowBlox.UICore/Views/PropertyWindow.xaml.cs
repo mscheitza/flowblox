@@ -1,7 +1,10 @@
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.UICore.PopUp.Provider;
 using FlowBlox.UICore.ViewModels.PropertyView;
 using MahApps.Metro.Controls;
 using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace FlowBlox.UICore.Views
 {
@@ -52,6 +55,9 @@ namespace FlowBlox.UICore.Views
 
     public partial class PropertyWindow : MetroWindow
     {
+        private PropertyWindowArgs _propertyWindowArgs;
+        private bool _quickStartPopUpRequested;
+
         public PropertyWindow()
         {
             InitializeComponent();
@@ -59,8 +65,28 @@ namespace FlowBlox.UICore.Views
 
         public PropertyWindow(PropertyWindowArgs propertyWindowArgs) : this()
         {
+            _propertyWindowArgs = propertyWindowArgs;
             DataContext = new PropertyWindowViewModel(this, propertyWindowArgs);
             Closing += PropertyView_Closing;
+            Loaded += PropertyWindow_Loaded;
+        }
+
+        private void PropertyWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (_quickStartPopUpRequested)
+                return;
+
+            _quickStartPopUpRequested = true;
+            Dispatcher.BeginInvoke(ShowQuickStartPopUpIfAvailable, DispatcherPriority.ApplicationIdle);
+        }
+
+        private void ShowQuickStartPopUpIfAvailable()
+        {
+            if (_propertyWindowArgs?.Target == null)
+                return;
+
+            var quickStartPopUpService = FlowBloxServiceLocator.Instance.GetService<IQuickStartPopUpService>();
+            quickStartPopUpService?.ShowFor(_propertyWindowArgs.Target, this);
         }
 
         private void PropertyView_Closing(object sender, CancelEventArgs e)
