@@ -261,7 +261,7 @@ namespace FlowBlox.AppWindow
             dockPanel.Visible = isProjectActive && !_isProjectLoading;
             BackColor = isProjectActive && !_isProjectLoading ?
                 Color.FromKnownColor(KnownColor.Control) :
-                Color.FromArgb(53, 53, 53);
+                Color.FromArgb(52, 52, 52);
 
             itmCreateProject.Enabled = !isRuntimeActive;
             itmOpenProject.Enabled = !isRuntimeActive;
