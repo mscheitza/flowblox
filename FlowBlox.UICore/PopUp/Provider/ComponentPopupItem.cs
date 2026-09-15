@@ -2,9 +2,9 @@ using System.Windows.Media;
 
 namespace FlowBlox.UICore.PopUp.Provider
 {
-    public class QuickStartPopUpItem
+    public class ComponentPopupItem
     {
-        public QuickStartPopUpItem(string headline, string description, ImageSource image)
+        public ComponentPopupItem(string headline, string description, ImageSource image)
         {
             Headline = headline;
             Description = description;

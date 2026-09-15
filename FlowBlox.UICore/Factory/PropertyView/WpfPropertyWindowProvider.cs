@@ -1,4 +1,6 @@
 using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Logging;
+using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Manager;
 using FlowBlox.UICore.ViewModels;
@@ -14,7 +16,15 @@ namespace FlowBlox.UICore.Factory.PropertyView
         {
             var propertyWindowViewFactory = GetPropertyWindowViewFactoryForType(instance.GetType());
             if (propertyWindowViewFactory != null)
+            {
+                if (!propertyWindowViewFactory.CanCreate(instance, target, readOnly, out var message))
+                {
+                    ShowViewCannotBeCreatedMessage(message);
+                    return false;
+                }
+
                 return InvokeWPFViewUsingTransaction(owner, instance, target, readOnly, propertyWindowViewFactory, isNew);
+            }
 
             var propertyView = new PropertyWindow(new PropertyWindowArgs(instance, parent: target, readOnly: readOnly, isNew: isNew))
             {
@@ -37,7 +47,19 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var openResult = manager.Open(instance);
             var transientInstance = openResult.TransientTarget;
 
-            var dialog = factory.Create(transientInstance, target, readOnly);
+            Window dialog;
+            try
+            {
+                dialog = factory.Create(transientInstance, target, readOnly);
+            }
+            catch (Exception ex)
+            {
+                manager.Cancel();
+                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
+                ShowViewCreationErrorMessage();
+                return false;
+            }
+
             if (dialog is Window window)
             {
                 window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -57,6 +79,29 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             manager.Cancel();
             return false;
+        }
+
+        private static void ShowViewCreationErrorMessage()
+        {
+            FlowBloxServiceLocator.Instance
+                .GetService<IFlowBloxMessageBoxService>()
+                ?.ShowMessageBox(
+                    "The view could not be created due to an unexpected problem. Further details have been written to the application log files.",
+                    "View could not be created",
+                    FlowBloxMessageBoxTypes.Error);
+        }
+
+        private static void ShowViewCannotBeCreatedMessage(string message)
+        {
+            if (string.IsNullOrWhiteSpace(message))
+                return;
+
+            FlowBloxServiceLocator.Instance
+                .GetService<IFlowBloxMessageBoxService>()
+                ?.ShowMessageBox(
+                    message,
+                    "View cannot be created",
+                    FlowBloxMessageBoxTypes.Information);
         }
 
         private static void MarkDialogAsDirtyIfNew(object dialog, bool isNew)

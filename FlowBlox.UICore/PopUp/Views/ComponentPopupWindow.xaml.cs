@@ -7,24 +7,24 @@ using System.Windows.Media;
 
 namespace FlowBlox.UICore.PopUp.Views
 {
-    public partial class QuickStartWindow : MetroWindow
+    public partial class ComponentPopupWindow : MetroWindow
     {
         private static readonly SolidColorBrush ActiveStepBrush = new(Color.FromRgb(30, 126, 223));
         private static readonly SolidColorBrush InactiveStepBrush = new(Color.FromRgb(207, 216, 226));
-        private readonly IReadOnlyList<QuickStartPopUpItem> _items;
+        private readonly IReadOnlyList<ComponentPopupItem> _items;
         private int _currentIndex;
 
-        public QuickStartWindow(string title, IReadOnlyList<QuickStartPopUpItem> items)
+        public ComponentPopupWindow(string title, IReadOnlyList<ComponentPopupItem> items)
         {
             InitializeComponent();
 
             Title = title;
             _items = items ?? throw new ArgumentNullException(nameof(items));
-            ShowAgainCheckBox.IsChecked = false;
+            ShowAgainToggleSwitch.IsOn = false;
             ShowCurrentItem();
         }
 
-        public bool ShowAgain => ShowAgainCheckBox.IsChecked == true;
+        public bool ShowAgain => ShowAgainToggleSwitch.IsOn;
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
@@ -51,8 +51,8 @@ namespace FlowBlox.UICore.PopUp.Views
             ImagePlaceholderTextBlock.Visibility = item.Image == null ? Visibility.Visible : Visibility.Collapsed;
 
             NextButtonTextBlock.Text = isLastItem
-                ? SequenceDetectionPopUpTexts.Button_Close
-                : SequenceDetectionPopUpTexts.Button_Next;
+                ? ComponentPopupWindowResources.Button_Close
+                : ComponentPopupWindowResources.Button_Next;
             NextButtonIcon.Kind = isLastItem
                 ? PackIconMaterialKind.Check
                 : PackIconMaterialKind.ArrowRight;

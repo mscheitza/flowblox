@@ -155,21 +155,12 @@ namespace FlowBlox.AppWindow
             if (dockPanel?.ActiveContent != _dockContentProjectPanel && !projectPanelWpfControl.CanHandleHostedShortcut)
                 return false;
 
-            var temporaryConnectionShortcutActive =
-                keyData.HasFlag(Keys.Control) &&
-                keyData.HasFlag(Keys.Shift);
-
-            if (!temporaryConnectionShortcutActive)
-                projectPanelWpfControl.ClearTemporaryConnectionShortcut();
-
             switch (keyData)
             {
                 case Keys.Control | Keys.Shift:
                 case Keys.Control | Keys.Shift | Keys.ControlKey:
                 case Keys.Control | Keys.Shift | Keys.ShiftKey:
-                    projectPanelWpfControl.UpdateTemporaryConnectionShortcut(
-                        hostContextActive: true,
-                        shortcutActive: true);
+                    projectPanelWpfControl.ActivateTemporaryConnectionShortcut();
                     return true;
                 case Keys.Escape:
                     return projectPanelWpfControl.ExecuteEscapeShortcut();

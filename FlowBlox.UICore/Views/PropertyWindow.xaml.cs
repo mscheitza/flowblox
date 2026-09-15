@@ -56,7 +56,7 @@ namespace FlowBlox.UICore.Views
     public partial class PropertyWindow : MetroWindow
     {
         private PropertyWindowArgs _propertyWindowArgs;
-        private bool _quickStartPopUpRequested;
+        private bool _componentPopUpRequested;
 
         public PropertyWindow()
         {
@@ -73,20 +73,20 @@ namespace FlowBlox.UICore.Views
 
         private void PropertyWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (_quickStartPopUpRequested)
+            if (_componentPopUpRequested)
                 return;
 
-            _quickStartPopUpRequested = true;
-            Dispatcher.BeginInvoke(ShowQuickStartPopUpIfAvailable, DispatcherPriority.ApplicationIdle);
+            _componentPopUpRequested = true;
+            Dispatcher.BeginInvoke(ShowComponentPopUpIfAvailable, DispatcherPriority.ApplicationIdle);
         }
 
-        private void ShowQuickStartPopUpIfAvailable()
+        private void ShowComponentPopUpIfAvailable()
         {
             if (_propertyWindowArgs?.Target == null)
                 return;
 
-            var quickStartPopUpService = FlowBloxServiceLocator.Instance.GetService<IQuickStartPopUpService>();
-            quickStartPopUpService?.ShowFor(_propertyWindowArgs.Target, this);
+            var componentPopUpService = FlowBloxServiceLocator.Instance.GetService<IComponentPopupService>();
+            componentPopUpService?.ShowFor(_propertyWindowArgs.Target, this);
         }
 
         private void PropertyView_Closing(object sender, CancelEventArgs e)

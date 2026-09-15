@@ -8,29 +8,29 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FlowBlox.UICore.PopUp.Provider
 {
-    public class SequenceDetectionQuickStartPopUpProvider :
-        QuickStartPopUpProviderBase<SequenceDetectionFlowBlock>,
+    public class SequenceDetectionPopUpProvider :
+        ComponentPopupProviderBase<SequenceDetectionFlowBlock>,
         IOptionsRegistration
     {
-        public const string SequenceDetectionOptionKey = "PopUp.SequenceDetection.ShowQuickStart";
+        public const string SequenceDetectionOptionKey = "PopUp.SequenceDetection.ShowComponentPopup";
 
         public override string OptionKey => SequenceDetectionOptionKey;
 
         protected override string WindowTitle => SequenceDetectionPopUpTexts.Window_Title;
 
-        protected override IReadOnlyList<QuickStartPopUpItem> CreateItems(SequenceDetectionFlowBlock target)
+        protected override IReadOnlyList<ComponentPopupItem> CreateItems(SequenceDetectionFlowBlock target)
         {
             return
             [
-                new QuickStartPopUpItem(
+                new ComponentPopupItem(
                     SequenceDetectionPopUpTexts.Step1_Headline,
                     SequenceDetectionPopUpTexts.Step1_Description,
                     PopUpImageResourceHelper.GetImageSource(SequenceDetectionPopUpImages.ResourceManager, nameof(SequenceDetectionPopUpImages.SequenceDetectionQuickStart_1))),
-                new QuickStartPopUpItem(
+                new ComponentPopupItem(
                     SequenceDetectionPopUpTexts.Step2_Headline,
                     SequenceDetectionPopUpTexts.Step2_Description,
                     PopUpImageResourceHelper.GetImageSource(SequenceDetectionPopUpImages.ResourceManager, nameof(SequenceDetectionPopUpImages.SequenceDetectionQuickStart_2))),
-                new QuickStartPopUpItem(
+                new ComponentPopupItem(
                     SequenceDetectionPopUpTexts.Step3_Headline,
                     SequenceDetectionPopUpTexts.Step3_Description,
                     PopUpImageResourceHelper.GetImageSource(SequenceDetectionPopUpImages.ResourceManager, nameof(SequenceDetectionPopUpImages.SequenceDetectionQuickStart_3)))
@@ -44,20 +44,20 @@ namespace FlowBlox.UICore.PopUp.Provider
             defaults.Add(new OptionElement(
                 SequenceDetectionOptionKey,
                 bool.FalseString,
-                SequenceDetectionPopUpTexts.Option_ShowQuickStart_Description,
+                "Controls whether the Sequence Detection component pop-up dialog is shown.",
                 OptionElement.OptionType.Boolean,
-                SequenceDetectionPopUpTexts.Option_ShowQuickStart_DisplayName));
+                "Sequence Detection: Show Component Pop-up"));
         }
     }
 
-    public class QuickStartPopUpServiceRegistration : IFlowBloxServiceRegistration
+    public class ComponentPopupServiceRegistration : IFlowBloxServiceRegistration
     {
         public void RegisterServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IQuickStartPopUpProvider, SequenceDetectionQuickStartPopUpProvider>();
+            serviceCollection.AddSingleton<IComponentPopupProvider, SequenceDetectionPopUpProvider>();
             serviceCollection.AddSingleton<IOptionsRegistration>(sp =>
-                (SequenceDetectionQuickStartPopUpProvider)sp.GetRequiredService<IQuickStartPopUpProvider>());
-            serviceCollection.AddSingleton<IQuickStartPopUpService, QuickStartPopUpService>();
+                (SequenceDetectionPopUpProvider)sp.GetRequiredService<IComponentPopupProvider>());
+            serviceCollection.AddSingleton<IComponentPopupService, ComponentPopupService>();
         }
     }
 }

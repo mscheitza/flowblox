@@ -21,6 +21,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
     public class PropertyWindowViewModel : INotifyPropertyChanged
     {
         private readonly MetroWindow _window;
+        private object _uiActionTarget;
+        private bool _isLoadingUIActions;
 
         public bool DisplaySaveButton { get; }
 
@@ -29,6 +31,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         public RelayCommand SaveWithoutVerificationCommand { get; }
 
         public RelayCommand CancelCommand { get; }
+
+        public RelayCommand RefreshUIActionsCommand { get; }
 
         public BitmapImage HeaderIcon { get; }
 
@@ -57,11 +61,26 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public ObservableCollection<PropertyWindowSpecialExplanationEntryViewModel> SpecialExplanations { get; } = new();
 
+        public bool IsLoadingUIActions
+        {
+            get => _isLoadingUIActions;
+            private set
+            {
+                if (_isLoadingUIActions == value)
+                    return;
+
+                _isLoadingUIActions = value;
+                OnPropertyChanged();
+                RefreshUIActionsCommand.Invalidate();
+            }
+        }
+
         public PropertyWindowViewModel()
         {
             SaveCommand = new RelayCommand(Save, CanSaveChanges);
             SaveWithoutVerificationCommand = new RelayCommand(SaveWithoutVerification, CanSaveChanges);
             CancelCommand = new RelayCommand(Cancel);
+            RefreshUIActionsCommand = new RelayCommand(RefreshUIActions, CanRefreshUIActions);
             UIActions = new ObservableCollection<UIActionViewModel>();
         }
 
@@ -93,7 +112,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             HeaderIcon = SkiaWpfImageHelper.ConvertToImageSource(headerIcon);
             DisplaySaveButton = propertyWindowArgs.CanSave;
             LoadSpecialExplanations(propertyWindowArgs.Target);
-            _ = LoadUIActions(propertyWindowArgs.Target);
+            _uiActionTarget = propertyWindowArgs.Target;
+            _ = LoadUIActions(_uiActionTarget);
         }
 
         private void LoadSpecialExplanations(object target)
@@ -170,14 +190,28 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             };
         }
 
+        private bool CanRefreshUIActions()
+        {
+            return !IsLoadingUIActions && _uiActionTarget is IFlowBloxComponent;
+        }
+
+        private async void RefreshUIActions()
+        {
+            await LoadUIActions(_uiActionTarget);
+        }
+
         private async Task LoadUIActions(object target)
         {
             if (target is not IFlowBloxComponent component)
                 return;
 
+            const int minimumLoadingMilliseconds = 500;
             List<UIActionViewModel> actions;
 
             var provider = new WpfUIActionsProvider();
+            var loadingStartedAt = DateTime.UtcNow;
+            IsLoadingUIActions = true;
+            await Task.Yield();
             try
             {
                 actions = provider.GetToolStripItemsForComponent(component);
@@ -192,6 +226,15 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                     FlowBloxResourceUtil.GetLocalizedString("Message_ComponentActionsLoadingFailure", typeof(Resources.PropertyWindow)));
 
                 return;
+            }
+            finally
+            {
+                var elapsedMilliseconds = (DateTime.UtcNow - loadingStartedAt).TotalMilliseconds;
+                var remainingMilliseconds = minimumLoadingMilliseconds - elapsedMilliseconds;
+                if (remainingMilliseconds > 0)
+                    await Task.Delay(TimeSpan.FromMilliseconds(remainingMilliseconds));
+
+                IsLoadingUIActions = false;
             }
 
             UIActions.Clear();

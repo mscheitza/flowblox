@@ -1,10 +1,10 @@
 namespace FlowBlox.UICore.PopUp.Provider
 {
-    public class QuickStartPopUpService : IQuickStartPopUpService
+    public class ComponentPopupService : IComponentPopupService
     {
-        private readonly IReadOnlyList<IQuickStartPopUpProvider> _providers;
+        private readonly IReadOnlyList<IComponentPopupProvider> _providers;
 
-        public QuickStartPopUpService(IEnumerable<IQuickStartPopUpProvider> providers)
+        public ComponentPopupService(IEnumerable<IComponentPopupProvider> providers)
         {
             _providers = providers?.ToList() ?? [];
         }

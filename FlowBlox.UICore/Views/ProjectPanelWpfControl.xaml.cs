@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace FlowBlox.UICore.Views
 {
@@ -26,6 +27,7 @@ namespace FlowBlox.UICore.Views
         private FlowBlockNodeViewModel _floatingInsertedNode;
         private double _floatingInsertedStartX;
         private double _floatingInsertedStartY;
+        private Window _hostWindow;
         private readonly ProjectPanelTemporaryConnectionShortcut _temporaryConnectionShortcut;
 
         public ProjectPanelWpfViewModel ViewModel { get; }
@@ -36,12 +38,11 @@ namespace FlowBlox.UICore.Views
             ViewModel = new ProjectPanelWpfViewModel();
             DataContext = ViewModel;
             _temporaryConnectionShortcut = new ProjectPanelTemporaryConnectionShortcut(
-                IsProjectPanelInteractionContextActive,
-                IsTextInputFocusWithin,
-                () => ViewModel.ConnectionModeCommand.CanExecute(null),
-                ViewModel.SetTemporaryConnectionMode);
+                DeactivateTemporaryConnectionShortcut);
+            Loaded += ProjectPanelWpfControl_Loaded;
             Unloaded += ProjectPanelWpfControl_Unloaded;
             LostKeyboardFocus += ProjectPanelWpfControl_LostKeyboardFocus;
+            PreviewMouseDown += ProjectPanelWpfControl_PreviewMouseDown;
         }
 
         public void RefreshProject() => ViewModel.Refresh();
@@ -123,19 +124,149 @@ namespace FlowBlox.UICore.Views
         public void MarkRuntimeFocus(FlowBlox.Core.Models.FlowBlocks.Base.BaseFlowBlock flowBlock)
             => ViewModel.MarkRuntimeFocus(flowBlock);
 
-        public void UpdateTemporaryConnectionShortcut(bool hostContextActive, bool shortcutActive)
-            => _temporaryConnectionShortcut.Update(hostContextActive, shortcutActive);
+        public void ActivateTemporaryConnectionShortcut()
+        {
+            UpdateTemporaryConnectionMode();
+            if (ViewModel.IsConnectionMode)
+                _temporaryConnectionShortcut.StartReleaseWatcher();
+        }
 
-        public void ClearTemporaryConnectionShortcut()
-            => _temporaryConnectionShortcut.Clear();
+        public void DeactivateTemporaryConnectionShortcut()
+        {
+            _temporaryConnectionShortcut.StopReleaseWatcher();
+            ViewModel.SetTemporaryConnectionMode(false);
+        }
+
+        private void ProjectPanelWpfControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            _hostWindow = Window.GetWindow(this);
+            if (_hostWindow == null)
+                return;
+
+            _hostWindow.PreviewKeyDown -= HostWindow_PreviewKeyDown;
+            _hostWindow.PreviewKeyUp -= HostWindow_PreviewKeyUp;
+            _hostWindow.PreviewKeyDown += HostWindow_PreviewKeyDown;
+            _hostWindow.PreviewKeyUp += HostWindow_PreviewKeyUp;
+        }
 
         private void ProjectPanelWpfControl_Unloaded(object sender, RoutedEventArgs e)
-            => _temporaryConnectionShortcut.Clear();
+        {
+            if (_hostWindow != null)
+            {
+                _hostWindow.PreviewKeyDown -= HostWindow_PreviewKeyDown;
+                _hostWindow.PreviewKeyUp -= HostWindow_PreviewKeyUp;
+                _hostWindow = null;
+            }
+
+            DeactivateTemporaryConnectionShortcut();
+        }
 
         private void ProjectPanelWpfControl_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (!IsKeyboardFocusWithin)
-                _temporaryConnectionShortcut.Clear();
+                DeactivateTemporaryConnectionShortcut();
+        }
+
+        private void ProjectPanelWpfControl_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.FocusedElement is not DependencyObject focusedElement ||
+                !IsTextInput(focusedElement) ||
+                e.OriginalSource is not DependencyObject clickedElement ||
+                IsTextInput(clickedElement))
+            {
+                return;
+            }
+
+            Dispatcher.BeginInvoke(
+                new Action(() => Keyboard.Focus(this)),
+                DispatcherPriority.Input);
+        }
+
+        private void HostWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (ExecuteEditingShortcut(e))
+                return;
+
+            ExecuteSelectionShortcut(e);
+            UpdateTemporaryConnectionMode();
+        }
+
+        private void HostWindow_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ||
+                !Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                DeactivateTemporaryConnectionShortcut();
+                return;
+            }
+
+            UpdateTemporaryConnectionMode();
+        }
+
+        private void ExecuteSelectionShortcut(KeyEventArgs e)
+        {
+            if (e.Handled ||
+                !IsProjectPanelInteractionContextActive() ||
+                IsTextInputFocusWithin() ||
+                Keyboard.Modifiers != ModifierKeys.Control)
+            {
+                return;
+            }
+
+            var command = e.Key switch
+            {
+                Key.Left => ViewModel.SelectLeftCommand,
+                Key.Right => ViewModel.SelectRightCommand,
+                Key.Up => ViewModel.SelectUpCommand,
+                Key.Down => ViewModel.SelectDownCommand,
+                Key.A => ViewModel.SelectAllCommand,
+                _ => null
+            };
+
+            if (command?.CanExecute(null) != true)
+                return;
+
+            command.Execute(null);
+            e.Handled = true;
+        }
+
+        private bool ExecuteEditingShortcut(KeyEventArgs e)
+        {
+            if (e.Handled ||
+                !IsProjectPanelInteractionContextActive() ||
+                IsTextInputFocusWithin())
+            {
+                return false;
+            }
+
+            if (e.Key == Key.Escape && _floatingInsertedNode != null)
+            {
+                ExecuteEscapeShortcut();
+                e.Handled = true;
+                return true;
+            }
+
+            if (Keyboard.Modifiers != ModifierKeys.None)
+                return false;
+
+            if (e.Key == Key.Delete && ExecuteDeleteShortcut())
+            {
+                e.Handled = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        private void UpdateTemporaryConnectionMode()
+        {
+            var isShortcutActive =
+                IsProjectPanelInteractionContextActive() &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Control) &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) &&
+                ViewModel.ConnectionModeCommand.CanExecute(null);
+
+            ViewModel.SetTemporaryConnectionMode(isShortcutActive);
         }
 
         private bool IsProjectPanelInteractionContextActive()
@@ -155,11 +286,21 @@ namespace FlowBlox.UICore.Views
 
             while (current != null)
             {
-                if (current is PasswordBox)
+                if (current is TextBox or PasswordBox)
                     return true;
 
-                if (current is TextBox textBox)
-                    return !textBox.IsReadOnly;
+                current = VisualTreeHelper.GetParent(current);
+            }
+
+            return false;
+        }
+
+        private static bool IsTextInput(DependencyObject current)
+        {
+            while (current != null)
+            {
+                if (current is TextBox or PasswordBox)
+                    return true;
 
                 current = VisualTreeHelper.GetParent(current);
             }

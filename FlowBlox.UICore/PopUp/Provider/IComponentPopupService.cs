@@ -2,7 +2,7 @@ using System.Windows;
 
 namespace FlowBlox.UICore.PopUp.Provider
 {
-    public interface IQuickStartPopUpService
+    public interface IComponentPopupService
     {
         bool ShowFor(object target, Window owner = null);
 

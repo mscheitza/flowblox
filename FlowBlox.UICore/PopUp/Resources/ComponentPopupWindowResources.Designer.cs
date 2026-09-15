@@ -23,7 +23,7 @@ namespace FlowBlox.UICore.PopUp.Resources
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SequenceDetectionPopUpTexts
+    public class ComponentPopupWindowResources
     {
         
         private static global::System.Resources.ResourceManager resourceMan;
@@ -31,7 +31,7 @@ namespace FlowBlox.UICore.PopUp.Resources
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SequenceDetectionPopUpTexts()
+        internal ComponentPopupWindowResources()
         {
         }
         
@@ -45,7 +45,7 @@ namespace FlowBlox.UICore.PopUp.Resources
             {
                 if (object.ReferenceEquals(resourceMan, null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.PopUp.Resources.SequenceDetectionPopUpTexts", typeof(SequenceDetectionPopUpTexts).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.PopUp.Resources.ComponentPopupWindowResources", typeof(ComponentPopupWindowResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -70,79 +70,57 @@ namespace FlowBlox.UICore.PopUp.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die At least two test cases are required. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
         /// </summary>
-        public static string Step1_Description
+        public static string Button_Close
         {
             get
             {
-                return ResourceManager.GetString("Step1_Description", resourceCulture);
+                return ResourceManager.GetString("Button_Close", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die At least two test cases are required ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Next ähnelt.
         /// </summary>
-        public static string Step1_Headline
+        public static string Button_Next
         {
             get
             {
-                return ResourceManager.GetString("Step1_Headline", resourceCulture);
+                return ResourceManager.GetString("Button_Next", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Each test case requires the number of records and a search value ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Image resource not assigned ähnelt.
         /// </summary>
-        public static string Step2_Description
+        public static string Image_Placeholder
         {
             get
             {
-                return ResourceManager.GetString("Step2_Description", resourceCulture);
+                return ResourceManager.GetString("Image_Placeholder", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Define the expected result ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do not show again ähnelt.
         /// </summary>
-        public static string Step2_Headline
+        public static string Toggle_ShowAgain_Off
         {
             get
             {
-                return ResourceManager.GetString("Step2_Headline", resourceCulture);
+                return ResourceManager.GetString("Toggle_ShowAgain_Off", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The sequence pattern is generated from the two test cases and reliably finds the search value ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Show again ähnelt.
         /// </summary>
-        public static string Step3_Description
+        public static string Toggle_ShowAgain_On
         {
             get
             {
-                return ResourceManager.GetString("Step3_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Generate the Sequence Pattern ähnelt.
-        /// </summary>
-        public static string Step3_Headline
-        {
-            get
-            {
-                return ResourceManager.GetString("Step3_Headline", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Sequence Detection ähnelt.
-        /// </summary>
-        public static string Window_Title
-        {
-            get
-            {
-                return ResourceManager.GetString("Window_Title", resourceCulture);
+                return ResourceManager.GetString("Toggle_ShowAgain_On", resourceCulture);
             }
         }
     }

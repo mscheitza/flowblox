@@ -5,22 +5,12 @@ namespace FlowBlox.UICore.Views
 {
     internal sealed class ProjectPanelTemporaryConnectionShortcut
     {
-        private readonly Func<bool> _isContextActive;
-        private readonly Func<bool> _isTextInputFocusActive;
-        private readonly Func<bool> _canEnterConnectionMode;
-        private readonly Action<bool> _setTemporaryConnectionMode;
+        private readonly Action _deactivate;
         private readonly DispatcherTimer _releaseTimer;
 
-        public ProjectPanelTemporaryConnectionShortcut(
-            Func<bool> isContextActive,
-            Func<bool> isTextInputFocusActive,
-            Func<bool> canEnterConnectionMode,
-            Action<bool> setTemporaryConnectionMode)
+        public ProjectPanelTemporaryConnectionShortcut(Action deactivate)
         {
-            _isContextActive = isContextActive;
-            _isTextInputFocusActive = isTextInputFocusActive;
-            _canEnterConnectionMode = canEnterConnectionMode;
-            _setTemporaryConnectionMode = setTemporaryConnectionMode;
+            _deactivate = deactivate;
             _releaseTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(50)
@@ -28,38 +18,22 @@ namespace FlowBlox.UICore.Views
             _releaseTimer.Tick += ReleaseTimer_Tick;
         }
 
-        public void Update()
-            => Update(_isContextActive(), IsShortcutPressed());
+        public void StartReleaseWatcher()
+            => _releaseTimer.Start();
 
-        public void Update(bool hostContextActive, bool shortcutActive)
-        {
-            var isShortcutActive =
-                hostContextActive &&
-                !_isTextInputFocusActive() &&
-                shortcutActive &&
-                _canEnterConnectionMode();
-
-            _setTemporaryConnectionMode(isShortcutActive);
-            if (isShortcutActive)
-                _releaseTimer.Start();
-            else
-                _releaseTimer.Stop();
-        }
-
-        public void Clear()
-        {
-            _releaseTimer.Stop();
-            _setTemporaryConnectionMode(false);
-        }
+        public void StopReleaseWatcher()
+            => _releaseTimer.Stop();
 
         private void ReleaseTimer_Tick(object sender, EventArgs e)
         {
-            if (!IsShortcutPressed())
-                Clear();
-        }
+            if (Keyboard.Modifiers.HasFlag(ModifierKeys.Control) &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                return;
+            }
 
-        private static bool IsShortcutPressed()
-            => Keyboard.Modifiers.HasFlag(ModifierKeys.Control) &&
-               Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
+            StopReleaseWatcher();
+            _deactivate();
+        }
     }
 }

@@ -101,6 +101,17 @@ namespace FlowBlox.UICore.Resources
                 return ResourceManager.GetString("ReadMore", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Refresh actions ähnelt.
+        /// </summary>
+        public static string RefreshActions
+        {
+            get
+            {
+                return ResourceManager.GetString("RefreshActions", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.

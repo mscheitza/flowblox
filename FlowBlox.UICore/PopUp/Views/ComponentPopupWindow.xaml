@@ -1,6 +1,6 @@
 <mah:MetroWindow
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    x:Class="FlowBlox.UICore.PopUp.Views.QuickStartWindow"
+    x:Class="FlowBlox.UICore.PopUp.Views.ComponentPopupWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -56,7 +56,7 @@
                            Stretch="Uniform"
                            SnapsToDevicePixels="True" />
                     <TextBlock x:Name="ImagePlaceholderTextBlock"
-                               Text="{x:Static resources:SequenceDetectionPopUpTexts.Image_Placeholder}"
+                               Text="{x:Static resources:ComponentPopupWindowResources.Image_Placeholder}"
                                Foreground="#6B7280"
                                FontSize="14"
                                HorizontalAlignment="Center"
@@ -95,10 +95,12 @@
         <DockPanel Grid.Row="2"
                    Margin="0,18,0,0"
                    LastChildFill="False">
-            <CheckBox x:Name="ShowAgainCheckBox"
-                      DockPanel.Dock="Left"
-                      VerticalAlignment="Center"
-                      Content="{x:Static resources:SequenceDetectionPopUpTexts.CheckBox_ShowAgain}" />
+            <mah:ToggleSwitch x:Name="ShowAgainToggleSwitch"
+                              DockPanel.Dock="Left"
+                              VerticalAlignment="Center"
+                              IsOn="False"
+                              OnContent="{x:Static resources:ComponentPopupWindowResources.Toggle_ShowAgain_On}"
+                              OffContent="{x:Static resources:ComponentPopupWindowResources.Toggle_ShowAgain_Off}" />
 
             <Button x:Name="NextButton"
                     DockPanel.Dock="Right"

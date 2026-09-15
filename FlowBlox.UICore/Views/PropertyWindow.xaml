@@ -101,34 +101,54 @@
             BorderThickness="0,1,0,1"
             Padding="6,4,6,4"
             Margin="0,0,0,0">
-            <ItemsControl ItemsSource="{Binding UIActions}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Command="{Binding Command}"
-                            IsEnabled="{Binding IsEnabled}"
-                            ToolTip="{Binding DisplayName}"
-                            Margin="3,0"
-                            Padding="6,3"
-                            MinWidth="80"
-                            Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding Icon}"
-                                   Width="16"
-                                   Height="16"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,5,0">
-                                </Image>
-                                <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <StackPanel Orientation="Horizontal">
+                <ItemsControl ItemsSource="{Binding UIActions}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Command}"
+                                IsEnabled="{Binding IsEnabled}"
+                                ToolTip="{Binding DisplayName}"
+                                Margin="3,0"
+                                Padding="6,3"
+                                MinWidth="80"
+                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Icon}"
+                                       Width="16"
+                                       Height="16"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,5,0">
+                                    </Image>
+                                    <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button Command="{Binding RefreshUIActionsCommand}"
+                        ToolTip="{x:Static resources:PropertyWindow.RefreshActions}"
+                        Margin="3,0"
+                        Padding="6,3"
+                        MinWidth="28"
+                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Grid Width="16" Height="16">
+                        <iconPacks:PackIconMaterial Kind="Refresh"
+                                                    Style="{StaticResource FlowBlox.ToolbarIconBase}"
+                                                    Foreground="#3A6EA5"
+                                                    Visibility="{Binding IsLoadingUIActions, Converter={StaticResource BoolToInverseVisibilityConverter}}"/>
+                        <mah:ProgressRing IsActive="{Binding IsLoadingUIActions}"
+                                          Visibility="{Binding IsLoadingUIActions, Converter={StaticResource BoolToVisibilityConverter}}"
+                                          Width="16"
+                                          Height="16"
+                                          Foreground="#3A6EA5"/>
+                    </Grid>
+                </Button>
+            </StackPanel>
         </Border>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Bottom" Margin="10">

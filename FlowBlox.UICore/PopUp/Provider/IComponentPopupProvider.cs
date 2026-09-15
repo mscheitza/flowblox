@@ -2,7 +2,7 @@ using System.Windows;
 
 namespace FlowBlox.UICore.PopUp.Provider
 {
-    public interface IQuickStartPopUpProvider
+    public interface IComponentPopupProvider
     {
         Type TargetType { get; }
 

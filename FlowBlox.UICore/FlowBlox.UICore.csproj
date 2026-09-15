@@ -235,6 +235,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="PopUp\Resources\ComponentPopupWindowResources.Designer.cs">
+      <DependentUpon>ComponentPopupWindowResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Views\PropertyWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -402,6 +407,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="PopUp\Resources\SequenceDetectionPopUpTexts.resx">
       <LastGenOutput>SequenceDetectionPopUpTexts.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PopUp\Resources\ComponentPopupWindowResources.resx">
+      <LastGenOutput>ComponentPopupWindowResources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>

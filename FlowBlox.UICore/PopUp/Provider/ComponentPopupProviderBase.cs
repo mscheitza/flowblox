@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace FlowBlox.UICore.PopUp.Provider
 {
-    public abstract class QuickStartPopUpProviderBase<TTarget> : IQuickStartPopUpProvider
+    public abstract class ComponentPopupProviderBase<TTarget> : IComponentPopupProvider
     {
         private bool _showOnceBecauseOptionWasMissing;
 
@@ -15,7 +15,7 @@ namespace FlowBlox.UICore.PopUp.Provider
 
         protected abstract string WindowTitle { get; }
 
-        protected abstract IReadOnlyList<QuickStartPopUpItem> CreateItems(TTarget target);
+        protected abstract IReadOnlyList<ComponentPopupItem> CreateItems(TTarget target);
 
         protected void SetOptionWasMissingAtInitialization(bool wasMissing)
         {
@@ -41,7 +41,7 @@ namespace FlowBlox.UICore.PopUp.Provider
             if (items.Count == 0)
                 return;
 
-            var window = new QuickStartWindow(WindowTitle, items)
+            var window = new ComponentPopupWindow(WindowTitle, items)
             {
                 Owner = owner ?? Application.Current?.Windows.OfType<Window>().FirstOrDefault(x => x.IsActive),
                 WindowStartupLocation = owner != null ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen
@@ -63,7 +63,7 @@ namespace FlowBlox.UICore.PopUp.Provider
             option = new OptionElement(
                 OptionKey,
                 bool.FalseString,
-                "Controls whether this quick start dialog is shown.",
+                "Controls whether this component pop-up dialog is shown.",
                 OptionElement.OptionType.Boolean);
 
             options.OptionCollection[OptionKey] = option;

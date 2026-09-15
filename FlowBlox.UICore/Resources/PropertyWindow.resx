@@ -132,4 +132,7 @@
 	<data name="ReadMore" xml:space="preserve">
 		<value>Read more</value>
 	</data>
+	<data name="RefreshActions" xml:space="preserve">
+		<value>Refresh actions</value>
+	</data>
 </root>
