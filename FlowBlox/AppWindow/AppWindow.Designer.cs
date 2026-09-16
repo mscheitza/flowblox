@@ -76,6 +76,7 @@ namespace FlowBlox.AppWindow
             itmPaste = new System.Windows.Forms.ToolStripMenuItem();
             itmAutomation = new System.Windows.Forms.ToolStripMenuItem();
             itmFlowBloxTaskManagement = new System.Windows.Forms.ToolStripMenuItem();
+            itmNotifications = new System.Windows.Forms.ToolStripMenuItem();
             mnItmWindows = new System.Windows.Forms.ToolStripMenuItem();
             itmDockablePanels = new System.Windows.Forms.ToolStripMenuItem();
             itmResetDockablePanels = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,7 +107,7 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmMisc
             // 
-            mnItmMisc.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmManageInputFiles, itmUserFields, toolStripSeparator5, itmAutomation, itmFbProjects, itmFbExtensions, toolStripSeparator1, itmOptions });
+            mnItmMisc.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmManageInputFiles, itmUserFields, toolStripSeparator5, itmAutomation, itmNotifications, itmFbProjects, itmFbExtensions, toolStripSeparator1, itmOptions });
             mnItmMisc.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmMisc.Name = "mnItmMisc";
             mnItmMisc.Size = new System.Drawing.Size(106, 19);
@@ -148,6 +149,13 @@ namespace FlowBlox.AppWindow
             itmFlowBloxTaskManagement.Size = new System.Drawing.Size(259, 22);
             itmFlowBloxTaskManagement.Text = "itmFlowBloxTaskManagement_Text";
             itmFlowBloxTaskManagement.Click += itmFlowBloxTaskManagement_Click;
+            // 
+            // itmNotifications
+            // 
+            itmNotifications.Name = "itmNotifications";
+            itmNotifications.Size = new System.Drawing.Size(215, 22);
+            itmNotifications.Text = "itmNotifications_Text";
+            itmNotifications.Click += itmNotifications_Click;
             // 
             // itmFbProjects
             // 
@@ -702,6 +710,7 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripMenuItem itmPaste;
         private System.Windows.Forms.ToolStripMenuItem itmAutomation;
         private System.Windows.Forms.ToolStripMenuItem itmFlowBloxTaskManagement;
+        private System.Windows.Forms.ToolStripMenuItem itmNotifications;
         private FlowBlox.AppWindow.Contents.BufferedDockPanel dockPanel;
         private System.Windows.Forms.ToolStripMenuItem itmOpenRuntimeLogDirectory;
         private System.Windows.Forms.ToolStripMenuItem itmDockablePanels;

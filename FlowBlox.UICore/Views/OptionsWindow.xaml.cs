@@ -13,6 +13,8 @@ namespace FlowBlox.UICore.Views
     public partial class OptionsWindow : MetroWindow
     {
         private bool _isUpdatingPassword;
+        private bool _isCloseConfirmationOpen;
+        private bool _closeConfirmed;
 
         public OptionsWindow()
             : this(null)
@@ -96,6 +98,39 @@ namespace FlowBlox.UICore.Views
                 return;
 
             ViewModel.Value = ValuePasswordBox.Password;
+        }
+
+        protected override async void OnClosing(CancelEventArgs e)
+        {
+            if (_closeConfirmed || ViewModel?.IsDirty != true)
+            {
+                base.OnClosing(e);
+                return;
+            }
+
+            e.Cancel = true;
+            base.OnClosing(e);
+
+            if (_isCloseConfirmationOpen)
+                return;
+
+            _isCloseConfirmationOpen = true;
+            try
+            {
+                var confirmed = await MessageBoxHelper.ShowQuestionAsync(
+                    this,
+                    OptionsWindowResources.CloseUnsavedChanges_Message);
+
+                if (confirmed == true)
+                {
+                    _closeConfirmed = true;
+                    Close();
+                }
+            }
+            finally
+            {
+                _isCloseConfirmationOpen = false;
+            }
         }
 
         protected override void OnClosed(EventArgs e)

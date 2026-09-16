@@ -122,6 +122,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [DeepCopierIgnore()]
         public int OutputDatasets_Count => GridElementResult?.Results?.Count ?? 0;
 
+        [JsonIgnore()]
+        [DeepCopierIgnore()]
+        public bool OutputDatasetProcessingCompleted { get; private set; }
+
         public override List<FieldElement> GetPossibleFieldElements()
         {
             return FlowBloxFieldsResolver.GetFieldsOrderedByReferencedFlowBlocksExcluding(this);
@@ -288,11 +292,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                         fieldValueMapping.Field.SetValue(runtime, fieldValueMapping.Value);
                     }
                 }
+
+                CompleteOutputDatasetProcessing();
             }
             else if (nextElementList.All(x => x.HasIterationContext))
             {
                 this.Fields.ForEach(x => x.Pending = true);
                 nextElementList.ForEach(x => x.Execute(runtime, this));
+                CompleteOutputDatasetProcessing();
             }
             else
             {
@@ -301,6 +308,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 {
                     items.Add(new Runtime.WorkItems.ApplyOutputDatasetAndScheduleNextWorkItem(this, result));
                 }
+                items.Add(new Runtime.WorkItems.CompleteOutputDatasetProcessingWorkItem(this));
                 runtime.TaskRunner.EnqueueBatchInExecutionOrder(items);
             }
         }
@@ -405,7 +413,31 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public void ResetOutputDatasetProcessing()
         {
             OutputDataset_CurrentlyProcessing = null;
+            OutputDatasetProcessingCompleted = false;
             NotifyOutputDatasetProcessingChanged();
+        }
+
+        internal void CompleteOutputDatasetProcessing()
+        {
+            if (OutputDatasets_Count <= 0 || OutputDatasetProcessingCompleted)
+                return;
+
+            OutputDatasetProcessingCompleted = true;
+            NotifyOutputDatasetProcessingChanged();
+        }
+
+        public override void RuntimeStarted(BaseRuntime runtime)
+        {
+            ResetOutputDatasetProcessing();
+            base.RuntimeStarted(runtime);
+        }
+
+        public override void RuntimeFinished(BaseRuntime runtime)
+        {
+            if (runtime?.Aborted != true)
+                CompleteOutputDatasetProcessing();
+
+            base.RuntimeFinished(runtime);
         }
 
         internal void NotifyOutputDatasetProcessingChanged() => OutputDatasetProcessingChanged?.Invoke();

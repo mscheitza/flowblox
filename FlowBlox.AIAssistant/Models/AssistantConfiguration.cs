@@ -12,6 +12,7 @@ namespace FlowBlox.AIAssistant.Models
     [Display(Name = "AssistantConfiguration_DisplayName", Description = "AssistantConfiguration_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxUIGroup("AssistantConfiguration_Groups_General", 0)]
     [FlowBloxUIGroup("AssistantConfiguration_Groups_Extended", 1)]
+    [FlowBloxUIGroup("AssistantConfiguration_Groups_Permissions", 2)]
     public class AssistantConfiguration : FlowBloxReactiveObject
     {
         [Required]
@@ -30,6 +31,9 @@ namespace FlowBlox.AIAssistant.Models
 
         [Display(Name = "AssistantConfiguration_AttachProjectJsonAutomatically", Description = "AssistantConfiguration_AttachProjectJsonAutomatically_Tooltip", GroupName = "AssistantConfiguration_Groups_General", ResourceType = typeof(FlowBloxTexts), Order = 4)]
         public bool AttachProjectJsonAutomatically { get; set; } = false;
+
+        [Display(Name = "AssistantConfiguration_OptionsAccessLevel", Description = "AssistantConfiguration_OptionsAccessLevel_Tooltip", GroupName = "AssistantConfiguration_Groups_Permissions", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        public AssistantOptionsAccessLevel OptionsAccessLevel { get; set; } = AssistantOptionsAccessLevel.None;
 
         [Display(Name = "AssistantConfiguration_MaxTokens", Description = "AssistantConfiguration_MaxTokens_Tooltip", GroupName = "AssistantConfiguration_Groups_Extended", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         public int? MaxTokens { get; set; }

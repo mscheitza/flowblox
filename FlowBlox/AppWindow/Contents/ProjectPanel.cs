@@ -182,7 +182,9 @@ namespace FlowBlox.AppWindow.Contents
             if (_runtime == null)
                 return;
 
-            _runtime.Aborted = true;
+            _runtime.CancelExecution(
+                FlowBlox.Core.Models.Runtime.Debugging.RuntimeCancellationKind.UserCancellation,
+                "Runtime execution was cancelled by the user.");
             _runtimeStateService?.AttachRuntime(_runtime);
             UpdateUI();
         }
@@ -264,6 +266,8 @@ namespace FlowBlox.AppWindow.Contents
                 foreach (var flowBlock in FlowBloxRegistryProvider.GetRegistry().GetFlowBlocks().OfType<BaseFlowBlock>())
                 {
                     flowBlock.ResetNotifications(_runtime);
+                    if (flowBlock is BaseResultFlowBlock resultFlowBlock)
+                        resultFlowBlock.ResetOutputDatasetProcessing();
                 }
             }
 

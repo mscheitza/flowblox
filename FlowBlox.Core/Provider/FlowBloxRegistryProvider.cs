@@ -46,13 +46,13 @@ namespace FlowBlox.Core.Provider
 
         public static FlowBloxRegistry OpenTransaction(bool detached = false)
         {
-            if (!_registryChain.Any())
-                _registryChain.Add(GetRegistry());
+            var parentRegistry = _registryChain.LastOrDefault() ?? GetRegistry();
+            FlowBloxRegistry transactionRegistry = detached
+                ? new FlowBloxDetachedRegistry(parentRegistry)
+                : new FlowBloxTransientRegistry(parentRegistry);
 
-            _registryChain.Add(detached
-                ? new FlowBloxDetachedRegistry(_registryChain.Last())
-                : new FlowBloxTransientRegistry(_registryChain.Last()));
-            return _registryChain.Last();
+            _registryChain.Add(transactionRegistry);
+            return transactionRegistry;
         }
 
         public static void CommitTransaction()
@@ -69,8 +69,6 @@ namespace FlowBlox.Core.Provider
         public static void RemoveFromChain(FlowBloxRegistry registry)
         {
             _registryChain.Remove(registry);
-            if (_registryChain.Count == 1)
-                _registryChain.RemoveAt(0);
         }
 
         private sealed class ProjectRegistryScope : IDisposable

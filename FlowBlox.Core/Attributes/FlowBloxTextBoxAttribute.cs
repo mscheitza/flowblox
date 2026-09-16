@@ -5,6 +5,12 @@ namespace FlowBlox.Core.Attributes
     {
         public bool MultiLine { get; set; }
 
+        /// <summary>
+        /// Masks the value in generated property views. The backing property remains a string so
+        /// callers can decide how the value is persisted.
+        /// </summary>
+        public bool IsPassword { get; set; }
+
         public bool IsCodingMode { get; set; }
         public bool Suggestions { get; set; }
         public string SuggestionMember { get; set; }
@@ -31,6 +37,7 @@ namespace FlowBlox.Core.Attributes
         public FlowBloxTextBoxAttribute()
         {
             MultiLine = false;
+            IsPassword = false;
             IsCodingMode = false;
             Suggestions = false;
         }

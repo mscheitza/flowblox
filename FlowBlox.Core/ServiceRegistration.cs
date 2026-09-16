@@ -4,6 +4,7 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Migration.MigrationStrategies;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Services;
+using FlowBlox.Core.Services.Notifications;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FlowBlox.Core
@@ -18,6 +19,9 @@ namespace FlowBlox.Core
             serviceCollection.AddSingleton<IFlowBlockToolboxRegistrationService, FlowBlockToolboxRegistrationService>();
             serviceCollection.AddSingleton<IFlowBloxLegacyTypeMappingService, FlowBloxCoreLegacyTypeMappingService>();
             serviceCollection.AddTransient<IRuntimeInterceptor, RuntimeDebuggingInterceptor>();
+            serviceCollection.AddTransient<IRuntimeInterceptor, RuntimeNotificationInterceptor>();
+            serviceCollection.AddSingleton<IRuntimeNotificationProvider, EmailRuntimeNotificationProvider>();
+            serviceCollection.AddSingleton<IOptionsRegistration, RuntimeNotificationOptionsRegistration>();
         }
     }
 }

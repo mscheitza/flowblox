@@ -15,6 +15,7 @@ using FlowBlox.Core.Constants;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Services;
+using FlowBlox.Core.Services.Notifications;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Interfaces;
@@ -120,6 +121,7 @@ namespace FlowBlox.AppWindow
             RefreshRecentProjectsMenu();
             SubscribeCurrentChangelist();
             this.UpdateUI();
+            this.Size = new Size(1420, 1000);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -1509,6 +1511,44 @@ namespace FlowBlox.AppWindow
         {
             var dialog = new FlowBloxTaskManagementWindow();
             WindowsFormWPFHelper.ShowDialog(dialog, this);
+        }
+
+        private void itmNotifications_Click(object sender, EventArgs e)
+        {
+            FlowBloxOptions.GetOptionInstance().InitDefaults(false);
+            var configuration = RuntimeNotificationConfigurationStore.Load(out var loadError);
+            if (!string.IsNullOrWhiteSpace(loadError))
+            {
+                FlowBloxMessageBox.Show(
+                    this,
+                    loadError,
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_Notifications_LoadError_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Warning);
+                return;
+            }
+
+            var propertyWindow = new PropertyWindow(new PropertyWindowArgs(
+                configuration,
+                readOnly: false,
+                canSave: true,
+                detached: true))
+            {
+                Height = 760,
+                Width = 860
+            };
+
+            WindowsFormWPFHelper.ShowDialog(propertyWindow, this);
+            if (propertyWindow.DialogResult == true &&
+                !RuntimeNotificationConfigurationStore.Save(configuration, out var saveError))
+            {
+                FlowBloxMessageBox.Show(
+                    this,
+                    saveError,
+                    FlowBloxResourceUtil.GetLocalizedString("AppWindow_Notifications_SaveError_Title", typeof(FlowBloxMainUITexts)),
+                    FlowBloxMessageBox.Buttons.OK,
+                    FlowBloxMessageBox.Icons.Error);
+            }
         }
 
         private void itmManageInputFiles_Click(object sender, EventArgs e)

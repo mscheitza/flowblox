@@ -133,4 +133,7 @@
   <data name="Toolbar_Stop" xml:space="preserve">
     <value>Stoppen</value>
   </data>
+  <data name="Tooltip_IterationProgress" xml:space="preserve">
+    <value>Aktueller Datensatz: {0} von insgesamt {1} Datensätzen. Ein Haken zeigt an, dass alle Iterationen abgeschlossen sind.</value>
+  </data>
 </root>

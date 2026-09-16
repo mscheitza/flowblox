@@ -378,6 +378,17 @@ namespace FlowBlox
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notifications... ähnelt.
+        /// </summary>
+        internal static string AppWindow_itmNotifications_Text
+        {
+            get
+            {
+                return ResourceManager.GetString("AppWindow_itmNotifications_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Show application log file(s) ähnelt.
         /// </summary>
         internal static string AppWindow_itmOpenApplicationLogDirectory_Text
@@ -781,6 +792,28 @@ namespace FlowBlox
             get
             {
                 return ResourceManager.GetString("AppWindow_Notification_UpdateInstallDownloaded_Action_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notifications could not be loaded ähnelt.
+        /// </summary>
+        internal static string AppWindow_Notifications_LoadError_Title
+        {
+            get
+            {
+                return ResourceManager.GetString("AppWindow_Notifications_LoadError_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notifications could not be saved ähnelt.
+        /// </summary>
+        internal static string AppWindow_Notifications_SaveError_Title
+        {
+            get
+            {
+                return ResourceManager.GetString("AppWindow_Notifications_SaveError_Title", resourceCulture);
             }
         }
         

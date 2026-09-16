@@ -1064,7 +1064,7 @@ Use the "+" button to add entries to the table.</value>
 		<value>Advanced ONNX settings</value>
 	</data>
 	<data name="OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings" xml:space="preserve">
-		<value>Advanced ONNX settings</value>
+		<value>Advanced ONNX Settings</value>
 	</data>
 	<data name="OnnxQuestionAnsweringFlowBlock_Context" xml:space="preserve">
 		<value>Context</value>
@@ -3925,6 +3925,24 @@ If a Join collector should aggregate links across all page iterations:
 	</data>	<data name="AssistantConfiguration_Groups_Extended" xml:space="preserve">
 		<value>Advanced settings</value>
 	</data>
+	<data name="AssistantConfiguration_Groups_Permissions" xml:space="preserve">
+		<value>Permissions</value>
+	</data>
+	<data name="AssistantConfiguration_OptionsAccessLevel" xml:space="preserve">
+		<value>Options access</value>
+	</data>
+	<data name="AssistantConfiguration_OptionsAccessLevel_Tooltip" xml:space="preserve">
+		<value>Controls whether the AI assistant may search FlowBlox options and set non-password option values through the Tool API.</value>
+	</data>
+	<data name="AssistantOptionsAccessLevel_None" xml:space="preserve">
+		<value>No permission</value>
+	</data>
+	<data name="AssistantOptionsAccessLevel_ReadOnly" xml:space="preserve">
+		<value>Read only</value>
+	</data>
+	<data name="AssistantOptionsAccessLevel_ReadWrite" xml:space="preserve">
+		<value>Read and write</value>
+	</data>
 	<data name="AssistantConfiguration_MaxLatestMessages" xml:space="preserve">
 		<value>Maximum latest messages</value>
 	</data>
@@ -4063,6 +4081,52 @@ If a Join collector should aggregate links across all page iterations:
   <data name="SplitSeparatorDefinition_Validation_NoSeparatorDefined" xml:space="preserve">
     <value>No separator was specified. Please specify either a separator or a special separator.</value>
   </data>
+  <data name="RuntimeNotificationConfiguration_DisplayName" xml:space="preserve"><value>Runtime notifications</value></data>
+  <data name="RuntimeNotificationConfiguration_Description" xml:space="preserve"><value>Configures email notifications for runtime events. SMTP credentials are stored locally for the current Windows user.</value></data>
+  <data name="RuntimeNotificationConfiguration_Groups_Notifications" xml:space="preserve"><value>Notifications</value></data>
+  <data name="RuntimeNotificationConfiguration_Groups_Server" xml:space="preserve"><value>SMTP server</value></data>
+  <data name="RuntimeNotificationConfiguration_Groups_Authentication" xml:space="preserve"><value>Authentication</value></data>
+  <data name="RuntimeNotificationConfiguration_Groups_Recipients" xml:space="preserve"><value>Recipients</value></data>
+  <data name="RuntimeNotificationConfiguration_Notifications" xml:space="preserve"><value>Runtime events</value></data>
+  <data name="RuntimeNotificationConfiguration_Notifications_Tooltip" xml:space="preserve"><value>Enable the runtime events for which an email should be sent.</value></data>
+  <data name="RuntimeNotificationConfiguration_DoNotSendWhileDebugging" xml:space="preserve"><value>Do not send emails while debugging</value></data>
+  <data name="RuntimeNotificationConfiguration_DoNotSendWhileDebugging_Tooltip" xml:space="preserve"><value>Suppresses notifications for runs started in the designer and for external debugging runs.</value></data>
+  <data name="RuntimeNotificationConfiguration_AttachRuntimeLog" xml:space="preserve"><value>Attach runtime log file</value></data>
+  <data name="RuntimeNotificationConfiguration_AttachRuntimeLog_Tooltip" xml:space="preserve"><value>Attaches the current runtime log to error, abort, and start-failure emails when the file is available.</value></data>
+  <data name="RuntimeNotificationConfiguration_Host" xml:space="preserve"><value>SMTP server</value></data>
+  <data name="RuntimeNotificationConfiguration_Host_Tooltip" xml:space="preserve"><value>Host name or IP address of the SMTP server.</value></data>
+  <data name="RuntimeNotificationConfiguration_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="RuntimeNotificationConfiguration_Port_Tooltip" xml:space="preserve"><value>SMTP server port, for example 25, 465, or 587.</value></data>
+  <data name="RuntimeNotificationConfiguration_UseSsl" xml:space="preserve"><value>Use SSL/TLS</value></data>
+  <data name="RuntimeNotificationConfiguration_UseSsl_Tooltip" xml:space="preserve"><value>Enables encrypted SMTP transport.</value></data>
+  <data name="RuntimeNotificationConfiguration_AcceptInvalidCertificates" xml:space="preserve"><value>Accept invalid certificates</value></data>
+  <data name="RuntimeNotificationConfiguration_AcceptInvalidCertificates_Tooltip" xml:space="preserve"><value>Allows invalid SMTP server certificates. Enable only in trusted test environments.</value></data>
+  <data name="RuntimeNotificationConfiguration_UseAuthentication" xml:space="preserve"><value>Use authentication</value></data>
+  <data name="RuntimeNotificationConfiguration_UseAuthentication_Tooltip" xml:space="preserve"><value>Authenticates with a user name and password instead of the default credentials.</value></data>
+  <data name="RuntimeNotificationConfiguration_UserName" xml:space="preserve"><value>User name</value></data>
+  <data name="RuntimeNotificationConfiguration_UserName_Tooltip" xml:space="preserve"><value>User name used for SMTP authentication.</value></data>
+  <data name="RuntimeNotificationConfiguration_Password" xml:space="preserve"><value>Password</value></data>
+  <data name="RuntimeNotificationConfiguration_Password_Tooltip" xml:space="preserve"><value>Password or app password. It is encrypted locally with Windows DPAPI for the current user.</value></data>
+  <data name="RuntimeNotificationConfiguration_FromAddress" xml:space="preserve"><value>From address</value></data>
+  <data name="RuntimeNotificationConfiguration_FromAddress_Tooltip" xml:space="preserve"><value>Sender email address.</value></data>
+  <data name="RuntimeNotificationConfiguration_ToAddresses" xml:space="preserve"><value>To addresses</value></data>
+  <data name="RuntimeNotificationConfiguration_ToAddresses_Tooltip" xml:space="preserve"><value>Recipient addresses separated by commas or semicolons.</value></data>
+  <data name="RuntimeNotificationConfiguration_CcAddresses" xml:space="preserve"><value>CC addresses</value></data>
+  <data name="RuntimeNotificationConfiguration_CcAddresses_Tooltip" xml:space="preserve"><value>Optional CC addresses separated by commas or semicolons.</value></data>
+  <data name="RuntimeNotificationConfiguration_BccAddresses" xml:space="preserve"><value>BCC addresses</value></data>
+  <data name="RuntimeNotificationConfiguration_BccAddresses_Tooltip" xml:space="preserve"><value>Optional BCC addresses separated by commas or semicolons.</value></data>
+  <data name="RuntimeNotificationRule_Type" xml:space="preserve"><value>Event</value></data>
+  <data name="RuntimeNotificationRule_Enabled" xml:space="preserve"><value>Enabled</value></data>
+  <data name="RuntimeNotificationType_RuntimeError" xml:space="preserve"><value>Runtime error</value></data>
+  <data name="RuntimeNotificationType_RuntimeAborted" xml:space="preserve"><value>Runtime aborted</value></data>
+  <data name="RuntimeNotificationType_RuntimeCompletedSuccessfully" xml:space="preserve"><value>Runtime completed successfully</value></data>
+  <data name="RuntimeNotificationType_RuntimeStartedSuccessfully" xml:space="preserve"><value>Runtime started successfully</value></data>
+  <data name="RuntimeNotificationType_RuntimeStartFailed" xml:space="preserve"><value>Runtime start failed</value></data>
+  <data name="RuntimeNotificationConfiguration_Validation_HostRequired" xml:space="preserve"><value>An SMTP server is required.</value></data>
+  <data name="RuntimeNotificationConfiguration_Validation_FromRequired" xml:space="preserve"><value>Exactly one sender address is required.</value></data>
+  <data name="RuntimeNotificationConfiguration_Validation_ToRequired" xml:space="preserve"><value>At least one recipient address is required.</value></data>
+  <data name="RuntimeNotificationConfiguration_Validation_InvalidAddress" xml:space="preserve"><value>'{0}' is not a valid email address.</value></data>
+  <data name="RuntimeNotificationConfiguration_LoadFailed" xml:space="preserve"><value>The runtime notification configuration could not be loaded: {0}</value></data>
 </root>
 
 

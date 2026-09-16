@@ -1,0 +1,87 @@
+<UserControl x:Class="FlowBlox.UICore.Views.ProjectPanel.IterationProgressBadge"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             Height="26"
+             MaxWidth="70"
+             Margin="2,1,0,0"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Top"
+             Focusable="False">
+    <UserControl.Style>
+        <Style TargetType="{x:Type UserControl}">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding HasIterationProgress}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+
+    <Border Padding="5,0"
+            Height="26"
+            MaxWidth="70"
+            CornerRadius="0,4,4,0"
+            ClipToBounds="True"
+            ToolTip="{Binding IterationProgressToolTip}">
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#59636B"/>
+                <Setter Property="BorderBrush" Value="#9ED7E6"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsIterationCompleted}" Value="True">
+                        <Setter Property="Background" Value="#315D4B"/>
+                        <Setter Property="BorderBrush" Value="#39D98A"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Width="12" Height="12" VerticalAlignment="Center">
+                <iconPacks:PackIconMaterial Kind="Sync"
+                                            Width="12"
+                                            Height="12"
+                                            Foreground="#CDEFF7">
+                    <iconPacks:PackIconMaterial.Style>
+                        <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsIterationCompleted}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </iconPacks:PackIconMaterial.Style>
+                </iconPacks:PackIconMaterial>
+                <iconPacks:PackIconMaterial Kind="Check"
+                                            Width="12"
+                                            Height="12"
+                                            Foreground="#39D98A">
+                    <iconPacks:PackIconMaterial.Style>
+                        <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsIterationCompleted}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </iconPacks:PackIconMaterial.Style>
+                </iconPacks:PackIconMaterial>
+            </Grid>
+            <TextBlock Grid.Column="1"
+                       Text="{Binding IterationProgressText}"
+                       Foreground="#FFFFFF"
+                       FontSize="10"
+                       Margin="4,0,0,0"
+                       TextTrimming="CharacterEllipsis"
+                       VerticalAlignment="Center"/>
+        </Grid>
+    </Border>
+</UserControl>

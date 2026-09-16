@@ -131,6 +131,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
                 <Button Command="{Binding RefreshUIActionsCommand}"
+                        Visibility="{Binding UIActions.Count, Converter={StaticResource CountToVisibilityConverter}}"
                         ToolTip="{x:Static resources:PropertyWindow.RefreshActions}"
                         Margin="3,0"
                         Padding="6,3"

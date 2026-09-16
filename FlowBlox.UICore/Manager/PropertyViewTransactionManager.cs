@@ -18,6 +18,7 @@ namespace FlowBlox.UICore.Manager
 		private Dictionary<object, object> _refMappings = new Dictionary<object, object>();
         private IFlowBloxProjectComponentProvider _componentProvider;
         private string _transactionProtocolFilePath;
+        private bool _detached;
 
         public PropertyViewTransactionManager()
 		{
@@ -55,6 +56,7 @@ namespace FlowBlox.UICore.Manager
 
 		public OpenResult Open(object target, bool detached = false)
 		{
+			_detached = detached;
 			_registry = FlowBloxRegistryProvider.OpenTransaction(detached);
 			_deepCopier.PropertyActions = FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(target);
 			var transientTarget = _deepCopier.Copy(target);
@@ -111,16 +113,24 @@ namespace FlowBlox.UICore.Manager
 			var repetitionObject = repetitionDeepCopier.Copy(target);
 
 			// Create and append change
-			_componentProvider.GetCurrentChangelist().AddChange(new FlowBloxEditAction()
-			{
-				Target = target,
-				RestoreObject = restoreObject,
-				RepetitionObject = repetitionObject
-			});
+			CreateAndAppendChange(target, restoreObject, repetitionObject);
 
-			// Committing the changes to the registry
-			FlowBloxRegistryProvider.CommitTransaction();
+            // Committing the changes to the registry
+            FlowBloxRegistryProvider.CommitTransaction();
 		}
+
+		private void CreateAndAppendChange(object target, object restoreObject, object repetitionObject)
+		{
+			if (_detached)
+				return;
+
+            _componentProvider.GetCurrentChangelist()?.AddChange(new FlowBloxEditAction()
+            {
+                Target = target,
+                RestoreObject = restoreObject,
+                RepetitionObject = repetitionObject
+            });
+        }
 
 		private void StoreProtocol(string protocol, string filePath)
 		{

@@ -87,7 +87,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public void CreateNotification(BaseRuntime runtime, Enum notificationEnumValue, Exception e = null)
         {
-            if (GetCurrentNotificationType(notificationEnumValue) == NotificationType.None)
+            var notificationType = GetCurrentNotificationType(notificationEnumValue);
+            if (notificationType == NotificationType.None)
                 return;
 
             string message = notificationEnumValue.GetDisplayName();
@@ -99,7 +100,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     $"Missing {nameof(FlowBloxNotificationAttribute)} on enum value '{notificationEnumValue}'. " +
                      "Please annotate the enum with [FlowBlockNotification(...)] to define its NotificationType.");
 
-            var notificationType = attribute.NotificationType;
             if (notificationType == NotificationType.Warning)
             {
                 runtime.Report(message, FlowBloxLogLevel.Warning, e);

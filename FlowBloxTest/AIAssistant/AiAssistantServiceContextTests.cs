@@ -265,7 +265,7 @@ namespace FlowBloxTest.AIAssistant
                 modelPrompt: "C",
                 maxLatestMessages: 5,
                 minLatestMessages: 1,
-                provider: null,
+                provider: new MetadataMappingProvider(),
                 tokenBudget: new AssistantTokenBudget
                 {
                     MaxContextTokens = 1000,

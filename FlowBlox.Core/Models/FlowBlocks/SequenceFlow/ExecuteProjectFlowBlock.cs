@@ -9,6 +9,7 @@ using FlowBlox.Core.Models.FlowBlocks.SequenceFlow.ExecuteProject;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Models.Runtime.Debugging;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
@@ -149,7 +150,11 @@ namespace FlowBlox.Core.Models.FlowBlocks
                     if (!string.IsNullOrWhiteSpace(response.ErrorMessage))
                         runtime.Report(response.ErrorMessage, FlowBloxLogLevel.Error);
 
-                    runtime.Aborted = true;
+                    runtime.CancelExecution(
+                        RuntimeCancellationKind.Unknown,
+                        string.IsNullOrWhiteSpace(response.ErrorMessage)
+                            ? $"Child project execution failed (ExitCode={response.ExitCode})."
+                            : response.ErrorMessage);
                     return;
                 }
 

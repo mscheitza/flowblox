@@ -50,6 +50,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             flowBlock.OnError += FlowBlock_OnError;
             flowBlock.OnUndoWarn += FlowBlock_OnUndoWarn;
             flowBlock.OnUndoError += FlowBlock_OnUndoError;
+            if (flowBlock is BaseResultFlowBlock resultFlowBlock)
+                resultFlowBlock.OutputDatasetProcessingChanged += ResultFlowBlock_OutputDatasetProcessingChanged;
             flowBlock.RefreshNotExecutedState();
             RefreshRows(preserveCenter: false);
             LogLayoutTrace(
@@ -102,6 +104,43 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public bool IsNotExecuted => InternalFlowBlock.IsNotExecuted;
         public bool HasExecutionIndex => InternalFlowBlock.ExecutionIndex >= 0;
         public string ExecutionIndexText => HasExecutionIndex ? $"#{InternalFlowBlock.ExecutionIndex}" : string.Empty;
+        public bool HasIterationProgress => InternalFlowBlock is BaseResultFlowBlock resultFlowBlock &&
+                                            resultFlowBlock.OutputDatasets_Count > 0 &&
+                                            (resultFlowBlock.OutputDataset_CurrentlyProcessingIndex > 0 ||
+                                             resultFlowBlock.OutputDatasetProcessingCompleted);
+        public bool IsIterationCompleted => InternalFlowBlock is BaseResultFlowBlock resultFlowBlock &&
+                                            resultFlowBlock.OutputDatasetProcessingCompleted;
+        public string IterationProgressText
+        {
+            get
+            {
+                if (InternalFlowBlock is not BaseResultFlowBlock resultFlowBlock)
+                    return string.Empty;
+
+                var total = resultFlowBlock.OutputDatasets_Count;
+                var current = resultFlowBlock.OutputDatasetProcessingCompleted
+                    ? total
+                    : resultFlowBlock.OutputDataset_CurrentlyProcessingIndex;
+                return total > 0 ? $"{current}/{total}" : string.Empty;
+            }
+        }
+        public string IterationProgressToolTip
+        {
+            get
+            {
+                if (InternalFlowBlock is not BaseResultFlowBlock resultFlowBlock)
+                    return string.Empty;
+
+                var total = resultFlowBlock.OutputDatasets_Count;
+                var current = resultFlowBlock.OutputDatasetProcessingCompleted
+                    ? total
+                    : resultFlowBlock.OutputDataset_CurrentlyProcessingIndex;
+                var format = FlowBloxResourceUtil.GetLocalizedString(
+                    "Tooltip_IterationProgress",
+                    typeof(Resources.ProjectPanel));
+                return string.Format(format, current, total);
+            }
+        }
         public bool HasNotification => HasWarning || HasError;
         public bool HasWarning => !string.IsNullOrWhiteSpace(_warningMessage);
         public bool HasError => !HasWarning && !string.IsNullOrWhiteSpace(_errorMessage);
@@ -351,6 +390,17 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private void FlowBlock_OnUndoError(BaseRuntime runtime)
             => SynchronizationContextHelper.PostToUi(_uiContext, () => SetError(string.Empty));
 
+        private void ResultFlowBlock_OutputDatasetProcessingChanged()
+            => SynchronizationContextHelper.PostToUi(_uiContext, NotifyIterationProgressChanged);
+
+        private void NotifyIterationProgressChanged()
+        {
+            OnPropertyChanged(nameof(HasIterationProgress));
+            OnPropertyChanged(nameof(IsIterationCompleted));
+            OnPropertyChanged(nameof(IterationProgressText));
+            OnPropertyChanged(nameof(IterationProgressToolTip));
+        }
+
         private void FlowBlock_PropertyChanged(object sender, PropertyChangedEventArgs e)
             => SynchronizationContextHelper.PostToUi(_uiContext, () => HandleFlowBlockPropertyChanged(e));
 
@@ -451,6 +501,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             InternalFlowBlock.OnError -= FlowBlock_OnError;
             InternalFlowBlock.OnUndoWarn -= FlowBlock_OnUndoWarn;
             InternalFlowBlock.OnUndoError -= FlowBlock_OnUndoError;
+            if (InternalFlowBlock is BaseResultFlowBlock resultFlowBlock)
+                resultFlowBlock.OutputDatasetProcessingChanged -= ResultFlowBlock_OutputDatasetProcessingChanged;
             _componentChangeSubscription.Dispose();
             _centerPreservationGuard.Dispose();
         }

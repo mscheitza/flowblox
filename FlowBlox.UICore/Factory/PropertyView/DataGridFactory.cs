@@ -231,6 +231,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 }
                 else if (propertyType.IsEnum)
                 {
+                    var isReadOnly = IsPropertyReadOnly(childProperty, uiAttribute);
                     var itemSource = Enum.GetValues(propertyType)
                         .Cast<Enum>()
                         .Select(e => new { Display = e.GetDisplayName(), Value = e })
@@ -246,9 +247,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         SelectedValuePath = "Value",
                         SelectedValueBinding = new Binding(childProperty.Name)
                         {
-                            Mode = BindingMode.TwoWay
+                            Mode = isReadOnly ? BindingMode.OneWay : BindingMode.TwoWay
                         },
-                        DisplayMemberPath = "Display"
+                        DisplayMemberPath = "Display",
+                        IsReadOnly = isReadOnly
                     };
                     dataGrid.Columns.Add(column);
                 }

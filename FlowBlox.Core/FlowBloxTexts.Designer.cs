@@ -939,6 +939,17 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Permissions ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_Groups_Permissions
+        {
+            get
+            {
+                return ResourceManager.GetString("AssistantConfiguration_Groups_Permissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Maximum context tokens ähnelt.
         /// </summary>
         public static string AssistantConfiguration_MaxContextTokens
@@ -1071,6 +1082,28 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Options access ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_OptionsAccessLevel
+        {
+            get
+            {
+                return ResourceManager.GetString("AssistantConfiguration_OptionsAccessLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls whether the AI assistant may search FlowBlox options and set non-password option values through the Tool API. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_OptionsAccessLevel_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("AssistantConfiguration_OptionsAccessLevel_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Provider ähnelt.
         /// </summary>
         public static string AssistantConfiguration_Provider
@@ -1155,6 +1188,39 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("AssistantConfiguration_Temperature_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No permission ähnelt.
+        /// </summary>
+        public static string AssistantOptionsAccessLevel_None
+        {
+            get
+            {
+                return ResourceManager.GetString("AssistantOptionsAccessLevel_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Read only ähnelt.
+        /// </summary>
+        public static string AssistantOptionsAccessLevel_ReadOnly
+        {
+            get
+            {
+                return ResourceManager.GetString("AssistantOptionsAccessLevel_ReadOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Read and write ähnelt.
+        /// </summary>
+        public static string AssistantOptionsAccessLevel_ReadWrite
+        {
+            get
+            {
+                return ResourceManager.GetString("AssistantOptionsAccessLevel_ReadWrite", resourceCulture);
             }
         }
         
@@ -8551,7 +8617,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Advanced ONNX settings ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Advanced ONNX Settings ähnelt.
         /// </summary>
         public static string OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings
         {
@@ -9856,6 +9922,512 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("RobertaQATokenizer_TokenizerConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Accept invalid certificates ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_AcceptInvalidCertificates
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_AcceptInvalidCertificates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allows invalid SMTP server certificates. Enable only in trusted test environments. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_AcceptInvalidCertificates_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_AcceptInvalidCertificates_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Attach runtime log file ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_AttachRuntimeLog
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_AttachRuntimeLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Attaches the current runtime log to error, abort, and start-failure emails when the file is available. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_AttachRuntimeLog_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_AttachRuntimeLog_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die BCC addresses ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_BccAddresses
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_BccAddresses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional BCC addresses separated by commas or semicolons. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_BccAddresses_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_BccAddresses_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die CC addresses ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_CcAddresses
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_CcAddresses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional CC addresses separated by commas or semicolons. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_CcAddresses_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_CcAddresses_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Configures email notifications for runtime events. SMTP credentials are stored locally for the current Windows user. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime notifications ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Do not send emails while debugging ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_DoNotSendWhileDebugging
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_DoNotSendWhileDebugging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Suppresses notifications for runs started in the designer and for external debugging runs. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_DoNotSendWhileDebugging_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_DoNotSendWhileDebugging_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die From address ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_FromAddress
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_FromAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sender email address. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_FromAddress_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_FromAddress_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Authentication ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Groups_Authentication
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Groups_Authentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Notifications ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Groups_Notifications
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Groups_Notifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recipients ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Groups_Recipients
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Groups_Recipients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SMTP server ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Groups_Server
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Groups_Server", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SMTP server ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Host
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Host name or IP address of the SMTP server. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Host_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Host_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The runtime notification configuration could not be loaded: {0} ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_LoadFailed
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_LoadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime events ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Notifications
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Notifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enable the runtime events for which an email should be sent. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Notifications_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Notifications_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Password
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password or app password. It is encrypted locally with Windows DPAPI for the current user. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Password_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Password_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Port ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Port
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Port", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SMTP server port, for example 25, 465, or 587. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Port_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Port_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die To addresses ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_ToAddresses
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_ToAddresses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Recipient addresses separated by commas or semicolons. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_ToAddresses_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_ToAddresses_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use authentication ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_UseAuthentication
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_UseAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Authenticates with a user name and password instead of the default credentials. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_UseAuthentication_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_UseAuthentication_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_UserName
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name used for SMTP authentication. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_UserName_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_UserName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Use SSL/TLS ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_UseSsl
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_UseSsl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enables encrypted SMTP transport. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_UseSsl_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_UseSsl_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Exactly one sender address is required. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Validation_FromRequired
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Validation_FromRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die An SMTP server is required. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Validation_HostRequired
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Validation_HostRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &apos;{0}&apos; is not a valid email address. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Validation_InvalidAddress
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Validation_InvalidAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die At least one recipient address is required. ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationConfiguration_Validation_ToRequired
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationConfiguration_Validation_ToRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Enabled ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationRule_Enabled
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationRule_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Event ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationRule_Type
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationRule_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime aborted ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationType_RuntimeAborted
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationType_RuntimeAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime completed successfully ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationType_RuntimeCompletedSuccessfully
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationType_RuntimeCompletedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime error ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationType_RuntimeError
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationType_RuntimeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime started successfully ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationType_RuntimeStartedSuccessfully
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationType_RuntimeStartedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Runtime start failed ähnelt.
+        /// </summary>
+        public static string RuntimeNotificationType_RuntimeStartFailed
+        {
+            get
+            {
+                return ResourceManager.GetString("RuntimeNotificationType_RuntimeStartFailed", resourceCulture);
             }
         }
         

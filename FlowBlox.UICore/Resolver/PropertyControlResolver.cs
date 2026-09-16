@@ -229,6 +229,25 @@ namespace FlowBlox.UICore.Resolver
                 return new PropertyControlWithFactoryResult(listViewSplitModeFactory.Create(), listViewSplitModeFactory);
             }
 
+            var textAttribute = property.GetCustomAttribute<FlowBloxTextBoxAttribute>();
+            if (property.PropertyType == typeof(string) && textAttribute?.IsPassword == true)
+            {
+                var passwordBox = new PasswordBox
+                {
+                    IsEnabled = !readOnly,
+                    Password = property.GetValue(target)?.ToString() ?? string.Empty
+                };
+                passwordBox.PasswordChanged += (s, e) =>
+                {
+                    if (readOnly)
+                        return;
+
+                    property.SetValue(target, passwordBox.Password);
+                    FlowBloxComponentHelper.RaisePropertyChanged(target, property.Name);
+                };
+                return new PropertyControlWithFactoryResult(passwordBox);
+            }
+
             return new PropertyControlWithFactoryResult(
                 _textBoxWithOptionalButtonsCreator
                     .CreateTextBoxWithOptionalButtons(property, target, displayName, uiAttribute, binding, readOnly));

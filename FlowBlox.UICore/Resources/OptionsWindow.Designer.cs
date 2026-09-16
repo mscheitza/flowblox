@@ -90,6 +90,50 @@ namespace FlowBlox.UICore.Resources
                 return ResourceManager.GetString("Button_Apply", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
+        /// </summary>
+        public static string Button_Close
+        {
+            get
+            {
+                return ResourceManager.GetString("Button_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The selected option contains unsaved changes. Do you really want to close the window and discard the changes? ähnelt.
+        /// </summary>
+        public static string CloseUnsavedChanges_Message
+        {
+            get
+            {
+                return ResourceManager.GetString("CloseUnsavedChanges_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The path to the editor does not exist. ähnelt.
+        /// </summary>
+        public static string EditorPathError_Message
+        {
+            get
+            {
+                return ResourceManager.GetString("EditorPathError_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Editor Path Error ähnelt.
+        /// </summary>
+        public static string EditorPathError_Title
+        {
+            get
+            {
+                return ResourceManager.GetString("EditorPathError_Title", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select an option to edit its details. ähnelt.

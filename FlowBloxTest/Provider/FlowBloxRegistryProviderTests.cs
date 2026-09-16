@@ -48,5 +48,33 @@ namespace FlowBloxTest.Provider
                 FlowBloxRegistryProvider.CancelTransaction();
             }
         }
+
+        [TestMethod]
+        public void OpenDetachedTransaction_WithoutAvailableRegistry_UsesEmptyRegistry()
+        {
+            var previousProject = FlowBloxProjectManager.Instance.ActiveProject;
+            FlowBloxProjectManager.Instance.ActiveProject = null;
+
+            try
+            {
+                var outerRegistry = FlowBloxRegistryProvider.OpenTransaction(detached: true);
+                Assert.IsNotNull(outerRegistry);
+                Assert.IsFalse(outerRegistry.GetFlowBlocks().Any());
+                Assert.IsFalse(outerRegistry.GetManagedObjects().Any());
+
+                var innerRegistry = FlowBloxRegistryProvider.OpenTransaction(detached: true);
+                FlowBloxRegistryProvider.CancelTransaction();
+
+                Assert.AreSame(outerRegistry, FlowBloxRegistryProvider.GetRegistry());
+                Assert.AreNotSame(outerRegistry, innerRegistry);
+
+                FlowBloxRegistryProvider.CancelTransaction();
+                Assert.IsNull(FlowBloxRegistryProvider.GetRegistry());
+            }
+            finally
+            {
+                FlowBloxProjectManager.Instance.ActiveProject = previousProject;
+            }
+        }
     }
 }

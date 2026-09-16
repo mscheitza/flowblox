@@ -34,8 +34,8 @@ namespace FlowBlox.UICore.Utilities
                 {
                     FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>()
                         .ShowMessageBox(
-                            "The path to the editor does not exist. Configured path: " + editorPath,
-                            "Editor Path Error",
+                            string.Format(Resources.OptionsWindow.EditorPathError_Message, editorPath),
+                            Resources.OptionsWindow.EditorPathError_Title,
                             FlowBloxMessageBoxTypes.Information);
                 }
             }

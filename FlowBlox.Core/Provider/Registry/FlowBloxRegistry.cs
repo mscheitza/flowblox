@@ -38,6 +38,9 @@ namespace FlowBlox.Core.Provider.Registry
 
         public FlowBloxRegistry(FlowBloxRegistry copyFrom) : this()
         {
+            if (copyFrom == null)
+                return;
+
             _flowBlocks.AddRange(copyFrom.GetFlowBlocks());
             _managedObjects.AddRange(copyFrom.GetManagedObjects());
         }

@@ -40,6 +40,39 @@ namespace FlowBloxTest.FlowBlocks.Execution
         }
 
         [TestMethod]
+        public void ResultIterationProgress_CompletesAfterLastDatasetWasProcessed()
+        {
+            var start = CreateFlowBlock<StartFlowBlock>();
+            var resultBlock = CreateFlowBlock<ExecutionOrderTestFlowBlock>(start);
+            _ = CreateFlowBlock<ExecutionOrderTestFlowBlock>(resultBlock);
+            var states = new List<(int Current, int Total, bool Completed)>();
+            resultBlock.OutputDatasetProcessingChanged += () => states.Add((
+                resultBlock.OutputDataset_CurrentlyProcessingIndex,
+                resultBlock.OutputDatasets_Count,
+                resultBlock.OutputDatasetProcessingCompleted));
+
+            CreateRuntimeAndExecute(_project);
+
+            Assert.IsTrue(states.Any(x => x.Current == 1 && x.Total == 1 && !x.Completed));
+            Assert.AreEqual((1, 1, true), states.Last());
+        }
+
+        [TestMethod]
+        public void ResultIterationProgress_CompletesAfterPassingToDeferredIterationContext()
+        {
+            var start = CreateFlowBlock<StartFlowBlock>();
+            var resultBlock = CreateFlowBlock<ExecutionOrderTestFlowBlock>(start);
+            var deferredBlock = CreateFlowBlock<ExecutionOrderTestFlowBlock>(resultBlock);
+            deferredBlock.AssociatedIterationContext = start;
+
+            CreateRuntimeAndExecute(_project);
+
+            Assert.AreEqual(0, resultBlock.OutputDataset_CurrentlyProcessingIndex);
+            Assert.AreEqual(1, resultBlock.OutputDatasets_Count);
+            Assert.IsTrue(resultBlock.OutputDatasetProcessingCompleted);
+        }
+
+        [TestMethod]
         public void ExecutionOrder_Start_Siblings_Then_InputReferenceNode_WithStartIterationContext()
         {
             var start = CreateFlowBlock<StartFlowBlock>();

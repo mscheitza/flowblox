@@ -43,7 +43,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         [JsonIgnore()]
         [DeepCopierIgnore()]
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_AiExecutionProvider", Description = "OnnxRuntimeGenAIFlowBlock_AiExecutionProvider_Tooltip",
-            GroupName = "°", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+            GroupName = "OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
         [Required]
         public AiExecutionProviders AiExecutionProvider

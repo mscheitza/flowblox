@@ -4,6 +4,7 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
              xmlns:projectPanel="clr-namespace:FlowBlox.UICore.ViewModels.ProjectPanel"
+             xmlns:projectPanelViews="clr-namespace:FlowBlox.UICore.Views.ProjectPanel"
              xmlns:converters="clr-namespace:FlowBlox.UICore.Converters"
              xmlns:projectPanelConverters="clr-namespace:FlowBlox.UICore.Converters.ProjectPanel"
              Focusable="True"
@@ -412,6 +413,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type projectPanel:FlowBlockNodeViewModel}">
+                            <StackPanel Orientation="Horizontal" Height="{Binding Height}">
                             <Border Width="{Binding Width}"
                                     Height="{Binding Height}"
                                     Padding="1"
@@ -710,6 +712,8 @@
                                     </Grid>
                                 </Grid>
                             </Border>
+                                <projectPanelViews:IterationProgressBadge/>
+                            </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

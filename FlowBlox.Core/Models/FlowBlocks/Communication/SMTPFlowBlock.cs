@@ -5,13 +5,12 @@ using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Services.Communication;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Net;
-using System.Net.Mail;
 using System.Net.Mime;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Communication
@@ -142,63 +141,45 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                     return;
                 }
 
-                using var message = new MailMessage
-                {
-                    From = new MailAddress(resolvedFrom),
-                    Subject = resolvedSubject,
-                    Body = resolvedBody,
-                    IsBodyHtml = IsBodyHtml
-                };
-
-                if (!AddAddresses(message.To, resolvedTo, true))
+                if (SmtpMailSender.ParseAddresses(resolvedTo).Count == 0)
                 {
                     CreateNotification(runtime, SMTPNotifications.ToAddressesAreEmpty);
                     GenerateResult(runtime);
                     return;
                 }
-
-                AddAddresses(message.CC, resolvedCc, false);
-                AddAddresses(message.Bcc, resolvedBcc, false);
-
-                var disposableAttachments = BuildAttachments();
                 var sendSucceeded = true;
                 try
                 {
-                    foreach (var attachment in disposableAttachments)
-                        message.Attachments.Add(attachment);
-
-                    using var client = new SmtpClient(resolvedHost, port)
+                    var resolvedUser = FlowBloxFieldHelper.ReplaceFieldsInString(UserName ?? string.Empty);
+                    var resolvedPassword = FlowBloxFieldHelper.ReplaceFieldsInString(Password ?? string.Empty);
+                    var sender = new SmtpMailSender();
+                    sender.Send(new SmtpMailSettings
                     {
-                        EnableSsl = useSsl
-                    };
-
-                    if (UseAuthentication)
+                        Host = resolvedHost,
+                        Port = port,
+                        UseSsl = useSsl,
+                        AcceptInvalidCertificates = AcceptInvalidCertificates,
+                        UseAuthentication = UseAuthentication,
+                        UserName = resolvedUser ?? string.Empty,
+                        Password = resolvedPassword ?? string.Empty
+                    }, new SmtpMailRequest
                     {
-                        var resolvedUser = FlowBloxFieldHelper.ReplaceFieldsInString(UserName ?? string.Empty);
-                        var resolvedPassword = FlowBloxFieldHelper.ReplaceFieldsInString(Password ?? string.Empty);
-                        client.Credentials = new NetworkCredential(resolvedUser ?? string.Empty, resolvedPassword ?? string.Empty);
-                    }
-                    else
-                    {
-                        client.UseDefaultCredentials = true;
-                    }
-
-                    try
-                    {
-                        SendMessage(client, message, useSsl, this.AcceptInvalidCertificates);
-                        runtime.Report($"SMTP mail sent successfully via '{resolvedHost}:{port}'.");
-                    }
-                    catch (Exception ex)
-                    {
-                        runtime.Report(ex.ToString());
-                        CreateNotification(runtime, SMTPNotifications.MailSendFailure);
-                        sendSucceeded = false;
-                    }
+                        FromAddress = resolvedFrom,
+                        ToAddresses = resolvedTo,
+                        CcAddresses = resolvedCc,
+                        BccAddresses = resolvedBcc,
+                        Subject = resolvedSubject,
+                        Body = resolvedBody,
+                        IsBodyHtml = IsBodyHtml,
+                        Attachments = BuildAttachments()
+                    });
+                    runtime.Report($"SMTP mail sent successfully via '{resolvedHost}:{port}'.");
                 }
-                finally
+                catch (Exception ex)
                 {
-                    foreach (var attachment in disposableAttachments)
-                        attachment.Dispose();
+                    runtime.Report(ex.ToString());
+                    CreateNotification(runtime, SMTPNotifications.MailSendFailure);
+                    sendSucceeded = false;
                 }
 
                 if (sendSucceeded)
@@ -208,27 +189,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
             });
         }
 
-        private static bool AddAddresses(MailAddressCollection target, string addressesRaw, bool isRequired)
+        private List<SmtpMailAttachment> BuildAttachments()
         {
-            var entries = (addressesRaw ?? string.Empty)
-                .Split([',', ';', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => x.Trim())
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
-
-            if (isRequired && entries.Count == 0)
-                return false;
-
-            foreach (var address in entries)
-                target.Add(new MailAddress(address));
-
-            return true;
-        }
-
-        private List<Attachment> BuildAttachments()
-        {
-            var attachments = new List<Attachment>();
+            var attachments = new List<SmtpMailAttachment>();
             foreach (var mapping in Attachments ?? Enumerable.Empty<SmtpAttachmentMappingEntry>())
             {
                 if (mapping == null || mapping.Field == null)
@@ -239,9 +202,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
                     continue;
 
                 var bytes = ConvertFieldToBytes(mapping);
-                var stream = new MemoryStream(bytes, writable: false);
-                var attachment = new Attachment(stream, fileName, MediaTypeNames.Application.Octet);
-                attachments.Add(attachment);
+                attachments.Add(new SmtpMailAttachment
+                {
+                    FileName = fileName,
+                    MediaType = MediaTypeNames.Application.Octet,
+                    Content = bytes
+                });
             }
 
             return attachments;
@@ -263,31 +229,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
 
             var fallback = value?.ToString() ?? string.Empty;
             return mapping.EncodingName.ToEncoding().GetBytes(fallback);
-        }
-
-        private static readonly object SmtpCertificateValidationSync = new();
-
-        private static void SendMessage(SmtpClient client, MailMessage message, bool useSsl, bool acceptInvalidCertificates)
-        {
-            if (!(useSsl && acceptInvalidCertificates))
-            {
-                client.Send(message);
-                return;
-            }
-
-            lock (SmtpCertificateValidationSync)
-            {
-                var previousValidationCallback = ServicePointManager.ServerCertificateValidationCallback;
-                try
-                {
-                    ServicePointManager.ServerCertificateValidationCallback = (_, _, _, _) => true;
-                    client.Send(message);
-                }
-                finally
-                {
-                    ServicePointManager.ServerCertificateValidationCallback = previousValidationCallback;
-                }
-            }
         }
 
         public override List<Type> NotificationTypes

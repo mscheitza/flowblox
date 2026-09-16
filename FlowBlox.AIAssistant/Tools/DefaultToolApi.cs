@@ -10,8 +10,9 @@ namespace FlowBlox.AIAssistant.Tools
         private readonly List<ToolDefinition> _definitions;
         public Func<ToolRequest, bool>? ToolExecutionConfirmationCallback { get; set; }
 
-        public DefaultToolApi()
+        public DefaultToolApi(Func<AssistantConfiguration>? assistantConfigurationProvider = null)
         {
+            ToolHandlerUtilities.SetAssistantConfigurationProvider(assistantConfigurationProvider);
             var handlers = CreateHandlers();
 
             _handlers = handlers.ToDictionary(
@@ -100,6 +101,8 @@ namespace FlowBlox.AIAssistant.Tools
                 new GetRootCategoriesHandler(),
                 new GetCategoryChildrenHandler(),
                 new SearchFlowBlockHandler(),
+                new SearchOptionsHandler(),
+                new SetOptionValueHandler(),
                 new GetComponentSnapshotHandler(),
                 new CreateFlowBlockHandler(),
                 new UpdateFlowBlockHandler(),

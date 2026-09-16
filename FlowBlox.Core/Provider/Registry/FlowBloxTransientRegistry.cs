@@ -60,6 +60,9 @@ namespace FlowBlox.Core.Provider.Registry
 
         public void Commit()
         {
+            if (_parentRegistry == null)
+                return;
+
             foreach (var obj in _transientManagedObjects)
             {
                 _parentRegistry.RegisterManagedObject(obj);

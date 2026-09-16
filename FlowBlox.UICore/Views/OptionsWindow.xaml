@@ -78,6 +78,10 @@
     </Window.Resources>
 
     <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="310"/>
             <ColumnDefinition Width="12"/>
@@ -310,5 +314,24 @@
                 </DockPanel>
             </Grid>
         </Grid>
+
+        <StackPanel Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0">
+            <Button IsCancel="True"
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Close"
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Back}"/>
+                    <TextBlock Text="{x:Static resources:OptionsWindow.Button_Close}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
     </Grid>
 </mah:MetroWindow>

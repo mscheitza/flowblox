@@ -6,6 +6,14 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="AddOption_Description" xml:space="preserve"><value>Geben Sie den Namen der neuen Option ein.</value></data>
   <data name="Button_Apply" xml:space="preserve"><value>Übernehmen</value></data>
+  <data name="Button_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="CloseUnsavedChanges_Message" xml:space="preserve"><value>Die ausgewählte Option enthält ungespeicherte Änderungen. Möchten Sie das Fenster wirklich schließen und die Änderungen verwerfen?</value></data>
+  <data name="EditorPathError_Message" xml:space="preserve"><value>Der Pfad zum Editor ist nicht vorhanden.
+
+Konfigurierter Pfad: {0}
+
+Den von FlowBlox verwendeten Standardeditor können Sie unter "Optionen" → "Editor" → "Default Path" konfigurieren.</value></data>
+  <data name="EditorPathError_Title" xml:space="preserve"><value>Fehlerhafter Editorpfad</value></data>
   <data name="EmptyState" xml:space="preserve"><value>Wahlen Sie eine Option aus, um die Details zu bearbeiten.</value></data>
   <data name="Header_EditOption" xml:space="preserve"><value>Option bearbeiten</value></data>
   <data name="Label_Description" xml:space="preserve"><value>Beschreibung:</value></data>
