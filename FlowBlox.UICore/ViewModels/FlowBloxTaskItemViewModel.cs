@@ -72,6 +72,7 @@ namespace FlowBlox.UICore.ViewModels
         public bool IsIntervalEnabled => ScheduleType == FlowBloxTaskScheduleType.Interval;
         public FlowBloxProject LoadedProject { get; set; }
         public ObservableCollection<FlowBloxTaskInputParameterViewModel> InputParameters { get; } = new();
+        public ObservableCollection<FlowBloxTaskOptionOverrideViewModel> OptionOverrides { get; } = new();
         public Dictionary<string, string> UserFields { get; } = new(StringComparer.OrdinalIgnoreCase);
         public bool InputParametersLoaded { get => _inputParametersLoaded; set { if (_inputParametersLoaded == value) return; _inputParametersLoaded = value; OnPropertyChanged(); } }
 
@@ -109,7 +110,10 @@ namespace FlowBlox.UICore.ViewModels
                 TaskDirectory = TaskDirectory,
                 RequestFilePath = RequestFilePath,
                 ResponseFilePathTemplate = ResponseFilePathTemplate,
-                UserFields = new Dictionary<string, string>(UserFields, StringComparer.OrdinalIgnoreCase)
+                UserFields = new Dictionary<string, string>(UserFields, StringComparer.OrdinalIgnoreCase),
+                OptionOverrides = OptionOverrides
+                    .Where(x => !string.IsNullOrWhiteSpace(x.OptionKey))
+                    .ToDictionary(x => x.OptionKey, x => x.StringValue ?? string.Empty, StringComparer.OrdinalIgnoreCase)
             };
         }
 
@@ -138,6 +142,15 @@ namespace FlowBlox.UICore.ViewModels
 
             foreach (var userField in task.UserFields ?? new Dictionary<string, string>())
                 item.UserFields[userField.Key] = userField.Value;
+
+            foreach (var optionOverride in task.OptionOverrides ?? new Dictionary<string, string>())
+            {
+                item.OptionOverrides.Add(new FlowBloxTaskOptionOverrideViewModel
+                {
+                    OptionKey = optionOverride.Key,
+                    StringValue = optionOverride.Value
+                });
+            }
 
             return item.EnableChangeTracking();
         }

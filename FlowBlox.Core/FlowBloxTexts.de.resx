@@ -1899,9 +1899,6 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="AIPromptFlowBlock_Groups_Request" xml:space="preserve">
 		<value>Anfrage</value>
 	</data>
-	<data name="AIPromptFlowBlock_Groups_Output" xml:space="preserve">
-		<value>Ausgabe</value>
-	</data>
 	<data name="AIPromptFlowBlock_Provider" xml:space="preserve">
 		<value>KI-Provider</value>
 	</data>
@@ -1943,6 +1940,9 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	</data>
 	<data name="AIPromptFlowBlock_TimeoutSecondsOverride_Tooltip" xml:space="preserve">
 		<value>Optionaler Timeout für diesen FlowBlock. Wenn leer, wird der Standard-Timeout des Providers verwendet.</value>
+	</data>
+	<data name="AIPromptFlowBlock_SpecialExplanation_OutputFormat" xml:space="preserve">
+		<value>Dieser FlowBlock ist standardmäßig für Antworten der KI im JSON-Format konfiguriert. JSON wird als Ausgabeformat empfohlen. Durch Anpassung der System-Anweisung können jedoch auch andere Ausgabeformate wie XML verwendet werden.</value>
 	</data>
 	<data name="TypeNames_AIProvider" xml:space="preserve">
 			<value>KI-Provider</value>
@@ -2526,8 +2526,11 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="AIPropertyValueGenerationStrategy_DisplayName" xml:space="preserve">
 		<value>KI-Propertywert-Generierung</value>
 	</data>
+	<data name="AIPropertyValueGenerationStrategy_Groups_AdditionalSettings" xml:space="preserve">
+		<value>ZusÃ¤tzliche Einstellungen</value>
+	</data>
 	<data name="AIPropertyValueGenerationStrategy_Description" xml:space="preserve">
-		<value>Erzeugt beschreibbare einfache und strukturierte Ziel-Properties per KI-Prompt anhand von Testfällen. Für strukturierte Ziel-Properties nutzt die KI die interne JSON-Schemabeschreibung ($GenerationStrategy::TargetPropertyDescription), erzeugt JSON-Ausgabe und FlowBlox deserialisiert diese in den Ziel-Property-Typ. Benötigt mindestens einen Testfall für den Ziel-FlowBlock mit Erwartungsankern (Expected Value) und erwarteter Ergebnisdatensatz-Anzahl.</value>
+		<value>Konfiguriert beschreibbare FlowBlock-Properties per KI-Prompt anhand von Testfällen. Die KI nutzt das FlowBlox Quick Update Schema ($GenerationStrategy::FlowBloxQuickUpdateSchema) und gibt FlowBlox Quick Update JSON zurück, um eine oder mehrere konfigurierbare Properties zu aktualisieren. Benötigt mindestens einen Testfall für den Ziel-FlowBlock mit Erwartungsankern (Expected Value) und erwarteter Ergebnisdatensatz-Anzahl.</value>
 	</data>
 	<data name="SequenceDetectionGenerationStrategy_DisplayName" xml:space="preserve">
 		<value>Sequenzerkennungs-Generierung</value>
@@ -2559,8 +2562,8 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="FlowBloxToolboxCategory_ChatTemplates" xml:space="preserve">
 		<value>Chat-Templates</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
-		<value>KI-Propertywert-Prompts</value>
+	<data name="FlowBloxToolboxCategory_AIPromptTemplates" xml:space="preserve">
+		<value>KI-Prompt-Templates</value>
 	</data>
 	<data name="FlowBloxToolboxCategory_ShellExecution" xml:space="preserve">
 		<value>Shell-Ausführung</value>
@@ -2880,9 +2883,6 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="FlowBloxTestDefinition_RequiredForExecution_Description" xml:space="preserve">
     <value>Wenn aktiviert, wird dieser Testfall beim Laufzeitstart automatisch ausgeführt. Schlägt eine Erwartung fehl, können Generierungsstrategien am betroffenen Flow-Block ausgeführt und der Testschritt einmal wiederholt werden.</value>
   </data>
-	<data name="FlowBloxTestConfiguration_UIRequiredForExecution_Description" xml:space="preserve">
-    <value>Nur UI-Markierung in der TestDefinitionsansicht; zeigt an, dass das Feld für ausführbare Flow-Blöcke erforderlich ist.</value>
-  </data>
 	<data name="FlowBlockTestDataset_Execute_Description" xml:space="preserve">
     <value>Steuert, ob dieser Flow-Block im Testlauf aktiv ausgeführt wird.</value>
   </data>
@@ -2896,7 +2896,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Flow-Block, der durch diesen Testdatensatz-Eintrag abgebildet wird.</value>
   </data>
 	<data name="FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue_Description" xml:space="preserve">
-    <value>Verwendet eine Benutzereingabe und prüft diese gleichzeitig als Erwartung.</value>
+    <value>Verwendet den eingegebenen Wert und setzt dieselbe Gültigkeitsregel wie eine AnyValue-Erwartung: Der Wert muss in den Flow-Block-Ergebnissen vorkommen.</value>
   </data>
 	<data name="ExpectationCondition_Index_Description" xml:space="preserve">
     <value>Index, der beim Ziel "Wert an Index" verwendet wird.</value>
@@ -2911,7 +2911,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Flow-Block-bezogene Testdatensätze vom Teststart bis zum aktuellen Ziel-Flow-Block.</value>
   </data>
 	<data name="FlowBloxTestConfiguration_ExpectationConditions_Description" xml:space="preserve">
-    <value>Erwartungsbedingungen, die für diese Feldkonfiguration während der Testausführung geprüft werden.</value>
+    <value>Zusätzliche Erwartungen für dieses Feld. "Benutzereingabe wird erwartet" wirkt bereits wie eine AnyValue-Erwartung für den eingegebenen Wert.</value>
   </data>
 	<data name="FlowBloxTestConfigurationSelectionMode_Index_Description" xml:space="preserve">
     <value>Wählt den Wert am konfigurierten Index aus den Ausführungsergebnissen.</value>
@@ -2925,9 +2925,6 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="FlowBloxTestConfigurationSelectionMode_First_Description" xml:space="preserve">
     <value>Wählt den ersten Wert aus den Ausführungsergebnissen.</value>
   </data>
-	<data name="FlowBloxTestConfiguration_UIRequiredForExecution" xml:space="preserve">
-    <value>Erforderlich für Ausführung</value>
-  </data>
 	<data name="FlowBlockTestDataset_UIRequiredForExecution" xml:space="preserve">
     <value>Erforderlich für Ausführung</value>
   </data>
@@ -2935,7 +2932,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Nur UI-Markierung in der TestDefinitionsansicht; zeigt an, dass dieser Testdatensatz erforderlich ist, weil ein ausgeführter Flow-Block auf seinen zugeordneten Flow-Block angewiesen ist.</value>
   </data>
 	<data name="FlowBloxTestConfiguration_SelectionMode_Description" xml:space="preserve">
-    <value>Um einen Feldwert automatisch aus einer Flow-Block-Ausführung zu ermitteln, nutzen Sie einen Auswahlmodus aus der Kategorie "Automatische Auswahl". Um eine Auswahl und gleichzeitig eine Erwartung festzulegen, nutzen Sie "Benutzereingabe wird erwartet". Um einen Wert manuell (bspw. ohne Ausführung) für ein Feld festzulegen, nutzen Sie "Manuelle Eingabe".</value>
+    <value>Legt fest, wie der Testwert gewählt wird. "Benutzereingabe wird erwartet" erzeugt zusätzlich eine AnyValue-Erwartung für den eingegebenen Wert; "Manuelle Eingabe" liefert nur einen Wert.</value>
   </data>
 	<data name="FlowBloxTestConfigurationSelectionMode_UserInput_Description" xml:space="preserve">
     <value>Verwendet einen manuell eingegebenen Wert.</value>
@@ -2948,6 +2945,15 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
   </data>
 	<data name="FlowBloxTestConfiguration_SelectionMode" xml:space="preserve">
     <value>Auswahlmodus</value>
+  </data>
+	<data name="FlowBloxTestConfiguration_UserInput" xml:space="preserve">
+    <value>Erwarteter / manueller Wert</value>
+  </data>
+	<data name="FlowBloxTestConfiguration_UserInput_Description" xml:space="preserve">
+    <value>Manueller oder erwarteter Wert. Er kann einen Wert für einen nicht ausgeführten Flow-Block liefern oder als erwarteter Wert dienen: Dann ist das Feld nur gültig, wenn dieser Wert in den Ergebnissen vorkommt, entsprechend einer AnyValue-Erwartung. Weitere AnyValue-Erwartungen sind optional.</value>
+  </data>
+	<data name="Global_NotApplicable" xml:space="preserve">
+    <value>Nicht zutreffend</value>
   </data>
 	<data name="FloxBloxCategory_DateOperations" xml:space="preserve">
     <value>Datumsoperationen</value>

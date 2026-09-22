@@ -36,6 +36,21 @@ namespace FlowBlox.Core.Models.Testing
 
         private void TestDatasets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
+            if (e.NewItems != null)
+            {
+                foreach (var dataset in e.NewItems.OfType<FlowBlockTestDataset>())
+                    dataset.ParentTestDefinition = this;
+            }
+
+            if (e.OldItems != null)
+            {
+                foreach (var dataset in e.OldItems.OfType<FlowBlockTestDataset>())
+                {
+                    if (ReferenceEquals(dataset.ParentTestDefinition, this))
+                        dataset.ParentTestDefinition = null;
+                }
+            }
+
             RecalculateRequiredFlagsAcrossDefinition();
         }
 
@@ -64,7 +79,8 @@ namespace FlowBlox.Core.Models.Testing
 
             foreach (var dataset in Entries)
             {
-                dataset.UIRequiredForExecution = dataset.FlowBlock != null
+                dataset.ParentTestDefinition = this;
+                dataset.UIAssociatedFlowBlockRequiredForExecution = dataset.FlowBlock != null
                     && requiredAssociatedFlowBlocks.Contains(dataset.FlowBlock);
             }
 
@@ -77,7 +93,7 @@ namespace FlowBlox.Core.Models.Testing
             }
         }
 
-        private static IEnumerable<BaseFlowBlock> ResolveAssociatedFlowBlocks(BaseFlowBlock flowBlock)
+        internal static IEnumerable<BaseFlowBlock> ResolveAssociatedFlowBlocks(BaseFlowBlock flowBlock)
         {
             foreach (var property in AssociatedFlowBlockResolver.GetResolvableProperties(flowBlock))
             {
@@ -85,6 +101,16 @@ namespace FlowBlox.Core.Models.Testing
                 if (resolution.FlowBlock != null)
                     yield return resolution.FlowBlock;
             }
+        }
+
+        public override void OnAfterLoad()
+        {
+            base.OnAfterLoad();
+
+            foreach (var dataset in Entries)
+                dataset.ParentTestDefinition = this;
+
+            RecalculateRequiredFlagsAcrossDefinition();
         }
 
         [Display(Name = "FlowBloxTestDefinition_RequiredForExecution", Description = "FlowBloxTestDefinition_RequiredForExecution_Description", ResourceType = typeof(FlowBloxTexts))]

@@ -28,11 +28,14 @@ namespace FlowBlox.UICore.ViewModels
 {
     public sealed class FlowBloxTaskManagementViewModel : INotifyPropertyChanged
     {
+        private const string RuntimeLogOptionKey = "Paths.RuntimeLogDir";
         private readonly Window _ownerWindow;
         private readonly ITaskManagementService _taskManagementService;
+        private readonly IReadOnlyList<string> _optionKeys;
         private readonly Dictionary<string, ObservableCollection<FlowBloxScheduledSession>> _sessionsCache = new(StringComparer.OrdinalIgnoreCase);
         private FlowBloxTaskItemViewModel _selectedTask;
         private FlowBloxScheduledSession _selectedSession;
+        private FlowBloxTaskOptionOverrideViewModel _selectedOptionOverride;
         private bool _isBusy;
         private bool _isDirty;
         private bool _isLoadingInputParameters;
@@ -54,6 +57,8 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand OpenTaskDirectoryCommand { get; }
         public RelayCommand OpenSessionDirectoryCommand { get; }
         public RelayCommand OpenSessionLogFileCommand { get; }
+        public RelayCommand AddOptionOverrideCommand { get; }
+        public RelayCommand RemoveOptionOverrideCommand { get; }
         public RelayCommand CloseCommand { get; }
 
         public FlowBloxTaskItemViewModel SelectedTask
@@ -68,7 +73,10 @@ namespace FlowBlox.UICore.ViewModels
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsTaskSelected));
                 OnPropertyChanged(nameof(InputParameters));
+                OnPropertyChanged(nameof(OptionOverrides));
+                SelectedOptionOverride = null;
                 OnInputParameterStateChanged();
+                RefreshAvailableOptionKeys();
                 RefreshSessions();
 
                 if (SelectedDetailTabIndex == 1)
@@ -84,6 +92,20 @@ namespace FlowBlox.UICore.ViewModels
                 _selectedSession = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsSessionSelected));
+            }
+        }
+
+        public FlowBloxTaskOptionOverrideViewModel SelectedOptionOverride
+        {
+            get => _selectedOptionOverride;
+            set
+            {
+                if (ReferenceEquals(_selectedOptionOverride, value))
+                    return;
+
+                _selectedOptionOverride = value;
+                OnPropertyChanged();
+                RemoveOptionOverrideCommand.Invalidate();
             }
         }
 
@@ -121,6 +143,7 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public ObservableCollection<FlowBloxTaskInputParameterViewModel> InputParameters => SelectedTask?.InputParameters ?? new ObservableCollection<FlowBloxTaskInputParameterViewModel>();
+        public ObservableCollection<FlowBloxTaskOptionOverrideViewModel> OptionOverrides => SelectedTask?.OptionOverrides ?? new ObservableCollection<FlowBloxTaskOptionOverrideViewModel>();
         public bool HasInputParameters => InputParameters.Count > 0;
         public bool ShowInputParameterList => IsTaskSelected && !IsLoadingInputParameters && SelectedTask?.InputParametersLoaded == true && HasInputParameters;
         public bool ShowInputParameterEmptyMessage => IsTaskSelected && !IsLoadingInputParameters && SelectedTask?.InputParametersLoaded == true && !HasInputParameters;
@@ -145,6 +168,13 @@ namespace FlowBlox.UICore.ViewModels
         {
             _ownerWindow = ownerWindow;
             _taskManagementService = TaskManagementProvider.GetService();
+            _optionKeys = FlowBloxOptions.GetOptionInstance()
+                .GetOptions()
+                .Select(x => x.Name)
+                .Where(x => !string.IsNullOrWhiteSpace(x) && !string.Equals(x, RuntimeLogOptionKey, StringComparison.OrdinalIgnoreCase))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                .ToList();
 
             ScheduleTypes = new ObservableCollection<FlowBloxTaskScheduleType>(
                 Enum.GetValues(typeof(FlowBloxTaskScheduleType)).Cast<FlowBloxTaskScheduleType>());
@@ -161,6 +191,8 @@ namespace FlowBlox.UICore.ViewModels
             OpenTaskDirectoryCommand = new RelayCommand(OpenTaskDirectory, () => IsTaskSelected);
             OpenSessionDirectoryCommand = new RelayCommand(OpenSessionDirectory, () => IsSessionSelected);
             OpenSessionLogFileCommand = new RelayCommand(OpenSessionLogFile, () => IsSessionSelected && !string.IsNullOrWhiteSpace(SelectedSession?.LogFilePath));
+            AddOptionOverrideCommand = new RelayCommand(AddOptionOverride, CanAddOptionOverride);
+            RemoveOptionOverrideCommand = new RelayCommand(RemoveOptionOverride, () => IsTaskSelected && SelectedOptionOverride != null);
             CloseCommand = new RelayCommand(() => _ownerWindow?.Close());
 
             LoadTasks(confirmDiscardChanges: false);
@@ -194,7 +226,10 @@ namespace FlowBlox.UICore.ViewModels
 
                 var tasks = await _taskManagementService.GetTasksAsync();
                 foreach (var task in tasks)
+                {
+                    LoadRunnerRequestConfiguration(task);
                     AddTaskItem(FlowBloxTaskItemViewModel.FromModel(task), markDirty: false);
+                }
 
                 SelectedTask = Tasks.FirstOrDefault();
                 IsDirty = false;
@@ -291,6 +326,8 @@ namespace FlowBlox.UICore.ViewModels
         private void AddTaskItem(FlowBloxTaskItemViewModel item, bool markDirty)
         {
             item.PropertyChanged += TaskItem_PropertyChanged;
+            foreach (var optionOverride in item.OptionOverrides)
+                optionOverride.PropertyChanged += OptionOverride_PropertyChanged;
             Tasks.Add(item);
 
             if (markDirty)
@@ -303,7 +340,11 @@ namespace FlowBlox.UICore.ViewModels
         private void UnsubscribeTaskItems()
         {
             foreach (var task in Tasks)
+            {
                 task.PropertyChanged -= TaskItem_PropertyChanged;
+                foreach (var optionOverride in task.OptionOverrides)
+                    optionOverride.PropertyChanged -= OptionOverride_PropertyChanged;
+            }
         }
 
         private void TaskItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -330,6 +371,103 @@ namespace FlowBlox.UICore.ViewModels
         {
             SelectedTask?.MarkDirty();
             IsDirty = true;
+        }
+
+        private void OptionOverride_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            SelectedTask?.MarkDirty();
+            IsDirty = true;
+
+            if (e.PropertyName == nameof(FlowBloxTaskOptionOverrideViewModel.OptionKey))
+                RefreshAvailableOptionKeys();
+        }
+
+        private bool CanAddOptionOverride()
+        {
+            if (SelectedTask == null)
+                return false;
+
+            var selectedKeys = SelectedTask.OptionOverrides
+                .Select(x => x.OptionKey)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            return _optionKeys.Any(x => !selectedKeys.Contains(x));
+        }
+
+        private void AddOptionOverride()
+        {
+            if (SelectedTask == null)
+                return;
+
+            var selectedKeys = SelectedTask.OptionOverrides
+                .Select(x => x.OptionKey)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var optionKey = _optionKeys.FirstOrDefault(x => !selectedKeys.Contains(x));
+            if (optionKey == null)
+                return;
+
+            var optionOverride = new FlowBloxTaskOptionOverrideViewModel
+            {
+                OptionKey = optionKey,
+                StringValue = string.Empty
+            };
+            optionOverride.PropertyChanged += OptionOverride_PropertyChanged;
+            SelectedTask.OptionOverrides.Add(optionOverride);
+            SelectedTask.MarkDirty();
+            IsDirty = true;
+            SelectedOptionOverride = optionOverride;
+            RefreshAvailableOptionKeys();
+        }
+
+        private void RemoveOptionOverride()
+        {
+            if (SelectedTask == null || SelectedOptionOverride == null)
+                return;
+
+            SelectedOptionOverride.PropertyChanged -= OptionOverride_PropertyChanged;
+            SelectedTask.OptionOverrides.Remove(SelectedOptionOverride);
+            SelectedTask.MarkDirty();
+            IsDirty = true;
+            SelectedOptionOverride = null;
+            RefreshAvailableOptionKeys();
+        }
+
+        private void RefreshAvailableOptionKeys()
+        {
+            if (SelectedTask == null)
+            {
+                AddOptionOverrideCommand?.Invalidate();
+                return;
+            }
+
+            foreach (var current in SelectedTask.OptionOverrides)
+            {
+                var usedByOtherRows = SelectedTask.OptionOverrides
+                    .Where(x => !ReferenceEquals(x, current))
+                    .Select(x => x.OptionKey)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                current.SetAvailableOptionKeys(_optionKeys.Where(x => !usedByOtherRows.Contains(x)));
+            }
+
+            AddOptionOverrideCommand?.Invalidate();
+        }
+
+        private static void LoadRunnerRequestConfiguration(FlowBloxScheduledTask task)
+        {
+            if (string.IsNullOrWhiteSpace(task?.RequestFilePath) || !File.Exists(task.RequestFilePath))
+                return;
+
+            var request = RunnerJson.ReadFile<RunnerRequest>(task.RequestFilePath);
+            if (request == null)
+                return;
+
+            task.UserFields = new Dictionary<string, string>(request.UserFields ?? new Dictionary<string, string>(), StringComparer.OrdinalIgnoreCase);
+            task.OptionOverrides = (request.OptionOverrides ?? new Dictionary<string, string>())
+                .Where(x => !string.Equals(x.Key, RuntimeLogOptionKey, StringComparison.OrdinalIgnoreCase))
+                .ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
         }
 
         private void OnInputParameterStateChanged()
@@ -468,6 +606,8 @@ namespace FlowBlox.UICore.ViewModels
 
             SelectedTask.IsDeleted = true;
             SelectedTask.PropertyChanged -= TaskItem_PropertyChanged;
+            foreach (var optionOverride in SelectedTask.OptionOverrides)
+                optionOverride.PropertyChanged -= OptionOverride_PropertyChanged;
             Tasks.Remove(SelectedTask);
             IsDirty = true;
             SelectedTask = Tasks.FirstOrDefault();
@@ -648,11 +788,12 @@ namespace FlowBlox.UICore.ViewModels
                 AbortOnError = true,
                 AbortOnWarning = false,
                 UserFields = new Dictionary<string, string>(task.UserFields, StringComparer.OrdinalIgnoreCase),
-                OptionOverrides = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    ["Paths.RuntimeLogDir"] = Path.Combine(task.TaskDirectory, "logs", "%NewUID(8,0)%")
-                }
+                OptionOverrides = task.OptionOverrides
+                    .Where(x => !string.IsNullOrWhiteSpace(x.OptionKey))
+                    .ToDictionary(x => x.OptionKey, x => x.StringValue ?? string.Empty, StringComparer.OrdinalIgnoreCase)
             };
+
+            request.OptionOverrides[RuntimeLogOptionKey] = Path.Combine(task.TaskDirectory, "logs", "%NewUID(8,0)%");
 
             RunnerJson.WriteFile(task.RequestFilePath, request);
         }

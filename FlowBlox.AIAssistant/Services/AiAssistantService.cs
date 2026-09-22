@@ -3,10 +3,13 @@ using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Constants;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Logging;
+using FlowBlox.Core.Models;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Services;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Json;
@@ -25,7 +28,7 @@ namespace FlowBlox.AIAssistant.Services
 
         private readonly IAiExecutor _executor;
         private readonly IFlowBloxAIToolApi _tools;
-        private readonly AiAssistantInstructionParser _instructionParser;
+        private readonly IAiResponseInstructionParserService _instructionParser;
         private readonly AssistantOutputFormatFeedbackQueue _outputFormatFeedbackQueue;
         private readonly ILogger? _logger;
         private readonly Func<AssistantConfiguration>? _configurationProvider;
@@ -46,7 +49,7 @@ namespace FlowBlox.AIAssistant.Services
         {
             _executor = executor ?? throw new ArgumentNullException(nameof(executor));
             _tools = tools ?? throw new ArgumentNullException(nameof(tools));
-            _instructionParser = new AiAssistantInstructionParser();
+            _instructionParser = FlowBloxServiceLocator.Instance.GetService<IAiResponseInstructionParserService>();
             _outputFormatFeedbackQueue = new AssistantOutputFormatFeedbackQueue();
             _logger = logger;
             _configurationProvider = configurationProvider;
@@ -1034,10 +1037,10 @@ namespace FlowBlox.AIAssistant.Services
             };
         }
 
-        private static string BuildToolProcessingTranscript(IReadOnlyList<AssistantToolCall> toolCalls)
+        private static string BuildToolProcessingTranscript(IReadOnlyList<AiResponseToolCall> toolCalls)
         {
             var sb = new StringBuilder();
-            var calls = toolCalls ?? Array.Empty<AssistantToolCall>();
+            var calls = toolCalls ?? Array.Empty<AiResponseToolCall>();
             sb.AppendLine($"Requested operations: {calls.Count}");
 
             if (calls.Count == 0)
@@ -1055,7 +1058,7 @@ namespace FlowBlox.AIAssistant.Services
             return sb.ToString().TrimEnd();
         }
 
-        private static string BuildAssistantRoundMessage(AssistantInstruction instruction, string assistantOutput)
+        private static string BuildAssistantRoundMessage(AiResponseInstruction instruction, string assistantOutput)
         {
             if (!string.IsNullOrWhiteSpace(instruction?.AssistantMessage))
                 return instruction.AssistantMessage;

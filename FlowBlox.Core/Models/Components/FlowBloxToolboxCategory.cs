@@ -52,9 +52,9 @@ namespace FlowBlox.Core.Models.Components
             "FlowBloxToolboxCategory_ChatTemplates",
             typeof(FlowBloxTexts));
 
-        public static readonly FlowBloxToolboxCategoryItem AIPropertyValueGenerationPrompts = new(
-            nameof(AIPropertyValueGenerationPrompts),
-            "FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts",
+        public static readonly FlowBloxToolboxCategoryItem AIPromptTemplates = new(
+            nameof(AIPromptTemplates),
+            "FlowBloxToolboxCategory_AIPromptTemplates",
             typeof(FlowBloxTexts));
 
         public static readonly FlowBloxToolboxCategoryItem ShellExecution = new(

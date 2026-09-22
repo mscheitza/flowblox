@@ -1,6 +1,7 @@
 ﻿using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
+using FlowBlox.Core.Services;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
@@ -687,7 +688,7 @@ namespace FlowBloxTest.AIAssistant
         [TestMethod]
         public void AssistantInstructionParser_CapturesJsonParseExceptionAndResponseContent()
         {
-            var parser = new AiAssistantInstructionParser();
+            var parser = new AiResponseInstructionParserService();
             const string output = "{\"assistantMessage\":\"Broken\",\"final\":false,\"toolCalls\":[}";
 
             var result = parser.Parse(output);
@@ -701,7 +702,7 @@ namespace FlowBloxTest.AIAssistant
         [TestMethod]
         public void AssistantInstructionParser_ReturnsFormatExceptionWhenNoJsonObjectStartExists()
         {
-            var parser = new AiAssistantInstructionParser();
+            var parser = new AiResponseInstructionParserService();
             const string output = "plain assistant text without a JSON object";
 
             var result = parser.ParseFirstJsonObject(output);

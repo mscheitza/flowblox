@@ -122,8 +122,8 @@ namespace FlowBlox.WorkerService
 
         private static RunnerRequest BuildRunnerRequest(FlowBloxServiceOptions cfg)
         {
-            if (cfg.ProjectFile == null)
-                throw new InvalidOperationException("ProjectFile must be configured.");
+            if (string.IsNullOrWhiteSpace(cfg.ProjectFile) && string.IsNullOrWhiteSpace(cfg.ProjectSpaceGuid))
+                throw new InvalidOperationException("ProjectFile or ProjectSpaceGuid must be configured.");
 
             // Validation: version requires guid
             if (cfg.ProjectSpaceVersion.HasValue && string.IsNullOrWhiteSpace(cfg.ProjectSpaceGuid))
@@ -131,7 +131,9 @@ namespace FlowBlox.WorkerService
 
             return new RunnerRequest
             {
-                ProjectFile = RunnerPathTemplateResolver.Resolve(cfg.ProjectFile),
+                ProjectFile = string.IsNullOrWhiteSpace(cfg.ProjectFile)
+                    ? null
+                    : RunnerPathTemplateResolver.Resolve(cfg.ProjectFile),
                 ProjectSpaceGuid = string.IsNullOrWhiteSpace(cfg.ProjectSpaceGuid) ? null : cfg.ProjectSpaceGuid,
                 ProjectSpaceVersion = cfg.ProjectSpaceVersion,
 

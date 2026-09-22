@@ -17,6 +17,9 @@ Link/scope semantics:
 - You do not need to link every flow block.
 - Link the latest flow block you want to test end-to-end.
 - Linking is additionally important when the test should be used for generation strategies.
+- A link also makes the linked target row executable (`Execute=true`) and provides the UI entry point for opening that test in flow-block context.
+- The same definition may be linked to several sibling targets: its synchronized `Entries` then describe one shared scenario with both branches. 
+- Without explicit flow-block context, the latest synchronized target in execution order is used.
 
 Execution-result semantics:
 - Use `RunTestDefinition` to execute test definitions via AI tools.
@@ -28,6 +31,15 @@ Validity rules (must enforce):
 - `ExpectationConditions` are evaluated before final field selection assignment for `SelectionMode` (`First`/`Index`/`Last`/`UserInput_ExpectedValue`).
 - Warning scenario: `SelectionMode=UserInput_ExpectedValue` with non-empty `UserInput` while `Execute=false`.
 - Warning scenario: `Execute=true` and `SelectionMode=UserInput_ExpectedValue`, but `UserInput` is empty and no `ExpectationConditions` exist.
+- `SelectionMode=UserInput`: inject `UserInput`; the parent flow block may stay `Execute=false`, and no actual result list is required.
+- `SelectionMode=UserInput_ExpectedValue`: execute the parent flow block, require `UserInput` to exist in its actual result list, then select it.
+- `First`, `Index`, and `Last` also consume actual results, so explicitly set the parent dataset `Execute=true` in tool calls.
+
+Execution prerequisites / where a focused test starts:
+1. Decide which target rows execute.
+2. For every required field of those rows, either execute its producer and select `First`/`Index`/`Last` (or `UserInput_ExpectedValue`), or leave the producer unexecuted and inject `UserInput`.
+3. Resolve every `AssociatedFlowBlockResolvableAttribute` property with `ResolveAssociatedFlowBlock`. Associated blocks provide runtime state, not only field values, and normally must execute.
+4. In TestDefinitionView, orange requirement icons mark required field configurations; purple link icons mark required associated-flow-block datasets.
 
 Use case A: WebRequest -> PatternSelector -> WebRequest -> PatternSelector
 Goal: from first web request, select first link, then validate extracted value + dataset count at second selector.
@@ -73,3 +85,17 @@ Iterative best practice:
 Generator interplay:
 - For generator tasks, first run `RunGenerationStrategies`.
 - If generation still fails or results are unclear, run `RunTestDefinition` to inspect protocol + `testResults` and adjust test configuration precisely.
+
+Use case C: shared WebBrowser scenario for two Sequence Detection targets
+Flow: `Start -> WebBrowserFlowBlock -> WebSelectorFlowBlock -> WebEventFlowBlock(SwitchToUrl) -> [SequenceDetectionFlowBlock #1, SequenceDetectionFlowBlock #2]`.
+Tool/setup semantics:
+1. Use `ConnectFlowBlocks` for the execution edges, including one edge from the WebEvent to each SequenceDetection target.
+2. Create test definitions A and B (two evidence cases are required by each `SequenceDetectionGenerationStrategy`). Link each same definition to both SequenceDetection targets via `/TestDefinitions/Link`; do not create separate definitions per branch.
+3. In each definition: execute WebBrowser; execute WebSelector and select the intended URL/link (often `UserInput_ExpectedValue` when that exact link must occur); execute the `SwitchToUrl` WebEvent and select its DOM result for downstream use.
+4. On each SequenceDetection target row, set its own expected extracted value plus `NumberOfDatasets` expectation. Thus one definition represents both sibling outcomes for one browser scenario.
+5. Set each SequenceDetection target's `InputField` to the generator input (normally the WebEvent DOM result). Its `SequenceDetectionGenerationStrategy.InputField` is synchronized automatically: it is copied when the strategy source is assigned and updated whenever the target FlowBlock's `InputField` changes. Then run `RunGenerationStrategies` separately for each target.
+Important: one shared definition can cover both branches, but it is still only one evidence case per target. The current strategy checks for at least two suitable `FlowBloxTestDefinition` instances on each SequenceDetection target; two target rows inside one definition do not satisfy that minimum.
+
+Focused variants of the same flow:
+- Execute only SequenceDetection: keep WebEvent `Execute=false`; set its DOM result configuration to `SelectionMode=UserInput` and put the complete DOM into `UserInput`. No real WebEvent result list is expected.
+- Execute WebEvent + SequenceDetection: keep WebSelector `Execute=false`; inject the URL/link into the WebSelector result via `UserInput`. Execute WebEvent and also execute its resolved associated `WebBrowserFlowBlock`, because WebEvent requires the initialized browser instance even though its URL field was injected.

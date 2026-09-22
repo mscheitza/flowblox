@@ -29,10 +29,11 @@ namespace FlowBlox.UICore.Operations
                 _runtimeStateService?.IsExternalProjectEditActive == true)
                 return false;
 
-            if (!Component.TestDefinitions.Any()) 
+            var reloadedComponent = _registry.Reload(Component);
+            if (!reloadedComponent.TestDefinitions.Any()) 
                 return false;
 
-            if (!Component.GenerationStrategies.Any())
+            if (!reloadedComponent.GenerationStrategies.Any())
                 return false;
 
             return true;

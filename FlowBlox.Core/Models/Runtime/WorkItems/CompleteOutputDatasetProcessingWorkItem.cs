@@ -13,7 +13,7 @@ namespace FlowBlox.Core.Models.Runtime.WorkItems
 
         public void Run(BaseRuntime runtime)
         {
-            _resultBlock.CompleteOutputDatasetProcessing();
+            _resultBlock.CompleteOutputDatasetProcessing(runtime);
         }
     }
 }

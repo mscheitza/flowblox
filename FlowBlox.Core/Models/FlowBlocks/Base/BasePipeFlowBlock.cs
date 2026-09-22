@@ -21,6 +21,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         public virtual List<FieldElement> GetPossibleInputFields() => FlowBloxFieldsResolver.GetFieldsOfAssociatedFlowBlocks(this);
 
+        public override void OnAfterOpen()
+        {
+            if (InputField != null || ReferencedFlowBlocks.Count != 1)
+                return;
+
+            var sourceFields = ReferencedFlowBlocks[0] is BaseResultFlowBlock sourceFlowBlock
+                ? sourceFlowBlock.Fields
+                : null;
+
+            if (sourceFields?.Count != 1 || sourceFields[0] == null)
+                return;
+
+            InputField = sourceFields[0];
+        }
+
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;
     }
 }

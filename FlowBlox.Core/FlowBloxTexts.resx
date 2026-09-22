@@ -1912,9 +1912,6 @@ Note: Once a provider is loaded, switching providers within the same process is 
 	<data name="AIPromptFlowBlock_Groups_Request" xml:space="preserve">
 		<value>Request</value>
 	</data>
-	<data name="AIPromptFlowBlock_Groups_Output" xml:space="preserve">
-		<value>Output</value>
-	</data>
 	<data name="AIPromptFlowBlock_Provider" xml:space="preserve">
 		<value>AI Provider</value>
 	</data>
@@ -1957,14 +1954,20 @@ Note: Once a provider is loaded, switching providers within the same process is 
 	<data name="AIPromptFlowBlock_TimeoutSecondsOverride_Tooltip" xml:space="preserve">
 		<value>Optional timeout override for this flow block execution. If empty, the provider default timeout is used.</value>
 	</data>
+	<data name="AIPromptFlowBlock_SpecialExplanation_OutputFormat" xml:space="preserve">
+		<value>This flow block is configured for AI responses in JSON format by default. JSON is the recommended output format. By adjusting the system instruction, other output formats such as XML can also be used.</value>
+	</data>
 	<data name="AIPropertyValueGenerationStrategy_Provider" xml:space="preserve">
 		<value>AI Provider</value>
 	</data>
 	<data name="AIPropertyValueGenerationStrategy_DisplayName" xml:space="preserve">
 		<value>AI Property Value Generation</value>
 	</data>
+	<data name="AIPropertyValueGenerationStrategy_Groups_AdditionalSettings" xml:space="preserve">
+		<value>Additional settings</value>
+	</data>
 	<data name="AIPropertyValueGenerationStrategy_Description" xml:space="preserve">
-		<value>Generates writable simple and structured target properties using an AI prompt and test-driven expectations. For structured targets, AI uses the internal JSON schema description ($GenerationStrategy::TargetPropertyDescription) to generate JSON output, and FlowBlox deserializes it into the target property type. Requires at least one test case for the target flow block, including expected value anchors and expected dataset count.</value>
+		<value>Configures writable flow block properties using an AI prompt and test-driven expectations. AI uses the FlowBlox Quick Update schema ($GenerationStrategy::FlowBloxQuickUpdateSchema) and returns FlowBlox Quick Update JSON to update one or more configurable properties. Requires at least one test case for the target flow block, including expected value anchors and expected dataset count.</value>
 	</data>
 	<data name="AIPropertyValueGenerationStrategy_Provider_Tooltip" xml:space="preserve">
 		<value>Select the AI provider (e.g., OpenAI, Anthropic) used to generate the target property value.</value>
@@ -2004,12 +2007,6 @@ Note: Once a provider is loaded, switching providers within the same process is 
 	</data>
 	<data name="AIPropertyValueGenerationStrategy_TimeoutSecondsOverride_Tooltip" xml:space="preserve">
 		<value>Optional timeout override for this strategy execution. If empty, the provider default timeout is used.</value>
-	</data>
-	<data name="AIPropertyValueGenerationStrategy_TargetPropertyName" xml:space="preserve">
-		<value>Target property name</value>
-	</data>
-	<data name="AIPropertyValueGenerationStrategy_TargetPropertyName_Tooltip" xml:space="preserve">
-		<value>Name of the writable target property on the flow block that should receive the generated value (simple or structured type). For structured targets, JSON is only the AI output format; FlowBlox deserializes it into the property type.</value>
 	</data>
 	<data name="SequenceDetectionGenerationStrategy_DisplayName" xml:space="preserve">
 		<value>Sequence Detection Generation</value>
@@ -2620,8 +2617,8 @@ Multi-level XPath expressions are not allowed here.</value>
 	<data name="FlowBloxToolboxCategory_ChatTemplates" xml:space="preserve">
 		<value>Chat Templates</value>
 	</data>
-	<data name="FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts" xml:space="preserve">
-		<value>AI Property Value Prompts</value>
+	<data name="FlowBloxToolboxCategory_AIPromptTemplates" xml:space="preserve">
+		<value>AI Prompt Templates</value>
 	</data>
 	<data name="FlowBloxToolboxCategory_ShellExecution" xml:space="preserve">
 		<value>Shell Execution</value>
@@ -3040,9 +3037,6 @@ Multi-level XPath expressions are not allowed here.</value>
 	<data name="FlowBloxTestDefinition_RequiredForExecution_Description" xml:space="preserve">
     <value>If enabled, this test definition is executed automatically when runtime starts. If an expectation fails, generation strategies of the affected flow block can run, then the test step is repeated once.</value>
   </data>
-	<data name="FlowBloxTestConfiguration_UIRequiredForExecution_Description" xml:space="preserve">
-    <value>UI-only marker in TestDefinition view indicating this field is required for executable flow blocks.</value>
-  </data>
 	<data name="FlowBlockTestDataset_Execute_Description" xml:space="preserve">
     <value>Controls whether this flow block is actively executed in the test run.</value>
   </data>
@@ -3056,7 +3050,7 @@ Multi-level XPath expressions are not allowed here.</value>
     <value>Flow block represented by this test dataset entry.</value>
   </data>
 	<data name="FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue_Description" xml:space="preserve">
-    <value>Uses manual input and evaluates it as an expectation.</value>
+    <value>Uses the entered value and adds the same validity rule as an AnyValue expectation: the value must occur in the flow-block results.</value>
   </data>
 	<data name="ExpectationCondition_Index_Description" xml:space="preserve">
     <value>Index used when target is "Value at index".</value>
@@ -3071,7 +3065,7 @@ Multi-level XPath expressions are not allowed here.</value>
     <value>Flow-block-level test datasets from test start to current target flow block.</value>
   </data>
 	<data name="FlowBloxTestConfiguration_ExpectationConditions_Description" xml:space="preserve">
-    <value>Expectation conditions evaluated for this field configuration during test execution.</value>
+    <value>Additional expectations evaluated for this field. "User input expected" already acts like an AnyValue expectation for the entered value.</value>
   </data>
 	<data name="FlowBloxTestConfigurationSelectionMode_Index_Description" xml:space="preserve">
     <value>Selects the value at the configured index from execution results.</value>
@@ -3085,9 +3079,6 @@ Multi-level XPath expressions are not allowed here.</value>
 	<data name="FlowBloxTestConfigurationSelectionMode_First_Description" xml:space="preserve">
     <value>Selects the first value from execution results.</value>
   </data>
-	<data name="FlowBloxTestConfiguration_UIRequiredForExecution" xml:space="preserve">
-    <value>Required for execution</value>
-  </data>
 	<data name="FlowBlockTestDataset_UIRequiredForExecution" xml:space="preserve">
     <value>Required for execution</value>
   </data>
@@ -3095,7 +3086,7 @@ Multi-level XPath expressions are not allowed here.</value>
     <value>UI-only marker in TestDefinition view indicating this dataset is required because another executed block depends on its associated flow block.</value>
   </data>
 	<data name="FlowBloxTestConfiguration_SelectionMode_Description" xml:space="preserve">
-    <value>Use automatic selection modes to derive a field value from flow-block execution. Use "User input expected" to combine manual input with an expectation, or "Manual user input" to set a value without execution.</value>
+    <value>Defines how the test value is selected. "User input expected" also creates an AnyValue expectation for the entered value; "Manual user input" only supplies a value.</value>
   </data>
 	<data name="FlowBloxTestConfigurationSelectionMode_UserInput_Description" xml:space="preserve">
     <value>Uses a manually entered value.</value>
@@ -3108,6 +3099,15 @@ Multi-level XPath expressions are not allowed here.</value>
   </data>
 	<data name="FlowBloxTestConfiguration_SelectionMode" xml:space="preserve">
     <value>Selection mode</value>
+  </data>
+	<data name="FlowBloxTestConfiguration_UserInput" xml:space="preserve">
+    <value>Expected / manual value</value>
+  </data>
+	<data name="FlowBloxTestConfiguration_UserInput_Description" xml:space="preserve">
+    <value>Manual or expected value. Use it to supply a value for a non-executed flow block, or as an expected value: then the field is valid only if this value occurs in the results, equivalent to an AnyValue expectation. Additional AnyValue expectations remain optional.</value>
+  </data>
+	<data name="Global_NotApplicable" xml:space="preserve">
+    <value>Not applicable</value>
   </data>
 	<data name="FloxBloxCategory_DateOperations" xml:space="preserve">
     <value>Date Operations</value>

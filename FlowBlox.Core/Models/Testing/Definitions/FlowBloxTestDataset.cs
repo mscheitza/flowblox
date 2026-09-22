@@ -9,7 +9,7 @@ namespace FlowBlox.Core.Models.Testing
     {
         private BaseFlowBlock _flowBlock;
         private bool _execute;
-        private bool _uIRequiredForExecution;
+        private bool _uIAssociatedFlowBlockRequiredForExecution;
         private bool _uIIsTargetFlowBlock;
         private bool _uIIsTargetNeighbour;
         private bool _uIIsVisibleInCurrentContext = true;
@@ -49,14 +49,14 @@ namespace FlowBlox.Core.Models.Testing
 
         [JsonIgnore]
         [Display(Name = "FlowBlockTestDataset_UIRequiredForExecution", Description = "FlowBlockTestDataset_UIRequiredForExecution_Description", ResourceType = typeof(FlowBloxTexts))]
-        public bool UIRequiredForExecution
+        public bool UIAssociatedFlowBlockRequiredForExecution
         {
-            get => _uIRequiredForExecution;
+            get => _uIAssociatedFlowBlockRequiredForExecution;
             set
             {
-                if (_uIRequiredForExecution != value)
+                if (_uIAssociatedFlowBlockRequiredForExecution != value)
                 {
-                    _uIRequiredForExecution = value;
+                    _uIAssociatedFlowBlockRequiredForExecution = value;
                     OnPropertyChanged();
                 }
             }

@@ -1,3 +1,4 @@
+using FlowBlox.Core.Models;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -7,7 +8,7 @@ namespace FlowBlox.AIAssistant.Services
     {
         private readonly Queue<string> _messages = new();
 
-        public string Enqueue(AssistantInstructionParseResult parseResult)
+        public string Enqueue(AiResponseInstructionParseResult parseResult)
         {
             var message = BuildFeedbackMessage(parseResult);
             _messages.Enqueue(message);
@@ -26,7 +27,7 @@ namespace FlowBlox.AIAssistant.Services
             _messages.Clear();
         }
 
-        private static string BuildFeedbackMessage(AssistantInstructionParseResult parseResult)
+        private static string BuildFeedbackMessage(AiResponseInstructionParseResult parseResult)
         {
             var exception = parseResult?.Exception;
             var sb = new StringBuilder();

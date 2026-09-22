@@ -345,6 +345,17 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die An executed flow block depends on this associated flow block. Enable execution so its required runtime state is initialized. ähnelt.
+        /// </summary>
+        public static string Icon_AssociatedFlowBlockRequiredForExecution_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("Icon_AssociatedFlowBlockRequiredForExecution_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die This is the current target flow block. The test ends here and the test results are read from this flow block. This flow block must be executed for test execution in this context. ähnelt.
         /// </summary>
         public static string Icon_TargetFlowBlock_Tooltip
@@ -363,17 +374,6 @@ namespace FlowBlox.UICore.Resources
             get
             {
                 return ResourceManager.GetString("Icon_UIRequiredForExecution_FieldConfiguration_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This test dataset is required for execution. ähnelt.
-        /// </summary>
-        public static string Icon_UIRequiredForExecution_TestDataset_Tooltip
-        {
-            get
-            {
-                return ResourceManager.GetString("Icon_UIRequiredForExecution_TestDataset_Tooltip", resourceCulture);
             }
         }
         

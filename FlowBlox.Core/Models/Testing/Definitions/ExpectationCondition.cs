@@ -27,8 +27,8 @@ namespace FlowBlox.Core.Models.Testing
 
         private int _index;
 
+        [ActivationCondition(MemberName = nameof(ExpectationConditionTarget), Value = ExpectationConditionTarget.ValueAtIndex)]
         [Display(Name = "ExpectationCondition_Index", Description = "ExpectationCondition_Index_Description", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public int Index
         {
             get => _index;

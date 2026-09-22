@@ -1,4 +1,6 @@
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
@@ -8,9 +10,10 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Toolbox;
+using FlowBlox.Core.Services;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Grid.Elements.Util;
-using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text;
@@ -20,19 +23,26 @@ namespace FlowBlox.Core.Models.Generators
 {
     [Display(Name = "AIPropertyValueGenerationStrategy_DisplayName", 
              Description = "AIPropertyValueGenerationStrategy_Description", ResourceType = typeof(FlowBloxTexts))]
-    [FlowBloxSupportedTypes(typeof(BaseSingleResultFlowBlock))]
+    [FlowBloxSupportedTypes(typeof(BaseResultFlowBlock))]
+    [FlowBloxUIGroup("Global_Groups_Default", 0, ControlAlignment.Top)]
+    [FlowBloxUIGroup("AIPropertyValueGenerationStrategy_Groups_AdditionalSettings", 1)]
     public class AIPropertyValueGenerationStrategy : FlowBloxGenerationStrategyBase
     {
         public AIPropertyValueGenerationStrategy()
             : base()
         {
+            ApplyDefaultPromptTemplate();
+            ApplyDefaultSystemInstruction();
         }
 
         public AIPropertyValueGenerationStrategy(BaseFlowBlock flowBlock)
             : base(flowBlock)
         {
-            if (flowBlock is not BaseSingleResultFlowBlock)
-                throw new ArgumentException(nameof(flowBlock), $"The FlowBlock must be of type \"{typeof(BaseSingleResultFlowBlock).Name}\".");
+            if (flowBlock is not BaseResultFlowBlock)
+                throw new ArgumentException(nameof(flowBlock), $"The FlowBlock must be of type \"{typeof(BaseResultFlowBlock).Name}\".");
+
+            ApplyDefaultPromptTemplate();
+            ApplyDefaultSystemInstruction();
         }
 
         [Required]
@@ -44,7 +54,7 @@ namespace FlowBlox.Core.Models.Generators
 
         [Required]
         [Display(Name = "AIPropertyValueGenerationStrategy_PromptTemplate", Description = "AIPropertyValueGenerationStrategy_PromptTemplate_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
-        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPropertyValueGenerationPrompts))]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPromptTemplates))]
         [FlowBloxFieldSelection(AllowedFieldSelectionModes =
             FieldSelectionModes.Fields |
             FieldSelectionModes.ProjectProperties |
@@ -54,27 +64,22 @@ namespace FlowBlox.Core.Models.Generators
         public string PromptTemplate { get; set; }
 
         [Display(Name = "AIPropertyValueGenerationStrategy_SystemInstruction", Description = "AIPropertyValueGenerationStrategy_SystemInstruction_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
-        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPromptTemplates))]
         [FlowBloxTextBox(MultiLine = true)]
         public string SystemInstruction { get; set; }
 
-        [Display(Name = "AIPropertyValueGenerationStrategy_ModelOverride", Description = "AIPropertyValueGenerationStrategy_ModelOverride_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
+        [Display(Name = "AIPropertyValueGenerationStrategy_ModelOverride", Description = "AIPropertyValueGenerationStrategy_ModelOverride_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPropertyValueGenerationStrategy_Groups_AdditionalSettings", Order = 0)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string ModelOverride { get; set; }
 
-        [Display(Name = "AIPropertyValueGenerationStrategy_Temperature", Description = "AIPropertyValueGenerationStrategy_Temperature_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 6)]
-        public double Temperature { get; set; }
+        [Display(Name = "AIPropertyValueGenerationStrategy_Temperature", Description = "AIPropertyValueGenerationStrategy_Temperature_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPropertyValueGenerationStrategy_Groups_AdditionalSettings", Order = 1)]
+        public double? Temperature { get; set; }
 
-        [Display(Name = "AIPropertyValueGenerationStrategy_MaxTokens", Description = "AIPropertyValueGenerationStrategy_MaxTokens_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 7)]
+        [Display(Name = "AIPropertyValueGenerationStrategy_MaxTokens", Description = "AIPropertyValueGenerationStrategy_MaxTokens_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPropertyValueGenerationStrategy_Groups_AdditionalSettings", Order = 2)]
         public int? MaxTokens { get; set; }
 
-        [Display(Name = "AIPropertyValueGenerationStrategy_TimeoutSecondsOverride", Description = "AIPropertyValueGenerationStrategy_TimeoutSecondsOverride_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 8)]
+        [Display(Name = "AIPropertyValueGenerationStrategy_TimeoutSecondsOverride", Description = "AIPropertyValueGenerationStrategy_TimeoutSecondsOverride_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPropertyValueGenerationStrategy_Groups_AdditionalSettings", Order = 3)]
         public int? TimeoutSecondsOverride { get; set; }
-
-        [Required]
-        [Display(Name = "AIPropertyValueGenerationStrategy_TargetPropertyName", Description = "AIPropertyValueGenerationStrategy_TargetPropertyName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 9)]
-        [FlowBloxTextBox(Suggestions = true, SuggestionMember = nameof(GetPossibleTargetPropertyNames))]
-        public string TargetPropertyName { get; set; }
 
         public List<AIProviderBase> GetPossibleProviders()
         {
@@ -82,17 +87,22 @@ namespace FlowBlox.Core.Models.Generators
             return registry.GetManagedObjects<AIProviderBase>().ToList();
         }
 
-        public IEnumerable<string> GetPossibleTargetPropertyNames()
+        private void ApplyDefaultPromptTemplate()
         {
-            if (Source == null)
-                return Enumerable.Empty<string>();
+            if (!string.IsNullOrWhiteSpace(PromptTemplate))
+                return;
 
-            return Source.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(AITargetPropertyHandler.IsSupportedTargetProperty)
-                .Select(x => x.Name)
-                .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
-                .ToList();
+            PromptTemplate = FlowBloxToolboxResourceProvider.GetToolboxElementContent(
+                ToolboxConstants.AIPromptTemplatesCategory,
+                ToolboxConstants.FlowBloxQuickUpdateConfiguratorName);
+        }
+
+        private void ApplyDefaultSystemInstruction()
+        {
+            if (!string.IsNullOrWhiteSpace(SystemInstruction))
+                return;
+
+            SystemInstruction = ToolboxConstants.SystemFlowBloxQuickUpdatePromptTemplateContent;
         }
 
         public override bool CanExecute(out Dictionary<FlowBloxTestDefinition, List<string>> testDefinitionToMessages, out List<string> messages)
@@ -100,29 +110,14 @@ namespace FlowBlox.Core.Models.Generators
             testDefinitionToMessages = new Dictionary<FlowBloxTestDefinition, List<string>>();
             messages = new List<string>();
 
-            if (Source is not BaseSingleResultFlowBlock)
-                messages.Add($"The source flow block must be of type \"{typeof(BaseSingleResultFlowBlock).Name}\".");
+            if (Source is not BaseResultFlowBlock)
+                messages.Add($"The source flow block must be of type \"{typeof(BaseResultFlowBlock).Name}\".");
 
             if (Provider == null)
                 messages.Add("No AI provider specified.");
 
             if (string.IsNullOrWhiteSpace(PromptTemplate))
                 messages.Add("No prompt template specified.");
-
-            if (string.IsNullOrWhiteSpace(TargetPropertyName))
-                messages.Add("No target property name specified.");
-            else
-            {
-                var targetProperty = AITargetPropertyHandler.GetTargetPropertyInfo(Source, TargetPropertyName);
-                if (targetProperty == null)
-                {
-                    messages.Add($"Could not resolve target property \"{TargetPropertyName}\".");
-                }
-                else if (!AITargetPropertyHandler.IsSupportedTargetProperty(targetProperty))
-                {
-                    messages.Add($"Target property \"{TargetPropertyName}\" must be writable and support AI assignment (string/simple value or structured JSON object/list).");
-                }
-            }
 
             if (Source?.TestDefinitions == null || !Source.TestDefinitions.Any())
                 messages.Add("At least one test case is required.");
@@ -175,17 +170,12 @@ namespace FlowBlox.Core.Models.Generators
 
         public override void Assign(object value)
         {
-            var targetProperty = AITargetPropertyHandler.GetTargetPropertyInfo(Source, TargetPropertyName);
-            if (targetProperty == null)
-                throw new InvalidOperationException($"Could not resolve target property \"{TargetPropertyName}\".");
+            if (Source == null)
+                throw new InvalidOperationException("No source flow block available for FlowBlox Quick Update.");
 
-            var parsedValue = AITargetPropertyHandler.ParseTargetPropertyValue(targetProperty, value);
-            if (!TryAssignCollectionByMutation(targetProperty, parsedValue))
-            {
-                targetProperty.SetValue(Source, parsedValue);
-            }
+            var instructionParserService = FlowBloxServiceLocator.Instance.GetService<IAiResponseInstructionParserService>();
 
-            FlowBloxComponentHelper.RaisePropertyChanged(Source, targetProperty.Name);
+            new FlowBloxQuickUpdateFormat(Source, instructionParserService).Apply(value?.ToString(), Provider);
         }
 
         private string ResolveTemplate(string template, Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)
@@ -198,7 +188,8 @@ namespace FlowBlox.Core.Models.Generators
             resolved = resolved.Replace("$GenerationStrategy::InputFieldValue", BuildGenerationInputText(testResults));
             resolved = resolved.Replace("$GenerationStrategy::TestExpectations", BuildTestExpectationsText(testResults));
             resolved = resolved.Replace("$GenerationStrategy::TestResults", BuildTestResultsText(testResults));
-            resolved = resolved.Replace("$GenerationStrategy::TargetPropertyDescription", AITargetPropertyHandler.BuildTargetPropertyDescription(Source, TargetPropertyName));
+            resolved = resolved.Replace("$GenerationStrategy::FlowBloxQuickUpdateSchema", FlowBloxQuickUpdateSchemaProvider.BuildSchema(Source));
+            resolved = resolved.Replace("$GenerationStrategy::FlowBloxQuickUpdateFormat", BuildQuickUpdateFormatText());
             resolved = resolved.Replace("$GenerationStrategy::FlowBlockDescriptions", BuildFlowBlockDescriptions());
 
             resolved = ReplaceFieldTokensWithTestValues(resolved, testResults);
@@ -283,6 +274,18 @@ namespace FlowBlox.Core.Models.Generators
             }
 
             return input;
+        }
+
+        private static string BuildQuickUpdateFormatText()
+        {
+            return """
+                   Return a JSON object with JsonContract set to "FlowBloxQuickUpdate".
+                   Put the exact FlowBlox property names to update into the Properties object.
+                   If a property is omitted, it remains unchanged.
+                   Collections must always be returned completely; existing collection items are replaced by the provided list.
+                   For enum values, return the enum name as a string.
+                   Example: { "JsonContract": "FlowBloxQuickUpdate", "Properties": { "PropertyName": "value", "EnumProperty": "EnumValue" } }
+                   """;
         }
 
         private string BuildTestResultsText(Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)
@@ -375,34 +378,6 @@ namespace FlowBlox.Core.Models.Generators
             }
 
             return sb.ToString().Trim();
-        }
-
-        private bool TryAssignCollectionByMutation(PropertyInfo targetProperty, object? parsedValue)
-        {
-            if (targetProperty.PropertyType == typeof(string))
-                return false;
-
-            if (!typeof(System.Collections.IEnumerable).IsAssignableFrom(targetProperty.PropertyType))
-                return false;
-
-            var existingCollection = targetProperty.GetValue(Source) as System.Collections.IList;
-            if (existingCollection == null)
-                return false;
-
-            var newItems = (parsedValue as System.Collections.IEnumerable)?.Cast<object?>().ToList();
-            if (parsedValue != null && newItems == null)
-                return false;
-
-            existingCollection.Clear();
-            if (newItems != null)
-            {
-                foreach (var item in newItems)
-                {
-                    existingCollection.Add(item);
-                }
-            }
-
-            return true;
         }
 
         private string BuildFlowBlockDescriptions()

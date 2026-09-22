@@ -101,7 +101,7 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         private static bool IsUiOnlyProperty(string propertyName)
-            => propertyName == nameof(FlowBlockTestDataset.UIRequiredForExecution) ||
+            => propertyName == nameof(FlowBlockTestDataset.UIAssociatedFlowBlockRequiredForExecution) ||
                propertyName == nameof(FlowBlockTestDataset.UIIsTargetFlowBlock) ||
                propertyName == nameof(FlowBlockTestDataset.UIIsTargetNeighbour) ||
                propertyName == nameof(FlowBlockTestDataset.UIIsVisibleInCurrentContext) ||

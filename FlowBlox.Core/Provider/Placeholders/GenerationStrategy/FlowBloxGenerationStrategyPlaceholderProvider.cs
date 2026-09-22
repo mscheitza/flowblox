@@ -28,9 +28,15 @@ namespace FlowBlox.Core.Provider.Placeholders.GenerationStrategy
                 },
                 new FlowBloxGenerationStrategyPlaceholderElement
                 {
-                    Key = "TargetPropertyDescription",
-                    DisplayName = "Target property description",
-                    Description = "Data structure description of the target property (collection/class, properties, property types, supported types). Important for structured properties or lists."
+                    Key = "FlowBloxQuickUpdateSchema",
+                    DisplayName = "FlowBlox Quick Update schema",
+                    Description = "Minimal schema of configurable source flow block properties for the FlowBlox Quick Update JSON format."
+                },
+                new FlowBloxGenerationStrategyPlaceholderElement
+                {
+                    Key = "FlowBloxQuickUpdateFormat",
+                    DisplayName = "FlowBlox Quick Update format",
+                    Description = "Output format for updating one or more configurable source flow block properties."
                 },
                 new FlowBloxGenerationStrategyPlaceholderElement
                 {

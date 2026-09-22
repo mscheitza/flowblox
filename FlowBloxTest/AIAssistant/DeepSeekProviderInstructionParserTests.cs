@@ -1,5 +1,5 @@
-using FlowBlox.AIAssistant.Services;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers;
+using FlowBlox.Core.Services;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBloxTest.AIAssistant
@@ -10,7 +10,7 @@ namespace FlowBloxTest.AIAssistant
         [TestMethod]
         public void Parse_MapsDsmlToolCallsToAssistantInstructionForDeepSeek()
         {
-            var parser = new AiAssistantInstructionParser();
+            var parser = new AiResponseInstructionParserService();
             var output =
                 "<||DSML||tool_calls>" +
                 "<||DSML||invoke name=\"FlowBloxAIToolApi-SearchFlowBlock\">" +
@@ -43,7 +43,7 @@ namespace FlowBloxTest.AIAssistant
         [TestMethod]
         public void Parse_DoesNotUseDsmlProviderParserForOtherProviders()
         {
-            var parser = new AiAssistantInstructionParser();
+            var parser = new AiResponseInstructionParserService();
             const string output =
                 "<||DSML||tool_calls>" +
                 "<||DSML||invoke name=\"SearchFlowBlock\">" +
@@ -59,7 +59,7 @@ namespace FlowBloxTest.AIAssistant
         [TestMethod]
         public void Parse_ToleratesEscapedToolCallsTagAndClosingTagsForDeepSeek()
         {
-            var parser = new AiAssistantInstructionParser();
+            var parser = new AiResponseInstructionParserService();
             const string output =
                 "<||DSML||tool\\_calls>" +
                 "<||DSML||invoke name=\"SearchFlowBlock\">" +
@@ -96,7 +96,7 @@ namespace FlowBloxTest.AIAssistant
         [TestMethod]
         public void Parse_TreatsDeepSeekDsmlAsToolCallsBeforeEmbeddedJson()
         {
-            var parser = new AiAssistantInstructionParser();
+            var parser = new AiResponseInstructionParserService();
             const string marker = "\uFF5C\uFF5CDSML\uFF5C\uFF5C";
             var output =
                 $"<{marker}tool_calls>" +

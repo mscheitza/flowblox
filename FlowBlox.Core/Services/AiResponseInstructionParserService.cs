@@ -1,13 +1,14 @@
-using FlowBlox.Core.Util;
+using FlowBlox.Core.Models;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
+using FlowBlox.Core.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace FlowBlox.AIAssistant.Services
+namespace FlowBlox.Core.Services
 {
-    internal sealed class AiAssistantInstructionParser
+    public sealed class AiResponseInstructionParserService : IAiResponseInstructionParserService
     {
-        public AssistantInstructionParseResult Parse(string output, AIProviderBase? provider = null)
+        public AiResponseInstructionParseResult Parse(string output, AIProviderBase? provider = null)
         {
             if (provider?.TryParseInstruction(output, null, out var providerInstructionJson) == true)
                 return ParseInstructionJson(providerInstructionJson, output);
@@ -15,7 +16,7 @@ namespace FlowBlox.AIAssistant.Services
             var jsonResult = ParseFirstJsonObject(output);
             if (jsonResult.JsonObject == null)
             {
-                return new AssistantInstructionParseResult
+                return new AiResponseInstructionParseResult
                 {
                     ResponseContent = output ?? string.Empty,
                     Exception = jsonResult.Exception
@@ -25,9 +26,9 @@ namespace FlowBlox.AIAssistant.Services
             return ParseInstructionJson(jsonResult.JsonObject, output);
         }
 
-        private static AssistantInstructionParseResult ParseInstructionJson(JObject root, string output)
+        private static AiResponseInstructionParseResult ParseInstructionJson(JObject root, string output)
         {
-            var instruction = new AssistantInstruction
+            var instruction = new AiResponseInstruction
             {
                 AssistantMessage = root.Value<string>("assistantMessage")
                     ?? root.Value<string>("message")
@@ -45,7 +46,7 @@ namespace FlowBlox.AIAssistant.Services
                     if (string.IsNullOrWhiteSpace(toolName))
                         continue;
 
-                    instruction.ToolCalls.Add(new AssistantToolCall
+                    instruction.ToolCalls.Add(new AiResponseToolCall
                     {
                         ToolName = toolName,
                         Arguments = token["arguments"] as JObject ?? new JObject()
@@ -57,7 +58,7 @@ namespace FlowBlox.AIAssistant.Services
                 var toolName = root.Value<string>("toolName") ?? root.Value<string>("tool") ?? string.Empty;
                 if (!string.IsNullOrWhiteSpace(toolName))
                 {
-                    instruction.ToolCalls.Add(new AssistantToolCall
+                    instruction.ToolCalls.Add(new AiResponseToolCall
                     {
                         ToolName = toolName,
                         Arguments = root["arguments"] as JObject ?? new JObject()
@@ -65,7 +66,7 @@ namespace FlowBlox.AIAssistant.Services
                 }
             }
 
-            return new AssistantInstructionParseResult
+            return new AiResponseInstructionParseResult
             {
                 Instruction = instruction,
                 JsonObject = root,
@@ -73,11 +74,11 @@ namespace FlowBlox.AIAssistant.Services
             };
         }
 
-        public AssistantInstructionParseResult ParseFirstJsonObject(string output)
+        public AiResponseInstructionParseResult ParseFirstJsonObject(string output)
         {
             if (string.IsNullOrWhiteSpace(output))
             {
-                return new AssistantInstructionParseResult
+                return new AiResponseInstructionParseResult
                 {
                     ResponseContent = output ?? string.Empty,
                     Exception = new FormatException("Assistant response was empty.")
@@ -88,7 +89,7 @@ namespace FlowBlox.AIAssistant.Services
             {
                 if (!TextHelper.TrySubstringFromFirstOccurrence(output, '{', out var objectCandidate) || string.IsNullOrWhiteSpace(objectCandidate))
                 {
-                    return new AssistantInstructionParseResult
+                    return new AiResponseInstructionParseResult
                     {
                         ResponseContent = output,
                         Exception = new FormatException("Assistant response did not contain a JSON object.")
@@ -111,14 +112,14 @@ namespace FlowBlox.AIAssistant.Services
                     var token = JToken.ReadFrom(jsonReader);
                     if (token is JObject obj)
                     {
-                        return new AssistantInstructionParseResult
+                        return new AiResponseInstructionParseResult
                         {
                             JsonObject = obj,
                             ResponseContent = output
                         };
                     }
 
-                    return new AssistantInstructionParseResult
+                    return new AiResponseInstructionParseResult
                     {
                         ResponseContent = output,
                         Exception = new FormatException("First JSON token was not an object.")
@@ -127,14 +128,14 @@ namespace FlowBlox.AIAssistant.Services
             }
             catch (Exception ex)
             {
-                return new AssistantInstructionParseResult
+                return new AiResponseInstructionParseResult
                 {
                     ResponseContent = output,
                     Exception = ex
                 };
             }
 
-            return new AssistantInstructionParseResult
+            return new AiResponseInstructionParseResult
             {
                 ResponseContent = output,
                 Exception = new FormatException("Assistant response did not contain a JSON object.")

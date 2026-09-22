@@ -10,10 +10,17 @@ namespace FlowBlox.UICore.Views
     /// </summary>
     public partial class ExtensionsWindow : MetroWindow
     {
-        public ExtensionsWindow(FlowBloxProject project = null)
+        public ExtensionsWindow(
+            FlowBloxProject project = null,
+            Action<FlowBloxProject> prepareProjectForSave = null,
+            Action<FlowBloxProject> restoreProjectAfterSaveAttempt = null)
         {
             InitializeComponent();
-            DataContext = new ExtensionsViewModel(this, project);
+            DataContext = new ExtensionsViewModel(
+                this,
+                project,
+                prepareProjectForSave,
+                restoreProjectAfterSaveAttempt);
         }
 
         private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)

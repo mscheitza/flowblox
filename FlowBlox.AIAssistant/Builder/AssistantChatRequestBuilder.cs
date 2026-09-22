@@ -1,6 +1,9 @@
 using FlowBlox.AIAssistant.Constants;
 using FlowBlox.AIAssistant.Services;
+using FlowBlox.Core.DependencyInjection;
+using FlowBlox.Core.Models;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
+using FlowBlox.Core.Services;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Newtonsoft.Json;
@@ -11,6 +14,8 @@ namespace FlowBlox.AIAssistant.Builder
     internal static class AssistantChatRequestBuilder
     {
         private const string ToolPluginName = "FlowBloxAIToolApi";
+        private static readonly IAiResponseInstructionParserService InstructionParserService =
+            FlowBloxServiceLocator.Instance.GetService<IAiResponseInstructionParserService>();
 
         public static AssistantChatRequestBuildResult Build(
             string systemPrompt,
@@ -189,10 +194,12 @@ namespace FlowBlox.AIAssistant.Builder
             });
         }
 
-        private static List<FunctionCallContent> BuildFunctionCalls(string assistantRequest, int sessionMessageIndex)
+        private static List<FunctionCallContent> BuildFunctionCalls(
+            string assistantRequest,
+            int sessionMessageIndex)
         {
-            var parseResult = new AiAssistantInstructionParser().Parse(assistantRequest);
-            var toolCalls = parseResult.Instruction?.ToolCalls ?? new List<AssistantToolCall>();
+            var parseResult = InstructionParserService.Parse(assistantRequest);
+            var toolCalls = parseResult.Instruction?.ToolCalls ?? new List<AiResponseToolCall>();
             var functionCalls = new List<FunctionCallContent>();
 
             for (var i = 0; i < toolCalls.Count; i++)

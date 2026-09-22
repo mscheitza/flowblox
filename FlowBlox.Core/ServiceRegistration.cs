@@ -18,6 +18,7 @@ namespace FlowBlox.Core
             serviceCollection.AddSingleton<IFlowBloxCategoryRegistrationService, FlowBlockCategoryRegistrationService>();
             serviceCollection.AddSingleton<IFlowBlockToolboxRegistrationService, FlowBlockToolboxRegistrationService>();
             serviceCollection.AddSingleton<IFlowBloxLegacyTypeMappingService, FlowBloxCoreLegacyTypeMappingService>();
+            serviceCollection.AddSingleton<IAiResponseInstructionParserService, AiResponseInstructionParserService>();
             serviceCollection.AddTransient<IRuntimeInterceptor, RuntimeDebuggingInterceptor>();
             serviceCollection.AddTransient<IRuntimeInterceptor, RuntimeNotificationInterceptor>();
             serviceCollection.AddSingleton<IRuntimeNotificationProvider, EmailRuntimeNotificationProvider>();

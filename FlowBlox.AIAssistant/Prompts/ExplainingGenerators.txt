@@ -4,15 +4,14 @@ Terminology note:
 - "Generator" means a value-generation strategy under `GenerationStrategies` (test-driven), not a dedicated generator flow block type.
 
 Purpose of generators:
-- Derive a property value from test input/output evidence.
-- Run when required test execution fails.
-- Write the generated value to the configured target property (one-shot assignment).
+- Configure a flow block from test input/output evidence so that executing it with the generation input field content produces result dataset(s) that satisfy the defined test expectations.
+- Run when required test execution fails or when explicitly triggered.
 
 Preconditions:
 - Suitable test cases exist for the target flow block.
 - A compatible generation strategy exists in the target flow block's `GenerationStrategies`.
-- Input field and target property are configured.
-- At the target flow block, define at least two expectations: one value expectation and one dataset-count expectation.
+- Every strategy inherits required `FlowBloxGenerationStrategyBase.InputField`. For a strategy whose source is a `BasePipeFlowBlock`, this value is copied from the source FlowBlock and kept synchronized when that FlowBlock's `InputField` changes; configure the FlowBlock input rather than duplicating the assignment on the strategy.
+- Expectations describe the intended generator output and are explicit generation evidence, not only pass/fail assertions. Configure meaningful expected values/counts on each suitable target entry; AI property generation includes them in its generation prompt. Sequence Detection specifically requires an expected extracted value plus a `NumberOfDatasets` expectation.
 
 Setup order:
 0. Discover available generator types when unclear:
@@ -30,32 +29,33 @@ Setup order:
 5. Configure strategy details via `UpdateFlowBlock` (nested strategy path):
 - provider,
 - input field,
-- target property,
 - prompt/template options.
 Hint for `AIPropertyValueGenerationStrategy` prompt design:
+- New `AIPropertyValueGenerationStrategy` instances are prefilled with the generic `FlowBlox Quick Update Configurator` prompt. Usually do not set the prompt again after creation unless the user explicitly wants to customize it.
 - If unsure how to structure the prompt with input value and test expectations, use `GetToolboxEntries` for toolbox category `AIPropertyValueGenerationPrompts` and adapt a fitting template.
 - For `AIPropertyValueGenerationStrategy`, prefer toolbox templates first; do not invent prompt-template assumptions when a fitting toolbox template exists.
-- For structured target properties (for example Start/End pattern lists), require JSON-only output and include `$GenerationStrategy::TargetPropertyDescription` in the prompt template.
+- Use `$GenerationStrategy::FlowBloxQuickUpdateSchema` and `$GenerationStrategy::FlowBloxQuickUpdateFormat` so the AI returns the unified FlowBlox Quick Update JSON contract.
 6. Execute tests / runtime as requested by the user.
    Preferred troubleshooting sequence: run `RunGenerationStrategies` first; only run `RunTestDefinition` when detailed test protocol/results are needed.
 
-Minimum expectations at target flow block:
-- Value expectation: target `FirstValue` or `AnyValue`, operator `ComparisonOperator.Equals`, expected value provided.
+Generator evidence at the target flow block:
+- Recommended value expectation: target `FirstValue` or `AnyValue`, operator `ComparisonOperator.Equals`, expected value provided.
 - Tip: Instead of `AnyValue`, prefer selection mode `UserInput_ExpectedValue` when downstream flow blocks should continue execution, because it combines selection and expectation.
 - Dataset-count expectation: target `NumberOfDatasets`, operator `ComparisonOperator.Equals`, expected count provided.
-- More expectation conditions usually improve generator quality.
+- These expectations are useful for every generator because they describe the intended result; more precise conditions usually improve generator quality. `NumberOfDatasets` is mandatory for Sequence Detection and useful output-shape context for other strategies.
 
 Minimum test-case requirements:
-- `AIPropertyValueGenerationStrategy`: at least 1 suitable test case.
-- `SequenceDetectionGenerationStrategy`: at least 2 automatically executable test cases.
+- `AIPropertyValueGenerationStrategy`: at least 1 suitable `FlowBloxTestDefinition` linked to the target.
+- `SequenceDetectionGenerationStrategy`: at least 2 suitable `FlowBloxTestDefinition` instances linked to the same target (the code reports these as automatically executed test cases). Multiple target rows inside one definition still count as one case for that target.
 
 Sequence detection tip (complex hierarchical content such as hard-to-read DOM/web content):
 - Use `SequenceDetectionFlowBlock` with `SequenceDetectionGenerationStrategy` when XPath/CSS/Regex/Start-End approaches are unstable or hard to maintain.
 - `SequenceDetectionGenerationStrategy` is supported only on `SequenceDetectionFlowBlock` (`FlowBloxSupportedTypes`).
 - Practical setup:
   1. Ensure at least 2 linked test definitions exist on the same `SequenceDetectionFlowBlock`.
-  2. Ensure these test definitions contain expected value + `NumberOfDatasets` expectation for the block result.
+  2. In every definition, ensure the automatically synchronized `InputField` receives a non-empty test value and the SequenceDetection entry contains expected value + `NumberOfDatasets` expectation for its single result configuration.
   3. Create/configure `SequenceDetectionGenerationStrategy` and run `RunGenerationStrategies`.
+- Shared-branch optimization: two SequenceDetection sibling targets after the same WebEvent may reuse the same two test definitions. Link both definitions to both targets and configure each target row's own expected value/count. This avoids duplicate browser scenarios, but does not reduce the minimum below two definitions.
 - Runtime-start auto-regeneration (`FlowBloxTestDefinition.RequiredForExecution=true`) is optional and can be expensive for WebBrowser/WebEvent chains.
 - Default behavior: do not enable `RequiredForExecution` automatically; inform the user and enable only on explicit request.
 
@@ -63,13 +63,11 @@ Use-Cases / Examples:
 1. Happy path (simple target property):
 - Create `AIPropertyValueGenerationStrategy` on the target flow block.
 - Link/select the strategy input field.
-- Use a fitting prompt template from `GetToolboxEntries` (for example Regex/XPath template) and set target property.
-- Run tests/generation; generated value is assigned to the simple target property.
-2. Special use-case (complex/structured target property):
-- Example: `StartEndPatternFlowBlock.StartEndPatterns`.
-- Provide $GenerationStrategy::TargetPropertyDescription in the prompt so the AI sees the full target schema.
-- Convenience: You can also use the toolbox template `Start/End Pattern JSON Generator`.
-- Require JSON-only output; AI returns JSON matching the schema.
-- Generator value can then be deserialized into the target property type and assigned.
+- Use the `FlowBlox Quick Update Configurator` toolbox template.
+- Run tests/generation; generated Quick Update JSON updates the listed configurable flow block properties.
+2. Special use-case (collection configuration):
+- Example: `StartEndPatternSelectorFlowBlock.StartEndPatterns`.
+- The Quick Update schema lists allowed collection item properties.
+- The AI must return the complete collection in the `Properties` object; existing items are replaced.
 
 Do not create or wire generators unless the user explicitly requests it.

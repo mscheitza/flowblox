@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
@@ -14,10 +15,15 @@ using System.ComponentModel.DataAnnotations;
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 {
     [FlowBloxUIGroup("AIPromptFlowBlock_Groups_Request", 0)]
-    [FlowBloxUIGroup("AIPromptFlowBlock_Groups_Output", 1)]
+    [FlowBloxSpecialExplanation("AIPromptFlowBlock_SpecialExplanation_OutputFormat", Icon = SpecialExplanationIcon.Information)]
     [Display(Name = "AIPromptFlowBlock_DisplayName", Description = "AIPromptFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class AIPromptFlowBlock : BaseSingleResultFlowBlock
     {
+        public AIPromptFlowBlock()
+        {
+            ApplyDefaultSystemInstruction();
+        }
+
         [Required]
         [Display(Name = "AIPromptFlowBlock_Provider", Description = "AIPromptFlowBlock_Provider_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.Association,
@@ -27,12 +33,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
 
         [Required]
         [Display(Name = "AIPromptFlowBlock_PromptTemplate", Description = "AIPromptFlowBlock_PromptTemplate_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPromptFlowBlock_Groups_Request", Order = 1)]
-        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPromptTemplates))]
         [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         public string PromptTemplate { get; set; }
 
         [Display(Name = "AIPromptFlowBlock_SystemInstruction", Description = "AIPromptFlowBlock_SystemInstruction_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPromptFlowBlock_Groups_Request", Order = 2)]
-        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPromptTemplates))]
         [FlowBloxTextBox(MultiLine = true)]
         public string SystemInstruction { get; set; }
 
@@ -41,7 +47,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
         public string ModelOverride { get; set; }
 
         [Display(Name = "AIPromptFlowBlock_Temperature", Description = "AIPromptFlowBlock_Temperature_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPromptFlowBlock_Groups_Request", Order = 4)]
-        public double Temperature { get; set; }
+        public double? Temperature { get; set; }
 
         [Display(Name = "AIPromptFlowBlock_MaxTokens", Description = "AIPromptFlowBlock_MaxTokens_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPromptFlowBlock_Groups_Request", Order = 5)]
         public int? MaxTokens { get; set; }
@@ -66,6 +72,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
         {
             var registry = FlowBloxRegistryProvider.GetRegistry();
             return registry.GetManagedObjects<AIProviderBase>().ToList();
+        }
+
+        private void ApplyDefaultSystemInstruction()
+        {
+            if (!string.IsNullOrWhiteSpace(SystemInstruction))
+                return;
+
+            SystemInstruction = ToolboxConstants.SystemJsonOutputPromptTemplateContent;
         }
 
         public override bool Execute(BaseRuntime runtime, object data)

@@ -26,6 +26,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string SpecialFlowRecursionKey = "explaining_flow_recursion";
         public const string SpecialExtensionsKey = "explaining_extensions";
         public const string SpecialProjectSpaceKey = "explaining_project_space";
+        public const string SpecialTaskSchedulingKey = "explaining_task_scheduling";
         public const string SpecialUserInterfaceKey = "explaining_user_interface";
         public const string VersionNotesKey = "explaining_version_notes";
 
@@ -146,6 +147,12 @@ namespace FlowBlox.AIAssistant.Services
                     "FlowBlox.AIAssistant.Prompts.ExplainingProjectSpace.txt",
                     "Special: on-demand guidance for Project Space, project sharing, stable versions, and remote execution by Project GUID.",
                     false),
+                [SpecialTaskSchedulingKey] = new PromptEntryDefinition(
+                    SpecialTaskSchedulingKey,
+                    "Explaining Task Scheduling and Service Execution",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingTaskScheduling.txt",
+                    "Special: on-demand guidance for scheduled project executions and running a project continuously as a service.",
+                    false),
                 [SpecialUserInterfaceKey] = new PromptEntryDefinition(
                     SpecialUserInterfaceKey,
                     "Explaining User Interface",
@@ -224,6 +231,16 @@ namespace FlowBlox.AIAssistant.Services
             var result = text;
             foreach (var url in GlobalUrls.GetAll())
                 result = result.Replace("{{" + url.Key + "}}", url.Value, StringComparison.Ordinal);
+
+            var currentDirectory = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var systemDirectory = Environment.GetFolderPath(Environment.SpecialFolder.System);
+            var serviceInstallerPath = string.IsNullOrWhiteSpace(systemDirectory)
+                ? "sc.exe"
+                : Path.Combine(systemDirectory, "sc.exe");
+
+            result = result.Replace("{{CURRENT_DIRECTORY}}", currentDirectory, StringComparison.Ordinal);
+            result = result.Replace("{{CURRENT_DIRECTORY_JSON}}", currentDirectory.Replace("\\", "\\\\", StringComparison.Ordinal), StringComparison.Ordinal);
+            result = result.Replace("{{SERVICE_INSTALLER_PATH}}", serviceInstallerPath, StringComparison.Ordinal);
 
             return result;
         }

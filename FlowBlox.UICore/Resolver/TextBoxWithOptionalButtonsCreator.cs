@@ -37,6 +37,9 @@ namespace FlowBlox.UICore.Resolver
         {
             var textAttribute = property.GetCustomAttribute<FlowBloxTextBoxAttribute>();
             var fieldSelectionAttribute = property.GetCustomAttribute<FlowBloxFieldSelectionAttribute>();
+            var buttonVerticalAlignment = textAttribute?.MultiLine == true
+                ? VerticalAlignment.Top
+                : VerticalAlignment.Center;
             FrameworkElement baseTextBox;
 
             if (textAttribute?.IsCodingMode == true)
@@ -109,7 +112,7 @@ namespace FlowBlox.UICore.Resolver
                     Width = 24,
                     Height = 24,
                     Margin = new Thickness(5, 0, 0, 0),
-                    VerticalAlignment = VerticalAlignment.Center,
+                    VerticalAlignment = buttonVerticalAlignment,
                     ToolTip = FlowBloxResourceUtil.GetLocalizedString("TextBoxWithOptionalButtonsCreator_EnableFileSelection_Tooltip", typeof(FlowBloxTexts)),
                     IsEnabled = !readOnly
                 };
@@ -158,7 +161,7 @@ namespace FlowBlox.UICore.Resolver
                     Width = 24,
                     Height = 24,
                     Margin = new Thickness(5, 0, 0, 0),
-                    VerticalAlignment = VerticalAlignment.Center,
+                    VerticalAlignment = buttonVerticalAlignment,
                     ToolTip = FlowBloxResourceUtil.GetLocalizedString("TextBoxWithOptionalButtonsCreator_EnableFolderSelection_Tooltip", typeof(FlowBloxTexts)),
                     IsEnabled = !readOnly
                 };
@@ -206,7 +209,7 @@ namespace FlowBlox.UICore.Resolver
                     },
                     Margin = new Thickness(4, 0, 0, 0),
                     Padding = new Thickness(6, 0, 6, 0),
-                    VerticalAlignment = VerticalAlignment.Center,
+                    VerticalAlignment = buttonVerticalAlignment,
                     ToolTip = FlowBloxResourceUtil.GetLocalizedString("TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip", typeof(FlowBloxTexts)),
                     IsEnabled = !readOnly
                 };
@@ -234,7 +237,7 @@ namespace FlowBlox.UICore.Resolver
                     },
                     Margin = new Thickness(4, 0, 0, 0),
                     Padding = new Thickness(6, 0, 6, 0),
-                    VerticalAlignment = VerticalAlignment.Center,
+                    VerticalAlignment = buttonVerticalAlignment,
                     ToolTip = FlowBloxResourceUtil.GetLocalizedString("TextBoxWithOptionalButtonsCreator_EnableToolbox_Tooltip", typeof(FlowBloxTexts)),
                     IsEnabled = !readOnly
                 };

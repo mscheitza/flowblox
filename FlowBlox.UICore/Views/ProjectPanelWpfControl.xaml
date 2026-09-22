@@ -213,6 +213,12 @@
                     <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_AutoLayout}" Margin="5,0,0,0"/>
                 </StackPanel>
             </Button>
+            <Button Command="{Binding ResetNotificationsCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_ResetNotifications}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="BellOffOutline" Width="14" Height="14" Foreground="#F4C542"/>
+                    <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_ResetNotifications}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
             <Separator/>
             <Button Command="{Binding ExecuteRuntimeCommand}" Style="{StaticResource ProjectPanel.ToolbarButton}" ToolTip="{x:Static resources:ProjectPanel.Toolbar_Execute}">
                 <StackPanel Orientation="Horizontal">

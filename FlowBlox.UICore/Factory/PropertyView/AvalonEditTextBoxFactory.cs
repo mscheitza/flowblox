@@ -40,13 +40,21 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 ShowLineNumbers = textAttr.MultiLine,
                 IsReadOnly = _readOnly,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                VerticalScrollBarVisibility = textAttr.MultiLine
+                    ? ScrollBarVisibility.Disabled
+                    : ScrollBarVisibility.Auto,
                 Height = textAttr.MultiLine ? double.NaN : 24,
                 Padding = new Thickness(2),
                 BorderThickness = new Thickness(1),
                 FontFamily = new FontFamily("JetBrains Mono"), 
                 FontSize = 12
             };
+
+            if (textAttr.MultiLine)
+            {
+                ParentScrollViewerMouseWheelForwarder.Register(editor);
+                ParentScrollViewerMouseWheelForwarder.Register(editor.TextArea);
+            }
 
             if (_target is INotifyPropertyChanged inpc)
             {

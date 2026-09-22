@@ -18,6 +18,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/PropertyViewStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -28,7 +29,10 @@
     <DockPanel>
 
         <!-- TabControl -->
-        <TabControl ItemsSource="{Binding VisibleTabs}" Margin="4,0,4,0" DockPanel.Dock="Top">
+        <TabControl ItemsSource="{Binding VisibleTabs}"
+                    Style="{StaticResource FlowBlox.ScrollableHeaderTabControl}"
+                    Margin="4,0,4,0"
+                    DockPanel.Dock="Top">
             <TabControl.Resources>
                 <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
                     <Setter Property="Foreground" Value="DarkSlateGray"/>
@@ -51,32 +55,6 @@
                 </Style>
             </TabControl.Resources>
 
-            <TabControl.Template>
-                <ControlTemplate TargetType="{x:Type TabControl}">
-                    <Grid KeyboardNavigation.TabNavigation="Local">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
-                                      VerticalScrollBarVisibility="Disabled" 
-                                      Grid.Row="0">
-                            <ScrollViewer.Resources>
-                                <Style TargetType="ScrollBar">
-                                    <Setter Property="MinHeight" Value="10" />
-                                    <Setter Property="Height" Value="5" />
-                                    <Setter Property="MinHeight" Value="5" />
-                                </Style>
-                                <Style TargetType="RepeatButton" x:Key="ScrollBarButtonStyle">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </Style>
-                            </ScrollViewer.Resources>
-                            <TabPanel IsItemsHost="True" Margin="2,0,2,0" />
-                        </ScrollViewer>
-                        <ContentPresenter Grid.Row="1" ContentSource="SelectedContent" />
-                    </Grid>
-                </ControlTemplate>
-            </TabControl.Template>
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding TabTitle}"

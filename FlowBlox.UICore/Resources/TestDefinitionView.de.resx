@@ -198,8 +198,8 @@
   <data name="Icon_UIRequiredForExecution_FieldConfiguration_Tooltip" xml:space="preserve">
     <value>Diese Testkonfiguration ist für die Ausführung erforderlich.</value>
   </data>
-  <data name="Icon_UIRequiredForExecution_TestDataset_Tooltip" xml:space="preserve">
-    <value>Dieser Testdatensatz ist für die Ausführung erforderlich.</value>
+  <data name="Icon_AssociatedFlowBlockRequiredForExecution_Tooltip" xml:space="preserve">
+    <value>Ein ausgeführter Flow-Block benötigt diesen zugeordneten Flow-Block. Aktiviere dessen Ausführung, damit der erforderliche Laufzeitzustand initialisiert wird.</value>
   </data>
   <data name="Icon_TargetFlowBlock_Tooltip" xml:space="preserve">
     <value>Dies ist der aktuelle Ziel-Flow-Block. Hier endet der Test, und die Testergebnisse werden von diesem Flow-Block gelesen. Dieser Flow-Block muss bei der Testausführung in diesem Kontext ausgeführt werden.</value>

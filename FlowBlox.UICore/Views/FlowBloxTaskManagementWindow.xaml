@@ -199,7 +199,8 @@
                         BorderBrush="#D8DDE3"
                         BorderThickness="1"
                         Padding="10">
-                    <TabControl Visibility="{Binding IsTaskSelected, Converter={StaticResource BoolToVisibilityConverter}}"
+                    <TabControl Style="{StaticResource FlowBlox.ScrollableHeaderTabControl}"
+                                Visibility="{Binding IsTaskSelected, Converter={StaticResource BoolToVisibilityConverter}}"
                                 SelectedIndex="{Binding SelectedDetailTabIndex, Mode=TwoWay}">
                         <TabItem Header="{x:Static resources:FlowBloxTaskManagementWindow.Tab_Project}">
                             <TabItem.HeaderTemplate>
@@ -423,6 +424,65 @@
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </ScrollViewer>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="{x:Static resources:FlowBloxTaskManagementWindow.Tab_OptionOverrides}">
+                            <TabItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconMaterial Kind="TuneVariant"
+                                                                    Width="16"
+                                                                    Height="16"
+                                                                    Margin="0,0,8,0"
+                                                                    VerticalAlignment="Center"
+                                                                    Foreground="#8055A5"/>
+                                        <TextBlock Text="{Binding}"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Padding="0,5"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabItem.HeaderTemplate>
+                            <Grid Margin="0,8,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <ToolBar Grid.Row="0">
+                                    <Button Command="{Binding AddOptionOverrideCommand}"
+                                            ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_AddOptionOverride}">
+                                        <iconPacks:PackIconMaterial Kind="Plus"
+                                                                    Style="{StaticResource TaskMgmt.Icon.Green}"/>
+                                    </Button>
+                                    <Button Command="{Binding RemoveOptionOverrideCommand}"
+                                            Margin="6,0,0,0"
+                                            ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_RemoveOptionOverride}">
+                                        <iconPacks:PackIconMaterial Kind="DeleteOutline"
+                                                                    Style="{StaticResource TaskMgmt.Icon.Red}"/>
+                                    </Button>
+                                </ToolBar>
+                                <DataGrid Grid.Row="1"
+                                          ItemsSource="{Binding OptionOverrides}"
+                                          SelectedItem="{Binding SelectedOptionOverride}"
+                                          AutoGenerateColumns="False"
+                                          CanUserAddRows="False"
+                                          CanUserDeleteRows="False"
+                                          Margin="0,6,0,0">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_OptionKey}"
+                                                                Width="*">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <ComboBox ItemsSource="{Binding AvailableOptionKeys}"
+                                                              SelectedItem="{Binding OptionKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn Header="{x:Static resources:FlowBloxTaskManagementWindow.Header_OptionValue}"
+                                                            Binding="{Binding StringValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Width="*"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Grid>
                         </TabItem>
                     </TabControl>

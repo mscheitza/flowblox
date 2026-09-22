@@ -18,9 +18,11 @@ namespace FlowBlox.UICore.ViewModels
         private BaseFlowBlock _currentFlowBlock;
         private ObservableCollection<RuntimeLog> _runtimeLogs;
         private Window _ownerWindow;
+        private readonly SynchronizationContext _uiContext;
 
         public GenerationViewModel()
         {
+            _uiContext = SynchronizationContext.Current;
             OpenInEditorCommand = new RelayCommand(OpenInEditor);
             RuntimeLogs = new ObservableCollection<RuntimeLog>();
             BindingOperations.EnableCollectionSynchronization(RuntimeLogs, new object());
@@ -81,7 +83,7 @@ namespace FlowBlox.UICore.ViewModels
 
             try
             {
-                await generationStrategyExecutor.ExecuteGenerationAsync();
+                await Task.Run(() => generationStrategyExecutor.ExecuteGenerationAsync());
             }
             catch (Exception ex)
             {
@@ -110,8 +112,12 @@ namespace FlowBlox.UICore.ViewModels
                 Message = e.Message,
                 LogLevel = e.LogLevel
             };
-            RuntimeLogs.Add(log);
-            OnPropertyChanged(nameof(RuntimeLogs));
+
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
+            {
+                RuntimeLogs.Add(log);
+                OnPropertyChanged(nameof(RuntimeLogs));
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

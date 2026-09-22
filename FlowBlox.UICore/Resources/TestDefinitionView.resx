@@ -198,8 +198,8 @@
   <data name="Icon_UIRequiredForExecution_FieldConfiguration_Tooltip" xml:space="preserve">
   <value>This test configuration is required for execution.</value>
 </data>
-  <data name="Icon_UIRequiredForExecution_TestDataset_Tooltip" xml:space="preserve">
-  <value>This test dataset is required for execution.</value>
+  <data name="Icon_AssociatedFlowBlockRequiredForExecution_Tooltip" xml:space="preserve">
+  <value>An executed flow block depends on this associated flow block. Enable execution so its required runtime state is initialized.</value>
 </data>
   <data name="Icon_TargetFlowBlock_Tooltip" xml:space="preserve">
   <value>This is the current target flow block. The test ends here and the test results are read from this flow block. This flow block must be executed for test execution in this context.</value>

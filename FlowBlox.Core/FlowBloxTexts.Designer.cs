@@ -112,7 +112,7 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("AIPromptFlowBlock_Description", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die AI Prompt ähnelt.
         /// </summary>
@@ -121,17 +121,6 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("AIPromptFlowBlock_DisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Output ähnelt.
-        /// </summary>
-        public static string AIPromptFlowBlock_Groups_Output
-        {
-            get
-            {
-                return ResourceManager.GetString("AIPromptFlowBlock_Groups_Output", resourceCulture);
             }
         }
         
@@ -231,6 +220,17 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("AIPromptFlowBlock_Provider_Tooltip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block is configured for AI responses in JSON format by default. JSON is the recommended output format. By adjusting the system instruction, other output formats such as XML can also be used. ähnelt.
+        /// </summary>
+        public static string AIPromptFlowBlock_SpecialExplanation_OutputFormat
+        {
+            get
+            {
+                return ResourceManager.GetString("AIPromptFlowBlock_SpecialExplanation_OutputFormat", resourceCulture);
             }
         }
         
@@ -4749,24 +4749,24 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Required for execution ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expected / manual value ähnelt.
         /// </summary>
-        public static string FlowBloxTestConfiguration_UIRequiredForExecution
+        public static string FlowBloxTestConfiguration_UserInput
         {
             get
             {
-                return ResourceManager.GetString("FlowBloxTestConfiguration_UIRequiredForExecution", resourceCulture);
+                return ResourceManager.GetString("FlowBloxTestConfiguration_UserInput", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die UI-only marker in TestDefinition view indicating this field is required for executable flow blocks. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The expected value or manually supplied field value, depending on the selected mode. ähnelt.
         /// </summary>
-        public static string FlowBloxTestConfiguration_UIRequiredForExecution_Description
+        public static string FlowBloxTestConfiguration_UserInput_Description
         {
             get
             {
-                return ResourceManager.GetString("FlowBloxTestConfiguration_UIRequiredForExecution_Description", resourceCulture);
+                return ResourceManager.GetString("FlowBloxTestConfiguration_UserInput_Description", resourceCulture);
             }
         }
         
@@ -5013,13 +5013,13 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die AI Property Value Prompts ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI Prompt Templates ähnelt.
         /// </summary>
-        public static string FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts
+        public static string FlowBloxToolboxCategory_AIPromptTemplates
         {
             get
             {
-                return ResourceManager.GetString("FlowBloxToolboxCategory_AIPropertyValueGenerationPrompts", resourceCulture);
+                return ResourceManager.GetString("FlowBloxToolboxCategory_AIPromptTemplates", resourceCulture);
             }
         }
         
@@ -5870,6 +5870,17 @@ namespace FlowBlox.Core
             }
         }
         
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Not applicable ähnelt.
+        /// </summary>
+        public static string Global_NotApplicable
+        {
+            get
+            {
+                return ResourceManager.GetString("Global_NotApplicable", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>

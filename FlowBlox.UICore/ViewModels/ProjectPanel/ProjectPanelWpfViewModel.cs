@@ -9,6 +9,7 @@ using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.ControlFlow;
 using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
@@ -58,6 +59,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private readonly List<BaseFlowBlock> _copiedFlowBlocks = new();
         private readonly Dictionary<FlowBlockNodeViewModel, FlowBloxCreateAction> _pendingInsertedCreateActions = new();
         private readonly Dictionary<FlowBlockNodeViewModel, NodeLayoutSnapshot> _historyActionLayoutSnapshots = new();
+        private readonly Dictionary<FlowBlockNodeViewModel, System.Drawing.Point> _storageLocationSnapshots = new();
         private ProjectChangelist _subscribedChangelist;
 
         public ProjectPanelWpfViewModel()
@@ -76,6 +78,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             SelectUpCommand = new RelayCommand(() => SelectDirectional(Direction.Up), CanEditGrid);
             SelectDownCommand = new RelayCommand(() => SelectDirectional(Direction.Down), CanEditGrid);
             AutoLayoutCommand = new RelayCommand(AutoLayout, () => HasProject() && !IsProjectEditingReadOnly);
+            ResetNotificationsCommand = new RelayCommand(() => ResetNotifications(), () => HasProject() && !IsProjectEditingReadOnly);
             DeleteSelectionCommand = new RelayCommand(DeleteSelection, () => HasProject() && SelectedArrow == null && SelectedNodes.Any() && !IsProjectEditingReadOnly);
             EditSelectionCommand = new RelayCommand(EditSelection, () => SelectedNode != null);
             ExecuteRuntimeCommand = new RelayCommand(() => ExecuteRuntimeRequested?.Invoke(this, EventArgs.Empty), () => CanExecuteRuntime);
@@ -119,6 +122,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         public RelayCommand SelectUpCommand { get; }
         public RelayCommand SelectDownCommand { get; }
         public RelayCommand AutoLayoutCommand { get; }
+        public RelayCommand ResetNotificationsCommand { get; }
         public RelayCommand DeleteSelectionCommand { get; }
         public RelayCommand EditSelectionCommand { get; }
         public RelayCommand ExecuteRuntimeCommand { get; }
@@ -461,6 +465,21 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         {
             foreach (var node in Nodes)
                 node.IsRuntimeFocused = flowBlock != null && ReferenceEquals(node.InternalFlowBlock, flowBlock);
+        }
+
+        public void ResetNotifications(BaseRuntime runtime = null)
+        {
+            if (!HasProject())
+                return;
+
+            foreach (var flowBlock in _registry.GetFlowBlocks().OfType<BaseFlowBlock>())
+            {
+                flowBlock.ResetNotifications(runtime);
+                if (flowBlock is BaseResultFlowBlock resultFlowBlock)
+                    resultFlowBlock.ResetOutputDatasetProcessing(runtime);
+            }
+
+            MarkRuntimeFocus(null);
         }
 
         public void CommitNodeMove(FlowBlockNodeViewModel node, System.Drawing.Point from, System.Drawing.Point to)
@@ -1209,13 +1228,53 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         }
 
         internal void SyncNodeSizesToModel()
+            => SyncNodeSizes(node => node.Height);
+
+        internal void PrepareNodeLocationForStorage()
+        {
+            RestoreNodeLocationAfterStorage();
+
+            foreach (var node in Nodes)
+            {
+                var flowBlock = node.InternalFlowBlock;
+                var originalLocation = flowBlock.Location;
+                _storageLocationSnapshots[node] = originalLocation;
+                node.SetStorageLayoutPropertyChangeSuppressed(true);
+
+                var storageLocationYOffset = node.StorageLocationYOffset;
+                if (storageLocationYOffset > 0d)
+                {
+                    flowBlock.Location = new System.Drawing.Point(
+                        originalLocation.X,
+                        Math.Max(0, originalLocation.Y + (int)Math.Round(storageLocationYOffset)));
+                }
+            }
+        }
+
+        private void SyncNodeSizes(Func<FlowBlockNodeViewModel, double> heightSelector)
         {
             foreach (var node in Nodes)
             {
                 node.InternalFlowBlock.Size = new System.Drawing.Size(
                     (int)Math.Round(node.Width),
-                    (int)Math.Round(node.Height));
+                    (int)Math.Round(heightSelector(node)));
             }
+        }
+
+        internal void RestoreNodeLocationAfterStorage()
+        {
+            if (_storageLocationSnapshots.Count == 0)
+                return;
+
+            foreach (var item in _storageLocationSnapshots)
+            {
+                var node = item.Key;
+                var location = item.Value;
+                node.InternalFlowBlock.Location = location;
+                node.SetStorageLayoutPropertyChangeSuppressed(false);
+            }
+
+            _storageLocationSnapshots.Clear();
         }
 
         private void DeleteSelection()
@@ -1631,6 +1690,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             SelectUpCommand.Invalidate();
             SelectDownCommand.Invalidate();
             AutoLayoutCommand.Invalidate();
+            ResetNotificationsCommand.Invalidate();
             ExecuteRuntimeCommand.Invalidate();
             PauseRuntimeCommand.Invalidate();
             StopRuntimeCommand.Invalidate();

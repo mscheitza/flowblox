@@ -155,6 +155,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 var underlyingType = Nullable.GetUnderlyingType(childProperty.PropertyType);
                 var propertyType = underlyingType ?? childProperty.PropertyType;
                 var textAttribute = childProperty.GetCustomAttribute<FlowBloxTextBoxAttribute>();
+                var activationCondition = childProperty.GetCustomAttribute<ActivationConditionAttribute>();
 
                 if (propertyType == typeof(string) &&
                     textAttribute?.Suggestions == true &&
@@ -208,25 +209,36 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     }
                     else
                     {
-                        var column = new DataGridTextColumn
+                        if (activationCondition != null)
                         {
-                            Header = headerText,
-                            MinWidth = DefaultTextColumnMinWidth,
-                            Binding = new Binding(childProperty.Name)
+                            dataGrid.Columns.Add(ActivationConditionAwareTextboxColumnFactory.Create(
+                                headerText,
+                                childProperty,
+                                activationCondition,
+                                IsPropertyReadOnly(childProperty, uiAttribute)));
+                        }
+                        else
+                        {
+                            var column = new DataGridTextColumn
                             {
-                                Mode = IsPropertyReadOnly(childProperty, uiAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
-                                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                                TargetNullValue = string.Empty
-                            },
-                            IsReadOnly = IsPropertyReadOnly(childProperty, uiAttribute)
-                        };
-                        ApplyCenteredTextColumnStyles(column);
-                        dataGrid.Columns.Add(column);
-                        columnAttributeMap[column] = new FieldSelectionDialogContext
-                        {
-                            UiAttribute = uiAttribute,
-                            FieldSelectionAttribute = fieldSelectionAttribute
-                        };
+                                Header = headerText,
+                                MinWidth = DefaultTextColumnMinWidth,
+                                Binding = new Binding(childProperty.Name)
+                                {
+                                    Mode = IsPropertyReadOnly(childProperty, uiAttribute) ? BindingMode.OneWay : BindingMode.TwoWay,
+                                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                                    TargetNullValue = string.Empty
+                                },
+                                IsReadOnly = IsPropertyReadOnly(childProperty, uiAttribute)
+                            };
+                            ApplyCenteredTextColumnStyles(column);
+                            dataGrid.Columns.Add(column);
+                            columnAttributeMap[column] = new FieldSelectionDialogContext
+                            {
+                                UiAttribute = uiAttribute,
+                                FieldSelectionAttribute = fieldSelectionAttribute
+                            };
+                        }
                     }
                 }
                 else if (propertyType.IsEnum)

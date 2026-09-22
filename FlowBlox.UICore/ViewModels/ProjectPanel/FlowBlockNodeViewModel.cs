@@ -31,6 +31,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private bool _isSelected;
         private bool _isReference;
         private bool _isRuntimeFocused;
+        private bool _suppressStorageLayoutPropertyChanges;
         private string _warningMessage = string.Empty;
         private string _errorMessage = string.Empty;
         private readonly FlowBlockNodeCenterPreservationGuard _centerPreservationGuard;
@@ -148,6 +149,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private double RuntimeInfoHeight => HasExecutionIndex ? RowHeight : 0d;
         private double NotificationInfoHeight => HasNotification ? NotificationHeight : 0d;
         private double DesiredHeight => HeaderHeight + (Rows.Count * RowHeight) + RuntimeInfoHeight + NotificationInfoHeight + 8d;
+        internal double StorageLocationYOffset => NotificationInfoHeight / 2d;
 
         public bool ElementSelected => IsSelected;
 
@@ -379,19 +381,44 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             });
 
         private void FlowBlock_OnWarn(BaseRuntime runtime, string message)
-            => SynchronizationContextHelper.PostToUi(_uiContext, () => SetWarning(message));
+        {
+            if (runtime?.ExecutionFlowEnabled == false)
+                return;
+
+            SynchronizationContextHelper.PostToUi(_uiContext, () => SetWarning(message));
+        }
 
         private void FlowBlock_OnError(BaseRuntime runtime, string message)
-            => SynchronizationContextHelper.PostToUi(_uiContext, () => SetError(message));
+        {
+            if (runtime?.ExecutionFlowEnabled == false)
+                return;
+
+            SynchronizationContextHelper.PostToUi(_uiContext, () => SetError(message));
+        }
 
         private void FlowBlock_OnUndoWarn(BaseRuntime runtime)
-            => SynchronizationContextHelper.PostToUi(_uiContext, () => SetWarning(string.Empty));
+        {
+            if (runtime?.ExecutionFlowEnabled == false)
+                return;
+
+            SynchronizationContextHelper.PostToUi(_uiContext, () => SetWarning(string.Empty));
+        }
 
         private void FlowBlock_OnUndoError(BaseRuntime runtime)
-            => SynchronizationContextHelper.PostToUi(_uiContext, () => SetError(string.Empty));
+        {
+            if (runtime?.ExecutionFlowEnabled == false)
+                return;
 
-        private void ResultFlowBlock_OutputDatasetProcessingChanged()
-            => SynchronizationContextHelper.PostToUi(_uiContext, NotifyIterationProgressChanged);
+            SynchronizationContextHelper.PostToUi(_uiContext, () => SetError(string.Empty));
+        }
+
+        private void ResultFlowBlock_OutputDatasetProcessingChanged(BaseRuntime runtime)
+        {
+            if (runtime?.ExecutionFlowEnabled == false)
+                return;
+
+            SynchronizationContextHelper.PostToUi(_uiContext, NotifyIterationProgressChanged);
+        }
 
         private void NotifyIterationProgressChanged()
         {
@@ -401,8 +428,17 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             OnPropertyChanged(nameof(IterationProgressToolTip));
         }
 
+        internal void SetStorageLayoutPropertyChangeSuppressed(bool suppressed)
+            => _suppressStorageLayoutPropertyChanges = suppressed;
+
         private void FlowBlock_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => SynchronizationContextHelper.PostToUi(_uiContext, () => HandleFlowBlockPropertyChanged(e));
+        {
+            if (_suppressStorageLayoutPropertyChanges &&
+                e.PropertyName == nameof(BaseFlowBlock.Location))
+                return;
+
+            SynchronizationContextHelper.PostToUi(_uiContext, () => HandleFlowBlockPropertyChanged(e));
+        }
 
         private void HandleFlowBlockPropertyChanged(PropertyChangedEventArgs e)
         {

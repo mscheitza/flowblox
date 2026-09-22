@@ -626,16 +626,12 @@ namespace FlowBlox.AppWindow
                     {
                         _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
-                        OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
-                        FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
-                        FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
+                        SaveActiveProjectFile(_recentProjectPath);
                     }
                 }
                 else
                 {
-                    OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
-                    FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
-                    FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
+                    SaveActiveProjectFile(_recentProjectPath);
                 }
             }
             catch (Exception ex)
@@ -666,9 +662,7 @@ namespace FlowBlox.AppWindow
                 {
                     _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
-                    OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
-                    FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
-                    FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
+                    SaveActiveProjectFile(_recentProjectPath);
                 }
             }
             catch (Exception Exception)
@@ -715,16 +709,12 @@ namespace FlowBlox.AppWindow
                         {
                             _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
-                            OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
-                            FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
-                            FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
+                            SaveActiveProjectFile(_recentProjectPath);
                         }
                     }
                     else
                     {
-                        OnBeforeSaveProject(FlowBloxProjectManager.Instance.ActiveProject);
-                        FlowBloxProjectManager.Instance.ActiveProject.Save(_recentProjectPath);
-                        FlowBloxProjectManager.Instance.ActiveProjectPath = _recentProjectPath;
+                        SaveActiveProjectFile(_recentProjectPath);
                     }
                 }
             }
@@ -732,9 +722,30 @@ namespace FlowBlox.AppWindow
             this.Close();
         }
 
-        private void OnBeforeSaveProject(FlowBloxProject project)
+        internal void PrepareProjectForSave(FlowBloxProject project)
         {
-            this._dockContentProjectPanel.OnBeforeSaveProject(project);
+            this._dockContentProjectPanel.PrepareProjectForSave(project);
+        }
+
+        internal void RestoreProjectAfterSaveAttempt(FlowBloxProject project)
+        {
+            this._dockContentProjectPanel.RestoreProjectAfterSaveAttempt(project);
+        }
+
+        private void SaveActiveProjectFile(string fileName)
+        {
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            PrepareProjectForSave(project);
+            try
+            {
+                project.Save(fileName);
+            }
+            finally
+            {
+                RestoreProjectAfterSaveAttempt(project);
+            }
+
+            FlowBloxProjectManager.Instance.ActiveProjectPath = fileName;
         }
 
         private void itmOptions_Click(object sender, EventArgs e)
@@ -1428,7 +1439,10 @@ namespace FlowBlox.AppWindow
         private void itmSaveToProjectSpace_Click(object sender, EventArgs e)
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;
-            var dialog = new CreateOrUpdatePSProjectWindow(project);
+            var dialog = new CreateOrUpdatePSProjectWindow(
+                project,
+                PrepareProjectForSave,
+                RestoreProjectAfterSaveAttempt);
             WindowsFormWPFHelper.ShowDialog(dialog, this);
         }
 
@@ -1503,7 +1517,12 @@ namespace FlowBlox.AppWindow
         private void itmFbExtensions_Click(object sender, EventArgs e)
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;
-            var dialog = new ExtensionsWindow(project);
+            var dialog = project == null
+                ? new ExtensionsWindow()
+                : new ExtensionsWindow(
+                    project,
+                    PrepareProjectForSave,
+                    RestoreProjectAfterSaveAttempt);
             WindowsFormWPFHelper.ShowDialog(dialog, this);
         }
 

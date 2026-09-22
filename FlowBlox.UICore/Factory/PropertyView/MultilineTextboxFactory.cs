@@ -35,11 +35,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 AcceptsReturn = true,
                 TextWrapping = TextWrapping.NoWrap,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
                 IsReadOnly = _readOnly
             };
             textBox.TextChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+            ParentScrollViewerMouseWheelForwarder.Register(textBox);
             textBox.SetBinding(TextBox.TextProperty, binding);
 
             return ResizableControlContainer.Create(textBox);

@@ -9,10 +9,17 @@ namespace FlowBlox.UICore.Views
     /// </summary>
     public partial class CreateOrUpdatePSProjectWindow : MetroWindow
     {
-        public CreateOrUpdatePSProjectWindow(FlowBloxProject project)
+        public CreateOrUpdatePSProjectWindow(
+            FlowBloxProject project,
+            Action<FlowBloxProject> prepareProjectForSave = null,
+            Action<FlowBloxProject> restoreProjectAfterSaveAttempt = null)
         {
             InitializeComponent();
-            DataContext = new CreateOrUpdatePSProjectViewModel(this, project);
+            DataContext = new CreateOrUpdatePSProjectViewModel(
+                this,
+                project,
+                prepareProjectForSave,
+                restoreProjectAfterSaveAttempt);
         }
     }
 }

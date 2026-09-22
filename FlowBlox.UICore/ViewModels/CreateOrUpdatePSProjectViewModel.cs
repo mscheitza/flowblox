@@ -19,6 +19,8 @@ namespace FlowBlox.UICore.ViewModels
     {
         private readonly Window _ownerWindow;
         private readonly FlowBloxProject _project;
+        private readonly Action<FlowBloxProject> _prepareProjectForSave;
+        private readonly Action<FlowBloxProject> _restoreProjectAfterSaveAttempt;
 
         private readonly string _initialProjectGuid;
         private string _backupProjectGuid;
@@ -226,10 +228,16 @@ namespace FlowBlox.UICore.ViewModels
             SaveCommand = new RelayCommand(async () => await ExecuteSaveAsync());
         }
 
-        public CreateOrUpdatePSProjectViewModel(Window ownerWindow, FlowBloxProject project) : this()
+        public CreateOrUpdatePSProjectViewModel(
+            Window ownerWindow,
+            FlowBloxProject project,
+            Action<FlowBloxProject> prepareProjectForSave = null,
+            Action<FlowBloxProject> restoreProjectAfterSaveAttempt = null) : this()
         {
             _ownerWindow = ownerWindow;
             _project = project;
+            _prepareProjectForSave = prepareProjectForSave;
+            _restoreProjectAfterSaveAttempt = restoreProjectAfterSaveAttempt;
 
             // Only if the stored endpoint matches the current API environment, the existing ProjectSpaceGuid is considered valid for update.
             if (string.Equals(_project.ProjectSpaceEndpointUri, ApiUrl, StringComparison.OrdinalIgnoreCase))
@@ -417,7 +425,17 @@ namespace FlowBlox.UICore.ViewModels
                 }
 
                 // Upload content ZIP
-                var saveContent = await _project.SaveToProjectSpaceAsync(ProjectGuid, UserToken, _flowBloxWebApiService.Value);
+                _prepareProjectForSave?.Invoke(_project);
+                FlowBloxWebApiService.ApiResponse saveContent;
+                try
+                {
+                    saveContent = await _project.SaveToProjectSpaceAsync(ProjectGuid, UserToken, _flowBloxWebApiService.Value);
+                }
+                finally
+                {
+                    _restoreProjectAfterSaveAttempt?.Invoke(_project);
+                }
+
                 if (saveContent == null || !saveContent.Success)
                 {
                     await ShowErrorAsync(ApiErrorMessageHelper.BuildErrorMessage(

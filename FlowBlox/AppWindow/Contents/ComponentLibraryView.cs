@@ -51,7 +51,13 @@ namespace FlowBlox.AppWindow.Contents
         private void ViewModel_ManageExtensionsRequested(object sender, EventArgs e)
         {
             FlowBloxProject project = FlowBloxProjectManager.Instance.ActiveProject;
-            var dialog = new ExtensionsWindow(project);
+            var appWindow = AppWindow.Instance;
+            var dialog = project == null
+                ? new ExtensionsWindow()
+                : new ExtensionsWindow(
+                    project,
+                    appWindow.PrepareProjectForSave,
+                    appWindow.RestoreProjectAfterSaveAttempt);
             var owner = ControlHelper.FindParentOfType<Form>(this, true);
             WindowsFormWPFHelper.ShowDialog(dialog, owner);
         }

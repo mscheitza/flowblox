@@ -5,7 +5,7 @@
         public string Prompt { get; set; }
         public string SystemInstruction { get; set; }
         public string Model { get; set; }
-        public double Temperature { get; set; } = 0.0;
+        public double? Temperature { get; set; }
         public int? MaxTokens { get; set; }
         public int? TimeoutSecondsOverride { get; set; }
         public Dictionary<string, object> Meta { get; set; } = new();

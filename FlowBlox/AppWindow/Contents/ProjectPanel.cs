@@ -134,8 +134,14 @@ namespace FlowBlox.AppWindow.Contents
 
         internal void SyncNodeSizesToModel() => _projectPanelWpfControl.SyncNodeSizesToModel();
 
-        internal void OnBeforeSaveProject(FlowBloxProject project)
+        internal void PrepareProjectForSave(FlowBloxProject project)
         {
+            _projectPanelWpfControl.PrepareNodeLocationForStorage();
+        }
+
+        internal void RestoreProjectAfterSaveAttempt(FlowBloxProject project)
+        {
+            _projectPanelWpfControl.RestoreNodeLocationAfterStorage();
         }
 
         internal void SaveInnerPanelBitmap(string fileName)
@@ -262,17 +268,9 @@ namespace FlowBlox.AppWindow.Contents
                 FlowBloxOptions.GetOptionInstance().GetOption(ResetNotificationsOnRuntimeFinishOptionName)?.GetValueBoolean() ?? true;
 
             if (resetNotificationsOnRuntimeFinish)
-            {
-                foreach (var flowBlock in FlowBloxRegistryProvider.GetRegistry().GetFlowBlocks().OfType<BaseFlowBlock>())
-                {
-                    flowBlock.ResetNotifications(_runtime);
-                    if (flowBlock is BaseResultFlowBlock resultFlowBlock)
-                        resultFlowBlock.ResetOutputDatasetProcessing();
-                }
-            }
+                _projectPanelWpfControl.ResetNotifications(_runtime);
 
             _runtimeFocusUpdateThrottler.ClearPending();
-            _projectPanelWpfControl.MarkRuntimeFocus(null);
             _projectPanelWpfControl.RefreshProject();
 
             if (result is Exception exception && exception is not RuntimeCancellationException)

@@ -26,7 +26,6 @@ namespace FlowBlox.Core.Models.Testing
         }
 
         [JsonIgnore]
-        [Display(Name = "FlowBloxTestConfiguration_UIRequiredForExecution", Description = "FlowBloxTestConfiguration_UIRequiredForExecution_Description", ResourceType = typeof(FlowBloxTexts))]
         public bool UIRequiredForExecution
         {
             get => _uIRequiredForExecution;
@@ -63,7 +62,7 @@ namespace FlowBlox.Core.Models.Testing
                 _selectionMode = PossibleSelectionModes.First();
         }
 
-        [Display(Name = "FlowBloxTestConfiguration_SelectionMode", Description = "FlowBloxTestConfiguration_SelectionMode_Description", ResourceType = typeof(FlowBloxTexts))]
+        [Display(Name = "FlowBloxTestConfiguration_SelectionMode", Description = "FlowBloxTestConfiguration_SelectionMode_Description", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         public FlowBloxTestConfigurationSelectionMode? SelectionMode
         {
             get => _selectionMode;
@@ -112,7 +111,27 @@ namespace FlowBlox.Core.Models.Testing
             }
         }
 
-        [Display(Name = "FlowBloxTestConfiguration_ExpectationConditions", Description = "FlowBloxTestConfiguration_ExpectationConditions_Description", ResourceType = typeof(FlowBloxTexts))]
+        [ActivationCondition(MemberName = nameof(SelectionMode), Values = new object[]
+        {
+            FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue,
+            FlowBloxTestConfigurationSelectionMode.UserInput
+        })]
+        [Display(Name = "FlowBloxTestConfiguration_UserInput", Description = "FlowBloxTestConfiguration_UserInput_Description", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        public string UserInput
+        {
+            get => _userInput;
+            set
+            {
+                if (_userInput != value)
+                {
+                    _userInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [Display(Name = "FlowBloxTestConfiguration_ExpectationConditions", Description = "FlowBloxTestConfiguration_ExpectationConditions_Description", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBloxUI(Factory = UIFactory.GridView)]
         [FlowBloxDataGrid(
             GridColumnMemberNames = new[]
@@ -164,20 +183,6 @@ namespace FlowBlox.Core.Models.Testing
         {
             OnPropertyChanged(nameof(ExpectationConditions));
         }
-
-        public string UserInput
-        {
-            get => _userInput;
-            set
-            {
-                if (_userInput != value)
-                {
-                    _userInput = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
 
         public int? Index
         {

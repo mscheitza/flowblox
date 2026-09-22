@@ -387,6 +387,17 @@ namespace FlowBlox.UICore.Resources
                 return ResourceManager.GetString("Toolbar_AutoLayout", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reset notifications ähnelt.
+        /// </summary>
+        public static string Toolbar_ResetNotifications
+        {
+            get
+            {
+                return ResourceManager.GetString("Toolbar_ResetNotifications", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Connect [Shift, Control] ähnelt.

@@ -16,7 +16,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
     [FlowBloxUIGroup("BaseResultFlowBlock_Groups_Output", 25)]
     public abstract class BaseResultFlowBlock : BaseFlowBlock
     {
-        public delegate void OutputDatasetProcessingChangedEventHandler();
+        public delegate void OutputDatasetProcessingChangedEventHandler(BaseRuntime runtime);
         public event OutputDatasetProcessingChangedEventHandler OutputDatasetProcessingChanged;
 
         [Display(Name = "BaseResultFlowBlock_OutputBehavior", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
@@ -275,7 +275,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 }).ToList()
             }).ToList() : CreateEmptyResults();
 
-            ResetOutputDatasetProcessing();
+            ResetOutputDatasetProcessing(runtime);
 
             runtime.NotifyResultDatasetsGenerated(this, this.GridElementResult.Results ?? new List<FlowBlockOutDataset>());
 
@@ -293,13 +293,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     }
                 }
 
-                CompleteOutputDatasetProcessing();
+                CompleteOutputDatasetProcessing(runtime);
             }
             else if (nextElementList.All(x => x.HasIterationContext))
             {
                 this.Fields.ForEach(x => x.Pending = true);
                 nextElementList.ForEach(x => x.Execute(runtime, this));
-                CompleteOutputDatasetProcessing();
+                CompleteOutputDatasetProcessing(runtime);
             }
             else
             {
@@ -410,36 +410,41 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             return success;
         }
 
-        public void ResetOutputDatasetProcessing()
+        public void ResetOutputDatasetProcessing() => ResetOutputDatasetProcessing(runtime: null);
+
+        public void ResetOutputDatasetProcessing(BaseRuntime runtime)
         {
             OutputDataset_CurrentlyProcessing = null;
             OutputDatasetProcessingCompleted = false;
-            NotifyOutputDatasetProcessingChanged();
+            NotifyOutputDatasetProcessingChanged(runtime);
         }
 
-        internal void CompleteOutputDatasetProcessing()
+        internal void CompleteOutputDatasetProcessing(BaseRuntime runtime)
         {
             if (OutputDatasets_Count <= 0 || OutputDatasetProcessingCompleted)
                 return;
 
             OutputDatasetProcessingCompleted = true;
-            NotifyOutputDatasetProcessingChanged();
+            NotifyOutputDatasetProcessingChanged(runtime);
         }
 
         public override void RuntimeStarted(BaseRuntime runtime)
         {
-            ResetOutputDatasetProcessing();
+            ResetOutputDatasetProcessing(runtime);
             base.RuntimeStarted(runtime);
         }
 
         public override void RuntimeFinished(BaseRuntime runtime)
         {
             if (runtime?.Aborted != true)
-                CompleteOutputDatasetProcessing();
+                CompleteOutputDatasetProcessing(runtime);
 
             base.RuntimeFinished(runtime);
         }
 
-        internal void NotifyOutputDatasetProcessingChanged() => OutputDatasetProcessingChanged?.Invoke();
+        internal void NotifyOutputDatasetProcessingChanged(BaseRuntime runtime)
+        {
+            OutputDatasetProcessingChanged?.Invoke(runtime);
+        }
     }
 }

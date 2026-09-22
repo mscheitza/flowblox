@@ -232,6 +232,13 @@ namespace FlowBlox.Core.Models.Base
             this.IsLoaded = true;
         }
 
+        /// <summary>
+        /// Called for the transient component after an editable property transaction has been opened.
+        /// </summary>
+        public virtual void OnAfterOpen()
+        {
+        }
+
         public virtual void OnBeforeSave()
         {
             // Intentionally left blank.

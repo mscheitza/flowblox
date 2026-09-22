@@ -13,7 +13,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
     [FlowBloxSpecialExplanation("WebActionFlowblockBase_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
     public abstract class WebActionFlowblockBase : BaseSingleResultFlowBlock
     {
-        [Display(Name = "WebActionFlowblockBase_AssociatedWebBrowser", Description = "WebActionFlowblockBase_AssociatedWebBrowser_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "WebActionFlowblockBase_AssociatedWebBrowser", Description = "WebActionFlowblockBase_AssociatedWebBrowser_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 100)]
         [AssociatedFlowBlockResolvable()]
         [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionFilterMethod = nameof(GetPossibleWebBrowserFlowBlocks),

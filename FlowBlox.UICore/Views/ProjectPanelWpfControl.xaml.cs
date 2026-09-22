@@ -58,6 +58,39 @@ namespace FlowBlox.UICore.Views
             ViewModel.SyncNodeSizesToModel();
         }
 
+        public void PrepareNodeLocationForStorage()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(PrepareNodeLocationForStorage);
+                return;
+            }
+
+            ViewModel.PrepareNodeLocationForStorage();
+        }
+
+        public void RestoreNodeLocationAfterStorage()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(RestoreNodeLocationAfterStorage);
+                return;
+            }
+
+            ViewModel.RestoreNodeLocationAfterStorage();
+        }
+
+        public void ResetNotifications(FlowBlox.Core.Models.Runtime.BaseRuntime runtime = null)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(() => ResetNotifications(runtime));
+                return;
+            }
+
+            ViewModel.ResetNotifications(runtime);
+        }
+
         public bool CanHandleHostedShortcut => IsProjectPanelInteractionContextActive() && !IsTextInputFocusWithin();
 
         public bool IsTextInputFocusActive => IsTextInputFocusWithin();

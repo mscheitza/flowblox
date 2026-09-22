@@ -301,17 +301,17 @@
                                                 Margin="5,0,0,0"
                                                 VerticalAlignment="Center"
                                                 Background="Transparent"
-                                                Visibility="{Binding UIRequiredForExecution, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                Visibility="{Binding UIAssociatedFlowBlockRequiredForExecution, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <Border.ToolTip>
                                                 <ToolTip Style="{StaticResource PropertyView.HelpToolTipStyle}"
-                                                         Content="{x:Static resources:TestDefinitionView.Icon_UIRequiredForExecution_TestDataset_Tooltip}" />
+                                                         Content="{x:Static resources:TestDefinitionView.Icon_AssociatedFlowBlockRequiredForExecution_Tooltip}" />
                                             </Border.ToolTip>
-                                            <iconPacks:PackIconMaterial Kind="AlertCircleOutline"
+                                            <iconPacks:PackIconMaterial Kind="LinkVariant"
                                                                         Width="16"
                                                                         Height="16"
                                                                         VerticalAlignment="Center"
                                                                         HorizontalAlignment="Center"
-                                                                        Foreground="#E65100" />
+                                                                        Foreground="#7B1FA2" />
                                         </Border>
                                     </StackPanel>
                                     <CheckBox IsChecked="{Binding Execute}" Grid.Column="1" 

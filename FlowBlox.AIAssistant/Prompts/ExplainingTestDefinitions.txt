@@ -21,14 +21,15 @@ Recommended tool-call order:
 6. Optionally run `RunTestDefinition` when the user requests execution or when generator troubleshooting requires test protocol/test results.
 
 Important behavior:
-- Linking a test definition to a flow block auto-synchronizes rows from start to target flow block.
-- Linked target flow blocks are executed within the test context.
-- If opened from TestView (without current flow block), the last linked target flow block is used.
+- Linking a test definition in a flow block's `TestDefinitions` auto-synchronizes rows from start to that target and sets that target row's `Execute=true`.
+- The link serves three purposes: assignment to the target/generator, convenient opening in flow-block context, and target/scope resolution. If opened from TestView without a current flow block, the latest linked/synchronized target in execution order is used.
+- One test definition may be linked to multiple target flow blocks and can contain both branches after a shared predecessor. Do not create a separate definition merely because the flow branches.
 - For each entry with `Execute=true`, activation prerequisites must be satisfied:
   - activation conditions of the flow block,
   - required fields must have a valid value strategy (at least manual input or an automatic selection mode),
   - for user fields (`UserFieldType=Input` or `UserFieldType=Memory`), prefer `SelectionMode=Keep` to preserve the current project value; use another mode only when there is a clear reason,
   - for properties marked with `AssociatedFlowBlockResolvableAttribute`, resolve required associated flow blocks with `ResolveAssociatedFlowBlock` and ensure they are covered by the test setup.
+- UI markers distinguish these prerequisites: the orange requirement marker denotes a required field value; the purple link marker denotes an associated flow block whose runtime state must be initialized, normally by setting its dataset `Execute=true`.
 - `RequiredForExecution=true` means this test definition is executed automatically at runtime start. If an expectation fails, FlowBlox can run generation strategies on the affected flow block and repeat the step once.
 - Do not set `FlowBloxTestDefinition.RequiredForExecution=true` by default. Only set it when the user explicitly wants runtime-start test guarding / automatic regeneration. Ask about auto-regeneration only if generation strategies exist on the affected flow block.
 - `ExpectationConditions` are evaluated only for entries where `FlowBlockTestDataset.Execute=true`.
@@ -49,5 +50,6 @@ Examples:
 
 Invalid configuration (must avoid):
 - Configuring expected outcomes (`FlowBloxFieldTestConfiguration.ExpectationConditions`) while parent `FlowBlockTestDataset.Execute=false` is logically invalid for that entry, because the flow block is not executed in the test run.
+- `SelectionMode=UserInput` injects a value even when the producing flow block is not executed and therefore does not require a real result list. `SelectionMode=UserInput_ExpectedValue` is different: the flow block must execute and the supplied value must occur in its actual results.
 
 Do not create test definitions proactively. Only do it when the user asks.

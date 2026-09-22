@@ -100,6 +100,9 @@
   <data name="Toolbar_AutoLayout" xml:space="preserve">
     <value>Automatisch ausrichten</value>
   </data>
+  <data name="Toolbar_ResetNotifications" xml:space="preserve">
+    <value>Meldungen zur&#xFC;cksetzen</value>
+  </data>
   <data name="Toolbar_Connect" xml:space="preserve">
     <value>Verbinden [Shift, Control]</value>
   </data>

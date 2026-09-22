@@ -114,7 +114,7 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The task name contains characters that are not supported by Windows Task Scheduler. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The task name contains characters that are not supported by the operating system&apos;s task scheduler. ähnelt.
         /// </summary>
         public static string Error_InvalidTaskName
         {
@@ -202,7 +202,7 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Windows Task Scheduler rejected the operation because the current user does not have the required permissions. Please start FlowBlox as administrator and try again. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The operating system&apos;s task scheduler rejected the operation because the current user does not have the required permissions. Please start FlowBlox with elevated permissions and try again. ähnelt.
         /// </summary>
         public static string Error_TaskSchedulerPermissionDenied
         {
@@ -224,7 +224,7 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manage FlowBlox project executions stored in the native Windows Task Scheduler folder &quot;\FlowBlox and contributors&quot;. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manage FlowBlox project executions using the operating system&apos;s native task scheduler. ähnelt.
         /// </summary>
         public static string Header_Description_Main
         {
@@ -289,6 +289,28 @@ namespace FlowBlox.UICore.Resources
             }
         }
         
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Option ähnelt.
+        /// </summary>
+        public static string Header_OptionKey
+        {
+            get
+            {
+                return ResourceManager.GetString("Header_OptionKey", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
+        /// </summary>
+        public static string Header_OptionValue
+        {
+            get
+            {
+                return ResourceManager.GetString("Header_OptionValue", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Running ähnelt.
         /// </summary>
@@ -466,7 +488,7 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die There are unsaved task changes. Discard them and reload from Windows Task Scheduler? ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die There are unsaved task changes. Discard them and reload from the operating system&apos;s task scheduler? ähnelt.
         /// </summary>
         public static string Message_DiscardChangesQuestion
         {
@@ -631,6 +653,17 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Options ähnelt.
+        /// </summary>
+        public static string Tab_OptionOverrides
+        {
+            get
+            {
+                return ResourceManager.GetString("Tab_OptionOverrides", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Project ähnelt.
         /// </summary>
         public static string Tab_Project
@@ -674,6 +707,17 @@ namespace FlowBlox.UICore.Resources
             }
         }
         
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Add option override ähnelt.
+        /// </summary>
+        public static string Tooltip_AddOptionOverride
+        {
+            get
+            {
+                return ResourceManager.GetString("Tooltip_AddOptionOverride", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Link project by project file ähnelt.
         /// </summary>
@@ -774,6 +818,17 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remove selected option override ähnelt.
+        /// </summary>
+        public static string Tooltip_RemoveOptionOverride
+        {
+            get
+            {
+                return ResourceManager.GetString("Tooltip_RemoveOptionOverride", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove selected task ähnelt.
         /// </summary>
         public static string Tooltip_RemoveTask
@@ -796,7 +851,7 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Manual tasks are saved without an automatic trigger and can be started manually from FlowBlox or Windows Task Scheduler. At startup runs when Windows starts. Daily runs once per day using the time from the start value. Interval runs repeatedly from the start value using the configured interval. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manual tasks are saved without an automatic trigger and can be started manually from FlowBlox or the operating system&apos;s scheduler. At startup runs when the system starts. Daily runs once per day using the time from the start value. Interval runs repeatedly from the start value using the configured interval. ähnelt.
         /// </summary>
         public static string Tooltip_ScheduleType
         {

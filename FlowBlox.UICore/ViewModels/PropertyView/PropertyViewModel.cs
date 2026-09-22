@@ -90,6 +90,10 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
             _transactionManager = new PropertyViewTransactionManager();
             InitTargetAndTransientTarget();
+
+            if (_deepCopy && !_readOnly && _transientTarget is FlowBloxComponent transientComponent)
+                transientComponent.OnAfterOpen();
+
             _ = ResolveTabsAndPresectProperty();
         }
 

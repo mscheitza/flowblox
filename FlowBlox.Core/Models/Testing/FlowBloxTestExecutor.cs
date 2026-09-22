@@ -73,6 +73,9 @@ namespace FlowBlox.Core.Models.Testing
 
             var fieldValueAssignments = new Dictionary<string, string>();
 
+            if (!ValidateAssociatedFlowBlockExecution())
+                return new FlowBloxTestResult(false, fieldValueAssignments);
+
             var entryOfUserFields = _testDefinition.Entries.SingleOrDefault(x => x.FlowBlock == null);
             if (entryOfUserFields != null)
             {
@@ -140,7 +143,8 @@ namespace FlowBlox.Core.Models.Testing
                             var fieldValues = resultFlowBlock.GridElementResult.Results
                                 .SelectMany(x => x.FieldValueMappings)
                                 .Where(x => x.Field == field)
-                                .Select(x => x.Value);
+                                .Select(x => x.Value)
+                                .ToList();
 
                             if (!EvaluateExpectationConditions(field, FlowBloxFieldTestConfiguration, fieldValues, out var failedCondition))
                             {
@@ -173,7 +177,8 @@ namespace FlowBlox.Core.Models.Testing
                                 fieldValues = resultFlowBlock.GridElementResult.Results
                                     .SelectMany(x => x.FieldValueMappings)
                                     .Where(x => x.Field == field)
-                                    .Select(x => x.Value);
+                                    .Select(x => x.Value)
+                                    .ToList();
 
                                 if (!EvaluateExpectationConditions(field, FlowBloxFieldTestConfiguration, fieldValues, out _))
                                     return new FlowBloxTestResult(false, fieldValueAssignments);
@@ -211,12 +216,6 @@ namespace FlowBlox.Core.Models.Testing
                             {
                                 if (!string.IsNullOrWhiteSpace(FlowBloxFieldTestConfiguration.UserInput))
                                 {
-                                    if (!fieldValues.Any(x => x == FlowBloxFieldTestConfiguration.UserInput))
-                                    {
-                                        _localRuntime.Report($"Test case: There is no value \"{TextHelper.ShortenString(FlowBloxFieldTestConfiguration.UserInput, 100, true)}\" in field values from field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
-                                        return new FlowBloxTestResult(false, fieldValueAssignments);
-                                    }
-
                                     var fieldValue = FlowBloxFieldTestConfiguration.UserInput;
                                     field.SetValue(_localRuntime, fieldValue);
                                     fieldValueAssignments[field.FullyQualifiedName] = fieldValue;
@@ -239,6 +238,35 @@ namespace FlowBlox.Core.Models.Testing
             _localRuntime.Report($"The test \"{_testDefinition.Name}\" was completed successfully.");
 
             return new FlowBloxTestResult(true, fieldValueAssignments);
+        }
+
+        private bool ValidateAssociatedFlowBlockExecution()
+        {
+            var isValid = true;
+            var entries = _testDefinition.Entries?.ToList() ?? new List<FlowBlockTestDataset>();
+            var entriesByFlowBlock = entries
+                .Where(x => x.FlowBlock != null)
+                .GroupBy(x => x.FlowBlock)
+                .ToDictionary(x => x.Key, x => x.First());
+
+            foreach (var executedDataset in entries.Where(x => x.Execute && x.FlowBlock != null))
+            {
+                foreach (var associatedFlowBlock in FlowBloxTestDefinition
+                    .ResolveAssociatedFlowBlocks(executedDataset.FlowBlock)
+                    .Distinct())
+                {
+                    if (entriesByFlowBlock.TryGetValue(associatedFlowBlock, out var associatedDataset) &&
+                        associatedDataset.Execute)
+                        continue;
+
+                    _localRuntime.Report(
+                        $"Test case: FlowBlock \"{executedDataset.FlowBlock.Name}\" is executed, but its associated FlowBlock \"{associatedFlowBlock.Name}\" is not executed.",
+                        FlowBloxLogLevel.Error);
+                    isValid = false;
+                }
+            }
+
+            return isValid;
         }
 
         private void ReportExpectedValueConfiguredButNotExecuted(
@@ -295,57 +323,92 @@ namespace FlowBlox.Core.Models.Testing
             out ExpectationCondition? failedCondition)
         {
             failedCondition = null;
+            var fieldValueList = fieldValues?.ToList() ?? new List<string>();
+            var hasExpectedValue = flowBloxTestConfiguration.SelectionMode == FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue &&
+                !string.IsNullOrWhiteSpace(flowBloxTestConfiguration.UserInput);
+            var hasExpectationConditions = flowBloxTestConfiguration.ExpectationConditions?.Any() == true;
 
-            if (flowBloxTestConfiguration.ExpectationConditions == null)
-                return true;
-
-            if (!flowBloxTestConfiguration.ExpectationConditions.Any())
-                return true;
-
-            foreach (var expectationCondition in flowBloxTestConfiguration.ExpectationConditions)
+            if (!hasExpectedValue && !hasExpectationConditions)
             {
-                bool conditionMet = false;
-
-                switch (expectationCondition.ExpectationConditionTarget)
-                {
-                    case ExpectationConditionTarget.FirstValue:
-                        {
-                            string value = fieldValues.FirstOrDefault();
-                            conditionMet = expectationCondition.Compare(value);
-                            break;
-                        }
-                    case ExpectationConditionTarget.AnyValue:
-                        {
-                            conditionMet = fieldValues.Any(value => expectationCondition.Compare(value));
-                            break;
-                        }
-                    case ExpectationConditionTarget.LastValue:
-                        {
-                            string value = fieldValues.LastOrDefault();
-                            conditionMet = expectationCondition.Compare(value);
-                            break;
-                        }
-                    case ExpectationConditionTarget.NumberOfDatasets:
-                        {
-                            int count = fieldValues.Count();
-                            conditionMet = expectationCondition.Compare(count);
-                            break;
-                        }
-                }
-
-                if (!conditionMet)
-                {
-                    _localRuntime.Report($"Test case: Expectation condition \"{expectationCondition.DisplayName}\" failed for the field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
-                    failedCondition = expectationCondition;
-                    return false;
-                }
+                _localRuntime.Report($"Test case: No test expectations defined for the field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Info);
+                return true;
             }
 
-            _localRuntime.Report($"Test case: All expectation conditions met for the field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Success);
+            var expectationConditions = (flowBloxTestConfiguration.ExpectationConditions ?? Enumerable.Empty<ExpectationCondition>())
+                .ToList();
+
+            if (hasExpectedValue)
+                expectationConditions.Add(CreateExpectedValueCondition(flowBloxTestConfiguration.UserInput));
+
+            var conditionsNotMetCount = 0;
+
+            foreach (var expectationCondition in expectationConditions)
+            {
+                if (IsExpectationConditionMet(expectationCondition, fieldValueList))
+                    continue;
+
+                _localRuntime.Report($"Test case: Expectation condition \"{expectationCondition.DisplayName}\" failed for the field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Error);
+                failedCondition ??= expectationCondition;
+                conditionsNotMetCount++;
+            }
+
+            if (conditionsNotMetCount > 0)
+            {
+                _localRuntime.Report(
+                    $"Test case: {conditionsNotMetCount} expectation condition(s) were not met for the field \"{field.FullyQualifiedName}\".",
+                    FlowBloxLogLevel.Error);
+                return false;
+            }
+
+            _localRuntime.Report($"Test case: All test expectations met for the field \"{field.FullyQualifiedName}\".", FlowBloxLogLevel.Success);
             return true;
+        }
+
+        private static bool IsExpectationConditionMet(
+            ExpectationCondition expectationCondition,
+            IReadOnlyList<string> fieldValues)
+        {
+            switch (expectationCondition.ExpectationConditionTarget)
+            {
+                case ExpectationConditionTarget.FirstValue:
+                    {
+                        string value = fieldValues.FirstOrDefault();
+                        return expectationCondition.Compare(value);
+                    }
+                case ExpectationConditionTarget.AnyValue:
+                    {
+                        return fieldValues.Any(value => expectationCondition.Compare(value));
+                    }
+                case ExpectationConditionTarget.LastValue:
+                    {
+                        string value = fieldValues.LastOrDefault();
+                        return expectationCondition.Compare(value);
+                    }
+                case ExpectationConditionTarget.ValueAtIndex:
+                    {
+                        string value = fieldValues.ElementAtOrDefault(expectationCondition.Index);
+                        return expectationCondition.Compare(value);
+                    }
+                case ExpectationConditionTarget.NumberOfDatasets:
+                    {
+                        int count = fieldValues.Count;
+                        return expectationCondition.Compare(count);
+                    }
+                default:
+                    return false;
+            }
+        }
+
+        private static ExpectationCondition CreateExpectedValueCondition(string expectedValue)
+        {
+            return new ExpectationCondition
+            {
+                ExpectationConditionTarget = ExpectationConditionTarget.AnyValue,
+                Operator = ComparisonOperator.Equals,
+                Value = expectedValue
+            };
         }
 
         public BaseRuntime GetRuntime() => _localRuntime;
     }
 }
-

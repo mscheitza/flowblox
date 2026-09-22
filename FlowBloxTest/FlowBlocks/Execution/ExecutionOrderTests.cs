@@ -46,7 +46,7 @@ namespace FlowBloxTest.FlowBlocks.Execution
             var resultBlock = CreateFlowBlock<ExecutionOrderTestFlowBlock>(start);
             _ = CreateFlowBlock<ExecutionOrderTestFlowBlock>(resultBlock);
             var states = new List<(int Current, int Total, bool Completed)>();
-            resultBlock.OutputDatasetProcessingChanged += () => states.Add((
+            resultBlock.OutputDatasetProcessingChanged += _ => states.Add((
                 resultBlock.OutputDataset_CurrentlyProcessingIndex,
                 resultBlock.OutputDatasets_Count,
                 resultBlock.OutputDatasetProcessingCompleted));

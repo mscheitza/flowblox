@@ -1,0 +1,34 @@
+{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "AIPromptTemplates",
+      "Name": "System - JSON Output",
+      "Content": "Return exactly one valid JSON object.\nDo not include explanations, Markdown, code fences, alternatives, examples, or text before/after the JSON.\nIf you are unsure, still return the single best JSON object.",
+      "Description": "System prompt for responses that must contain exactly one JSON object."
+    },
+    {
+      "ToolboxCategory": "AIPromptTemplates",
+      "Name": "System - FlowBlox Quick Update JSON Output",
+      "Content": "Return exactly one FlowBlox Quick Update JSON object.\nReturn only the JSON object, no Markdown, no comments, no alternative JSON objects.\nIf multiple configurations are possible, choose the single most likely configuration.",
+      "Description": "System prompt for FlowBlox Quick Update responses."
+    },
+    {
+      "ToolboxCategory": "AIPromptTemplates",
+      "Name": "System - XML Output",
+      "Content": "Return exactly one valid XML document.\nUse a single root element.\nDo not include explanations, Markdown, code fences, alternatives, examples, or text before/after the XML.\nIf you are unsure, still return the single best XML document.",
+      "Description": "System prompt for responses that must contain exactly one XML document."
+    },
+    {
+      "ToolboxCategory": "AIPromptTemplates",
+      "Name": "Notebook Product Data JSON Extraction",
+      "Content": "Extract notebook product data from the following input content.\n\nInput:\n[Insert the input field using Field Selection]\n\nReturn the extracted data exactly in this JSON format. If a value cannot be determined, set it to null.\n\n{\n  \"productName\": \"Lenovo ThinkPad X1 Carbon Gen 12\",\n  \"manufacturer\": \"Lenovo\",\n  \"processor\": \"Intel Core Ultra 7 155U\",\n  \"memoryGb\": 32,\n  \"price\": 1899.99\n}",
+      "Description": "Extracts notebook product data from page content and returns a compact JSON object."
+    },
+    {
+      "ToolboxCategory": "AIPromptTemplates",
+      "Name": "FlowBlox Quick Update Configurator",
+      "Content": "You are a FlowBlox flow block configurator.\n\nGoal:\nConfigure the source flow block so that, for the provided input value, it produces one or more expected result datasets that satisfy the test expectations. A result dataset can contain multiple fields, and all relevant field expectations must be considered.\n\nInput:\n$GenerationStrategy::InputFieldValue\n\nTest expectations:\n$GenerationStrategy::TestExpectations\n\nFlow block description:\n$GenerationStrategy::FlowBlockDescriptions\n\nQuick Update schema:\n$GenerationStrategy::FlowBloxQuickUpdateSchema\n\nRequired output format:\n$GenerationStrategy::FlowBloxQuickUpdateFormat\n\nRules:\n- Return valid JSON only. No explanation, no Markdown, no code block.\n- Only update properties listed in the Quick Update schema.\n- Omit properties that should remain unchanged.\n- Return collections completely; existing collection items are replaced by the provided list.\n- Prefer robust, structural configuration values over volatile literal full values.\n- Do not copy the ExpectedValue or any unnecessary part of it into selectors, patterns, queries or expressions.\n- For XPath selectors on element-based flow blocks, select the owning element node unless the flow block schema explicitly supports attribute output via a separate property.\n- For start/end pattern based flow blocks, build ordered pattern entries that can be applied hierarchically and generalize beyond a single literal example.",
+      "Description": "Configures the source flow block with the FlowBlox Quick Update JSON format based on test-driven expectations."
+    }
+  ]
+}

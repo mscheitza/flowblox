@@ -1,0 +1,23 @@
+Explaining scheduled and service-based project execution:
+
+1) Native task scheduling
+- Open `Automation` > `Scheduled project executions...`.
+- Add a local `.fbprj` or a Project Space project, then choose: `Manual`, `At startup`, `Daily`, or `Interval`.
+- Daily at 08:00: choose `Daily` and set the start time to 08:00.
+- Every 2 minutes: choose `Interval`, set the first start time, and set interval minutes to `2`.
+- `Input parameters` supplies project user fields. `Options` supplies per-run key/string-value overrides; these do not change the globally saved FlowBlox options.
+- Apply/save before using Run. The operating-system-specific scheduler is an implementation detail; availability and minimum intervals can depend on that scheduler.
+
+2) Background service (current Windows host)
+- Use `FlowBlox.WorkerService.exe` when a project should run without an interactive FlowBlox session. Its JSON config section is `FlowBloxService`.
+- Set either `ProjectFile`, or `ProjectSpaceGuid` with optional `ProjectSpaceVersion`. `Restart=true` repeats execution after `RestartDelaySeconds`; this is different from calendar scheduling.
+- Minimal config (`{{CURRENT_DIRECTORY}}\MyProject.service.json`):
+```json
+{"FlowBloxService":{"ServiceName":"FlowBlox.MyProject","DisplayName":"FlowBlox My Project","RunOnStart":true,"ProjectFile":"{{CURRENT_DIRECTORY_JSON}}\\MyProject.fbprj","Restart":true,"RestartDelaySeconds":120,"AbortOnError":true,"AbortOnWarning":false,"OutputFile":"{{CURRENT_DIRECTORY_JSON}}\\logs\\response-%timestamp%.json","UserFields":{"Input_Name":"value"},"OptionOverrides":{"Paths.OutputDir":"{{CURRENT_DIRECTORY_JSON}}\\output"}}}
+```
+- Example elevated batch commands:
+```bat
+"{{SERVICE_INSTALLER_PATH}}" create "FlowBlox.MyProject" binPath= "\"{{CURRENT_DIRECTORY}}\FlowBlox.WorkerService.exe\" --config \"{{CURRENT_DIRECTORY}}\MyProject.service.json\"" start= auto DisplayName= "FlowBlox My Project"
+"{{SERVICE_INSTALLER_PATH}}" start "FlowBlox.MyProject"
+```
+- To update configuration, edit the JSON and restart the service. To remove it, stop it, then run `"{{SERVICE_INSTALLER_PATH}}" delete "FlowBlox.MyProject"` from an elevated terminal.

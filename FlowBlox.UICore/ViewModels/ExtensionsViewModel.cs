@@ -33,6 +33,8 @@ namespace FlowBlox.UICore.ViewModels
         private FbVersionResult _selectedVersion;
         private Window _ownerWindow;
         private FlowBloxProject _project;
+        private readonly Action<FlowBloxProject> _prepareProjectForSave;
+        private readonly Action<FlowBloxProject> _restoreProjectAfterSaveAttempt;
         private bool _hasExtensionChanged;
 
         public bool HasProjectReference => _project != null;
@@ -157,10 +159,16 @@ namespace FlowBlox.UICore.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ExtensionsViewModel(Window ownerWindow, FlowBloxProject project = null) : this()
+        public ExtensionsViewModel(
+            Window ownerWindow,
+            FlowBloxProject project = null,
+            Action<FlowBloxProject> prepareProjectForSave = null,
+            Action<FlowBloxProject> restoreProjectAfterSaveAttempt = null) : this()
         {
             _ownerWindow = ownerWindow;
             _project = project;
+            _prepareProjectForSave = prepareProjectForSave;
+            _restoreProjectAfterSaveAttempt = restoreProjectAfterSaveAttempt;
             OnPropertyChanged(nameof(HasProjectReference));
 
             if (_project != null)
@@ -317,18 +325,26 @@ namespace FlowBlox.UICore.ViewModels
                                 bool saveToProjectSpace = string.IsNullOrWhiteSpace(projectPath);
                                 try
                                 {
-                                    if (saveToProjectSpace)
+                                    _prepareProjectForSave?.Invoke(activeProject);
+                                    try
                                     {
-                                        if (activeProject.ProjectSpaceGuid == null)
-                                            throw new InvalidOperationException(
-                                                "Cannot save project to ProjectSpace because the ProjectSpaceGuid is missing. " +
-                                                "When ActiveProjectPath is not set, a valid ProjectSpaceGuid is required to perform a ProjectSpace save.");
+                                        if (saveToProjectSpace)
+                                        {
+                                            if (activeProject.ProjectSpaceGuid == null)
+                                                throw new InvalidOperationException(
+                                                    "Cannot save project to ProjectSpace because the ProjectSpaceGuid is missing. " +
+                                                    "When ActiveProjectPath is not set, a valid ProjectSpaceGuid is required to perform a ProjectSpace save.");
 
-                                        await activeProject.SaveToProjectSpaceAsync(activeProject.ProjectSpaceGuid, UserToken, _flowBloxWebApiService.Value);
+                                            await activeProject.SaveToProjectSpaceAsync(activeProject.ProjectSpaceGuid, UserToken, _flowBloxWebApiService.Value);
+                                        }
+                                        else
+                                        {
+                                            activeProject.Save(projectPath);
+                                        }
                                     }
-                                    else
+                                    finally
                                     {
-                                        activeProject.Save(projectPath);
+                                        _restoreProjectAfterSaveAttempt?.Invoke(activeProject);
                                     }
                                 }
                                 catch (Exception ex)
