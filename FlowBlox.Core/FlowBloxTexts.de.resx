@@ -4085,6 +4085,8 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="RuntimeNotificationConfiguration_Validation_ToRequired" xml:space="preserve"><value>Mindestens eine Empfängeradresse muss angegeben werden.</value></data>
   <data name="RuntimeNotificationConfiguration_Validation_InvalidAddress" xml:space="preserve"><value>„{0}“ ist keine gültige E-Mail-Adresse.</value></data>
   <data name="RuntimeNotificationConfiguration_LoadFailed" xml:space="preserve"><value>Die Laufzeitbenachrichtigungskonfiguration konnte nicht geladen werden: {0}</value></data>
+  <data name="TableWriterFlowBlock_ClearOnRuntimeStart" xml:space="preserve"><value>Bei Laufzeitstart leeren</value></data>
+  <data name="TableWriterFlowBlock_ClearOnRuntimeStart_Tooltip" xml:space="preserve"><value>Leert die Zieltabelle beim Start der Laufzeit, sodass die Ausgabe nur Daten des aktuellen Laufs enthält.</value></data>
 </root>
 
 

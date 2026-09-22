@@ -4136,6 +4136,8 @@ If a Join collector should aggregate links across all page iterations:
   <data name="RuntimeNotificationConfiguration_Validation_ToRequired" xml:space="preserve"><value>At least one recipient address is required.</value></data>
   <data name="RuntimeNotificationConfiguration_Validation_InvalidAddress" xml:space="preserve"><value>'{0}' is not a valid email address.</value></data>
   <data name="RuntimeNotificationConfiguration_LoadFailed" xml:space="preserve"><value>The runtime notification configuration could not be loaded: {0}</value></data>
+  <data name="TableWriterFlowBlock_ClearOnRuntimeStart" xml:space="preserve"><value>Clear on runtime start</value></data>
+  <data name="TableWriterFlowBlock_ClearOnRuntimeStart_Tooltip" xml:space="preserve"><value>Clears the target table when the runtime starts so the output contains only data produced by the current run.</value></data>
 </root>
 
 

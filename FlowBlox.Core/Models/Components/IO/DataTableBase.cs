@@ -60,6 +60,5 @@ namespace FlowBlox.Core.Models.Components.IO
         public abstract DataTable Read();
 
         public abstract void Write(DataTable dataTable);
-       
     }
 }

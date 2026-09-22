@@ -10,6 +10,7 @@ namespace FlowBloxTest.FlowBlocks.IO
         private readonly List<Action> _listeners = new();
 
         public int ReadCount { get; private set; }
+        public int WriteCount { get; private set; }
         public int ListenerCount => _listeners.Count;
 
         public bool CanRead(BaseRuntime runtime = null) => true;
@@ -34,6 +35,7 @@ namespace FlowBloxTest.FlowBlocks.IO
 
         public void Write(DataTable dataTable)
         {
+            WriteCount++;
         }
 
         public void RaiseDataSourceChanged()

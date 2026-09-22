@@ -41,9 +41,7 @@ namespace FlowBlox.Core.Models.Components.IO
         public override DataTable Read()
         {
             if (DataSource == null || !DataSource.CanRead())
-            {
                 throw new InvalidOperationException("The data source is not ready for reading.");
-            }
 
             var dataTableConverter = new DataTableConverter(Separator, EncodingName.ToEncoding());
             using (var memoryStream = new MemoryStream(DataSource.Content))
@@ -55,9 +53,7 @@ namespace FlowBlox.Core.Models.Components.IO
         public override void Write(DataTable dataTable)
         {
             if (DataSource == null)
-            {
                 throw new InvalidOperationException("The data source is not ready for writing.");
-            }
 
             var dataTableConverter = new DataTableConverter(Separator, EncodingName.ToEncoding());
             using (var memoryStream = new MemoryStream())

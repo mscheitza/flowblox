@@ -49,6 +49,22 @@ namespace FlowBloxTest.FlowBlocks.IO
         }
 
         [TestMethod]
+        public void RuntimeStarted_SkipsInitialReadAndWrite_WhenClearOnRuntimeStartIsEnabled()
+        {
+            var table = new RecordingTable();
+            var writer = new TableWriterFlowBlock
+            {
+                ReferencedTable = table,
+                ClearOnRuntimeStart = true
+            };
+
+            writer.RuntimeStarted(null);
+
+            Assert.AreEqual(0, table.ReadCount);
+            Assert.AreEqual(0, table.WriteCount);
+        }
+
+        [TestMethod]
         public void OnAfterSave_SynchronizesRequiredFieldsFromColumnDefinitions()
         {
             var project = new FlowBloxProject();

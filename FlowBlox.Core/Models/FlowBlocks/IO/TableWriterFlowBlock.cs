@@ -42,6 +42,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         [FlowBloxUI(Factory = UIFactory.Default)]
         public bool UpdateExistingDatasets { get; set; } = true;
 
+        [Display(Name = "TableWriterFlowBlock_ClearOnRuntimeStart", Description = "TableWriterFlowBlock_ClearOnRuntimeStart_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
+        public bool ClearOnRuntimeStart { get; set; }
+
         public List<IWritableTable> GetPossibleWritableTables()
         {
             var registry = FlowBloxRegistryProvider.GetRegistry();
@@ -264,6 +268,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             }
         }
 
+        private void InitializeEmptyRuntimeTable()
+        {
+            _currentTableData = new DataTable();
+            InitRowKeyCache();
+        }
+
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             this._keyColumns = this.TableColumnDefinitions
@@ -271,11 +281,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
                 .Select(x => x.ColumnName)
                 .ToList();
 
+            if (ClearOnRuntimeStart)
+                InitializeEmptyRuntimeTable();
+
             if (ReferencedTable is IReadableTable)
             {
                 var readableTable = (IReadableTable)ReferencedTable;
                 SubscribeReadableTableDataSourceChanged(readableTable, runtime);
-                OnReadableTableInitializedOrChanged(readableTable, runtime);
+
+                if (!ClearOnRuntimeStart)
+                    OnReadableTableInitializedOrChanged(readableTable, runtime);
             }
             base.RuntimeStarted(runtime);
         }
