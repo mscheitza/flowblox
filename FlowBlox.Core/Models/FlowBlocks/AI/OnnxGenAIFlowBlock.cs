@@ -23,16 +23,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
     {
         private Model _model;
         private Microsoft.ML.OnnxRuntimeGenAI.Tokenizer _tokenizer;
+        private string _resolvedModelFolder;
+
         #region Tab: Default
 
         [Required]
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_ModelFolder", Description = "OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
+        [FlowBloxFieldSelection(AllowedFieldSelectionModes = FieldSelectionModes.ProjectProperties)]
         public string ModelFolder { get; set; }
 
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_Prompt", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBloxTextBox(IsCodingMode = true, MultiLine = true)]
-        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPromptTemplates))]
         [Required]
         public string Prompt { get; set; }
 
@@ -94,7 +97,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_SystemPrompt", Description = "OnnxRuntimeGenAIFlowBlock_SystemPrompt_Tooltip",
             GroupName = "OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", ResourceType = typeof(FlowBloxTexts), Order = 7)]
         [FlowBloxTextBox(IsCodingMode = true, MultiLine = true)]
-        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.AIPromptTemplates))]
         public string SystemPrompt { get; set; }
 
         [ActivationCondition(MemberName = nameof(UseChatTemplate), Value = true)]
@@ -132,7 +135,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 Wait(runtime);
                 SetParentElement(data);
 
-                if (string.IsNullOrWhiteSpace(ModelFolder) || !Directory.Exists(ModelFolder))
+                var modelFolder = GetResolvedModelFolder();
+
+                if (string.IsNullOrWhiteSpace(modelFolder) || !Directory.Exists(modelFolder))
                 {
                     CreateNotification(runtime, OnnxRuntimeGenAiNotifications.ModelFolderMissing);
                     GenerateResult(runtime);
@@ -156,7 +161,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                 string result;
                 try
                 {
-                    result = RunGenAI(runtime, ModelFolder, finalPrompt, MaxNewTokens);
+                    result = RunGenAI(runtime, modelFolder, finalPrompt, MaxNewTokens);
                 }
                 catch (Exception ex)
                 {
@@ -190,31 +195,45 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             // Ensure GenAI native binaries are loaded:
             FlowBloxOnnxRuntimeGenAiLoader.Instance.EnsureLoaded(AiExecutionProvider, runtime);
 
-            if (string.IsNullOrWhiteSpace(ModelFolder))
+            var modelFolder = ResolveModelFolder();
+            _resolvedModelFolder = modelFolder;
+
+            if (string.IsNullOrWhiteSpace(modelFolder))
                 throw new InvalidOperationException("ONNX Runtime GenAI initialization failed: ModelFolder is null or empty.");
 
-            if (!Directory.Exists(ModelFolder))
-                throw new InvalidOperationException($"ONNX Runtime GenAI initialization failed: ModelFolder does not exist: '{ModelFolder}'");
+            if (!Directory.Exists(modelFolder))
+                throw new InvalidOperationException($"ONNX Runtime GenAI initialization failed: ModelFolder does not exist: '{modelFolder}'");
 
-            runtime.Report($"Loading ONNX model from folder: {ModelFolder}");
+            runtime.Report($"Loading ONNX model from folder: {modelFolder}");
 
             try
             {
-                _model = new Model(ModelFolder);
+                _model = new Model(modelFolder);
                 _tokenizer = new Microsoft.ML.OnnxRuntimeGenAI.Tokenizer(_model);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"ONNX Runtime GenAI initialization failed while loading model from '{ModelFolder}'.", ex);
+                throw new InvalidOperationException($"ONNX Runtime GenAI initialization failed while loading model from '{modelFolder}'.", ex);
             }
         }
+
+        private string ResolveModelFolder() => 
+            FlowBloxFieldHelper.ReplaceFieldsInString(ModelFolder);
 
         public override void RuntimeFinished(BaseRuntime runtime)
         {
             _tokenizer?.Dispose();
             _model?.Dispose();
+            _resolvedModelFolder = null;
 
             base.RuntimeFinished(runtime);
+        }
+
+        private string GetResolvedModelFolder()
+        {
+            return !string.IsNullOrWhiteSpace(_resolvedModelFolder)
+                ? _resolvedModelFolder
+                : ResolveModelFolder();
         }
 
         private string RunGenAI(BaseRuntime runtime, string modelFolder, string prompt, int maxNewTokens)

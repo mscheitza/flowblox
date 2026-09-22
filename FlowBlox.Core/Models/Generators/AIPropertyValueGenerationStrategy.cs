@@ -102,7 +102,9 @@ namespace FlowBlox.Core.Models.Generators
             if (!string.IsNullOrWhiteSpace(SystemInstruction))
                 return;
 
-            SystemInstruction = ToolboxConstants.SystemFlowBloxQuickUpdatePromptTemplateContent;
+            SystemInstruction = FlowBloxToolboxResourceProvider.GetToolboxElementContent(
+                ToolboxConstants.AIPromptTemplatesCategory,
+                ToolboxConstants.SystemFlowBloxQuickUpdatePromptTemplateName);
         }
 
         public override bool CanExecute(out Dictionary<FlowBloxTestDefinition, List<string>> testDefinitionToMessages, out List<string> messages)

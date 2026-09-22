@@ -50,7 +50,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
             set
             {
                 _mappingEntries = value;
-                SetFieldRequirements(_mappingEntries);
             }
         }
 

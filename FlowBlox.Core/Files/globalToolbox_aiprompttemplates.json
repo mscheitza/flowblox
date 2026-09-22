@@ -20,6 +20,18 @@
     },
     {
       "ToolboxCategory": "AIPromptTemplates",
+      "Name": "System - Plain Text Output",
+      "Content": "Return only the requested plain text value.\nDo not include explanations, Markdown, labels, alternatives, examples, or text before/after the value.\nIf you are unsure, still return the single best value.",
+      "Description": "System prompt for responses that must contain exactly one plain text value."
+    },
+    {
+      "ToolboxCategory": "AIPromptTemplates",
+      "Name": "System - Single Choice Output",
+      "Content": "Return exactly one of the allowed values.\nDo not include explanations, Markdown, labels, alternatives, examples, or text before/after the value.\nIf you are unsure, choose the single most likely allowed value.",
+      "Description": "System prompt for classification responses that must contain exactly one allowed value."
+    },
+    {
+      "ToolboxCategory": "AIPromptTemplates",
       "Name": "Notebook Product Data JSON Extraction",
       "Content": "Extract notebook product data from the following input content.\n\nInput:\n[Insert the input field using Field Selection]\n\nReturn the extracted data exactly in this JSON format. If a value cannot be determined, set it to null.\n\n{\n  \"productName\": \"Lenovo ThinkPad X1 Carbon Gen 12\",\n  \"manufacturer\": \"Lenovo\",\n  \"processor\": \"Intel Core Ultra 7 155U\",\n  \"memoryGb\": 32,\n  \"price\": 1899.99\n}",
       "Description": "Extracts notebook product data from page content and returns a compact JSON object."

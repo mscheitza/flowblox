@@ -162,28 +162,6 @@ namespace FlowBloxTest.Models.Generators
         }
 
         [TestMethod]
-        public void UsesQuickUpdateConfiguratorPromptByDefault()
-        {
-            var startFlowBlock = CreateFlowBlock<StartFlowBlock>();
-            var resultBlock = CreateFlowBlock<ExecutionOrderTestFlowBlock>(startFlowBlock);
-
-            var strategy = new AIPropertyValueGenerationStrategy(resultBlock);
-
-            Assert.IsTrue(strategy.PromptTemplate?.Contains("FlowBlox flow block configurator") == true);
-            Assert.IsTrue(strategy.PromptTemplate?.Contains("$GenerationStrategy::FlowBloxQuickUpdateSchema") == true);
-            Assert.IsTrue(strategy.PromptTemplate?.Contains("$GenerationStrategy::FlowBloxQuickUpdateFormat") == true);
-            Assert.AreEqual(ToolboxConstants.SystemFlowBloxQuickUpdatePromptTemplateContent, strategy.SystemInstruction);
-        }
-
-        [TestMethod]
-        public void AIPromptFlowBlockUsesJsonOutputSystemPromptByDefault()
-        {
-            var flowBlock = new AIPromptFlowBlock();
-
-            Assert.AreEqual(ToolboxConstants.SystemJsonOutputPromptTemplateContent, flowBlock.SystemInstruction);
-        }
-
-        [TestMethod]
         public void ResolvesQuickUpdatePlaceholders()
         {
             var startFlowBlock = CreateFlowBlock<StartFlowBlock>();

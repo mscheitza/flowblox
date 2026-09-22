@@ -962,6 +962,15 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="JsonPathSelectorFlowBlock_Path" xml:space="preserve">
 		<value>JSON-Pfad</value>
 	</data>
+	<data name="JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples" xml:space="preserve">
+		<value>JSON-Pfad-Beispiele:
+- `participant/name` gibt einen einzelnen Property-Wert zurück.
+- `participant/addresses` gibt alle Elemente des Adress-Arrays zurück; Objekt-Elemente werden als kompaktes JSON ausgegeben.
+- `participant/addresses/0/Street` gibt die Straße der ersten Adresse zurück.
+- `participant/addresses/@Country=Germany` gibt Adressobjekte zurück, deren Country Germany ist.
+- `participant/addresses/@Country=Germany/Street` gibt die Straßen der deutschen Adressen zurück.
+- Filter unterstützen: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
+	</data>
 	<data name="JsonPropertyValueAssignment_DisplayName" xml:space="preserve">
 		<value>JSON-Property-Zuweisung</value>
 	</data>
@@ -1861,7 +1870,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Optionaler Kontext-FlowBlock. Wenn gesetzt, wird der Index bei jedem Iterationsstart dieses FlowBlocks auf den initialen Index zurückgesetzt. Ist kein Kontext angegeben, läuft der Index über die gesamte Laufzeit kontinuierlich weiter.</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
-		<value>Pfad zur Navigation im JSON-Dokument. Verwenden Sie '/' zur Trennung von Knoten. Objekt-Eigenschaften werden über ihren Property-Namen adressiert, Array-Elemente über einen numerischen Index (z. B. 'participants/addresses/0').</value>
+		<value>Pfad zur Navigation im JSON-Dokument. Verwenden Sie '/' zur Trennung von Knoten. Objekt-Properties werden über ihren Namen adressiert, Arrays können vollständig zurückgegeben oder per numerischem Index adressiert werden (z. B. 'participants/addresses' oder 'participants/addresses/0'). Array-Filter verwenden @Property-Operatoren, z. B. 'addresses/@Country=Germany/Street'. Unterstützte Operatoren: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
 	</data>
 	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
 		<value>Berechnung</value>
@@ -2248,7 +2257,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Modellordner</value>
 	</data>
 	<data name="OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip" xml:space="preserve">
-		<value>Ordner mit dem GenAI-Modell (inkl. genai.config, *.onnx und Tokenizer-Assets).</value>
+		<value>Ordner mit dem ONNX Runtime GenAI-Modell, inkl. genai_config.json, *.onnx-Dateien und Tokenizer-Assets.</value>
 	</data>
 	<data name="OnnxRuntimeGenAIFlowBlock_Prompt" xml:space="preserve">
 		<value>Prompt</value>
@@ -3250,7 +3259,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Nach der Ausführung liefert dieser Flow-Block den aktuellen DOM-Content und den tatsächlich aufgelösten Downloadpfad in seinen Ergebnisfeldern zurück.</value>
   </data>
 	<data name="OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
-    <value>Dieser Flow-Block verwaltet interne ONNX Runtime GenAI-Modell- und Tokenizer-Instanzen für die Prompt-Ausführung.</value>
+    <value>Dieser FlowBlock benötigt einen ONNX Runtime GenAI-kompatiblen Modellordner. Der Ordner muss genai_config.json, ONNX-Modelldateien und Tokenizer-Assets enthalten. Bevorzuge fertige Microsoft/Hugging Face- oder Foundry Local-GenAI-Modellordner und setze ModelFolder auf den konkreten Unterordner mit genai_config.json.</value>
   </data>
 	<data name="XmlDocumentOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
     <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und gibt es als Text oder Byte-Array aus.</value>
@@ -3659,7 +3668,7 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
     <value>Anhangszuordnungen, die aus konfigurierten Feldern erzeugt werden.</value>
   </data>
 	<data name="JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip" xml:space="preserve">
-    <value>Pfad zur Auflösung eines Werts aus dem JSON-Inhalt. Verwenden Sie '/' zur Trennung von Knoten und numerische Indizes für Arrays.</value>
+    <value>Pfad zur Auflösung eines Werts aus dem JSON-Inhalt. Verwenden Sie '/' zur Trennung von Knoten. Arrays können vollständig zurückgegeben, per numerischem Index adressiert, per Property projiziert oder mit @Property-Operatoren gefiltert werden, z. B. 'addresses/@Country=Germany/Street'. Unterstützte Operatoren: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
   </data>
 	<data name="JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip" xml:space="preserve">
     <value>JSON-Quellinhalt, der für alle konfigurierten Pfadzuordnungen verwendet wird.</value>

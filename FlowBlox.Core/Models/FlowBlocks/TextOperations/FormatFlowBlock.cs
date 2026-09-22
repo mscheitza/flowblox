@@ -49,7 +49,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
             set
             {
                 _formatParameterDefinitions = value;
-                SetFieldRequirements(_formatParameterDefinitions);
             }
         }
 

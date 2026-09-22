@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Json
 {
+    [FlowBloxSpecialExplanation("JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples", Icon = SpecialExplanationIcon.Information)]
     [Display(Name = "JsonPathSelectorFlowBlock_DisplayName", Description = "JsonPathSelectorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class JsonPathSelectorFlowBlock : BaseSingleResultFlowBlock
     {

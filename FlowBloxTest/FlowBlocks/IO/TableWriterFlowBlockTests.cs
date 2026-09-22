@@ -1,4 +1,7 @@
 using FlowBlox.Core.Models.FlowBlocks.IO;
+using FlowBlox.Core.Models.FlowBlocks.TextOperations;
+using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Provider.Project;
 
 namespace FlowBloxTest.FlowBlocks.IO
 {
@@ -43,6 +46,33 @@ namespace FlowBloxTest.FlowBlocks.IO
 
             Assert.AreEqual(readsBeforeChange + 1, table.ReadCount);
             Assert.AreEqual(1, table.ListenerCount);
+        }
+
+        [TestMethod]
+        public void OnAfterSave_SynchronizesRequiredFieldsFromColumnDefinitions()
+        {
+            var project = new FlowBloxProject();
+            FlowBloxProjectManager.Instance.ActiveProject = project;
+
+            var registry = project.FlowBloxRegistry;
+            var source = registry.CreateFlowBlockUnregistered<ConcatUriFlowBlock>();
+            registry.PostProcessFlowBlockCreated(source);
+            registry.Register(source);
+
+            var writer = registry.CreateFlowBlockUnregistered<TableWriterFlowBlock>();
+            registry.PostProcessFlowBlockCreated(writer);
+            registry.Register(writer);
+
+            writer.TableColumnDefinitions.Add(new TableColumnDefinition
+            {
+                Field = source.ResultField,
+                IsRequired = true,
+                ColumnName = "InvoiceNumber"
+            });
+
+            writer.OnAfterSave();
+
+            Assert.IsTrue(writer.RequiredFields.Contains(source.ResultField));
         }
     }
 }

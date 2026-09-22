@@ -7,6 +7,7 @@ using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Provider.Toolbox;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
@@ -79,7 +80,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
             if (!string.IsNullOrWhiteSpace(SystemInstruction))
                 return;
 
-            SystemInstruction = ToolboxConstants.SystemJsonOutputPromptTemplateContent;
+            SystemInstruction = FlowBloxToolboxResourceProvider.GetToolboxElementContent(
+                ToolboxConstants.AIPromptTemplatesCategory,
+                ToolboxConstants.SystemJsonOutputPromptTemplateName);
         }
 
         public override bool Execute(BaseRuntime runtime, object data)

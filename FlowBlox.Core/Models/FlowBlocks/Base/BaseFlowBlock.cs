@@ -1339,9 +1339,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
         }
 
+        private void SynchronizeFieldRequiredDefinitions()
+        {
+            var definitions = FlowBlockObjectCollector.CollectObjects<FieldRequiredDefinitionBase>(
+                this,
+                new HashSet<object>(),
+                recursive: false,
+                excludedTypes: [typeof(ManagedObject), typeof(BaseFlowBlock)]);
+
+            SetFieldRequirements(definitions);
+        }
+
         public override void OnAfterSave()
         {
             base.OnAfterSave();
+            SynchronizeFieldRequiredDefinitions();
             this.PropertyValuesChanged();
         }
 

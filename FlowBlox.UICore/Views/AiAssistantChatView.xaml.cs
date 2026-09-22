@@ -30,14 +30,27 @@ namespace FlowBlox.UICore.Views
             if (DataContext is not AiAssistantChatViewModel vm)
                 return;
 
-            if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.Control)
+            if (!IsEnterKey(e))
             {
-                var caretIndex = PromptTextBox.CaretIndex;
-                PromptTextBox.Text = PromptTextBox.Text.Insert(caretIndex, Environment.NewLine);
-                PromptTextBox.CaretIndex = caretIndex + Environment.NewLine.Length;
+                if (e.Key == Key.Escape)
+                {
+                    if (vm.StopCommand.CanExecute(null))
+                    {
+                        vm.StopCommand.Execute(null);
+                        e.Handled = true;
+                    }
+                }
+
+                return;
+            }
+
+            var modifiers = Keyboard.Modifiers;
+            if (modifiers == ModifierKeys.Alt || modifiers == ModifierKeys.Control)
+            {
+                InsertPromptLineBreak();
                 e.Handled = true;
             }
-            else if (e.Key == Key.Enter && Keyboard.Modifiers == ModifierKeys.None)
+            else if (modifiers == ModifierKeys.None)
             {
                 if (vm.SubmitCommand.CanExecute(null))
                 {
@@ -45,14 +58,19 @@ namespace FlowBlox.UICore.Views
                     e.Handled = true;
                 }
             }
-            else if (e.Key == Key.Escape)
-            {
-                if (vm.StopCommand.CanExecute(null))
-                {
-                    vm.StopCommand.Execute(null);
-                    e.Handled = true;
-                }
-            }
+        }
+
+        private void InsertPromptLineBreak()
+        {
+            var selectionStart = PromptTextBox.SelectionStart;
+            PromptTextBox.SelectedText = Environment.NewLine;
+            PromptTextBox.CaretIndex = selectionStart + Environment.NewLine.Length;
+        }
+
+        private static bool IsEnterKey(KeyEventArgs e)
+        {
+            return e.Key is Key.Enter or Key.Return ||
+                   e.SystemKey is Key.Enter or Key.Return;
         }
 
         private void AiAssistantChatView_Loaded(object sender, System.Windows.RoutedEventArgs e)

@@ -62,7 +62,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             set
             {
                 _tableColumnDefinitions = value;
-                SetFieldRequirements(_tableColumnDefinitions);
             }
         }
 

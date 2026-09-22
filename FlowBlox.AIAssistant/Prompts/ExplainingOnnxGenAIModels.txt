@@ -1,0 +1,173 @@
+ONNX Runtime GenAI model setup
+
+Use this only on demand when the user wants to create, configure, or troubleshoot an `OnnxGenAIFlowBlock` or asks how to obtain a compatible local GenAI model.
+
+Goal:
+- Ensure that an ONNX Runtime GenAI-compatible model folder is available for `OnnxGenAIFlowBlock`.
+- Default approach: if no suitable project input script already exists and no existing model folder was explicitly provided, create a managed input file script that downloads/prepares the model into `$Project::InputDirectory\Models\...`.
+- Configure `OnnxGenAIFlowBlock.ModelFolder` to the project-local model folder that already exists or will be created by that script.
+- The model folder must contain `genai_config.json`, tokenizer assets, and the referenced `.onnx` / `.onnx.data` files.
+- Prefer ready-to-use ONNX Runtime GenAI model folders. Do not assume that a generic ONNX export is compatible.
+- Configure the prompt fields too: `Prompt`, optional `SystemPrompt`, `UseChatTemplate`, and `ChatTemplate`.
+
+Best path:
+1. Prefer ready-made ONNX Runtime GenAI folders from trusted sources:
+   - Microsoft/Hugging Face model repositories, for example:
+     - `microsoft/Phi-4-mini-instruct-onnx`
+       - recommended compact default for new CPU demos:
+         `cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4`
+     - `microsoft/phi-4-onnx`
+       - larger Phi-4 option, use only if the user's hardware/disk budget fits:
+         `cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4`
+     - `microsoft/Phi-3.5-mini-instruct-onnx`
+       - known working compact CPU option:
+         `cpu_and_mobile/cpu-int4-awq-block-128-acc-level-4`
+     - `microsoft/Phi-3-mini-4k-instruct-onnx`
+   - Foundry Local models, when available on the user's machine.
+2. Choose the model by task and hardware:
+   - local CPU text generation: prefer small INT4 Phi mini folders.
+   - DirectML/CUDA/NPU: select the provider-specific subfolder only if the FlowBlox runtime/options are configured for that provider.
+3. Set `ModelFolder` to the concrete subfolder that contains `genai_config.json`, not merely to the repository root.
+
+Important compatibility rule:
+- A plain `optimum.exporters.onnx.main_export(...)` output is usually not enough for `OnnxGenAIFlowBlock`.
+- ONNX Runtime GenAI expects a GenAI model package with `genai_config.json`.
+- If conversion is needed, prefer the ONNX Runtime GenAI model builder or Microsoft Olive with model-builder support so `genai_config.json` is generated.
+
+Project file layout:
+- Prefer project input files/folders for local model setup artifacts:
+  - `Input/Models/<ModelName>/...`
+  - `Input/Scripts/download_<model>.ps1`
+- Managed input file keys are relative to `$Project::InputDirectory`.
+- `OnnxGenAIFlowBlock.ModelFolder` supports project placeholders only. Do not use runtime field placeholders for the model path.
+- Prefer `$Project::InputDirectory` in `ModelFolder` so the project remains portable.
+- ModelFolder blueprint:
+  - `$Project::InputDirectory\Models\Phi-4-mini-instruct-onnx\cpu_and_mobile\cpu-int4-rtn-block-32-acc-level-4`
+
+Model setup scripts:
+- If no usable model folder is known, create a managed input file script that downloads/prepares the selected ONNX GenAI model.
+- Do not ask the user to provide a model folder unless the user explicitly says a model is already downloaded or wants to use an existing local model.
+- Prefer testing the script so the concrete model folder can be verified.
+- If the task should be completed without waiting for the download to finish, set `OnnxGenAIFlowBlock.ModelFolder` to the deterministic project-local path that the script will create.
+- For script command setup, user confirmation, `ExecuteInputFileCommand`, stdout/stderr handling, and `executeBeforeRuntime` rules, use `explaining_input_files`.
+- Before running model download/setup scripts, warn that ONNX model downloads are often several GB and may take several minutes depending on bandwidth and disk performance.
+- Large model downloads can also require authentication/license acceptance.
+
+Recommended AI Assistant workflow:
+1. If the user asks for a local GenAI flow and no model folder is known:
+   - select a reasonable default instead of stopping: normally `microsoft/Phi-4-mini-instruct-onnx` with `cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4` for a compact CPU-friendly demo.
+   - use `microsoft/Phi-3.5-mini-instruct-onnx` with `cpu_and_mobile/cpu-int4-awq-block-128-acc-level-4` if the user explicitly mentions Phi-3.5 or known CPU compatibility.
+   - propose a different model only when the user has given a clear hardware/model preference.
+   - explain expected disk size and hardware/provider assumption if known.
+2. Create a managed input file script under `Scripts/`, for example `Scripts/download_phi4_mini_onnx.ps1`.
+   - Follow `explaining_input_files` for `command`, `syncMode`, execution confirmation, and testing.
+3. Test the script when a working local ONNX setup is requested. If the user does not approve or the download is not run yet, still continue with the flow configuration using the expected `ModelFolder` path created by the script.
+4. Use `$Project::InputDirectory` in `ModelFolder`.
+5. Configure `ChatTemplate` for the selected model. Use Toolbox entries from category `ChatTemplates` where possible:
+   - Phi-3/Phi-3.5: use `Phi-3(.5) Instruct`.
+   - Phi-4 mini: use `Phi-4 mini Instruct`.
+   - LLaMA/Mistral-style models: use `LLaMA / Mistral Instruct`.
+   - ChatML-style models: use `ChatML (OpenAI-style)`.
+   - If the model should receive the prompt without chat wrapping, use `Plain Prompt (No Chat)` or set `UseChatTemplate=false` deliberately.
+6. If the user has already downloaded a model, inspect/ask for the folder and verify that `genai_config.json` is in the selected folder.
+
+Chat template guidance:
+- `OnnxGenAIFlowBlock` has `UseChatTemplate=true` by default, so `ChatTemplate` must match the model.
+- The AI Assistant can retrieve Toolbox elements. Prefer retrieving the matching `ChatTemplates` entry instead of recreating template text manually.
+- Chat templates use `{SystemPrompt}` and `{UserPrompt}` placeholders. Keep these placeholders unchanged.
+- Phi-4 mini uses the same Phi instruct token structure as Phi-3/Phi-3.5, but prefer the dedicated `Phi-4 mini Instruct` Toolbox entry for clarity.
+- A wrong chat template can produce poor or empty answers even when the model folder is valid.
+
+Example PowerShell script for a ready-made Hugging Face model:
+
+```powershell
+$ErrorActionPreference = "Stop"
+
+python -m pip install --upgrade "huggingface-hub[cli]"
+
+$target = Join-Path $PSScriptRoot "..\Models\Phi-4-mini-instruct-onnx"
+New-Item -ItemType Directory -Force -Path $target | Out-Null
+
+huggingface-cli download microsoft/Phi-4-mini-instruct-onnx `
+  --include "cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/*" `
+  --local-dir $target
+
+Write-Host "Downloaded model files to: $target"
+Write-Host "Set ModelFolder to:"
+Write-Host '$Project::InputDirectory\Models\Phi-4-mini-instruct-onnx\cpu_and_mobile\cpu-int4-rtn-block-32-acc-level-4'
+```
+
+Example ModelFolder after download:
+
+```text
+$Project::InputDirectory\Models\Phi-4-mini-instruct-onnx\cpu_and_mobile\cpu-int4-rtn-block-32-acc-level-4
+```
+
+Example for Phi-3.5 mini CPU:
+
+```powershell
+$ErrorActionPreference = "Stop"
+python -m pip install --upgrade "huggingface-hub[cli]"
+
+$target = Join-Path $PSScriptRoot "..\Models\Phi-3.5-mini-instruct-onnx"
+New-Item -ItemType Directory -Force -Path $target | Out-Null
+
+huggingface-cli download microsoft/Phi-3.5-mini-instruct-onnx `
+  --include "cpu_and_mobile/cpu-int4-awq-block-128-acc-level-4/*" `
+  --local-dir $target
+
+$modelFolder = Join-Path $target "cpu_and_mobile\cpu-int4-awq-block-128-acc-level-4"
+
+# Some Phi-3.5 ONNX GenAI folders require tokenizer.model from the base model repository.
+# Keep it in the same folder as genai_config.json.
+huggingface-cli download microsoft/Phi-3.5-mini-instruct `
+  --include "tokenizer.model" `
+  --local-dir $modelFolder
+```
+
+Then ModelFolder normally points to:
+
+```text
+$Project::InputDirectory\Models\Phi-3.5-mini-instruct-onnx\cpu_and_mobile\cpu-int4-awq-block-128-acc-level-4
+```
+
+Foundry Local path:
+- Microsoft documents Foundry Local as another model acquisition path.
+- The flow is:
+  - install Foundry Local,
+  - list/download model,
+  - inspect Foundry cache location,
+  - set `ModelFolder` to the cached model subfolder containing `genai_config.json`.
+- Use this only if Foundry Local is available or the user prefers it.
+
+Conversion/export guidance:
+- Use conversion only when no ready-made ONNX Runtime GenAI folder exists.
+- Prefer Microsoft Olive with model builder support for Phi-style models.
+- Example direction, not a guaranteed universal command:
+
+```powershell
+python -m pip install --upgrade olive-ai transformers
+olive auto-opt --model_name_or_path "<local-or-hf-model>" --output_path "Input\Models\<model>-onnx" --device cpu --provider CPUExecutionProvider --precision int4 --use_model_builder --log_level 1
+```
+
+Validation checklist:
+- The selected ModelFolder contains `genai_config.json`.
+- The ONNX filenames referenced by `genai_config.json` exist.
+- Tokenizer assets exist, usually `tokenizer.json`, `tokenizer.model`, `tokenizer_config.json`, `special_tokens_map.json`, or related files depending on the model.
+- For Phi-3.5 mini ONNX CPU folders, verify whether `tokenizer.model` is present. If it is missing, download it from `microsoft/Phi-3.5-mini-instruct` into the same ModelFolder.
+- `ChatTemplate` matches the selected model family, or `UseChatTemplate=false` is chosen intentionally.
+- The FlowBlox ONNX execution provider option matches the model subfolder/provider where relevant.
+- The user's machine has enough disk/RAM/VRAM for the selected model.
+
+Useful references:
+- ONNX Runtime GenAI downloads: https://github.com/microsoft/onnxruntime-genai/blob/main/docs/DownloadModels.md
+- ONNX Runtime GenAI config reference: https://onnxruntime.ai/docs/genai/reference/config.html
+- ONNX Runtime GenAI Phi-3 tutorial: https://onnxruntime.ai/docs/genai/tutorials/phi3-python.html
+- Microsoft ONNX Runtime GenAI repo: https://github.com/microsoft/onnxruntime-genai
+- Hugging Face ready ONNX GenAI model: https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx
+- Hugging Face ready ONNX GenAI model: https://huggingface.co/microsoft/phi-4-onnx
+- Hugging Face ready ONNX GenAI model: https://huggingface.co/microsoft/Phi-3.5-mini-instruct-onnx
+- Phi-4 mini CPU subfolder with `genai_config.json`: https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/tree/main/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4
+- Phi-3.5 mini CPU subfolder with `genai_config.json`: https://huggingface.co/microsoft/Phi-3.5-mini-instruct-onnx/tree/main/cpu_and_mobile/cpu-int4-awq-block-128-acc-level-4
+- Microsoft PhiCookBook / Phi-4 ONNX: https://github.com/microsoft/PhiCookBook/blob/main/md/02.Application/01.TextAndChat/Phi4/ChatWithPhi4ONNX/README.md
+- Phi-4 mini tokenizer config / chat template: https://huggingface.co/microsoft/Phi-4-mini-instruct/blob/main/tokenizer_config.json

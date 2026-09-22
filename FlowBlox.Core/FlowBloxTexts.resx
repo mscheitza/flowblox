@@ -963,6 +963,15 @@ All inputs are collected during each referenced iteration and this flow block ex
 	<data name="JsonPathSelectorFlowBlock_Path" xml:space="preserve">
 		<value>JSON path</value>
 	</data>
+	<data name="JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples" xml:space="preserve">
+		<value>JSON path examples:
+- `participant/name` returns a single property value.
+- `participant/addresses` returns all address array items; object items are returned as compact JSON.
+- `participant/addresses/0/Street` returns the street of the first address.
+- `participant/addresses/@Country=Germany` returns address objects whose Country is Germany.
+- `participant/addresses/@Country=Germany/Street` returns the streets of German addresses.
+- Filters support: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
+	</data>
 	<data name="JsonPropertyValueAssignment_DisplayName" xml:space="preserve">
 		<value>JSON property assignment</value>
 	</data>
@@ -1868,7 +1877,7 @@ Use the "+" button to add entries to the table.</value>
 		<value>Optional context flow block. If set, the index is reset to the initial value whenever this flow block starts a new iteration. If no context is specified, the index continues across the entire runtime execution.</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
-		<value>Path used to navigate through the JSON document. Use '/' to separate nodes. Object properties are addressed by their property name, array elements by a numeric index (e.g. 'participants/addresses/0').</value>
+		<value>Path used to navigate through the JSON document. Use '/' to separate nodes. Object properties are addressed by name, arrays can be returned as a whole or addressed by numeric index (e.g. 'participants/addresses' or 'participants/addresses/0'). Array filters use @Property operators, e.g. 'addresses/@Country=Germany/Street'. Supported operators: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
 	</data>
 	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
 		<value>Calculation</value>
@@ -2324,7 +2333,7 @@ Note: Once a provider is loaded, switching providers within the same process is 
 		<value>Model folder</value>
 	</data>
 	<data name="OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip" xml:space="preserve">
-		<value>Folder containing the GenAI model (including genai.config, *.onnx and tokenizer assets).</value>
+		<value>Folder containing the ONNX Runtime GenAI model, including genai_config.json, *.onnx files and tokenizer assets.</value>
 	</data>
 	<data name="OnnxRuntimeGenAIFlowBlock_Prompt" xml:space="preserve">
 		<value>Prompt</value>
@@ -3416,7 +3425,7 @@ Multi-level XPath expressions are not allowed here.</value>
     <value>After execution, this flow block returns the current DOM content and the actual resolved download path in its result fields.</value>
   </data>
 	<data name="OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
-    <value>This flow block manages internal ONNX Runtime GenAI model and tokenizer instances for prompt execution.</value>
+    <value>This flow block requires an ONNX Runtime GenAI-compatible model folder. The folder must contain genai_config.json, ONNX model files and tokenizer assets. Prefer ready-made Microsoft/Hugging Face or Foundry Local GenAI model folders and point ModelFolder to the concrete subfolder that contains genai_config.json.</value>
   </data>
 	<data name="XmlDocumentOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
     <value>This flow block uses the internally managed XML document from an XML document flow block and outputs it as text or byte array.</value>
@@ -3810,7 +3819,7 @@ If a Join collector should aggregate links across all page iterations:
     <value>Attachment mappings generated from configured fields.</value>
   </data>
 	<data name="JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip" xml:space="preserve">
-    <value>Path used to resolve a value from the JSON content. Use '/' to separate nodes and numeric indexes for arrays.</value>
+    <value>Path used to resolve a value from the JSON content. Use '/' to separate nodes. Arrays can be returned as a whole, addressed by numeric index, projected by property, or filtered with @Property operators, e.g. 'addresses/@Country=Germany/Street'. Supported operators: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
   </data>
 	<data name="JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip" xml:space="preserve">
     <value>JSON source content used for all configured path mappings.</value>

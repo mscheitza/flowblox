@@ -406,9 +406,47 @@ namespace FlowBlox.UICore.ViewModels
                 key);
 
             var title = FlowBloxResourceUtil.GetLocalizedString("Message_ExecuteInputFileCommand_Confirm_Title", typeof(Resources.AiAssistantChatView));
-            var decision = _messageBoxService?.ShowMessageBox(message, title, FlowBloxMessageBoxTypes.Question);
+            var decision = ShowMessageBoxOnUiThread(message, title, FlowBloxMessageBoxTypes.Question);
 
             return decision == FlowBloxMessageBoxDialogResult.Yes;
+        }
+
+        private FlowBloxMessageBoxDialogResult? ShowMessageBoxOnUiThread(
+            string message,
+            string title,
+            FlowBloxMessageBoxTypes messageBoxType)
+        {
+            if (_messageBoxService == null)
+                return null;
+
+            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
+            {
+                FlowBloxMessageBoxDialogResult? result = null;
+                Exception? exception = null;
+
+                _uiContext.Send(_ =>
+                {
+                    try
+                    {
+                        result = _messageBoxService.ShowMessageBox(message, title, messageBoxType);
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                    }
+                }, null);
+
+                if (exception != null)
+                    throw exception;
+
+                return result;
+            }
+
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher != null && !dispatcher.CheckAccess())
+                return dispatcher.Invoke(() => _messageBoxService.ShowMessageBox(message, title, messageBoxType));
+
+            return _messageBoxService.ShowMessageBox(message, title, messageBoxType);
         }
 
         private void CopyTranscriptEntry(object parameter)
