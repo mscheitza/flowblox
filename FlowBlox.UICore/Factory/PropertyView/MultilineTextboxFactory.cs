@@ -21,10 +21,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         public FrameworkElement Create()
         {
+            var canEdit = !_readOnly && _property.SetMethod?.IsPublic == true;
             var binding = new Binding(_property.Name)
             {
                 Source = _target,
-                Mode = _property.CanWrite ? BindingMode.TwoWay : BindingMode.OneWay,
+                Mode = canEdit ? BindingMode.TwoWay : BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 ValidatesOnDataErrors = true,
                 ValidatesOnExceptions = true,
@@ -39,7 +40,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
                 IsReadOnly = _readOnly
             };
-            textBox.TextChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
+            if (canEdit)
+                textBox.TextChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
             ParentScrollViewerMouseWheelForwarder.Register(textBox);
             textBox.SetBinding(TextBox.TextProperty, binding);
 

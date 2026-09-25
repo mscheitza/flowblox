@@ -103,6 +103,15 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.ControlFlow;
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(ProjectFile));
+            properties.Add(nameof(ProjectSpaceGuid));
+            properties.Add(nameof(ProjectSpaceVersion));
+            return properties;
+        }
+
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return this.Invoke(runtime, data, () =>

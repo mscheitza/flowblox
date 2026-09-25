@@ -185,62 +185,50 @@ namespace FlowBlox.Core.Models.Generators
             if (string.IsNullOrEmpty(template))
                 return template;
 
-            var resolved = template;
+            var resolved = ReplaceFieldTokensWithTestValues(template, testResults);
+            resolved = FlowBloxFieldHelper.ReplaceFieldsInString(resolved);
 
-            resolved = resolved.Replace("$GenerationStrategy::InputFieldValue", BuildGenerationInputText(testResults));
+            resolved = resolved.Replace("$GenerationStrategy::TargetFlowBlockInputValues", BuildTargetFlowBlockInputValuesText(testResults));
             resolved = resolved.Replace("$GenerationStrategy::TestExpectations", BuildTestExpectationsText(testResults));
             resolved = resolved.Replace("$GenerationStrategy::TestResults", BuildTestResultsText(testResults));
             resolved = resolved.Replace("$GenerationStrategy::FlowBloxQuickUpdateSchema", FlowBloxQuickUpdateSchemaProvider.BuildSchema(Source));
             resolved = resolved.Replace("$GenerationStrategy::FlowBloxQuickUpdateFormat", BuildQuickUpdateFormatText());
             resolved = resolved.Replace("$GenerationStrategy::FlowBlockDescriptions", BuildFlowBlockDescriptions());
 
-            resolved = ReplaceFieldTokensWithTestValues(resolved, testResults);
-            resolved = FlowBloxFieldHelper.ReplaceFieldsInString(resolved);
-
             return resolved;
         }
 
-        private string BuildGenerationInputText(Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)
+        private string BuildTargetFlowBlockInputValuesText(Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)
         {
-            if (InputField == null || testResults == null || testResults.Count == 0)
+            if (Source == null || testResults == null || testResults.Count == 0)
                 return string.Empty;
 
-            var inputFieldFQName = InputField.FullyQualifiedName;
-            if (string.IsNullOrWhiteSpace(inputFieldFQName))
-                return string.Empty;
+            var referencedFields = Source.GetAssociatedFields()
+                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.FullyQualifiedName))
+                .GroupBy(x => x.FullyQualifiedName, StringComparer.Ordinal)
+                .Select(x => x.First())
+                .OrderBy(x => x.FullyQualifiedName, StringComparer.Ordinal)
+                .ToList();
 
-            var valuesByTestCase = testResults
-                .OrderBy(x => x.Key.Name, StringComparer.Ordinal)
-                .Select(x =>
+            if (referencedFields.Count == 0)
+                return "No referenced input fields are available.";
+
+            var sb = new StringBuilder();
+            foreach (var testResult in testResults.OrderBy(x => x.Key.Name, StringComparer.Ordinal))
+            {
+                sb.AppendLine($"TestCase={testResult.Key.Name}");
+
+                foreach (var field in referencedFields)
                 {
-                    var value = string.Empty;
-                    var hasValue = x.Value?.FieldValueAssignments != null
-                        && x.Value.FieldValueAssignments.TryGetValue(inputFieldFQName, out value);
-                    return new
-                    {
-                        TestCaseName = x.Key.Name,
-                        HasValue = hasValue,
-                        Value = value
-                    };
-                })
-                .Where(x => x.HasValue)
-                .ToList();
+                    var value = field.StringValue ?? string.Empty;
+                    testResult.Value?.FieldValueAssignments?.TryGetValue(field.FullyQualifiedName, out value);
+                    sb.AppendLine($"{field.FullyQualifiedName}={field.GetExternalValue(value ?? string.Empty)}");
+                }
 
-            if (valuesByTestCase.Count == 0)
-                return string.Empty;
+                sb.AppendLine();
+            }
 
-            var distinctValues = valuesByTestCase
-                .Select(x => x.Value ?? string.Empty)
-                .Distinct(StringComparer.Ordinal)
-                .ToList();
-
-            if (distinctValues.Count == 1)
-                return distinctValues[0];
-
-            var lines = valuesByTestCase
-                .Select(x => $"[{x.TestCaseName}] {x.Value ?? string.Empty}")
-                .ToList();
-            return string.Join(Environment.NewLine, lines);
+            return sb.ToString().Trim();
         }
 
         private string ReplaceFieldTokensWithTestValues(string input, Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)
@@ -258,6 +246,13 @@ namespace FlowBlox.Core.Models.Generators
 
             foreach (var token in tokens)
             {
+                var field = FlowBloxRegistryProvider.GetRegistry().GetFieldElementOrNull(token);
+                if (field?.IsPassword == true)
+                {
+                    input = input.Replace(token, GlobalConstants.HiddenSensitiveValue);
+                    continue;
+                }
+
                 var values = new List<string>();
                 foreach (var kvp in testResults.OrderBy(x => x.Key.Name))
                 {

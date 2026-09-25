@@ -1,12 +1,16 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.Selection;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.SequenceDetection;
 using FlowBlox.SequenceDetection.Model;
+using FlowBlox.Grid.Elements.Util;
 using Newtonsoft.Json;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.Generators
@@ -15,6 +19,8 @@ namespace FlowBlox.Core.Models.Generators
     [FlowBloxSupportedTypes(typeof(SequenceDetectionFlowBlock))]
     public class SequenceDetectionGenerationStrategy : FlowBloxGenerationStrategyBase
     {
+        private BasePipeFlowBlock _subscribedSource;
+
         private static readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings()
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -22,6 +28,13 @@ namespace FlowBlox.Core.Models.Generators
         };
 
         private SequenceDetectionFlowBlock GetSequenceDetectionFlowBlock() => (SequenceDetectionFlowBlock)Source;
+
+        [Display(Name = "Global_InputField", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Link | UIOperations.Unlink,
+            SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
+            SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
+        [Required]
+        public FieldElement InputField { get; set; }
 
         public SequenceDetectionGenerationStrategy() : base()
         {
@@ -34,10 +47,32 @@ namespace FlowBlox.Core.Models.Generators
                 throw new ArgumentException(nameof(flowBlock), $"The FlowBlock must be of type \"{typeof(SequenceDetectionFlowBlock).Name}\".");
         }
 
+        protected override void OnAfterSourceChanged()
+        {
+            if (_subscribedSource != null)
+                _subscribedSource.PropertyChanged -= SourcePropertyChanged;
+
+            _subscribedSource = Source as BasePipeFlowBlock;
+            if (_subscribedSource == null)
+                return;
+
+            InputField = _subscribedSource.InputField;
+            _subscribedSource.PropertyChanged += SourcePropertyChanged;
+        }
+
+        private void SourcePropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(BasePipeFlowBlock.InputField))
+                InputField = _subscribedSource?.InputField;
+        }
+
         public override void Assign(object value)
         {
             var sequenceDetectionFlowBlock = GetSequenceDetectionFlowBlock();
             sequenceDetectionFlowBlock.SequenceDetectionPattern = JsonConvert.SerializeObject(value, _jsonSerializerSettings);
+            FlowBloxComponentHelper.RaisePropertyChanged(
+                sequenceDetectionFlowBlock,
+                nameof(SequenceDetectionFlowBlock.SequenceDetectionPattern));
         }
 
         public override object Execute(BaseRuntime runtime, Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults)

@@ -70,13 +70,13 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
-        public static string Button_Apply
+        public static string Button_Save
         {
             get
             {
-                return ResourceManager.GetString("Button_Apply", resourceCulture);
+                return ResourceManager.GetString("Button_Save", resourceCulture);
             }
         }
         
@@ -154,6 +154,28 @@ namespace FlowBlox.UICore.Resources
             get
             {
                 return ResourceManager.GetString("Toolbar_ImportText_Tooltip", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Insert placeholder ähnelt.
+        /// </summary>
+        public static string Toolbar_InsertPlaceholder
+        {
+            get
+            {
+                return ResourceManager.GetString("Toolbar_InsertPlaceholder", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Insert a project property or option placeholder at the current cursor position. ähnelt.
+        /// </summary>
+        public static string Toolbar_InsertPlaceholder_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("Toolbar_InsertPlaceholder_Tooltip", resourceCulture);
             }
         }
         

@@ -88,7 +88,10 @@ namespace FlowBlox.Core.Models.Components
         public static readonly FlowBlockCategory Selection = new(Get("FloxBloxCategory_Selection"));
         public static readonly FlowBlockCategory Web = new(Get("FloxBloxCategory_Web"));
         public static readonly FlowBlockCategory IO = new(Get("FloxBloxCategory_IO"));
+        public static readonly FlowBlockCategory S3Storage = new(Get("FloxBloxCategory_S3Storage"), IO);
+        public static readonly FlowBlockCategory Sftp = new(Get("FloxBloxCategory_Sftp"), IO);
         public static readonly FlowBlockCategory Generation = new(Get("FloxBloxCategory_Generation"));
+        public static readonly FlowBlockCategory Conversion = new(Get("FloxBloxCategory_Conversion"));
         public static readonly FlowBlockCategory ControlFlow = new(Get("FloxBloxCategory_ControlFlow"));
         public static readonly FlowBlockCategory Communication = new(Get("FloxBloxCategory_Communication"));
         public static readonly FlowBlockCategory Authorization = new(Get("FloxBloxCategory_Authorization"));

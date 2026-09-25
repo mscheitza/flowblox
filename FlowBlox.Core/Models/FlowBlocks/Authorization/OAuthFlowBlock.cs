@@ -16,35 +16,46 @@ namespace FlowBlox.Core.Models.FlowBlocks.Authorization
     public class OAuthFlowBlock : BaseSingleResultFlowBlock
     {
         [Required]
-        [Display(Name = "OAuthFlowBlock_TokenEndpoint", ResourceType = typeof(FlowBloxTexts), Order = 0)]
+        [Display(Name = "OAuthFlowBlock_TokenEndpoint", Description = "OAuthFlowBlock_TokenEndpoint_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string TokenEndpoint { get; set; }
 
         [Required]
-        [Display(Name = "OAuthFlowBlock_ClientId", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "OAuthFlowBlock_ClientId", Description = "OAuthFlowBlock_ClientId_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string ClientId { get; set; }
 
         [Required]
-        [Display(Name = "OAuthFlowBlock_ClientSecret", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [Display(Name = "OAuthFlowBlock_ClientSecret", Description = "OAuthFlowBlock_ClientSecret_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
-        [FlowBloxTextBox]
         public string ClientSecret { get; set; }
 
-        [Display(Name = "OAuthFlowBlock_Scope", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [Display(Name = "OAuthFlowBlock_Scope", Description = "OAuthFlowBlock_Scope_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Scope { get; set; }
 
-        [Display(Name = "OAuthFlowBlock_Audience", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        [Display(Name = "OAuthFlowBlock_Audience", Description = "OAuthFlowBlock_Audience_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Audience { get; set; }
 
-        [Display(Name = "OAuthFlowBlock_GrantType", ResourceType = typeof(FlowBloxTexts), Order = 5)]
-        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
-        public string GrantType { get; set; } = "client_credentials";
+        [Display(Name = "OAuthFlowBlock_GrantType", Description = "OAuthFlowBlock_GrantType_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
+        [FlowBloxUI(Factory = UIFactory.ComboBox)]
+        public OAuthGrantType GrantType { get; set; } = OAuthGrantType.ClientCredentials;
 
-        [Display(Name = "OAuthFlowBlock_SendClientCredentialsInBody", ResourceType = typeof(FlowBloxTexts), Order = 6)]
+        [Display(Name = "OAuthFlowBlock_SendClientCredentialsInBody", Description = "OAuthFlowBlock_SendClientCredentialsInBody_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 6)]
         public bool SendClientCredentialsInBody { get; set; } = true;
+
+        [ActivationCondition(MemberName = nameof(GrantType), Value = OAuthGrantType.Password)]
+        [ConditionallyRequired]
+        [Display(Name = "OAuthFlowBlock_UserName", Description = "OAuthFlowBlock_UserName_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 7)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        public string UserName { get; set; }
+
+        [ActivationCondition(MemberName = nameof(GrantType), Value = OAuthGrantType.Password)]
+        [ConditionallyRequired]
+        [Display(Name = "OAuthFlowBlock_Password", Description = "OAuthFlowBlock_Password_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 8)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        public string Password { get; set; }
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.identifier, 16, SKColors.SteelBlue);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.identifier, 32, SKColors.SteelBlue);
@@ -63,6 +74,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Authorization
             properties.Add(nameof(Scope));
             properties.Add(nameof(Audience));
             properties.Add(nameof(GrantType));
+            if (GrantType == OAuthGrantType.Password)
+                properties.Add(nameof(UserName));
             return properties;
         }
 
@@ -79,7 +92,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Authorization
                 var resolvedClientSecret = FlowBloxFieldHelper.ReplaceFieldsInString(ClientSecret ?? string.Empty);
                 var resolvedScope = FlowBloxFieldHelper.ReplaceFieldsInString(Scope ?? string.Empty)?.Trim();
                 var resolvedAudience = FlowBloxFieldHelper.ReplaceFieldsInString(Audience ?? string.Empty)?.Trim();
-                var resolvedGrantType = FlowBloxFieldHelper.ReplaceFieldsInString(GrantType ?? string.Empty)?.Trim();
+                var resolvedUserName = FlowBloxFieldHelper.ReplaceFieldsInString(UserName ?? string.Empty)?.Trim();
+                var resolvedPassword = FlowBloxFieldHelper.ReplaceFieldsInString(Password ?? string.Empty);
 
                 if (string.IsNullOrWhiteSpace(resolvedEndpoint))
                     throw new ValidationException("OAuth token endpoint is empty.");
@@ -87,13 +101,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.Authorization
                 if (string.IsNullOrWhiteSpace(resolvedClientId))
                     throw new ValidationException("OAuth client id is empty.");
 
-                if (string.IsNullOrWhiteSpace(resolvedGrantType))
-                    resolvedGrantType = "client_credentials";
+                if (GrantType == OAuthGrantType.Password && string.IsNullOrWhiteSpace(resolvedUserName))
+                    throw new ValidationException("OAuth user name is empty for the password grant.");
+                if (GrantType == OAuthGrantType.Password && string.IsNullOrEmpty(resolvedPassword))
+                    throw new ValidationException("OAuth password is empty for the password grant.");
 
                 string token;
                 try
                 {
-                    token = RequestToken(resolvedEndpoint, resolvedClientId, resolvedClientSecret, resolvedScope, resolvedAudience, resolvedGrantType).GetAwaiter().GetResult();
+                    token = RequestToken(resolvedEndpoint, resolvedClientId, resolvedClientSecret, resolvedScope,
+                        resolvedAudience, GrantType, resolvedUserName, resolvedPassword).GetAwaiter().GetResult();
                 }
                 catch (Exception ex)
                 {
@@ -118,14 +135,22 @@ namespace FlowBlox.Core.Models.FlowBlocks.Authorization
             string clientSecret,
             string scope,
             string audience,
-            string grantType)
+            OAuthGrantType grantType,
+            string userName,
+            string password)
         {
             using var httpClient = new HttpClient();
 
             var form = new Dictionary<string, string>
             {
-                ["grant_type"] = grantType
+                ["grant_type"] = grantType == OAuthGrantType.Password ? "password" : "client_credentials"
             };
+
+            if (grantType == OAuthGrantType.Password)
+            {
+                form["username"] = userName ?? string.Empty;
+                form["password"] = password ?? string.Empty;
+            }
 
             if (!string.IsNullOrWhiteSpace(scope))
                 form["scope"] = scope;

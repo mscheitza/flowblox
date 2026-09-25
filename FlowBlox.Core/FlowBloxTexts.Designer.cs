@@ -14537,6 +14537,22 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XmlDocumentXPathSelector_DocumentSource", resourceCulture);
             }
         }
+
+        public static string XmlDocumentXPathSelector_Notification_NoMatchingValuesFound
+        {
+            get
+            {
+                return ResourceManager.GetString("XmlDocumentXPathSelector_Notification_NoMatchingValuesFound", resourceCulture);
+            }
+        }
+
+        public static string XmlDocumentXPathSelector_Notification_XPathExpressionIsEmpty
+        {
+            get
+            {
+                return ResourceManager.GetString("XmlDocumentXPathSelector_Notification_XPathExpressionIsEmpty", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die XPath ähnelt.
@@ -14546,6 +14562,14 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("XmlDocumentXPathSelector_XPath", resourceCulture);
+            }
+        }
+
+        public static string XmlDocumentXPathSelector_XPath_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("XmlDocumentXPathSelector_XPath_Tooltip", resourceCulture);
             }
         }
         
@@ -14579,6 +14603,78 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_Description", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_Notification_NoMatchingValuesFound
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_Notification_NoMatchingValuesFound", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_Notification_XmlContentIsEmpty
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_Notification_XmlContentIsEmpty", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_Notification_XPathExpressionIsEmpty
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_Notification_XPathExpressionIsEmpty", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_XmlContent
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_XmlContent", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_XmlContent_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_XmlContent_Tooltip", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_XPath
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_XPath", resourceCulture);
+            }
+        }
+
+        public static string XPathSelectorFlowBlock_XPath_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_XPath_Tooltip", resourceCulture);
             }
         }
         
@@ -14988,5 +15084,167 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("ZipCompressionStrength_VeryHigh", resourceCulture);
             }
         }
+
+        public static string OpenXmlTemplateFlowBlock_DisplayName => ResourceManager.GetString(nameof(OpenXmlTemplateFlowBlock_DisplayName), resourceCulture);
+        public static string OpenXmlTemplateFlowBlock_Description => ResourceManager.GetString(nameof(OpenXmlTemplateFlowBlock_Description), resourceCulture);
+        public static string OpenXmlTemplateFlowBlock_TemplateField => ResourceManager.GetString(nameof(OpenXmlTemplateFlowBlock_TemplateField), resourceCulture);
+        public static string OpenXmlTemplateFlowBlock_TemplateField_Tooltip => ResourceManager.GetString(nameof(OpenXmlTemplateFlowBlock_TemplateField_Tooltip), resourceCulture);
+        public static string AsposeWordToPdfFlowBlock_DisplayName => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_DisplayName), resourceCulture);
+        public static string AsposeWordToPdfFlowBlock_Description => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_Description), resourceCulture);
+        public static string AsposeWordToPdfFlowBlock_WordDocumentField => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_WordDocumentField), resourceCulture);
+        public static string AsposeWordToPdfFlowBlock_WordDocumentField_Tooltip => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_WordDocumentField_Tooltip), resourceCulture);
+        public static string AsposeWordToPdfFlowBlock_Compliance => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_Compliance), resourceCulture);
+        public static string AsposeWordToPdfFlowBlock_Compliance_Tooltip => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_Compliance_Tooltip), resourceCulture);
+        public static string AsposePdfCompliance_Pdf => ResourceManager.GetString(nameof(AsposePdfCompliance_Pdf), resourceCulture);
+        public static string AsposePdfCompliance_PdfA1b => ResourceManager.GetString(nameof(AsposePdfCompliance_PdfA1b), resourceCulture);
+        public static string AsposePdfCompliance_PdfA2u => ResourceManager.GetString(nameof(AsposePdfCompliance_PdfA2u), resourceCulture);
+        public static string AsposePdfCompliance_PdfA3u => ResourceManager.GetString(nameof(AsposePdfCompliance_PdfA3u), resourceCulture);
+        public static string AsposePdfCompliance_PdfA4 => ResourceManager.GetString(nameof(AsposePdfCompliance_PdfA4), resourceCulture);
+        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlockUIActions_ImportLicense), resourceCulture);
+        public static string TextBuilderFlowBlock_DisplayName => ResourceManager.GetString(nameof(TextBuilderFlowBlock_DisplayName), resourceCulture);
+        public static string TextBuilderFlowBlock_Description => ResourceManager.GetString(nameof(TextBuilderFlowBlock_Description), resourceCulture);
+        public static string TextBuilderFlowBlock_InitialText => ResourceManager.GetString(nameof(TextBuilderFlowBlock_InitialText), resourceCulture);
+        public static string TextBuilderFlowBlock_InitialText_Tooltip => ResourceManager.GetString(nameof(TextBuilderFlowBlock_InitialText_Tooltip), resourceCulture);
+        public static string TextBuilderAppendFlowBlock_DisplayName => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_DisplayName), resourceCulture);
+        public static string TextBuilderAppendFlowBlock_Description => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_Description), resourceCulture);
+        public static string TextBuilderAppendFlowBlock_AssociatedTextBuilder => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_AssociatedTextBuilder), resourceCulture);
+        public static string TextBuilderAppendFlowBlock_AssociatedTextBuilder_Tooltip => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_AssociatedTextBuilder_Tooltip), resourceCulture);
+        public static string TextBuilderAppendFlowBlock_Text => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_Text), resourceCulture);
+        public static string TextBuilderAppendFlowBlock_Text_Tooltip => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_Text_Tooltip), resourceCulture);
+        public static string TextBuilderAppendFlowBlock_AppendLine => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_AppendLine), resourceCulture);
+        public static string TextBuilderAppendFlowBlock_AppendLine_Tooltip => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_AppendLine_Tooltip), resourceCulture);
+        public static string TextBuilderOutputFlowBlock_DisplayName => ResourceManager.GetString(nameof(TextBuilderOutputFlowBlock_DisplayName), resourceCulture);
+        public static string TextBuilderOutputFlowBlock_Description => ResourceManager.GetString(nameof(TextBuilderOutputFlowBlock_Description), resourceCulture);
+        public static string TextBuilderOutputFlowBlock_AssociatedTextBuilder => ResourceManager.GetString(nameof(TextBuilderOutputFlowBlock_AssociatedTextBuilder), resourceCulture);
+        public static string TextBuilderOutputFlowBlock_AssociatedTextBuilder_Tooltip => ResourceManager.GetString(nameof(TextBuilderOutputFlowBlock_AssociatedTextBuilder_Tooltip), resourceCulture);
+        public static string AmazonWebServicesProvider_S3ServiceUrl => ResourceManager.GetString(nameof(AmazonWebServicesProvider_S3ServiceUrl), resourceCulture);
+        public static string AmazonWebServicesProvider_S3ServiceUrl_Tooltip => ResourceManager.GetString(nameof(AmazonWebServicesProvider_S3ServiceUrl_Tooltip), resourceCulture);
+        public static string AmazonWebServicesProvider_S3ForcePathStyle => ResourceManager.GetString(nameof(AmazonWebServicesProvider_S3ForcePathStyle), resourceCulture);
+        public static string AmazonWebServicesProvider_S3ForcePathStyle_Tooltip => ResourceManager.GetString(nameof(AmazonWebServicesProvider_S3ForcePathStyle_Tooltip), resourceCulture);
+        public static string S3DownloadObjectFlowBlock_DisplayName => ResourceManager.GetString(nameof(S3DownloadObjectFlowBlock_DisplayName), resourceCulture);
+        public static string S3DownloadObjectFlowBlock_Description => ResourceManager.GetString(nameof(S3DownloadObjectFlowBlock_Description), resourceCulture);
+        public static string S3UploadObjectFlowBlock_DisplayName => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_DisplayName), resourceCulture);
+        public static string S3UploadObjectFlowBlock_Description => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_Description), resourceCulture);
+        public static string S3StorageFlowBlock_Provider => ResourceManager.GetString(nameof(S3StorageFlowBlock_Provider), resourceCulture);
+        public static string S3StorageFlowBlock_Provider_Tooltip => ResourceManager.GetString(nameof(S3StorageFlowBlock_Provider_Tooltip), resourceCulture);
+        public static string S3StorageFlowBlock_BucketName => ResourceManager.GetString(nameof(S3StorageFlowBlock_BucketName), resourceCulture);
+        public static string S3StorageFlowBlock_BucketName_Tooltip => ResourceManager.GetString(nameof(S3StorageFlowBlock_BucketName_Tooltip), resourceCulture);
+        public static string S3StorageFlowBlock_ObjectKey => ResourceManager.GetString(nameof(S3StorageFlowBlock_ObjectKey), resourceCulture);
+        public static string S3StorageFlowBlock_ObjectKey_Tooltip => ResourceManager.GetString(nameof(S3StorageFlowBlock_ObjectKey_Tooltip), resourceCulture);
+        public static string S3UploadObjectFlowBlock_ContentField => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_ContentField), resourceCulture);
+        public static string S3UploadObjectFlowBlock_ContentField_Tooltip => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_ContentField_Tooltip), resourceCulture);
+        public static string S3UploadObjectFlowBlock_ContentType => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_ContentType), resourceCulture);
+        public static string S3UploadObjectFlowBlock_ContentType_Tooltip => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_ContentType_Tooltip), resourceCulture);
+        public static string HashModifier_DisplayName => ResourceManager.GetString(nameof(HashModifier_DisplayName), resourceCulture);
+        public static string HashModifier_Algorithm => ResourceManager.GetString(nameof(HashModifier_Algorithm), resourceCulture);
+        public static string HashModifier_Algorithm_Tooltip => ResourceManager.GetString(nameof(HashModifier_Algorithm_Tooltip), resourceCulture);
+        public static string HashModifier_OutputEncoding => ResourceManager.GetString(nameof(HashModifier_OutputEncoding), resourceCulture);
+        public static string HashModifier_OutputEncoding_Tooltip => ResourceManager.GetString(nameof(HashModifier_OutputEncoding_Tooltip), resourceCulture);
+        public static string HmacModifier_DisplayName => ResourceManager.GetString(nameof(HmacModifier_DisplayName), resourceCulture);
+        public static string HmacModifier_Algorithm => ResourceManager.GetString(nameof(HmacModifier_Algorithm), resourceCulture);
+        public static string HmacModifier_Algorithm_Tooltip => ResourceManager.GetString(nameof(HmacModifier_Algorithm_Tooltip), resourceCulture);
+        public static string HmacModifier_SecretKey => ResourceManager.GetString(nameof(HmacModifier_SecretKey), resourceCulture);
+        public static string HmacModifier_SecretKey_Tooltip => ResourceManager.GetString(nameof(HmacModifier_SecretKey_Tooltip), resourceCulture);
+        public static string HmacModifier_KeyEncoding => ResourceManager.GetString(nameof(HmacModifier_KeyEncoding), resourceCulture);
+        public static string HmacModifier_KeyEncoding_Tooltip => ResourceManager.GetString(nameof(HmacModifier_KeyEncoding_Tooltip), resourceCulture);
+        public static string CryptographicHashAlgorithm_SHA256 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_SHA256), resourceCulture);
+        public static string CryptographicHashAlgorithm_SHA384 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_SHA384), resourceCulture);
+        public static string CryptographicHashAlgorithm_SHA512 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_SHA512), resourceCulture);
+        public static string CryptographicHashAlgorithm_SHA1 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_SHA1), resourceCulture);
+        public static string CryptographicHashAlgorithm_MD5 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_MD5), resourceCulture);
+        public static string CryptographicOutputEncoding_HexLowerCase => ResourceManager.GetString(nameof(CryptographicOutputEncoding_HexLowerCase), resourceCulture);
+        public static string CryptographicOutputEncoding_HexUpperCase => ResourceManager.GetString(nameof(CryptographicOutputEncoding_HexUpperCase), resourceCulture);
+        public static string CryptographicOutputEncoding_Base64 => ResourceManager.GetString(nameof(CryptographicOutputEncoding_Base64), resourceCulture);
+        public static string CryptographicKeyEncoding_Text => ResourceManager.GetString(nameof(CryptographicKeyEncoding_Text), resourceCulture);
+        public static string CryptographicKeyEncoding_Base64 => ResourceManager.GetString(nameof(CryptographicKeyEncoding_Base64), resourceCulture);
+        public static string CryptographicKeyEncoding_Hex => ResourceManager.GetString(nameof(CryptographicKeyEncoding_Hex), resourceCulture);
+        public static string SftpConnectionProvider_DisplayName => ResourceManager.GetString(nameof(SftpConnectionProvider_DisplayName), resourceCulture);
+        public static string SftpConnectionProvider_DisplayName_Plural => ResourceManager.GetString(nameof(SftpConnectionProvider_DisplayName_Plural), resourceCulture);
+        public static string SftpConnectionProvider_Host => ResourceManager.GetString(nameof(SftpConnectionProvider_Host), resourceCulture);
+        public static string SftpConnectionProvider_Host_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_Host_Tooltip), resourceCulture);
+        public static string SftpConnectionProvider_Port => ResourceManager.GetString(nameof(SftpConnectionProvider_Port), resourceCulture);
+        public static string SftpConnectionProvider_Port_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_Port_Tooltip), resourceCulture);
+        public static string SftpConnectionProvider_UserName => ResourceManager.GetString(nameof(SftpConnectionProvider_UserName), resourceCulture);
+        public static string SftpConnectionProvider_UserName_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_UserName_Tooltip), resourceCulture);
+        public static string SftpConnectionProvider_Password => ResourceManager.GetString(nameof(SftpConnectionProvider_Password), resourceCulture);
+        public static string SftpConnectionProvider_Password_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_Password_Tooltip), resourceCulture);
+        public static string SftpConnectionProvider_PrivateKey => ResourceManager.GetString(nameof(SftpConnectionProvider_PrivateKey), resourceCulture);
+        public static string SftpConnectionProvider_PrivateKey_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_PrivateKey_Tooltip), resourceCulture);
+        public static string SftpConnectionProvider_PrivateKeyPassphrase => ResourceManager.GetString(nameof(SftpConnectionProvider_PrivateKeyPassphrase), resourceCulture);
+        public static string SftpConnectionProvider_PrivateKeyPassphrase_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_PrivateKeyPassphrase_Tooltip), resourceCulture);
+        public static string SftpConnectionProvider_HostKeyFingerprint => ResourceManager.GetString(nameof(SftpConnectionProvider_HostKeyFingerprint), resourceCulture);
+        public static string SftpConnectionProvider_HostKeyFingerprint_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_HostKeyFingerprint_Tooltip), resourceCulture);
+        public static string SftpConnectionProvider_TrustAnyHostKey => ResourceManager.GetString(nameof(SftpConnectionProvider_TrustAnyHostKey), resourceCulture);
+        public static string SftpConnectionProvider_TrustAnyHostKey_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_TrustAnyHostKey_Tooltip), resourceCulture);
+        public static string SftpDownloadFlowBlock_DisplayName => ResourceManager.GetString(nameof(SftpDownloadFlowBlock_DisplayName), resourceCulture);
+        public static string SftpDownloadFlowBlock_Description => ResourceManager.GetString(nameof(SftpDownloadFlowBlock_Description), resourceCulture);
+        public static string SftpUploadFlowBlock_DisplayName => ResourceManager.GetString(nameof(SftpUploadFlowBlock_DisplayName), resourceCulture);
+        public static string SftpUploadFlowBlock_Description => ResourceManager.GetString(nameof(SftpUploadFlowBlock_Description), resourceCulture);
+        public static string SftpFlowBlock_Connection => ResourceManager.GetString(nameof(SftpFlowBlock_Connection), resourceCulture);
+        public static string SftpFlowBlock_Connection_Tooltip => ResourceManager.GetString(nameof(SftpFlowBlock_Connection_Tooltip), resourceCulture);
+        public static string SftpFlowBlock_RemotePath => ResourceManager.GetString(nameof(SftpFlowBlock_RemotePath), resourceCulture);
+        public static string SftpFlowBlock_RemotePath_Tooltip => ResourceManager.GetString(nameof(SftpFlowBlock_RemotePath_Tooltip), resourceCulture);
+        public static string SftpUploadFlowBlock_ContentField => ResourceManager.GetString(nameof(SftpUploadFlowBlock_ContentField), resourceCulture);
+        public static string SftpUploadFlowBlock_ContentField_Tooltip => ResourceManager.GetString(nameof(SftpUploadFlowBlock_ContentField_Tooltip), resourceCulture);
+        public static string SftpUploadFlowBlock_Overwrite => ResourceManager.GetString(nameof(SftpUploadFlowBlock_Overwrite), resourceCulture);
+        public static string SftpUploadFlowBlock_Overwrite_Tooltip => ResourceManager.GetString(nameof(SftpUploadFlowBlock_Overwrite_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_DisplayName => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_DisplayName), resourceCulture);
+        public static string OpenApiRestFlowBlock_Description => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Description), resourceCulture);
+        public static string OpenApiRestFlowBlock_OpenApiSource => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_OpenApiSource), resourceCulture);
+        public static string OpenApiRestFlowBlock_OpenApiSource_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_OpenApiSource_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_Endpoint => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Endpoint), resourceCulture);
+        public static string OpenApiRestFlowBlock_Endpoint_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Endpoint_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_BaseUrl => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_BaseUrl), resourceCulture);
+        public static string OpenApiRestFlowBlock_BaseUrl_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_BaseUrl_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_EndpointDescription => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_EndpointDescription), resourceCulture);
+        public static string OpenApiRestFlowBlock_EndpointDescription_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_EndpointDescription_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_DefinitionError => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_DefinitionError), resourceCulture);
+        public static string OpenApiRestFlowBlock_DefinitionError_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_DefinitionError_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_BearerToken => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_BearerToken), resourceCulture);
+        public static string OpenApiRestFlowBlock_BearerToken_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_BearerToken_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_HeaderParameters => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_HeaderParameters), resourceCulture);
+        public static string OpenApiRestFlowBlock_HeaderParameters_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_HeaderParameters_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_RequestParameters => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_RequestParameters), resourceCulture);
+        public static string OpenApiRestFlowBlock_RequestParameters_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_RequestParameters_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_ContentType => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_ContentType), resourceCulture);
+        public static string OpenApiRestFlowBlock_ContentType_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_ContentType_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_Payload => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Payload), resourceCulture);
+        public static string OpenApiRestFlowBlock_Payload_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Payload_Tooltip), resourceCulture);
+        public static string OpenApiRestFlowBlock_ResultFields => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_ResultFields), resourceCulture);
+        public static string OpenApiRestFlowBlock_ResultFields_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_ResultFields_Tooltip), resourceCulture);
+        public static string OpenApiParameterValue_Name => ResourceManager.GetString(nameof(OpenApiParameterValue_Name), resourceCulture);
+        public static string OpenApiParameterValue_Location => ResourceManager.GetString(nameof(OpenApiParameterValue_Location), resourceCulture);
+        public static string OpenApiParameterValue_Required => ResourceManager.GetString(nameof(OpenApiParameterValue_Required), resourceCulture);
+        public static string OpenApiParameterValue_Description => ResourceManager.GetString(nameof(OpenApiParameterValue_Description), resourceCulture);
+        public static string OpenApiParameterValue_Value => ResourceManager.GetString(nameof(OpenApiParameterValue_Value), resourceCulture);
+        public static string OpenApiRestDestinations_Payload => ResourceManager.GetString(nameof(OpenApiRestDestinations_Payload), resourceCulture);
+        public static string OpenApiRestDestinations_StatusCode => ResourceManager.GetString(nameof(OpenApiRestDestinations_StatusCode), resourceCulture);
+        public static string OpenApiRestDestinations_Status => ResourceManager.GetString(nameof(OpenApiRestDestinations_Status), resourceCulture);
+        public static string OpenApiRestDestinations_ErrorMessage => ResourceManager.GetString(nameof(OpenApiRestDestinations_ErrorMessage), resourceCulture);
+        public static string OpenApiRestDestinations_ResponseHeaders => ResourceManager.GetString(nameof(OpenApiRestDestinations_ResponseHeaders), resourceCulture);
+        public static string OpenApiRestDestinations_Url => ResourceManager.GetString(nameof(OpenApiRestDestinations_Url), resourceCulture);
+        public static string OAuthFlowBlock_TokenEndpoint_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_TokenEndpoint_Tooltip), resourceCulture);
+        public static string OAuthFlowBlock_ClientId_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_ClientId_Tooltip), resourceCulture);
+        public static string OAuthFlowBlock_ClientSecret_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_ClientSecret_Tooltip), resourceCulture);
+        public static string OAuthFlowBlock_Scope_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_Scope_Tooltip), resourceCulture);
+        public static string OAuthFlowBlock_Audience_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_Audience_Tooltip), resourceCulture);
+        public static string OAuthFlowBlock_GrantType_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_GrantType_Tooltip), resourceCulture);
+        public static string OAuthFlowBlock_SendClientCredentialsInBody_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_SendClientCredentialsInBody_Tooltip), resourceCulture);
+        public static string OAuthFlowBlock_UserName => ResourceManager.GetString(nameof(OAuthFlowBlock_UserName), resourceCulture);
+        public static string OAuthFlowBlock_UserName_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_UserName_Tooltip), resourceCulture);
+        public static string OAuthFlowBlock_Password => ResourceManager.GetString(nameof(OAuthFlowBlock_Password), resourceCulture);
+        public static string OAuthFlowBlock_Password_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_Password_Tooltip), resourceCulture);
+        public static string OAuthGrantType_ClientCredentials => ResourceManager.GetString(nameof(OAuthGrantType_ClientCredentials), resourceCulture);
+        public static string OAuthGrantType_Password => ResourceManager.GetString(nameof(OAuthGrantType_Password), resourceCulture);
+        public static string SftpConnectionProvider_Groups_Connection => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_Connection), resourceCulture);
+        public static string SftpConnectionProvider_Groups_Authentication => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_Authentication), resourceCulture);
+        public static string SftpConnectionProvider_Groups_PasswordAuthentication => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_PasswordAuthentication), resourceCulture);
+        public static string SftpConnectionProvider_Groups_PrivateKeyAuthentication => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_PrivateKeyAuthentication), resourceCulture);
+        public static string SftpConnectionProvider_Groups_HostKeyVerification => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_HostKeyVerification), resourceCulture);
+        public static string SftpConnectionProvider_AuthenticationMethod => ResourceManager.GetString(nameof(SftpConnectionProvider_AuthenticationMethod), resourceCulture);
+        public static string SftpConnectionProvider_AuthenticationMethod_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_AuthenticationMethod_Tooltip), resourceCulture);
+        public static string SftpAuthenticationMethod_Password => ResourceManager.GetString(nameof(SftpAuthenticationMethod_Password), resourceCulture);
+        public static string SftpAuthenticationMethod_PrivateKey => ResourceManager.GetString(nameof(SftpAuthenticationMethod_PrivateKey), resourceCulture);
+        public static string SftpAuthenticationMethod_PasswordAndPrivateKey => ResourceManager.GetString(nameof(SftpAuthenticationMethod_PasswordAndPrivateKey), resourceCulture);
     }
 }

@@ -42,6 +42,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
             }
         }
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(Path));
+            return properties;
+        }
+
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>

@@ -54,6 +54,12 @@
         <Setter Property="Foreground" Value="#5C6B73"/>
     </Style>
 
+    <Style x:Key="FlowBlox.WindowActionIcon.Execute"
+           TargetType="{x:Type iconPacks:PackIconMaterial}"
+           BasedOn="{StaticResource FlowBlox.WindowActionIconBase}">
+        <Setter Property="Foreground" Value="#3A6EA5"/>
+    </Style>
+
     <!-- Compact scroll bars used where content should stay visually lightweight. -->
     <Style x:Key="FlowBlox.ThinScrollThumb" TargetType="{x:Type Thumb}">
         <Setter Property="Background" Value="#7F91A3"/>

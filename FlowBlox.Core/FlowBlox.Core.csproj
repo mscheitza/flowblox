@@ -28,6 +28,7 @@
     <PackageReference Include="Anthropic.SDK" Version="5.10.0" />
     <PackageReference Include="CoreCLR-NCalc" Version="3.1.253" />
     <PackageReference Include="CsvHelper" Version="33.1.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
     <PackageReference Include="EPPlus" Version="8.6.1" />
     <PackageReference Include="log4net" Version="3.3.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.2" />
@@ -35,8 +36,11 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.9" />
+    <PackageReference Include="Microsoft.OpenApi" Version="3.10.2" />
     <PackageReference Include="MailKit" Version="4.17.0" />
     <PackageReference Include="AWSSDK.Rekognition" Version="3.7.500.48" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.511.8" />
+    <PackageReference Include="Aspose.Words" Version="26.9.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.27.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntimeGenAI.Managed" Version="0.14.1" />
     <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
@@ -48,6 +52,7 @@
     <PackageReference Include="PdfPig" Version="0.1.15" />
     <PackageReference Include="Selenium.Support" Version="4.45.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
+    <PackageReference Include="SSH.NET" Version="2026.0.0" />
     <PackageReference Include="SkiaSharp" Version="4.148.0" />
     <PackageReference Include="Svg.Skia" Version="5.1.1" />
     <PackageReference Include="System.Resources.Extensions" Version="10.0.9" />

@@ -270,4 +270,7 @@
 Message(s):
 {0}</value>
   </data>
+  <data name="Text_EditInEditor" xml:space="preserve">
+    <value>Edit in editor</value>
+  </data>
 </root>

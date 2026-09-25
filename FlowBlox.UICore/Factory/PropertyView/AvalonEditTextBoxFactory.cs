@@ -35,10 +35,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         public FrameworkElement Create(FlowBloxTextBoxAttribute textAttr)
         {
+            var canEdit = !_readOnly && _property.SetMethod?.IsPublic == true;
             var editor = new TextEditor
             {
                 ShowLineNumbers = textAttr.MultiLine,
-                IsReadOnly = _readOnly,
+                IsReadOnly = !canEdit,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
                 VerticalScrollBarVisibility = textAttr.MultiLine
                     ? ScrollBarVisibility.Disabled
@@ -91,7 +92,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 if (_updatingFromModel)
                     return;
 
-                if (_property.CanWrite)
+                if (canEdit)
                 {
                     var current = _property.GetValue(_target) as string;
                     var newText = editor.Text;

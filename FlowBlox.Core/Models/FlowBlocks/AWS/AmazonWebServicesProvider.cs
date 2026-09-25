@@ -1,5 +1,6 @@
 using Amazon;
 using Amazon.Runtime;
+using Amazon.S3;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
@@ -37,6 +38,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.AWS
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Region { get; set; } = "eu-central-1";
 
+        [Display(Name = "AmazonWebServicesProvider_S3ServiceUrl", Description = "AmazonWebServicesProvider_S3ServiceUrl_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        public string S3ServiceUrl { get; set; }
+
+        [Display(Name = "AmazonWebServicesProvider_S3ForcePathStyle", Description = "AmazonWebServicesProvider_S3ForcePathStyle_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
+        public bool S3ForcePathStyle { get; set; }
+
         public TClient CreateClient<TClient>()
         {
             var constructor = typeof(TClient).GetConstructor([typeof(AWSCredentials), typeof(RegionEndpoint)]);
@@ -65,6 +73,31 @@ namespace FlowBlox.Core.Models.FlowBlocks.AWS
                 throw new InvalidOperationException("AWS secret key is empty after field resolution.");
 
             return new BasicAWSCredentials(resolvedApiKey, resolvedSecretKey);
+        }
+
+        public AmazonS3Client CreateS3Client()
+            => new AmazonS3Client(CreateCredentials(), CreateS3Configuration());
+
+        public AmazonS3Config CreateS3Configuration()
+        {
+            var resolvedRegion = ResolveRegionEndpoint();
+            var resolvedServiceUrl = FlowBloxFieldHelper.ReplaceFieldsInString(S3ServiceUrl ?? string.Empty)?.Trim();
+            var configuration = new AmazonS3Config
+            {
+                ForcePathStyle = S3ForcePathStyle
+            };
+
+            if (string.IsNullOrWhiteSpace(resolvedServiceUrl))
+            {
+                configuration.RegionEndpoint = resolvedRegion;
+            }
+            else
+            {
+                configuration.ServiceURL = resolvedServiceUrl;
+                configuration.AuthenticationRegion = resolvedRegion.SystemName;
+            }
+
+            return configuration;
         }
 
         public RegionEndpoint ResolveRegionEndpoint()

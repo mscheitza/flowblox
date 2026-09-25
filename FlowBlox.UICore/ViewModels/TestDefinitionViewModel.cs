@@ -513,7 +513,7 @@ namespace FlowBlox.UICore.ViewModels
             if (configuration == null)
                 return;
 
-            var view = new EditContentView(configuration.UserInput)
+            var view = new EditContentView(configuration.UserInput, enableFieldSelection: true)
             {
                 Owner = _ownerWindow,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner

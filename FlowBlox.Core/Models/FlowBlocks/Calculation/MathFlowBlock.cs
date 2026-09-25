@@ -28,6 +28,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Calculation
         [FlowBloxTextBox(IsCodingMode = true, MultiLine = true)]
         public string MathExpression { get; set; }
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(MathExpression));
+            return properties;
+        }
+
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>

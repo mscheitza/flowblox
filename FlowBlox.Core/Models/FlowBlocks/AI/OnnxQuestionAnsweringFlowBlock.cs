@@ -59,6 +59,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.comment_question, 16, SKColors.MediumVioletRed);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.comment_question, 32, SKColors.MediumVioletRed);
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(ModelPath));
+            properties.Add(nameof(AssociatedOnnxFlowBlock));
+            properties.Add(nameof(QATokenizer));
+            properties.Add(nameof(Question));
+            return properties;
+        }
+
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             QATokenizer.DisposeTokenizer();

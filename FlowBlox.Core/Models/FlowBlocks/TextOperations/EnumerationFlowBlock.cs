@@ -29,6 +29,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
 
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.TextOperations;
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(Parameters));
+            return properties;
+        }
+
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>

@@ -4,13 +4,14 @@ Terminology note:
 - "Generator" means a value-generation strategy under `GenerationStrategies` (test-driven), not a dedicated generator flow block type.
 
 Purpose of generators:
-- Configure a flow block from test input/output evidence so that executing it with the generation input field content produces result dataset(s) that satisfy the defined test expectations.
+- Configure a flow block from test input/output evidence so that executing it with the referenced field values produces result dataset(s) that satisfy the defined test expectations.
 - Run when required test execution fails or when explicitly triggered.
 
 Preconditions:
 - Suitable test cases exist for the target flow block.
 - A compatible generation strategy exists in the target flow block's `GenerationStrategies`.
-- Every strategy inherits required `FlowBloxGenerationStrategyBase.InputField`. For a strategy whose source is a `BasePipeFlowBlock`, this value is copied from the source FlowBlock and kept synchronized when that FlowBlock's `InputField` changes; configure the FlowBlock input rather than duplicating the assignment on the strategy.
+- `AIPropertyValueGenerationStrategy` automatically uses every field referenced by the target FlowBlock, including field placeholders in field-enabled string properties and nested reactive objects. Password field values remain hidden.
+- `SequenceDetectionGenerationStrategy` still has a required `InputField`; for its `SequenceDetectionFlowBlock` source this value is copied from the source and kept synchronized.
 - Expectations describe the intended generator output and are explicit generation evidence, not only pass/fail assertions. Configure meaningful expected values/counts on each suitable target entry; AI property generation includes them in its generation prompt. Sequence Detection specifically requires an expected extracted value plus a `NumberOfDatasets` expectation.
 
 Setup order:
@@ -28,12 +29,12 @@ Setup order:
 4. Before detailed updates, call kind/type info tools (for example `GetTypeKindsInfo`) to confirm valid paths/options.
 5. Configure strategy details via `UpdateFlowBlock` (nested strategy path):
 - provider,
-- input field,
 - prompt/template options.
 Hint for `AIPropertyValueGenerationStrategy` prompt design:
 - New `AIPropertyValueGenerationStrategy` instances are prefilled with the generic `FlowBlox Quick Update Configurator` prompt. Usually do not set the prompt again after creation unless the user explicitly wants to customize it.
-- If unsure how to structure the prompt with input value and test expectations, use `GetToolboxEntries` for toolbox category `AIPropertyValueGenerationPrompts` and adapt a fitting template.
+- If unsure how to structure the prompt with referenced field values and test expectations, use `GetToolboxEntries` for toolbox category `AIPropertyValueGenerationPrompts` and adapt a fitting template.
 - For `AIPropertyValueGenerationStrategy`, prefer toolbox templates first; do not invent prompt-template assumptions when a fitting toolbox template exists.
+- Use `$GenerationStrategy::TargetFlowBlockInputValues` for all referenced fully qualified field names and their per-test values. Known names may be used directly as runtime placeholders in generated configuration.
 - Use `$GenerationStrategy::FlowBloxQuickUpdateSchema` and `$GenerationStrategy::FlowBloxQuickUpdateFormat` so the AI returns the unified FlowBlox Quick Update JSON contract.
 6. Execute tests / runtime as requested by the user.
    Preferred troubleshooting sequence: run `RunGenerationStrategies` first; only run `RunTestDefinition` when detailed test protocol/results are needed.
@@ -62,7 +63,6 @@ Sequence detection tip (complex hierarchical content such as hard-to-read DOM/we
 Use-Cases / Examples:
 1. Happy path (simple target property):
 - Create `AIPropertyValueGenerationStrategy` on the target flow block.
-- Link/select the strategy input field.
 - Use the `FlowBlox Quick Update Configurator` toolbox template.
 - Run tests/generation; generated Quick Update JSON updates the listed configurable flow block properties.
 2. Special use-case (collection configuration):

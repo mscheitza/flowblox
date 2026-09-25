@@ -29,7 +29,6 @@ namespace FlowBlox.SequenceDetection
             if (targetData.Entries == null)
                 throw new InvalidOperationException("The target data mus have entries.");
 
-            SequenceDetectionPattern? result = default;
             List<Task<SequenceDetectionPattern?>> tasks = new List<Task<SequenceDetectionPattern?>>();
             var cancellationToken = new CancellationTokenSource();
             if (targetData.Timeout > 0)
@@ -64,20 +63,26 @@ namespace FlowBlox.SequenceDetection
                         if (entry.Count > 1 && !pattern!.HasIterationTerminationSequence)
                             return null;
 
-                        cancellationToken.Cancel();
-
                         return pattern;
                     }));
                 }
             }
-            Task.WaitAny(tasks.ToArray());
-            result = tasks
-                .Where(x => x.Status == TaskStatus.RanToCompletion)
-                .Select(x => x.Result)
-                .Where(x => x != null)
-                .OrderByDescending(x => x!.TotalLength)
-                .FirstOrDefault();
-            return result;
+
+            while (tasks.Count > 0)
+            {
+                var completedTaskIndex = Task.WaitAny(tasks.ToArray());
+                var completedTask = tasks[completedTaskIndex];
+                tasks.RemoveAt(completedTaskIndex);
+
+                var pattern = completedTask.GetAwaiter().GetResult();
+                if (pattern == null)
+                    continue;
+
+                cancellationToken.Cancel();
+                return pattern;
+            }
+
+            return null;
         }
     }
 }

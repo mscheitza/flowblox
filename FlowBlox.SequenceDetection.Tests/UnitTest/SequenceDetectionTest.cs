@@ -46,6 +46,10 @@ namespace FlowBlox.SequenceDetectionTests.UnitTest
                 }
             });
 
+            Assert.IsNotNull(patternName);
+            Assert.IsNotNull(patternStrasse);
+            Assert.IsNotNull(patternPLZ);
+
             List<string> result = new List<string>();
 
             SequenceSearch.Instance.SearchFor(c1, patternName!, ref result);
@@ -68,6 +72,8 @@ namespace FlowBlox.SequenceDetectionTests.UnitTest
                 }
             });
 
+            Assert.IsNotNull(patternDescription);
+
             List<string> result = new List<string>();
             SequenceSearch.Instance.SearchFor(c2, patternDescription!, ref result);
         }
@@ -87,6 +93,8 @@ namespace FlowBlox.SequenceDetectionTests.UnitTest
                 }
             });
 
+            Assert.IsNotNull(patternDescription);
+
             List<string> result = new List<string>();
             SequenceSearch.Instance.SearchFor(c2, patternDescription!, ref result);
         }
@@ -105,6 +113,8 @@ namespace FlowBlox.SequenceDetectionTests.UnitTest
                     new SequenceDetectionInputEntry(c2, "#1", 10)
                 }
             });
+
+            Assert.IsNotNull(patternDescription);
 
             List<string> result = new List<string>();
             SequenceSearch.Instance.SearchFor(c1, patternDescription!, ref result);

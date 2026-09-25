@@ -275,4 +275,7 @@
 Meldung(en):
 {0}</value>
   </data>
+  <data name="Text_EditInEditor" xml:space="preserve">
+    <value>Im Editor bearbeiten</value>
+  </data>
 </root>

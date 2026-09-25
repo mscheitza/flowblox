@@ -84,6 +84,15 @@ namespace FlowBlox.Core.Models.FlowBlocks
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.ControlFlow;
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(InputField));
+            properties.Add(nameof(AssociatedExecuteProjectFlowBlock));
+            properties.Add(nameof(OutputName));
+            return properties;
+        }
+
         public override List<FieldElement> Fields
         {
             get

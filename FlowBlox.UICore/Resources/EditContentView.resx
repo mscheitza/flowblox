@@ -115,6 +115,12 @@
 	<data name="Toolbar_ImportBytes_Tooltip" xml:space="preserve">
   <value>Load a binary file and insert it as Base64 text into the editor.</value>
 </data>
+	<data name="Toolbar_InsertPlaceholder" xml:space="preserve">
+  <value>Insert placeholder</value>
+</data>
+	<data name="Toolbar_InsertPlaceholder_Tooltip" xml:space="preserve">
+  <value>Insert a project property or option placeholder at the current cursor position.</value>
+</data>
 
 	<data name="Label_Syntax" xml:space="preserve">
   <value>Syntax:</value>
@@ -126,8 +132,8 @@
 	<data name="Button_Back" xml:space="preserve">
   <value>Back</value>
 </data>
-	<data name="Button_Apply" xml:space="preserve">
-  <value>Apply</value>
-</data>
+	<data name="Button_Save" xml:space="preserve">
+		<value>Save</value>
+	</data>
 
 </root>

@@ -48,6 +48,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Logic
 
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.Logic;
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(InputField));
+            properties.Add(nameof(DisributedFields));
+            return properties;
+        }
+
         public override bool Execute(Runtime.BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>

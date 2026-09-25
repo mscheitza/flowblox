@@ -1774,7 +1774,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Erstellt oder aktualisiert XML-Knoten und schreibt Zuweisungen in das Dokument. Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block.</value>
 	</data>
 	<data name="XmlDocumentNodeWriterFlowBlock_DisplayName" xml:space="preserve">
-		<value>XML-Knoten schreiben</value>
+		<value>XML-Dokument: XML-Knoten schreiben</value>
 	</data>
 	<data name="XmlDocumentNodeWriterFlowBlock_XPath" xml:space="preserve">
 		<value>Ziel-XPath</value>
@@ -1786,7 +1786,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Gibt das XML-Dokument als Text oder Byte-Array aus. Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block.</value>
 	</data>
 	<data name="XmlDocumentOutputFlowBlock_DisplayName" xml:space="preserve">
-		<value>XML-Dokument Ausgabe</value>
+		<value>XML-Dokument: Ausgabe</value>
 	</data>
 	<data name="XmlDocumentOutputFlowBlock_Indent" xml:space="preserve">
 		<value>Ausgabe einrücken</value>
@@ -1804,7 +1804,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Liest XML-Knoteninhalte per XPath. Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block.</value>
 	</data>
 	<data name="XmlDocumentXPathSelector_DisplayName" xml:space="preserve">
-		<value>XPath-Selektor</value>
+		<value>XML-Dokument: XPath-Selektor</value>
 	</data>
 	<data name="XmlDocumentXPathSelector_DocumentSource" xml:space="preserve">
 		<value>XML-Dokumentenquelle</value>
@@ -1814,6 +1814,42 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	</data>
 	<data name="XmlDocumentXPathSelector_AssociatedXmlDocument" xml:space="preserve">
 		<value>XML-Dokument (Flow-Block)</value>
+	</data>
+	<data name="XmlDocumentXPathSelector_XPath_Tooltip" xml:space="preserve">
+		<value>XPath-Ausdruck, der auf das verwaltete XML-Dokument angewendet wird. Elemente liefern ihr inneres XML; endet der Ausdruck mit einem Attributschritt wie '//item/@id', werden Attributwerte ausgegeben. Felder aus Eingabe-Flow-Blocks können verwendet werden.</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_Description" xml:space="preserve">
+		<value>Liest XML-Knoteninhalte per XPath.</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_DisplayName" xml:space="preserve">
+		<value>XPath-Selektor</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_XmlContent" xml:space="preserve">
+		<value>XML-Inhalt</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_XmlContent_Tooltip" xml:space="preserve">
+		<value>Der bei dieser Ausführung zu verarbeitende XML-Text. Statischer Text und Felder aus einem oder mehreren Eingabe-Flow-Blocks können kombiniert werden.</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_XPath" xml:space="preserve">
+		<value>XPath</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_XPath_Tooltip" xml:space="preserve">
+		<value>XPath-Ausdruck, der direkt auf den XML-Inhalt angewendet wird. Elemente liefern ihr inneres XML; endet der Ausdruck mit einem Attributschritt wie '//item/@id', werden Attributwerte ausgegeben. Felder aus Eingabe-Flow-Blocks können verwendet werden.</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_Notification_XmlContentIsEmpty" xml:space="preserve">
+		<value>Der XML-Inhalt ist leer</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_Notification_XPathExpressionIsEmpty" xml:space="preserve">
+		<value>Der XPath-Ausdruck ist leer</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_Notification_NoMatchingValuesFound" xml:space="preserve">
+		<value>Keine passenden XML-Knoten oder Attribute gefunden</value>
+	</data>
+	<data name="XmlDocumentXPathSelector_Notification_XPathExpressionIsEmpty" xml:space="preserve">
+		<value>Der XPath-Ausdruck ist leer</value>
+	</data>
+	<data name="XmlDocumentXPathSelector_Notification_NoMatchingValuesFound" xml:space="preserve">
+		<value>Keine passenden XML-Knoten oder Attribute gefunden</value>
 	</data>
 	<data name="InputBehavior_RowWise" xml:space="preserve">
 		<value>Reihenweise</value>
@@ -3073,7 +3109,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Dieser Flow-Block verwaltet ein internes XML-Dokument. Das verwaltete Dokument kann von anderen Flow-Blocks verwendet werden.</value>
   </data>
 	<data name="XmlDocumentXPathSelector_AssociatedXmlDocument_Tooltip" xml:space="preserve">
-    <value>Der XML-Dokument-Flow-Block, der das interne XML-Dokument für die XPath-Auswertung verwaltet.</value>
+    <value>Der XML-Dokument-Flow-Block, der das intern verwaltete XML-Dokument für die XPath-Auswahl bereitstellt, einschließlich der Änderungen durch XML-Knotenschreiber.</value>
   </data>
 	<data name="ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock" xml:space="preserve">
     <value>Zugehöriger Projekt ausführen-Flow-Block</value>
@@ -3100,7 +3136,7 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Verwendung des XML-Dokuments in diesem Flow-Block</value>
   </data>
 	<data name="XmlDocumentXPathSelectorFlowBlock_ExternalFlowBlocks_Explanation0" xml:space="preserve">
-    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und liest Knoteninhalte per XPath.</value>
+    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und liest Knoteninhalte oder Attributwerte per XPath.</value>
   </data>
 	<data name="JsonObjectWriterFlowBlock_ExternalFlowBlocks_Topic" xml:space="preserve">
     <value>Verwendung des JSON-Objekts in diesem Flow-Block</value>
@@ -3288,7 +3324,7 @@ Wenn das Öffnen der URL fehlschlägt, wird ein leerer Text in das Ergebnisfeld 
 Stellen Sie sicher, dass Selenium korrekt installiert und konfiguriert ist (Chrome-Setup: https://www.selenium.dev/documentation/webdriver/browsers/chrome/).</value>
   </data>
 	<data name="XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
-    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und liest Knoteninhalte per XPath.</value>
+    <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und liest Knoteninhalte oder Attributwerte per XPath.</value>
   </data>
 	<data name="JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
     <value>Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block und erstellt oder aktualisiert Knoten.</value>
@@ -3849,28 +3885,67 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
 		<value>OAuth-Access-Token</value>
 	</data>
 	<data name="OAuthFlowBlock_Description" xml:space="preserve">
-		<value>Führt eine OAuth/OpenID-Client-Credentials-Autorisierung durch und gibt ein Access-Token zurück.</value>
+		<value>Ruft per Client Credentials oder Password Grant ein OAuth-/OpenID-Access-Token ab.</value>
 	</data>
 	<data name="OAuthFlowBlock_TokenEndpoint" xml:space="preserve">
 		<value>Token-Endpunkt</value>
 	</data>
+	<data name="OAuthFlowBlock_TokenEndpoint_Tooltip" xml:space="preserve">
+		<value>OAuth-/OpenID-Token-Endpunkt, an den die formularcodierte Token-Anfrage gesendet wird.</value>
+	</data>
 	<data name="OAuthFlowBlock_ClientId" xml:space="preserve">
 		<value>Client-ID</value>
+	</data>
+	<data name="OAuthFlowBlock_ClientId_Tooltip" xml:space="preserve">
+		<value>Kennung des beim Autorisierungsserver registrierten OAuth-Clients. Felder aus Eingabe-Flow-Blocks können verwendet werden.</value>
 	</data>
 	<data name="OAuthFlowBlock_ClientSecret" xml:space="preserve">
 		<value>Client-Secret</value>
 	</data>
+	<data name="OAuthFlowBlock_ClientSecret_Tooltip" xml:space="preserve">
+		<value>Secret des registrierten OAuth-Clients. Es ist nicht das Benutzerpasswort des Password Grants.</value>
+	</data>
 	<data name="OAuthFlowBlock_Scope" xml:space="preserve">
 		<value>Scope</value>
+	</data>
+	<data name="OAuthFlowBlock_Scope_Tooltip" xml:space="preserve">
+		<value>Optionale, durch Leerzeichen getrennte Scopes für das Access-Token.</value>
 	</data>
 	<data name="OAuthFlowBlock_Audience" xml:space="preserve">
 		<value>Audience</value>
 	</data>
+	<data name="OAuthFlowBlock_Audience_Tooltip" xml:space="preserve">
+		<value>Optionale Audience zur Angabe der API, für die das Token angefordert wird.</value>
+	</data>
 	<data name="OAuthFlowBlock_GrantType" xml:space="preserve">
 		<value>Grant-Type</value>
 	</data>
+	<data name="OAuthFlowBlock_GrantType_Tooltip" xml:space="preserve">
+		<value>Wählt Client Credentials für Machine-to-Machine-Zugriffe oder den Password Grant für Benutzerzugangsdaten.</value>
+	</data>
 	<data name="OAuthFlowBlock_SendClientCredentialsInBody" xml:space="preserve">
 		<value>Client-Credentials im Body senden</value>
+	</data>
+	<data name="OAuthFlowBlock_SendClientCredentialsInBody_Tooltip" xml:space="preserve">
+		<value>Sendet Client-ID und Client-Secret im Formular-Body. Deaktivieren, um stattdessen HTTP-Basic-Clientauthentifizierung zu verwenden.</value>
+	</data>
+	<data name="OAuthFlowBlock_UserName" xml:space="preserve">
+		<value>Benutzername</value>
+	</data>
+	<data name="OAuthFlowBlock_UserName_Tooltip" xml:space="preserve">
+		<value>Benutzername, der nur beim Password Grant gesendet wird. Felder aus Eingabe-Flow-Blocks können verwendet werden.</value>
+	</data>
+	<data name="OAuthFlowBlock_Password" xml:space="preserve">
+		<value>Passwort</value>
+	</data>
+	<data name="OAuthFlowBlock_Password_Tooltip" xml:space="preserve">
+		<value>Benutzerpasswort, das nur beim Password Grant gesendet wird. Felder aus Eingabe-Flow-Blocks können verwendet werden.</value>
+	</data>
+	<data name="OAuthGrantType_ClientCredentials" xml:space="preserve">
+		<value>Client Credentials</value>
+	</data>
+	<data name="OAuthGrantType_Password" xml:space="preserve">
+		<value>Password Grant</value>
 	</data>
 	<data name="OAuthFlowBlock_Notification_AuthorizationFailed" xml:space="preserve">
 		<value>Autorisierung fehlgeschlagen</value>
@@ -4087,6 +4162,167 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="RuntimeNotificationConfiguration_LoadFailed" xml:space="preserve"><value>Die Laufzeitbenachrichtigungskonfiguration konnte nicht geladen werden: {0}</value></data>
   <data name="TableWriterFlowBlock_ClearOnRuntimeStart" xml:space="preserve"><value>Bei Laufzeitstart leeren</value></data>
   <data name="TableWriterFlowBlock_ClearOnRuntimeStart_Tooltip" xml:space="preserve"><value>Leert die Zieltabelle beim Start der Laufzeit, sodass die Ausgabe nur Daten des aktuellen Laufs enthält.</value></data>
+  <data name="OpenXmlTemplateFlowBlock_DisplayName" xml:space="preserve"><value>OpenXML-Word-Vorlage befüllen</value></data>
+  <data name="OpenXmlTemplateFlowBlock_Description" xml:space="preserve"><value>Ersetzt FlowBlox-Feldplatzhalter in einer DOCX-Vorlage und erhält Formatierungen, Kopf- und Fußzeilen.</value></data>
+  <data name="OpenXmlTemplateFlowBlock_TemplateField" xml:space="preserve"><value>DOCX-Vorlage</value></data>
+  <data name="OpenXmlTemplateFlowBlock_TemplateField_Tooltip" xml:space="preserve"><value>DOCX-Vorlage als Byte-Array, Base64-Zeichenfolge oder Dateipfad. Platzhalter werden in Inhalt, Kopf- und Fußzeilen aufgelöst.</value></data>
+  <data name="AsposeWordToPdfFlowBlock_DisplayName" xml:space="preserve"><value>Word in PDF konvertieren</value></data>
+  <data name="AsposeWordToPdfFlowBlock_Description" xml:space="preserve"><value>Konvertiert ein Word-Dokument mit Aspose.Words ohne Microsoft Word in PDF oder PDF/A.</value></data>
+  <data name="AsposeWordToPdfFlowBlock_WordDocumentField" xml:space="preserve"><value>Word-Dokument</value></data>
+  <data name="AsposeWordToPdfFlowBlock_WordDocumentField_Tooltip" xml:space="preserve"><value>Word-Dokument als Byte-Array, Base64-Zeichenfolge oder Dateipfad.</value></data>
+  <data name="AsposeWordToPdfFlowBlock_Compliance" xml:space="preserve"><value>PDF-Standard</value></data>
+  <data name="AsposeWordToPdfFlowBlock_Compliance_Tooltip" xml:space="preserve"><value>Wählt normales PDF oder die benötigte PDF/A-Konformitätsstufe.</value></data>
+  <data name="AsposePdfCompliance_Pdf" xml:space="preserve"><value>PDF</value></data>
+  <data name="AsposePdfCompliance_PdfA1b" xml:space="preserve"><value>PDF/A-1b</value></data>
+  <data name="AsposePdfCompliance_PdfA2u" xml:space="preserve"><value>PDF/A-2u</value></data>
+  <data name="AsposePdfCompliance_PdfA3u" xml:space="preserve"><value>PDF/A-3u</value></data>
+  <data name="AsposePdfCompliance_PdfA4" xml:space="preserve"><value>PDF/A-4</value></data>
+  <data name="AsposeWordToPdfFlowBlock_Option_License_DisplayName" xml:space="preserve"><value>Aspose.Words: Lizenz (Base64)</value></data>
+  <data name="AsposeWordToPdfFlowBlock_Option_License_Description" xml:space="preserve"><value>Base64-codierte Aspose.Words-Lizenz. Sie wird über die Lizenzimport-Aktion des Flow-Blocks hinterlegt.</value></data>
+  <data name="AsposeWordToPdfFlowBlockUIActions_ImportLicense" xml:space="preserve"><value>Aspose-Lizenz importieren</value></data>
+  <data name="AsposeWordToPdfFlowBlockUIActions_ImportLicense_Title" xml:space="preserve"><value>Aspose.Words-Lizenz</value></data>
+  <data name="AsposeWordToPdfFlowBlockUIActions_ImportLicense_Success" xml:space="preserve"><value>Die Aspose.Words-Lizenz wurde importiert und in den Anwendungsoptionen gespeichert.</value></data>
+  <data name="AsposeWordToPdfFlowBlockUIActions_ImportLicense_Failed" xml:space="preserve"><value>Die Aspose.Words-Lizenz konnte nicht importiert werden.</value></data>
+  <data name="TextBuilderFlowBlock_DisplayName" xml:space="preserve"><value>Text-Builder</value></data>
+  <data name="TextBuilderFlowBlock_Description" xml:space="preserve"><value>Erstellt einen intern verwalteten Text-Builder und initialisiert ihn optional mit Text.</value></data>
+  <data name="TextBuilderFlowBlock_InitialText" xml:space="preserve"><value>Ausgangstext</value></data>
+  <data name="TextBuilderFlowBlock_InitialText_Tooltip" xml:space="preserve"><value>Optionaler Ausgangsinhalt. FlowBlox-Feldplatzhalter werden bei der Ausführung ersetzt.</value></data>
+  <data name="TextBuilderFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve"><value>Dieser Flow-Block erstellt und verwaltet intern den Text-Builder für die zugehörigen Text-Builder-Flow-Blocks.</value></data>
+  <data name="TextBuilderAppendFlowBlock_DisplayName" xml:space="preserve"><value>Text-Builder: Text anhängen</value></data>
+  <data name="TextBuilderAppendFlowBlock_Description" xml:space="preserve"><value>Hängt aufgelösten Text an einen intern verwalteten Text-Builder an, optional mit Zeilenumbruch.</value></data>
+  <data name="TextBuilderAppendFlowBlock_AssociatedTextBuilder" xml:space="preserve"><value>Zugehöriger Text-Builder</value></data>
+  <data name="TextBuilderAppendFlowBlock_AssociatedTextBuilder_Tooltip" xml:space="preserve"><value>Text-Builder, dessen Inhalt geändert wird. Ohne Auswahl wird der vorherige Text-Builder im Ausführungspfad verwendet.</value></data>
+  <data name="TextBuilderAppendFlowBlock_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="TextBuilderAppendFlowBlock_Text_Tooltip" xml:space="preserve"><value>Anzuhängender Text. FlowBlox-Feldplatzhalter werden bei der Ausführung ersetzt.</value></data>
+  <data name="TextBuilderAppendFlowBlock_AppendLine" xml:space="preserve"><value>Zeilenumbruch anhängen</value></data>
+  <data name="TextBuilderAppendFlowBlock_AppendLine_Tooltip" xml:space="preserve"><value>Hängt nach dem Text den Zeilenumbruch des Betriebssystems an.</value></data>
+  <data name="TextBuilderAppendFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve"><value>Dieser Flow-Block verwendet den intern verwalteten Text-Builder aus einem Text-Builder-Flow-Block.</value></data>
+  <data name="TextBuilderOutputFlowBlock_DisplayName" xml:space="preserve"><value>Text-Builder: Ausgabe</value></data>
+  <data name="TextBuilderOutputFlowBlock_Description" xml:space="preserve"><value>Gibt den vollständigen Inhalt eines intern verwalteten Text-Builders aus.</value></data>
+  <data name="TextBuilderOutputFlowBlock_AssociatedTextBuilder" xml:space="preserve"><value>Zugehöriger Text-Builder</value></data>
+  <data name="TextBuilderOutputFlowBlock_AssociatedTextBuilder_Tooltip" xml:space="preserve"><value>Text-Builder, dessen Inhalt ausgegeben wird. Ohne Auswahl wird der vorherige Text-Builder im Ausführungspfad verwendet.</value></data>
+  <data name="TextBuilderOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve"><value>Dieser Flow-Block verwendet den intern verwalteten Text-Builder aus einem Text-Builder-Flow-Block.</value></data>
+  <data name="AmazonWebServicesProvider_S3ServiceUrl" xml:space="preserve"><value>S3-Service-URL</value></data>
+  <data name="AmazonWebServicesProvider_S3ServiceUrl_Tooltip" xml:space="preserve"><value>Optionaler S3-Endpunkt für einen kompatiblen Dienst wie MinIO. Wirkt nur auf S3-Clients; leer lassen für Amazon S3.</value></data>
+  <data name="AmazonWebServicesProvider_S3ForcePathStyle" xml:space="preserve"><value>S3: Pfadadressierung erzwingen</value></data>
+  <data name="AmazonWebServicesProvider_S3ForcePathStyle_Tooltip" xml:space="preserve"><value>Verwendet für S3-Clients die Adressierung Endpunkt/Bucket/Schlüssel. Dies wird häufig für MinIO benötigt und beeinflusst keine anderen AWS-Dienste.</value></data>
+  <data name="S3DownloadObjectFlowBlock_DisplayName" xml:space="preserve"><value>Objekt herunterladen</value></data>
+  <data name="S3DownloadObjectFlowBlock_Description" xml:space="preserve"><value>Lädt ein Objekt aus Amazon S3 oder einem S3-kompatiblen Dienst wie MinIO als Binärinhalt herunter.</value></data>
+  <data name="S3UploadObjectFlowBlock_DisplayName" xml:space="preserve"><value>Objekt hochladen</value></data>
+  <data name="S3UploadObjectFlowBlock_Description" xml:space="preserve"><value>Lädt Binär- oder Textinhalt zu Amazon S3 oder einem S3-kompatiblen Dienst wie MinIO hoch.</value></data>
+  <data name="S3StorageFlowBlock_Provider" xml:space="preserve"><value>AWS-/S3-Provider</value></data>
+  <data name="S3StorageFlowBlock_Provider_Tooltip" xml:space="preserve"><value>Provider mit Zugangsdaten, Region und optionaler URL für einen S3-kompatiblen Dienst.</value></data>
+  <data name="S3StorageFlowBlock_BucketName" xml:space="preserve"><value>Bucket</value></data>
+  <data name="S3StorageFlowBlock_BucketName_Tooltip" xml:space="preserve"><value>Name des S3-Buckets. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="S3StorageFlowBlock_ObjectKey" xml:space="preserve"><value>Objektschlüssel</value></data>
+  <data name="S3StorageFlowBlock_ObjectKey_Tooltip" xml:space="preserve"><value>Vollständiger Objektschlüssel im Bucket. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="S3UploadObjectFlowBlock_ContentField" xml:space="preserve"><value>Inhalt</value></data>
+  <data name="S3UploadObjectFlowBlock_ContentField_Tooltip" xml:space="preserve"><value>Upload-Inhalt als Byte-Array, Base64-Zeichenfolge, Dateipfad oder Klartext.</value></data>
+  <data name="S3UploadObjectFlowBlock_ContentType" xml:space="preserve"><value>Inhaltstyp</value></data>
+  <data name="S3UploadObjectFlowBlock_ContentType_Tooltip" xml:space="preserve"><value>Optionaler MIME-Typ, zum Beispiel application/pdf. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="HashModifier_DisplayName" xml:space="preserve"><value>Hash</value></data>
+  <data name="HashModifier_Algorithm" xml:space="preserve"><value>Algorithmus</value></data>
+  <data name="HashModifier_Algorithm_Tooltip" xml:space="preserve"><value>Hash-Algorithmus für die UTF-8-Eingabe. SHA-256 oder stärker wird empfohlen; SHA-1 und MD5 dienen nur der Kompatibilität mit Altsystemen.</value></data>
+  <data name="HashModifier_OutputEncoding" xml:space="preserve"><value>Ausgabecodierung</value></data>
+  <data name="HashModifier_OutputEncoding_Tooltip" xml:space="preserve"><value>Codierung der erzeugten Hash- oder HMAC-Bytes.</value></data>
+  <data name="HashModifier_ObjectDisplayName" xml:space="preserve"><value>Hash: {0}, {1}</value></data>
+  <data name="HmacModifier_DisplayName" xml:space="preserve"><value>HMAC</value></data>
+  <data name="HmacModifier_Algorithm" xml:space="preserve"><value>Algorithmus</value></data>
+  <data name="HmacModifier_Algorithm_Tooltip" xml:space="preserve"><value>HMAC-Algorithmus für die UTF-8-Eingabe. HMAC-SHA-256 oder stärker wird empfohlen.</value></data>
+  <data name="HmacModifier_SecretKey" xml:space="preserve"><value>Geheimer Schlüssel</value></data>
+  <data name="HmacModifier_SecretKey_Tooltip" xml:space="preserve"><value>Geheimer HMAC-Schlüssel. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="HmacModifier_KeyEncoding" xml:space="preserve"><value>Schlüsselcodierung</value></data>
+  <data name="HmacModifier_KeyEncoding_Tooltip" xml:space="preserve"><value>Legt fest, ob der Schlüssel als UTF-8-Text, Base64 oder hexadezimale Bytes interpretiert wird.</value></data>
+  <data name="HmacModifier_ObjectDisplayName" xml:space="preserve"><value>HMAC: {0}, {1}</value></data>
+  <data name="CryptographicHashAlgorithm_SHA256" xml:space="preserve"><value>SHA-256</value></data>
+  <data name="CryptographicHashAlgorithm_SHA384" xml:space="preserve"><value>SHA-384</value></data>
+  <data name="CryptographicHashAlgorithm_SHA512" xml:space="preserve"><value>SHA-512</value></data>
+  <data name="CryptographicHashAlgorithm_SHA1" xml:space="preserve"><value>SHA-1 (veraltet)</value></data>
+  <data name="CryptographicHashAlgorithm_MD5" xml:space="preserve"><value>MD5 (veraltet)</value></data>
+  <data name="CryptographicOutputEncoding_HexLowerCase" xml:space="preserve"><value>Hexadezimal, Kleinbuchstaben</value></data>
+  <data name="CryptographicOutputEncoding_HexUpperCase" xml:space="preserve"><value>Hexadezimal, Großbuchstaben</value></data>
+  <data name="CryptographicOutputEncoding_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="CryptographicKeyEncoding_Text" xml:space="preserve"><value>UTF-8-Text</value></data>
+  <data name="CryptographicKeyEncoding_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="CryptographicKeyEncoding_Hex" xml:space="preserve"><value>Hexadezimal</value></data>
+  <data name="SftpConnectionProvider_DisplayName" xml:space="preserve"><value>SFTP-Verbindung</value></data>
+  <data name="SftpConnectionProvider_DisplayName_Plural" xml:space="preserve"><value>SFTP-Verbindungen</value></data>
+  <data name="SftpConnectionProvider_Groups_Connection" xml:space="preserve"><value>Verbindung</value></data>
+  <data name="SftpConnectionProvider_Groups_Authentication" xml:space="preserve"><value>Authentifizierung</value></data>
+  <data name="SftpConnectionProvider_Groups_PasswordAuthentication" xml:space="preserve"><value>Passwort-Authentifizierung</value></data>
+  <data name="SftpConnectionProvider_Groups_PrivateKeyAuthentication" xml:space="preserve"><value>Private-Key-Authentifizierung</value></data>
+  <data name="SftpConnectionProvider_Groups_HostKeyVerification" xml:space="preserve"><value>Host-Key-Prüfung</value></data>
+  <data name="SftpConnectionProvider_AuthenticationMethod" xml:space="preserve"><value>Authentifizierungsmethode</value></data>
+  <data name="SftpConnectionProvider_AuthenticationMethod_Tooltip" xml:space="preserve"><value>Wählt Passwort, Private Key oder beide Verfahren, wenn der Server eine Mehrfaktor-Authentifizierung verlangt.</value></data>
+  <data name="SftpAuthenticationMethod_Password" xml:space="preserve"><value>Passwort</value></data>
+  <data name="SftpAuthenticationMethod_PrivateKey" xml:space="preserve"><value>Private Key</value></data>
+  <data name="SftpAuthenticationMethod_PasswordAndPrivateKey" xml:space="preserve"><value>Passwort und Private Key</value></data>
+  <data name="SftpConnectionProvider_Host" xml:space="preserve"><value>Host</value></data>
+  <data name="SftpConnectionProvider_Host_Tooltip" xml:space="preserve"><value>Hostname oder IP-Adresse des SFTP-Servers. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="SftpConnectionProvider_Port" xml:space="preserve"><value>Port</value></data>
+  <data name="SftpConnectionProvider_Port_Tooltip" xml:space="preserve"><value>SSH-/SFTP-Port des Servers, normalerweise 22.</value></data>
+  <data name="SftpConnectionProvider_UserName" xml:space="preserve"><value>Benutzername</value></data>
+  <data name="SftpConnectionProvider_UserName_Tooltip" xml:space="preserve"><value>Benutzername für die Anmeldung am SFTP-Server. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="SftpConnectionProvider_Password" xml:space="preserve"><value>Passwort</value></data>
+  <data name="SftpConnectionProvider_Password_Tooltip" xml:space="preserve"><value>Optionales Passwort. Es kann allein oder zusammen mit einem privaten Schlüssel verwendet werden.</value></data>
+  <data name="SftpConnectionProvider_PrivateKey" xml:space="preserve"><value>Privater Schlüssel</value></data>
+  <data name="SftpConnectionProvider_PrivateKey_Tooltip" xml:space="preserve"><value>Optionaler privater Schlüssel als PEM-Text, Base64-Inhalt oder Dateipfad. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="SftpConnectionProvider_PrivateKeyPassphrase" xml:space="preserve"><value>Passphrase des privaten Schlüssels</value></data>
+  <data name="SftpConnectionProvider_PrivateKeyPassphrase_Tooltip" xml:space="preserve"><value>Optionale Passphrase für einen verschlüsselten privaten Schlüssel.</value></data>
+  <data name="SftpConnectionProvider_HostKeyFingerprint" xml:space="preserve"><value>Host-Key-Fingerabdruck</value></data>
+  <data name="SftpConnectionProvider_HostKeyFingerprint_Tooltip" xml:space="preserve"><value>Erwarteter SHA-256-Host-Key-Fingerabdruck, zum Beispiel SHA256:.... Bei Abweichung wird die Verbindung abgelehnt.</value></data>
+  <data name="SftpConnectionProvider_TrustAnyHostKey" xml:space="preserve"><value>Jedem Host-Key vertrauen</value></data>
+  <data name="SftpConnectionProvider_TrustAnyHostKey_Tooltip" xml:space="preserve"><value>Deaktiviert die Host-Key-Prüfung. Nur in kontrollierten Testumgebungen verwenden, da dies Man-in-the-Middle-Angriffe ermöglicht.</value></data>
+  <data name="SftpDownloadFlowBlock_DisplayName" xml:space="preserve"><value>Datei herunterladen</value></data>
+  <data name="SftpDownloadFlowBlock_Description" xml:space="preserve"><value>Lädt eine Datei von einem SFTP-Server herunter und gibt ihren Binärinhalt aus.</value></data>
+  <data name="SftpUploadFlowBlock_DisplayName" xml:space="preserve"><value>Datei hochladen</value></data>
+  <data name="SftpUploadFlowBlock_Description" xml:space="preserve"><value>Lädt Binär- oder Textinhalt auf einen SFTP-Server hoch.</value></data>
+  <data name="SftpFlowBlock_Connection" xml:space="preserve"><value>SFTP-Verbindung</value></data>
+  <data name="SftpFlowBlock_Connection_Tooltip" xml:space="preserve"><value>Verwaltete SFTP-Verbindung mit Server-, Anmelde- und Host-Key-Prüfungseinstellungen.</value></data>
+  <data name="SftpFlowBlock_RemotePath" xml:space="preserve"><value>Remote-Pfad</value></data>
+  <data name="SftpFlowBlock_RemotePath_Tooltip" xml:space="preserve"><value>Vollständiger entfernter Dateipfad. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="SftpUploadFlowBlock_ContentField" xml:space="preserve"><value>Inhalt</value></data>
+  <data name="SftpUploadFlowBlock_ContentField_Tooltip" xml:space="preserve"><value>Upload-Inhalt als Byte-Array, Base64-Zeichenfolge, Dateipfad oder Klartext.</value></data>
+  <data name="SftpUploadFlowBlock_Overwrite" xml:space="preserve"><value>Vorhandene Datei überschreiben</value></data>
+  <data name="SftpUploadFlowBlock_Overwrite_Tooltip" xml:space="preserve"><value>Erlaubt das Ersetzen einer vorhandenen entfernten Datei.</value></data>
+  <data name="OpenApiRestFlowBlock_DisplayName" xml:space="preserve"><value>OpenAPI-REST-Endpunkt</value></data>
+  <data name="OpenApiRestFlowBlock_Description" xml:space="preserve"><value>Lädt eine Swagger-/OpenAPI-Beschreibung, erzeugt eine Oberfläche für Endpunkte und Parameter und ruft die ausgewählte REST-Operation auf.</value></data>
+  <data name="OpenApiRestFlowBlock_OpenApiSource" xml:space="preserve"><value>OpenAPI-Quelle</value></data>
+  <data name="OpenApiRestFlowBlock_OpenApiSource_Tooltip" xml:space="preserve"><value>HTTP(S)-URL, lokaler Dateipfad oder direkt eingefügtes Swagger-/OpenAPI-JSON beziehungsweise YAML. URL-Beschreibungen werden 15 Minuten im Arbeitsspeicher gecacht.</value></data>
+  <data name="OpenApiRestFlowBlock_Endpoint" xml:space="preserve"><value>Endpunkt</value></data>
+  <data name="OpenApiRestFlowBlock_Endpoint_Tooltip" xml:space="preserve"><value>Operation aus der Beschreibung, sortiert nach Controller/Tag, Pfad und HTTP-Methode. Die Auswahl setzt Parameter und Payload zurück und erzeugt deren Vorgaben neu.</value></data>
+  <data name="OpenApiRestFlowBlock_BaseUrl" xml:space="preserve"><value>Basis-URL</value></data>
+  <data name="OpenApiRestFlowBlock_BaseUrl_Tooltip" xml:space="preserve"><value>Aus der OpenAPI-Serverangabe ermittelte API-Basis-URL. Sie kann überschrieben werden und unterstützt FlowBlox-Feldplatzhalter.</value></data>
+  <data name="OpenApiRestFlowBlock_EndpointDescription" xml:space="preserve"><value>Endpunktbeschreibung</value></data>
+  <data name="OpenApiRestFlowBlock_EndpointDescription_Tooltip" xml:space="preserve"><value>Schreibgeschützte Zusammenfassung oder Beschreibung aus der OpenAPI-Definition.</value></data>
+  <data name="OpenApiRestFlowBlock_DefinitionError" xml:space="preserve"><value>Definitionsfehler</value></data>
+  <data name="OpenApiRestFlowBlock_DefinitionError_Tooltip" xml:space="preserve"><value>Schreibgeschützter Lade- oder Analysefehler der aktuellen OpenAPI-Quelle.</value></data>
+  <data name="OpenApiRestFlowBlock_BearerToken" xml:space="preserve"><value>Bearer-Token</value></data>
+  <data name="OpenApiRestFlowBlock_BearerToken_Tooltip" xml:space="preserve"><value>Optionales Zugriffstoken, beispielsweise das Ergebnisfeld eines OAuth-/OpenID-Flow-Blocks. Das Bearer-Präfix wird automatisch ergänzt.</value></data>
+  <data name="OpenApiRestFlowBlock_HeaderParameters" xml:space="preserve"><value>Header-Parameter</value></data>
+  <data name="OpenApiRestFlowBlock_HeaderParameters_Tooltip" xml:space="preserve"><value>Header des ausgewählten Endpunkts. Metadaten sind schreibgeschützt; nur Werte können bearbeitet werden und FlowBlox-Felder enthalten.</value></data>
+  <data name="OpenApiRestFlowBlock_RequestParameters" xml:space="preserve"><value>Request-Parameter</value></data>
+  <data name="OpenApiRestFlowBlock_RequestParameters_Tooltip" xml:space="preserve"><value>Query-, Pfad- und Cookie-Parameter des Endpunkts. Metadaten sind schreibgeschützt; nur Werte können bearbeitet werden.</value></data>
+  <data name="OpenApiRestFlowBlock_ContentType" xml:space="preserve"><value>Inhaltstyp</value></data>
+  <data name="OpenApiRestFlowBlock_ContentType_Tooltip" xml:space="preserve"><value>Inhaltstyp aus der Endpunktbeschreibung; JSON wird bevorzugt, danach XML.</value></data>
+  <data name="OpenApiRestFlowBlock_Payload" xml:space="preserve"><value>Payload</value></data>
+  <data name="OpenApiRestFlowBlock_Payload_Tooltip" xml:space="preserve"><value>Request-Body aus einem OpenAPI-Beispiel oder dem Schema erzeugt. FlowBlox-Feldplatzhalter werden unterstützt.</value></data>
+  <data name="OpenApiRestFlowBlock_ResultFields" xml:space="preserve"><value>Ergebnisfelder</value></data>
+  <data name="OpenApiRestFlowBlock_ResultFields_Tooltip" xml:space="preserve"><value>Ordnet Payload, HTTP-Statuscode, Statustext, Fehlermeldung, Response-Header oder aufgerufene URL Ausgabefeldern zu. Payload und Statuscode werden standardmäßig angelegt.</value></data>
+  <data name="OpenApiParameterValue_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="OpenApiParameterValue_Location" xml:space="preserve"><value>Position</value></data>
+  <data name="OpenApiParameterValue_Required" xml:space="preserve"><value>Erforderlich</value></data>
+  <data name="OpenApiParameterValue_Description" xml:space="preserve"><value>Beschreibung</value></data>
+  <data name="OpenApiParameterValue_Value" xml:space="preserve"><value>Wert</value></data>
+  <data name="OpenApiRestDestinations_Payload" xml:space="preserve"><value>Payload</value></data>
+  <data name="OpenApiRestDestinations_StatusCode" xml:space="preserve"><value>HTTP-Statuscode</value></data>
+  <data name="OpenApiRestDestinations_Status" xml:space="preserve"><value>HTTP-Status</value></data>
+  <data name="OpenApiRestDestinations_ErrorMessage" xml:space="preserve"><value>Fehlermeldung</value></data>
+  <data name="OpenApiRestDestinations_ResponseHeaders" xml:space="preserve"><value>Response-Header</value></data>
+  <data name="OpenApiRestDestinations_Url" xml:space="preserve"><value>Aufgerufene URL</value></data>
+  <data name="FloxBloxCategory_Conversion" xml:space="preserve"><value>Konvertierung</value></data>
+  <data name="FloxBloxCategory_S3Storage" xml:space="preserve"><value>S3-Speicher</value></data>
+  <data name="FloxBloxCategory_Sftp" xml:space="preserve"><value>SFTP</value></data>
 </root>
 
 

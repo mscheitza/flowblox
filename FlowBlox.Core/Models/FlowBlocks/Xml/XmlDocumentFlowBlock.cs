@@ -38,6 +38,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(XmlContent));
+            return properties;
+        }
+
         public override bool Execute(BaseRuntime runtime, object data)
         {
             return Invoke(runtime, data, () =>

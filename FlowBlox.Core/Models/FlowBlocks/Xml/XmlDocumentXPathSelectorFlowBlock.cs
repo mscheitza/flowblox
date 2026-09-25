@@ -6,10 +6,8 @@ using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
-using Newtonsoft.Json;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
-using System.Xml;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Xml
 {
@@ -31,7 +29,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
                 .ToList();
         }
 
-        [Display(Name = "XmlDocumentXPathSelector_XPath", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "XmlDocumentXPathSelector_XPath", Description = "XmlDocumentXPathSelector_XPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.XPath))]
         [Required]
         public string XPath { get; set; }
@@ -82,23 +80,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
                     return;
                 }
 
-                var nodes = xmlDoc.SelectNodes(resolvedXPath);
-                if (nodes == null || nodes.Count == 0)
-                {
-                    CreateNotification(runtime, XmlDocumentXPathSelectorNotifications.NoMatchingNodesFound);
-                    GenerateResult(runtime);
-                    return;
-                }
-
-                var contents = new List<string>();
-
-                foreach (XmlNode node in nodes)
-                {
-                    string text = node.InnerXml?.Trim();
-                    if (!string.IsNullOrEmpty(text))
-                        contents.Add(text);
-                }
-
+                var contents = XPathSelector.SelectValues(xmlDoc, resolvedXPath);
                 if (contents.Count == 0)
                 {
                     CreateNotification(runtime, XmlDocumentXPathSelectorNotifications.NoMatchingNodesFound);
@@ -113,11 +95,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         public enum XmlDocumentXPathSelectorNotifications
         {
             [FlowBloxNotification(NotificationType = NotificationType.Warning)]
-            [Display(Name = "XPath expression is empty")]
+            [Display(Name = "XmlDocumentXPathSelector_Notification_XPathExpressionIsEmpty", ResourceType = typeof(FlowBloxTexts))]
             XPathExpressionIsEmpty,
 
             [FlowBloxNotification(NotificationType = NotificationType.Error)]
-            [Display(Name = "No matching nodes found")]
+            [Display(Name = "XmlDocumentXPathSelector_Notification_NoMatchingValuesFound", ResourceType = typeof(FlowBloxTexts))]
             NoMatchingNodesFound
         }
     }

@@ -65,6 +65,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
 
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.ControlFlow;
 
+        public override List<string> GetDisplayableProperties()
+        {
+            var properties = base.GetDisplayableProperties();
+            properties.Add(nameof(MappingEntries));
+            return properties;
+        }
+
         public override bool Execute(Runtime.BaseRuntime runtime, object data)
         {
             return this.Invoke(runtime, data, () =>

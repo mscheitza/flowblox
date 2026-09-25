@@ -186,7 +186,7 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
 
             var rootCategories = FlowBlockCategory.GetAll()
                 .Where(c => c.ParentCategory == null)
-                .OrderBy(c => c.DisplayName);
+                .OrderBy(c => c.DisplayName, StringComparer.CurrentCultureIgnoreCase);
 
             foreach (var rootCategory in rootCategories)
             {
@@ -194,6 +194,8 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
                 if (categoryNode != null)
                     Nodes.Add(categoryNode);
             }
+
+            SortNodes(Nodes);
         }
 
         private ComponentLibraryNodeViewModel BuildCategoryNodeRecursive(FlowBlockCategory category, Dictionary<FlowBlockCategory, List<BaseFlowBlock>> flowBlocksByCategory)
@@ -207,7 +209,7 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
 
             var childCategories = FlowBlockCategory.GetAll()
                 .Where(c => c.ParentCategory == category)
-                .OrderBy(c => c.DisplayName);
+                .OrderBy(c => c.DisplayName, StringComparer.CurrentCultureIgnoreCase);
 
             var hasFlowBlocks = flowBlocksByCategory.TryGetValue(category, out var blocks);
             if (!childCategories.Any() && !hasFlowBlocks)
@@ -222,11 +224,28 @@ namespace FlowBlox.UICore.ViewModels.ComponentLibrary
 
             if (hasFlowBlocks)
             {
-                foreach (var block in blocks.OrderBy(FlowBloxComponentHelper.GetDisplayName))
+                foreach (var block in blocks.OrderBy(FlowBloxComponentHelper.GetDisplayName, StringComparer.CurrentCultureIgnoreCase))
                     categoryNode.Children.Add(CreateFlowBlockNode(block));
             }
 
+            SortNodes(categoryNode.Children);
+
             return categoryNode.Children.Count == 0 ? null : categoryNode;
+        }
+
+        private static void SortNodes(ObservableCollection<ComponentLibraryNodeViewModel> nodes)
+        {
+            foreach (var node in nodes)
+                SortNodes(node.Children);
+
+            var orderedNodes = nodes
+                .OrderBy(node => node.IsCategory ? 0 : 1)
+                .ThenBy(node => node.DisplayName, StringComparer.CurrentCultureIgnoreCase)
+                .ToList();
+
+            nodes.Clear();
+            foreach (var node in orderedNodes)
+                nodes.Add(node);
         }
 
         private static ComponentLibraryNodeViewModel CreateFlowBlockNode(BaseFlowBlock flowBlock)

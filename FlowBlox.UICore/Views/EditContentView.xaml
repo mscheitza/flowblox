@@ -23,6 +23,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -56,6 +57,17 @@
                 </StackPanel>
             </Button>
 
+            <Button x:Name="InsertFieldPlaceholderButton"
+                    Margin="6,0,0,0"
+                    Visibility="Collapsed"
+                    Click="InsertFieldPlaceholderButton_Click"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_InsertPlaceholder_Tooltip}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Variable" Foreground="#2F6DB3" Width="16" Height="16" Margin="0,0,6,0"/>
+                    <TextBlock Text="{x:Static resources:EditContentView.Toolbar_InsertPlaceholder}"/>
+                </StackPanel>
+            </Button>
+
             <Separator Margin="6,0,6,0"/>
 
             <!-- Syntax Highlighting Selection -->
@@ -83,18 +95,27 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
             <Button Command="{Binding CancelCommand}"
                     IsCancel="True"
-                    Margin="0,0,8,0">
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
                 <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="ArrowLeft" Width="16" Height="16" Margin="0,0,6,0"/>
-                    <TextBlock Text="{x:Static resources:EditContentView.Button_Back}"/>
+                    <iconPacks:PackIconMaterial Kind="ArrowLeft"
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Back}"/>
+                    <TextBlock Text="{x:Static resources:EditContentView.Button_Back}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
 
             <Button Command="{Binding ApplyCommand}"
-                    IsDefault="True">
+                    IsDefault="True"
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
                 <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="ContentSave" Width="16" Height="16" Margin="0,0,6,0"/>
-                    <TextBlock Text="{x:Static resources:EditContentView.Button_Apply}"/>
+                    <iconPacks:PackIconMaterial Kind="ContentSave"
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
+                    <TextBlock Text="{x:Static resources:EditContentView.Button_Save}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </StackPanel>

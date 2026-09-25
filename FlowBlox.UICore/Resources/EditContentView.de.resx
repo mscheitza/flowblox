@@ -135,6 +135,13 @@
     <value>Binärdatei laden und als Base64-Text in den Editor einfügen.</value>
   </data>
 
+	<data name="Toolbar_InsertPlaceholder" xml:space="preserve">
+    <value>Platzhalter einf&#252;gen</value>
+  </data>
+	<data name="Toolbar_InsertPlaceholder_Tooltip" xml:space="preserve">
+    <value>Projekt- oder Optionsplatzhalter an der aktuellen Cursorposition einf&#252;gen.</value>
+  </data>
+
 	<data name="Label_Syntax" xml:space="preserve">
     <value>Syntax:</value>
   </data>
@@ -145,7 +152,7 @@
 	<data name="Button_Back" xml:space="preserve">
     <value>Zurück</value>
   </data>
-	<data name="Button_Apply" xml:space="preserve">
-    <value>Übernehmen</value>
-  </data>
+	<data name="Button_Save" xml:space="preserve">
+		<value>Speichern</value>
+	</data>
 </root>

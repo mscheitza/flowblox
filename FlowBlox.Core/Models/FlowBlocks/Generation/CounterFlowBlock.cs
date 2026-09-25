@@ -86,6 +86,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Generation
 
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.Generation;
 
+        public override void OnAfterCreate()
+        {
+            AlphaRange = FlowBloxOptions.GetOptionInstance().OptionCollection["Counter.Alphanumeric.Range"].Value;
+            base.OnAfterCreate();
+        }
+
         public override List<string> GetDisplayableProperties()
         {
             var properties = base.GetDisplayableProperties();

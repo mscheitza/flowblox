@@ -2,6 +2,7 @@ using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
+using FlowBlox.Core.Models.FlowBlocks.Json;
 using FlowBlox.Core.Models.FlowBlocks.Selection;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.FlowBlocks.Web;
@@ -181,6 +182,80 @@ namespace FlowBloxTest.Models.Generators
             Assert.IsTrue(provider.LastPrompt?.Contains("Properties") == true);
             Assert.IsTrue(provider.LastPrompt?.Contains("\"PropertyName\": \"value\"") == true);
             Assert.IsTrue(provider.LastPrompt?.Contains("FlowBloxQuickUpdateSchema") == true);
+        }
+
+        [TestMethod]
+        public void IncludesAllReferencedFieldValuesAndMasksPasswords()
+        {
+            var start = CreateFlowBlock<StartFlowBlock>();
+            var visibleSource = CreateFlowBlock<ExecutionOrderTestFlowBlock>(start);
+            var passwordSource = CreateFlowBlock<ExecutionOrderTestFlowBlock>(visibleSource);
+            passwordSource.ResultField.IsPassword = true;
+
+            var target = CreateFlowBlock<JsonObjectWriterFlowBlock>(passwordSource);
+            target.Assignments.Add(new JsonPropertyValueAssignment
+            {
+                PropertyName = "visible",
+                FieldValue = visibleSource.ResultField
+            });
+            target.Assignments.Add(new JsonPropertyValueAssignment
+            {
+                PropertyName = "secret",
+                Value = passwordSource.ResultField.FullyQualifiedName
+            });
+
+            var provider = new CapturingAIProvider();
+            var strategy = new AIPropertyValueGenerationStrategy(target)
+            {
+                Provider = provider,
+                PromptTemplate = "$GenerationStrategy::TargetFlowBlockInputValues" + Environment.NewLine +
+                    $"DirectPasswordReference={passwordSource.ResultField.FullyQualifiedName}"
+            };
+            var testDefinition = new FlowBloxTestDefinition
+            {
+                Name = "Referenced fields",
+                Entries = new ObservableCollection<FlowBlockTestDataset>
+                {
+                    new()
+                    {
+                        FlowBlock = target,
+                        FlowBloxTestConfigurations =
+                        [
+                            new FlowBloxFieldTestConfiguration
+                            {
+                                FieldElement = target.ResultField,
+                                SelectionMode = FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue,
+                                UserInput = "expected"
+                            }
+                        ]
+                    }
+                }
+            };
+            var runtime = new FlowBloxUnitTestRuntime(_project);
+
+            strategy.Execute(
+                runtime,
+                new Dictionary<FlowBloxTestDefinition, FlowBloxTestResult>
+                {
+                    [testDefinition] = new(
+                        false,
+                        new Dictionary<string, string>
+                        {
+                            [visibleSource.ResultField.FullyQualifiedName] = "visible-value",
+                            [passwordSource.ResultField.FullyQualifiedName] = "secret-value"
+                        })
+                });
+
+            StringAssert.Contains(
+                provider.LastPrompt,
+                $"{visibleSource.ResultField.FullyQualifiedName}=visible-value");
+            StringAssert.Contains(
+                provider.LastPrompt,
+                $"{passwordSource.ResultField.FullyQualifiedName}={GlobalConstants.HiddenSensitiveValue}");
+            StringAssert.Contains(
+                provider.LastPrompt,
+                $"DirectPasswordReference={GlobalConstants.HiddenSensitiveValue}");
+            Assert.IsFalse(provider.LastPrompt?.Contains("secret-value", StringComparison.Ordinal) == true);
         }
 
         private sealed class CapturingAIProvider : AIProviderBase

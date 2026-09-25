@@ -23,6 +23,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/HostedControlStyles.xaml" />
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/PropertyViewStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <globalConverters:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter"/>
@@ -32,6 +34,7 @@
             <converters:RuntimeLogsToVisibilityConverter x:Key="RuntimeLogsToVisibilityConverter"/>
             <converters:TestResultsToVisibilityConverter x:Key="TestResultsToVisibilityConverter"/>
             <converters:UserInputEnabledConverter x:Key="UserInputEnabledConverter"/>
+            <converters:MultilineTextVisibilityConverter x:Key="MultilineTextVisibilityConverter"/>
             <converters:FlowBlockToVisibilityConverter x:Key="FlowBlockToVisibilityConverter"/>
             <converters:TabControlVisibilityConverter x:Key="TabControlVisibilityConverter"/>
             <globalConverters:CollectionContainsToVisibilityConverter x:Key="CollectionContainsToVisibilityConverter"/>
@@ -381,15 +384,33 @@
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
 
-                                                        <TextBox Grid.Column="0"
-                                                             x:Name="UserInputTextBox"
-                                                             Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}" 
-                                                             VerticalAlignment="Center" 
-                                                             Margin="0 0 5 0" />
+                                                        <Grid Grid.Column="0" Margin="0,0,5,0">
+                                                            <TextBox x:Name="UserInputTextBox"
+                                                                     Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}"
+                                                                     Height="24"
+                                                                     MaxLines="1"
+                                                                     TextWrapping="NoWrap"
+                                                                     VerticalContentAlignment="Center"
+                                                                     Visibility="{Binding UserInput, Converter={StaticResource MultilineTextVisibilityConverter}, ConverterParameter=SingleLine}" />
+
+                                                            <StackPanel Orientation="Horizontal"
+                                                                        VerticalAlignment="Center"
+                                                                        Visibility="{Binding UserInput, Converter={StaticResource MultilineTextVisibilityConverter}}">
+                                                                <iconPacks:PackIconMaterial Kind="InformationOutline"
+                                                                                            Margin="0,0,6,0"
+                                                                                            VerticalAlignment="Center"
+                                                                                            Style="{StaticResource FlowBlox.EmptyStateIconStyle}" />
+                                                                <TextBlock Text="{x:Static resources:TestDefinitionView.Text_EditInEditor}"
+                                                                           VerticalAlignment="Center"
+                                                                           TextTrimming="CharacterEllipsis"
+                                                                           Style="{StaticResource FlowBlox.EmptyStateTextStyle}" />
+                                                            </StackPanel>
+                                                        </Grid>
 
                                                         <Button Grid.Column="1"
                                                             Margin="0,0,5,0"
-                                                            Click="InsertFieldPlaceholderButton_Click">
+                                                            Click="InsertFieldPlaceholderButton_Click"
+                                                            Visibility="{Binding UserInput, Converter={StaticResource MultilineTextVisibilityConverter}, ConverterParameter=SingleLine}">
                                                             <iconPacks:PackIconMaterial Kind="Variable" Width="14" Height="14" Foreground="#2F6DB3"/>
                                                         </Button>
 
@@ -694,22 +715,43 @@
         </TabControl>
 
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button IsCancel="True" Click="CancelButton_Click" Margin="5">
+            <Button Command="{Binding ExecuteTestCommand}"
+                    IsEnabled="{Binding CanExecute}"
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
                 <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconModern Kind="ChevronLeft" Width="16" Height="16" Margin="0,0,5,0"/>
+                    <iconPacks:PackIconMaterial Kind="Play"
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Execute}"/>
+                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_Execute}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+
+            <Button IsCancel="True"
+                    Click="CancelButton_Click"
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="ArrowLeft"
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Back}"/>
                     <TextBlock Text="{x:Static resources:TestDefinitionView.Button_Back}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Button IsDefault="True" Click="OkButton_Click" IsEnabled="{Binding CanApply}" Margin="5">
+
+            <Button IsDefault="True"
+                    Click="OkButton_Click"
+                    IsEnabled="{Binding CanApply}"
+                    MinWidth="112"
+                    MinHeight="32"
+                    Padding="12,5"
+                    Margin="5">
                 <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconModern Kind="Save" Width="16" Height="16" Margin="0,0,5,0"/>
-                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_SaveAndClose}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding ExecuteTestCommand}" IsEnabled="{Binding CanExecute}" Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconModern Kind="Cog" Width="16" Height="16" Margin="0,0,5,0"/>
-                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_Execute}" VerticalAlignment="Center"/>
+                    <iconPacks:PackIconMaterial Kind="ContentSave"
+                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
+                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_Save}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
         </StackPanel>

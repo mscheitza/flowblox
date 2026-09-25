@@ -10,9 +10,9 @@ namespace FlowBlox.Core.Provider.Placeholders.GenerationStrategy
             {
                 new FlowBloxGenerationStrategyPlaceholderElement
                 {
-                    Key = "InputFieldValue",
-                    DisplayName = "Input field value",
-                    Description = "Resolved input value of the generation strategy input field."
+                    Key = "TargetFlowBlockInputValues",
+                    DisplayName = "Target flow block input values",
+                    Description = "Fully qualified names and current per-test values of all fields referenced by the target flow block. Password values are hidden; known field names can be used directly as placeholders in configuration values."
                 },
                 new FlowBloxGenerationStrategyPlaceholderElement
                 {
@@ -30,19 +30,19 @@ namespace FlowBlox.Core.Provider.Placeholders.GenerationStrategy
                 {
                     Key = "FlowBloxQuickUpdateSchema",
                     DisplayName = "FlowBlox Quick Update schema",
-                    Description = "Minimal schema of configurable source flow block properties for the FlowBlox Quick Update JSON format."
+                    Description = "Minimal schema of configurable target flow block properties for the FlowBlox Quick Update JSON format."
                 },
                 new FlowBloxGenerationStrategyPlaceholderElement
                 {
                     Key = "FlowBloxQuickUpdateFormat",
                     DisplayName = "FlowBlox Quick Update format",
-                    Description = "Output format for updating one or more configurable source flow block properties."
+                    Description = "Output format for updating one or more configurable target flow block properties."
                 },
                 new FlowBloxGenerationStrategyPlaceholderElement
                 {
                     Key = "FlowBlockDescriptions",
                     DisplayName = "Flow block descriptions",
-                    Description = "Description of the source flow block plus special explanations (listed as bullet points). Useful for AI prompt context."
+                    Description = "Description of the target flow block plus special explanations (listed as bullet points). Useful for AI prompt context."
                 }
             };
         }

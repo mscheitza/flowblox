@@ -588,6 +588,17 @@ namespace FlowBlox.UICore.Resources
                 return ResourceManager.GetString("Text_UserInputFieldValue", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit in editor ähnelt.
+        /// </summary>
+        public static string Text_EditInEditor
+        {
+            get
+            {
+                return ResourceManager.GetString("Text_EditInEditor", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test definition ähnelt.

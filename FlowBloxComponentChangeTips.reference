@@ -1,0 +1,232 @@
+Tips and Tricks for Changing FlowBlox Components
+================================================
+
+FlowBlox projects are stored as typed JSON. Component changes should therefore preserve the ability to open existing projects unambiguously and without manual repair.
+
+Rule of thumb
+-------------
+
+1. A property was renamed, or a simple legacy value can be converted directly:
+   Use a legacy property.
+2. The CLR type, namespace, or assembly of a persisted type changed:
+   Use IFlowBloxLegacyTypeMappingService.
+3. The JSON shape or a property type changed substantially:
+   Use IFlowBloxMigrationStrategy to transform the JSON before deserialization.
+
+
+1. Renaming properties and converting simple values
+----------------------------------------------------
+
+The new property is the regular public property. Add a private, write-only legacy property whose JsonProperty name exactly matches the old JSON property. Because it has no getter, the legacy property is not exported again when the project is saved.
+
+Simple rename, following LegacyAssociatedInputReference in BaseFlowBlock:
+
+    public BaseFlowBlock AssociatedIterationContext { get; set; }
+
+    [JsonProperty("AssociatedInputReference")]
+    private BaseFlowBlock LegacyAssociatedInputReference
+    {
+        set
+        {
+            if (AssociatedIterationContext == null)
+                AssociatedIterationContext = value;
+        }
+    }
+
+The same pattern supports a simple type conversion, for example from a legacy string to an enum:
+
+    public ExecutionMode Mode { get; set; } = ExecutionMode.Default;
+
+    [JsonProperty("ExecutionMode")]
+    private string LegacyExecutionMode
+    {
+        set
+        {
+            if (Enum.TryParse(value, ignoreCase: true, out ExecutionMode mode))
+                Mode = mode;
+        }
+    }
+
+Keep in mind:
+
+- A legacy property is deserialization-only logic and must not appear in the UI.
+- Do not overwrite a value that was already supplied through the new property.
+- Prefer a JSON migration strategy for complex object or collection transformations.
+
+
+2. Renaming types, namespaces, and assemblies
+---------------------------------------------
+
+Persisted $type values contain the namespace, type name, and assembly. IFlowBloxLegacyTypeMappingService maps historical names explicitly to the current CLR type.
+
+Extend FlowBloxCoreLegacyTypeMappingService for FlowBlox Core. An extension provides its own service:
+
+    using FlowBlox.Core.Interfaces;
+    using FlowBlox.Core.Models.Serialization;
+
+    public sealed class MyLegacyTypeMappingService
+        : IFlowBloxLegacyTypeMappingService
+    {
+        public IEnumerable<FlowBloxLegacyTypeMapping> GetLegacyTypeMappings()
+        {
+            return
+            [
+                new FlowBloxLegacyTypeMapping(
+                    typeof(NewNamespace.WriteObjectFlowBlock),
+                    [
+                        "OldNamespace.WriteObjectFlowBlock, MyExtension"
+                    ])
+            ];
+        }
+    }
+
+Registering the service in an extension:
+
+    using FlowBlox.Core.DependencyInjection;
+    using FlowBlox.Core.Interfaces;
+    using Microsoft.Extensions.DependencyInjection;
+
+    internal sealed class ServiceRegistration : IFlowBloxServiceRegistration
+    {
+        public void RegisterServices(IServiceCollection services)
+        {
+            services.AddSingleton<IFlowBloxLegacyTypeMappingService,
+                MyLegacyTypeMappingService>();
+        }
+    }
+
+A namespace-only change may be resolved by the simple-name fallback. An explicit mapping is still recommended because it documents the change and prevents ambiguous resolution when types share the same simple name. A mapping is mandatory whenever simple-name resolution would not be unique.
+
+LegacyTypeNames use the format "Namespace.TypeName, AssemblyName". One mapping may map several historical names to the same current TargetType.
+
+
+3. JSON migrations before deserialization
+-----------------------------------------
+
+When a project is opened, FlowBlox executes matching IFlowBloxMigrationStrategy implementations against the JSON before deserialization. This permits changes that the serializer cannot map safely by itself. FlowBlocks, ManagedObjects, and UserFields are migrated, with applicable strategies executed in version order.
+
+Always make migrations idempotent: if the new representation already exists, the migration must leave it unchanged.
+
+Property level: List<T> to ObservableCollection<T>
+-------------------------------------------------
+
+OnVisitProperty is intended for changes to a persisted property type. FlowBloxComponentMigrationStrategy_1_0_0 handles a $type entry by examining parentType and parentPropertyName. It replaces the former List<T> type only when the current CLR property now expects ObservableCollection<T>.
+
+Simplified pattern:
+
+    protected override void OnVisitProperty(
+        JProperty property,
+        Type? parentType,
+        string? parentPropertyName)
+    {
+        if (property.Name != "$type" ||
+            property.Value.Type != JTokenType.String ||
+            parentType == null ||
+            parentPropertyName == null)
+        {
+            return;
+        }
+
+        string oldType = property.Value.ToString();
+        if (!ShouldReplaceType(parentType, parentPropertyName, oldType))
+            return;
+
+        property.Value = ListToObservableCollectionRegex.Replace(
+            oldType,
+            match =>
+                $"System.Collections.ObjectModel.ObservableCollection`1" +
+                $"[[{match.Groups[1].Value}]], System.ObjectModel");
+    }
+
+    private static bool ShouldReplaceType(
+        Type parentType,
+        string propertyName,
+        string jsonTypeValue)
+    {
+        PropertyInfo? property = parentType.GetProperty(propertyName);
+        Type? propertyType = property?.PropertyType;
+
+        return propertyType?.IsGenericType == true &&
+               propertyType.GetGenericTypeDefinition() ==
+                   typeof(ObservableCollection<>);
+    }
+
+The important part is the combination of JSON information and the current CLR model. Do not blindly replace every List<T>; replace only collections whose target property actually expects ObservableCollection<T>.
+
+Object level: changing the shape of a FlowBlock
+------------------------------------------------
+
+OnVisitObject is intended for changes involving several properties or the complete shape of an object. A real example is the migration from WebRequestFlowBlock.ResultField to ResultFields: one result field becomes a typed collection containing a mapping entry.
+
+    protected override void OnVisitObject(Type? currentType, JObject obj)
+    {
+        if (currentType != null &&
+            WebRequestFlowBlockType != null &&
+            WebRequestFlowBlockType.IsAssignableFrom(currentType))
+        {
+            MigrateWebRequestResultField(obj);
+        }
+    }
+
+    private static void MigrateWebRequestResultField(JObject obj)
+    {
+        // Idempotency: the new representation always takes precedence.
+        if (obj.Property("ResultFields") != null)
+            return;
+
+        JProperty? legacyProperty = obj.Property("ResultField");
+        if (legacyProperty?.Value is not JToken legacyField ||
+            legacyField.Type == JTokenType.Null)
+        {
+            legacyProperty?.Remove();
+            return;
+        }
+
+        obj["ResultFields"] = new JObject
+        {
+            ["$type"] = ResultFieldsCollectionTypeString,
+            ["$values"] = new JArray
+            {
+                new JObject
+                {
+                    ["$type"] = ResultFieldByEnumValueTypeString,
+                    ["EnumValue"] = "Content",
+                    ["ResultField"] = legacyField.DeepClone()
+                }
+            }
+        };
+
+        legacyProperty.Remove();
+    }
+
+A custom strategy derives from FlowBloxMigrationStrategyBase and implements IFlowBloxMigrationStrategy:
+
+    public sealed class MyComponentMigrationStrategy_2_0_0
+        : FlowBloxMigrationStrategyBase, IFlowBloxMigrationStrategy
+    {
+        public Type ComponentType => typeof(MyFlowBlock);
+        public Version Version => new(2, 0, 0, 0);
+
+        public void Migrate(JObject json)
+        {
+            IterateThroughObjectsRecursive(json);
+        }
+
+        // Override OnVisitProperty and/or OnVisitObject.
+    }
+
+Registration:
+
+    services.AddTransient<IFlowBloxMigrationStrategy,
+        MyComponentMigrationStrategy_2_0_0>();
+
+Migration checklist
+-------------------
+
+- Choose the smallest suitable mechanism: legacy property, type mapping, or structural JSON migration.
+- Copy old JSON names and $type values exactly; do not guess casing.
+- Keep migrations idempotent and never overwrite an existing new value.
+- DeepClone tokens before removing their legacy property during a structural migration.
+- Scope ComponentType and Version as narrowly as possible.
+- Test loading both a legacy and an already-current project. After saving, both should contain only the new representation.
+- Map namespace and type changes explicitly, especially for extensions and generic collection types.

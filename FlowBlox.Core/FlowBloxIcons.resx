@@ -142,6 +142,12 @@
   <data name="call_split" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\call-split.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="cloud_download_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\cloud-download-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cloud_upload_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\cloud-upload-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="code_braces" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\code-braces.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -210,6 +216,9 @@
   </data>
   <data name="file_pdf_box" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\file-pdf-box.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="file_word_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file-word-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\folder-open.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -307,8 +316,20 @@
   <data name="table_large" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\table-large.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="text_box_check_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\text-box-check-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="text_box_edit_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\text-box-edit-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="text_box_plus_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\text-box-plus-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="text_long" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\text-long.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="text_search" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\text-search.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="timeline_clock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\timeline-clock.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
