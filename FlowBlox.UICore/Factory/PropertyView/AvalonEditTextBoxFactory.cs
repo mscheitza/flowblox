@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using System.Xml;
 
 namespace FlowBlox.UICore.Factory.PropertyView
@@ -61,18 +62,29 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 PropertyChangedEventHandler propertyChangedEventHandler = (s, e) =>
                 {
-                    if (!_initialized)
+                    if (!_initialized || _updatingToModel || e.PropertyName != _property.Name)
                         return;
 
-                    if (_updatingToModel)
-                        return;
-
-                    if (e.PropertyName == _property.Name)
+                    void UpdateEditor()
                     {
+                        if (!_initialized || _updatingToModel)
+                            return;
+
                         _updatingFromModel = true;
-                        editor.Text = (string)_property.GetValue(_target);
-                        _updatingFromModel = false;
+                        try
+                        {
+                            editor.Text = _property.GetValue(_target) as string ?? string.Empty;
+                        }
+                        finally
+                        {
+                            _updatingFromModel = false;
+                        }
                     }
+
+                    if (editor.Dispatcher.CheckAccess())
+                        UpdateEditor();
+                    else
+                        _ = editor.Dispatcher.InvokeAsync(UpdateEditor, DispatcherPriority.DataBind);
                 };
 
                 inpc.PropertyChanged += propertyChangedEventHandler;
