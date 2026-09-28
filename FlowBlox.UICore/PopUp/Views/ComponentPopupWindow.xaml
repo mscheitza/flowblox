@@ -95,12 +95,11 @@
         <DockPanel Grid.Row="2"
                    Margin="0,18,0,0"
                    LastChildFill="False">
-            <mah:ToggleSwitch x:Name="ShowAgainToggleSwitch"
-                              DockPanel.Dock="Left"
-                              VerticalAlignment="Center"
-                              IsOn="False"
-                              OnContent="{x:Static resources:ComponentPopupWindowResources.Toggle_ShowAgain_On}"
-                              OffContent="{x:Static resources:ComponentPopupWindowResources.Toggle_ShowAgain_Off}" />
+            <CheckBox x:Name="ShowAgainCheckBox"
+                      DockPanel.Dock="Left"
+                      VerticalAlignment="Center"
+                      IsChecked="False"
+                      Content="{x:Static resources:ComponentPopupWindowResources.CheckBox_ShowAgain}" />
 
             <Button x:Name="NextButton"
                     DockPanel.Dock="Right"

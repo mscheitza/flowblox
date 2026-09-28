@@ -14,6 +14,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using FlowBlox.UICore.Models.FieldSelection;
+using FlowBlox.UICore.Manager;
+using FlowBlox.UICore.Factory;
 
 namespace FlowBlox.UICore.Views
 {
@@ -22,24 +24,45 @@ namespace FlowBlox.UICore.Views
     /// </summary>
     public partial class TestDefinitionView : MetroWindow
     {
+        private readonly BaseFlowBlock _requestedCurrentFlowBlock;
+        private readonly FlowBloxTransactionEventHandler _transactionEventHandler;
+
+        public PropertyWindowCommitStatus CommitStatus => _transactionEventHandler.CommitStatus;
+
         public TestDefinitionView(FlowBloxTestDefinition testDefinition, BaseFlowBlock currentFlowBlock)
         {
             InitializeComponent();
-            var viewModel = (TestDefinitionViewModel)DataContext;
+            TransactionMonitorWindowFactory.Register(this);
 
+            _requestedCurrentFlowBlock = currentFlowBlock;
+            _transactionEventHandler = new FlowBloxTransactionEventHandler(
+                testDefinition ?? throw new ArgumentNullException(nameof(testDefinition)),
+                workingCopyOpened: InitializeWorkingCopy,
+                canCommit: () => DataContext is TestDefinitionViewModel { CanApply: true },
+                window: this);
+            _transactionEventHandler.Open();
+            Loaded += TestDefinitionView_Loaded;
+            Closing += TestDefinitionView_Closing;
+        }
+
+        private void InitializeWorkingCopy(object workingCopy)
+        {
+            var transientTestDefinition = (FlowBloxTestDefinition)workingCopy;
             var testConfigurationSynchronizer = new FlowBloxTestDefinitionSynchronizer();
-            testConfigurationSynchronizer.Synchronize(testDefinition, currentFlowBlock);
+            testConfigurationSynchronizer.Synchronize(transientTestDefinition, _requestedCurrentFlowBlock);
 
             var latestFlowBlockResolver = new FlowBloxTestDefinitionLatestFlowBlockResolver();
-            var effectiveCurrentFlowBlock = currentFlowBlock ?? latestFlowBlockResolver.ResolveLatestFlowBlock(testDefinition);
+            var effectiveCurrentFlowBlock = _requestedCurrentFlowBlock ??
+                latestFlowBlockResolver.ResolveLatestFlowBlock(transientTestDefinition);
 
+            var viewModel = (TestDefinitionViewModel)DataContext;
             viewModel.OwnerWindow = this;
-            viewModel.HasExplicitFlowBlockContext = currentFlowBlock != null;
-            viewModel.TestDefinition = testDefinition;
+            viewModel.HasExplicitFlowBlockContext = _requestedCurrentFlowBlock != null;
+            viewModel.TestDefinition = transientTestDefinition;
             viewModel.CurrentFlowBlock = effectiveCurrentFlowBlock;
             viewModel.AcceptChanges("Test definition view initialized");
+            viewModel.PropertyChanged -= ViewModel_PropertyChanged;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
-            Loaded += TestDefinitionView_Loaded;
         }
 
         private void TestDefinitionView_Loaded(object sender, RoutedEventArgs e)
@@ -72,19 +95,16 @@ namespace FlowBlox.UICore.Views
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is TestDefinitionViewModel { IsDirty: true } viewModel)
-                viewModel.TestDefinition?.OnAfterSave();
+            => _transactionEventHandler.Save();
 
-            DialogResult = true;
-            Close();
-        }
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+            => _transactionEventHandler.Apply();
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
-        }
+            => _transactionEventHandler.Cancel();
+
+        private void TestDefinitionView_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+            => _transactionEventHandler.HandleClosing(sender, e);
 
         private void InsertFieldPlaceholderButton_Click(object sender, RoutedEventArgs e)
         {

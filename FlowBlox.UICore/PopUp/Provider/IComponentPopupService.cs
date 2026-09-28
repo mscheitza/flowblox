@@ -6,6 +6,10 @@ namespace FlowBlox.UICore.PopUp.Provider
     {
         bool ShowFor(object target, Window owner = null);
 
+        bool ShowFor(object target, ComponentPopupEvent popupEvent, Window owner = null);
+
         bool ShowFor<TTarget>(TTarget target, Window owner = null);
+
+        bool ShowFor<TTarget>(TTarget target, ComponentPopupEvent popupEvent, Window owner = null);
     }
 }

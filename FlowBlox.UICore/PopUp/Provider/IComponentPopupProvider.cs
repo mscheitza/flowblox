@@ -6,9 +6,11 @@ namespace FlowBlox.UICore.PopUp.Provider
     {
         Type TargetType { get; }
 
+        ComponentPopupEvent PopupEvent { get; }
+
         string OptionKey { get; }
 
-        bool CanShowFor(object target);
+        bool CanShowFor(object target, ComponentPopupEvent popupEvent);
 
         void ShowIfEnabled(object target, Window owner = null);
     }

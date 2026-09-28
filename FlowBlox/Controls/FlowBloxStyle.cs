@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using FlowBlox.Core.Util;
 
-namespace FlowBlox.Components
+namespace FlowBlox.Controls
 {
     /// <summary>
     /// The application's style class. The current style can be defined in the "UI.Style" option.

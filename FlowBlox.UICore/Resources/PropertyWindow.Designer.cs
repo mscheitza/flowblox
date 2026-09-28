@@ -70,6 +70,28 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
+        /// </summary>
+        public static string Apply
+        {
+            get
+            {
+                return ResourceManager.GetString("Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply without verification ähnelt.
+        /// </summary>
+        public static string ApplyWithoutVerification
+        {
+            get
+            {
+                return ResourceManager.GetString("ApplyWithoutVerification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
         public static string Back
@@ -101,7 +123,7 @@ namespace FlowBlox.UICore.Resources
                 return ResourceManager.GetString("ReadMore", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Refresh actions ähnelt.
         /// </summary>

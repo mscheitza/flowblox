@@ -103,24 +103,13 @@ namespace FlowBlox.UICore.PopUp.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Do not show again ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Show this guidance again ähnelt.
         /// </summary>
-        public static string Toggle_ShowAgain_Off
+        public static string CheckBox_ShowAgain
         {
             get
             {
-                return ResourceManager.GetString("Toggle_ShowAgain_Off", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Show again ähnelt.
-        /// </summary>
-        public static string Toggle_ShowAgain_On
-        {
-            get
-            {
-                return ResourceManager.GetString("Toggle_ShowAgain_On", resourceCulture);
+                return ResourceManager.GetString("CheckBox_ShowAgain", resourceCulture);
             }
         }
     }

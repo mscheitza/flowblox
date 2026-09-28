@@ -1,4 +1,4 @@
-﻿namespace FlowBlox.Components
+﻿namespace FlowBlox.Controls
 {
     public class FlowBloxStyleTags
     {

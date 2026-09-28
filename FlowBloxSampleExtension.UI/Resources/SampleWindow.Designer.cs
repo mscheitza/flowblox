@@ -70,24 +70,57 @@ namespace FlowBloxSampleExtension.UI.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Close ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
-        public static string CloseButton
+        public static string Button_Apply
         {
             get
             {
-                return ResourceManager.GetString("CloseButton", resourceCulture);
+                return ResourceManager.GetString("Button_Apply", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This window serves as an example of a custom UI action in a FlowBlox extension. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Cancel ähnelt.
+        /// </summary>
+        public static string Button_Cancel
+        {
+            get
+            {
+                return ResourceManager.GetString("Button_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
+        /// </summary>
+        public static string Button_Save
+        {
+            get
+            {
+                return ResourceManager.GetString("Button_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This custom window edits a transactional working copy. Apply commits the current state and continues with a fresh working copy. ähnelt.
         /// </summary>
         public static string Description
         {
             get
             {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output text: ähnelt.
+        /// </summary>
+        public static string OutputTextLabel
+        {
+            get
+            {
+                return ResourceManager.GetString("OutputTextLabel", resourceCulture);
             }
         }
         

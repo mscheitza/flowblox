@@ -1,4 +1,4 @@
-﻿using FlowBlox.Components;
+﻿using FlowBlox.Controls;
 using System.Reflection;
 using System.Windows.Forms;
 

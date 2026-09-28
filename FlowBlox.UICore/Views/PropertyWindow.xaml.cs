@@ -1,5 +1,7 @@
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Factory;
 using FlowBlox.UICore.PopUp.Provider;
 using FlowBlox.UICore.ViewModels.PropertyView;
 using MahApps.Metro.Controls;
@@ -58,15 +60,21 @@ namespace FlowBlox.UICore.Views
         private PropertyWindowArgs _propertyWindowArgs;
         private bool _componentPopUpRequested;
 
+        public PropertyWindowCommitStatus CommitStatus =>
+            (DataContext as PropertyWindowViewModel)?.CommitStatus ?? PropertyWindowCommitStatus.None;
+
         public PropertyWindow()
         {
             InitializeComponent();
+            TransactionMonitorWindowFactory.Register(this);
         }
 
         public PropertyWindow(PropertyWindowArgs propertyWindowArgs) : this()
         {
             _propertyWindowArgs = propertyWindowArgs;
-            DataContext = new PropertyWindowViewModel(this, propertyWindowArgs);
+            var viewModel = new PropertyWindowViewModel(this, propertyWindowArgs);
+            viewModel.PropertyViewModel.ValidationFailed += PropertyViewModel_ValidationFailed;
+            DataContext = viewModel;
             Closing += PropertyView_Closing;
             Loaded += PropertyWindow_Loaded;
         }
@@ -91,10 +99,32 @@ namespace FlowBlox.UICore.Views
 
         private void PropertyView_Closing(object sender, CancelEventArgs e)
         {
-            if (DialogResult != true && DataContext is PropertyWindowViewModel viewModel)
-            {
-                viewModel.Rollback();
-            }
+            if (DataContext is PropertyWindowViewModel viewModel)
+                viewModel.HandleClosing(sender, e);
         }
+
+        private void PropertyViewModel_ValidationFailed(object? sender, EventArgs e)
+        {
+            if (_propertyWindowArgs?.Target == null)
+                return;
+
+            var componentPopUpService = FlowBloxServiceLocator.Instance.GetService<IComponentPopupService>();
+            componentPopUpService?.ShowFor(
+                _propertyWindowArgs.Target,
+                ComponentPopupEvent.ValidationFailed,
+                this);
+        }
+
+        private void CommitOptionsButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var button = sender as System.Windows.Controls.Button;
+            if (button?.ContextMenu == null)
+                return;
+
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            button.ContextMenu.IsOpen = true;
+        }
+
     }
 }

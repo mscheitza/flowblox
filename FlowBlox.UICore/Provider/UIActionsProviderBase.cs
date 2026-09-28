@@ -1,10 +1,14 @@
 ﻿using System.Reflection;
 using System.ComponentModel.DataAnnotations;
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Attributes;
+using FlowBlox.UICore.Enums;
 using SkiaSharp;
 using FlowBlox.UICore.Interfaces;
+using UIActionsProviderBaseResources = FlowBlox.UICore.Resources.ClassResources.UIActionsProviderBase;
 
 namespace FlowBlox.UICore.Provider
 {
@@ -61,12 +65,46 @@ namespace FlowBlox.UICore.Provider
 
                     var icon16 = TryGetIcon(instance, type, $"{method.Name}Icon16");
 
-                    var item = CreateItem(displayName, (sender, e) => method.Invoke(instance, null), enabled, icon16);
+                    var item = CreateItem(
+                        displayName,
+                        (sender, e) => ExecuteAction(method, instance),
+                        enabled,
+                        icon16);
                     items.Add(item);
                 }
             }
 
             return items;
+        }
+
+        private static void ExecuteAction(MethodInfo method, object instance)
+        {
+            try
+            {
+                method.Invoke(instance, null);
+            }
+            catch (Exception ex)
+            {
+                var actionException = ex is TargetInvocationException { InnerException: not null }
+                    ? ex.InnerException
+                    : ex;
+                var actionName = $"{method.DeclaringType?.FullName}.{method.Name}";
+
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    $"An error occurred while executing the UI action '{actionName}'.",
+                    actionException);
+
+                FlowBloxServiceLocator.Instance
+                    .GetService<IFlowBloxMessageBoxService>()
+                    ?.ShowMessageBox(
+                        FlowBloxResourceUtil.GetLocalizedString(
+                            nameof(UIActionsProviderBaseResources.ActionExecutionFailedMessage),
+                            typeof(UIActionsProviderBaseResources)),
+                        FlowBloxResourceUtil.GetLocalizedString(
+                            nameof(UIActionsProviderBaseResources.ActionExecutionFailedTitle),
+                            typeof(UIActionsProviderBaseResources)),
+                        FlowBloxMessageBoxTypes.Error);
+            }
         }
 
         private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)

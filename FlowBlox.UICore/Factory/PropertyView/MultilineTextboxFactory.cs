@@ -42,7 +42,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
             };
             if (canEdit)
                 textBox.TextChanged += (s, e) => FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
-            ParentScrollViewerMouseWheelForwarder.Register(textBox);
+            ParentScrollViewerMouseWheelForwarder.Register(
+                textBox,
+                () => textBox.HorizontalOffset,
+                textBox.ScrollToHorizontalOffset);
             textBox.SetBinding(TextBox.TextProperty, binding);
 
             return ResizableControlContainer.Create(textBox);

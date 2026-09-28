@@ -1,6 +1,7 @@
 ﻿using FlowBlox.UICore.Events;
 using System.ComponentModel;
 using System.Windows;
+using FlowBlox.UICore.Interfaces;
 
 namespace FlowBlox.UICore.ViewModels.PropertyView
 {
@@ -43,6 +44,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         }
 
         public FrameworkElement Control { get; set; }
+
+        public IPropertyViewNestedTransaction NestedTransaction { get; set; }
 
         public bool UseLabel { get; set; }
         public bool Maximize { get; set; }

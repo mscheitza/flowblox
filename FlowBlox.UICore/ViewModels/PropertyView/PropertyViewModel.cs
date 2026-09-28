@@ -4,6 +4,8 @@ using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Manager;
 using FlowBlox.UICore.Resolver;
 using FlowBlox.UICore.Utilities;
@@ -24,7 +26,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 {
     public class PropertyViewModel : INotifyPropertyChanged
     {
-        private PropertyViewTransactionManager _transactionManager;
+        private FlowBloxTransactionEventHandler _transactionEventHandler;
         private bool _deepCopy;
         private bool _detached;
         private bool _readOnly;
@@ -34,11 +36,34 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         private string _preselectedProperty;
         private object _preselectedInstance;
         private object _transientTarget;
+        private TabViewModel _selectedTab;
         private readonly Window _window;
 
         public ObservableCollection<TabViewModel> Tabs { get; }
 
         public ICollectionView VisibleTabs { get; }
+
+        public PropertyWindowCommitStatus CommitStatus =>
+            _transactionEventHandler?.CommitStatus ?? PropertyWindowCommitStatus.None;
+
+        public bool HasActiveTransaction => _transactionEventHandler?.HasActiveTransaction == true;
+
+        public TabViewModel SelectedTab
+        {
+            get => _selectedTab;
+            set
+            {
+                if (ReferenceEquals(_selectedTab, value))
+                    return;
+
+                var tabWasSelected = _selectedTab != null;
+                _selectedTab = value;
+                OnPropertyChanged();
+
+                if (tabWasSelected)
+                    CloseNestedTransactions();
+            }
+        }
 
         public bool IsDirty
         {
@@ -72,7 +97,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             bool readOnly,
             string preselectedProperty = "",
             object preselectedInstance = null,
-            bool detached = false)
+            bool detached = false,
+            bool nestedTransaction = false)
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
@@ -85,14 +111,16 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             _preselectedProperty = preselectedProperty;
             _preselectedInstance = preselectedInstance;
 
-            if (_transactionManager != null)
-                _transactionManager.Cancel();
+            if (_transactionEventHandler?.HasActiveTransaction == true)
+                throw new InvalidOperationException("The current property view transaction must be completed before another target can be opened.");
 
-            _transactionManager = new PropertyViewTransactionManager();
-            InitTargetAndTransientTarget();
-
-            if (_deepCopy && !_readOnly && _transientTarget is FlowBloxComponent transientComponent)
-                transientComponent.OnAfterOpen();
+            _transactionEventHandler = new FlowBloxTransactionEventHandler(
+                _target,
+                _deepCopy,
+                _detached,
+                _readOnly,
+                nestedTransaction);
+            _transientTarget = _transactionEventHandler.Open();
 
             _ = ResolveTabsAndPresectProperty();
         }
@@ -143,6 +171,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         private async Task ResolveTabs()
         {
+            _selectedTab = null;
+            OnPropertyChanged(nameof(SelectedTab));
             Tabs.Clear();
 
             try
@@ -196,7 +226,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             if (!IsBackReferencedProperty(flowBlock, e.PropertyName))
                 return;
 
-            e.LinkedObject = _transactionManager.Append(e.OriginalLinkedObject);
+            e.LinkedObject = _transactionEventHandler.Append(e.OriginalLinkedObject);
         }
 
         private static bool IsBackReferencedProperty(BaseFlowBlock flowBlock, string propertyName)
@@ -209,22 +239,34 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 .Contains(propertyName);
         }
 
-        private void InitTargetAndTransientTarget()
-        {
-            if (_deepCopy)
-            {
-                var result = _transactionManager.Open(_target, _detached);
-                _transientTarget = result.TransientTarget;
-            }
-            else
-            {
-                _transientTarget = _target;
-            }
-        }
-
         public async Task<bool> SaveAsync(MetroWindow window, bool withoutVerification = false)
         {
+            if (!await PrepareCommitAsync(window, withoutVerification))
+                return false;
+
+            return _transactionEventHandler.Save();
+        }
+
+        public async Task<bool> ApplyAsync(MetroWindow window, bool withoutVerification = false)
+        {
+            if (!await PrepareCommitAsync(window, withoutVerification))
+                return false;
+
+            if (!_transactionEventHandler.Apply())
+                return false;
+
+            _transientTarget = _transactionEventHandler.WorkingCopy;
+            await ResolveTabsAndPresectProperty();
+            IsDirty = false;
+            return true;
+        }
+
+        private async Task<bool> PrepareCommitAsync(MetroWindow window, bool withoutVerification = false)
+        {
             if (_readOnly)
+                return false;
+
+            if (!await PrepareNestedTransactionsAsync(window, withoutVerification))
                 return false;
 
             if (!withoutVerification && 
@@ -235,6 +277,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                     FlowBloxResourceUtil.GetLocalizedString("Global_ValidationFailed_Title"),
                     string.Join("\n", validationMessages)
                 );
+                OnValidationFailed();
                 return false;
             }
 
@@ -253,26 +296,14 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 transientFlowBloxComponent.RemoveRequiredFields(selectedFieldElements);
             }
 
-            if (_transientTarget is IFlowBloxComponent transientComponent)
-                transientComponent.OnBeforeSave();
-
-            if (_deepCopy)
-                _transactionManager.Commit(_target, _transientTarget);
-
-            _transactionManager = null;
-
-            if(_target is IFlowBloxComponent component)
-                component.OnAfterSave();
-
             return true;
         }
 
         public void Cancel(bool keepComponent = false)
         {
-            if (_deepCopy)
-                _transactionManager?.Cancel();
-
-            _transactionManager = null;
+            CloseNestedTransactions();
+            _transactionEventHandler?.Rollback();
+            _transactionEventHandler = null;
 
             if (keepComponent)
             {
@@ -283,6 +314,40 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 _detached = false;
                 _target = null;
             }
+        }
+
+        public void HandleClosing(object sender, CancelEventArgs e)
+        {
+            CloseNestedTransactions();
+            _transactionEventHandler?.HandleClosing(sender, e);
+        }
+
+        public void CloseEmbeddedTransaction()
+        {
+            CloseNestedTransactions();
+            _transactionEventHandler?.CloseEmbeddedTransaction();
+        }
+
+        private IEnumerable<IPropertyViewNestedTransaction> GetNestedTransactions() =>
+            Tabs.SelectMany(x => x.Controls)
+                .Select(x => x.NestedTransaction)
+                .Where(x => x != null);
+
+        private async Task<bool> PrepareNestedTransactionsAsync(MetroWindow window, bool withoutVerification)
+        {
+            foreach (var nestedTransaction in GetNestedTransactions().Reverse())
+            {
+                if (!await nestedTransaction.PrepareHostCommitAsync(window, withoutVerification))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private void CloseNestedTransactions()
+        {
+            foreach (var nestedTransaction in GetNestedTransactions().Reverse())
+                nestedTransaction.Cancel();
         }
 
         private bool ValidateTarget(object target, out List<string> messages)
@@ -356,6 +421,13 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                !typeof(IManagedObject).IsAssignableFrom(itemType);
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public event EventHandler ValidationFailed;
+
+        protected virtual void OnValidationFailed()
+        {
+            ValidationFailed?.Invoke(this, EventArgs.Empty);
+        }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

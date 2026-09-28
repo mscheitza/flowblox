@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using System.Drawing;
 
-namespace FlowBlox.Components
+namespace FlowBlox.Controls
 {
     internal abstract class FlowBloxSyleBase : ProfessionalColorTable
     {

@@ -137,17 +137,11 @@
                         Padding="6,3"
                         MinWidth="28"
                         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                    <Grid Width="16" Height="16">
-                        <iconPacks:PackIconMaterial Kind="Refresh"
-                                                    Style="{StaticResource FlowBlox.ToolbarIconBase}"
-                                                    Foreground="#3A6EA5"
-                                                    Visibility="{Binding IsLoadingUIActions, Converter={StaticResource BoolToInverseVisibilityConverter}}"/>
-                        <mah:ProgressRing IsActive="{Binding IsLoadingUIActions}"
-                                          Visibility="{Binding IsLoadingUIActions, Converter={StaticResource BoolToVisibilityConverter}}"
-                                          Width="16"
-                                          Height="16"
-                                          Foreground="#3A6EA5"/>
-                    </Grid>
+                    <iconPacks:PackIconMaterial Kind="Refresh"
+                                                Width="16"
+                                                Height="16"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}"
+                                                Foreground="#3A6EA5"/>
                 </Button>
             </StackPanel>
         </Border>
@@ -158,7 +152,7 @@
             <Button Command="{Binding CancelCommand}"
                     IsCancel="True"
                     MinWidth="112"
-                    MinHeight="32"
+                    Height="32"
                     Padding="12,5"
                     Margin="5">
                 <StackPanel Orientation="Horizontal">
@@ -168,34 +162,104 @@
                 </StackPanel>
             </Button>
 
-            <!-- SaveWithoutVerification -->
-            <Button Command="{Binding SaveWithoutVerificationCommand}"
-                    Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                    MinWidth="112"
-                    MinHeight="32"
-                    Padding="12,5"
-                    Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="ContentSaveEdit"
-                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
-                    <TextBlock Text="{x:Static resources:PropertyWindow.SaveWithoutVerification}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+            <!-- Apply -->
+            <StackPanel Orientation="Horizontal"
+                        Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Margin="5">
+                <Button x:Name="ApplyButton"
+                        Command="{Binding ApplyCommand}"
+                        MinWidth="112"
+                        Height="32"
+                        Padding="12,5">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial Kind="Check"
+                                                    Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
+                        <TextBlock Text="{x:Static resources:PropertyWindow.Apply}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button IsEnabled="{Binding IsEnabled, ElementName=ApplyButton}"
+                        Click="CommitOptionsButton_Click"
+                        Width="26"
+                        Height="32"
+                        Padding="0"
+                        Margin="0"
+                        Focusable="False"
+                        IsTabStop="False"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                        <MenuItem Header="{x:Static resources:PropertyWindow.ApplyWithoutVerification}"
+                                  Command="{Binding PlacementTarget.DataContext.ApplyWithoutVerificationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="AlertCircleOutline"
+                                                            Width="16"
+                                                            Height="16"
+                                                            Foreground="#D97706"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                    <iconPacks:PackIconMaterial Kind="ChevronDown"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}"
+                                                Width="12"
+                                                Height="12"
+                                                Margin="0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"/>
+                </Button>
+            </StackPanel>
 
             <!-- Save -->
-            <Button Command="{Binding SaveCommand}"
-                    Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                    IsDefault="True"
-                    MinWidth="112"
-                    MinHeight="32"
-                    Padding="12,5"
-                    Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="ContentSave"
-                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
-                    <TextBlock Text="{x:Static resources:PropertyWindow.Save}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+            <StackPanel Orientation="Horizontal"
+                        Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Margin="5">
+                <Button x:Name="SaveButton"
+                        Command="{Binding SaveCommand}"
+                        IsDefault="True"
+                        MinWidth="112"
+                        Height="32"
+                        Padding="12,5">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial Kind="ContentSave"
+                                                    Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
+                        <TextBlock Text="{x:Static resources:PropertyWindow.Save}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button IsEnabled="{Binding IsEnabled, ElementName=SaveButton}"
+                        Click="CommitOptionsButton_Click"
+                        Width="26"
+                        Height="32"
+                        Padding="0"
+                        Margin="0"
+                        Focusable="False"
+                        IsTabStop="False"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                        <MenuItem Header="{x:Static resources:PropertyWindow.SaveWithoutVerification}"
+                                  Command="{Binding PlacementTarget.DataContext.SaveWithoutVerificationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="AlertCircleOutline"
+                                                            Width="16"
+                                                            Height="16"
+                                                            Foreground="#D97706"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                    <iconPacks:PackIconMaterial Kind="ChevronDown"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}"
+                                                Width="12"
+                                                Height="12"
+                                                Margin="0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"/>
+                </Button>
+            </StackPanel>
         </StackPanel>
 
         <!-- PropertyView Embedding -->

@@ -70,6 +70,17 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
+        /// </summary>
+        public static string Button_Apply
+        {
+            get
+            {
+                return ResourceManager.GetString("Button_Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
         public static string Button_Back
@@ -502,6 +513,17 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Edit in editor ähnelt.
+        /// </summary>
+        public static string Text_EditInEditor
+        {
+            get
+            {
+                return ResourceManager.GetString("Text_EditInEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Execute ähnelt.
         /// </summary>
         public static string Text_Execute
@@ -586,17 +608,6 @@ namespace FlowBlox.UICore.Resources
             get
             {
                 return ResourceManager.GetString("Text_UserInputFieldValue", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Edit in editor ähnelt.
-        /// </summary>
-        public static string Text_EditInEditor
-        {
-            get
-            {
-                return ResourceManager.GetString("Text_EditInEditor", resourceCulture);
             }
         }
         

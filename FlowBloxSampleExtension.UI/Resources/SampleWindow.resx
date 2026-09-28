@@ -121,9 +121,18 @@
 		<value>Sample Window</value>
 	</data>
 	<data name="Description" xml:space="preserve">
-		<value>This window serves as an example of a custom UI action in a FlowBlox extension.</value>
+		<value>This custom window edits a transactional working copy. Apply commits the current state and continues with a fresh working copy.</value>
 	</data>
-	<data name="CloseButton" xml:space="preserve">
-		<value>Close</value>
+	<data name="OutputTextLabel" xml:space="preserve">
+		<value>Output text:</value>
+	</data>
+	<data name="Button_Cancel" xml:space="preserve">
+		<value>Cancel</value>
+	</data>
+	<data name="Button_Apply" xml:space="preserve">
+		<value>Apply</value>
+	</data>
+	<data name="Button_Save" xml:space="preserve">
+		<value>Save</value>
 	</data>
 </root>

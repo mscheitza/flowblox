@@ -10,13 +10,16 @@ namespace FlowBlox.UICore.PopUp.Provider
         }
 
         public bool ShowFor(object target, System.Windows.Window owner = null)
+            => ShowFor(target, ComponentPopupEvent.Open, owner);
+
+        public bool ShowFor(object target, ComponentPopupEvent popupEvent, System.Windows.Window owner = null)
         {
             if (target == null)
                 return false;
 
             var targetType = target.GetType();
             var provider = _providers
-                .Where(x => x.CanShowFor(target))
+                .Where(x => x.CanShowFor(target, popupEvent))
                 .OrderByDescending(x => GetInheritanceDistance(targetType, x.TargetType))
                 .FirstOrDefault();
 
@@ -29,6 +32,9 @@ namespace FlowBlox.UICore.PopUp.Provider
 
         public bool ShowFor<TTarget>(TTarget target, System.Windows.Window owner = null)
             => ShowFor((object)target, owner);
+
+        public bool ShowFor<TTarget>(TTarget target, ComponentPopupEvent popupEvent, System.Windows.Window owner = null)
+            => ShowFor((object)target, popupEvent, owner);
 
         private static int GetInheritanceDistance(Type targetType, Type providerTargetType)
         {

@@ -74,6 +74,12 @@
                 <Setter Property="Margin" Value="0,9,0,5"/>
                 <Setter Property="CornerRadius" Value="4"/>
             </Style>
+
+            <Style x:Key="Options.TreeViewItemStyle"
+                   TargetType="{x:Type TreeViewItem}"
+                   BasedOn="{StaticResource FlowBlox.SubtleTreeViewItemStyle}">
+                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWay}"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -118,7 +124,7 @@
                 <TreeView x:Name="OptionsTreeView"
                           ItemsSource="{Binding OptionNodes}"
                           SelectedItemChanged="OptionsTreeView_SelectedItemChanged"
-                          ItemContainerStyle="{StaticResource FlowBlox.SubtleTreeViewItemStyle}"
+                          ItemContainerStyle="{StaticResource Options.TreeViewItemStyle}"
                           BorderThickness="0"
                           Margin="6">
                     <TreeView.ItemTemplate>

@@ -170,7 +170,10 @@
 </data>
   <data name="Button_Back" xml:space="preserve">
   <value>Back</value>
-</data>
+  </data>
+  <data name="Button_Apply" xml:space="preserve">
+  <value>Apply</value>
+  </data>
   <data name="Button_Save" xml:space="preserve">
   <value>Save</value>
 </data>

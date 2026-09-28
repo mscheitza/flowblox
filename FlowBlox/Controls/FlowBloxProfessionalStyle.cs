@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace FlowBlox.Components
+namespace FlowBlox.Controls
 {
     internal class FlowBloxProfessionalStyle : FlowBloxSyleBase
     {

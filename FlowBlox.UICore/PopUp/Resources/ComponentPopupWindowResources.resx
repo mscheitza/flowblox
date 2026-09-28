@@ -7,6 +7,5 @@
   <data name="Button_Next" xml:space="preserve"><value>Next</value></data>
   <data name="Button_Close" xml:space="preserve"><value>Close</value></data>
   <data name="Image_Placeholder" xml:space="preserve"><value>Image resource not assigned</value></data>
-  <data name="Toggle_ShowAgain_On" xml:space="preserve"><value>Show again</value></data>
-  <data name="Toggle_ShowAgain_Off" xml:space="preserve"><value>Do not show again</value></data>
+  <data name="CheckBox_ShowAgain" xml:space="preserve"><value>Show this guidance again</value></data>
 </root>

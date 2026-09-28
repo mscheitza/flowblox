@@ -1,15 +1,18 @@
 ﻿using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
+using FlowBlox.UICore.Interfaces;
+using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.PropertyView;
 using MahApps.Metro.IconPacks;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ListViewSplitModeFactoryResources = FlowBlox.UICore.Resources.ClassResources.ListViewSplitModeFactory;
 
 namespace FlowBlox.UICore.Factory.PropertyView
 {
-    public class ListViewSplitModeFactory : ListViewFactory
+    public class ListViewSplitModeFactory : ListViewFactory, IPropertyViewNestedTransaction
     {
         private ListView _listView;
         private Views.PropertyView _propertyView;
@@ -17,21 +20,17 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private System.Windows.Controls.Grid _mainGrid;
         private TextBlock _noSelectionText;
         private Button _saveButton;
-        private bool _enableSaveForNextSelection;
+        private bool _restoringSelection;
+        private object _selectedItem;
+
+        public bool HasPendingChanges => _propertyViewModel?.IsDirty == true;
 
         public ListViewSplitModeFactory(Window window, PropertyInfo property, object target, bool readOnly, object parent = null)
             : base(window, property, target, readOnly, parent)
         {
-            window.Closing += Window_Closing;
         }
 
         protected override bool ShouldShowEditButton => false;
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (_propertyViewModel != null)
-                _propertyViewModel.Cancel(false);
-        }
 
         protected override FrameworkElement CreateFrameworkElement(StackPanel stackPanel, ListView listView)
         {
@@ -55,7 +54,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             // NoSelectionText
             _noSelectionText = new TextBlock
             {
-                Text = FlowBloxResourceUtil.GetLocalizedString("ListViewSplitModeFactory_NoElementSelected_Text"),
+                Text = GetLocalizedString(nameof(ListViewSplitModeFactoryResources.NoElementSelectedText)),
                 FontSize = 16,
                 FontWeight = FontWeights.UltraLight,
                 Foreground = Brushes.Gray,
@@ -77,7 +76,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 {
                     if (await _propertyViewModel.SaveAsync(metro) == true)
                     {
-                        _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: _readOnly);
+                        _propertyViewModel.Open(
+                            _listView.SelectedItem,
+                            _target,
+                            deepCopy: true,
+                            readOnly: _readOnly,
+                            nestedTransaction: true);
                         _propertyViewModel.IsDirty = false;
                         UpdateSaveButtonState();
                     }
@@ -175,21 +179,36 @@ namespace FlowBlox.UICore.Factory.PropertyView
             };
         }
 
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_listView.SelectedItem != null)
+            if (_restoringSelection)
+                return;
+
+            var selectedItem = _listView.SelectedItem;
+            if (!await ConfirmAndCloseCurrentDetailAsync())
+            {
+                RestoreSelection();
+                return;
+            }
+
+            _selectedItem = selectedItem;
+
+            if (selectedItem != null)
             {
                 _noSelectionText.Visibility = Visibility.Collapsed;
                 _propertyView.Visibility = Visibility.Visible;
-                _propertyViewModel.Open(_listView.SelectedItem, _target, deepCopy: true, readOnly: _readOnly);
-                _propertyViewModel.IsDirty = _enableSaveForNextSelection;
-                _enableSaveForNextSelection = false;
+                _propertyViewModel.Open(
+                    selectedItem,
+                    _target,
+                    deepCopy: true,
+                    readOnly: _readOnly,
+                    nestedTransaction: true);
+                _propertyViewModel.IsDirty = false;
                 UpdateSaveButtonState();
             }
             else if (_propertyViewModel != null)
             {
                 _propertyViewModel.Cancel(keepComponent: true);
-                _enableSaveForNextSelection = false;
                 _propertyView.Visibility = Visibility.Collapsed;
                 _noSelectionText.Visibility = Visibility.Visible;
                 if (_saveButton != null)
@@ -197,12 +216,93 @@ namespace FlowBlox.UICore.Factory.PropertyView
             }
         }
 
+        private void RestoreSelection()
+        {
+            _restoringSelection = true;
+            _listView.SelectedItem = _selectedItem;
+            _restoringSelection = false;
+        }
+
+        private async Task<bool> ConfirmAndCloseCurrentDetailAsync()
+        {
+            if (_propertyViewModel?.HasActiveTransaction != true)
+                return true;
+
+            if (_propertyViewModel.IsDirty)
+            {
+                if (_window is not MahApps.Metro.Controls.MetroWindow metroWindow)
+                    return false;
+
+                var discardChanges = await MessageBoxHelper.ShowQuestionAsync(
+                    metroWindow,
+                    GetLocalizedString(nameof(ListViewSplitModeFactoryResources.DiscardChangesTitle)),
+                    GetLocalizedString(nameof(ListViewSplitModeFactoryResources.DiscardChangesMessage)),
+                    GetLocalizedString(nameof(ListViewSplitModeFactoryResources.DiscardChangesButton)),
+                    GetLocalizedString(nameof(ListViewSplitModeFactoryResources.ContinueEditingButton)));
+                if (discardChanges != true)
+                    return false;
+            }
+
+            CloseCurrentDetail();
+            return true;
+        }
+
         private void PropertyViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(PropertyViewModel.IsDirty))
             {
                 UpdateSaveButtonState();
+                OnPropertyChanged(nameof(HasPendingChanges));
             }
+        }
+
+        public async Task<bool> PrepareHostCommitAsync(MahApps.Metro.Controls.MetroWindow window, bool withoutVerification)
+        {
+            if (_propertyViewModel?.HasActiveTransaction != true)
+                return true;
+
+            if (!HasPendingChanges)
+            {
+                _propertyViewModel.Cancel();
+                return true;
+            }
+
+            var success = await _propertyViewModel.SaveAsync(window, withoutVerification);
+            if (success)
+                _propertyViewModel.IsDirty = false;
+
+            return success;
+        }
+
+        public void Cancel()
+        {
+            CloseCurrentDetail();
+
+            _restoringSelection = true;
+            if (_listView != null)
+                _listView.UnselectAll();
+            _restoringSelection = false;
+
+            _selectedItem = null;
+
+            if (_propertyView != null)
+                _propertyView.Visibility = Visibility.Collapsed;
+            if (_noSelectionText != null)
+                _noSelectionText.Visibility = Visibility.Visible;
+
+            UpdateSaveButtonState();
+        }
+
+        private void CloseCurrentDetail()
+        {
+            if (_propertyViewModel?.HasActiveTransaction == true)
+                _propertyViewModel.Cancel(keepComponent: true);
+
+            if (_propertyViewModel != null)
+                _propertyViewModel.IsDirty = false;
+
+            UpdateSaveButtonState();
+            OnPropertyChanged(nameof(HasPendingChanges));
         }
 
         private void UpdateSaveButtonState()
@@ -220,24 +320,48 @@ namespace FlowBlox.UICore.Factory.PropertyView
             _saveButton.IsEnabled = !_readOnly && _propertyViewModel?.IsDirty == true;
         }
 
-        protected override void ExecuteCreate()
+        protected override async void ExecuteCreate()
         {
             if (_readOnly)
                 return;
 
+            if (!await ConfirmAndCloseCurrentDetailAsync())
+                return;
+
             var newInstance = CreateNewInstance(_window, _listItemType);
+
             if (newInstance != null)
             {
                 _list.Add(newInstance);
                 _property.SetValue(_target, _list);
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
 
-                _enableSaveForNextSelection = true;
                 if (_listView != null)
                     _listView.SelectedItem = newInstance;
 
                 UpdateSaveButtonState();
             }
+        }
+
+        protected override async Task ExecuteDeleteItemsAsync(IReadOnlyList<object> items)
+        {
+            if (!await ConfirmAndCloseCurrentDetailAsync())
+            {
+                RestoreSelection();
+                return;
+            }
+
+            _restoringSelection = true;
+            try
+            {
+                await base.ExecuteDeleteItemsAsync(items);
+            }
+            finally
+            {
+                _restoringSelection = false;
+            }
+
+            Cancel();
         }
 
         private Button CreateSaveButton()
@@ -270,5 +394,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             return button;
         }
+
+        private static string GetLocalizedString(string key)
+            => FlowBloxResourceUtil.GetLocalizedString(key, typeof(ListViewSplitModeFactoryResources));
     }
 }

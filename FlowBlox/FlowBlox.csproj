@@ -52,7 +52,7 @@
     <None Remove="Icons\extension.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Components\NumericTextBox.cs" />
+    <Compile Update="Controls\NumericTextBox.cs" />
     <Compile Update="FlowBloxMainUIImages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -68,7 +68,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>FlowBloxMainUITexts.de.resx</DependentUpon>
     </Compile>
-    <Compile Update="Components\SplitTableLayoutPanel.cs">
+    <Compile Update="Controls\SplitTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -81,7 +81,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Update="Components\DoubleBufferedPanel.cs">
+    <Compile Update="Controls\DoubleBufferedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <None Include="..\.editorconfig">

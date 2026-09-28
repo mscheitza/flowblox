@@ -22,7 +22,9 @@ namespace FlowBlox.UICore.Provider
                 Icon = icon16 != null ? 
                     SkiaWpfImageHelper.ConvertToImageSource(icon16) : 
                     WpfIconHelper.CreateMaterialIcon(MahApps.Metro.IconPacks.PackIconMaterialKind.CogOutline, 16),
-                Command = new RelayCommand(_ => clickHandler.Invoke(null, EventArgs.Empty), _ => enabled)
+                Command = new RelayCommand(
+                    _ => clickHandler.Invoke(null, EventArgs.Empty),
+                    _ => enabled)
             };
         }
     }

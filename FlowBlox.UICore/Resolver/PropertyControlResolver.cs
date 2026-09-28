@@ -4,6 +4,7 @@ using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Factory.PropertyView;
+using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.PropertyView.Resolver;
 using FlowBlox.UICore.ViewModels.PropertyView;
 using System.ComponentModel;
@@ -79,13 +80,25 @@ namespace FlowBlox.UICore.Resolver
                 ValueType = property.PropertyType,
                 IsEnabled = !FlowBlockUIAttributeHelper.IsDynamicallyReadOnly(target, uiAttribute),
                 Control = controlResult.FrameworkElement,
+                NestedTransaction = controlResult.PropertyViewControlFactory as IPropertyViewNestedTransaction,
                 IsActive = isActive,
                 Maximize = uiAttribute?.Maximize == true,
                 TooltipText = description
             };
 
             if (controlResult.PropertyViewControlFactory != null)
+            {
                 controlResult.PropertyViewControlFactory.AssociationBeforeLink += propertyControlViewModel.RelayAssociationBeforeLink;
+
+                if (propertyControlViewModel.NestedTransaction != null)
+                {
+                    controlResult.PropertyViewControlFactory.PropertyChanged += (_, e) =>
+                    {
+                        if (e.PropertyName == nameof(IPropertyViewNestedTransaction.HasPendingChanges))
+                            propertyControlViewModel.HasChanges = propertyControlViewModel.NestedTransaction.HasPendingChanges;
+                    };
+                }
+            }
 
             bindingContext.Register(property, propertyControlViewModel);
 

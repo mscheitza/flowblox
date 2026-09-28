@@ -156,7 +156,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
             // RelayCommands with central enable logic
             var addCommand = new RelayCommand(ExecuteCreate, CanAdd);
             var editCommand = new RelayCommand(() => ExecuteEdit(listView.SelectedItem), () => CanEdit(listView.SelectedItem));
-            var deleteCommand = new RelayCommand(() => ExecuteDelete(listView.SelectedItem), () => CanRemove(listView.SelectedItem));
+            var deleteCommand = new RelayCommand(
+                async () => await ExecuteDeleteItemsAsync(listView.SelectedItems.Cast<object>().ToList()),
+                () => listView.SelectedItems.Count > 0 && !_readOnly);
             var unlinkCommand = new RelayCommand(() => ExecuteUnlink(listView.SelectedItem), () => CanUnlink(listView.SelectedItem));
             var linkCommand = new RelayCommand(async () => await ExecuteLink(), CanLink);
 
@@ -389,7 +391,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             }
         }
 
-        private async void ExecuteDelete(object item)
+        protected virtual async Task ExecuteDeleteAsync(object item)
         {
             if (item != null && await IsDeletableAsync(item, _window))
             {
@@ -398,6 +400,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
                 DeleteInstance(item);
             }
+        }
+
+        protected virtual async Task ExecuteDeleteItemsAsync(IReadOnlyList<object> items)
+        {
+            foreach (var item in items)
+                await ExecuteDeleteAsync(item);
         }
 
         private void ExecuteUnlink(object item)

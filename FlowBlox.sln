@@ -32,7 +32,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBlox.WorkerService", "F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBlox.AIAssistant", "FlowBlox.AIAssistant\FlowBlox.AIAssistant.csproj", "{484AD965-42E0-48CB-B304-FEDF8C141530}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "FlowBlox.Installer", "FlowBlox.Installer\FlowBlox.Installer.wixproj", "{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}"
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "FlowBlox.Installer", "FlowBlox.Installer\FlowBlox.Installer.wixproj", "{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -342,7 +342,7 @@ Global
 		{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}.Debug|ARM64.ActiveCfg = Debug|Any CPU
 		{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}.Debug|x64.ActiveCfg = Debug|x64
 		{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18B6FD66-4FF3-4F4D-8BB0-E9215C5AC6FC}.Release|ARM.ActiveCfg = Release|Any CPU

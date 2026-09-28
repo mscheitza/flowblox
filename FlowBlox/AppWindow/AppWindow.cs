@@ -23,6 +23,7 @@ using FlowBlox.Services;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Factory;
 using FlowBlox.UICore.ViewModels.PSProjects;
 using FlowBlox.UICore.Views;
 using FlowBlox.Views;
@@ -36,7 +37,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static FlowBlox.Core.Interceptors.RuntimeBacktraceInterceptor;
 using FlowBlox.Provider;
-using FlowBlox.Components;
+using FlowBlox.Controls;
 using FlowBlox.Util.Controls;
 using FlowBlox.Util.WPF;
 
@@ -134,6 +135,12 @@ namespace FlowBlox.AppWindow
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            if (keyData == (Keys.Control | Keys.Alt | Keys.T))
+            {
+                TransactionMonitorWindowFactory.Show();
+                return true;
+            }
+
             if (_componentLibraryPanel?.ProcessCmdKey(ref msg, keyData) == true)
                 return true;
 

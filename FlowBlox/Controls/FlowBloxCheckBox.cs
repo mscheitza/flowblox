@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace FlowBlox.Components
+namespace FlowBlox.Controls
 {
     public class FlowBloxCheckBox : Control
     {

@@ -7,19 +7,44 @@ namespace FlowBlox.UICore.Factory.PropertyView
 {
     internal static class ParentScrollViewerMouseWheelForwarder
     {
-        public static void Register(UIElement element)
+        private const double HorizontalScrollStep = 48;
+
+        public static void Register(
+            UIElement element,
+            Func<double> getHorizontalOffset,
+            Action<double> scrollToHorizontalOffset)
         {
             if (element == null)
                 return;
+            if (getHorizontalOffset == null)
+                throw new ArgumentNullException(nameof(getHorizontalOffset));
+            if (scrollToHorizontalOffset == null)
+                throw new ArgumentNullException(nameof(scrollToHorizontalOffset));
 
             element.AddHandler(
                 UIElement.PreviewMouseWheelEvent,
-                new MouseWheelEventHandler(ForwardMouseWheelToParent),
+                new MouseWheelEventHandler((sender, e) => HandleMouseWheel(
+                    sender,
+                    e,
+                    getHorizontalOffset,
+                    scrollToHorizontalOffset)),
                 true);
         }
 
-        private static void ForwardMouseWheelToParent(object sender, MouseWheelEventArgs e)
+        private static void HandleMouseWheel(
+            object sender,
+            MouseWheelEventArgs e,
+            Func<double> getHorizontalOffset,
+            Action<double> scrollToHorizontalOffset)
         {
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                var wheelSteps = e.Delta / Mouse.MouseWheelDeltaForOneLine;
+                scrollToHorizontalOffset(getHorizontalOffset() - wheelSteps * HorizontalScrollStep);
+                e.Handled = true;
+                return;
+            }
+
             if (sender is not DependencyObject dependencyObject)
                 return;
 

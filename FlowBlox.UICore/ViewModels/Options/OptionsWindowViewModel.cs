@@ -57,7 +57,13 @@ namespace FlowBlox.UICore.ViewModels.Options
                 if (ReferenceEquals(_selectedNode, value))
                     return;
 
+                var previouslySelectedNode = _selectedNode;
                 _selectedNode = value;
+                if (previouslySelectedNode != null)
+                    previouslySelectedNode.IsSelected = false;
+                if (_selectedNode != null)
+                    _selectedNode.IsSelected = true;
+
                 OnPropertyChanged();
                 SelectOption(value?.OptionElement);
             }
@@ -211,6 +217,12 @@ namespace FlowBlox.UICore.ViewModels.Options
             if (string.IsNullOrWhiteSpace(newName))
                 throw new ValidationException(OptionsWindow.Validation_OptionNameRequired);
 
+            var treeStructureChanged =
+                !string.Equals(_originalOptionName, newName, StringComparison.Ordinal);
+            var expandedNodePaths = treeStructureChanged
+                ? GetExpandedNodePaths(OptionNodes)
+                : null;
+
             if (!_selectedOption.SystemOption &&
                 !string.Equals(_originalOptionName, newName, StringComparison.OrdinalIgnoreCase) &&
                 _options.OptionCollection.ContainsKey(newName))
@@ -236,7 +248,9 @@ namespace FlowBlox.UICore.ViewModels.Options
 
             _options.Save();
             IsDirty = false;
-            RebuildTree(_selectedOption);
+
+            if (treeStructureChanged)
+                RebuildTree(_selectedOption, expandedNodePaths);
         }
 
         private void SelectOption(OptionElement option)
@@ -297,7 +311,9 @@ namespace FlowBlox.UICore.ViewModels.Options
             OnPropertyChanged(nameof(IsPlaceholderEnabled));
         }
 
-        private void RebuildTree(OptionElement preSelectedOption)
+        private void RebuildTree(
+            OptionElement preSelectedOption,
+            IReadOnlySet<string> expandedNodePaths = null)
         {
             OptionNodes.Clear();
 
@@ -308,7 +324,10 @@ namespace FlowBlox.UICore.ViewModels.Options
                     option.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) < 0)
                     continue;
 
-                AddOptionToTree(option, expand: !string.IsNullOrWhiteSpace(filter));
+                AddOptionToTree(
+                    option,
+                    expand: !string.IsNullOrWhiteSpace(filter),
+                    expandedNodePaths);
             }
 
             SortNodes(OptionNodes);
@@ -317,7 +336,10 @@ namespace FlowBlox.UICore.ViewModels.Options
                 SelectedNode = FindNodeByOption(OptionNodes, preSelectedOption);
         }
 
-        private void AddOptionToTree(OptionElement option, bool expand)
+        private void AddOptionToTree(
+            OptionElement option,
+            bool expand,
+            IReadOnlySet<string> expandedNodePaths = null)
         {
             var currentNodes = OptionNodes;
             OptionTreeNodeViewModel currentNode = null;
@@ -327,6 +349,7 @@ namespace FlowBlox.UICore.ViewModels.Options
             {
                 var part = parts[i];
                 var isLeaf = i == parts.Length - 1;
+                var nodePath = string.Join('.', parts.Take(i + 1));
                 var existing = currentNodes.FirstOrDefault(x => string.Equals(x.DisplayName, part, StringComparison.OrdinalIgnoreCase));
 
                 if (existing == null)
@@ -338,7 +361,7 @@ namespace FlowBlox.UICore.ViewModels.Options
                     currentNodes.Add(existing);
                 }
 
-                if (expand)
+                if (expand || expandedNodePaths?.Contains(nodePath) == true)
                     existing.IsExpanded = true;
 
                 currentNode = existing;
@@ -347,6 +370,33 @@ namespace FlowBlox.UICore.ViewModels.Options
 
             if (currentNode != null && expand)
                 currentNode.IsExpanded = true;
+        }
+
+        private static IReadOnlySet<string> GetExpandedNodePaths(
+            IEnumerable<OptionTreeNodeViewModel> nodes,
+            string parentPath = "")
+        {
+            var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            AddExpandedNodePaths(nodes, parentPath, result);
+            return result;
+        }
+
+        private static void AddExpandedNodePaths(
+            IEnumerable<OptionTreeNodeViewModel> nodes,
+            string parentPath,
+            ISet<string> result)
+        {
+            foreach (var node in nodes)
+            {
+                var nodePath = string.IsNullOrEmpty(parentPath)
+                    ? node.DisplayName
+                    : $"{parentPath}.{node.DisplayName}";
+
+                if (node.IsExpanded)
+                    result.Add(nodePath);
+
+                AddExpandedNodePaths(node.Children, nodePath, result);
+            }
         }
 
         private static void SortNodes(ObservableCollection<OptionTreeNodeViewModel> nodes)
@@ -373,7 +423,10 @@ namespace FlowBlox.UICore.ViewModels.Options
 
                 var child = FindNodeByOption(node.Children, option);
                 if (child != null)
+                {
+                    node.IsExpanded = true;
                     return child;
+                }
             }
 
             return null;

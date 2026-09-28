@@ -8,6 +8,7 @@ namespace FlowBlox.UICore.ViewModels.Options
     public sealed class OptionTreeNodeViewModel : INotifyPropertyChanged
     {
         private bool _isExpanded;
+        private bool _isSelected;
 
         public OptionTreeNodeViewModel(string displayName, OptionElement optionElement = null)
         {
@@ -32,6 +33,19 @@ namespace FlowBlox.UICore.ViewModels.Options
                     return;
 
                 _isExpanded = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected == value)
+                    return;
+
+                _isSelected = value;
                 OnPropertyChanged();
             }
         }

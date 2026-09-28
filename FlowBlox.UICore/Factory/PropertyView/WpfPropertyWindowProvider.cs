@@ -1,12 +1,13 @@
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Logging;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
-using FlowBlox.UICore.Manager;
 using FlowBlox.UICore.ViewModels;
 using FlowBlox.UICore.ViewModels.PropertyView;
 using FlowBlox.UICore.Views;
 using System.Windows;
+using WpfPropertyWindowProviderResources = FlowBlox.UICore.Resources.ClassResources.WpfPropertyWindowProvider;
 
 namespace FlowBlox.UICore.Factory.PropertyView
 {
@@ -14,24 +15,33 @@ namespace FlowBlox.UICore.Factory.PropertyView
     {
         public static bool CreatePropertyWindowAndShowDialog(Window owner, object target, object instance, bool readOnly, bool isNew = false)
         {
-            var propertyWindowViewFactory = GetPropertyWindowViewFactoryForType(instance.GetType());
-            if (propertyWindowViewFactory != null)
+            try
             {
-                if (!propertyWindowViewFactory.CanCreate(instance, target, readOnly, out var message))
+                var propertyWindowViewFactory = GetPropertyWindowViewFactoryForType(instance.GetType());
+                if (propertyWindowViewFactory != null)
                 {
-                    ShowViewCannotBeCreatedMessage(message);
-                    return false;
+                    if (!propertyWindowViewFactory.CanCreate(instance, target, readOnly, out var message))
+                    {
+                        ShowViewCannotBeCreatedMessage(message);
+                        return false;
+                    }
+
+                    return InvokeWPFView(owner, instance, target, readOnly, propertyWindowViewFactory, isNew);
                 }
 
-                return InvokeWPFViewUsingTransaction(owner, instance, target, readOnly, propertyWindowViewFactory, isNew);
+                var propertyView = new PropertyWindow(new PropertyWindowArgs(instance, parent: target, readOnly: readOnly, isNew: isNew))
+                {
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    Owner = owner
+                };
+                return propertyView.ShowDialog() == true;
             }
-
-            var propertyView = new PropertyWindow(new PropertyWindowArgs(instance, parent: target, readOnly: readOnly, isNew: isNew))
+            catch (Exception ex)
             {
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                Owner = owner
-            };
-            return propertyView.ShowDialog() == true;
+                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
+                ShowViewCreationErrorMessage();
+                return false;
+            }
         }
 
         private static IPropertyWindowViewFactory GetPropertyWindowViewFactoryForType(Type instanceType)
@@ -40,45 +50,19 @@ namespace FlowBlox.UICore.Factory.PropertyView
             return propertyWindowViewFactories.FirstOrDefault(x => x.SupportsType(instanceType));
         }
 
-        private static bool InvokeWPFViewUsingTransaction(Window owner, object instance, object target, bool readOnly, IPropertyWindowViewFactory factory, bool isNew)
+        private static bool InvokeWPFView(
+            Window owner,
+            object instance,
+            object target,
+            bool readOnly,
+            IPropertyWindowViewFactory factory,
+            bool isNew)
         {
-            var manager = new PropertyViewTransactionManager();
-
-            var openResult = manager.Open(instance);
-            var transientInstance = openResult.TransientTarget;
-
-            Window dialog;
-            try
-            {
-                dialog = factory.Create(transientInstance, target, readOnly);
-            }
-            catch (Exception ex)
-            {
-                manager.Cancel();
-                FlowBloxLogManager.Instance.GetLogger().Exception(ex);
-                ShowViewCreationErrorMessage();
-                return false;
-            }
-
-            if (dialog is Window window)
-            {
-                window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                window.Owner = owner;
-                MarkDialogAsDirtyIfNew(dialog, isNew);
-                var result = window.ShowDialog();
-
-                if (result == true)
-                {
-                    manager.Commit(instance, transientInstance);
-                    return true;
-                }
-
-                manager.Cancel();
-                return false;
-            }
-
-            manager.Cancel();
-            return false;
+            var dialog = factory.Create(instance, target, readOnly);
+            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            dialog.Owner = owner;
+            MarkDialogAsDirtyIfNew(dialog, isNew);
+            return dialog.ShowDialog() == true;
         }
 
         private static void ShowViewCreationErrorMessage()
@@ -86,8 +70,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
             FlowBloxServiceLocator.Instance
                 .GetService<IFlowBloxMessageBoxService>()
                 ?.ShowMessageBox(
-                    "The view could not be created due to an unexpected problem. Further details have been written to the application log files.",
-                    "View could not be created",
+                    FlowBloxResourceUtil.GetLocalizedString(
+                        nameof(WpfPropertyWindowProviderResources.ViewCreationErrorMessage),
+                        typeof(WpfPropertyWindowProviderResources)),
+                    FlowBloxResourceUtil.GetLocalizedString(
+                        nameof(WpfPropertyWindowProviderResources.ViewCreationErrorTitle),
+                        typeof(WpfPropertyWindowProviderResources)),
                     FlowBloxMessageBoxTypes.Error);
         }
 
@@ -100,7 +88,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 .GetService<IFlowBloxMessageBoxService>()
                 ?.ShowMessageBox(
                     message,
-                    "View cannot be created",
+                    FlowBloxResourceUtil.GetLocalizedString(
+                        nameof(WpfPropertyWindowProviderResources.ViewCannotBeCreatedTitle),
+                        typeof(WpfPropertyWindowProviderResources)),
                     FlowBloxMessageBoxTypes.Information);
         }
 
@@ -121,6 +111,19 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 testDefinitionView.DataContext is TestDefinitionViewModel testDefinitionViewModel)
             {
                 testDefinitionViewModel.IsDirty = true;
+                return;
+            }
+
+            if (dialog is not FrameworkElement frameworkElement ||
+                frameworkElement.DataContext == null)
+                return;
+
+            var dataContext = frameworkElement.DataContext;
+            var isDirtyProperty = dataContext.GetType().GetProperty(nameof(PropertyViewModel.IsDirty));
+            if (isDirtyProperty?.CanWrite == true &&
+                isDirtyProperty?.PropertyType == typeof(bool))
+            {
+                isDirtyProperty.SetValue(dataContext, true);
             }
         }
     }

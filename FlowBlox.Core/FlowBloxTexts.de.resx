@@ -1020,6 +1020,9 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="ListViewSplitModeFactory_NoElementSelected_Text" xml:space="preserve">
 		<value>Bitte wählen Sie ein Element in der Liste aus, um die Details anzuzeigen.</value>
 	</data>
+	<data name="ListViewSplitModeFactory_DiscardChanges_Message" xml:space="preserve">
+		<value>Das ausgewählte Element enthält ungespeicherte Änderungen. Möchten Sie diese verwerfen?</value>
+	</data>
 	<data name="LlamaAiTokenizer_Description" xml:space="preserve">
 		<value>Verwendet das LLaMA-Tokenisierungsmodell (SentencePiece), um Texte in Token-IDs umzuwandeln und zurück. Unterstützt spezielle Token-Übersetzungen wie das Ersetzen des „Ġ“-Zeichens durch Leerzeichen.</value>
 	</data>

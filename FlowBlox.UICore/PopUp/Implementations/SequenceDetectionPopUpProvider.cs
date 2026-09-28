@@ -1,20 +1,18 @@
-using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Selection;
+using FlowBlox.UICore.PopUp.Constants;
+using FlowBlox.UICore.PopUp.Provider;
 using FlowBlox.UICore.PopUp.Resources;
 using FlowBlox.UICore.PopUp.Utilities;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace FlowBlox.UICore.PopUp.Provider
+namespace FlowBlox.UICore.PopUp.Implementations
 {
     public class SequenceDetectionPopUpProvider :
         ComponentPopupProviderBase<SequenceDetectionFlowBlock>,
         IOptionsRegistration
     {
-        public const string SequenceDetectionOptionKey = "PopUp.SequenceDetection.ShowComponentPopup";
-
-        public override string OptionKey => SequenceDetectionOptionKey;
+        public override string OptionKey => PopupOptionNames.ShowSequenceDetectionPopupOnOpen;
 
         protected override string WindowTitle => SequenceDetectionPopUpTexts.Window_Title;
 
@@ -39,25 +37,15 @@ namespace FlowBlox.UICore.PopUp.Provider
 
         public void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions)
         {
-            SetOptionWasMissingAtInitialization(!currentOptions.Any(x => x.Name == SequenceDetectionOptionKey));
+            SetOptionWasMissingAtInitialization(
+                !currentOptions.Any(x => x.Name == PopupOptionNames.ShowSequenceDetectionPopupOnOpen));
 
             defaults.Add(new OptionElement(
-                SequenceDetectionOptionKey,
+                PopupOptionNames.ShowSequenceDetectionPopupOnOpen,
                 bool.FalseString,
                 "Controls whether the Sequence Detection component pop-up dialog is shown.",
                 OptionElement.OptionType.Boolean,
                 "Sequence Detection: Show Component Pop-up"));
-        }
-    }
-
-    public class ComponentPopupServiceRegistration : IFlowBloxServiceRegistration
-    {
-        public void RegisterServices(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddSingleton<IComponentPopupProvider, SequenceDetectionPopUpProvider>();
-            serviceCollection.AddSingleton<IOptionsRegistration>(sp =>
-                (SequenceDetectionPopUpProvider)sp.GetRequiredService<IComponentPopupProvider>());
-            serviceCollection.AddSingleton<IComponentPopupService, ComponentPopupService>();
         }
     }
 }

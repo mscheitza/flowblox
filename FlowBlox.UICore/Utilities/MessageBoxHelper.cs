@@ -31,6 +31,33 @@ namespace FlowBlox.UICore.Utilities
             return result == MessageDialogResult.Affirmative;
         }
 
+        public static async Task<bool?> ShowQuestionAsync(
+            MetroWindow window,
+            string title,
+            string question,
+            string affirmativeButtonText,
+            string negativeButtonText)
+        {
+            if (window == null)
+                window = Application.Current.MainWindow as MetroWindow;
+
+            if (window == null)
+                return null;
+
+            var settings = new MetroDialogSettings
+            {
+                AffirmativeButtonText = affirmativeButtonText,
+                NegativeButtonText = negativeButtonText
+            };
+            var result = await window.ShowMessageAsync(
+                title,
+                question,
+                MessageDialogStyle.AffirmativeAndNegative,
+                settings);
+
+            return result == MessageDialogResult.Affirmative;
+        }
+
         public static async Task ShowMessageBoxAsync(MetroWindow window, MessageBoxType messageBoxType, string description)
         {
             if (window == null)

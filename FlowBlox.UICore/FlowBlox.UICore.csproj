@@ -30,6 +30,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>SequenceDetectionPopUpImages.resx</DependentUpon>
     </Compile>
+    <Compile Update="PopUp\Resources\ComponentValidationFailedPopUpImages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComponentValidationFailedPopUpImages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PopUp\Resources\ComponentValidationFailedPopUpTexts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComponentValidationFailedPopUpTexts.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\AiAssistantControl.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -205,6 +215,26 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PropertyWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ClassResources\WpfPropertyWindowProvider.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WpfPropertyWindowProvider.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\UIActionsProviderBase.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UIActionsProviderBase.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\TestDefinitionViewFactory.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TestDefinitionViewFactory.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\ListViewSplitModeFactory.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ListViewSplitModeFactory.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\PSProjectsWindow.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -217,6 +247,11 @@
     </Compile>
     <Compile Update="Resources\TestDefinitionView.Designer.cs">
       <DependentUpon>TestDefinitionView.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\TransactionMonitorWindow.Designer.cs">
+      <DependentUpon>TransactionMonitorWindow.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -365,6 +400,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProblemTraceWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="PopUp\Resources\ComponentValidationFailedPopUpImages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ComponentValidationFailedPopUpImages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PopUp\Resources\ComponentValidationFailedPopUpTexts.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ComponentValidationFailedPopUpTexts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\ProblemsView.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ProblemsView.Designer.cs</LastGenOutput>
@@ -385,6 +428,34 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PropertyWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\WpfPropertyWindowProvider.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WpfPropertyWindowProvider.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\WpfPropertyWindowProvider.de.resx">
+      <DependentUpon>WpfPropertyWindowProvider.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\UIActionsProviderBase.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIActionsProviderBase.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\UIActionsProviderBase.de.resx">
+      <DependentUpon>UIActionsProviderBase.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\TestDefinitionViewFactory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TestDefinitionViewFactory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\TestDefinitionViewFactory.de.resx">
+      <DependentUpon>TestDefinitionViewFactory.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\ListViewSplitModeFactory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ListViewSplitModeFactory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\ListViewSplitModeFactory.de.resx">
+      <DependentUpon>ListViewSplitModeFactory.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\PSProjectsWindow.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PSProjectsWindow.Designer.cs</LastGenOutput>
@@ -395,6 +466,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\TestDefinitionView.resx">
       <LastGenOutput>TestDefinitionView.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\TransactionMonitorWindow.resx">
+      <LastGenOutput>TransactionMonitorWindow.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\TestView.resx">

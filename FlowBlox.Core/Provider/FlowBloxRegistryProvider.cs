@@ -6,10 +6,21 @@ namespace FlowBlox.Core.Provider
 {
     public static class FlowBloxRegistryProvider
     {
+        private static readonly object _registryChainSync = new();
         private static readonly List<FlowBloxRegistry> _registryChain = new();
+        private static readonly HashSet<FlowBloxRegistry> _nestedTransactionRegistries = new();
         private static readonly AsyncLocal<FlowBloxRegistry> _scopedProjectRegistry = new();
 
-        public static bool IsCurrentlyDetached => _registryChain.Any(x => x is FlowBloxDetachedRegistry);
+        public static event EventHandler TransactionsChanged;
+
+        public static bool IsCurrentlyDetached
+        {
+            get
+            {
+                lock (_registryChainSync)
+                    return _registryChain.Any(x => x is FlowBloxDetachedRegistry);
+            }
+        }
 
         public static FlowBloxRegistry GetRegistry()
         {
@@ -17,8 +28,11 @@ namespace FlowBlox.Core.Provider
             if (scopedProjectRegistry != null)
                 return scopedProjectRegistry;
 
-            if (_registryChain.Any())
-                return _registryChain.Last();
+            lock (_registryChainSync)
+            {
+                if (_registryChain.Any())
+                    return _registryChain.Last();
+            }
 
             var registry = ThreadBasedGridElementRegistryProvider.GetManagedObject();
             if (registry == null)
@@ -44,32 +58,121 @@ namespace FlowBlox.Core.Provider
             return project?.FlowBloxRegistry;
         }
 
-        public static FlowBloxRegistry OpenTransaction(bool detached = false)
+        public static FlowBloxRegistry OpenTransaction(
+            bool detached = false,
+            object target = null,
+            bool nested = false)
         {
-            var parentRegistry = _registryChain.LastOrDefault() ?? GetRegistry();
-            FlowBloxRegistry transactionRegistry = detached
-                ? new FlowBloxDetachedRegistry(parentRegistry)
-                : new FlowBloxTransientRegistry(parentRegistry);
+            FlowBloxRegistry transactionRegistry;
+            int depth;
+            lock (_registryChainSync)
+            {
+                if (_registryChain.LastOrDefault() is { } currentTransaction &&
+                    _nestedTransactionRegistries.Contains(currentTransaction))
+                {
+                    throw new InvalidOperationException(
+                        "A transaction cannot be opened on top of a nested transaction.");
+                }
 
-            _registryChain.Add(transactionRegistry);
+                var parentRegistry = _registryChain.LastOrDefault() ?? GetRegistry();
+                transactionRegistry = detached
+                    ? new FlowBloxDetachedRegistry(parentRegistry)
+                    : new FlowBloxTransientRegistry(parentRegistry);
+
+                _registryChain.Add(transactionRegistry);
+                if (nested)
+                    _nestedTransactionRegistries.Add(transactionRegistry);
+                depth = _registryChain.Count;
+            }
+
+            FlowBloxRegistryTransactionHistory.RegisterOpened(
+                transactionRegistry,
+                target,
+                detached,
+                nested,
+                depth);
+            OnTransactionsChanged();
             return transactionRegistry;
         }
 
-        public static void CommitTransaction()
+        public static bool IsCurrentTransactionNested()
         {
-            var currentRegistry = _registryChain.Last();
-            if (currentRegistry is FlowBloxTransientRegistry transientRegistry)
+            lock (_registryChainSync)
+            {
+                return _registryChain.Any() &&
+                       _nestedTransactionRegistries.Contains(_registryChain.Last());
+            }
+        }
+
+        public static void CommitTransaction()
+            => CommitTransaction(GetCurrentTransaction());
+
+        public static void CommitTransaction(FlowBloxRegistry transactionRegistry)
+        {
+            EnsureCurrentTransaction(transactionRegistry);
+
+            if (transactionRegistry is FlowBloxTransientRegistry transientRegistry)
                 transientRegistry.Commit();
 
-            RemoveFromChain(currentRegistry);
+            CompleteTransaction(transactionRegistry, FlowBloxRegistryTransactionState.Committed);
         }
 
-        public static void CancelTransaction() => RemoveFromChain(_registryChain.Last());
+        public static void CancelTransaction() => CancelTransaction(GetCurrentTransaction());
 
-        public static void RemoveFromChain(FlowBloxRegistry registry)
+        public static void CancelTransaction(FlowBloxRegistry transactionRegistry)
         {
-            _registryChain.Remove(registry);
+            EnsureCurrentTransaction(transactionRegistry);
+            CompleteTransaction(transactionRegistry, FlowBloxRegistryTransactionState.Cancelled);
         }
+
+        public static bool IsCurrentTransaction(FlowBloxRegistry transactionRegistry)
+        {
+            lock (_registryChainSync)
+            {
+                return transactionRegistry != null &&
+                       _registryChain.Any() &&
+                       ReferenceEquals(_registryChain.Last(), transactionRegistry);
+            }
+        }
+
+        private static FlowBloxRegistry GetCurrentTransaction()
+        {
+            lock (_registryChainSync)
+            {
+                if (!_registryChain.Any())
+                    throw new InvalidOperationException("No registry transaction is active.");
+
+                return _registryChain.Last();
+            }
+        }
+
+        private static void EnsureCurrentTransaction(FlowBloxRegistry transactionRegistry)
+        {
+            if (transactionRegistry == null)
+                throw new ArgumentNullException(nameof(transactionRegistry));
+
+            if (!IsCurrentTransaction(transactionRegistry))
+                throw new InvalidOperationException("The specified registry transaction is not the current transaction.");
+        }
+
+        private static void CompleteTransaction(
+            FlowBloxRegistry registry,
+            FlowBloxRegistryTransactionState state)
+        {
+            lock (_registryChainSync)
+            {
+                if (!_registryChain.Remove(registry))
+                    return;
+
+                _nestedTransactionRegistries.Remove(registry);
+            }
+
+            FlowBloxRegistryTransactionHistory.RegisterCompleted(registry, state);
+            OnTransactionsChanged();
+        }
+
+        private static void OnTransactionsChanged() =>
+            TransactionsChanged?.Invoke(null, EventArgs.Empty);
 
         private sealed class ProjectRegistryScope : IDisposable
         {

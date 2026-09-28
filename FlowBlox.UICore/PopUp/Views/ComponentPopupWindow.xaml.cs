@@ -20,11 +20,11 @@ namespace FlowBlox.UICore.PopUp.Views
 
             Title = title;
             _items = items ?? throw new ArgumentNullException(nameof(items));
-            ShowAgainToggleSwitch.IsOn = false;
+            ShowAgainCheckBox.IsChecked = false;
             ShowCurrentItem();
         }
 
-        public bool ShowAgain => ShowAgainToggleSwitch.IsOn;
+        public bool ShowAgain => ShowAgainCheckBox.IsChecked == true;
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {

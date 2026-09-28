@@ -2,9 +2,11 @@ using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
+using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Provider;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.PropertyWindow;
@@ -15,18 +17,28 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace FlowBlox.UICore.ViewModels.PropertyView
 {
     public class PropertyWindowViewModel : INotifyPropertyChanged
     {
+        private static readonly TimeSpan UIActionsRefreshDebounceInterval = TimeSpan.FromSeconds(1);
         private readonly MetroWindow _window;
         private object _uiActionTarget;
-        private bool _isLoadingUIActions;
+        private bool _isClosed;
+        private DispatcherTimer _uiActionsRefreshDebounceTimer;
 
         public bool DisplaySaveButton { get; }
 
+        public PropertyWindowCommitStatus CommitStatus =>
+            PropertyViewModel?.CommitStatus ?? PropertyWindowCommitStatus.None;
+
         public RelayCommand SaveCommand { get; }
+
+        public RelayCommand ApplyCommand { get; }
+
+        public RelayCommand ApplyWithoutVerificationCommand { get; }
 
         public RelayCommand SaveWithoutVerificationCommand { get; }
 
@@ -61,23 +73,11 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public ObservableCollection<PropertyWindowSpecialExplanationEntryViewModel> SpecialExplanations { get; } = new();
 
-        public bool IsLoadingUIActions
-        {
-            get => _isLoadingUIActions;
-            private set
-            {
-                if (_isLoadingUIActions == value)
-                    return;
-
-                _isLoadingUIActions = value;
-                OnPropertyChanged();
-                RefreshUIActionsCommand.Invalidate();
-            }
-        }
-
         public PropertyWindowViewModel()
         {
             SaveCommand = new RelayCommand(Save, CanSaveChanges);
+            ApplyCommand = new RelayCommand(Apply, CanSaveChanges);
+            ApplyWithoutVerificationCommand = new RelayCommand(ApplyWithoutVerification, CanSaveChanges);
             SaveWithoutVerificationCommand = new RelayCommand(SaveWithoutVerification, CanSaveChanges);
             CancelCommand = new RelayCommand(Cancel);
             RefreshUIActionsCommand = new RelayCommand(RefreshUIActions, CanRefreshUIActions);
@@ -113,7 +113,9 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             DisplaySaveButton = propertyWindowArgs.CanSave;
             LoadSpecialExplanations(propertyWindowArgs.Target);
             _uiActionTarget = propertyWindowArgs.Target;
-            _ = LoadUIActions(_uiActionTarget);
+            FlowBloxRegistryProvider.TransactionsChanged += RegistryTransactionsChanged;
+            _window.Closed += Window_Closed;
+            LoadUIActions(_uiActionTarget);
         }
 
         private void LoadSpecialExplanations(object target)
@@ -181,10 +183,13 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         {
             propertyViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == nameof(PropertyViewModel.IsDirty) && propertyViewModel.IsDirty)
+                if (e.PropertyName == nameof(PropertyViewModel.IsDirty))
                 {
                     SaveCommand.Invalidate();
+                    ApplyCommand.Invalidate();
+                    ApplyWithoutVerificationCommand.Invalidate();
                     SaveWithoutVerificationCommand.Invalidate();
+                    RequestUIActionsRefresh();
                 }
 
             };
@@ -192,26 +197,76 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         private bool CanRefreshUIActions()
         {
-            return !IsLoadingUIActions && _uiActionTarget is IFlowBloxComponent;
+            return _uiActionTarget is IFlowBloxComponent;
         }
 
-        private async void RefreshUIActions()
+        private void RefreshUIActions()
         {
-            await LoadUIActions(_uiActionTarget);
+            StopUIActionsRefreshDebounceTimer();
+            LoadUIActions(_uiActionTarget);
         }
 
-        private async Task LoadUIActions(object target)
+        private void RegistryTransactionsChanged(object sender, EventArgs e)
+        {
+            if (_isClosed || _window.Dispatcher.HasShutdownStarted || _window.Dispatcher.HasShutdownFinished)
+                return;
+
+            if (_window.Dispatcher.CheckAccess())
+                HandleTransactionContextChanged();
+            else
+                _window.Dispatcher.BeginInvoke(HandleTransactionContextChanged);
+        }
+
+        private void HandleTransactionContextChanged()
+        {
+            RefreshUIActionsCommand.Invalidate();
+            RequestUIActionsRefresh();
+        }
+
+        private void RequestUIActionsRefresh()
+        {
+            if (_isClosed ||
+                _uiActionTarget is not IFlowBloxComponent)
+                return;
+
+            _uiActionsRefreshDebounceTimer ??= CreateUIActionsRefreshDebounceTimer();
+            _uiActionsRefreshDebounceTimer.Stop();
+            _uiActionsRefreshDebounceTimer.Start();
+        }
+
+        private DispatcherTimer CreateUIActionsRefreshDebounceTimer()
+        {
+            var timer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, _window.Dispatcher)
+            {
+                Interval = UIActionsRefreshDebounceInterval
+            };
+            timer.Tick += UIActionsRefreshDebounceTimer_Tick;
+            return timer;
+        }
+
+        private void UIActionsRefreshDebounceTimer_Tick(object sender, EventArgs e)
+        {
+            StopUIActionsRefreshDebounceTimer();
+            if (_isClosed)
+                return;
+
+            LoadUIActions(_uiActionTarget);
+        }
+
+        private void StopUIActionsRefreshDebounceTimer()
+            => _uiActionsRefreshDebounceTimer?.Stop();
+
+        private void LoadUIActions(object target)
         {
             if (target is not IFlowBloxComponent component)
                 return;
 
-            const int minimumLoadingMilliseconds = 500;
             List<UIActionViewModel> actions;
 
             var provider = new WpfUIActionsProvider();
-            var loadingStartedAt = DateTime.UtcNow;
-            IsLoadingUIActions = true;
-            await Task.Yield();
+            if (_isClosed)
+                return;
+
             try
             {
                 actions = provider.GetToolStripItemsForComponent(component);
@@ -220,26 +275,25 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(e);
 
-                await MessageBoxHelper.ShowMessageBoxAsync(
+                _ = MessageBoxHelper.ShowMessageBoxAsync(
                     _window,
                     MessageBoxType.Error,
                     FlowBloxResourceUtil.GetLocalizedString("Message_ComponentActionsLoadingFailure", typeof(Resources.PropertyWindow)));
 
                 return;
             }
-            finally
-            {
-                var elapsedMilliseconds = (DateTime.UtcNow - loadingStartedAt).TotalMilliseconds;
-                var remainingMilliseconds = minimumLoadingMilliseconds - elapsedMilliseconds;
-                if (remainingMilliseconds > 0)
-                    await Task.Delay(TimeSpan.FromMilliseconds(remainingMilliseconds));
-
-                IsLoadingUIActions = false;
-            }
 
             UIActions.Clear();
             foreach (var action in actions)
                 UIActions.Add(action);
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _isClosed = true;
+            StopUIActionsRefreshDebounceTimer();
+            FlowBloxRegistryProvider.TransactionsChanged -= RegistryTransactionsChanged;
+            _window.Closed -= Window_Closed;
         }
 
         private async void Save()
@@ -250,6 +304,16 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 _window.DialogResult = true;
                 _window.Close();
             }
+        }
+
+        private async void Apply()
+        {
+            await _propertyViewModel.ApplyAsync(_window);
+        }
+
+        private async void ApplyWithoutVerification()
+        {
+            await _propertyViewModel.ApplyAsync(_window, true);
         }
 
         private async void SaveWithoutVerification()
@@ -268,7 +332,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             _window.Close();
         }
 
-        public void Rollback() => _propertyViewModel.Cancel();
+        public void HandleClosing(object sender, CancelEventArgs e)
+            => _propertyViewModel.HandleClosing(sender, e);
 
         public event PropertyChangedEventHandler PropertyChanged;
 

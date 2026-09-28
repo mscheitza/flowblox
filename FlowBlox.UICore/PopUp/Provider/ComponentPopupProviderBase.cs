@@ -11,6 +11,8 @@ namespace FlowBlox.UICore.PopUp.Provider
 
         public Type TargetType => typeof(TTarget);
 
+        public virtual ComponentPopupEvent PopupEvent => ComponentPopupEvent.Open;
+
         public abstract string OptionKey { get; }
 
         protected abstract string WindowTitle { get; }
@@ -22,9 +24,9 @@ namespace FlowBlox.UICore.PopUp.Provider
             _showOnceBecauseOptionWasMissing = wasMissing;
         }
 
-        public bool CanShowFor(object target)
+        public bool CanShowFor(object target, ComponentPopupEvent popupEvent)
         {
-            return target is TTarget;
+            return target is TTarget && popupEvent == this.PopupEvent;
         }
 
         public void ShowIfEnabled(object target, Window owner = null)

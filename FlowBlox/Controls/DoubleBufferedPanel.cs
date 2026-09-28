@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace FlowBlox.Components
+namespace FlowBlox.Controls
 {
     internal class DoubleBufferedPanel : Panel
     {

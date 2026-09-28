@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace FlowBlox.Components
+namespace FlowBlox.Controls
 {
     public class NumericTextBox : TextBox
     {

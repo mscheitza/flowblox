@@ -6,6 +6,7 @@ using MahApps.Metro.Controls;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using OptionsWindowResources = FlowBlox.UICore.Resources.OptionsWindow;
 
 namespace FlowBlox.UICore.Views
@@ -77,6 +78,38 @@ namespace FlowBlox.UICore.Views
             if (e.PropertyName == nameof(OptionsWindowViewModel.Value) ||
                 e.PropertyName == nameof(OptionsWindowViewModel.IsPasswordType))
                 SyncPasswordFromViewModel();
+
+            if (e.PropertyName == nameof(OptionsWindowViewModel.SelectedNode))
+                Dispatcher.BeginInvoke(BringSelectedNodeIntoView, DispatcherPriority.Loaded);
+        }
+
+        private void BringSelectedNodeIntoView()
+        {
+            var selectedNode = ViewModel?.SelectedNode;
+            if (selectedNode == null)
+                return;
+
+            OptionsTreeView.UpdateLayout();
+            FindTreeViewItem(OptionsTreeView, selectedNode)?.BringIntoView();
+        }
+
+        private static TreeViewItem FindTreeViewItem(ItemsControl parent, object item)
+        {
+            if (parent.ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem directContainer)
+                return directContainer;
+
+            foreach (var childItem in parent.Items)
+            {
+                if (parent.ItemContainerGenerator.ContainerFromItem(childItem) is not TreeViewItem childContainer)
+                    continue;
+
+                childContainer.UpdateLayout();
+                var nestedContainer = FindTreeViewItem(childContainer, item);
+                if (nestedContainer != null)
+                    return nestedContainer;
+            }
+
+            return null;
         }
 
         private void SyncPasswordFromViewModel()

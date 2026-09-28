@@ -1021,6 +1021,9 @@ Use the "+" button to add entries to the table.</value>
 	<data name="ListViewSplitModeFactory_NoElementSelected_Text" xml:space="preserve">
 		<value>Please select an element from the list to view its details.</value>
 	</data>
+	<data name="ListViewSplitModeFactory_DiscardChanges_Message" xml:space="preserve">
+		<value>The selected element contains unsaved changes. Do you want to discard them?</value>
+	</data>
 	<data name="LlamaAiTokenizer_Description" xml:space="preserve">
 		<value>Uses the LLaMA tokenization model (SentencePiece) to convert text to and from token IDs. Supports special token mappings such as replacing the “Ġ” character with a space.</value>
 	</data>

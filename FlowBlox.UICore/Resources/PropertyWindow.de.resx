@@ -123,6 +123,12 @@
 	<data name="Back" xml:space="preserve">
 		<value>Zurück</value>
 	</data>
+	<data name="Apply" xml:space="preserve">
+		<value>Übernehmen</value>
+	</data>
+	<data name="ApplyWithoutVerification" xml:space="preserve">
+		<value>Ohne Überprüfung anwenden</value>
+	</data>
 	<data name="Save" xml:space="preserve">
 		<value>Speichern</value>
 	</data>

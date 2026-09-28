@@ -15,6 +15,7 @@ namespace FlowBlox.UICore.Manager
 	{
 		private DynamicDeepCopier _deepCopier;
 		private FlowBloxRegistry _registry;
+		private FlowBloxRegistry _transactionRegistry;
 		private Dictionary<object, object> _refMappings = new Dictionary<object, object>();
         private IFlowBloxProjectComponentProvider _componentProvider;
         private string _transactionProtocolFilePath;
@@ -54,10 +55,14 @@ namespace FlowBlox.UICore.Manager
 			public FlowBloxRegistry Registry { get; set; }
 		}
 
-		public OpenResult Open(object target, bool detached = false)
+		public OpenResult Open(object target, bool detached = false, bool nested = false)
 		{
+			if (_transactionRegistry != null)
+				throw new InvalidOperationException("A transaction is already active.");
+
 			_detached = detached;
-			_registry = FlowBloxRegistryProvider.OpenTransaction(detached);
+			_transactionRegistry = FlowBloxRegistryProvider.OpenTransaction(detached, target, nested);
+			_registry = _transactionRegistry;
 			_deepCopier.PropertyActions = FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(target);
 			var transientTarget = _deepCopier.Copy(target);
 			var protocol = _deepCopier.GetProtocol();
@@ -92,11 +97,18 @@ namespace FlowBlox.UICore.Manager
 
         public void Cancel()
 		{
-			FlowBloxRegistryProvider.CancelTransaction();
+			if (_transactionRegistry == null)
+				return;
+
+			FlowBloxRegistryProvider.CancelTransaction(_transactionRegistry);
+			_transactionRegistry = null;
 		}
 
 		public void Commit(object target, object transientTarget)
 		{
+			if (!FlowBloxRegistryProvider.IsCurrentTransaction(_transactionRegistry))
+				throw new InvalidOperationException("The transaction is not the current registry transaction and cannot be committed.");
+
 			// Create restore object
 			var restoreDeepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(target));
 			var restoreObject = restoreDeepCopier.Copy(target);
@@ -116,7 +128,8 @@ namespace FlowBlox.UICore.Manager
 			CreateAndAppendChange(target, restoreObject, repetitionObject);
 
             // Committing the changes to the registry
-            FlowBloxRegistryProvider.CommitTransaction();
+            FlowBloxRegistryProvider.CommitTransaction(_transactionRegistry);
+			_transactionRegistry = null;
 		}
 
 		private void CreateAndAppendChange(object target, object restoreObject, object repetitionObject)

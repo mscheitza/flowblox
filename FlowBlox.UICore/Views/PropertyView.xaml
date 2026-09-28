@@ -30,6 +30,7 @@
 
         <!-- TabControl -->
         <TabControl ItemsSource="{Binding VisibleTabs}"
+                    SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
                     Style="{StaticResource FlowBlox.ScrollableHeaderTabControl}"
                     Margin="4,0,4,0"
                     DockPanel.Dock="Top">

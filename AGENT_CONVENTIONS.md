@@ -36,7 +36,7 @@ This file summarizes core project conventions for AI/coding agents working in th
   - `System.ComponentModel.DataAnnotations`
   - Use `DisplayAttribute` with `ResourceType = typeof(FlowBloxTexts)`
 
-## Localization Conventions (Mandatory)
+## Localization and Logging Conventions (Mandatory)
 - Always create localization keys for new user-visible types/properties/tooltips.
 - German localization files must contain real German umlauts (`ä`, `ö`, `ü`, `Ä`, `Ö`, `Ü`, `ß`). Do not use XML character codes for normal text and avoid mojibake such as `Ã¤`.
 - Key naming format:
@@ -53,6 +53,19 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Encoding requirement:
   - `FlowBlox.Core/FlowBloxTexts.de.resx` must be saved as `UTF-8` **without BOM**.
 - Rule: provide tooltip text for explanatory/complex properties (recommended), especially for selectors/patterns (e.g., XPath, CSS selector, regex). Include short examples to improve UX where helpful.
+
+### WPF/UICore localization
+- Localize both the title and message of every message box. Never place user-visible fallback text directly in the call.
+- Provide a neutral English `.resx` and a `.de.resx`. In `FlowBlox.UICore`, keep resources scoped to their owner:
+  - A view and its ViewModel share the view resource, for example `Resources/PropertyWindow.resx` and `Resources/PropertyWindow.de.resx`.
+  - Non-view classes use individual resources in the central `Resources/ClassResources` directory, for example `Resources/ClassResources/UIActionsProviderBase.resx` or `Resources/ClassResources/TestDefinitionViewFactory.resx`.
+- Always resolve strings through `FlowBloxResourceUtil.GetLocalizedString(key, typeof(ResourceClass))`. Do not read generated resource properties directly, including for message-box titles and messages.
+
+### Logging
+- Log a concise technical English message that identifies the operation and failure location; do not reuse the localized UI text as the log message.
+- In `FlowBlox.UICore` and other view/UI code, write to the application logs through `FlowBloxLogManager.Instance.GetLogger()`.
+- Select `Info`, `Warning`, or `Error` according to severity. In a `catch` block, pass both the technical message and the caught exception to `Warning(message, exception)` or `Error(message, exception)` as appropriate.
+- Inside FlowBlock execution/runtime code, report through the active runtime (`runtime.Report(...)`) so the problem remains associated with that execution. Do not substitute the UICore application logger for runtime reporting.
 
 ## Property Declaration Conventions for FlowBlocks/Strategies
 - Use `[Display(...)]` on user-facing properties.

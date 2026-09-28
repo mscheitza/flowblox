@@ -18,7 +18,7 @@ namespace FlowBloxSampleExtension.UI.Operations
         [Display(Name = "SampleExtensionFlowBlockUIActions_SampleAction", ResourceType = typeof(SampleExtensionResources))]
         public void SampleAction()
         {
-            var window = new SampleWindow();
+            var window = new SampleWindow(Component);
             var dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
             dialogService.ShowWPFDialog(window);
         }

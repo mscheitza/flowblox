@@ -25,10 +25,20 @@ namespace FlowBlox.UICore.Operations
 
         public SKImage ManageUserFieldsIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.account_cog, 16, SKColors.SteelBlue);
 
+        public bool CanManageUserFields()
+        {
+            // A nested transaction is the active detail-edit transaction of a parent view.
+            // User-field management opens another registry-backed editor and must wait until it is closed.
+            return !FlowBloxRegistryProvider.IsCurrentTransactionNested();
+        }
+
         [UIActionMetadata(OnlyShowInPropertyWindow = true)]
         [Display(Name = "FlowBloxComponentUIActions_ManageUserFields", ResourceType = typeof(FlowBloxTexts))]
         public void ManageUserFields()
         {
+            if (!CanManageUserFields())
+                return;
+
             var registry = FlowBloxRegistryProvider.GetRegistry();
             var userFieldObjectManager = new UserFieldObjectManager(registry);
 

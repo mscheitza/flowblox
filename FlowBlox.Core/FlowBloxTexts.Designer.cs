@@ -112,7 +112,7 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("AIPromptFlowBlock_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die AI Prompt ähnelt.
         /// </summary>
@@ -222,7 +222,7 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("AIPromptFlowBlock_Provider_Tooltip", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die This flow block is configured for AI responses in JSON format by default. JSON is the recommended output format. By adjusting the system instruction, other output formats such as XML can also be used. ähnelt.
         /// </summary>
@@ -301,7 +301,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Generates writable simple and structured target properties using an AI prompt and test-driven expectations. For structured targets, AI uses the internal JSON schema description ($GenerationStrategy::TargetPropertyDescription) to generate JSON output, and FlowBlox deserializes it into the target property type. Requires at least one test case for the target flow block, including expected value anchors and expected dataset count. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Configures writable flow block properties using an AI prompt and test-driven expectations. AI uses the FlowBlox Quick Update schema ($GenerationStrategy::FlowBloxQuickUpdateSchema) and returns FlowBlox Quick Update JSON to update one or more configurable properties. Requires at least one test case for the target flow block, including expected value anchors and expected dataset count. ähnelt.
         /// </summary>
         public static string AIPropertyValueGenerationStrategy_Description
         {
@@ -319,6 +319,17 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("AIPropertyValueGenerationStrategy_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Additional settings ähnelt.
+        /// </summary>
+        public static string AIPropertyValueGenerationStrategy_Groups_AdditionalSettings
+        {
+            get
+            {
+                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_Groups_AdditionalSettings", resourceCulture);
             }
         }
         
@@ -429,28 +440,6 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("AIPropertyValueGenerationStrategy_SystemInstruction_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Target property name ähnelt.
-        /// </summary>
-        public static string AIPropertyValueGenerationStrategy_TargetPropertyName
-        {
-            get
-            {
-                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_TargetPropertyName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Name of the writable target property on the flow block that should receive the generated value (simple or structured type). For structured targets, JSON is only the AI output format; FlowBlox deserializes it into the property type. ähnelt.
-        /// </summary>
-        public static string AIPropertyValueGenerationStrategy_TargetPropertyName_Tooltip
-        {
-            get
-            {
-                return ResourceManager.GetString("AIPropertyValueGenerationStrategy_TargetPropertyName_Tooltip", resourceCulture);
             }
         }
         
@@ -763,6 +752,50 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die S3: Force path-style addressing ähnelt.
+        /// </summary>
+        public static string AmazonWebServicesProvider_S3ForcePathStyle
+        {
+            get
+            {
+                return ResourceManager.GetString("AmazonWebServicesProvider_S3ForcePathStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses endpoint/bucket/key addressing for S3 clients. This is commonly required by MinIO and does not affect other AWS services. ähnelt.
+        /// </summary>
+        public static string AmazonWebServicesProvider_S3ForcePathStyle_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("AmazonWebServicesProvider_S3ForcePathStyle_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die S3 service URL ähnelt.
+        /// </summary>
+        public static string AmazonWebServicesProvider_S3ServiceUrl
+        {
+            get
+            {
+                return ResourceManager.GetString("AmazonWebServicesProvider_S3ServiceUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional S3 endpoint URL for a compatible service such as MinIO. It affects S3 clients only; leave empty to use Amazon S3. ähnelt.
+        /// </summary>
+        public static string AmazonWebServicesProvider_S3ServiceUrl_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("AmazonWebServicesProvider_S3ServiceUrl_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Secret key ähnelt.
         /// </summary>
         public static string AmazonWebServicesProvider_SecretKey
@@ -803,6 +836,193 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("AnthropicAIProvider_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die PDF ähnelt.
+        /// </summary>
+        public static string AsposePdfCompliance_Pdf
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposePdfCompliance_Pdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die PDF/A-1b ähnelt.
+        /// </summary>
+        public static string AsposePdfCompliance_PdfA1b
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposePdfCompliance_PdfA1b", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die PDF/A-2u ähnelt.
+        /// </summary>
+        public static string AsposePdfCompliance_PdfA2u
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposePdfCompliance_PdfA2u", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die PDF/A-3u ähnelt.
+        /// </summary>
+        public static string AsposePdfCompliance_PdfA3u
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposePdfCompliance_PdfA3u", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die PDF/A-4 ähnelt.
+        /// </summary>
+        public static string AsposePdfCompliance_PdfA4
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposePdfCompliance_PdfA4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die PDF standard ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlock_Compliance
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlock_Compliance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects regular PDF or the required PDF/A conformance level. ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlock_Compliance_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlock_Compliance_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Converts a Word document to PDF or PDF/A using Aspose.Words without requiring Microsoft Word. ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Convert Word to PDF ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Base64-encoded Aspose.Words license. Use the flow block&apos;s license import action to populate it. ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlock_Option_License_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlock_Option_License_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Aspose.Words: License (Base64) ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlock_Option_License_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlock_Option_License_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Word document ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlock_WordDocumentField
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlock_WordDocumentField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Word document as a byte array, Base64 string, or file path. ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlock_WordDocumentField_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlock_WordDocumentField_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Import Aspose license ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlockUIActions_ImportLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The Aspose.Words license could not be imported. ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense_Failed
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The Aspose.Words license was imported and stored in the application options. ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense_Success
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Aspose.Words license ähnelt.
+        /// </summary>
+        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense_Title
+        {
+            get
+            {
+                return ResourceManager.GetString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Title", resourceCulture);
             }
         }
         
@@ -2666,6 +2886,127 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("CounterFlowBlock_StartValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die MD5 (legacy) ähnelt.
+        /// </summary>
+        public static string CryptographicHashAlgorithm_MD5
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicHashAlgorithm_MD5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SHA-1 (legacy) ähnelt.
+        /// </summary>
+        public static string CryptographicHashAlgorithm_SHA1
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicHashAlgorithm_SHA1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SHA-256 ähnelt.
+        /// </summary>
+        public static string CryptographicHashAlgorithm_SHA256
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicHashAlgorithm_SHA256", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SHA-384 ähnelt.
+        /// </summary>
+        public static string CryptographicHashAlgorithm_SHA384
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicHashAlgorithm_SHA384", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SHA-512 ähnelt.
+        /// </summary>
+        public static string CryptographicHashAlgorithm_SHA512
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicHashAlgorithm_SHA512", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Base64 ähnelt.
+        /// </summary>
+        public static string CryptographicKeyEncoding_Base64
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicKeyEncoding_Base64", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hexadecimal ähnelt.
+        /// </summary>
+        public static string CryptographicKeyEncoding_Hex
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicKeyEncoding_Hex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die UTF-8 text ähnelt.
+        /// </summary>
+        public static string CryptographicKeyEncoding_Text
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicKeyEncoding_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Base64 ähnelt.
+        /// </summary>
+        public static string CryptographicOutputEncoding_Base64
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicOutputEncoding_Base64", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hexadecimal, lower case ähnelt.
+        /// </summary>
+        public static string CryptographicOutputEncoding_HexLowerCase
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicOutputEncoding_HexLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hexadecimal, upper case ähnelt.
+        /// </summary>
+        public static string CryptographicOutputEncoding_HexUpperCase
+        {
+            get
+            {
+                return ResourceManager.GetString("CryptographicOutputEncoding_HexUpperCase", resourceCulture);
             }
         }
         
@@ -4716,7 +5057,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Expectation conditions evaluated for this field configuration during test execution. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Additional expectations evaluated for this field. &quot;User input expected&quot; already acts like an AnyValue expectation for the entered value. ähnelt.
         /// </summary>
         public static string FlowBloxTestConfiguration_ExpectationConditions_Description
         {
@@ -4738,7 +5079,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Use automatic selection modes to derive a field value from flow-block execution. Use &quot;User input expected&quot; to combine manual input with an expectation, or &quot;Manual user input&quot; to set a value without execution. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines how the test value is selected. &quot;User input expected&quot; also creates an AnyValue expectation for the entered value; &quot;Manual user input&quot; only supplies a value. ähnelt.
         /// </summary>
         public static string FlowBloxTestConfiguration_SelectionMode_Description
         {
@@ -4760,7 +5101,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The expected value or manually supplied field value, depending on the selected mode. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Manual or expected value. Use it to supply a value for a non-executed flow block, or as an expected value: then the field is valid only if this value occurs in the results, equivalent to an AnyValue expectation. Additional AnyValue expectations remain optional. ähnelt.
         /// </summary>
         public static string FlowBloxTestConfiguration_UserInput_Description
         {
@@ -4892,7 +5233,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Uses manual input and evaluates it as an expectation. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uses the entered value and adds the same validity rule as an AnyValue expectation: the value must occur in the flow-block results. ähnelt.
         /// </summary>
         public static string FlowBloxTestConfigurationSelectionMode_UserInput_ExpectedValue_Description
         {
@@ -5200,6 +5541,17 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Conversion ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_Conversion
+        {
+            get
+            {
+                return ResourceManager.GetString("FloxBloxCategory_Conversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Date Operations ähnelt.
         /// </summary>
         public static string FloxBloxCategory_DateOperations
@@ -5266,6 +5618,17 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die S3 storage ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_S3Storage
+        {
+            get
+            {
+                return ResourceManager.GetString("FloxBloxCategory_S3Storage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Selection ähnelt.
         /// </summary>
         public static string FloxBloxCategory_Selection
@@ -5306,6 +5669,17 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("FloxBloxCategory_Serialization_XML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SFTP ähnelt.
+        /// </summary>
+        public static string FloxBloxCategory_Sftp
+        {
+            get
+            {
+                return ResourceManager.GetString("FloxBloxCategory_Sftp", resourceCulture);
             }
         }
         
@@ -5880,7 +6254,7 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("Global_NotApplicable", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
@@ -5966,6 +6340,160 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("Global_ValidationFailed_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Algorithm ähnelt.
+        /// </summary>
+        public static string HashModifier_Algorithm
+        {
+            get
+            {
+                return ResourceManager.GetString("HashModifier_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hash algorithm applied to the UTF-8 input. SHA-256 or stronger is recommended; SHA-1 and MD5 are provided only for legacy interoperability. ähnelt.
+        /// </summary>
+        public static string HashModifier_Algorithm_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("HashModifier_Algorithm_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hash ähnelt.
+        /// </summary>
+        public static string HashModifier_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("HashModifier_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hash: {0}, {1} ähnelt.
+        /// </summary>
+        public static string HashModifier_ObjectDisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("HashModifier_ObjectDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output encoding ähnelt.
+        /// </summary>
+        public static string HashModifier_OutputEncoding
+        {
+            get
+            {
+                return ResourceManager.GetString("HashModifier_OutputEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Encoding used for the generated hash or HMAC bytes. ähnelt.
+        /// </summary>
+        public static string HashModifier_OutputEncoding_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("HashModifier_OutputEncoding_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Algorithm ähnelt.
+        /// </summary>
+        public static string HmacModifier_Algorithm
+        {
+            get
+            {
+                return ResourceManager.GetString("HmacModifier_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HMAC algorithm applied to the UTF-8 input. HMAC-SHA-256 or stronger is recommended. ähnelt.
+        /// </summary>
+        public static string HmacModifier_Algorithm_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("HmacModifier_Algorithm_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HMAC ähnelt.
+        /// </summary>
+        public static string HmacModifier_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("HmacModifier_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Key encoding ähnelt.
+        /// </summary>
+        public static string HmacModifier_KeyEncoding
+        {
+            get
+            {
+                return ResourceManager.GetString("HmacModifier_KeyEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Specifies whether the secret key is interpreted as UTF-8 text, Base64, or hexadecimal bytes. ähnelt.
+        /// </summary>
+        public static string HmacModifier_KeyEncoding_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("HmacModifier_KeyEncoding_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HMAC: {0}, {1} ähnelt.
+        /// </summary>
+        public static string HmacModifier_ObjectDisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("HmacModifier_ObjectDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Secret key ähnelt.
+        /// </summary>
+        public static string HmacModifier_SecretKey
+        {
+            get
+            {
+                return ResourceManager.GetString("HmacModifier_SecretKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Secret HMAC key. FlowBlox field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string HmacModifier_SecretKey_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("HmacModifier_SecretKey_Tooltip", resourceCulture);
             }
         }
         
@@ -7015,7 +7543,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Path used to resolve a value from the JSON content. Use &apos;/&apos; to separate nodes and numeric indexes for arrays. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path used to resolve a value from the JSON content. Use &apos;/&apos; to separate nodes. Arrays can be returned as a whole, addressed by numeric index, projected by property, or filtered with @Property operators, e.g. &apos;addresses/@Country=Germany/Street&apos;. Supported operators: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty. ähnelt.
         /// </summary>
         public static string JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip
         {
@@ -7400,13 +7928,30 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Path used to navigate through the JSON document. Use &apos;/&apos; to separate nodes. Object properties are addressed by their property name, array elements by a numeric index (e.g. &apos;participants/addresses/0&apos;). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Path used to navigate through the JSON document. Use &apos;/&apos; to separate nodes. Object properties are addressed by name, arrays can be returned as a whole or addressed by numeric index (e.g. &apos;participants/addresses&apos; or &apos;participants/addresses/0&apos;). Array filters use @Property operators, e.g. &apos;addresses/@Country=Germany/Street&apos;. Supported operators: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty. ähnelt.
         /// </summary>
         public static string JsonPathSelectorFlowBlock_Path_Tooltip
         {
             get
             {
                 return ResourceManager.GetString("JsonPathSelectorFlowBlock_Path_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path examples:
+        ///- `participant/name` returns a single property value.
+        ///- `participant/addresses` returns all address array items; object items are returned as compact JSON.
+        ///- `participant/addresses/0/Street` returns the street of the first address.
+        ///- `participant/addresses/@Country=Germany` returns address objects whose Country is Germany.
+        ///- `participant/addresses/@Country=Germany/Street` returns the streets of German addresses.
+        ///- Filters support: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is n [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        public static string JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples
+        {
+            get
+            {
+                return ResourceManager.GetString("JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples", resourceCulture);
             }
         }
         
@@ -7606,6 +8151,17 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("ListFactoryBase_NoDataAvailable_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The selected element contains unsaved changes. Do you want to discard them? ähnelt.
+        /// </summary>
+        public static string ListViewSplitModeFactory_DiscardChanges_Message
+        {
+            get
+            {
+                return ResourceManager.GetString("ListViewSplitModeFactory_DiscardChanges_Message", resourceCulture);
             }
         }
         
@@ -8182,6 +8738,17 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional audience identifying the API for which the token is requested. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_Audience_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_Audience_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Client ID ähnelt.
         /// </summary>
         public static string OAuthFlowBlock_ClientId
@@ -8189,6 +8756,17 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("OAuthFlowBlock_ClientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Identifier of the OAuth client registered with the authorization server. Fields from input flow blocks can be used. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_ClientId_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_ClientId_Tooltip", resourceCulture);
             }
         }
         
@@ -8204,7 +8782,18 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Performs OAuth/OpenID client-credentials authorization and returns an access token. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Secret of the registered OAuth client. This is different from the user password used by the password grant. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_ClientSecret_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_ClientSecret_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Requests an OAuth/OpenID access token using client credentials or the password grant. ähnelt.
         /// </summary>
         public static string OAuthFlowBlock_Description
         {
@@ -8237,6 +8826,17 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects client credentials for machine-to-machine access or password grant for a user&apos;s credentials. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_GrantType_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_GrantType_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Authorization failed ähnelt.
         /// </summary>
         public static string OAuthFlowBlock_Notification_AuthorizationFailed
@@ -8244,6 +8844,28 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("OAuthFlowBlock_Notification_AuthorizationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_Password
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User password sent only with the password grant. Fields from input flow blocks can be used. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_Password_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_Password_Tooltip", resourceCulture);
             }
         }
         
@@ -8259,6 +8881,17 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional space-separated scopes requested for the access token. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_Scope_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_Scope_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Send client credentials in body ähnelt.
         /// </summary>
         public static string OAuthFlowBlock_SendClientCredentialsInBody
@@ -8270,6 +8903,17 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Sends client ID and client secret in the form body. Disable this to use HTTP Basic client authentication instead. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_SendClientCredentialsInBody_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_SendClientCredentialsInBody_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Token endpoint ähnelt.
         /// </summary>
         public static string OAuthFlowBlock_TokenEndpoint
@@ -8277,6 +8921,61 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("OAuthFlowBlock_TokenEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OAuth/OpenID token endpoint that receives the form-encoded token request. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_TokenEndpoint_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_TokenEndpoint_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_UserName
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name sent only with the password grant. Fields from input flow blocks can be used. ähnelt.
+        /// </summary>
+        public static string OAuthFlowBlock_UserName_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthFlowBlock_UserName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Client credentials ähnelt.
+        /// </summary>
+        public static string OAuthGrantType_ClientCredentials
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthGrantType_ClientCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password grant ähnelt.
+        /// </summary>
+        public static string OAuthGrantType_Password
+        {
+            get
+            {
+                return ResourceManager.GetString("OAuthGrantType_Password", resourceCulture);
             }
         }
         
@@ -8449,7 +9148,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block manages internal ONNX Runtime GenAI model and tokenizer instances for prompt execution. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block requires an ONNX Runtime GenAI-compatible model folder. The folder must contain genai_config.json, ONNX model files and tokenizer assets. Prefer ready-made Microsoft/Hugging Face or Foundry Local GenAI model folders and point ModelFolder to the concrete subfolder that contains genai_config.json. ähnelt.
         /// </summary>
         public static string OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource
         {
@@ -8672,7 +9371,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Folder containing the GenAI model (including genai.config, *.onnx and tokenizer assets). ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Folder containing the ONNX Runtime GenAI model, including genai_config.json, *.onnx files and tokenizer assets. ähnelt.
         /// </summary>
         public static string OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip
         {
@@ -9009,6 +9708,435 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("OpenAIProvider_StoreResponses_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
+        /// </summary>
+        public static string OpenApiParameterValue_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiParameterValue_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Location ähnelt.
+        /// </summary>
+        public static string OpenApiParameterValue_Location
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiParameterValue_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
+        /// </summary>
+        public static string OpenApiParameterValue_Name
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiParameterValue_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required ähnelt.
+        /// </summary>
+        public static string OpenApiParameterValue_Required
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiParameterValue_Required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
+        /// </summary>
+        public static string OpenApiParameterValue_Value
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiParameterValue_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Error message ähnelt.
+        /// </summary>
+        public static string OpenApiRestDestinations_ErrorMessage
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestDestinations_ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Payload ähnelt.
+        /// </summary>
+        public static string OpenApiRestDestinations_Payload
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestDestinations_Payload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Response headers ähnelt.
+        /// </summary>
+        public static string OpenApiRestDestinations_ResponseHeaders
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestDestinations_ResponseHeaders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP status ähnelt.
+        /// </summary>
+        public static string OpenApiRestDestinations_Status
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestDestinations_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP status code ähnelt.
+        /// </summary>
+        public static string OpenApiRestDestinations_StatusCode
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestDestinations_StatusCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Called URL ähnelt.
+        /// </summary>
+        public static string OpenApiRestDestinations_Url
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestDestinations_Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Base URL ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_BaseUrl
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_BaseUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die API base URL derived from the OpenAPI server declaration. It can be overridden and supports FlowBlox field placeholders. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_BaseUrl_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_BaseUrl_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bearer token ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_BearerToken
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_BearerToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional access token, for example the result field of an OAuth/OpenID flow block. The Bearer prefix is added automatically. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_BearerToken_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_BearerToken_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content type ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_ContentType
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_ContentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Request content type selected from the endpoint definition, preferring JSON and then XML. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_ContentType_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_ContentType_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Definition error ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_DefinitionError
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_DefinitionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Read-only parsing or loading error for the current OpenAPI source. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_DefinitionError_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_DefinitionError_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Loads a Swagger/OpenAPI definition, provides its endpoints and parameters as generated UI, and invokes the selected REST operation. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OpenAPI REST endpoint ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Endpoint ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_Endpoint
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_Endpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Operation from the definition, sorted by controller/tag and then by path and HTTP method. Selecting it resets and generates parameters and the payload example. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_Endpoint_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_Endpoint_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Endpoint description ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_EndpointDescription
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_EndpointDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Read-only summary or description supplied by the OpenAPI definition. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_EndpointDescription_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_EndpointDescription_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Header parameters ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_HeaderParameters
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_HeaderParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Headers defined by the selected endpoint. Metadata is read-only; only values can be edited and can contain FlowBlox fields. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_HeaderParameters_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_HeaderParameters_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die OpenAPI source ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_OpenApiSource
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_OpenApiSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die HTTP(S) URL, local file path, or directly pasted Swagger/OpenAPI JSON or YAML. URL definitions are cached in memory for 15 minutes. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_OpenApiSource_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_OpenApiSource_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Payload ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_Payload
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_Payload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Request body initialized from an OpenAPI example or generated from its schema. FlowBlox field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_Payload_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_Payload_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Request parameters ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_RequestParameters
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_RequestParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Query, path, and cookie parameters defined by the endpoint. Metadata is read-only; only values can be edited. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_RequestParameters_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_RequestParameters_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result fields ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_ResultFields
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_ResultFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maps payload, HTTP status code, status text, error message, response headers, or called URL to output fields. Payload and status code are created by default. ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_ResultFields_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_ResultFields_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Replaces FlowBlox field placeholders throughout a DOCX template while preserving its formatting, headers, and footers. ähnelt.
+        /// </summary>
+        public static string OpenXmlTemplateFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenXmlTemplateFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fill OpenXML Word template ähnelt.
+        /// </summary>
+        public static string OpenXmlTemplateFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenXmlTemplateFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DOCX template ähnelt.
+        /// </summary>
+        public static string OpenXmlTemplateFlowBlock_TemplateField
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenXmlTemplateFlowBlock_TemplateField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DOCX template as a byte array, Base64 string, or file path. Placeholders are resolved in body, header, and footer paragraphs. ähnelt.
+        /// </summary>
+        public static string OpenXmlTemplateFlowBlock_TemplateField_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("OpenXmlTemplateFlowBlock_TemplateField_Tooltip", resourceCulture);
             }
         }
         
@@ -10443,6 +11571,160 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Downloads an object from Amazon S3 or an S3-compatible service such as MinIO as binary content. ähnelt.
+        /// </summary>
+        public static string S3DownloadObjectFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("S3DownloadObjectFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download object ähnelt.
+        /// </summary>
+        public static string S3DownloadObjectFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("S3DownloadObjectFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Bucket ähnelt.
+        /// </summary>
+        public static string S3StorageFlowBlock_BucketName
+        {
+            get
+            {
+                return ResourceManager.GetString("S3StorageFlowBlock_BucketName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die S3 bucket name. FlowBlox field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string S3StorageFlowBlock_BucketName_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("S3StorageFlowBlock_BucketName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Object key ähnelt.
+        /// </summary>
+        public static string S3StorageFlowBlock_ObjectKey
+        {
+            get
+            {
+                return ResourceManager.GetString("S3StorageFlowBlock_ObjectKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Complete object key inside the bucket. FlowBlox field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string S3StorageFlowBlock_ObjectKey_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("S3StorageFlowBlock_ObjectKey_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AWS/S3 provider ähnelt.
+        /// </summary>
+        public static string S3StorageFlowBlock_Provider
+        {
+            get
+            {
+                return ResourceManager.GetString("S3StorageFlowBlock_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Provider containing credentials, region, and an optional S3-compatible service URL. ähnelt.
+        /// </summary>
+        public static string S3StorageFlowBlock_Provider_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("S3StorageFlowBlock_Provider_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content ähnelt.
+        /// </summary>
+        public static string S3UploadObjectFlowBlock_ContentField
+        {
+            get
+            {
+                return ResourceManager.GetString("S3UploadObjectFlowBlock_ContentField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upload content as a byte array, Base64 string, file path, or plain text. ähnelt.
+        /// </summary>
+        public static string S3UploadObjectFlowBlock_ContentField_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("S3UploadObjectFlowBlock_ContentField_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content type ähnelt.
+        /// </summary>
+        public static string S3UploadObjectFlowBlock_ContentType
+        {
+            get
+            {
+                return ResourceManager.GetString("S3UploadObjectFlowBlock_ContentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional MIME type stored with the object, for example application/pdf. Field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string S3UploadObjectFlowBlock_ContentType_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("S3UploadObjectFlowBlock_ContentType_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uploads binary or text content to Amazon S3 or an S3-compatible service such as MinIO. ähnelt.
+        /// </summary>
+        public static string S3UploadObjectFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("S3UploadObjectFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upload object ähnelt.
+        /// </summary>
+        public static string S3UploadObjectFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("S3UploadObjectFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Detects predefined sequences within an input text based on recurring structural patterns. Sequence detection is especially useful for structured content where the overall structure remains the same while the actual values change, for example HTML pages with identical layout but different content depending on the URL or page request. At least two test cases must be defined under &quot;Test cases&quot;, each specifying an expected value and an expected number of occurrences. Based on these expectations, a hierarchical  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         public static string SequenceDetectionFlowBlock_Description
@@ -10505,6 +11787,446 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("SequenceDetectionGenerationStrategy_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string SftpAuthenticationMethod_Password
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpAuthenticationMethod_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password and private key ähnelt.
+        /// </summary>
+        public static string SftpAuthenticationMethod_PasswordAndPrivateKey
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpAuthenticationMethod_PasswordAndPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Private key ähnelt.
+        /// </summary>
+        public static string SftpAuthenticationMethod_PrivateKey
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpAuthenticationMethod_PrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Authentication method ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_AuthenticationMethod
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_AuthenticationMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects password authentication, private-key authentication, or both when the server requires multi-factor authentication. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_AuthenticationMethod_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_AuthenticationMethod_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SFTP connection ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SFTP connections ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_DisplayName_Plural
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Authentication ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Groups_Authentication
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Groups_Authentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Connection ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Groups_Connection
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Groups_Connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Host-key verification ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Groups_HostKeyVerification
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Groups_HostKeyVerification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password authentication ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Groups_PasswordAuthentication
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Groups_PasswordAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Private-key authentication ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Groups_PrivateKeyAuthentication
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Groups_PrivateKeyAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Host ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Host
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Host", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SFTP server host name or IP address. FlowBlox field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Host_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Host_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Host-key fingerprint ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_HostKeyFingerprint
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_HostKeyFingerprint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Expected SHA-256 host-key fingerprint, for example SHA256:.... Connections are rejected when it does not match. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_HostKeyFingerprint_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_HostKeyFingerprint_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Password ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Password
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional password authentication value. It can be used alone or together with a private key. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Password_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Password_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Port ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Port
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Port", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SSH/SFTP server port, normally 22. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_Port_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_Port_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Private key ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_PrivateKey
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_PrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional private key as PEM text, Base64 content, or file path. FlowBlox field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_PrivateKey_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_PrivateKey_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Private-key passphrase ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_PrivateKeyPassphrase
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_PrivateKeyPassphrase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional passphrase for an encrypted private key. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_PrivateKeyPassphrase_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_PrivateKeyPassphrase_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Trust any host key ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_TrustAnyHostKey
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_TrustAnyHostKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Disables host-key verification. Use only for controlled test environments because it permits man-in-the-middle attacks. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_TrustAnyHostKey_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_TrustAnyHostKey_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_UserName
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_UserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die User name used to authenticate with the SFTP server. FlowBlox field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string SftpConnectionProvider_UserName_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpConnectionProvider_UserName_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Downloads a file from an SFTP server and outputs its binary content. ähnelt.
+        /// </summary>
+        public static string SftpDownloadFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpDownloadFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download file ähnelt.
+        /// </summary>
+        public static string SftpDownloadFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpDownloadFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die SFTP connection ähnelt.
+        /// </summary>
+        public static string SftpFlowBlock_Connection
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpFlowBlock_Connection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Managed SFTP connection containing server, authentication, and host-key verification settings. ähnelt.
+        /// </summary>
+        public static string SftpFlowBlock_Connection_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpFlowBlock_Connection_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Remote path ähnelt.
+        /// </summary>
+        public static string SftpFlowBlock_RemotePath
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpFlowBlock_RemotePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Complete remote file path. FlowBlox field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string SftpFlowBlock_RemotePath_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpFlowBlock_RemotePath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content ähnelt.
+        /// </summary>
+        public static string SftpUploadFlowBlock_ContentField
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpUploadFlowBlock_ContentField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field containing the upload content as a byte array, Base64 string, file path, or plain text. ähnelt.
+        /// </summary>
+        public static string SftpUploadFlowBlock_ContentField_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpUploadFlowBlock_ContentField_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Uploads binary or text content to an SFTP server. ähnelt.
+        /// </summary>
+        public static string SftpUploadFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpUploadFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Upload file ähnelt.
+        /// </summary>
+        public static string SftpUploadFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpUploadFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Overwrite existing file ähnelt.
+        /// </summary>
+        public static string SftpUploadFlowBlock_Overwrite
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpUploadFlowBlock_Overwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allows an existing remote file to be replaced. ähnelt.
+        /// </summary>
+        public static string SftpUploadFlowBlock_Overwrite_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("SftpUploadFlowBlock_Overwrite_Tooltip", resourceCulture);
             }
         }
         
@@ -11730,6 +13452,28 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Clear on runtime start ähnelt.
+        /// </summary>
+        public static string TableWriterFlowBlock_ClearOnRuntimeStart
+        {
+            get
+            {
+                return ResourceManager.GetString("TableWriterFlowBlock_ClearOnRuntimeStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Clears the target table when the runtime starts so the output contains only data produced by the current run. ähnelt.
+        /// </summary>
+        public static string TableWriterFlowBlock_ClearOnRuntimeStart_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("TableWriterFlowBlock_ClearOnRuntimeStart_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die A column with the name &quot;{0}&quot; already exists. ähnelt.
         /// </summary>
         public static string TableWriterFlowBlock_ColumnAlreadyExists
@@ -11869,6 +13613,215 @@ namespace FlowBlox.Core
             get
             {
                 return ResourceManager.GetString("TextBoxWithOptionalButtonsCreator_EnableToolbox_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Append line break ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_AppendLine
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_AppendLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Appends the platform line break after the text. ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_AppendLine_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_AppendLine_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated text builder ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_AssociatedTextBuilder
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_AssociatedTextBuilder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text builder whose content is modified. If empty, the previous text builder on the execution path is used. ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_AssociatedTextBuilder_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_AssociatedTextBuilder_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Appends resolved text to an internally managed text builder, optionally followed by a line break. ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text builder: Append text ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed text builder from a text builder flow block. ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_SpecialExplanation_ExternalFlowBlocks
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_Text
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text to append. FlowBlox field placeholders are replaced when this flow block executes. ähnelt.
+        /// </summary>
+        public static string TextBuilderAppendFlowBlock_Text_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderAppendFlowBlock_Text_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates an internally managed text builder and optionally initializes it with text. ähnelt.
+        /// </summary>
+        public static string TextBuilderFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text builder ähnelt.
+        /// </summary>
+        public static string TextBuilderFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Initial text ähnelt.
+        /// </summary>
+        public static string TextBuilderFlowBlock_InitialText
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderFlowBlock_InitialText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional initial content. FlowBlox field placeholders are replaced when this flow block executes. ähnelt.
+        /// </summary>
+        public static string TextBuilderFlowBlock_InitialText_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderFlowBlock_InitialText_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block creates and internally manages the text builder used by associated text builder flow blocks. ähnelt.
+        /// </summary>
+        public static string TextBuilderFlowBlock_SpecialExplanation_ManagedResource
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderFlowBlock_SpecialExplanation_ManagedResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Associated text builder ähnelt.
+        /// </summary>
+        public static string TextBuilderOutputFlowBlock_AssociatedTextBuilder
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderOutputFlowBlock_AssociatedTextBuilder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text builder whose complete content is output. If empty, the previous text builder on the execution path is used. ähnelt.
+        /// </summary>
+        public static string TextBuilderOutputFlowBlock_AssociatedTextBuilder_Tooltip
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderOutputFlowBlock_AssociatedTextBuilder_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Outputs the complete content of an internally managed text builder. ähnelt.
+        /// </summary>
+        public static string TextBuilderOutputFlowBlock_Description
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderOutputFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text builder: Output ähnelt.
+        /// </summary>
+        public static string TextBuilderOutputFlowBlock_DisplayName
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderOutputFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed text builder from a text builder flow block. ähnelt.
+        /// </summary>
+        public static string TextBuilderOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks
+        {
+            get
+            {
+                return ResourceManager.GetString("TextBuilderOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
             }
         }
         
@@ -14262,7 +16215,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Write XML node ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document: Write XML node ähnelt.
         /// </summary>
         public static string XmlDocumentNodeWriterFlowBlock_DisplayName
         {
@@ -14396,7 +16349,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XML document output ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document: Output ähnelt.
         /// </summary>
         public static string XmlDocumentOutputFlowBlock_DisplayName
         {
@@ -14495,7 +16448,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The XML document flow block that manages the internal XML document used for XPath selection. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The XML document flow block that manages the internal XML document used for XPath selection, including changes made by XML node writers. ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelector_AssociatedXmlDocument_Tooltip
         {
@@ -14517,7 +16470,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XPath selector ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML document: XPath selector ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelector_DisplayName
         {
@@ -14537,7 +16490,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XmlDocumentXPathSelector_DocumentSource", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No matching XML nodes or attributes found ähnelt.
+        /// </summary>
         public static string XmlDocumentXPathSelector_Notification_NoMatchingValuesFound
         {
             get
@@ -14545,7 +16501,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XmlDocumentXPathSelector_Notification_NoMatchingValuesFound", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression is empty ähnelt.
+        /// </summary>
         public static string XmlDocumentXPathSelector_Notification_XPathExpressionIsEmpty
         {
             get
@@ -14564,7 +16523,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XmlDocumentXPathSelector_XPath", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression applied to the managed XML document. Select elements to return their inner XML, or end the expression with an attribute step such as &apos;//item/@id&apos; to return attribute values. Fields from input flow blocks can be used. ähnelt.
+        /// </summary>
         public static string XmlDocumentXPathSelector_XPath_Tooltip
         {
             get
@@ -14574,7 +16536,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and reads node content by XPath. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and reads node content or attribute values by XPath. ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelectorFlowBlock_ExternalFlowBlocks_Explanation0
         {
@@ -14596,7 +16558,7 @@ namespace FlowBlox.Core
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and reads node content by XPath. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block uses the internally managed XML document from an XML document flow block and reads node content or attribute values by XPath. ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks
         {
@@ -14605,7 +16567,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Selects XML node content by XPath. ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_Description
         {
             get
@@ -14613,7 +16578,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XPathSelectorFlowBlock_Description", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath selector ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_DisplayName
         {
             get
@@ -14621,7 +16589,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XPathSelectorFlowBlock_DisplayName", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No matching XML nodes or attributes found ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_Notification_NoMatchingValuesFound
         {
             get
@@ -14629,7 +16600,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XPathSelectorFlowBlock_Notification_NoMatchingValuesFound", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML content is empty ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_Notification_XmlContentIsEmpty
         {
             get
@@ -14637,7 +16611,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XPathSelectorFlowBlock_Notification_XmlContentIsEmpty", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression is empty ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_Notification_XPathExpressionIsEmpty
         {
             get
@@ -14645,7 +16622,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XPathSelectorFlowBlock_Notification_XPathExpressionIsEmpty", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XML content ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_XmlContent
         {
             get
@@ -14653,7 +16633,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XPathSelectorFlowBlock_XmlContent", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The XML text to parse for this execution. Static text and fields from one or more input flow blocks can be combined. ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_XmlContent_Tooltip
         {
             get
@@ -14661,7 +16644,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XPathSelectorFlowBlock_XmlContent_Tooltip", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_XPath
         {
             get
@@ -14669,7 +16655,10 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("XPathSelectorFlowBlock_XPath", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression applied directly to the XML content. Select elements to return their inner XML, or end the expression with an attribute step such as &apos;//item/@id&apos; to return attribute values. Fields from input flow blocks can be used. ähnelt.
+        /// </summary>
         public static string XPathSelectorFlowBlock_XPath_Tooltip
         {
             get
@@ -15084,167 +17073,5 @@ namespace FlowBlox.Core
                 return ResourceManager.GetString("ZipCompressionStrength_VeryHigh", resourceCulture);
             }
         }
-
-        public static string OpenXmlTemplateFlowBlock_DisplayName => ResourceManager.GetString(nameof(OpenXmlTemplateFlowBlock_DisplayName), resourceCulture);
-        public static string OpenXmlTemplateFlowBlock_Description => ResourceManager.GetString(nameof(OpenXmlTemplateFlowBlock_Description), resourceCulture);
-        public static string OpenXmlTemplateFlowBlock_TemplateField => ResourceManager.GetString(nameof(OpenXmlTemplateFlowBlock_TemplateField), resourceCulture);
-        public static string OpenXmlTemplateFlowBlock_TemplateField_Tooltip => ResourceManager.GetString(nameof(OpenXmlTemplateFlowBlock_TemplateField_Tooltip), resourceCulture);
-        public static string AsposeWordToPdfFlowBlock_DisplayName => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_DisplayName), resourceCulture);
-        public static string AsposeWordToPdfFlowBlock_Description => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_Description), resourceCulture);
-        public static string AsposeWordToPdfFlowBlock_WordDocumentField => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_WordDocumentField), resourceCulture);
-        public static string AsposeWordToPdfFlowBlock_WordDocumentField_Tooltip => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_WordDocumentField_Tooltip), resourceCulture);
-        public static string AsposeWordToPdfFlowBlock_Compliance => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_Compliance), resourceCulture);
-        public static string AsposeWordToPdfFlowBlock_Compliance_Tooltip => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlock_Compliance_Tooltip), resourceCulture);
-        public static string AsposePdfCompliance_Pdf => ResourceManager.GetString(nameof(AsposePdfCompliance_Pdf), resourceCulture);
-        public static string AsposePdfCompliance_PdfA1b => ResourceManager.GetString(nameof(AsposePdfCompliance_PdfA1b), resourceCulture);
-        public static string AsposePdfCompliance_PdfA2u => ResourceManager.GetString(nameof(AsposePdfCompliance_PdfA2u), resourceCulture);
-        public static string AsposePdfCompliance_PdfA3u => ResourceManager.GetString(nameof(AsposePdfCompliance_PdfA3u), resourceCulture);
-        public static string AsposePdfCompliance_PdfA4 => ResourceManager.GetString(nameof(AsposePdfCompliance_PdfA4), resourceCulture);
-        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense => ResourceManager.GetString(nameof(AsposeWordToPdfFlowBlockUIActions_ImportLicense), resourceCulture);
-        public static string TextBuilderFlowBlock_DisplayName => ResourceManager.GetString(nameof(TextBuilderFlowBlock_DisplayName), resourceCulture);
-        public static string TextBuilderFlowBlock_Description => ResourceManager.GetString(nameof(TextBuilderFlowBlock_Description), resourceCulture);
-        public static string TextBuilderFlowBlock_InitialText => ResourceManager.GetString(nameof(TextBuilderFlowBlock_InitialText), resourceCulture);
-        public static string TextBuilderFlowBlock_InitialText_Tooltip => ResourceManager.GetString(nameof(TextBuilderFlowBlock_InitialText_Tooltip), resourceCulture);
-        public static string TextBuilderAppendFlowBlock_DisplayName => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_DisplayName), resourceCulture);
-        public static string TextBuilderAppendFlowBlock_Description => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_Description), resourceCulture);
-        public static string TextBuilderAppendFlowBlock_AssociatedTextBuilder => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_AssociatedTextBuilder), resourceCulture);
-        public static string TextBuilderAppendFlowBlock_AssociatedTextBuilder_Tooltip => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_AssociatedTextBuilder_Tooltip), resourceCulture);
-        public static string TextBuilderAppendFlowBlock_Text => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_Text), resourceCulture);
-        public static string TextBuilderAppendFlowBlock_Text_Tooltip => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_Text_Tooltip), resourceCulture);
-        public static string TextBuilderAppendFlowBlock_AppendLine => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_AppendLine), resourceCulture);
-        public static string TextBuilderAppendFlowBlock_AppendLine_Tooltip => ResourceManager.GetString(nameof(TextBuilderAppendFlowBlock_AppendLine_Tooltip), resourceCulture);
-        public static string TextBuilderOutputFlowBlock_DisplayName => ResourceManager.GetString(nameof(TextBuilderOutputFlowBlock_DisplayName), resourceCulture);
-        public static string TextBuilderOutputFlowBlock_Description => ResourceManager.GetString(nameof(TextBuilderOutputFlowBlock_Description), resourceCulture);
-        public static string TextBuilderOutputFlowBlock_AssociatedTextBuilder => ResourceManager.GetString(nameof(TextBuilderOutputFlowBlock_AssociatedTextBuilder), resourceCulture);
-        public static string TextBuilderOutputFlowBlock_AssociatedTextBuilder_Tooltip => ResourceManager.GetString(nameof(TextBuilderOutputFlowBlock_AssociatedTextBuilder_Tooltip), resourceCulture);
-        public static string AmazonWebServicesProvider_S3ServiceUrl => ResourceManager.GetString(nameof(AmazonWebServicesProvider_S3ServiceUrl), resourceCulture);
-        public static string AmazonWebServicesProvider_S3ServiceUrl_Tooltip => ResourceManager.GetString(nameof(AmazonWebServicesProvider_S3ServiceUrl_Tooltip), resourceCulture);
-        public static string AmazonWebServicesProvider_S3ForcePathStyle => ResourceManager.GetString(nameof(AmazonWebServicesProvider_S3ForcePathStyle), resourceCulture);
-        public static string AmazonWebServicesProvider_S3ForcePathStyle_Tooltip => ResourceManager.GetString(nameof(AmazonWebServicesProvider_S3ForcePathStyle_Tooltip), resourceCulture);
-        public static string S3DownloadObjectFlowBlock_DisplayName => ResourceManager.GetString(nameof(S3DownloadObjectFlowBlock_DisplayName), resourceCulture);
-        public static string S3DownloadObjectFlowBlock_Description => ResourceManager.GetString(nameof(S3DownloadObjectFlowBlock_Description), resourceCulture);
-        public static string S3UploadObjectFlowBlock_DisplayName => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_DisplayName), resourceCulture);
-        public static string S3UploadObjectFlowBlock_Description => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_Description), resourceCulture);
-        public static string S3StorageFlowBlock_Provider => ResourceManager.GetString(nameof(S3StorageFlowBlock_Provider), resourceCulture);
-        public static string S3StorageFlowBlock_Provider_Tooltip => ResourceManager.GetString(nameof(S3StorageFlowBlock_Provider_Tooltip), resourceCulture);
-        public static string S3StorageFlowBlock_BucketName => ResourceManager.GetString(nameof(S3StorageFlowBlock_BucketName), resourceCulture);
-        public static string S3StorageFlowBlock_BucketName_Tooltip => ResourceManager.GetString(nameof(S3StorageFlowBlock_BucketName_Tooltip), resourceCulture);
-        public static string S3StorageFlowBlock_ObjectKey => ResourceManager.GetString(nameof(S3StorageFlowBlock_ObjectKey), resourceCulture);
-        public static string S3StorageFlowBlock_ObjectKey_Tooltip => ResourceManager.GetString(nameof(S3StorageFlowBlock_ObjectKey_Tooltip), resourceCulture);
-        public static string S3UploadObjectFlowBlock_ContentField => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_ContentField), resourceCulture);
-        public static string S3UploadObjectFlowBlock_ContentField_Tooltip => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_ContentField_Tooltip), resourceCulture);
-        public static string S3UploadObjectFlowBlock_ContentType => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_ContentType), resourceCulture);
-        public static string S3UploadObjectFlowBlock_ContentType_Tooltip => ResourceManager.GetString(nameof(S3UploadObjectFlowBlock_ContentType_Tooltip), resourceCulture);
-        public static string HashModifier_DisplayName => ResourceManager.GetString(nameof(HashModifier_DisplayName), resourceCulture);
-        public static string HashModifier_Algorithm => ResourceManager.GetString(nameof(HashModifier_Algorithm), resourceCulture);
-        public static string HashModifier_Algorithm_Tooltip => ResourceManager.GetString(nameof(HashModifier_Algorithm_Tooltip), resourceCulture);
-        public static string HashModifier_OutputEncoding => ResourceManager.GetString(nameof(HashModifier_OutputEncoding), resourceCulture);
-        public static string HashModifier_OutputEncoding_Tooltip => ResourceManager.GetString(nameof(HashModifier_OutputEncoding_Tooltip), resourceCulture);
-        public static string HmacModifier_DisplayName => ResourceManager.GetString(nameof(HmacModifier_DisplayName), resourceCulture);
-        public static string HmacModifier_Algorithm => ResourceManager.GetString(nameof(HmacModifier_Algorithm), resourceCulture);
-        public static string HmacModifier_Algorithm_Tooltip => ResourceManager.GetString(nameof(HmacModifier_Algorithm_Tooltip), resourceCulture);
-        public static string HmacModifier_SecretKey => ResourceManager.GetString(nameof(HmacModifier_SecretKey), resourceCulture);
-        public static string HmacModifier_SecretKey_Tooltip => ResourceManager.GetString(nameof(HmacModifier_SecretKey_Tooltip), resourceCulture);
-        public static string HmacModifier_KeyEncoding => ResourceManager.GetString(nameof(HmacModifier_KeyEncoding), resourceCulture);
-        public static string HmacModifier_KeyEncoding_Tooltip => ResourceManager.GetString(nameof(HmacModifier_KeyEncoding_Tooltip), resourceCulture);
-        public static string CryptographicHashAlgorithm_SHA256 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_SHA256), resourceCulture);
-        public static string CryptographicHashAlgorithm_SHA384 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_SHA384), resourceCulture);
-        public static string CryptographicHashAlgorithm_SHA512 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_SHA512), resourceCulture);
-        public static string CryptographicHashAlgorithm_SHA1 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_SHA1), resourceCulture);
-        public static string CryptographicHashAlgorithm_MD5 => ResourceManager.GetString(nameof(CryptographicHashAlgorithm_MD5), resourceCulture);
-        public static string CryptographicOutputEncoding_HexLowerCase => ResourceManager.GetString(nameof(CryptographicOutputEncoding_HexLowerCase), resourceCulture);
-        public static string CryptographicOutputEncoding_HexUpperCase => ResourceManager.GetString(nameof(CryptographicOutputEncoding_HexUpperCase), resourceCulture);
-        public static string CryptographicOutputEncoding_Base64 => ResourceManager.GetString(nameof(CryptographicOutputEncoding_Base64), resourceCulture);
-        public static string CryptographicKeyEncoding_Text => ResourceManager.GetString(nameof(CryptographicKeyEncoding_Text), resourceCulture);
-        public static string CryptographicKeyEncoding_Base64 => ResourceManager.GetString(nameof(CryptographicKeyEncoding_Base64), resourceCulture);
-        public static string CryptographicKeyEncoding_Hex => ResourceManager.GetString(nameof(CryptographicKeyEncoding_Hex), resourceCulture);
-        public static string SftpConnectionProvider_DisplayName => ResourceManager.GetString(nameof(SftpConnectionProvider_DisplayName), resourceCulture);
-        public static string SftpConnectionProvider_DisplayName_Plural => ResourceManager.GetString(nameof(SftpConnectionProvider_DisplayName_Plural), resourceCulture);
-        public static string SftpConnectionProvider_Host => ResourceManager.GetString(nameof(SftpConnectionProvider_Host), resourceCulture);
-        public static string SftpConnectionProvider_Host_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_Host_Tooltip), resourceCulture);
-        public static string SftpConnectionProvider_Port => ResourceManager.GetString(nameof(SftpConnectionProvider_Port), resourceCulture);
-        public static string SftpConnectionProvider_Port_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_Port_Tooltip), resourceCulture);
-        public static string SftpConnectionProvider_UserName => ResourceManager.GetString(nameof(SftpConnectionProvider_UserName), resourceCulture);
-        public static string SftpConnectionProvider_UserName_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_UserName_Tooltip), resourceCulture);
-        public static string SftpConnectionProvider_Password => ResourceManager.GetString(nameof(SftpConnectionProvider_Password), resourceCulture);
-        public static string SftpConnectionProvider_Password_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_Password_Tooltip), resourceCulture);
-        public static string SftpConnectionProvider_PrivateKey => ResourceManager.GetString(nameof(SftpConnectionProvider_PrivateKey), resourceCulture);
-        public static string SftpConnectionProvider_PrivateKey_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_PrivateKey_Tooltip), resourceCulture);
-        public static string SftpConnectionProvider_PrivateKeyPassphrase => ResourceManager.GetString(nameof(SftpConnectionProvider_PrivateKeyPassphrase), resourceCulture);
-        public static string SftpConnectionProvider_PrivateKeyPassphrase_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_PrivateKeyPassphrase_Tooltip), resourceCulture);
-        public static string SftpConnectionProvider_HostKeyFingerprint => ResourceManager.GetString(nameof(SftpConnectionProvider_HostKeyFingerprint), resourceCulture);
-        public static string SftpConnectionProvider_HostKeyFingerprint_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_HostKeyFingerprint_Tooltip), resourceCulture);
-        public static string SftpConnectionProvider_TrustAnyHostKey => ResourceManager.GetString(nameof(SftpConnectionProvider_TrustAnyHostKey), resourceCulture);
-        public static string SftpConnectionProvider_TrustAnyHostKey_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_TrustAnyHostKey_Tooltip), resourceCulture);
-        public static string SftpDownloadFlowBlock_DisplayName => ResourceManager.GetString(nameof(SftpDownloadFlowBlock_DisplayName), resourceCulture);
-        public static string SftpDownloadFlowBlock_Description => ResourceManager.GetString(nameof(SftpDownloadFlowBlock_Description), resourceCulture);
-        public static string SftpUploadFlowBlock_DisplayName => ResourceManager.GetString(nameof(SftpUploadFlowBlock_DisplayName), resourceCulture);
-        public static string SftpUploadFlowBlock_Description => ResourceManager.GetString(nameof(SftpUploadFlowBlock_Description), resourceCulture);
-        public static string SftpFlowBlock_Connection => ResourceManager.GetString(nameof(SftpFlowBlock_Connection), resourceCulture);
-        public static string SftpFlowBlock_Connection_Tooltip => ResourceManager.GetString(nameof(SftpFlowBlock_Connection_Tooltip), resourceCulture);
-        public static string SftpFlowBlock_RemotePath => ResourceManager.GetString(nameof(SftpFlowBlock_RemotePath), resourceCulture);
-        public static string SftpFlowBlock_RemotePath_Tooltip => ResourceManager.GetString(nameof(SftpFlowBlock_RemotePath_Tooltip), resourceCulture);
-        public static string SftpUploadFlowBlock_ContentField => ResourceManager.GetString(nameof(SftpUploadFlowBlock_ContentField), resourceCulture);
-        public static string SftpUploadFlowBlock_ContentField_Tooltip => ResourceManager.GetString(nameof(SftpUploadFlowBlock_ContentField_Tooltip), resourceCulture);
-        public static string SftpUploadFlowBlock_Overwrite => ResourceManager.GetString(nameof(SftpUploadFlowBlock_Overwrite), resourceCulture);
-        public static string SftpUploadFlowBlock_Overwrite_Tooltip => ResourceManager.GetString(nameof(SftpUploadFlowBlock_Overwrite_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_DisplayName => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_DisplayName), resourceCulture);
-        public static string OpenApiRestFlowBlock_Description => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Description), resourceCulture);
-        public static string OpenApiRestFlowBlock_OpenApiSource => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_OpenApiSource), resourceCulture);
-        public static string OpenApiRestFlowBlock_OpenApiSource_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_OpenApiSource_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_Endpoint => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Endpoint), resourceCulture);
-        public static string OpenApiRestFlowBlock_Endpoint_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Endpoint_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_BaseUrl => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_BaseUrl), resourceCulture);
-        public static string OpenApiRestFlowBlock_BaseUrl_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_BaseUrl_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_EndpointDescription => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_EndpointDescription), resourceCulture);
-        public static string OpenApiRestFlowBlock_EndpointDescription_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_EndpointDescription_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_DefinitionError => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_DefinitionError), resourceCulture);
-        public static string OpenApiRestFlowBlock_DefinitionError_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_DefinitionError_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_BearerToken => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_BearerToken), resourceCulture);
-        public static string OpenApiRestFlowBlock_BearerToken_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_BearerToken_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_HeaderParameters => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_HeaderParameters), resourceCulture);
-        public static string OpenApiRestFlowBlock_HeaderParameters_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_HeaderParameters_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_RequestParameters => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_RequestParameters), resourceCulture);
-        public static string OpenApiRestFlowBlock_RequestParameters_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_RequestParameters_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_ContentType => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_ContentType), resourceCulture);
-        public static string OpenApiRestFlowBlock_ContentType_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_ContentType_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_Payload => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Payload), resourceCulture);
-        public static string OpenApiRestFlowBlock_Payload_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_Payload_Tooltip), resourceCulture);
-        public static string OpenApiRestFlowBlock_ResultFields => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_ResultFields), resourceCulture);
-        public static string OpenApiRestFlowBlock_ResultFields_Tooltip => ResourceManager.GetString(nameof(OpenApiRestFlowBlock_ResultFields_Tooltip), resourceCulture);
-        public static string OpenApiParameterValue_Name => ResourceManager.GetString(nameof(OpenApiParameterValue_Name), resourceCulture);
-        public static string OpenApiParameterValue_Location => ResourceManager.GetString(nameof(OpenApiParameterValue_Location), resourceCulture);
-        public static string OpenApiParameterValue_Required => ResourceManager.GetString(nameof(OpenApiParameterValue_Required), resourceCulture);
-        public static string OpenApiParameterValue_Description => ResourceManager.GetString(nameof(OpenApiParameterValue_Description), resourceCulture);
-        public static string OpenApiParameterValue_Value => ResourceManager.GetString(nameof(OpenApiParameterValue_Value), resourceCulture);
-        public static string OpenApiRestDestinations_Payload => ResourceManager.GetString(nameof(OpenApiRestDestinations_Payload), resourceCulture);
-        public static string OpenApiRestDestinations_StatusCode => ResourceManager.GetString(nameof(OpenApiRestDestinations_StatusCode), resourceCulture);
-        public static string OpenApiRestDestinations_Status => ResourceManager.GetString(nameof(OpenApiRestDestinations_Status), resourceCulture);
-        public static string OpenApiRestDestinations_ErrorMessage => ResourceManager.GetString(nameof(OpenApiRestDestinations_ErrorMessage), resourceCulture);
-        public static string OpenApiRestDestinations_ResponseHeaders => ResourceManager.GetString(nameof(OpenApiRestDestinations_ResponseHeaders), resourceCulture);
-        public static string OpenApiRestDestinations_Url => ResourceManager.GetString(nameof(OpenApiRestDestinations_Url), resourceCulture);
-        public static string OAuthFlowBlock_TokenEndpoint_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_TokenEndpoint_Tooltip), resourceCulture);
-        public static string OAuthFlowBlock_ClientId_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_ClientId_Tooltip), resourceCulture);
-        public static string OAuthFlowBlock_ClientSecret_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_ClientSecret_Tooltip), resourceCulture);
-        public static string OAuthFlowBlock_Scope_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_Scope_Tooltip), resourceCulture);
-        public static string OAuthFlowBlock_Audience_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_Audience_Tooltip), resourceCulture);
-        public static string OAuthFlowBlock_GrantType_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_GrantType_Tooltip), resourceCulture);
-        public static string OAuthFlowBlock_SendClientCredentialsInBody_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_SendClientCredentialsInBody_Tooltip), resourceCulture);
-        public static string OAuthFlowBlock_UserName => ResourceManager.GetString(nameof(OAuthFlowBlock_UserName), resourceCulture);
-        public static string OAuthFlowBlock_UserName_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_UserName_Tooltip), resourceCulture);
-        public static string OAuthFlowBlock_Password => ResourceManager.GetString(nameof(OAuthFlowBlock_Password), resourceCulture);
-        public static string OAuthFlowBlock_Password_Tooltip => ResourceManager.GetString(nameof(OAuthFlowBlock_Password_Tooltip), resourceCulture);
-        public static string OAuthGrantType_ClientCredentials => ResourceManager.GetString(nameof(OAuthGrantType_ClientCredentials), resourceCulture);
-        public static string OAuthGrantType_Password => ResourceManager.GetString(nameof(OAuthGrantType_Password), resourceCulture);
-        public static string SftpConnectionProvider_Groups_Connection => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_Connection), resourceCulture);
-        public static string SftpConnectionProvider_Groups_Authentication => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_Authentication), resourceCulture);
-        public static string SftpConnectionProvider_Groups_PasswordAuthentication => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_PasswordAuthentication), resourceCulture);
-        public static string SftpConnectionProvider_Groups_PrivateKeyAuthentication => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_PrivateKeyAuthentication), resourceCulture);
-        public static string SftpConnectionProvider_Groups_HostKeyVerification => ResourceManager.GetString(nameof(SftpConnectionProvider_Groups_HostKeyVerification), resourceCulture);
-        public static string SftpConnectionProvider_AuthenticationMethod => ResourceManager.GetString(nameof(SftpConnectionProvider_AuthenticationMethod), resourceCulture);
-        public static string SftpConnectionProvider_AuthenticationMethod_Tooltip => ResourceManager.GetString(nameof(SftpConnectionProvider_AuthenticationMethod_Tooltip), resourceCulture);
-        public static string SftpAuthenticationMethod_Password => ResourceManager.GetString(nameof(SftpAuthenticationMethod_Password), resourceCulture);
-        public static string SftpAuthenticationMethod_PrivateKey => ResourceManager.GetString(nameof(SftpAuthenticationMethod_PrivateKey), resourceCulture);
-        public static string SftpAuthenticationMethod_PasswordAndPrivateKey => ResourceManager.GetString(nameof(SftpAuthenticationMethod_PasswordAndPrivateKey), resourceCulture);
     }
 }

@@ -1,9 +1,11 @@
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Views;
 using System.Windows;
+using TestDefinitionViewFactoryResources = FlowBlox.UICore.Resources.ClassResources.TestDefinitionViewFactory;
 
 namespace FlowBlox.UICore.Factory
 {
@@ -24,7 +26,9 @@ namespace FlowBlox.UICore.Factory
                 return true;
             }
 
-            message = "At least one Start FlowBlock is required before test cases can be created.";
+            message = FlowBloxResourceUtil.GetLocalizedString(
+                nameof(TestDefinitionViewFactoryResources.StartFlowBlockRequired),
+                typeof(TestDefinitionViewFactoryResources));
             return false;
         }
 

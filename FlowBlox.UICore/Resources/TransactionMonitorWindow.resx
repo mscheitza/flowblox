@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Title" xml:space="preserve"><value>Transaction monitor</value></data>
+  <data name="Header" xml:space="preserve"><value>Registry transactions</value></data>
+  <data name="ShortcutHint" xml:space="preserve"><value>Live diagnostic view · Ctrl+Alt+T</value></data>
+  <data name="ActiveTransactions" xml:space="preserve"><value>Active transactions</value></data>
+  <data name="CurrentTransaction" xml:space="preserve"><value>Current transaction</value></data>
+  <data name="Current_Root" xml:space="preserve"><value>Root registry · direct repository access</value></data>
+  <data name="RootExplanation" xml:space="preserve"><value>If no transaction is active, the root registry is current and changes are made directly in the repository. Completed transactions remain visible in the history.</value></data>
+  <data name="Column_Target" xml:space="preserve"><value>Target</value></data>
+  <data name="Column_Registry" xml:space="preserve"><value>Registry</value></data>
+  <data name="Column_Mode" xml:space="preserve"><value>Mode</value></data>
+  <data name="Column_Depth" xml:space="preserve"><value>Depth</value></data>
+  <data name="Column_Opened" xml:space="preserve"><value>Opened</value></data>
+  <data name="Column_Closed" xml:space="preserve"><value>Closed</value></data>
+  <data name="Column_State" xml:space="preserve"><value>State</value></data>
+  <data name="Mode_Standard" xml:space="preserve"><value>Standard</value></data>
+  <data name="Mode_Detached" xml:space="preserve"><value>Detached</value></data>
+  <data name="State_Active" xml:space="preserve"><value>Active</value></data>
+  <data name="State_Committed" xml:space="preserve"><value>Committed</value></data>
+  <data name="State_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="Target_Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="Depth" xml:space="preserve"><value>Depth</value></data>
+  <data name="ContextMenu_ClearInactiveTransactions" xml:space="preserve"><value>Clear inactive transactions</value></data>
+</root>
