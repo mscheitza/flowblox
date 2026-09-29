@@ -20,6 +20,40 @@
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="DescriptionLinkStyle" TargetType="Button">
+                <Setter Property="Foreground" Value="#256B9A" />
+                <Setter Property="Background" Value="#EAF4FC" />
+                <Setter Property="BorderBrush" Value="#C7E2F4" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Padding" Value="7,2" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="LinkBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="7"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="LinkBorder" Property="Background" Value="#DCEFFC" />
+                                    <Setter TargetName="LinkBorder" Property="BorderBrush" Value="#9CCBEA" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter TargetName="LinkBorder" Property="BorderBrush" Value="#4B92C3" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 

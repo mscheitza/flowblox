@@ -80,7 +80,9 @@ namespace FlowBlox.Core.Util
                 new OptionElement("FieldView.ShowFlowBlock", "false", "Show or hide the Flow Block column in the FieldView.", OptionElement.OptionType.Boolean, "FieldView: Show Flow Block"),
                 new OptionElement("FieldView.SingleLineFieldValues", "false", "Show field values in single-line mode in the FieldView.", OptionElement.OptionType.Boolean, "FieldView: 1 Line Values"),
                 new OptionElement("TestDefinitionView.HideLastLayerNeighbours", "true", "Hide sibling flow blocks in the target flow block layer when editing a test definition in flow-block context.", OptionElement.OptionType.Boolean),
-                new OptionElement("PropertyWindow.ApplyButtonSelection", "Apply", "Action executed by the Apply split button. Possible values: Apply, ApplyWithoutVerification.", OptionElement.OptionType.Text),
+                new OptionElement("PropertyWindow.EnableApplySplitButton", "true", "Use a split button for Apply actions in the property window. If disabled, Apply and Apply without verification are displayed as separate buttons.", OptionElement.OptionType.Boolean, "Property window: Apply split button"),
+                new OptionElement("PropertyWindow.EnableSaveSplitButton", "true", "Use a split button for Save actions in the property window. If disabled, Save and Save without verification are displayed as separate buttons.", OptionElement.OptionType.Boolean, "Property window: Save split button"),
+                new OptionElement("PropertyWindow.ApplyButtonSelection", "ApplyWithoutVerification", "Action executed by the Apply split button. Possible values: Apply, ApplyWithoutVerification.", OptionElement.OptionType.Text),
                 new OptionElement("PropertyWindow.SaveButtonSelection", "Save", "Action executed by the Save split button. Possible values: Save, SaveWithoutVerification.", OptionElement.OptionType.Text),
 
                 new OptionElement("Paths.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "Toolbox directory path.", OptionElement.OptionType.Text),

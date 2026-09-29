@@ -25,6 +25,16 @@
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="PopUp\Resources\WebBrowserPopUpImages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebBrowserPopUpImages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PopUp\Resources\WebBrowserPopUpTexts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WebBrowserPopUpTexts.resx</DependentUpon>
+    </Compile>
     <Compile Update="PopUp\Resources\SequenceDetectionPopUpImages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -280,6 +290,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="PopUp\Resources\WebBrowserPopUpImages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebBrowserPopUpImages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="PopUp\Resources\SequenceDetectionPopUpImages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SequenceDetectionPopUpImages.Designer.cs</LastGenOutput>
@@ -482,6 +496,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="PopUp\Resources\SequenceDetectionPopUpTexts.resx">
       <LastGenOutput>SequenceDetectionPopUpTexts.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PopUp\Resources\WebBrowserPopUpTexts.resx">
+      <LastGenOutput>WebBrowserPopUpTexts.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="PopUp\Resources\ComponentPopupWindowResources.resx">

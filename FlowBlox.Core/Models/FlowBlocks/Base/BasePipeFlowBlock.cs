@@ -34,6 +34,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 return;
 
             InputField = sourceFields[0];
+            OnPropertyChanged(nameof(InputField));
         }
 
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.One;

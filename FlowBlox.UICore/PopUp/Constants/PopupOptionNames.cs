@@ -5,5 +5,7 @@ namespace FlowBlox.UICore.PopUp.Constants
         public const string ShowComponentPopupOnValidationFailed = "PopUp.Component.ShowPopupOnValidationFailed";
 
         public const string ShowSequenceDetectionPopupOnOpen = "PopUp.SequenceDetection.ShowPopupOnOpen";
+
+        public const string ShowWebBrowserPopupOnOpen = "PopUp.WebBrowser.ShowPopupOnOpen";
     }
 }

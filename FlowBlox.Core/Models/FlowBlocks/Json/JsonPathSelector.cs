@@ -8,7 +8,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         /// Navigates through a JObject/JArray using a slash-delimited path.
         /// </summary>
         /// <param name="root">The starting token (must be a JObject or JArray).</param>
-        /// <param name="path">Path in the format "participants/addresses", "participants/addresses/0" or "addresses/@Country=Germany/Street".</param>
+        /// <param name="path">Path in the format "$", "$/id", "participants/addresses", "participants/addresses/0" or "addresses/@Country=Germany/Street".</param>
         /// <param name="parent">The parent token of the target path (JObject or JArray).</param>
         /// <param name="propertyName">The property name or array index (as a string) of the target path.</param>
         /// <returns>The token at the specified path, or null if it does not exist.</returns>
@@ -27,7 +27,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                 return root;
             }
 
-            var parts = path.Split(['/'], StringSplitOptions.RemoveEmptyEntries);
+            var normalizedPath = path.Trim();
+            if (normalizedPath == "$")
+                return root;
+
+            if (normalizedPath.StartsWith("$/", StringComparison.Ordinal))
+                normalizedPath = normalizedPath[2..];
+
+            if (string.IsNullOrWhiteSpace(normalizedPath))
+                return root;
+
+            var parts = normalizedPath.Split(['/'], StringSplitOptions.RemoveEmptyEntries);
             JToken current = root;
 
             for (int i = 0; i < parts.Length; i++)

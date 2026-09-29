@@ -43,6 +43,27 @@ namespace FlowBloxTest.FlowBlocks.Json
         }
 
         [TestMethod]
+        public void GetJToken_SupportsRootArrayIdentifierAndProjection()
+        {
+            var root = JToken.Parse("""
+            [
+              { "id": "first" },
+              { "id": "second" }
+            ]
+            """);
+
+            var rootResult = JsonPathSelector.GetJToken(root, "$", out var parent, out var propertyName);
+            var idResult = JsonPathSelector.GetJToken(root, "$/id", out _, out _);
+
+            Assert.AreSame(root, rootResult);
+            Assert.IsNull(parent);
+            Assert.IsNull(propertyName);
+            CollectionAssert.AreEqual(
+                new[] { "first", "second" },
+                ((JArray)idResult).Select(x => x.ToString()).ToArray());
+        }
+
+        [TestMethod]
         public void GetJToken_FiltersArrayAndReturnsMatchingObjects()
         {
             var root = CreateAddressRoot();
@@ -122,6 +143,31 @@ namespace FlowBloxTest.FlowBlocks.Json
             Assert.AreEqual(2, values.Count);
             Assert.AreEqual("""{"Country":"Germany","Street":"Main Street"}""", values[0]);
             Assert.AreEqual("""{"Country":"France","Street":"Rue A"}""", values[1]);
+        }
+
+        [TestMethod]
+        public void JsonPathSelectorFlowBlock_ReturnsRootArrayItemsForRootIdentifier()
+        {
+            var startFlowBlock = CreateFlowBlock<StartFlowBlock>();
+            var selector = CreateFlowBlock<JsonPathSelectorFlowBlock>(startFlowBlock);
+            selector.JsonContent = """
+            [
+              { "id": "first" },
+              { "id": "second" }
+            ]
+            """;
+            selector.Path = "$";
+
+            var runtime = new FlowBloxUnitTestRuntime(_project);
+
+            Assert.IsTrue(selector.Execute(runtime, null));
+
+            CollectionAssert.AreEqual(
+                new[] { """{"id":"first"}""", """{"id":"second"}""" },
+                selector.GridElementResult.Results
+                    .SelectMany(x => x.FieldValueMappings)
+                    .Select(x => x.Value)
+                    .ToArray());
         }
 
         private static JToken CreateAddressRoot()

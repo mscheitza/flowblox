@@ -73,10 +73,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                 }
 
                 var rootToken = JToken.Parse(jsonText);
-                if (rootToken is not JObject rootObj)
-                    throw new InvalidOperationException("The provided JSON must represent an object at the root.");
-
-                var resultToken = JsonPathSelector.GetJToken(rootObj, path, out _, out _);
+                var resultToken = JsonPathSelector.GetJToken(rootToken, path, out _, out _);
                 if (resultToken == null)
                 {
                     CreateNotification(runtime, JsonPathSelectorNotifications.JsonTokenCouldNotBeResolved);

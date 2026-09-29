@@ -30,18 +30,6 @@
             <converters:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
             <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
-            <DataTemplate x:Key="CommitActionTemplate">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="{Binding IconKind}"
-                                                Width="14"
-                                                Height="14"
-                                                Margin="0,0,8,0"
-                                                VerticalAlignment="Center"
-                                                Foreground="{Binding IconColor}"/>
-                    <TextBlock Text="{Binding DisplayName}"
-                               VerticalAlignment="Center"/>
-                </StackPanel>
-            </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -158,38 +146,7 @@
             </StackPanel>
         </Border>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Bottom" Margin="10">
-
-            <!-- Back -->
-            <Button Content="{x:Static resources:PropertyWindow.Back}"
-                    Command="{Binding CancelCommand}"
-                    IsCancel="True"
-                    Style="{StaticResource FlowBlox.WindowActionButton.Back}" />
-
-            <!-- Apply -->
-            <mah:SplitButton ItemsSource="{Binding ApplyButtonActions}"
-                             SelectedItem="{Binding SelectedApplyButtonAction, Mode=TwoWay}"
-                             Command="{Binding SelectedApplyButtonAction.Command}"
-                             ItemTemplate="{StaticResource CommitActionTemplate}"
-                             Style="{StaticResource FlowBlox.WindowActionSplitButton}"
-                             Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                             MinWidth="138"
-                             Height="32"
-                             Padding="12,5"
-                             Margin="5"/>
-
-            <!-- Save -->
-            <mah:SplitButton ItemsSource="{Binding SaveButtonActions}"
-                             SelectedItem="{Binding SelectedSaveButtonAction, Mode=TwoWay}"
-                             Command="{Binding SelectedSaveButtonAction.Command}"
-                             ItemTemplate="{StaticResource CommitActionTemplate}"
-                             Style="{StaticResource FlowBlox.WindowActionSplitButton}"
-                             Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                             MinWidth="138"
-                             Height="32"
-                             Padding="12,5"
-                             Margin="5"/>
-        </StackPanel>
+        <views:PropertyWindowFooter DockPanel.Dock="Bottom" />
 
         <!-- PropertyView Embedding -->
         <views:PropertyView DataContext="{Binding PropertyViewModel}" />

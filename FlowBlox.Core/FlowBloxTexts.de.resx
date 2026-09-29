@@ -912,7 +912,7 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Gibt ein JSON-Objekt als Text oder Byte-Array aus. Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block.</value>
 	</data>
 	<data name="JsonObjectOutputFlowBlock_DisplayName" xml:space="preserve">
-		<value>JSON-Objekt-Ausgabe</value>
+		<value>JSON-Objekt: Ausgabe</value>
 	</data>
 	<data name="JsonObjectOutputFlowBlock_Indented" xml:space="preserve">
 		<value>Mehrzeilige Ausgabe</value>
@@ -930,7 +930,7 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Erstellt oder aktualisiert Knoten in einem JSON-Objekt. Dieser Flow-Block verwendet das intern verwaltete JSON-Objekt aus einem JSON-Objekt-Flow-Block.</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_DisplayName" xml:space="preserve">
-		<value>JSON-Objekt schreiben</value>
+		<value>JSON-Objekt: JSON-Objekt schreiben</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_JsonAssignments" xml:space="preserve">
 		<value>JSON-Zuweisungen</value>
@@ -951,7 +951,7 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Wenn aktiviert und der Pfad noch nicht existiert, wird am Pfad ein Array angelegt und ein neues Objekt-Element hinzugefügt. Wenn deaktiviert, wird am Pfad ein JSON-Objekt angelegt.</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_Description" xml:space="preserve">
-		<value>Liest ein JSON-Objekt ein und gibt den Wert oder die Werte zurück, die dem angegebenen JSON-Pfad entsprechen.</value>
+		<value>Liest JSON-Inhalt ein und gibt den Wert oder die Werte zurück, die dem angegebenen JSON-Pfad entsprechen.</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Pfad-Selektor</value>
@@ -964,6 +964,8 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	</data>
 	<data name="JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples" xml:space="preserve">
 		<value>JSON-Pfad-Beispiele:
+- `$` gibt den Root-Inhalt zurück; Elemente eines Root-Arrays werden einzeln ausgegeben.
+- `$/id` gibt die id-Werte aller Objekte eines Root-Arrays zurück.
 - `participant/name` gibt einen einzelnen Property-Wert zurück.
 - `participant/addresses` gibt alle Elemente des Adress-Arrays zurück; Objekt-Elemente werden als kompaktes JSON ausgegeben.
 - `participant/addresses/0/Street` gibt die Straße der ersten Adresse zurück.
@@ -1909,7 +1911,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Optionaler Kontext-FlowBlock. Wenn gesetzt, wird der Index bei jedem Iterationsstart dieses FlowBlocks auf den initialen Index zurückgesetzt. Ist kein Kontext angegeben, läuft der Index über die gesamte Laufzeit kontinuierlich weiter.</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
-		<value>Pfad zur Navigation im JSON-Dokument. Verwenden Sie '/' zur Trennung von Knoten. Objekt-Properties werden über ihren Namen adressiert, Arrays können vollständig zurückgegeben oder per numerischem Index adressiert werden (z. B. 'participants/addresses' oder 'participants/addresses/0'). Array-Filter verwenden @Property-Operatoren, z. B. 'addresses/@Country=Germany/Street'. Unterstützte Operatoren: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
+		<value>Pfad zur Navigation im JSON-Dokument. Verwenden Sie '$' für den Root und '/' zur Trennung von Knoten. Ist der Root ein Array, gibt '$' dessen Elemente einzeln aus und '$/id' projiziert eine Property aus allen Elementen. Objekt-Properties werden über ihren Namen adressiert, Arrays können vollständig zurückgegeben oder per numerischem Index adressiert werden (z. B. 'participants/addresses' oder 'participants/addresses/0'). Array-Filter verwenden @Property-Operatoren, z. B. 'addresses/@Country=Germany/Street'. Unterstützte Operatoren: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
 	</data>
 	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
 		<value>Berechnung</value>
