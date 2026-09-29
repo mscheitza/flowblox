@@ -94,7 +94,7 @@ namespace FlowBlox.UICore.Views
             }
         }
 
-        private void OkButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
             => _transactionEventHandler.Save();
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)

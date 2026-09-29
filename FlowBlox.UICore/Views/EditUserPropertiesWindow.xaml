@@ -16,6 +16,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
@@ -142,12 +143,11 @@
                         HorizontalAlignment="Right"
                         Margin="0,10,0,0">
                 <Button Content="{x:Static resources:EditUserPropertiesWindow.Button_Back}"
-                        Padding="5,0,5,0"
-                        Margin="0,0,6,0"
+                        Style="{StaticResource FlowBlox.WindowActionButton.Back}"
                         Command="{Binding CloseCommand}"
                         IsCancel="True"/>
                 <Button Content="{x:Static resources:EditUserPropertiesWindow.Button_Save}"
-                        Padding="5,0,5,0"
+                        Style="{StaticResource FlowBlox.WindowActionButton.Save}"
                         Command="{Binding SaveCommand}"
                         IsEnabled="{Binding CanSave}"
                         IsDefault="True"/>

@@ -20,6 +20,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -98,7 +99,12 @@
             <TextBlock Grid.Row="4" Text="{x:Static resources:ToolboxWindow.Label_Content}" Margin="5"/>
             <TextBox Grid.Row="5" Text="{Binding SelectedToolboxElement.Content, UpdateSourceTrigger=PropertyChanged}" Margin="5" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
-            <Button Grid.Row="6" Content="{x:Static resources:ToolboxWindow.Button_Save}" Command="{Binding SaveCommand}" HorizontalAlignment="Right" Margin="5" IsEnabled="{Binding DataContext.CanSave}"/>
+            <Button Grid.Row="6"
+                    Content="{x:Static resources:ToolboxWindow.Button_Save}"
+                    Command="{Binding SaveCommand}"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource FlowBlox.WindowActionButton.Save}"
+                    IsEnabled="{Binding DataContext.CanSave}"/>
         </Grid>
 
         <!-- No Items Found Message -->

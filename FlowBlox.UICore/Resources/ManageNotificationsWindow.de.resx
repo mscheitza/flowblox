@@ -123,8 +123,8 @@
   <data name="Button_Back" xml:space="preserve">
     <value>Zurück</value>
   </data>
-  <data name="Button_Apply" xml:space="preserve">
-    <value>Übernehmen</value>
+  <data name="Button_Save" xml:space="preserve">
+    <value>Speichern</value>
   </data>
   <data name="GridColumn_Message" xml:space="preserve">
     <value>Nachricht</value>

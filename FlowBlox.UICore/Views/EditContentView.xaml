@@ -93,31 +93,15 @@
 
         <!-- Bottom Buttons -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
-            <Button Command="{Binding CancelCommand}"
+            <Button Content="{x:Static resources:EditContentView.Button_Back}"
+                    Command="{Binding CancelCommand}"
                     IsCancel="True"
-                    MinWidth="112"
-                    MinHeight="32"
-                    Padding="12,5"
-                    Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="ArrowLeft"
-                                                Style="{StaticResource FlowBlox.WindowActionIcon.Back}"/>
-                    <TextBlock Text="{x:Static resources:EditContentView.Button_Back}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+                    Style="{StaticResource FlowBlox.WindowActionButton.Back}" />
 
-            <Button Command="{Binding ApplyCommand}"
+            <Button Content="{x:Static resources:EditContentView.Button_Save}"
+                    Command="{Binding SaveCommand}"
                     IsDefault="True"
-                    MinWidth="112"
-                    MinHeight="32"
-                    Padding="12,5"
-                    Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="ContentSave"
-                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
-                    <TextBlock Text="{x:Static resources:EditContentView.Button_Save}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+                    Style="{StaticResource FlowBlox.WindowActionButton.Save}" />
         </StackPanel>
     </Grid>
 </mah:MetroWindow>

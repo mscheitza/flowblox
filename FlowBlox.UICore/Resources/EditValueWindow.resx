@@ -18,7 +18,7 @@
   <data name="DefaultDescription" xml:space="preserve"><value>Please enter the value.</value></data>
   <data name="LabelParameter" xml:space="preserve"><value>Parameter:</value></data>
   <data name="MaskRegex" xml:space="preserve"><value>Escape regex characters</value></data>
-  <data name="ButtonApply" xml:space="preserve"><value>Apply</value></data>
+  <data name="ButtonSave" xml:space="preserve"><value>Save</value></data>
   <data name="ButtonCancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="ValidationErrorMessage" xml:space="preserve"><value>Please enter a value.</value></data>
   <data name="ValidationErrorTitle" xml:space="preserve"><value>Invalid input</value></data>

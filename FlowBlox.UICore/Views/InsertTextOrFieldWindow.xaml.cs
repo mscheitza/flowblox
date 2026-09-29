@@ -56,7 +56,7 @@ namespace FlowBlox.UICore.Views
             return string.Empty;
         }
 
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             SelectedValue = GetValueBySelection();
             DialogResult = true;

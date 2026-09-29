@@ -18,7 +18,7 @@
   <data name="Label_ExecutionIndex" xml:space="preserve"><value>Ausführungsindex:</value></data>
   <data name="Button_Back" xml:space="preserve"><value>Zurück</value></data>
   <data name="Button_Remove" xml:space="preserve"><value>Ausführungsindex entfernen</value></data>
-  <data name="Button_Apply" xml:space="preserve"><value>Übernehmen</value></data>
+  <data name="Button_Save" xml:space="preserve"><value>Speichern</value></data>
   <data name="Validation_InvalidIndex_Title" xml:space="preserve"><value>Ungültige Eingabe</value></data>
   <data name="Validation_InvalidIndex_Message" xml:space="preserve"><value>Bitte einen numerischen Wert größer oder gleich 0 eingeben.</value></data>
 </root>

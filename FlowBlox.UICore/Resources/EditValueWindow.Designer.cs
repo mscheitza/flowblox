@@ -70,13 +70,13 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
-        public static string ButtonApply
+        public static string ButtonSave
         {
             get
             {
-                return ResourceManager.GetString("ButtonApply", resourceCulture);
+                return ResourceManager.GetString("ButtonSave", resourceCulture);
             }
         }
         

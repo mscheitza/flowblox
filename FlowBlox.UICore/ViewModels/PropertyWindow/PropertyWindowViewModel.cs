@@ -3,6 +3,7 @@ using FlowBlox.Core.Enums;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
@@ -23,6 +24,12 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 {
     public class PropertyWindowViewModel : INotifyPropertyChanged
     {
+        private const string ApplyButtonSelectionOptionName = "PropertyWindow.ApplyButtonSelection";
+        private const string SaveButtonSelectionOptionName = "PropertyWindow.SaveButtonSelection";
+        private const string ApplyOptionValue = "Apply";
+        private const string ApplyWithoutVerificationOptionValue = "ApplyWithoutVerification";
+        private const string SaveOptionValue = "Save";
+        private const string SaveWithoutVerificationOptionValue = "SaveWithoutVerification";
         private static readonly TimeSpan UIActionsRefreshDebounceInterval = TimeSpan.FromSeconds(1);
         private readonly MetroWindow _window;
         private object _uiActionTarget;
@@ -45,6 +52,40 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         public RelayCommand CancelCommand { get; }
 
         public RelayCommand RefreshUIActionsCommand { get; }
+
+        public IReadOnlyList<PropertyWindowCommitActionViewModel> ApplyButtonActions { get; }
+
+        public IReadOnlyList<PropertyWindowCommitActionViewModel> SaveButtonActions { get; }
+
+        private PropertyWindowCommitActionViewModel _selectedApplyButtonAction;
+        public PropertyWindowCommitActionViewModel SelectedApplyButtonAction
+        {
+            get => _selectedApplyButtonAction;
+            set
+            {
+                if (value == null || ReferenceEquals(_selectedApplyButtonAction, value))
+                    return;
+
+                _selectedApplyButtonAction = value;
+                OnPropertyChanged();
+                StoreButtonSelection(ApplyButtonSelectionOptionName, value.OptionValue);
+            }
+        }
+
+        private PropertyWindowCommitActionViewModel _selectedSaveButtonAction;
+        public PropertyWindowCommitActionViewModel SelectedSaveButtonAction
+        {
+            get => _selectedSaveButtonAction;
+            set
+            {
+                if (value == null || ReferenceEquals(_selectedSaveButtonAction, value))
+                    return;
+
+                _selectedSaveButtonAction = value;
+                OnPropertyChanged();
+                StoreButtonSelection(SaveButtonSelectionOptionName, value.OptionValue);
+            }
+        }
 
         public BitmapImage HeaderIcon { get; }
 
@@ -81,7 +122,80 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
             SaveWithoutVerificationCommand = new RelayCommand(SaveWithoutVerification, CanSaveChanges);
             CancelCommand = new RelayCommand(Cancel);
             RefreshUIActionsCommand = new RelayCommand(RefreshUIActions, CanRefreshUIActions);
+            ApplyButtonActions =
+            [
+                new PropertyWindowCommitActionViewModel
+                {
+                    OptionValue = ApplyOptionValue,
+                    DisplayName = GetLocalizedString("Apply"),
+                    IconKind = PackIconMaterialKind.Check,
+                    IconColor = "#2E8B57",
+                    Command = ApplyCommand
+                },
+                new PropertyWindowCommitActionViewModel
+                {
+                    OptionValue = ApplyWithoutVerificationOptionValue,
+                    DisplayName = GetLocalizedString("ApplyWithoutVerification"),
+                    IconKind = PackIconMaterialKind.ShieldOffOutline,
+                    IconColor = "#D97706",
+                    Command = ApplyWithoutVerificationCommand
+                }
+            ];
+            SaveButtonActions =
+            [
+                new PropertyWindowCommitActionViewModel
+                {
+                    OptionValue = SaveOptionValue,
+                    DisplayName = GetLocalizedString("Save"),
+                    IconKind = PackIconMaterialKind.ContentSave,
+                    IconColor = "#2E8B57",
+                    Command = SaveCommand
+                },
+                new PropertyWindowCommitActionViewModel
+                {
+                    OptionValue = SaveWithoutVerificationOptionValue,
+                    DisplayName = GetLocalizedString("SaveWithoutVerification"),
+                    IconKind = PackIconMaterialKind.ContentSaveAlertOutline,
+                    IconColor = "#D97706",
+                    Command = SaveWithoutVerificationCommand
+                }
+            ];
+            _selectedApplyButtonAction = ResolveButtonSelection(
+                ApplyButtonActions,
+                ApplyButtonSelectionOptionName,
+                ApplyOptionValue);
+            _selectedSaveButtonAction = ResolveButtonSelection(
+                SaveButtonActions,
+                SaveButtonSelectionOptionName,
+                SaveOptionValue);
             UIActions = new ObservableCollection<UIActionViewModel>();
+        }
+
+        private static string GetLocalizedString(string resourceName)
+            => FlowBloxResourceUtil.GetLocalizedString(resourceName, typeof(Resources.PropertyWindow));
+
+        private static PropertyWindowCommitActionViewModel ResolveButtonSelection(
+            IReadOnlyList<PropertyWindowCommitActionViewModel> actions,
+            string optionName,
+            string defaultValue)
+        {
+            var selectedValue = FlowBloxOptions.GetOptionInstance().GetOption(optionName)?.Value;
+            return actions.FirstOrDefault(x => string.Equals(
+                       x.OptionValue,
+                       selectedValue,
+                       StringComparison.OrdinalIgnoreCase))
+                   ?? actions.First(x => x.OptionValue == defaultValue);
+        }
+
+        private static void StoreButtonSelection(string optionName, string value)
+        {
+            var options = FlowBloxOptions.GetOptionInstance();
+            var option = options.GetOption(optionName);
+            if (option == null || string.Equals(option.Value, value, StringComparison.Ordinal))
+                return;
+
+            option.Value = value;
+            options.Save();
         }
 
         public PropertyWindowViewModel(MetroWindow window, PropertyWindowArgs propertyWindowArgs) : this()

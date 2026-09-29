@@ -24,7 +24,7 @@
   <data name="Toggle_On" xml:space="preserve"><value>Aktiviert</value></data>
   <data name="Toggle_Off" xml:space="preserve"><value>Deaktiviert</value></data>
   <data name="Button_Back" xml:space="preserve"><value>Zurück</value></data>
-  <data name="Button_Apply" xml:space="preserve"><value>Übernehmen</value></data>
+  <data name="Button_Save" xml:space="preserve"><value>Speichern</value></data>
   <data name="Validation_Title" xml:space="preserve"><value>Ungültige Eingabe</value></data>
   <data name="Validation_InvalidWidth_Message" xml:space="preserve"><value>Bitte geben Sie eine gültige Rasterbreite an. Mindestwert: {0}px.</value></data>
   <data name="Validation_InvalidHeight_Message" xml:space="preserve"><value>Bitte geben Sie eine gültige Rasterhöhe an. Mindestwert: {0}px.</value></data>

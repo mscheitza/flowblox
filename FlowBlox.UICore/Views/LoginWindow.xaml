@@ -15,6 +15,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         </ResourceDictionary>
@@ -118,10 +119,11 @@
                         Margin="0,10,0,0">
                 <Button Command="{Binding CancelCommand}"
                         Content="{x:Static resources:LoginWindow.Button_Back}"
-                        Margin="0,0,10,0"
+                        Style="{StaticResource FlowBlox.WindowActionButton.Back}"
                         IsCancel="True"/>
                 <Button Command="{Binding LoginCommand}"
                         Content="{x:Static resources:LoginWindow.Button_Login}"
+                        Style="{StaticResource FlowBlox.WindowActionButton}"
                         IsDefault="True"/>
             </StackPanel>
         </Grid>

@@ -301,22 +301,13 @@
                 <DockPanel Grid.Row="1"
                            Margin="0,8,0,0"
                            LastChildFill="False">
-                    <Button Command="{Binding SaveCommand}"
+                    <Button Content="{x:Static resources:OptionsWindow.Button_Apply}"
+                            Command="{Binding SaveCommand}"
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Right"
-                            MinWidth="112"
-                            MinHeight="32"
-                            Padding="12,5"
-                            Margin="5"
                             ToolTip="{x:Static resources:OptionsWindow.Tooltip_Save}"
-                            ToolTipService.Placement="Bottom">
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconMaterial Kind="ContentSave"
-                                                        Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
-                            <TextBlock Text="{x:Static resources:OptionsWindow.Button_Apply}"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
+                            Style="{StaticResource FlowBlox.WindowActionButton.Apply}"
+                            ToolTipService.Placement="Bottom" />
                 </DockPanel>
             </Grid>
         </Grid>

@@ -728,45 +728,21 @@
                 </StackPanel>
             </Button>
 
-            <Button IsCancel="True"
+            <Button Content="{x:Static resources:TestDefinitionView.Button_Back}"
+                    IsCancel="True"
                     Click="CancelButton_Click"
-                    MinWidth="112"
-                    Height="32"
-                    Padding="12,5"
-                    Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="ArrowLeft"
-                                                Style="{StaticResource FlowBlox.WindowActionIcon.Back}"/>
-                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_Back}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+                    Style="{StaticResource FlowBlox.WindowActionButton.Back}" />
 
-            <Button Click="ApplyButton_Click"
+            <Button Content="{x:Static resources:TestDefinitionView.Button_Apply}"
+                    Click="ApplyButton_Click"
                     IsEnabled="{Binding CanApply}"
-                    MinWidth="112"
-                    Height="32"
-                    Padding="12,5"
-                    Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="Check"
-                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
-                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_Apply}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+                    Style="{StaticResource FlowBlox.WindowActionButton.Apply}" />
 
-            <Button IsDefault="True"
-                    Click="OkButton_Click"
+            <Button Content="{x:Static resources:TestDefinitionView.Button_Save}"
+                    IsDefault="True"
+                    Click="SaveButton_Click"
                     IsEnabled="{Binding CanApply}"
-                    MinWidth="112"
-                    Height="32"
-                    Padding="12,5"
-                    Margin="5">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="ContentSave"
-                                                Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
-                    <TextBlock Text="{x:Static resources:TestDefinitionView.Button_Save}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+                    Style="{StaticResource FlowBlox.WindowActionButton.Save}" />
         </StackPanel>
 
     </Grid>

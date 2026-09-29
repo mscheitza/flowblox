@@ -36,7 +36,7 @@ namespace FlowBlox.UICore.ViewModels
 
             ImportTextFromFileCommand = new RelayCommand(_ => ImportTextFromFile());
             ImportBytesFromFileCommand = new RelayCommand(_ => ImportBytesFromFile());
-            ApplyCommand = new RelayCommand(_ => Apply());
+            SaveCommand = new RelayCommand(_ => Save());
             CancelCommand = new RelayCommand(_ => Cancel());
         }
 
@@ -107,7 +107,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public ICommand ImportTextFromFileCommand { get; }
         public ICommand ImportBytesFromFileCommand { get; }
-        public ICommand ApplyCommand { get; }
+        public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
         private void ImportTextFromFile()
@@ -165,7 +165,7 @@ namespace FlowBlox.UICore.ViewModels
             };
         }
 
-        private void Apply()
+        private void Save()
         {
             _window.DialogResult = true;
             _window.Close();

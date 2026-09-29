@@ -16,6 +16,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         </ResourceDictionary>
@@ -209,11 +210,10 @@
                         HorizontalAlignment="Right"
                         Margin="0,10,0,0">
                 <Button Content="{x:Static resources:RegistrationWindow.Button_Back}"
-                        Padding="5,0,5,0"
-                        Margin="5,0,5,0"
+                        Style="{StaticResource FlowBlox.WindowActionButton.Back}"
                         Command="{Binding CloseCommand}" />
                 <Button Content="{x:Static resources:RegistrationWindow.Button_Register}"
-                        Padding="5,0,5,0"
+                        Style="{StaticResource FlowBlox.WindowActionButton}"
                         Command="{Binding RegisterCommand}"
                         IsEnabled="{Binding CanRegister}" />
             </StackPanel>

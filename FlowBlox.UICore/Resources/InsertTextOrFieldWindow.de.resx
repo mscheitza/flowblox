@@ -17,7 +17,7 @@
   <data name="LabelInsertText" xml:space="preserve"><value>Text einfügen:</value></data>
   <data name="LabelInsertField" xml:space="preserve"><value>Feld einfügen:</value></data>
   <data name="ButtonSelectField" xml:space="preserve"><value>Feld auswählen</value></data>
-  <data name="ButtonApply" xml:space="preserve"><value>Übernehmen</value></data>
+  <data name="ButtonSave" xml:space="preserve"><value>Speichern</value></data>
   <data name="ButtonCancel" xml:space="preserve"><value>Abbrechen</value></data>
   <data name="NoFieldSelected" xml:space="preserve"><value>Kein Feld ausgewählt</value></data>
 </root>

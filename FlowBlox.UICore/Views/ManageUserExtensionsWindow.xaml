@@ -23,6 +23,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -181,6 +182,7 @@
                             <!-- Save Changes Button for Extension -->
                             <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges}"
                                 Command="{Binding SaveChangesCommand}"
+                                Style="{StaticResource FlowBlox.WindowActionButton.Save}"
                                 ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges_Tooltip}"
                                 Margin="0,10,0,0" HorizontalAlignment="Right" />
                         </StackPanel>
@@ -311,6 +313,7 @@
                         <!-- Save Changes Button for Version -->
                         <Button Content="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges}"
                         Command="{Binding SaveChangesCommand}"
+                        Style="{StaticResource FlowBlox.WindowActionButton.Save}"
                         ToolTip="{x:Static resources:ManageUserExtensionsWindow.Button_SaveChanges_Tooltip}"
                         Margin="10,10,0,0" HorizontalAlignment="Right" />
                     </StackPanel>

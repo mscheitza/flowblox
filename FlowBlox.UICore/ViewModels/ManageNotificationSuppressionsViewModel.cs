@@ -28,13 +28,13 @@ namespace FlowBlox.UICore.ViewModels
 
         public ObservableCollection<NotificationType> NotificationTypes { get; }
 
-        public ICommand OkCommand { get; }
+        public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand ResetCommand { get; }
 
         public ManageNotificationOverridesViewModel()
         {
-            OkCommand = new RelayCommand(Ok);
+            SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Cancel);
             ResetCommand = new RelayCommand(Reset);
 
@@ -76,7 +76,7 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        private void Ok()
+        private void Save()
         {
             foreach (var item in Items)
             {

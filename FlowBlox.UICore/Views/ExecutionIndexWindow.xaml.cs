@@ -22,7 +22,7 @@ namespace FlowBlox.UICore.Views
                 Result = executionIndex;
             }
 
-            ApplyButton.IsEnabled = executionIndex >= 0;
+            SaveButton.IsEnabled = executionIndex >= 0;
         }
 
         protected override void OnContentRendered(EventArgs e)
@@ -46,7 +46,7 @@ namespace FlowBlox.UICore.Views
             Close();
         }
 
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (!TryParseExecutionIndex(out var executionIndex))
             {
@@ -71,7 +71,7 @@ namespace FlowBlox.UICore.Views
 
         private void ExecutionIndexTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            ApplyButton.IsEnabled = TryParseExecutionIndex(out _);
+            SaveButton.IsEnabled = TryParseExecutionIndex(out _);
         }
 
         private bool TryParseExecutionIndex(out int executionIndex)

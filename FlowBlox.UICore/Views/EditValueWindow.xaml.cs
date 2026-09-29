@@ -135,7 +135,7 @@ namespace FlowBlox.UICore.Views
             }
         }
 
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             var value = ValueTextBox.Visibility == Visibility.Visible
                 ? ValueTextBox.Text
@@ -165,7 +165,7 @@ namespace FlowBlox.UICore.Views
 
         private void ValueInput_Changed(object sender, RoutedEventArgs e)
         {
-            ApplyButton.IsEnabled = true;
+            SaveButton.IsEnabled = true;
         }
     }
 }

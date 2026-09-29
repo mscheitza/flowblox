@@ -24,7 +24,7 @@
   <data name="Toggle_On" xml:space="preserve"><value>Enabled</value></data>
   <data name="Toggle_Off" xml:space="preserve"><value>Disabled</value></data>
   <data name="Button_Back" xml:space="preserve"><value>Back</value></data>
-  <data name="Button_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="Button_Save" xml:space="preserve"><value>Save</value></data>
   <data name="Validation_Title" xml:space="preserve"><value>Invalid input</value></data>
   <data name="Validation_InvalidWidth_Message" xml:space="preserve"><value>Please enter a valid grid width. Minimum value: {0}px.</value></data>
   <data name="Validation_InvalidHeight_Message" xml:space="preserve"><value>Please enter a valid grid height. Minimum value: {0}px.</value></data>

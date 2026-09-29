@@ -31,7 +31,7 @@ namespace FlowBlox.UICore.Views
             Close();
         }
 
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (!ViewModel.TrySave(out var validationMessage))
             {

@@ -150,7 +150,7 @@
                         IsEnabled="{Binding IsDirty}"
                         Margin="6,0,0,0"
                         ToolTip="{x:Static resources:FlowBloxTaskManagementWindow.Tooltip_Apply}">
-                    <iconPacks:PackIconMaterial Kind="ContentSave"
+                    <iconPacks:PackIconMaterial Kind="Check"
                                                 Style="{StaticResource TaskMgmt.Icon.Green}"/>
                 </Button>
             </ToolBar>

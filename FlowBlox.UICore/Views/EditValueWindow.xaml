@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     mc:Ignorable="d"
     Title="{x:Static resources:EditValueWindow.Title}"
     Width="700"
@@ -15,6 +16,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -75,16 +77,15 @@
                       Visibility="Collapsed"/>
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                <Button Width="100"
-                        Margin="0,0,8,0"
-                        IsCancel="True"
+                <Button IsCancel="True"
                         Click="CancelButton_Click"
+                        Style="{StaticResource FlowBlox.WindowActionButton}"
                         Content="{x:Static resources:EditValueWindow.ButtonCancel}"/>
-                <Button x:Name="ApplyButton"
-                        Width="100"
+                <Button x:Name="SaveButton"
+                        Content="{x:Static resources:EditValueWindow.ButtonSave}"
                         IsDefault="True"
-                        Click="ApplyButton_Click"
-                        Content="{x:Static resources:EditValueWindow.ButtonApply}"/>
+                        Style="{StaticResource FlowBlox.WindowActionButton.Save}"
+                        Click="SaveButton_Click" />
             </StackPanel>
         </DockPanel>
     </Grid>
