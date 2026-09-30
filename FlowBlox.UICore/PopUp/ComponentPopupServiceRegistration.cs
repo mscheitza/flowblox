@@ -22,6 +22,18 @@ namespace FlowBlox.UICore.PopUp
             serviceCollection.AddSingleton<IOptionsRegistration>(sp =>
                 sp.GetRequiredService<WebBrowserPopUpProvider>());
 
+            serviceCollection.AddSingleton<OnnxGenAIPopUpProvider>();
+            serviceCollection.AddSingleton<IComponentPopupProvider>(sp =>
+                sp.GetRequiredService<OnnxGenAIPopUpProvider>());
+            serviceCollection.AddSingleton<IOptionsRegistration>(sp =>
+                sp.GetRequiredService<OnnxGenAIPopUpProvider>());
+
+            serviceCollection.AddSingleton<OnnxQAPopUpProvider>();
+            serviceCollection.AddSingleton<IComponentPopupProvider>(sp =>
+                sp.GetRequiredService<OnnxQAPopUpProvider>());
+            serviceCollection.AddSingleton<IOptionsRegistration>(sp =>
+                sp.GetRequiredService<OnnxQAPopUpProvider>());
+
             serviceCollection.AddSingleton<ComponentValidationFailedPopUpProvider>();
             serviceCollection.AddSingleton<IComponentPopupProvider>(sp =>
                 sp.GetRequiredService<ComponentValidationFailedPopUpProvider>());

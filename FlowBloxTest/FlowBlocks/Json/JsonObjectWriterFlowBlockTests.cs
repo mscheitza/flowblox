@@ -59,6 +59,60 @@ namespace FlowBloxTest.FlowBlocks.Json
         }
 
         [TestMethod]
+        public void Execute_MissingObjectChain_CreatesAllObjectsAndTargetArray()
+        {
+            var source = CreateJsonObject("{}");
+            var writer = CreateWriter(source, "$.registration.subobject.participants", isArray: true);
+            writer.Assignments.Add(new JsonPropertyValueAssignment
+            {
+                PropertyName = "name",
+                Value = "Anna"
+            });
+
+            Assert.IsTrue(writer.Execute(_runtime, null));
+
+            var expected = JToken.Parse("""
+            {
+              "registration": {
+                "subobject": {
+                  "participants": [
+                    { "name": "Anna" }
+                  ]
+                }
+              }
+            }
+            """);
+            Assert.IsTrue(JToken.DeepEquals(expected, source.InternalJsonObject));
+        }
+
+        [TestMethod]
+        public void EnsureObject_MissingArrayPath_ThrowsDescriptiveExceptionWithoutMutation()
+        {
+            var root = new JObject();
+
+            var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
+                JPathEnsurer.EnsureObject(root, "$.groups[0].participants", isArray: true));
+
+            StringAssert.Contains(exception.Message, "array selector");
+            Assert.AreEqual(0, root.Count);
+        }
+
+        [TestMethod]
+        public void Execute_ExistingArrayPath_CreatesFinalTargetArray()
+        {
+            var source = CreateJsonObject("""{ "groups": [{}] }""");
+            var writer = CreateWriter(source, "$.groups[0].participants", isArray: true);
+            writer.Assignments.Add(new JsonPropertyValueAssignment
+            {
+                PropertyName = "name",
+                Value = "Anna"
+            });
+
+            Assert.IsTrue(writer.Execute(_runtime, null));
+            Assert.AreEqual("Anna", source.InternalJsonObject["groups"]?[0]?["participants"]?[0]?["name"]?.ToString());
+        }
+
+        [TestMethod]
         public void Execute_ArrayTarget_AppendsNewObject()
         {
             var source = CreateJsonObject("""{ "participants": [] }""");
@@ -74,6 +128,41 @@ namespace FlowBloxTest.FlowBlocks.Json
             var participants = (JArray)source.InternalJsonObject["participants"]!;
             Assert.AreEqual(1, participants.Count);
             Assert.AreEqual("new participant", participants[0]?["name"]?.ToString());
+        }
+
+        [TestMethod]
+        public void Execute_ArrayTargetWithoutArrayMode_FailsWithoutMutation()
+        {
+            var source = CreateJsonObject("""{ "participants": [] }""");
+            var writer = CreateWriter(source, "$.participants");
+
+            Assert.IsFalse(writer.Execute(_runtime, null));
+            Assert.AreEqual(0, ((JArray)source.InternalJsonObject["participants"]!).Count);
+        }
+
+        [TestMethod]
+        public void Execute_ObjectTargetWithArrayMode_FailsWithoutMutation()
+        {
+            var source = CreateJsonObject("""{ "participants": {} }""");
+            var writer = CreateWriter(source, "$.participants", isArray: true);
+
+            Assert.IsFalse(writer.Execute(_runtime, null));
+            Assert.AreEqual(0, ((JObject)source.InternalJsonObject["participants"]!).Count);
+        }
+
+        [TestMethod]
+        public void Execute_QuotedPropertyPath_CreatesObject()
+        {
+            var source = CreateJsonObject("{}");
+            var writer = CreateWriter(source, "$['participant details']");
+            writer.Assignments.Add(new JsonPropertyValueAssignment
+            {
+                PropertyName = "active",
+                Value = "true"
+            });
+
+            Assert.IsTrue(writer.Execute(_runtime, null));
+            Assert.AreEqual("true", source.InternalJsonObject["participant details"]?["active"]?.ToString());
         }
 
         private JsonObjectFlowBlock CreateJsonObject(string jsonContent)

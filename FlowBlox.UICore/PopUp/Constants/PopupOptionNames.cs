@@ -7,5 +7,9 @@ namespace FlowBlox.UICore.PopUp.Constants
         public const string ShowSequenceDetectionPopupOnOpen = "PopUp.SequenceDetection.ShowPopupOnOpen";
 
         public const string ShowWebBrowserPopupOnOpen = "PopUp.WebBrowser.ShowPopupOnOpen";
+
+        public const string ShowOnnxGenAIPopupOnOpen = "PopUp.OnnxGenAI.ShowPopupOnOpen";
+
+        public const string ShowOnnxQAPopupOnOpen = "PopUp.OnnxQA.ShowPopupOnOpen";
     }
 }

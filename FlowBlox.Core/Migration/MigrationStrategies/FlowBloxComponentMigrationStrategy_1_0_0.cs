@@ -110,11 +110,19 @@ namespace FlowBlox.Core.Migration.MigrationStrategies
 
         private static void MigrateLegacyJsonPath(Type? currentType, JObject obj)
         {
+            const string legacySelectorTypeName =
+                "FlowBlox.Core.Models.FlowBlocks.Json.JsonPathSelectorFlowBlock";
+            var serializedTypeName = obj.Value<string>("$type");
+            var isLegacySelector = serializedTypeName?.StartsWith(
+                legacySelectorTypeName + ",",
+                StringComparison.Ordinal) == true;
+
             var propertyName = currentType switch
             {
-                Type type when typeof(JsonPathSelectorFlowBlock).IsAssignableFrom(type) => nameof(JsonPathSelectorFlowBlock.Path),
+                Type type when typeof(JPathSelectorFlowBlock).IsAssignableFrom(type) => nameof(JPathSelectorFlowBlock.Path),
                 Type type when typeof(JsonObjectWriterFlowBlock).IsAssignableFrom(type) => nameof(JsonObjectWriterFlowBlock.Path),
                 Type type when typeof(JsonManyPathsSelectorMappingEntry).IsAssignableFrom(type) => nameof(JsonManyPathsSelectorMappingEntry.JsonPath),
+                _ when isLegacySelector => nameof(JPathSelectorFlowBlock.Path),
                 _ => null
             };
 

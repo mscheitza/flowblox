@@ -942,27 +942,27 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Pfad</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_Path_Tooltip" xml:space="preserve">
-		<value>Newtonsoft.Json-JPath zum Zielknoten, an dem das Objekt erstellt oder aktualisiert wird (z. B. '$.participants[0]'). Für das Anhängen an ein Array die Array-Property auswählen (z. B. '$.participants') und IsArray aktivieren. Ein neues Objekt-Element wird angehängt und die Zuweisungen setzen Properties direkt auf diesem Element. Assignment PropertyName wird als literaler Property-Key und nicht als Pfad behandelt. Ein leerer Pfad adressiert das Root-Objekt.</value>
+		<value>Newtonsoft.Json-JPath zum Zielknoten, an dem das Objekt erstellt oder aktualisiert wird (z. B. '$.participants[0]'). Fehlende Ketten einfacher Objekt-Properties werden automatisch angelegt. Fehlende Array-Selektoren, Filter, Wildcards und rekursive Selektoren können nicht automatisch erzeugt werden. Für das Anhängen an ein Array die Array-Property auswählen (z. B. '$.participants') und IsArray aktivieren. Ein neues Objekt-Element wird angehängt und die Zuweisungen setzen Properties direkt auf diesem Element. Assignment PropertyName wird als literaler Property-Key und nicht als Pfad behandelt. Ein leerer Pfad adressiert das Root-Objekt.</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_IsArray" xml:space="preserve">
 		<value>Ist Array</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_IsArray_Tooltip" xml:space="preserve">
-		<value>Wenn aktiviert und der Pfad noch nicht existiert, wird am Pfad ein Array angelegt und ein neues Objekt-Element hinzugefügt. Wenn deaktiviert, wird am Pfad ein JSON-Objekt angelegt.</value>
+		<value>Wenn aktiviert, muss der Pfad auf ein Array zeigen oder es wird ein neues Array angelegt und ein Objekt angehängt. Wenn deaktiviert, muss der Pfad auf ein Objekt zeigen oder es wird ein neues Objekt angelegt.</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_Description" xml:space="preserve">
+	<data name="JPathSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Liest JSON-Inhalt ein und gibt die mit einem Newtonsoft.Json-JPath-Ausdruck ausgewählten Werte zurück.</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_DisplayName" xml:space="preserve">
-		<value>JSON-Pfad-Selektor</value>
+	<data name="JPathSelectorFlowBlock_DisplayName" xml:space="preserve">
+		<value>JPath-Selektor</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_JsonContent" xml:space="preserve">
+	<data name="JPathSelectorFlowBlock_JsonContent" xml:space="preserve">
 		<value>JSON-Inhalt</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_Path" xml:space="preserve">
-		<value>JSON-Pfad</value>
+	<data name="JPathSelectorFlowBlock_Path" xml:space="preserve">
+		<value>JPath</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples" xml:space="preserve">
+	<data name="JPathSelectorFlowBlock_SpecialExplanation_PathExamples" xml:space="preserve">
 		<value>JPath-Beispiele:
 - `$` wählt den Root-Inhalt aus; Elemente eines ausgewählten Arrays werden einzeln ausgegeben.
 - `$[*].id` wählt die id-Werte aller Objekte eines Root-Arrays aus.
@@ -1077,24 +1077,6 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	</data>
 	<data name="OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings" xml:space="preserve">
 		<value>Erweiterte ONNX-Einstellungen</value>
-	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_Context" xml:space="preserve">
-		<value>Kontext</value>
-	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_DisplayName" xml:space="preserve">
-		<value>ONNX Q&amp;A</value>
-	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy" xml:space="preserve">
-		<value>Strategie zur Positionsauswahl</value>
-	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy_Tooltip" xml:space="preserve">
-		<value>Legt fest, wie die beste Start- und Endposition aus den Logits ausgewählt wird – z.B. per ArgMax oder benutzerdefinierter Bewertungsmethode.</value>
-	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_QATokenizer" xml:space="preserve">
-		<value>Q&amp;A Tokenizer</value>
-	</data>
-	<data name="OnnxQuestionAnsweringFlowBlock_Question" xml:space="preserve">
-		<value>Frage</value>
 	</data>
 	<data name="OnnxTextGenerationFlowBlock_AiTokenizer" xml:space="preserve">
 		<value>KI-Tokenizer</value>
@@ -1909,7 +1891,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	<data name="IndexFlowBlock_Context_Tooltip" xml:space="preserve">
 		<value>Optionaler Kontext-FlowBlock. Wenn gesetzt, wird der Index bei jedem Iterationsstart dieses FlowBlocks auf den initialen Index zurückgesetzt. Ist kein Kontext angegeben, läuft der Index über die gesamte Laufzeit kontinuierlich weiter.</value>
 	</data>
-	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
+	<data name="JPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
 		<value>Newtonsoft.Json-JPath-Ausdruck zur Auswahl von Werten aus dem JSON-Dokument. Verwenden Sie '$' für den Root, die Punktnotation für Properties, '[*]' für alle Array-Elemente, '[0]' für einen Array-Index und '[?(...)]' für Filter. Beispiele: '$.participants', '$.participants[0]', '$[*].id', '$.addresses[?(@.Country == 'Germany')].Street'.</value>
 	</data>
 	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
@@ -3124,9 +3106,6 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="WebActionFlowblockBase_ExternalFlowBlocks_Topic" xml:space="preserve">
     <value>Verwendung der WebBrowser-Instanz in diesem Flow-Block</value>
   </data>
-	<data name="OnnxQuestionAnsweringFlowBlock_Description" xml:space="preserve">
-    <value>Beantwortet Fragen zu einem Kontext mit einem ONNX-Modell.</value>
-  </data>
 	<data name="JsonObjectFlowBlock_ManagedResource_Topic" xml:space="preserve">
     <value>Erläuterungen zum intern verwalteten JSON-Objekt</value>
   </data>
@@ -4333,6 +4312,29 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="FloxBloxCategory_Conversion" xml:space="preserve"><value>Konvertierung</value></data>
   <data name="FloxBloxCategory_S3Storage" xml:space="preserve"><value>S3-Speicher</value></data>
   <data name="FloxBloxCategory_Sftp" xml:space="preserve"><value>SFTP</value></data>
+  <data name="OnnxQAFlowBlock_DisplayName" xml:space="preserve"><value>ONNX-Fragebeantwortung</value></data>
+  <data name="OnnxQAFlowBlock_Description" xml:space="preserve"><value>Extrahiert mit einem lokalen ONNX-QA-Modell die beste Antwortspanne aus einem vorgegebenen Kontext.</value></data>
+  <data name="OnnxQAFlowBlock_ModelFolder" xml:space="preserve"><value>Modellordner</value></data>
+  <data name="OnnxQAFlowBlock_ModelFolder_Tooltip" xml:space="preserve"><value>Ordner mit model.onnx, Konfigurationsdateien und einem unterstützten Tokenizer: vocab.txt, vocab.json mit merges.txt oder eine SentencePiece-.model-Datei. Projektplatzhalter werden unterstützt.</value></data>
+  <data name="OnnxQAFlowBlock_Question" xml:space="preserve"><value>Frage</value></data>
+  <data name="OnnxQAFlowBlock_Question_Tooltip" xml:space="preserve"><value>Zu beantwortende Frage. Das Modell sucht die Antwort im Kontext.</value></data>
+  <data name="OnnxQAFlowBlock_Context" xml:space="preserve"><value>Kontext</value></data>
+  <data name="OnnxQAFlowBlock_Context_Tooltip" xml:space="preserve"><value>Quelltext, aus dem die Antwort wortgetreu extrahiert wird. Lange Texte werden in überlappenden Fenstern verarbeitet.</value></data>
+  <data name="OnnxQAFlowBlock_Groups_ExtendedSettings" xml:space="preserve"><value>Erweiterte Einstellungen</value></data>
+  <data name="OnnxQAFlowBlock_AiExecutionProvider" xml:space="preserve"><value>AI-Ausführungsanbieter</value></data>
+  <data name="OnnxQAFlowBlock_AiExecutionProvider_Tooltip" xml:space="preserve"><value>Global in den FlowBlox-ONNX-Einstellungen ausgewählter Ausführungsanbieter.</value></data>
+  <data name="OnnxQAFlowBlock_MaxSequenceLength" xml:space="preserve"><value>Maximale Sequenzlänge</value></data>
+  <data name="OnnxQAFlowBlock_MaxSequenceLength_Tooltip" xml:space="preserve"><value>Maximale Tokenanzahl je Modellaufruf einschließlich Frage und Spezialtokens. Die Grenze des Modells wird immer eingehalten.</value></data>
+  <data name="OnnxQAFlowBlock_DocumentStride" xml:space="preserve"><value>Dokumentüberlappung</value></data>
+  <data name="OnnxQAFlowBlock_DocumentStride_Tooltip" xml:space="preserve"><value>Anzahl der Kontexttokens, die zwischen benachbarten Fenstern wiederholt werden, damit Antworten an Fenstergrenzen nicht verloren gehen.</value></data>
+  <data name="OnnxQAFlowBlock_MaxAnswerLength" xml:space="preserve"><value>Maximale Antwortlänge</value></data>
+  <data name="OnnxQAFlowBlock_MaxAnswerLength_Tooltip" xml:space="preserve"><value>Maximale Anzahl an Tokens, die als Antwortspanne berücksichtigt werden.</value></data>
+  <data name="OnnxQAFlowBlock_AllowNoAnswer" xml:space="preserve"><value>Keine Antwort zulassen</value></data>
+  <data name="OnnxQAFlowBlock_AllowNoAnswer_Tooltip" xml:space="preserve"><value>Erlaubt bei SQuAD-2-Modellen ein leeres Ergebnis, wenn die Keine-Antwort-Position höher als die beste Textspanne bewertet wird.</value></data>
+  <data name="OnnxQAFlowBlock_NoAnswerThreshold" xml:space="preserve"><value>Keine-Antwort-Schwellwert</value></data>
+  <data name="OnnxQAFlowBlock_NoAnswerThreshold_Tooltip" xml:space="preserve"><value>Erforderliche Differenz zwischen Keine-Antwort-Score und bestem Spannenscore. Dieser Wert sollte mit repräsentativen Validierungsdaten abgestimmt werden.</value></data>
+  <data name="OnnxQAFlowBlock_SpecialExplanation_ModelFolder" xml:space="preserve"><value>Modell und Tokenizer bilden eine gemeinsame Deployment-Einheit. ONNX-Graph, Konfiguration und Tokenizer-Dateien müssen aus demselben exportierten Checkpoint stammen.</value></data>
+  <data name="OnnxQAFlowBlock_SpecialExplanation_Extractive" xml:space="preserve"><value>Dies ist extraktive Fragebeantwortung: Das Ergebnis wird aus dem Kontext kopiert. Für erklärende oder neu formulierte Antworten sollte der ONNX-GenAI-Flow-Block verwendet werden.</value></data>
 </root>
 
 

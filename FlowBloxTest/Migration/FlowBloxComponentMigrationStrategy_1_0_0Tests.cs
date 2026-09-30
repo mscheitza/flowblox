@@ -1,5 +1,6 @@
 using FlowBlox.Core.Migration.MigrationStrategies;
 using FlowBlox.Core.Models.FlowBlocks.Json;
+using FlowBlox.Core.Services;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBloxTest.Migration
@@ -12,7 +13,7 @@ namespace FlowBloxTest.Migration
         {
             var cases = new[]
             {
-                (Type: typeof(JsonPathSelectorFlowBlock), Property: nameof(JsonPathSelectorFlowBlock.Path), Legacy: "addresses/@Country=Germany/Street", Expected: "$.addresses[?(@.Country == 'Germany')].Street"),
+                (Type: typeof(JPathSelectorFlowBlock), Property: nameof(JPathSelectorFlowBlock.Path), Legacy: "addresses/@Country=Germany/Street", Expected: "$.addresses[?(@.Country == 'Germany')].Street"),
                 (Type: typeof(JsonObjectWriterFlowBlock), Property: nameof(JsonObjectWriterFlowBlock.Path), Legacy: "participants/0", Expected: "$.participants[0]"),
                 (Type: typeof(JsonManyPathsSelectorMappingEntry), Property: nameof(JsonManyPathsSelectorMappingEntry.JsonPath), Legacy: "$/id", Expected: "$[*].id")
             };
@@ -38,13 +39,39 @@ namespace FlowBloxTest.Migration
             const string path = "$.addresses[?(@.Country == 'Germany')].Street";
             var component = new JObject
             {
-                ["$type"] = typeof(JsonPathSelectorFlowBlock).AssemblyQualifiedName,
-                [nameof(JsonPathSelectorFlowBlock.Path)] = path
+                ["$type"] = typeof(JPathSelectorFlowBlock).AssemblyQualifiedName,
+                [nameof(JPathSelectorFlowBlock.Path)] = path
             };
 
             new FlowBloxComponentMigrationStrategy_1_0_0().Migrate(component);
 
-            Assert.AreEqual(path, component.Value<string>(nameof(JsonPathSelectorFlowBlock.Path)));
+            Assert.AreEqual(path, component.Value<string>(nameof(JPathSelectorFlowBlock.Path)));
+        }
+
+        [TestMethod]
+        public void Migrate_LegacyJsonPathSelectorType_TranslatesLegacySyntax()
+        {
+            var component = new JObject
+            {
+                ["$type"] = "FlowBlox.Core.Models.FlowBlocks.Json.JsonPathSelectorFlowBlock, FlowBlox.Core",
+                [nameof(JPathSelectorFlowBlock.Path)] = "participants/0/name"
+            };
+
+            new FlowBloxComponentMigrationStrategy_1_0_0().Migrate(component);
+
+            Assert.AreEqual("$.participants[0].name", component.Value<string>(nameof(JPathSelectorFlowBlock.Path)));
+        }
+
+        [TestMethod]
+        public void LegacyTypeMapping_JsonPathSelector_MapsToJPathSelector()
+        {
+            var mapping = new FlowBloxCoreLegacyTypeMappingService()
+                .GetLegacyTypeMappings()
+                .Single(x => x.TargetType == typeof(JPathSelectorFlowBlock));
+
+            CollectionAssert.Contains(
+                mapping.LegacyTypeNames.ToArray(),
+                "FlowBlox.Core.Models.FlowBlocks.Json.JsonPathSelectorFlowBlock, FlowBlox.Core");
         }
     }
 }

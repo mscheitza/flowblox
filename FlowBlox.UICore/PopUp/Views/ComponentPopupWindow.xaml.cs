@@ -3,6 +3,7 @@ using FlowBlox.UICore.PopUp.Resources;
 using MahApps.Metro.Controls;
 using MahApps.Metro.IconPacks;
 using System.Diagnostics;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +14,7 @@ namespace FlowBlox.UICore.PopUp.Views
 {
     public partial class ComponentPopupWindow : MetroWindow
     {
-        private static readonly Regex UrlRegex = new(@"https?://[^\s]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex UrlRegex = new(@"(?:https?|file)://[^\s]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly SolidColorBrush ActiveStepBrush = new(Color.FromRgb(30, 126, 223));
         private static readonly SolidColorBrush InactiveStepBrush = new(Color.FromRgb(207, 216, 226));
         private readonly IReadOnlyList<ComponentPopupItem> _items;
@@ -104,12 +105,18 @@ namespace FlowBlox.UICore.PopUp.Views
         private static void OpenLink(string url)
         {
             if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) ||
-                (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+                (uri.Scheme != Uri.UriSchemeHttp &&
+                 uri.Scheme != Uri.UriSchemeHttps &&
+                 uri.Scheme != Uri.UriSchemeFile))
                 return;
 
             try
             {
-                Process.Start(new ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true });
+                var target = uri.IsFile ? uri.LocalPath : uri.AbsoluteUri;
+                if (uri.IsFile && !File.Exists(target))
+                    return;
+
+                Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
             }
             catch
             {

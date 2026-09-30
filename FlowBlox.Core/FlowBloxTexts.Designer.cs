@@ -6475,45 +6475,45 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reads JSON content and returns the value or values selected by a Newtonsoft.Json JPath expression. ähnelt.
         /// </summary>
-        public static string JsonPathSelectorFlowBlock_Description {
+        public static string JPathSelectorFlowBlock_Description {
             get {
-                return ResourceManager.GetString("JsonPathSelectorFlowBlock_Description", resourceCulture);
+                return ResourceManager.GetString("JPathSelectorFlowBlock_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die JSON path selector ähnelt.
         /// </summary>
-        public static string JsonPathSelectorFlowBlock_DisplayName {
+        public static string JPathSelectorFlowBlock_DisplayName {
             get {
-                return ResourceManager.GetString("JsonPathSelectorFlowBlock_DisplayName", resourceCulture);
+                return ResourceManager.GetString("JPathSelectorFlowBlock_DisplayName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die JSON content ähnelt.
         /// </summary>
-        public static string JsonPathSelectorFlowBlock_JsonContent {
+        public static string JPathSelectorFlowBlock_JsonContent {
             get {
-                return ResourceManager.GetString("JsonPathSelectorFlowBlock_JsonContent", resourceCulture);
+                return ResourceManager.GetString("JPathSelectorFlowBlock_JsonContent", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die JSON path ähnelt.
         /// </summary>
-        public static string JsonPathSelectorFlowBlock_Path {
+        public static string JPathSelectorFlowBlock_Path {
             get {
-                return ResourceManager.GetString("JsonPathSelectorFlowBlock_Path", resourceCulture);
+                return ResourceManager.GetString("JPathSelectorFlowBlock_Path", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath expression used to select values from the JSON document. Use &apos;$&apos; for the root, dot notation for properties, &apos;[*]&apos; for all array items, &apos;[0]&apos; for an array index, and &apos;[?(...)]&apos; for filters. Examples: &apos;$.participants&apos;, &apos;$.participants[0]&apos;, &apos;$[*].id&apos;, &apos;$.addresses[?(@.Country == &apos;Germany&apos;)].Street&apos;. ähnelt.
         /// </summary>
-        public static string JsonPathSelectorFlowBlock_Path_Tooltip {
+        public static string JPathSelectorFlowBlock_Path_Tooltip {
             get {
-                return ResourceManager.GetString("JsonPathSelectorFlowBlock_Path_Tooltip", resourceCulture);
+                return ResourceManager.GetString("JPathSelectorFlowBlock_Path_Tooltip", resourceCulture);
             }
         }
         
@@ -6527,9 +6527,9 @@ namespace FlowBlox.Core {
         ///- `$.addresses[?(@.Country == &apos;Germany&apos;)]` selects address objects whose Country is Germany.
         ///- `$.addresses[?(@.Country == &apos;Germany&apos;)].Street` selects the  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        public static string JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples {
+        public static string JPathSelectorFlowBlock_SpecialExplanation_PathExamples {
             get {
-                return ResourceManager.GetString("JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples", resourceCulture);
+                return ResourceManager.GetString("JPathSelectorFlowBlock_SpecialExplanation_PathExamples", resourceCulture);
             }
         }
         
@@ -7533,69 +7533,6 @@ namespace FlowBlox.Core {
         public static string OnnxGenAIFlowBlock_TokenSelectionStrategy_Tooltip {
             get {
                 return ResourceManager.GetString("OnnxGenAIFlowBlock_TokenSelectionStrategy_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Context ähnelt.
-        /// </summary>
-        public static string OnnxQuestionAnsweringFlowBlock_Context {
-            get {
-                return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_Context", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Answers questions from a context using an ONNX model. ähnelt.
-        /// </summary>
-        public static string OnnxQuestionAnsweringFlowBlock_Description {
-            get {
-                return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die ONNX Q&amp;A ähnelt.
-        /// </summary>
-        public static string OnnxQuestionAnsweringFlowBlock_DisplayName {
-            get {
-                return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_DisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Position selection strategy ähnelt.
-        /// </summary>
-        public static string OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy {
-            get {
-                return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Defines how the best start and end positions are chosen from logits – e.g., via ArgMax or a custom evaluation method. ähnelt.
-        /// </summary>
-        public static string OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy_Tooltip {
-            get {
-                return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_PositionSelectionStrategy_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Q&amp;A Tokenizer ähnelt.
-        /// </summary>
-        public static string OnnxQuestionAnsweringFlowBlock_QATokenizer {
-            get {
-                return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_QATokenizer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Question ähnelt.
-        /// </summary>
-        public static string OnnxQuestionAnsweringFlowBlock_Question {
-            get {
-                return ResourceManager.GetString("OnnxQuestionAnsweringFlowBlock_Question", resourceCulture);
             }
         }
         
@@ -13994,6 +13931,30 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Very high ähnelt.
         /// </summary>
+        public static string OnnxQAFlowBlock_DisplayName => ResourceManager.GetString("OnnxQAFlowBlock_DisplayName", resourceCulture);
+        public static string OnnxQAFlowBlock_Description => ResourceManager.GetString("OnnxQAFlowBlock_Description", resourceCulture);
+        public static string OnnxQAFlowBlock_ModelFolder => ResourceManager.GetString("OnnxQAFlowBlock_ModelFolder", resourceCulture);
+        public static string OnnxQAFlowBlock_ModelFolder_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_ModelFolder_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_Question => ResourceManager.GetString("OnnxQAFlowBlock_Question", resourceCulture);
+        public static string OnnxQAFlowBlock_Question_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_Question_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_Context => ResourceManager.GetString("OnnxQAFlowBlock_Context", resourceCulture);
+        public static string OnnxQAFlowBlock_Context_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_Context_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_Groups_ExtendedSettings => ResourceManager.GetString("OnnxQAFlowBlock_Groups_ExtendedSettings", resourceCulture);
+        public static string OnnxQAFlowBlock_AiExecutionProvider => ResourceManager.GetString("OnnxQAFlowBlock_AiExecutionProvider", resourceCulture);
+        public static string OnnxQAFlowBlock_AiExecutionProvider_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_AiExecutionProvider_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_MaxSequenceLength => ResourceManager.GetString("OnnxQAFlowBlock_MaxSequenceLength", resourceCulture);
+        public static string OnnxQAFlowBlock_MaxSequenceLength_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_MaxSequenceLength_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_DocumentStride => ResourceManager.GetString("OnnxQAFlowBlock_DocumentStride", resourceCulture);
+        public static string OnnxQAFlowBlock_DocumentStride_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_DocumentStride_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_MaxAnswerLength => ResourceManager.GetString("OnnxQAFlowBlock_MaxAnswerLength", resourceCulture);
+        public static string OnnxQAFlowBlock_MaxAnswerLength_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_MaxAnswerLength_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_AllowNoAnswer => ResourceManager.GetString("OnnxQAFlowBlock_AllowNoAnswer", resourceCulture);
+        public static string OnnxQAFlowBlock_AllowNoAnswer_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_AllowNoAnswer_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_NoAnswerThreshold => ResourceManager.GetString("OnnxQAFlowBlock_NoAnswerThreshold", resourceCulture);
+        public static string OnnxQAFlowBlock_NoAnswerThreshold_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_NoAnswerThreshold_Tooltip", resourceCulture);
+        public static string OnnxQAFlowBlock_SpecialExplanation_ModelFolder => ResourceManager.GetString("OnnxQAFlowBlock_SpecialExplanation_ModelFolder", resourceCulture);
+        public static string OnnxQAFlowBlock_SpecialExplanation_Extractive => ResourceManager.GetString("OnnxQAFlowBlock_SpecialExplanation_Extractive", resourceCulture);
+
         public static string ZipCompressionStrength_VeryHigh {
             get {
                 return ResourceManager.GetString("ZipCompressionStrength_VeryHigh", resourceCulture);

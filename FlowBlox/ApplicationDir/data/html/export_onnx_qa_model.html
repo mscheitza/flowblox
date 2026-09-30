@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlowBlox extractive QA ONNX export script</title>
+  <style>html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; } body { overflow: hidden; }</style>
+</head>
+<body>
+  <iframe id="page" src="export-script-base.html" title="FlowBlox model script"></iframe>
+  <script>
+    const page = {
+      documentTitle: 'FlowBlox extractive QA ONNX export script',
+      title: 'Export an extractive QA model to ONNX',
+      notice: '<strong>Before you start:</strong> checkpoints and their ONNX exports may require several GB. Ensure that Python and enough free disk space are available.',
+      description: 'The default is multilingual mDeBERTa-v3 SQuAD2. Use <span class="path">--model-id</span> for another QA checkpoint and <span class="path">--output-directory &lt;folder&gt;</span> for its model folder.',
+      filename: 'export_onnx_qa_model.py',
+      scriptUrl: '../python/export_onnx_qa_model.py'
+    };
+    const frame = document.getElementById('page');
+    const send = () => frame.contentWindow.postMessage({ type: 'flowblox-export-script', page }, '*');
+    frame.addEventListener('load', send);
+    window.addEventListener('message', event => {
+      if (event.source === frame.contentWindow && event.data?.type === 'flowblox-export-script-ready') send();
+    });
+  </script>
+</body>
+</html>

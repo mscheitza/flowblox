@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlowBlox Phi-4 ONNX GenAI download script</title>
+  <style>html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; } body { overflow: hidden; }</style>
+</head>
+<body>
+  <iframe id="page" src="export-script-base.html" title="FlowBlox model script"></iframe>
+  <script>
+    const page = {
+      documentTitle: 'FlowBlox Phi-4 ONNX GenAI download script',
+      title: 'Download Phi-4 for ONNX Runtime GenAI',
+      notice: '<strong>Before you start:</strong> the CPU INT4 model is about 10.9 GB. Ensure that Python and enough free disk space are available.',
+      description: 'Run the published script with Python. Use <span class="path">--output-directory &lt;folder&gt;</span> to select a model folder; without it, the script stores the model below <span class="path">data/python/onnxgenai/phi-4</span>.',
+      filename: 'download_phi4_onnx.py',
+      scriptUrl: '../python/download_phi4_onnx.py'
+    };
+    const frame = document.getElementById('page');
+    const send = () => frame.contentWindow.postMessage({ type: 'flowblox-export-script', page }, '*');
+    frame.addEventListener('load', send);
+    window.addEventListener('message', event => {
+      if (event.source === frame.contentWindow && event.data?.type === 'flowblox-export-script-ready') send();
+    });
+  </script>
+</body>
+</html>

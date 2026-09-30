@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlowBlox model script</title>
+  <style>
+    :root { color-scheme: light; font-family: "Segoe UI", sans-serif; color: #172033; background: #f4f8fc; }
+    body { max-width: 980px; margin: 0 auto; padding: 40px 24px; }
+    h1 { margin-bottom: 8px; font-size: 30px; }
+    p { line-height: 1.55; color: #46566d; }
+    .notice { border-left: 4px solid #2384e8; padding: 10px 16px; background: #eaf4fc; border-radius: 8px; }
+    .code-card { position: relative; margin-top: 24px; overflow: hidden; border: 1px solid #cad8e8; border-radius: 16px; background: #17233a; box-shadow: 0 14px 38px rgba(34, 72, 112, .16); }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 14px; color: #c8d8ea; background: #21314e; }
+    .actions { display: flex; gap: 8px; }
+    button { display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border: 1px solid #5d83ae; border-radius: 9px; color: white; background: #247fdb; cursor: pointer; font-weight: 600; }
+    button:hover { background: #176fc4; }
+    button:disabled { cursor: default; opacity: .65; }
+    button svg { width: 17px; height: 17px; fill: currentColor; }
+    pre { margin: 0; padding: 22px; overflow: auto; color: #e8f0fa; font: 13px/1.55 Consolas, "Cascadia Code", monospace; tab-size: 4; }
+    code { white-space: pre; }
+    .path { font-family: Consolas, monospace; color: #185d98; }
+    #script-fallback { display: none; width: 100%; height: 620px; border: 0; background: white; }
+  </style>
+</head>
+<body>
+  <h1 id="heading">FlowBlox model script</h1>
+  <p id="notice" class="notice">Loading script description…</p>
+  <p id="description"></p>
+
+  <div class="code-card">
+    <div class="toolbar">
+      <span id="filename">model-script.py</span>
+      <div class="actions">
+        <button id="download" type="button" aria-label="Download Python script">Download .py</button>
+        <button id="copy" type="button" aria-label="Copy Python script">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H8a2 2 0 0 1-2-2V8h2v11h11v2Zm-4-4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2ZM5 5v10h10V5H5Z"/></svg>
+          <span id="copy-label">Copy</span>
+        </button>
+      </div>
+    </div>
+    <pre id="script-container"><code id="script">Loading Python script…</code></pre>
+    <iframe id="script-fallback" title="Python script source"></iframe>
+  </div>
+
+  <script>
+    let page = { filename: 'model-script.py', scriptUrl: '' };
+    let scriptText = '';
+    const heading = document.getElementById('heading');
+    const notice = document.getElementById('notice');
+    const description = document.getElementById('description');
+    const filename = document.getElementById('filename');
+    const script = document.getElementById('script');
+    const scriptContainer = document.getElementById('script-container');
+    const scriptFallback = document.getElementById('script-fallback');
+    const copyButton = document.getElementById('copy');
+    const copyLabel = document.getElementById('copy-label');
+
+    async function loadScript() {
+      scriptText = '';
+      script.textContent = 'Loading Python script…';
+      scriptContainer.style.display = 'block';
+      scriptFallback.style.display = 'none';
+      copyButton.disabled = false;
+
+      try {
+        const response = await fetch(page.scriptUrl, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        scriptText = await response.text();
+        script.textContent = scriptText;
+      } catch {
+        // Browsers commonly block fetch() between local file:// resources. A direct
+        // iframe still displays the published ../python file without duplicating it.
+        scriptContainer.style.display = 'none';
+        scriptFallback.src = page.scriptUrl;
+        scriptFallback.style.display = 'block';
+        copyButton.disabled = true;
+        copyLabel.textContent = 'Open script to copy';
+      }
+    }
+
+    window.addEventListener('message', event => {
+      if (event.source !== window.parent || event.data?.type !== 'flowblox-export-script') return;
+      page = event.data.page;
+      document.title = page.documentTitle || page.title;
+      heading.textContent = page.title;
+      notice.innerHTML = page.notice;
+      description.innerHTML = page.description;
+      filename.textContent = page.filename;
+      loadScript();
+    });
+
+    copyButton.addEventListener('click', async () => {
+      if (!scriptText) return;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(scriptText);
+        } else {
+          const area = document.createElement('textarea');
+          area.value = scriptText;
+          area.style.position = 'fixed';
+          area.style.opacity = '0';
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand('copy');
+          area.remove();
+        }
+        copyLabel.textContent = 'Copied';
+        setTimeout(() => copyLabel.textContent = 'Copy', 1600);
+      } catch {
+        copyLabel.textContent = 'Select and copy';
+      }
+    });
+
+    document.getElementById('download').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.href = page.scriptUrl;
+      link.download = page.filename;
+      link.click();
+    });
+
+    window.parent.postMessage({ type: 'flowblox-export-script-ready' }, '*');
+  </script>
+</body>
+</html>

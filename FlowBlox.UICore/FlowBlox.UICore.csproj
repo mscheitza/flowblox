@@ -25,6 +25,26 @@
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="PopUp\Resources\OnnxQAPopUpImages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OnnxQAPopUpImages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PopUp\Resources\OnnxQAPopUpTexts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OnnxQAPopUpTexts.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PopUp\Resources\OnnxGenAIPopUpImages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OnnxGenAIPopUpImages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PopUp\Resources\OnnxGenAIPopUpTexts.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OnnxGenAIPopUpTexts.resx</DependentUpon>
+    </Compile>
     <Compile Update="PopUp\Resources\WebBrowserPopUpImages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -290,6 +310,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="PopUp\Resources\OnnxQAPopUpImages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OnnxQAPopUpImages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PopUp\Resources\OnnxQAPopUpTexts.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OnnxQAPopUpTexts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PopUp\Resources\OnnxGenAIPopUpImages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OnnxGenAIPopUpImages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PopUp\Resources\OnnxGenAIPopUpTexts.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OnnxGenAIPopUpTexts.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="PopUp\Resources\WebBrowserPopUpImages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WebBrowserPopUpImages.Designer.cs</LastGenOutput>

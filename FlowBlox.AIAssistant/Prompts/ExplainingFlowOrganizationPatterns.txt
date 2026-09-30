@@ -18,10 +18,10 @@ Decision criteria:
 
 Example 1 (JSON configuration pre-task):
 - Avoid long serial chains like:
-  `StartFlowBlock -> JsonObjectFlowBlock -> JsonPathSelectorFlowBlock(SMTP Host) -> JsonPathSelectorFlowBlock(SMTP Port) -> ...`
+  `StartFlowBlock -> JsonObjectFlowBlock -> JPathSelectorFlowBlock(SMTP Host) -> JPathSelectorFlowBlock(SMTP Port) -> ...`
 - Prefer:
   `StartFlowBlock -> JsonObjectFlowBlock`
-  with multiple stacked `JsonPathSelectorFlowBlock` siblings as direct next blocks of `JsonObjectFlowBlock` and explicit `ExecutionIndex` as needed.
+  with multiple stacked `JPathSelectorFlowBlock` siblings as direct next blocks of `JsonObjectFlowBlock` and explicit `ExecutionIndex` as needed.
 - Treat this as a configuration sub-flow (task block), then continue to the main business flow in a later index.
 
 Example 2 (Web cookie/search pre-task):

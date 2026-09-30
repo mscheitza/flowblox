@@ -24,6 +24,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string SpecialTestDrivenUnknownResourcesKey = "explaining_test_driven_unknown_resources";
         public const string SpecialModifiersAndFieldValidatorsKey = "explaining_modifiers_and_field_validators";
         public const string SpecialOnnxGenAIModelsKey = "explaining_onnx_genai_models";
+        public const string SpecialOnnxQAModelsKey = "explaining_onnx_qa_models";
         public const string SpecialFlowRecursionKey = "explaining_flow_recursion";
         public const string SpecialExtensionsKey = "explaining_extensions";
         public const string SpecialProjectSpaceKey = "explaining_project_space";
@@ -135,6 +136,12 @@ namespace FlowBlox.AIAssistant.Services
                     "Explaining ONNX Runtime GenAI Models",
                     "FlowBlox.AIAssistant.Prompts.ExplainingOnnxGenAIModels.txt",
                     "Special: on-demand guidance for obtaining and configuring ONNX Runtime GenAI model folders for OnnxGenAIFlowBlock.",
+                    false),
+                [SpecialOnnxQAModelsKey] = new PromptEntryDefinition(
+                    SpecialOnnxQAModelsKey,
+                    "Explaining ONNX Question Answering Models",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingOnnxQAModels.txt",
+                    "Special: on-demand guidance for selecting, exporting and configuring extractive QA model folders for OnnxQAFlowBlock.",
                     false),
                 [SpecialFlowRecursionKey] = new PromptEntryDefinition(
                     SpecialFlowRecursionKey,

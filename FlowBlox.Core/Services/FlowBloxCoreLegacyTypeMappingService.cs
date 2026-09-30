@@ -7,6 +7,7 @@ using FlowBlox.Core.Models.FlowBlocks.ControlFlow;
 using FlowBlox.Core.Models.FlowBlocks.Selection;
 using FlowBlox.Core.Models.FlowBlocks.Web.InternalWebRequest;
 using FlowBlox.Core.Models.FlowBlocks.IO;
+using FlowBlox.Core.Models.FlowBlocks.Json;
 
 namespace FlowBlox.Core.Services
 {
@@ -127,6 +128,11 @@ namespace FlowBlox.Core.Services
                     typeof(TableSelectorColumnCondition),
                     [
                         "FlowBlox.Core.Models.FlowBlocks.TableSelectorColumnCondition, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(JPathSelectorFlowBlock),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.Json.JsonPathSelectorFlowBlock, FlowBlox.Core"
                     ])
             ];
         }
