@@ -22,6 +22,7 @@
     <None Remove="Files\globalToolbox_sql_oracle.json" />
     <None Remove="Files\globalToolbox_shellexecution.json" />
     <None Remove="Files\globalToolbox_xpath.json" />
+    <None Remove="Files\globalToolbox_jpath.json" />
     <None Remove="Models\FlowBlocks\Web\duplicate_tab_shortcut_1.5.1.0.crx" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +97,7 @@
     <EmbeddedResource Include="Files\globalToolbox_sql_oracle.json" />
     <EmbeddedResource Include="Files\globalToolbox_shellexecution.json" />
     <EmbeddedResource Include="Files\globalToolbox_xpath.json" />
+    <EmbeddedResource Include="Files\globalToolbox_jpath.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="FlowBloxIcons.resx">

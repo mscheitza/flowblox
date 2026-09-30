@@ -18,6 +18,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 {
     [Display(Name = "JsonObjectWriterFlowBlock_DisplayName", Description = "JsonObjectWriterFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("JsonFlowBlocks_SpecialExplanation_JPathSyntax", Icon = SpecialExplanationIcon.Information)]
     public class JsonObjectWriterFlowBlock : BaseSingleResultFlowBlock
     {
         public override FieldTypes DefaultResultFieldType => FieldTypes.Boolean;
@@ -55,6 +56,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
 
         [Display(Name = "JsonObjectWriterFlowBlock_Path", Description = "JsonObjectWriterFlowBlock_Path_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.JPath))]
         public string Path { get; set; }
 
         [Display(Name = "JsonObjectWriterFlowBlock_IsArray", Description = "JsonObjectWriterFlowBlock_IsArray_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
@@ -103,45 +105,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                     root = AssociatedJsonObjectWriter.CreatedOrUpdatedObject;
                 }
 
-                // Search/create parent via path
-                var effectivePath = string.IsNullOrWhiteSpace(Path) ? "" : Path;
-                var current = JsonPathSelector.GetJToken(root, effectivePath, out JToken parent, out string propertyName);
-
-                JObject createdOrUpdatedObject;
-                if (current is JArray targetArray)
-                {
-                    createdOrUpdatedObject = new JObject();
-                    targetArray.Add(createdOrUpdatedObject);
-                }
-                else if (current is null)
-                {
-                    if (parent is not JObject parentObject || string.IsNullOrWhiteSpace(propertyName))
-                        throw new InvalidOperationException("The target path cannot be created at this location.");
-
-                    if (IsArray)
-                    {
-                        var newArray = new JArray();
-                        createdOrUpdatedObject = new JObject();
-                        newArray.Add(createdOrUpdatedObject);
-                        parentObject[propertyName] = newArray;
-                    }
-                    else
-                    {
-                        createdOrUpdatedObject = new JObject();
-                        parentObject[propertyName] = createdOrUpdatedObject;
-                    }
-                }
-                else if (current is JObject jObject)
-                {
-                    if (IsArray)
-                        throw new InvalidOperationException("The target path resolves to an object. For array mode, provide a path to an array property.");
-
-                    createdOrUpdatedObject = jObject;
-                }
-                else
-                {
-                    throw new InvalidOperationException("The target parent for the new node must be an object or array.");
-                }
+                var resolvedPath = FlowBloxFieldHelper.ReplaceFieldsInString(Path);
+                var effectivePath = string.IsNullOrWhiteSpace(resolvedPath) ? "$" : resolvedPath.Trim();
+                var createdOrUpdatedObject = JPathEnsurer.EnsureObject(root, effectivePath, IsArray);
 
                 CreatedOrUpdatedObject = createdOrUpdatedObject;
                 ApplyAssignments(createdOrUpdatedObject);

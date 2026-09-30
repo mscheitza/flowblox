@@ -1,0 +1,70 @@
+{
+  "ToolboxElements": [
+    {
+      "Content": "$",
+      "Description": "Selects the root JSON value.",
+      "Name": "Select root",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$[*]",
+      "Description": "Selects every item of a root array.",
+      "Name": "Select all root array items",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$.<Property>",
+      "Description": "Selects a property of the root object.",
+      "Name": "Select property",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$.<Parent>.<Property>",
+      "Description": "Selects a nested object property.",
+      "Name": "Select nested property",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$.<Array>[<Index>]",
+      "Description": "Selects an array item by its zero-based index.",
+      "Name": "Select array item by index",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$.<Array>[*]",
+      "Description": "Selects every item of an array.",
+      "Name": "Select all array items",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$.<Array>[*].<Property>",
+      "Description": "Selects one property from every object in an array.",
+      "Name": "Project array property",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$.<Array>[?(@.<Property> == '<Value>')]",
+      "Description": "Selects array items whose property equals a value.",
+      "Name": "Filter array by equality",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$.<Array>[?(@.<Property> > <Value>)]",
+      "Description": "Selects array items whose property is greater than a value.",
+      "Name": "Filter array by comparison",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$..<Property>",
+      "Description": "Selects a property recursively at any depth.",
+      "Name": "Select property recursively",
+      "ToolboxCategory": "JPath"
+    },
+    {
+      "Content": "$['<Property>']",
+      "Description": "Selects a property whose name requires quoted notation.",
+      "Name": "Select quoted property",
+      "ToolboxCategory": "JPath"
+    }
+  ]
+}

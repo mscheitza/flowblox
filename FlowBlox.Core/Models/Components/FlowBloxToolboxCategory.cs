@@ -22,6 +22,11 @@ namespace FlowBlox.Core.Models.Components
             "FlowBloxToolboxCategory_XPath",
             typeof(FlowBloxTexts));
 
+        public static readonly FlowBloxToolboxCategoryItem JPath = new(
+            nameof(JPath),
+            "FlowBloxToolboxCategory_JPath",
+            typeof(FlowBloxTexts));
+
         public static readonly FlowBloxToolboxCategoryItem CounterFormat = new(
             nameof(CounterFormat),
             "FlowBloxToolboxCategory_CounterFormat",

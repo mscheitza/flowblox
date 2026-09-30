@@ -11,6 +11,7 @@ namespace FlowBlox.Core.Services
             [
                 FlowBloxToolboxCategory.Regex,
                 FlowBloxToolboxCategory.XPath,
+                FlowBloxToolboxCategory.JPath,
                 FlowBloxToolboxCategory.CounterFormat,
                 FlowBloxToolboxCategory.Format,
                 FlowBloxToolboxCategory.SQL,
@@ -36,6 +37,7 @@ namespace FlowBlox.Core.Services
                 "FlowBlox.Core.Files.globalToolbox_sql_mysql.json",
                 "FlowBlox.Core.Files.globalToolbox_sql_oracle.json",
                 "FlowBlox.Core.Files.globalToolbox_xpath.json",
+                "FlowBlox.Core.Files.globalToolbox_jpath.json",
                 "FlowBlox.Core.Files.globalToolbox_chattemplates.json",
                 "FlowBlox.Core.Files.globalToolbox_aiprompttemplates.json",
                 "FlowBlox.Core.Files.globalToolbox_shellexecution.json"

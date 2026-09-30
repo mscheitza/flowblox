@@ -21,7 +21,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     {
         [Required]
         [Display(Name = "JsonManyPathsSelectorMappingEntry_JsonPath", Description = "JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.JPath))]
         public string JsonPath { get; set; }
 
         [Required]
@@ -42,6 +42,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     }
 
     [FlowBloxUIGroup("JsonManyPathsSelectorFlowBlock_Groups_Mappings", 0)]
+    [FlowBloxSpecialExplanation("JsonFlowBlocks_SpecialExplanation_JPathSyntax", Icon = SpecialExplanationIcon.Information)]
     [Display(Name = "JsonManyPathsSelectorFlowBlock_DisplayName", Description = "JsonManyPathsSelectorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class JsonManyPathsSelectorFlowBlock : BaseResultFlowBlock
     {
@@ -145,10 +146,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                         continue;
                     }
 
-                    JToken resultToken;
+                    List<JToken> resultTokens;
                     try
                     {
-                        resultToken = JsonPathSelector.GetJToken(rootToken, resolvedPath, out _, out _);
+                        resultTokens = rootToken
+                            .SelectTokens(resolvedPath, errorWhenNoMatch: false)
+                            .ToList();
                     }
                     catch (Exception)
                     {
@@ -156,13 +159,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                         continue;
                     }
 
-                    if (resultToken == null)
+                    if (resultTokens.Count == 0)
                     {
                         hadUnresolvedPaths = true;
                         continue;
                     }
 
-                    row[mappingEntry.Field] = SerializeToken(resultToken);
+                    row[mappingEntry.Field] = resultTokens.Count == 1
+                        ? SerializeToken(resultTokens[0])
+                        : SerializeToken(new JArray(resultTokens.Select(x => x.DeepClone())));
                 }
 
                 if (hadUnresolvedPaths)

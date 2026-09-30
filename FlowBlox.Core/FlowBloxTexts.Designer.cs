@@ -4439,6 +4439,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JPath ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_JPath {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_JPath", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Regex ähnelt.
         /// </summary>
         public static string FlowBloxToolboxCategory_Regex {
@@ -6104,6 +6113,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path properties in this flow block use Newtonsoft.Json JPath syntax. See [Querying JSON with JSON Path](https://www.newtonsoft.com/json/help/html/queryjsonselecttoken.htm). ähnelt.
+        /// </summary>
+        public static string JsonFlowBlocks_SpecialExplanation_JPathSyntax {
+            get {
+                return ResourceManager.GetString("JsonFlowBlocks_SpecialExplanation_JPathSyntax", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reads multiple JSON paths from one JSON source and maps the resolved values directly to result fields. ähnelt.
         /// </summary>
         public static string JsonManyPathsSelectorFlowBlock_Description {
@@ -6176,7 +6194,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Path used to resolve a value from the JSON content. Use &apos;/&apos; to separate nodes. Arrays can be returned as a whole, addressed by numeric index, projected by property, or filtered with @Property operators, e.g. &apos;addresses/@Country=Germany/Street&apos;. Supported operators: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath expression used to resolve values from the JSON content, for example &apos;$.participants[0].name&apos;, &apos;$[*].id&apos;, or &apos;$.addresses[?(@.Country == &apos;Germany&apos;)].Street&apos;. ähnelt.
         /// </summary>
         public static string JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip {
             get {
@@ -6437,7 +6455,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Path to the target node where the object should be created or updated. Use &apos;/&apos; to separate segments; object properties by name, array entries by index (e.g. &apos;participants/0&apos;). For array append, set Path to the array property (e.g. &apos;participants&apos;) and enable IsArray. A new object element is appended and assignments set properties directly on that new element. Assignment PropertyName is treated as a literal property key (not as a path). Empty path targets the root object. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath to the target node where the object should be created or updated (e.g. &apos;$.participants[0]&apos;). For array append, select the array property (e.g. &apos;$.participants&apos;) and enable IsArray. A new object element is appended and assignments set properties directly on that new element. Assignment PropertyName is treated as a literal property key, not as a path. An empty path targets the root object. ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_Path_Tooltip {
             get {
@@ -6455,7 +6473,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reads JSON content and returns the value or values that match the specified JSON path. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads JSON content and returns the value or values selected by a Newtonsoft.Json JPath expression. ähnelt.
         /// </summary>
         public static string JsonPathSelectorFlowBlock_Description {
             get {
@@ -6491,7 +6509,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Path used to navigate through the JSON document. Use &apos;$&apos; for the root and &apos;/&apos; to separate nodes. If the root is an array, &apos;$&apos; returns its items individually and &apos;$/id&apos; projects a property from all items. Object properties are addressed by name, arrays can be returned as a whole or addressed by numeric index (e.g. &apos;participants/addresses&apos; or &apos;participants/addresses/0&apos;). Array filters use @Property operators, e.g. &apos;addresses/@Country=Germany/Street&apos;. Supported operators: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not n [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath expression used to select values from the JSON document. Use &apos;$&apos; for the root, dot notation for properties, &apos;[*]&apos; for all array items, &apos;[0]&apos; for an array index, and &apos;[?(...)]&apos; for filters. Examples: &apos;$.participants&apos;, &apos;$.participants[0]&apos;, &apos;$[*].id&apos;, &apos;$.addresses[?(@.Country == &apos;Germany&apos;)].Street&apos;. ähnelt.
         /// </summary>
         public static string JsonPathSelectorFlowBlock_Path_Tooltip {
             get {
@@ -6500,14 +6518,14 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path examples:
-        ///- `$` returns the root content; items of a root array are returned individually.
-        ///- `$/id` returns the id values of all objects in a root array.
-        ///- `participant/name` returns a single property value.
-        ///- `participant/addresses` returns all address array items; object items are returned as compact JSON.
-        ///- `participant/addresses/0/Street` returns the street of the first address.
-        ///- `participant/addresses/@Country=Germany` returns address objects whose Country is Germany.
-        ///- `participant/addresse [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die JPath examples:
+        ///- `$` selects the root content; items of a selected array are returned individually.
+        ///- `$[*].id` selects the id values of all objects in a root array.
+        ///- `$.participant.name` selects a single property value.
+        ///- `$.participant.addresses` selects the address array.
+        ///- `$.participant.addresses[0].Street` selects the street of the first address.
+        ///- `$.addresses[?(@.Country == &apos;Germany&apos;)]` selects address objects whose Country is Germany.
+        ///- `$.addresses[?(@.Country == &apos;Germany&apos;)].Street` selects the  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         public static string JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples {
             get {

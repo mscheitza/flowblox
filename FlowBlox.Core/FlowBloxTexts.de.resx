@@ -942,7 +942,7 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Pfad</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_Path_Tooltip" xml:space="preserve">
-		<value>Pfad zum Zielknoten, an dem das Objekt erstellt oder aktualisiert wird. Verwenden Sie '/' zur Trennung von Segmenten; Objekt-Eigenschaften über Namen, Array-Einträge über Index (z. B. 'participants/0'). Für Array-Append den Pfad auf die Array-Property setzen (z. B. 'participants') und IsArray aktivieren. Es wird ein neues Objekt-Element angehängt, und die Zuweisungen setzen Eigenschaften direkt auf diesem neuen Element. Assignment PropertyName wird als literaler Property-Key behandelt (nicht als Pfad). Ein leerer Pfad adressiert das Root-Objekt.</value>
+		<value>Newtonsoft.Json-JPath zum Zielknoten, an dem das Objekt erstellt oder aktualisiert wird (z. B. '$.participants[0]'). Für das Anhängen an ein Array die Array-Property auswählen (z. B. '$.participants') und IsArray aktivieren. Ein neues Objekt-Element wird angehängt und die Zuweisungen setzen Properties direkt auf diesem Element. Assignment PropertyName wird als literaler Property-Key und nicht als Pfad behandelt. Ein leerer Pfad adressiert das Root-Objekt.</value>
 	</data>
 	<data name="JsonObjectWriterFlowBlock_IsArray" xml:space="preserve">
 		<value>Ist Array</value>
@@ -951,7 +951,7 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Wenn aktiviert und der Pfad noch nicht existiert, wird am Pfad ein Array angelegt und ein neues Objekt-Element hinzugefügt. Wenn deaktiviert, wird am Pfad ein JSON-Objekt angelegt.</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_Description" xml:space="preserve">
-		<value>Liest JSON-Inhalt ein und gibt den Wert oder die Werte zurück, die dem angegebenen JSON-Pfad entsprechen.</value>
+		<value>Liest JSON-Inhalt ein und gibt die mit einem Newtonsoft.Json-JPath-Ausdruck ausgewählten Werte zurück.</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_DisplayName" xml:space="preserve">
 		<value>JSON-Pfad-Selektor</value>
@@ -963,15 +963,14 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>JSON-Pfad</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples" xml:space="preserve">
-		<value>JSON-Pfad-Beispiele:
-- `$` gibt den Root-Inhalt zurück; Elemente eines Root-Arrays werden einzeln ausgegeben.
-- `$/id` gibt die id-Werte aller Objekte eines Root-Arrays zurück.
-- `participant/name` gibt einen einzelnen Property-Wert zurück.
-- `participant/addresses` gibt alle Elemente des Adress-Arrays zurück; Objekt-Elemente werden als kompaktes JSON ausgegeben.
-- `participant/addresses/0/Street` gibt die Straße der ersten Adresse zurück.
-- `participant/addresses/@Country=Germany` gibt Adressobjekte zurück, deren Country Germany ist.
-- `participant/addresses/@Country=Germany/Street` gibt die Straßen der deutschen Adressen zurück.
-- Filter unterstützen: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
+		<value>JPath-Beispiele:
+- `$` wählt den Root-Inhalt aus; Elemente eines ausgewählten Arrays werden einzeln ausgegeben.
+- `$[*].id` wählt die id-Werte aller Objekte eines Root-Arrays aus.
+- `$.participant.name` wählt einen einzelnen Property-Wert aus.
+- `$.participant.addresses` wählt das Adress-Array aus.
+- `$.participant.addresses[0].Street` wählt die Straße der ersten Adresse aus.
+- `$.addresses[?(@.Country == 'Germany')]` wählt Adressobjekte aus, deren Country Germany ist.
+- `$.addresses[?(@.Country == 'Germany')].Street` wählt die Straßen deutscher Adressen aus.</value>
 	</data>
 	<data name="JsonPropertyValueAssignment_DisplayName" xml:space="preserve">
 		<value>JSON-Property-Zuweisung</value>
@@ -1911,7 +1910,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Optionaler Kontext-FlowBlock. Wenn gesetzt, wird der Index bei jedem Iterationsstart dieses FlowBlocks auf den initialen Index zurückgesetzt. Ist kein Kontext angegeben, läuft der Index über die gesamte Laufzeit kontinuierlich weiter.</value>
 	</data>
 	<data name="JsonPathSelectorFlowBlock_Path_Tooltip" xml:space="preserve">
-		<value>Pfad zur Navigation im JSON-Dokument. Verwenden Sie '$' für den Root und '/' zur Trennung von Knoten. Ist der Root ein Array, gibt '$' dessen Elemente einzeln aus und '$/id' projiziert eine Property aus allen Elementen. Objekt-Properties werden über ihren Namen adressiert, Arrays können vollständig zurückgegeben oder per numerischem Index adressiert werden (z. B. 'participants/addresses' oder 'participants/addresses/0'). Array-Filter verwenden @Property-Operatoren, z. B. 'addresses/@Country=Germany/Street'. Unterstützte Operatoren: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
+		<value>Newtonsoft.Json-JPath-Ausdruck zur Auswahl von Werten aus dem JSON-Dokument. Verwenden Sie '$' für den Root, die Punktnotation für Properties, '[*]' für alle Array-Elemente, '[0]' für einen Array-Index und '[?(...)]' für Filter. Beispiele: '$.participants', '$.participants[0]', '$[*].id', '$.addresses[?(@.Country == 'Germany')].Street'.</value>
 	</data>
 	<data name="MathFlowBlock_DisplayName" xml:space="preserve">
 		<value>Berechnung</value>
@@ -2593,6 +2592,9 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	</data>
 	<data name="FlowBloxToolboxCategory_XPath" xml:space="preserve">
 		<value>XPath</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_JPath" xml:space="preserve">
+		<value>JPath</value>
 	</data>
 	<data name="FlowBloxToolboxCategory_CounterFormat" xml:space="preserve">
 		<value>Zählerformat</value>
@@ -3709,8 +3711,11 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
     <value>Anhangszuordnungen, die aus konfigurierten Feldern erzeugt werden.</value>
   </data>
 	<data name="JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip" xml:space="preserve">
-    <value>Pfad zur Auflösung eines Werts aus dem JSON-Inhalt. Verwenden Sie '/' zur Trennung von Knoten. Arrays können vollständig zurückgegeben, per numerischem Index adressiert, per Property projiziert oder mit @Property-Operatoren gefiltert werden, z. B. 'addresses/@Country=Germany/Street'. Unterstützte Operatoren: =, !=, &gt;, &gt;=, &lt;, &lt;=, is null, is not null, is empty, is not empty.</value>
-  </data>
+		<value>Newtonsoft.Json-JPath-Ausdruck zur Auflösung von Werten aus dem JSON-Inhalt, zum Beispiel '$.participants[0].name', '$[*].id' oder '$.addresses[?(@.Country == 'Germany')].Street'.</value>
+	</data>
+	<data name="JsonFlowBlocks_SpecialExplanation_JPathSyntax" xml:space="preserve">
+		<value>JSON-Pfad-Properties in diesem Flow-Block verwenden die Newtonsoft.Json-JPath-Syntax. Siehe [JSON mit JSON Path abfragen](https://www.newtonsoft.com/json/help/html/queryjsonselecttoken.htm).</value>
+	</data>
 	<data name="JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip" xml:space="preserve">
     <value>JSON-Quellinhalt, der für alle konfigurierten Pfadzuordnungen verwendet wird.</value>
   </data>

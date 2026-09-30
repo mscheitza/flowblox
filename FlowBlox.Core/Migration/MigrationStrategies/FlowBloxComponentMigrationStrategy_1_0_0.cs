@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.FlowBlocks.Json;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 
@@ -96,6 +97,8 @@ namespace FlowBlox.Core.Migration.MigrationStrategies
         /// </summary>
         protected override void OnVisitObject(Type? currentType, JObject obj)
         {
+            MigrateLegacyJsonPath(currentType, obj);
+
             // WebRequestFlowBlock.ResultField -> ResultFields migration
             if (currentType != null &&
                 WebRequestFlowBlockType != null &&
@@ -103,6 +106,24 @@ namespace FlowBlox.Core.Migration.MigrationStrategies
             {
                 MigrateWebRequestResultField(obj);
             }
+        }
+
+        private static void MigrateLegacyJsonPath(Type? currentType, JObject obj)
+        {
+            var propertyName = currentType switch
+            {
+                Type type when typeof(JsonPathSelectorFlowBlock).IsAssignableFrom(type) => nameof(JsonPathSelectorFlowBlock.Path),
+                Type type when typeof(JsonObjectWriterFlowBlock).IsAssignableFrom(type) => nameof(JsonObjectWriterFlowBlock.Path),
+                Type type when typeof(JsonManyPathsSelectorMappingEntry).IsAssignableFrom(type) => nameof(JsonManyPathsSelectorMappingEntry.JsonPath),
+                _ => null
+            };
+
+            if (propertyName == null || obj[propertyName]?.Type != JTokenType.String)
+                return;
+
+            var path = obj[propertyName].ToString();
+            if (!Legacy2JPathTranslator.IsNewtonsoftJPath(path))
+                obj[propertyName] = Legacy2JPathTranslator.Translate(path);
         }
 
         private const string WebRequestFlowBlockTypeString =

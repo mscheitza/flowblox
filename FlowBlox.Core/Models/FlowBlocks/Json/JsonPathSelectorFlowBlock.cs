@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Json
 {
+    [FlowBloxSpecialExplanation("JsonFlowBlocks_SpecialExplanation_JPathSyntax", Icon = SpecialExplanationIcon.Information)]
     [FlowBloxSpecialExplanation("JsonPathSelectorFlowBlock_SpecialExplanation_PathExamples", Icon = SpecialExplanationIcon.Information)]
     [Display(Name = "JsonPathSelectorFlowBlock_DisplayName", Description = "JsonPathSelectorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class JsonPathSelectorFlowBlock : BaseSingleResultFlowBlock
@@ -23,6 +24,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         public string JsonContent { get; set; }
 
         [Display(Name = "JsonPathSelectorFlowBlock_Path", Description = "JsonPathSelectorFlowBlock_Path_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.JPath))]
         [Required]
         public string Path { get; set; }
 
@@ -73,8 +75,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                 }
 
                 var rootToken = JToken.Parse(jsonText);
-                var resultToken = JsonPathSelector.GetJToken(rootToken, path, out _, out _);
-                if (resultToken == null)
+                var resultTokens = rootToken.SelectTokens(path, errorWhenNoMatch: false).ToList();
+                if (resultTokens.Count == 0)
                 {
                     CreateNotification(runtime, JsonPathSelectorNotifications.JsonTokenCouldNotBeResolved);
                     GenerateResult(runtime);
@@ -83,25 +85,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
                 var results = new List<string>();
 
-                switch (resultToken)
+                foreach (var resultToken in resultTokens)
                 {
-                    case JValue jv:
-                        results.Add(jv.Value?.ToString());
-                        break;
-
-                    case JArray arr:
-                        foreach (var item in arr)
-                        {
-                            if (item is JValue iv)
-                                results.Add(iv.Value?.ToString());
-                            else
-                                results.Add(JsonConvert.SerializeObject(item, Formatting.None));
-                        }
-                        break;
-
-                    default:
-                        results.Add(JsonConvert.SerializeObject(resultToken, Formatting.None));
-                        break;
+                    if (resultToken is JArray array)
+                    {
+                        foreach (var item in array)
+                            results.Add(SerializeToken(item));
+                    }
+                    else
+                    {
+                        results.Add(SerializeToken(resultToken));
+                    }
                 }
 
                 if (results.Count == 0)
@@ -109,6 +103,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
                 GenerateResult(runtime, results);
             });
+        }
+
+        private static string SerializeToken(JToken token)
+        {
+            return token is JValue value
+                ? value.Value?.ToString()
+                : JsonConvert.SerializeObject(token, Formatting.None);
         }
 
         public enum JsonPathSelectorNotifications
