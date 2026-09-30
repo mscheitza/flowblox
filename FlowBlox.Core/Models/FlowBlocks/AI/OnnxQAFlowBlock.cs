@@ -106,13 +106,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.AI;
 
-        public override List<string> GetDisplayableProperties()
-        {
-            var props = base.GetDisplayableProperties();
-            props.Add(nameof(ModelFolder));
-            return props;
-        }
-
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             base.RuntimeStarted(runtime);
