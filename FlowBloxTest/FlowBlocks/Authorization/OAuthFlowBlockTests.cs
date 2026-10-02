@@ -10,6 +10,7 @@ using System.Text;
 namespace FlowBloxTest.FlowBlocks.Authorization
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class OAuthFlowBlockTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;

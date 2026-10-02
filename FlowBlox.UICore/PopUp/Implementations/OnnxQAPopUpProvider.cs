@@ -16,7 +16,7 @@ namespace FlowBlox.UICore.PopUp.Implementations
         ComponentPopupProviderBase<OnnxQAFlowBlock>,
         IOptionsRegistration
     {
-        public override string OptionKey => PopupOptionNames.ShowOnnxQAPopupOnOpen;
+        public override string OptionKey => PopupOptionNames.OnnxQAQuickStartCompleted;
 
         protected override string WindowTitle => Text("Window_Title");
 
@@ -28,7 +28,7 @@ namespace FlowBlox.UICore.PopUp.Implementations
             [
                 new ComponentPopupItem(
                     Text("Step1_Headline"),
-                    Text("Step1_Description"),
+                    string.Format(CultureInfo.CurrentCulture, Text("Step1_Description"), GlobalUrls.PythonDownloads),
                     PopUpImageResourceHelper.GetImageSource(
                         OnnxQAPopUpImages.ResourceManager,
                         nameof(OnnxQAPopUpImages.OnnxQAQuickStart_1))),
@@ -49,15 +49,12 @@ namespace FlowBlox.UICore.PopUp.Implementations
 
         public void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions)
         {
-            SetOptionWasMissingAtInitialization(
-                !currentOptions.Any(x => x.Name == PopupOptionNames.ShowOnnxQAPopupOnOpen));
-
             defaults.Add(new OptionElement(
-                PopupOptionNames.ShowOnnxQAPopupOnOpen,
+                PopupOptionNames.OnnxQAQuickStartCompleted,
                 bool.FalseString,
-                "Controls whether the ONNX QA component pop-up dialog is shown.",
+                "Tracks whether the ONNX QA quick-start guidance has been completed.",
                 OptionElement.OptionType.Boolean,
-                "ONNX QA: Show Component Pop-up"));
+                "ONNX QA: Quick-Start completed"));
         }
 
         private static string Text(string key) =>

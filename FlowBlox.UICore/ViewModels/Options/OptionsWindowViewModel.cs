@@ -159,7 +159,7 @@ namespace FlowBlox.UICore.ViewModels.Options
                 return null;
 
             optionName = optionName.Trim();
-            if (_options.OptionCollection.ContainsKey(optionName))
+            if (_options.HasOption(optionName))
                 return string.Format(OptionsWindow.Validation_OptionAlreadyExists, optionName);
 
             var option = new OptionElement
@@ -171,7 +171,7 @@ namespace FlowBlox.UICore.ViewModels.Options
                 IsPlaceholderEnabled = true
             };
 
-            _options.OptionCollection[optionName] = option;
+            _options.OptionCollection[option.Name] = option;
             _options.Save();
             RebuildTree(option);
             return null;
@@ -225,14 +225,14 @@ namespace FlowBlox.UICore.ViewModels.Options
 
             if (!_selectedOption.SystemOption &&
                 !string.Equals(_originalOptionName, newName, StringComparison.OrdinalIgnoreCase) &&
-                _options.OptionCollection.ContainsKey(newName))
+                _options.HasOption(newName))
                 throw new ValidationException(string.Format(OptionsWindow.Validation_OptionAlreadyExists, newName));
 
             _selectedOption.Name = newName;
             _selectedOption.Description = Description ?? string.Empty;
             _selectedOption.Type = SelectedType;
             _selectedOption.IsPlaceholderEnabled = IsPlaceholderEnabled;
-            _selectedOption.Value = SelectedType == OptionElement.OptionType.Boolean
+            _selectedOption.PersistentValue = SelectedType == OptionElement.OptionType.Boolean
                 ? BooleanValue.ToString().ToLowerInvariant()
                 : Value ?? string.Empty;
 
@@ -268,9 +268,9 @@ namespace FlowBlox.UICore.ViewModels.Options
                 SetDetailSnapshot(
                     option.Name,
                     option.Description,
-                    option.Value,
+                    option.PersistentValue,
                     optionType,
-                    option.GetValueBoolean(),
+                    bool.TryParse(option.PersistentValue, out var booleanValue) && booleanValue,
                     option.IsPlaceholderEnabled);
             }
 
@@ -280,8 +280,8 @@ namespace FlowBlox.UICore.ViewModels.Options
 
         private static OptionElement.OptionType ResolveOptionType(OptionElement option)
         {
-            var looksBoolean = string.Equals(option.Value, "true", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(option.Value, "false", StringComparison.OrdinalIgnoreCase);
+            var looksBoolean = string.Equals(option.PersistentValue, "true", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(option.PersistentValue, "false", StringComparison.OrdinalIgnoreCase);
 
             return looksBoolean && option.Type != OptionElement.OptionType.Boolean
                 ? OptionElement.OptionType.Boolean

@@ -19,9 +19,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
     [FlowBloxUIGroup("OnnxQAFlowBlock_Groups_ExtendedSettings", 10)]
     [Display(Name = "OnnxQAFlowBlock_DisplayName", Description = "OnnxQAFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("OnnxQAFlowBlock_SpecialExplanation_ModelFolder", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("OnnxQAFlowBlock_SpecialExplanation_ModelProvisioning", Icon = SpecialExplanationIcon.Hint)]
     [FlowBloxSpecialExplanation("OnnxQAFlowBlock_SpecialExplanation_Extractive", Icon = SpecialExplanationIcon.Hint)]
     public class OnnxQAFlowBlock : BaseSingleResultFlowBlock
     {
+        public const string ModelRootDirectoryOptionName = "AI.Onnx.QA.ModelRootDirectory";
+        public const string DefaultModelFolderName = "mdeberta-v3-base-squad2";
+
+        private static readonly FlowBloxRuntimeModelCache<QAModelSession> ModelCache = new();
+
         private InferenceSession _session;
         private OnnxQAModelTokenizer _tokenizer;
         private string _resolvedModelFolder;
@@ -32,6 +38,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         [Display(Name = "OnnxQAFlowBlock_ModelFolder", Description = "OnnxQAFlowBlock_ModelFolder_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
         [FlowBloxFieldSelection(AllowedFieldSelectionModes = FieldSelectionModes.ProjectProperties)]
+        [FlowBloxOpenFromFileSystem(InitialDirectoryMethod = nameof(GetInitialModelDirectory))]
         public string ModelFolder { get; set; }
 
         [Required]
@@ -95,6 +102,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
         public OnnxQAFlowBlock()
         {
+            ModelFolder = $"$Options::{ModelRootDirectoryOptionName}\\{DefaultModelFolderName}";
             MaxSequenceLength = 384;
             DocumentStride = 128;
             MaxAnswerLength = 30;
@@ -106,6 +114,19 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.AI;
 
+        public override void OptionsInit(List<OptionElement> defaults)
+        {
+            defaults.Add(new OptionElement(
+                ModelRootDirectoryOptionName,
+                @"$Options::Paths.GlobalDataDir\onnx\qa",
+                "User-specific root directory for ONNX question-answering models.",
+                OptionElement.OptionType.Text,
+                "ONNX QA: Model root directory",
+                isPlaceholderEnabled: true));
+
+            base.OptionsInit(defaults);
+        }
+
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             base.RuntimeStarted(runtime);
@@ -114,19 +135,25 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             _resolvedModelFolder = ResolveModelFolder();
             ValidateModelFolder(_resolvedModelFolder);
 
-            var modelPath = ResolveModelPath(_resolvedModelFolder);
-            runtime.Report($"Loading ONNX question answering model from folder: {_resolvedModelFolder}");
-
-            var sessionOptions = CreateSessionOptions(runtime);
             try
             {
-                _session = new InferenceSession(modelPath, sessionOptions);
-                _tokenizer = OnnxQAModelTokenizer.Load(_resolvedModelFolder);
-                ValidateModelContract();
+                var modelSession = ModelCache.Open(
+                    runtime,
+                    _resolvedModelFolder,
+                    () => CreateModelSession(runtime, _resolvedModelFolder),
+                    out var alreadyOpen);
+                _session = modelSession.Session;
+                _tokenizer = modelSession.Tokenizer;
+
+                if (alreadyOpen)
+                {
+                    runtime.Report(
+                        $"Inference session is already open; using cached session for FlowBlock '{Name}' " +
+                        $"and model folder: {_resolvedModelFolder}");
+                }
             }
             catch
             {
-                _session?.Dispose();
                 _session = null;
                 _tokenizer = null;
                 throw;
@@ -174,11 +201,38 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
         public override void RuntimeFinished(BaseRuntime runtime)
         {
-            _session?.Dispose();
+            if (!string.IsNullOrWhiteSpace(_resolvedModelFolder))
+            {
+                var closed = ModelCache.Close(runtime, _resolvedModelFolder);
+                runtime.Report(closed
+                    ? $"Closed cached ONNX QA inference session after FlowBlock '{Name}' finished."
+                    : $"Cached ONNX QA inference session was already closed when FlowBlock '{Name}' finished.");
+            }
+
             _session = null;
             _tokenizer = null;
             _resolvedModelFolder = null;
             base.RuntimeFinished(runtime);
+        }
+
+        private QAModelSession CreateModelSession(BaseRuntime runtime, string modelFolder)
+        {
+            var modelPath = ResolveModelPath(modelFolder);
+            runtime.Report($"Loading ONNX question answering model from folder: {modelFolder}");
+
+            using var sessionOptions = CreateSessionOptions(runtime);
+            var session = new InferenceSession(modelPath, sessionOptions);
+            try
+            {
+                var tokenizer = OnnxQAModelTokenizer.Load(modelFolder);
+                ValidateModelContract(session);
+                return new QAModelSession(session, tokenizer);
+            }
+            catch
+            {
+                session.Dispose();
+                throw;
+            }
         }
 
         private string PredictAnswer(string question, string context)
@@ -260,8 +314,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             switch (AiExecutionProvider)
             {
                 case AiExecutionProviders.OpenVINO:
-                    options.AppendExecutionProvider_OpenVINO("GPU_FP32");
-                    runtime.Report("Using OpenVINO Execution Provider (GPU_FP32).");
+                    options.AppendExecutionProvider_OpenVINO("GPU");
+                    runtime.Report("Using OpenVINO Execution Provider (GPU).");
                     break;
                 case AiExecutionProviders.DirectML:
                     options.AppendExecutionProvider_DML();
@@ -279,19 +333,33 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             return options;
         }
 
-        private void ValidateModelContract()
+        private static void ValidateModelContract(InferenceSession session)
         {
             foreach (var input in new[] { "input_ids", "attention_mask" })
             {
-                if (!_session.InputMetadata.ContainsKey(input))
+                if (!session.InputMetadata.ContainsKey(input))
                     throw new InvalidDataException($"The ONNX model does not expose the required input '{input}'.");
             }
 
             foreach (var output in new[] { "start_logits", "end_logits" })
             {
-                if (!_session.OutputMetadata.ContainsKey(output))
+                if (!session.OutputMetadata.ContainsKey(output))
                     throw new InvalidDataException($"The ONNX model does not expose the required output '{output}'.");
             }
+        }
+
+        private sealed class QAModelSession : IDisposable
+        {
+            public QAModelSession(InferenceSession session, OnnxQAModelTokenizer tokenizer)
+            {
+                Session = session;
+                Tokenizer = tokenizer;
+            }
+
+            public InferenceSession Session { get; }
+            public OnnxQAModelTokenizer Tokenizer { get; }
+
+            public void Dispose() => Session.Dispose();
         }
 
         private static void ValidateModelFolder(string modelFolder)
@@ -315,6 +383,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         }
 
         private string ResolveModelFolder() => FlowBloxFieldHelper.ReplaceFieldsInString(ModelFolder);
+
+        private string GetInitialModelDirectory()
+        {
+            var directory = FlowBloxOptions.GetOptionInstance()
+                .GetOption(ModelRootDirectoryOptionName)?.Value;
+            return !string.IsNullOrWhiteSpace(directory) && Directory.Exists(directory)
+                ? directory
+                : string.Empty;
+        }
 
         public override List<string> GetDisplayableProperties()
         {

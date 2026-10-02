@@ -28,7 +28,7 @@ namespace FlowBlox.AIAssistant.Tools
             {
                 ["projectInputDirectory"] = project.ProjectInputDirectory ?? string.Empty,
                 ["placeholderHint"] = "$Project::InputDirectory",
-                ["commandPlaceholderHint"] = "$InputFile:Path",
+                ["commandPlaceholderHint"] = "$InputFile::Path",
                 ["count"] = items.Count,
                 ["inputFiles"] = items
             };

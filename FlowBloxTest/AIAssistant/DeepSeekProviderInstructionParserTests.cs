@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 namespace FlowBloxTest.AIAssistant
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public sealed class DeepSeekProviderInstructionParserTests
     {
         [TestMethod]

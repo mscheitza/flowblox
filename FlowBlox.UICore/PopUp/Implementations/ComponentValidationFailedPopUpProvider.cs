@@ -13,7 +13,7 @@ namespace FlowBlox.UICore.PopUp.Implementations
     {
         public override ComponentPopupEvent PopupEvent => ComponentPopupEvent.ValidationFailed;
 
-        public override string OptionKey => PopupOptionNames.ShowComponentPopupOnValidationFailed;
+        public override string OptionKey => PopupOptionNames.ComponentValidationGuidanceCompleted;
 
         protected override string WindowTitle => ComponentValidationFailedPopUpTexts.Window_Title;
 
@@ -38,15 +38,12 @@ namespace FlowBlox.UICore.PopUp.Implementations
 
         public void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions)
         {
-            SetOptionWasMissingAtInitialization(
-                !currentOptions.Any(x => x.Name == PopupOptionNames.ShowComponentPopupOnValidationFailed));
-
             defaults.Add(new OptionElement(
-                PopupOptionNames.ShowComponentPopupOnValidationFailed,
+                PopupOptionNames.ComponentValidationGuidanceCompleted,
                 bool.FalseString,
-                "Controls whether guidance for saving without verification is shown after component validation fails.",
+                "Tracks whether guidance for saving without verification has been completed.",
                 OptionElement.OptionType.Boolean,
-                "Components: Show Pop-up on Validation Failure"));
+                "Components: Validation guidance completed"));
         }
     }
 }

@@ -16,9 +16,30 @@
 
     {
       "ToolboxCategory": "ChatTemplates",
-      "Name": "LLaMA / Mistral Instruct",
-      "Content": "<s>[INST] <<SYS>>\n{SystemPrompt}\n<</SYS>>\n\n{UserPrompt} [/INST]",
-      "Description": "LLaMA / Mistral instruct-style schema."
+      "Name": "Mistral 7B Instruct v0.2",
+      "Content": "<s>[INST] {SystemPrompt}\n\n{UserPrompt} [/INST]",
+      "Description": "Mistral 7B Instruct v0.2 single-turn schema; the system instruction is folded into the user instruction."
+    },
+
+    {
+      "ToolboxCategory": "ChatTemplates",
+      "Name": "Llama 3 Instruct",
+      "Content": "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n{SystemPrompt}<|eot_id|><|start_header_id|>user<|end_header_id|>\n\n{UserPrompt}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+      "Description": "Meta Llama 3 and Llama 3.x Instruct single-turn schema."
+    },
+
+    {
+      "ToolboxCategory": "ChatTemplates",
+      "Name": "Qwen 2.5 / 3 Instruct",
+      "Content": "<|im_start|>system\n{SystemPrompt}<|im_end|>\n<|im_start|>user\n{UserPrompt}<|im_end|>\n<|im_start|>assistant\n",
+      "Description": "Qwen 2.5 and Qwen 3 text-instruct ChatML schema without tool calls."
+    },
+
+    {
+      "ToolboxCategory": "ChatTemplates",
+      "Name": "DeepSeek R1 Distill",
+      "Content": "<|begin▁of▁sentence|><|User|>{UserPrompt}<|Assistant|>",
+      "Description": "DeepSeek R1 Distill chat schema. The model template does not use a separate system prompt."
     },
 
     {

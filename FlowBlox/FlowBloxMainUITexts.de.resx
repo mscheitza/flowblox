@@ -195,6 +195,12 @@
   <data name="AppWindow_itmOpenProjectOutputDir_Text" xml:space="preserve">
 		<value>Projekt-Ausgabeverzeichnis öffnen</value>
 	</data>
+  <data name="AppWindow_itmOpenOnnxQaModelRootDirectory_Text" xml:space="preserve">
+		<value>&amp;QA-Modellstammverzeichnis öffnen</value>
+	</data>
+  <data name="AppWindow_itmOpenOnnxGenAiModelRootDirectory_Text" xml:space="preserve">
+		<value>&amp;GenAI-Modellstammverzeichnis öffnen</value>
+	</data>
   <data name="AppWindow_itmOpenProject_Text" xml:space="preserve">
 		<value>Projekt ö&amp;ffnen</value>
 	</data>
@@ -254,6 +260,9 @@
 	</data>
   <data name="AppWindow_mnItmDirectories_Text" xml:space="preserve">
 		<value>&amp;Verzeichnisse</value>
+	</data>
+  <data name="AppWindow_mnItmOnnxModelRootDirectories_Text" xml:space="preserve">
+		<value>ONNX-Modell&amp;stammverzeichnisse</value>
 	</data>
   <data name="AppWindow_NewProjectConfirm_Message" xml:space="preserve">
 		<value>Wollen Sie das Projekt "{0}" wirklich schließen und ein neues Projekt erstellen?</value>

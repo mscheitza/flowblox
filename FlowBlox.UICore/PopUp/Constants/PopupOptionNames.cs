@@ -2,14 +2,14 @@ namespace FlowBlox.UICore.PopUp.Constants
 {
     public static class PopupOptionNames
     {
-        public const string ShowComponentPopupOnValidationFailed = "PopUp.Component.ShowPopupOnValidationFailed";
+        public const string ComponentValidationGuidanceCompleted = "PopUp.Component.ValidationGuidanceCompleted";
 
-        public const string ShowSequenceDetectionPopupOnOpen = "PopUp.SequenceDetection.ShowPopupOnOpen";
+        public const string SequenceDetectionQuickStartCompleted = "PopUp.SequenceDetection.QuickStartCompleted";
 
-        public const string ShowWebBrowserPopupOnOpen = "PopUp.WebBrowser.ShowPopupOnOpen";
+        public const string WebBrowserQuickStartCompleted = "PopUp.WebBrowser.QuickStartCompleted";
 
-        public const string ShowOnnxGenAIPopupOnOpen = "PopUp.OnnxGenAI.ShowPopupOnOpen";
+        public const string OnnxGenAIQuickStartCompleted = "PopUp.OnnxGenAI.QuickStartCompleted";
 
-        public const string ShowOnnxQAPopupOnOpen = "PopUp.OnnxQA.ShowPopupOnOpen";
+        public const string OnnxQAQuickStartCompleted = "PopUp.OnnxQA.QuickStartCompleted";
     }
 }

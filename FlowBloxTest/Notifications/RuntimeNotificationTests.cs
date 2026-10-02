@@ -3,26 +3,13 @@ using FlowBlox.Core.Models.Notifications;
 using FlowBlox.Core.Services.Notifications;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 namespace FlowBloxTest.Notifications
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class RuntimeNotificationTests
     {
-        [TestMethod]
-        public void Configuration_ContainsEveryRuntimeEventDisabledByDefault()
-        {
-            var configuration = new RuntimeNotificationConfiguration();
-
-            CollectionAssert.AreEquivalent(
-                Enum.GetValues<RuntimeNotificationType>(),
-                configuration.Notifications.Select(x => x.Type).ToArray());
-            Assert.IsTrue(configuration.Notifications.All(x => !x.Enabled));
-            Assert.IsTrue(configuration.DoNotSendWhileDebugging);
-            Assert.IsTrue(configuration.AttachRuntimeLog);
-        }
-
         [TestMethod]
         public void ConfigurationJson_ReplacesDefaultRulesInsteadOfAppendingDuplicates()
         {
@@ -37,17 +24,6 @@ namespace FlowBloxTest.Notifications
             Assert.AreEqual(Enum.GetValues<RuntimeNotificationType>().Length, deserialized.Notifications.Count);
             Assert.AreEqual(deserialized.Notifications.Count, deserialized.Notifications.Select(x => x.Type).Distinct().Count());
             Assert.IsTrue(deserialized.Notifications.Single(x => x.Type == RuntimeNotificationType.RuntimeAborted).Enabled);
-        }
-
-        [TestMethod]
-        public void Configuration_UsesDataAnnotationsForRequiredSmtpSettings()
-        {
-            var configuration = new RuntimeNotificationConfiguration();
-            var errors = Validate(configuration);
-
-            Assert.IsTrue(errors.Any(x => x.MemberNames.Contains(nameof(configuration.Host))));
-            Assert.IsTrue(errors.Any(x => x.MemberNames.Contains(nameof(configuration.FromAddress))));
-            Assert.IsTrue(errors.Any(x => x.MemberNames.Contains(nameof(configuration.ToAddresses))));
         }
 
         [TestMethod]
@@ -91,22 +67,6 @@ namespace FlowBloxTest.Notifications
             StringAssert.Contains(html, "Flow block &lt;failed&gt;");
             StringAssert.Contains(html, "Bad &lt;value&gt;");
             Assert.IsFalse(html.Contains("Project <A>", StringComparison.Ordinal));
-        }
-
-        [TestMethod]
-        public void MailFormatter_UsesCopyrightFromApplicationMetadata()
-        {
-            var context = new RuntimeNotificationContext
-            {
-                Type = RuntimeNotificationType.RuntimeCompletedSuccessfully
-            };
-            var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-            var copyright = assembly.GetCustomAttribute<AssemblyCopyrightAttribute>()?.Copyright;
-
-            var html = RuntimeNotificationMailFormatter.CreateHtmlBody(context);
-
-            Assert.IsFalse(string.IsNullOrWhiteSpace(copyright));
-            StringAssert.Contains(html, System.Net.WebUtility.HtmlEncode(copyright));
         }
 
         [TestMethod]

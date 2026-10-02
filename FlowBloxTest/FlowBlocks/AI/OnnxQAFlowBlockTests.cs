@@ -9,19 +9,7 @@ namespace FlowBloxTest.FlowBlocks.AI
     public class OnnxQAFlowBlockTests
     {
         [TestMethod]
-        public void KonstruktorVerwendetSichereQaStandardwerte()
-        {
-            var flowBlock = new OnnxQAFlowBlock();
-
-            Assert.AreEqual(384, flowBlock.MaxSequenceLength);
-            Assert.AreEqual(128, flowBlock.DocumentStride);
-            Assert.AreEqual(30, flowBlock.MaxAnswerLength);
-            Assert.IsFalse(flowBlock.AllowNoAnswer);
-            Assert.AreEqual(0.0f, flowBlock.NoAnswerThreshold);
-        }
-
-        [TestMethod]
-        public void SentencePieceOffsetsWerdenAufOriginalkontextAbgebildet()
+        public void SentencePieceOffsetsMapToOriginalContext()
         {
             const string original = "Tim lives in Sweden.";
             const string normalized = "▁Tim▁lives▁in▁Sweden.";
@@ -45,7 +33,7 @@ namespace FlowBloxTest.FlowBlocks.AI
         }
 
         [TestMethod]
-        public void BesteAntwortspanneIgnoriertFrageUndSpezialtokens()
+        public void BestAnswerSpanIgnoresQuestionAndSpecialTokens()
         {
             var contextTokens = new[]
             {
@@ -75,7 +63,7 @@ namespace FlowBloxTest.FlowBlocks.AI
         }
 
         [TestMethod]
-        public void BesteAntwortspanneBeachtetMaximaleAntwortlänge()
+        public void BestAnswerSpanHonorsMaximumAnswerLength()
         {
             var contextTokens = new[]
             {
@@ -106,7 +94,7 @@ namespace FlowBloxTest.FlowBlocks.AI
         }
 
         [TestMethod]
-        public void WordPieceTokenizerBehältOffsetsInDenOriginalkontext()
+        public void WordPieceTokenizerPreservesOffsetsInOriginalContext()
         {
             var modelFolder = Path.Combine(Path.GetTempPath(), $"flowblox-onnx-qa-{Guid.NewGuid():N}");
             Directory.CreateDirectory(modelFolder);

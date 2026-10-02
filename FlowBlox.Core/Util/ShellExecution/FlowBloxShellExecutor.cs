@@ -41,17 +41,17 @@ namespace FlowBlox.Core.Util.ShellExecution
                 ? Environment.CurrentDirectory
                 : request.WorkingDirectory;
 
-            var (hostFileName, hostArguments) = ResolveShellHost(command);
+            var hostFileName = ResolveShellHost();
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = hostFileName,
-                Arguments = hostArguments,
                 WorkingDirectory = workingDirectory,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
+            ConfigureShellArguments(processStartInfo, command);
 
             var stdoutBuilder = new StringBuilder();
             var stderrBuilder = new StringBuilder();
@@ -144,19 +144,20 @@ namespace FlowBlox.Core.Util.ShellExecution
             };
         }
 
-        private static (string FileName, string Arguments) ResolveShellHost(string command)
+        private static void ConfigureShellArguments(ProcessStartInfo processStartInfo, string command)
         {
             if (OperatingSystem.IsWindows())
             {
-                return ("cmd.exe", $"/C {command}");
+                processStartInfo.Arguments = $"/D /S /C \"{command}\"";
+                return;
             }
 
-            var escaped = command
-                .Replace("\\", "\\\\", StringComparison.Ordinal)
-                .Replace("\"", "\\\"", StringComparison.Ordinal);
-
-            return ("/bin/bash", $"-lc \"{escaped}\"");
+            processStartInfo.ArgumentList.Add("-lc");
+            processStartInfo.ArgumentList.Add(command);
         }
+
+        private static string ResolveShellHost() =>
+            OperatingSystem.IsWindows() ? "cmd.exe" : "/bin/bash";
 
         private static void TryKillProcess(Process process)
         {

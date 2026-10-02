@@ -6,6 +6,6 @@ namespace FlowBlox.Core.Models.Project
         public string DisplayName { get; set; }
         public string Description { get; set; }
         public string Value { get; set; }
-        public string Placeholder => $"$InputFile:{Key}";
+        public string Placeholder => $"$InputFile::{Key}";
     }
 }

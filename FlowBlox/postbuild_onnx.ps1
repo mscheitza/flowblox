@@ -133,11 +133,6 @@ function Copy-DirectoryContentIncremental {
   }
 }
 
-function Get-GpuSourceProvider([string] $Rid) {
-  if ($Rid -match '^linux-') { return "gpu-linux" }
-  return "gpu-windows"
-}
-
 # -----------------------------
 # Compute paths
 # -----------------------------
@@ -184,12 +179,11 @@ Copy-DirectoryContentIncremental `
   -ProviderName "cpu" `
   -Rid $Rid
 
-# GPU (source folder depends on OS)
-$gpuSrcProvider = Get-GpuSourceProvider $Rid
+# CUDA
 Copy-DirectoryContentIncremental `
-  -SourceDir (Join-Path $srcBase ("{0}\{1}" -f $gpuSrcProvider, $Rid)) `
-  -DestDir   (Join-Path $dstBase ("gpu\{0}" -f $Rid)) `
-  -ProviderName "gpu" `
+  -SourceDir (Join-Path $srcBase ("cuda\{0}" -f $Rid)) `
+  -DestDir   (Join-Path $dstBase ("cuda\{0}" -f $Rid)) `
+  -ProviderName "cuda" `
   -Rid $Rid
 
 # DirectML
@@ -204,13 +198,6 @@ Copy-DirectoryContentIncremental `
   -SourceDir (Join-Path $srcBase ("openvino\{0}" -f $Rid)) `
   -DestDir   (Join-Path $dstBase ("openvino\{0}" -f $Rid)) `
   -ProviderName "openvino" `
-  -Rid $Rid
-
-# CUDA (optional / GenAI-specific)
-Copy-DirectoryContentIncremental `
-  -SourceDir (Join-Path $srcBase ("cuda\{0}" -f $Rid)) `
-  -DestDir   (Join-Path $dstBase ("cuda\{0}" -f $Rid)) `
-  -ProviderName "cuda" `
   -Rid $Rid
 
 Write-Info ""

@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 namespace FlowBloxTest.Components
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class FlowBlockCombinationDatasetSelectorTests : FlowBlockDatasetSelectorTestBase
     {
         [TestMethod]
@@ -20,7 +21,7 @@ namespace FlowBloxTest.Components
 
             var fb2 = Substitute.For<BaseResultFlowBlock>();
             fb2.Name.Returns("FB2");
-            var fb2_ReferencedFlowBlocks = new ObservableCollection<BaseFlowBlock>{ fb1 };
+            var fb2_ReferencedFlowBlocks = new ObservableCollection<BaseFlowBlock> { fb1 };
             fb2.ReferencedFlowBlocks.Returns(fb2_ReferencedFlowBlocks);
 
             var fb3 = Substitute.For<BaseResultFlowBlock>();
@@ -104,7 +105,7 @@ namespace FlowBloxTest.Components
             var fb4_ReferencedFlowBlocks = new ObservableCollection<BaseFlowBlock> { fb2, fb3 };
             fb4.ReferencedFlowBlocks.Returns(fb4_ReferencedFlowBlocks);
 
-            // Erstelle Substitutes für FieldElements
+            // Erstelle Substitutes fÃ¼r FieldElements
             var fb1Field = Substitute.For<FieldElement>();
             fb1Field.Name.Returns("FB1-Feld");
             fb1Field.Source.Returns(fb2);

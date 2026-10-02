@@ -85,18 +85,21 @@ namespace FlowBlox.Core.Util
                 new OptionElement("PropertyWindow.ApplyButtonSelection", "ApplyWithoutVerification", "Action executed by the Apply split button. Possible values: Apply, ApplyWithoutVerification.", OptionElement.OptionType.Text),
                 new OptionElement("PropertyWindow.SaveButtonSelection", "Save", "Action executed by the Save split button. Possible values: Save, SaveWithoutVerification.", OptionElement.OptionType.Text),
 
-                new OptionElement("Paths.ToolboxDir", @"%userprofile%\Documents\FlowBlox\toolbox", "Toolbox directory path.", OptionElement.OptionType.Text),
-                new OptionElement("Paths.ToolboxUserFile", @"%userprofile%\Documents\FlowBlox\toolbox\userToolbox.json", "Toolbox user file path.", OptionElement.OptionType.Text),
-                new OptionElement("Paths.ProjectDir", @"%userprofile%\Documents\FlowBlox\projects", "Project directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("Paths.InputDir", @"%userprofile%\Documents\FlowBlox\input", "Input directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("Paths.OutputDir", @"%userprofile%\Documents\FlowBlox\output", "Output directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("Paths.ExtensionsDir", @"%localappdata%\FlowBlox\extensions", "Extensions directory path.", OptionElement.OptionType.Text),
-                new OptionElement("Paths.ProblemTraceDir", @"%localappdata%\FlowBlox\logs\runtime\problems", "Problem trace directory path.", OptionElement.OptionType.Text),
-                new OptionElement("Paths.RuntimeLogDir", @"%localappdata%\FlowBlox\logs\runtime", "Runtime log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("Paths.ApplicationLogDir", @"%localappdata%\FlowBlox\logs\application", "Application log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("Paths.ScheduledTasksDir", @"%localappdata%\FlowBlox\tasks", "Base directory for scheduled FlowBlox task request, response, and log files.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
-                new OptionElement("Paths.DeepCopierProtocolDir", @"%localappdata%\FlowBlox\copy_protocols", "Deep copier protocol directory.", OptionElement.OptionType.Text),
-                new OptionElement("Paths.ToolboxCacheDir", @"%localappdata%\FlowBlox\toolbox", "Global toolbox cache directory path.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.DocumentsDir", @"%userprofile%\Documents\FlowBlox", "Root directory for user documents managed by FlowBlox.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.LocalAppDataDir", @"%localappdata%\FlowBlox", "Root directory for local application data managed by FlowBlox.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.GlobalDataDir", @"%userprofile%\.flowblox", "User-specific root directory for cross-project FlowBlox data.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.ToolboxDir", @"$Options::Paths.DocumentsDir\toolbox", "Toolbox directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.ToolboxUserFile", @"$Options::Paths.ToolboxDir\userToolbox.json", "Toolbox user file path.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.ProjectDir", @"$Options::Paths.DocumentsDir\projects", "Project directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.InputDir", @"$Options::Paths.DocumentsDir\input", "Input directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.OutputDir", @"$Options::Paths.DocumentsDir\output", "Output directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.ExtensionsDir", @"$Options::Paths.LocalAppDataDir\extensions", "Extensions directory path.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.ProblemTraceDir", @"$Options::Paths.RuntimeLogDir\problems", "Problem trace directory path.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.RuntimeLogDir", @"$Options::Paths.LocalAppDataDir\logs\runtime", "Runtime log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.ApplicationLogDir", @"$Options::Paths.LocalAppDataDir\logs\application", "Application log directory path.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.ScheduledTasksDir", @"$Options::Paths.LocalAppDataDir\tasks", "Base directory for scheduled FlowBlox task request, response, and log files.", OptionElement.OptionType.Text, isPlaceholderEnabled: true),
+                new OptionElement("Paths.DeepCopierProtocolDir", @"$Options::Paths.LocalAppDataDir\copy_protocols", "Deep copier protocol directory.", OptionElement.OptionType.Text),
+                new OptionElement("Paths.ToolboxCacheDir", @"$Options::Paths.LocalAppDataDir\toolbox", "Global toolbox cache directory path.", OptionElement.OptionType.Text),
 
                 new OptionElement("Api.ExtensionServiceBaseUrl", GlobalUrls.FlowBloxPublicApiBaseUrl, "The URL for the REST API of the extension management system.", OptionElement.OptionType.Text),
                 new OptionElement("Api.ProjectServiceBaseUrl", GlobalUrls.FlowBloxPublicApiBaseUrl, "The URL for the REST API of the project space.", OptionElement.OptionType.Text),
@@ -217,6 +220,44 @@ namespace FlowBlox.Core.Util
                 return option;
 
             return null;
+        }
+
+        internal static string ResolveOptionValue(OptionElement option)
+        {
+            ArgumentNullException.ThrowIfNull(option);
+
+            var persistentValue = option.PersistentValue ?? string.Empty;
+            if (_instance == null)
+                return Environment.ExpandEnvironmentVariables(persistentValue);
+
+            var resolvingOptions = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            if (!string.IsNullOrWhiteSpace(option.Name))
+                resolvingOptions.Add(option.Name);
+
+            return Environment.ExpandEnvironmentVariables(
+                _instance.ResolveOptionPlaceholders(persistentValue, resolvingOptions));
+        }
+
+        private string ResolveOptionPlaceholders(string value, HashSet<string> resolvingOptions)
+        {
+            foreach (var option in OptionCollection.Values
+                .Where(x => x.IsPlaceholderEnabled)
+                .OrderByDescending(x => x.Name.Length))
+            {
+                var placeholder = $"$Options::{option.Name}";
+                if (!value.Contains(placeholder, StringComparison.Ordinal))
+                    continue;
+
+                if (resolvingOptions.Contains(option.Name))
+                    continue;
+
+                resolvingOptions.Add(option.Name);
+                var replacement = ResolveOptionPlaceholders(option.PersistentValue, resolvingOptions);
+                resolvingOptions.Remove(option.Name);
+                value = value.Replace(placeholder, replacement, StringComparison.Ordinal);
+            }
+
+            return value;
         }
     }
 }

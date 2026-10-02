@@ -11,8 +11,6 @@ using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Runtime.Debugging;
-using FlowBlox.Core.Util.Fields;
-using FlowBlox.Core.Util.ShellExecution;
 
 namespace FlowBlox.Core.Models.Runtime
 {
@@ -386,21 +384,14 @@ namespace FlowBlox.Core.Models.Runtime
 
             foreach (var inputFile in inputFilesWithCommands)
             {
-                var resolvedCommand = FlowBloxInputFileHelper.ReplaceInputFilePlaceholders(inputFile.Command ?? string.Empty, Project, inputFile);
-                resolvedCommand = FlowBloxFieldHelper.ReplaceFieldsInString(resolvedCommand ?? string.Empty);
-
-                if (string.IsNullOrWhiteSpace(resolvedCommand))
-                    continue;
-
                 var relativePath = FlowBloxInputFileHelper.NormalizeRelativePath(inputFile.RelativePath ?? string.Empty);
-                Report($"Executing startup command for input file \"{relativePath}\": {resolvedCommand}");
-
-                var result = FlowBloxShellExecutor.Execute(new FlowBloxShellExecutionRequest
-                {
-                    Command = resolvedCommand,
-                    WorkingDirectory = Project.ProjectInputDirectory,
-                    CancellationToken = GetCancellationToken()
-                });
+                var result = FlowBloxInputFileCommandExecutor.Execute(
+                    Project,
+                    inputFile,
+                    GetCancellationToken(),
+                    inputFileAlreadyEnsured: true,
+                    onCommandResolved: command =>
+                        Report($"Executing startup command for input file \"{relativePath}\": {command}"));
 
                 if (!string.IsNullOrWhiteSpace(result.StandardOutput))
                     Report($"Startup command output: {TruncateForReport(result.StandardOutput)}");

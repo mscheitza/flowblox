@@ -1,4 +1,6 @@
 ﻿using FlowBlox.Core.Authentication;
+using FlowBlox.Core.Util;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Xml;
 
@@ -30,24 +32,25 @@ namespace FlowBlox.Core.Models.Components
 
         internal bool HasStoredValue => !string.IsNullOrWhiteSpace(_internalValue);
 
+        /// <summary>
+        /// Gets the persistent value with option placeholders and environment variables resolved.
+        /// Setting this property updates <see cref="PersistentValue"/>.
+        /// </summary>
+        [JsonIgnore]
         public string Value
         {
-            get
-            {
-                if (Type == OptionType.Password)
-                {
-                    if (string.IsNullOrEmpty(_internalValue))
-                    {
-                        return string.Empty;
-                    }
-                    else
-                    {
-                        return FlowBloxSecureStorageManager.GetProtectedData(Name, _internalValue);
-                    }
-                }
+            get => FlowBloxOptions.ResolveOptionValue(this);
+            set => PersistentValue = value;
+        }
 
-                return (_internalValue != null) ? Environment.ExpandEnvironmentVariables(_internalValue) : string.Empty;
-            }
+
+        /// <summary>
+        /// Gets or sets the persistent value without resolving option placeholders or environment variables.
+        /// </summary>
+        [JsonProperty("Value")]
+        public string PersistentValue
+        {
+            get => GetPersistentValue();
             set
             {
                 if (Type == OptionType.Password)
@@ -67,6 +70,18 @@ namespace FlowBlox.Core.Models.Components
                     this._internalValue = value;
                 }
             }
+        }
+
+        private string GetPersistentValue()
+        {
+            if (Type == OptionType.Password)
+            {
+                return string.IsNullOrEmpty(_internalValue)
+                    ? string.Empty
+                    : FlowBloxSecureStorageManager.GetProtectedData(Name, _internalValue);
+            }
+
+            return _internalValue ?? string.Empty;
         }
 
         public OptionElement(string name, string value, string description, OptionType type, string displayName = null, bool isPlaceholderEnabled = false)

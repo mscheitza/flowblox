@@ -8,6 +8,7 @@ using FlowBlox.Core.Provider.Project;
 namespace FlowBloxTest.Notifications
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class NotificationOverrideTests
     {
         [TestMethod]

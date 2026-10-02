@@ -14,16 +14,15 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         protected override string GetOnnxRuntimeLibraryFileName()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return "onnxruntime-genai.dll";
+                return "onnxruntime.dll";
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                return "libonnxruntime-genai.so";
+                return "libonnxruntime.so";
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                return "libonnxruntime-genai.dylib";
+                return "libonnxruntime.dylib";
 
-            // Fallback (Windows-like)
-            return "onnxruntime-genai.dll";
+            return "onnxruntime.dll";
         }
     }
 }

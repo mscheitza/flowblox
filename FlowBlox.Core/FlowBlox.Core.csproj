@@ -42,7 +42,7 @@
     <PackageReference Include="AWSSDK.Rekognition" Version="3.7.500.48" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.511.8" />
     <PackageReference Include="Aspose.Words" Version="26.9.0" />
-    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.27.0" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.23.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntimeGenAI.Managed" Version="0.14.1" />
     <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
     <PackageReference Include="Microsoft.ML.Tokenizers.Data.Gpt2" Version="2.0.0" />

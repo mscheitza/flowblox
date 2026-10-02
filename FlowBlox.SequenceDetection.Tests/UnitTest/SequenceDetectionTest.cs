@@ -7,6 +7,7 @@ using FlowBlox.SequenceDetection.Model;
 namespace FlowBlox.SequenceDetectionTests.UnitTest
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class SequenceDetectionTest
     {
         public SequenceDetectionTest()

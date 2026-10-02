@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlowBlox large CUDA ONNX GenAI model script</title>
+  <style>html, body, iframe { width: 100%; height: 100%; margin: 0; border: 0; } body { overflow: hidden; }</style>
+</head>
+<body>
+  <iframe id="page" src="export-script-base.html" title="FlowBlox model script"></iframe>
+  <script>
+    const page = {
+      documentTitle: 'FlowBlox large CUDA ONNX GenAI model script',
+      title: 'Download a large CUDA model for ONNX Runtime GenAI',
+      notice: '<strong>Advanced:</strong> use this script only for explicitly requested GPU workloads after checking NVIDIA CUDA compatibility, VRAM and free disk space.',
+      description: 'Mistral 7B Instruct CUDA INT4 is the default. Use <span class="path">--model-id &lt;id&gt;</span> for Phi-3 Medium 14B or DeepSeek R1 Distill Qwen 7B, and <span class="path">--list-models</span> to inspect all supported IDs. Models are stored below <span class="path">%USERPROFILE%\.flowblox\onnx\genai</span> unless <span class="path">--model-root-directory</span> or <span class="path">--output-directory</span> is supplied.',
+      specialHint: '<strong>Hardware:</strong> Compute Capability 7.0+ is required. The script checks VRAM and rejects unsuitable local hardware. Mistral and DeepSeek require at least 8 GiB (12 GiB preferred); Phi-3 Medium requires 16 GiB for stable use. Configure FlowBlox option <span class="path">AI.Onnx.Provider</span> as <strong>CUDA</strong>, synchronize CUDA runtimes, and restart FlowBlox.',
+      filename: 'download_large_cuda_genai_model.py',
+      scriptUrl: '../python/download_large_cuda_genai_model.py'
+    };
+    const frame = document.getElementById('page');
+    const send = () => frame.contentWindow.postMessage({ type: 'flowblox-export-script', page }, '*');
+    frame.addEventListener('load', send);
+    window.addEventListener('message', event => {
+      if (event.source === frame.contentWindow && event.data?.type === 'flowblox-export-script-ready') send();
+    });
+  </script>
+</body>
+</html>

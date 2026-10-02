@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 namespace FlowBloxTest.FlowBlocks.Json
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class JsonObjectWriterFlowBlockTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;

@@ -10,6 +10,7 @@ using System;
 namespace FlowBloxTest.FlowBlocks.Conditions
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class FieldComparisonConditionTests
     {
         private FlowBloxProject _project;

@@ -14,7 +14,7 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns available placeholders for EnableFieldSelection-capable string properties. Includes field placeholders ($FlowBlock::FieldName / $User::FieldName), $Project:: / $Options:: placeholders, $InputFile:* placeholders and $GenerationStrategy::* placeholders.",
+            "Returns available placeholders for EnableFieldSelection-capable string properties. Includes field placeholders ($FlowBlock::FieldName / $User::FieldName), $Project:: / $Options:: placeholders, $InputFile::Path / $InputFile::RelativePath and $GenerationStrategy:: placeholders.",
             new JObject());
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)

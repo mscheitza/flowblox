@@ -4,6 +4,7 @@ using FlowBlox.Core.Util;
 namespace FlowBloxTest.AIAssistant
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class ReflectionHelperTypeEndingTests
     {
         [TestMethod]

@@ -27,6 +27,7 @@ Den von FlowBlox verwendeten Standardeditor können Sie unter "Optionen" → "Ed
   <data name="Tooltip_Delete" xml:space="preserve"><value>Option entfernen</value></data>
   <data name="Tooltip_Reset" xml:space="preserve"><value>Optionen zurucksetzen</value></data>
   <data name="Tooltip_Save" xml:space="preserve"><value>Option speichern</value></data>
+  <data name="Tooltip_InsertOptionPlaceholder" xml:space="preserve"><value>Optionsplatzhalter einfügen</value></data>
   <data name="Validation_OptionAlreadyExists" xml:space="preserve"><value>Eine Option mit dem Namen "{0}" ist bereits vorhanden.</value></data>
   <data name="Validation_OptionNameRequired" xml:space="preserve"><value>Der Optionsname ist erforderlich.</value></data>
   <data name="Value_No" xml:space="preserve"><value>Nein</value></data>

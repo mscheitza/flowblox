@@ -9,6 +9,7 @@ using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.Interceptors;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.ObjectManager;
+using FlowBlox.Core.Models.FlowBlocks.AI;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Constants;
@@ -1631,6 +1632,33 @@ namespace FlowBlox.AppWindow
             {
                 FileName = "explorer.exe",
                 Arguments = projectOutputDirectory,
+                UseShellExecute = true
+            });
+        }
+
+        private void itmOpenOnnxQaModelRootDirectory_Click(object sender, EventArgs e)
+        {
+            OpenOptionDirectory(OnnxQAFlowBlock.ModelRootDirectoryOptionName);
+        }
+
+        private void itmOpenOnnxGenAiModelRootDirectory_Click(object sender, EventArgs e)
+        {
+            OpenOptionDirectory(OnnxGenAIFlowBlock.ModelRootDirectoryOptionName);
+        }
+
+        private static void OpenOptionDirectory(string optionName)
+        {
+            var directory = FlowBloxOptions.GetOptionInstance().GetOption(optionName)?.Value;
+            if (string.IsNullOrWhiteSpace(directory))
+                return;
+
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = directory,
                 UseShellExecute = true
             });
         }

@@ -45,6 +45,9 @@ namespace FlowBlox.AppWindow
             itmOpenProjectDir = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenProjectInputDir = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenProjectOutputDir = new System.Windows.Forms.ToolStripMenuItem();
+            mnItmOnnxModelRootDirectories = new System.Windows.Forms.ToolStripMenuItem();
+            itmOpenOnnxQaModelRootDirectory = new System.Windows.Forms.ToolStripMenuItem();
+            itmOpenOnnxGenAiModelRootDirectory = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
             itmOpenRuntimeLogDirectory = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenApplicationLogDirectory = new System.Windows.Forms.ToolStripMenuItem();
@@ -228,6 +231,29 @@ namespace FlowBlox.AppWindow
             itmOpenProjectOutputDir.Size = new System.Drawing.Size(403, 22);
             itmOpenProjectOutputDir.Text = "itmOpenProjectOutputDir_Text";
             itmOpenProjectOutputDir.Click += itmOpenProjectOutputDir_Click;
+            //
+            // mnItmOnnxModelRootDirectories
+            //
+            mnItmOnnxModelRootDirectories.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmOpenOnnxQaModelRootDirectory, itmOpenOnnxGenAiModelRootDirectory });
+            mnItmOnnxModelRootDirectories.Name = "mnItmOnnxModelRootDirectories";
+            mnItmOnnxModelRootDirectories.Size = new System.Drawing.Size(403, 22);
+            mnItmOnnxModelRootDirectories.Text = "mnItmOnnxModelRootDirectories_Text";
+            //
+            // itmOpenOnnxQaModelRootDirectory
+            //
+            itmOpenOnnxQaModelRootDirectory.Image = itmOpenInputDir.Image;
+            itmOpenOnnxQaModelRootDirectory.Name = "itmOpenOnnxQaModelRootDirectory";
+            itmOpenOnnxQaModelRootDirectory.Size = new System.Drawing.Size(284, 22);
+            itmOpenOnnxQaModelRootDirectory.Text = "itmOpenOnnxQaModelRootDirectory_Text";
+            itmOpenOnnxQaModelRootDirectory.Click += itmOpenOnnxQaModelRootDirectory_Click;
+            //
+            // itmOpenOnnxGenAiModelRootDirectory
+            //
+            itmOpenOnnxGenAiModelRootDirectory.Image = itmOpenInputDir.Image;
+            itmOpenOnnxGenAiModelRootDirectory.Name = "itmOpenOnnxGenAiModelRootDirectory";
+            itmOpenOnnxGenAiModelRootDirectory.Size = new System.Drawing.Size(284, 22);
+            itmOpenOnnxGenAiModelRootDirectory.Text = "itmOpenOnnxGenAiModelRootDirectory_Text";
+            itmOpenOnnxGenAiModelRootDirectory.Click += itmOpenOnnxGenAiModelRootDirectory_Click;
             // 
             // toolStripSeparator20
             // 
@@ -480,7 +506,7 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmDirectories
             // 
-            mnItmDirectories.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmOpenInputDir, itmOpenOutputDir, itmOpenProjectDir, toolStripSeparator8, itmOpenProjectInputDir, itmOpenProjectOutputDir, toolStripSeparator20, itmOpenRuntimeLogDirectory, itmOpenApplicationLogDirectory });
+            mnItmDirectories.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmOpenInputDir, itmOpenOutputDir, itmOpenProjectDir, toolStripSeparator8, itmOpenProjectInputDir, itmOpenProjectOutputDir, mnItmOnnxModelRootDirectories, toolStripSeparator20, itmOpenRuntimeLogDirectory, itmOpenApplicationLogDirectory });
             mnItmDirectories.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmDirectories.Name = "mnItmDirectories";
             mnItmDirectories.Size = new System.Drawing.Size(137, 19);
@@ -730,6 +756,9 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripMenuItem mnItmDirectories;
         private System.Windows.Forms.ToolStripMenuItem itmOpenProjectInputDir;
         private System.Windows.Forms.ToolStripMenuItem itmOpenProjectOutputDir;
+        private System.Windows.Forms.ToolStripMenuItem mnItmOnnxModelRootDirectories;
+        private System.Windows.Forms.ToolStripMenuItem itmOpenOnnxQaModelRootDirectory;
+        private System.Windows.Forms.ToolStripMenuItem itmOpenOnnxGenAiModelRootDirectory;
     }
 }
 

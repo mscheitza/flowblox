@@ -98,6 +98,7 @@ namespace FlowBlox.AIAssistant.Tools
                 new GetProjectJsonHandler(),
                 new GetExplanationManifestHandler(),
                 new GetExplanationContentHandler(),
+                new GetPublishedScriptContentHandler(),
                 new GetRootCategoriesHandler(),
                 new GetCategoryChildrenHandler(),
                 new SearchFlowBlockHandler(),

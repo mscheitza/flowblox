@@ -6,6 +6,7 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Attributes;
 using FlowBlox.UICore.Interfaces;
+using FlowBlox.UICore.PopUp.Provider;
 using FlowBlox.UICore.Views;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
@@ -16,14 +17,26 @@ namespace FlowBlox.UICore.Operations
     {
         private readonly IDialogService _dialogService;
         private readonly IRuntimeStateService _runtimeStateService;
+        private readonly IComponentPopupService _componentPopupService;
 
         public FlowBloxComponentUIActions(FlowBloxComponent component) : base(component)
         {
             _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
             _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
+            _componentPopupService = FlowBloxServiceLocator.Instance.GetService<IComponentPopupService>();
         }
 
         public SKImage ManageUserFieldsIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.account_cog, 16, SKColors.SteelBlue);
+        public SKImage QuickStartIcon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.play_box_outline, 16, SKColors.SteelBlue);
+
+        public bool IsQuickStartVisible() =>
+            _componentPopupService?.HasProviderFor(Component, ComponentPopupEvent.Open) == true;
+
+        [Display(Name = "FlowBloxComponentUIActions_QuickStart", ResourceType = typeof(FlowBloxTexts))]
+        public void QuickStart()
+        {
+            _componentPopupService?.ShowForForced(Component, ComponentPopupEvent.Open);
+        }
 
         public bool CanManageUserFields()
         {

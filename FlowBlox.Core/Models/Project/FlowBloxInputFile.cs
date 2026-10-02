@@ -67,7 +67,7 @@ namespace FlowBlox.Core.Models.Project
 
         /// <summary>
         /// Optional command executed in runtime startup context.
-        /// Supports placeholders, including $InputFile:Path.
+        /// Supports placeholders, including $InputFile::Path.
         /// </summary>
         public string Command
         {

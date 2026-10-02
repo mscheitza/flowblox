@@ -12,6 +12,6 @@ namespace FlowBlox.UICore.PopUp.Provider
 
         bool CanShowFor(object target, ComponentPopupEvent popupEvent);
 
-        void ShowIfEnabled(object target, Window owner = null);
+        bool Show(object target, Window owner = null, bool force = false);
     }
 }

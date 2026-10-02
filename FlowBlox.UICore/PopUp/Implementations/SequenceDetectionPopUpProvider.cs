@@ -12,7 +12,7 @@ namespace FlowBlox.UICore.PopUp.Implementations
         ComponentPopupProviderBase<SequenceDetectionFlowBlock>,
         IOptionsRegistration
     {
-        public override string OptionKey => PopupOptionNames.ShowSequenceDetectionPopupOnOpen;
+        public override string OptionKey => PopupOptionNames.SequenceDetectionQuickStartCompleted;
 
         protected override string WindowTitle => SequenceDetectionPopUpTexts.Window_Title;
 
@@ -37,15 +37,12 @@ namespace FlowBlox.UICore.PopUp.Implementations
 
         public void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions)
         {
-            SetOptionWasMissingAtInitialization(
-                !currentOptions.Any(x => x.Name == PopupOptionNames.ShowSequenceDetectionPopupOnOpen));
-
             defaults.Add(new OptionElement(
-                PopupOptionNames.ShowSequenceDetectionPopupOnOpen,
+                PopupOptionNames.SequenceDetectionQuickStartCompleted,
                 bool.FalseString,
-                "Controls whether the Sequence Detection component pop-up dialog is shown.",
+                "Tracks whether the Sequence Detection quick-start guidance has been completed.",
                 OptionElement.OptionType.Boolean,
-                "Sequence Detection: Show Component Pop-up"));
+                "Sequence Detection: Quick-Start completed"));
         }
     }
 }

@@ -37,6 +37,7 @@ namespace FlowBlox.UICore.Resolver
         {
             var textAttribute = property.GetCustomAttribute<FlowBloxTextBoxAttribute>();
             var fieldSelectionAttribute = property.GetCustomAttribute<FlowBloxFieldSelectionAttribute>();
+            var openFromFileSystemAttribute = property.GetCustomAttribute<FlowBloxOpenFromFileSystemAttribute>();
             var buttonVerticalAlignment = textAttribute?.MultiLine == true
                 ? VerticalAlignment.Top
                 : VerticalAlignment.Center;
@@ -123,7 +124,10 @@ namespace FlowBlox.UICore.Resolver
                     {
                         Filter = filter
                     };
-                    ApplyFileDialogInitialPath(dialog, property.GetValue(target)?.ToString());
+                    ApplyFileDialogInitialPath(
+                        dialog,
+                        property.GetValue(target)?.ToString(),
+                        ResolveInitialDirectory(target, openFromFileSystemAttribute));
 
                     if (dialog.ShowDialog() == true)
                     {
@@ -169,7 +173,10 @@ namespace FlowBlox.UICore.Resolver
                 folderButton.Click += (s, e) =>
                 {
                     using var dialog = new System.Windows.Forms.FolderBrowserDialog();
-                    ApplyFolderDialogInitialPath(dialog, property.GetValue(target)?.ToString());
+                    ApplyFolderDialogInitialPath(
+                        dialog,
+                        property.GetValue(target)?.ToString(),
+                        ResolveInitialDirectory(target, openFromFileSystemAttribute));
 
                     var result = dialog.ShowDialog();
 
@@ -326,10 +333,36 @@ namespace FlowBlox.UICore.Resolver
                 .ToList();
         }
 
-        private static void ApplyFileDialogInitialPath(Microsoft.Win32.OpenFileDialog dialog, string currentValue)
+        private static string ResolveInitialDirectory(
+            object target,
+            FlowBloxOpenFromFileSystemAttribute attribute)
+        {
+            if (target == null || string.IsNullOrWhiteSpace(attribute?.InitialDirectoryMethod))
+                return string.Empty;
+
+            var method = target.GetType().GetMethod(
+                attribute.InitialDirectoryMethod,
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (method == null)
+                throw new InvalidOperationException(
+                    $"Initial-directory method '{attribute.InitialDirectoryMethod}' not found on type '{target.GetType().FullName}'.");
+            if (method.ReturnType != typeof(string) || method.GetParameters().Length != 0)
+                throw new InvalidOperationException(
+                    $"Initial-directory method '{attribute.InitialDirectoryMethod}' must return string and have no parameters.");
+
+            return method.Invoke(target, null) as string ?? string.Empty;
+        }
+
+        private static void ApplyFileDialogInitialPath(
+            Microsoft.Win32.OpenFileDialog dialog,
+            string currentValue,
+            string initialDirectory)
         {
             if (dialog == null)
                 return;
+
+            if (!string.IsNullOrWhiteSpace(initialDirectory) && Directory.Exists(initialDirectory))
+                dialog.InitialDirectory = initialDirectory;
 
             var resolvedValue = FlowBloxFieldHelper.ReplaceFieldsInString(currentValue);
             if (string.IsNullOrWhiteSpace(resolvedValue))
@@ -339,12 +372,14 @@ namespace FlowBlox.UICore.Resolver
             {
                 if (Directory.Exists(resolvedValue))
                 {
-                    dialog.InitialDirectory = resolvedValue;
+                    if (string.IsNullOrWhiteSpace(dialog.InitialDirectory))
+                        dialog.InitialDirectory = resolvedValue;
                     return;
                 }
 
                 var directory = Path.GetDirectoryName(resolvedValue);
-                if (!string.IsNullOrWhiteSpace(directory) && Directory.Exists(directory))
+                if (string.IsNullOrWhiteSpace(dialog.InitialDirectory) &&
+                    !string.IsNullOrWhiteSpace(directory) && Directory.Exists(directory))
                     dialog.InitialDirectory = directory;
 
                 var fileName = Path.GetFileName(resolvedValue);
@@ -357,10 +392,19 @@ namespace FlowBlox.UICore.Resolver
             }
         }
 
-        private static void ApplyFolderDialogInitialPath(System.Windows.Forms.FolderBrowserDialog dialog, string currentValue)
+        private static void ApplyFolderDialogInitialPath(
+            System.Windows.Forms.FolderBrowserDialog dialog,
+            string currentValue,
+            string initialDirectory)
         {
             if (dialog == null)
                 return;
+
+            if (!string.IsNullOrWhiteSpace(initialDirectory) && Directory.Exists(initialDirectory))
+            {
+                dialog.SelectedPath = initialDirectory;
+                return;
+            }
 
             var resolvedValue = FlowBloxFieldHelper.ReplaceFieldsInString(currentValue);
             if (string.IsNullOrWhiteSpace(resolvedValue))
@@ -399,14 +443,19 @@ namespace FlowBlox.UICore.Resolver
             }
 
             var options = FlowBloxOptions.GetOptionInstance();
-            if (options.OptionCollection.TryGetValue("Paths.InputDir", out var inputDirOption))
-            {
-                candidates.Add((FlowBloxFieldHelper.ReplaceFieldsInString(inputDirOption.Value), "$Options::Paths.InputDir"));
-            }
+            AddOptionPathCandidate("Paths.InputDir");
+            AddOptionPathCandidate("Paths.OutputDir");
+            AddOptionPathCandidate("AI.Onnx.QA.ModelRootDirectory");
+            AddOptionPathCandidate("AI.Onnx.GenAI.ModelRootDirectory");
 
-            if (options.OptionCollection.TryGetValue("Paths.OutputDir", out var outputDirOption))
+            void AddOptionPathCandidate(string optionName)
             {
-                candidates.Add((FlowBloxFieldHelper.ReplaceFieldsInString(outputDirOption.Value), "$Options::Paths.OutputDir"));
+                if (options.OptionCollection.TryGetValue(optionName, out var option))
+                {
+                    candidates.Add((
+                        FlowBloxFieldHelper.ReplaceFieldsInString(option.Value),
+                        $"$Options::{optionName}"));
+                }
             }
 
             var normalizedSelectedPath = IOUtil.NormalizePath(selectedPath, trimTrailingDirectorySeparator: true);

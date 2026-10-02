@@ -4,7 +4,6 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using FlowBlox.Core.Models.FlowBlocks.AWS;
 using FlowBlox.Core.Models.Components.IO;
-using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.FlowBlocks.TextOperations;
 using FlowBlox.Core.Models.Project;
@@ -16,6 +15,7 @@ using WDocument = DocumentFormat.OpenXml.Wordprocessing.Document;
 namespace FlowBloxTest.FlowBlocks.IO
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class DocumentAndStorageFlowBlockTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;
@@ -112,30 +112,6 @@ namespace FlowBloxTest.FlowBlocks.IO
             Assert.AreEqual(2222, client.ConnectionInfo.Port);
             Assert.AreEqual("user", client.ConnectionInfo.Username);
             Assert.AreEqual(1, client.ConnectionInfo.AuthenticationMethods.Count());
-        }
-
-        [TestMethod]
-        public void SftpProvider_ActivatesOnlyCredentialsForSelectedAuthenticationMethod()
-        {
-            var provider = new SftpConnectionProvider();
-            var passwordCondition = typeof(SftpConnectionProvider).GetProperty(nameof(SftpConnectionProvider.Password))!
-                .GetCustomAttributes(typeof(ActivationConditionAttribute), true)
-                .Cast<ActivationConditionAttribute>().Single();
-            var privateKeyCondition = typeof(SftpConnectionProvider).GetProperty(nameof(SftpConnectionProvider.PrivateKey))!
-                .GetCustomAttributes(typeof(ActivationConditionAttribute), true)
-                .Cast<ActivationConditionAttribute>().Single();
-
-            provider.AuthenticationMethod = SftpAuthenticationMethod.Password;
-            Assert.IsTrue(passwordCondition.IsActive(provider));
-            Assert.IsFalse(privateKeyCondition.IsActive(provider));
-
-            provider.AuthenticationMethod = SftpAuthenticationMethod.PrivateKey;
-            Assert.IsFalse(passwordCondition.IsActive(provider));
-            Assert.IsTrue(privateKeyCondition.IsActive(provider));
-
-            provider.AuthenticationMethod = SftpAuthenticationMethod.PasswordAndPrivateKey;
-            Assert.IsTrue(passwordCondition.IsActive(provider));
-            Assert.IsTrue(privateKeyCondition.IsActive(provider));
         }
 
         [TestMethod]

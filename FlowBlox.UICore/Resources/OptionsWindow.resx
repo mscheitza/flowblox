@@ -27,6 +27,7 @@ You can configure the default editor used by FlowBlox under "Options" → "Edito
   <data name="Tooltip_Delete" xml:space="preserve"><value>Remove option</value></data>
   <data name="Tooltip_Reset" xml:space="preserve"><value>Reset options</value></data>
   <data name="Tooltip_Save" xml:space="preserve"><value>Save option</value></data>
+  <data name="Tooltip_InsertOptionPlaceholder" xml:space="preserve"><value>Insert option placeholder</value></data>
   <data name="Validation_OptionAlreadyExists" xml:space="preserve"><value>An option named '{0}' already exists.</value></data>
   <data name="Validation_OptionNameRequired" xml:space="preserve"><value>The option name is required.</value></data>
   <data name="Value_No" xml:space="preserve"><value>No</value></data>

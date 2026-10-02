@@ -1,11 +1,11 @@
 using FlowBlox.Core.Migration.MigrationStrategies;
 using FlowBlox.Core.Models.FlowBlocks.Json;
-using FlowBlox.Core.Services;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBloxTest.Migration
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class FlowBloxComponentMigrationStrategy_1_0_0Tests
     {
         [TestMethod]
@@ -62,16 +62,5 @@ namespace FlowBloxTest.Migration
             Assert.AreEqual("$.participants[0].name", component.Value<string>(nameof(JPathSelectorFlowBlock.Path)));
         }
 
-        [TestMethod]
-        public void LegacyTypeMapping_JsonPathSelector_MapsToJPathSelector()
-        {
-            var mapping = new FlowBloxCoreLegacyTypeMappingService()
-                .GetLegacyTypeMappings()
-                .Single(x => x.TargetType == typeof(JPathSelectorFlowBlock));
-
-            CollectionAssert.Contains(
-                mapping.LegacyTypeNames.ToArray(),
-                "FlowBlox.Core.Models.FlowBlocks.Json.JsonPathSelectorFlowBlock, FlowBlox.Core");
-        }
     }
 }

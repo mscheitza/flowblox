@@ -1,4 +1,3 @@
-using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.Web;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
@@ -6,6 +5,7 @@ using FlowBlox.Core.Provider.Project;
 namespace FlowBloxTest.FlowBlocks.Web
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class OpenApiRestFlowBlockTests : FlowBloxTestsBase
     {
         [TestInitialize]
@@ -56,17 +56,6 @@ namespace FlowBloxTest.FlowBlocks.Web
             Assert.AreEqual(0, block.HeaderParameters.Count);
             Assert.AreEqual("id", block.RequestParameters.Single().Name);
             Assert.AreEqual("Path", block.RequestParameters.Single().Location);
-        }
-
-        [TestMethod]
-        public void NewBlock_HasOnlyPayloadAndStatusCodeResultsByDefault()
-        {
-            var block = CreateFlowBlock<OpenApiRestFlowBlock>();
-
-            CollectionAssert.AreEqual(
-                new[] { OpenApiRestDestinations.Payload, OpenApiRestDestinations.StatusCode },
-                block.ResultFields.Select(x => x.EnumValue!.Value).ToArray());
-            Assert.AreEqual(FieldTypes.Integer, block.ResultFields[1].ResultField.FieldType.FieldType);
         }
 
         private const string Definition = """

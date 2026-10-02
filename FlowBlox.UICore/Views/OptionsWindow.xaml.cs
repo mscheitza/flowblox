@@ -1,4 +1,7 @@
 using FlowBlox.Core.Models.Components;
+using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Factory.Adapter;
+using FlowBlox.UICore.Models.FieldSelection;
 using FlowBlox.UICore.Resources;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.Options;
@@ -8,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using OptionsWindowResources = FlowBlox.UICore.Resources.OptionsWindow;
+using UICoreTextBoxHelper = FlowBlox.UICore.Utilities.TextBoxHelper;
 
 namespace FlowBlox.UICore.Views
 {
@@ -81,6 +85,27 @@ namespace FlowBlox.UICore.Views
 
             if (e.PropertyName == nameof(OptionsWindowViewModel.SelectedNode))
                 Dispatcher.BeginInvoke(BringSelectedNodeIntoView, DispatcherPriority.Loaded);
+        }
+
+        private void OptionPlaceholderButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedOptionName = ViewModel?.Name;
+            var args = new FieldSelectionWindowArgs
+            {
+                SelectionMode = FieldSelectionMode.Options,
+                AllowedFieldSelectionModes = [FieldSelectionMode.Options],
+                MultiSelect = false,
+                HideRequired = true,
+                OptionElements = FlowBlox.Core.Util.FlowBloxOptions.GetOptionInstance()
+                    .GetOptions()
+                    .Where(option =>
+                        option.IsPlaceholderEnabled &&
+                        !string.Equals(option.Name, selectedOptionName, StringComparison.OrdinalIgnoreCase))
+            };
+
+            var result = UICoreTextBoxHelper.ShowFieldSelectionDialog(args, this);
+            if (result?.SelectedOptions?.Count > 0)
+                UICoreTextBoxHelper.ApplyOptionElementsToTextBox(result.SelectedOptions, new WpfTextBoxAdapter(ValueTextBox));
         }
 
         private void BringSelectedNodeIntoView()

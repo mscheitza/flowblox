@@ -89,6 +89,7 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Do not add trivial baseline tests for changes below roughly two story points of complexity.
 - A test must protect meaningful FlowBlox-owned behavior such as branching, validation and error handling, state transitions, migrations, serialization compatibility, runtime interaction, or non-trivial orchestration.
 - Do not create tests that merely prove framework/BCL or third-party behavior, straightforward property-to-option mapping, or known cryptographic library output. For example, hashing `"abc"` and comparing it with the standard SHA-256 digest does not meaningfully test FlowBlox.
+- Do not add tests that only mirror declarations or configuration, such as checking that a constructor assigns a default, an `OptionsInit` method adds an option, or an annotation/resource key exists. These tests add refactoring cost without protecting runtime behavior.
 - Thin wrappers and direct mappings normally require a successful build, not a dedicated unit test.
 - Add tests when project-specific logic or a concrete regression risk makes them valuable, even if the implementation itself is small.
 

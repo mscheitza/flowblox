@@ -12,6 +12,7 @@ using System.Linq;
 namespace FlowBloxTest.FlowBlocks.Conditions
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class BaseFlowBlockActivationConditionsTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;

@@ -280,12 +280,32 @@
                             <TextBlock Text="{x:Static resources:OptionsWindow.Label_Value}"/>
                         </Border>
 
-                        <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Visibility="{Binding IsTextValueType, Converter={StaticResource BoolToVisibilityConverter}}"
-                                 MinHeight="90"
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="True"
-                                 VerticalScrollBarVisibility="Auto"/>
+                        <Grid Visibility="{Binding IsTextValueType, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="ValueTextBox"
+                                     Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     MinHeight="90"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto"/>
+                            <Button x:Name="OptionPlaceholderButton"
+                                    Grid.Column="1"
+                                    Width="30"
+                                    Height="30"
+                                    Margin="4,0,0,0"
+                                    Padding="0"
+                                    VerticalAlignment="Top"
+                                    Click="OptionPlaceholderButton_Click"
+                                    ToolTip="{x:Static resources:OptionsWindow.Tooltip_InsertOptionPlaceholder}">
+                                <iconPacks:PackIconMaterial Kind="Variable"
+                                                            Width="16"
+                                                            Height="16"
+                                                            Foreground="#2F6DB3"/>
+                            </Button>
+                        </Grid>
 
                         <PasswordBox x:Name="ValuePasswordBox"
                                      Visibility="{Binding IsPasswordType, Converter={StaticResource BoolToVisibilityConverter}}"

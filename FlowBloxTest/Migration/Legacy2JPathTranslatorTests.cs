@@ -3,6 +3,7 @@ using FlowBlox.Core.Migration;
 namespace FlowBloxTest.Migration
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class Legacy2JPathTranslatorTests
     {
         [TestMethod]

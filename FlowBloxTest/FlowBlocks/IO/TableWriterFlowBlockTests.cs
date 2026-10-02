@@ -6,6 +6,7 @@ using FlowBlox.Core.Provider.Project;
 namespace FlowBloxTest.FlowBlocks.IO
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public sealed class TableWriterFlowBlockTests
     {
         [TestMethod]

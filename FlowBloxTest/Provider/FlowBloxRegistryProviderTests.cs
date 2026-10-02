@@ -5,6 +5,7 @@ using FlowBlox.Core.Provider.Project;
 namespace FlowBloxTest.Provider
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class FlowBloxRegistryProviderTests
     {
         [TestMethod]

@@ -81,11 +81,7 @@ namespace FlowBlox.Core.Models.Project
             }
 
             var replaced = input;
-            // Canonical single-colon placeholders.
-            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile:Path", absolutePath);
-            replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile:RelativePath", relativePath);
-
-            // Backward-compatible double-colon placeholders.
+            // Canonical FlowBlox placeholder syntax.
             replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile::Path", absolutePath);
             replaced = ReplaceOrdinalIgnoreCase(replaced, "$InputFile::RelativePath", relativePath);
             return replaced;
@@ -136,33 +132,33 @@ namespace FlowBlox.Core.Models.Project
             if (project.InputFiles == null || project.InputFiles.Count == 0)
                 return;
 
+            foreach (var tpl in project.InputFiles)
+                EnsureInputFileExists(project, tpl);
+        }
+
+        /// <summary>
+        /// Materializes one managed input file according to its sync mode.
+        /// </summary>
+        public static void EnsureInputFileExists(FlowBloxProject project, FlowBloxInputFile inputFile)
+        {
+            if (project == null || inputFile == null || string.IsNullOrWhiteSpace(inputFile.RelativePath))
+                return;
+
             var inputDir = project.ProjectInputDirectory;
             if (string.IsNullOrWhiteSpace(inputDir))
                 return;
 
             Directory.CreateDirectory(inputDir);
 
-            foreach (var tpl in project.InputFiles)
-            {
-                if (tpl == null)
-                    continue;
+            var targetPath = BuildAbsoluteTargetPath(inputDir, inputFile.RelativePath);
+            if (File.Exists(targetPath) && inputFile.SyncMode != FlowBloxInputFileSyncMode.AlwaysOverwrite)
+                return;
 
-                if (string.IsNullOrWhiteSpace(tpl.RelativePath))
-                    continue;
+            var parentDir = Path.GetDirectoryName(targetPath);
+            if (!string.IsNullOrWhiteSpace(parentDir))
+                Directory.CreateDirectory(parentDir);
 
-                var targetPath = BuildAbsoluteTargetPath(inputDir, tpl.RelativePath);
-                var syncMode = tpl.SyncMode;
-
-                if (File.Exists(targetPath) && syncMode != FlowBloxInputFileSyncMode.AlwaysOverwrite)
-                    continue;
-
-                var parentDir = Path.GetDirectoryName(targetPath);
-                if (!string.IsNullOrWhiteSpace(parentDir))
-                    Directory.CreateDirectory(parentDir);
-
-                var bytes = tpl.ContentBytes ?? Array.Empty<byte>();
-                File.WriteAllBytes(targetPath, bytes);
-            }
+            File.WriteAllBytes(targetPath, inputFile.ContentBytes ?? Array.Empty<byte>());
         }
     }
 }

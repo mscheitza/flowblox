@@ -9,6 +9,7 @@ using System.Xml;
 namespace FlowBloxTest.FlowBlocks.Xml
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class XPathSelectorTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;

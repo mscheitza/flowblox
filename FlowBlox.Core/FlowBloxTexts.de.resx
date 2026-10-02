@@ -576,6 +576,9 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="FlowBloxComponentUIActions_ManageUserFields" xml:space="preserve">
 		<value>Benutzerfelder verwalten</value>
 	</data>
+	<data name="FlowBloxComponentUIActions_QuickStart" xml:space="preserve">
+		<value>Quick-Start</value>
+	</data>
 	<data name="FlowBloxComponent_Validation_NameRequired" xml:space="preserve">
 		<value>Bitte legen Sie einen eindeutigen Namen fest.</value>
 	</data>
@@ -2279,7 +2282,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Modellordner</value>
 	</data>
 	<data name="OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip" xml:space="preserve">
-		<value>Ordner mit dem ONNX Runtime GenAI-Modell, inkl. genai_config.json, *.onnx-Dateien und Tokenizer-Assets.</value>
+		<value>Ordner mit dem ONNX Runtime GenAI-Modell bei der FlowBlock-Initialisierung, inkl. genai_config.json, *.onnx-Dateien und Tokenizer-Assets. Er kann lokal verwaltet oder durch ein Eingabedatei-Skript beim Laufzeitstart bereitgestellt werden.</value>
 	</data>
 	<data name="OnnxRuntimeGenAIFlowBlock_Prompt" xml:space="preserve">
 		<value>Prompt</value>
@@ -3281,7 +3284,10 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
     <value>Nach der Ausführung liefert dieser Flow-Block den aktuellen DOM-Content und den tatsächlich aufgelösten Downloadpfad in seinen Ergebnisfeldern zurück.</value>
   </data>
 	<data name="OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource" xml:space="preserve">
-    <value>Dieser FlowBlock benötigt einen ONNX Runtime GenAI-kompatiblen Modellordner. Der Ordner muss genai_config.json, ONNX-Modelldateien und Tokenizer-Assets enthalten. Bevorzuge fertige Microsoft/Hugging Face- oder Foundry Local-GenAI-Modellordner und setze ModelFolder auf den konkreten Unterordner mit genai_config.json.</value>
+    <value>Bei der Initialisierung muss ModelFolder auf einen ONNX Runtime GenAI-kompatiblen Ordner mit genai_config.json, ONNX-Modelldateien und Tokenizer-Assets zeigen. Bevorzuge fertige Microsoft/Hugging Face- oder Foundry Local-Pakete und wähle den konkreten Unterordner mit genai_config.json.</value>
+  </data>
+	<data name="OnnxGenAIFlowBlock_SpecialExplanation_ModelProvisioning" xml:space="preserve">
+    <value>Best Practice: Wiederverwendbare Modelle unter $Options::AI.Onnx.GenAI.ModelRootDirectory ablegen. Entweder einen lokal verwalteten Modellordner auswählen oder unter Extras &gt; Eingabedateien verwalten ein Python-Skript hinzufügen, das das Modell bei Bedarf herunterlädt und sicherstellt, dass es vollständig vorliegt. Den Befehl python "$InputFile::Path" --model-root-directory "$Options::AI.Onnx.GenAI.ModelRootDirectory" setzen und Vor Laufzeitbeginn ausführen aktivieren. Das bereitgestellte Skript legt den modellspezifischen Unterordner selbst an, sodass Projekte und Runtimes dieselbe Kopie nutzen.</value>
   </data>
 	<data name="XmlDocumentOutputFlowBlock_SpecialExplanation_ExternalFlowBlocks" xml:space="preserve">
     <value>Dieser Flow-Block verwendet das intern verwaltete XML-Dokument aus einem XML-Dokument-Flow-Block und gibt es als Text oder Byte-Array aus.</value>
@@ -4315,7 +4321,7 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="OnnxQAFlowBlock_DisplayName" xml:space="preserve"><value>ONNX-Fragebeantwortung</value></data>
   <data name="OnnxQAFlowBlock_Description" xml:space="preserve"><value>Extrahiert mit einem lokalen ONNX-QA-Modell die beste Antwortspanne aus einem vorgegebenen Kontext.</value></data>
   <data name="OnnxQAFlowBlock_ModelFolder" xml:space="preserve"><value>Modellordner</value></data>
-  <data name="OnnxQAFlowBlock_ModelFolder_Tooltip" xml:space="preserve"><value>Ordner mit model.onnx, Konfigurationsdateien und einem unterstützten Tokenizer: vocab.txt, vocab.json mit merges.txt oder eine SentencePiece-.model-Datei. Projektplatzhalter werden unterstützt.</value></data>
+  <data name="OnnxQAFlowBlock_ModelFolder_Tooltip" xml:space="preserve"><value>Ordner mit dem Modell bei der FlowBlock-Initialisierung: model.onnx, Konfigurationsdateien und ein unterstützter Tokenizer (vocab.txt, vocab.json mit merges.txt oder eine SentencePiece-.model-Datei). Er kann lokal verwaltet oder durch ein Eingabedatei-Skript beim Laufzeitstart bereitgestellt werden.</value></data>
   <data name="OnnxQAFlowBlock_Question" xml:space="preserve"><value>Frage</value></data>
   <data name="OnnxQAFlowBlock_Question_Tooltip" xml:space="preserve"><value>Zu beantwortende Frage. Das Modell sucht die Antwort im Kontext.</value></data>
   <data name="OnnxQAFlowBlock_Context" xml:space="preserve"><value>Kontext</value></data>
@@ -4333,7 +4339,8 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="OnnxQAFlowBlock_AllowNoAnswer_Tooltip" xml:space="preserve"><value>Erlaubt bei SQuAD-2-Modellen ein leeres Ergebnis, wenn die Keine-Antwort-Position höher als die beste Textspanne bewertet wird.</value></data>
   <data name="OnnxQAFlowBlock_NoAnswerThreshold" xml:space="preserve"><value>Keine-Antwort-Schwellwert</value></data>
   <data name="OnnxQAFlowBlock_NoAnswerThreshold_Tooltip" xml:space="preserve"><value>Erforderliche Differenz zwischen Keine-Antwort-Score und bestem Spannenscore. Dieser Wert sollte mit repräsentativen Validierungsdaten abgestimmt werden.</value></data>
-  <data name="OnnxQAFlowBlock_SpecialExplanation_ModelFolder" xml:space="preserve"><value>Modell und Tokenizer bilden eine gemeinsame Deployment-Einheit. ONNX-Graph, Konfiguration und Tokenizer-Dateien müssen aus demselben exportierten Checkpoint stammen.</value></data>
+  <data name="OnnxQAFlowBlock_SpecialExplanation_ModelFolder" xml:space="preserve"><value>Bei der Initialisierung muss ModelFolder den ONNX-Graphen, die Konfiguration und die Tokenizer-Dateien desselben exportierten Checkpoints enthalten; sie bilden eine gemeinsame Deployment-Einheit.</value></data>
+  <data name="OnnxQAFlowBlock_SpecialExplanation_ModelProvisioning" xml:space="preserve"><value>Best Practice: Wiederverwendbare Modelle unter $Options::AI.Onnx.QA.ModelRootDirectory ablegen. Entweder einen lokal verwalteten Modellordner auswählen oder unter Extras &gt; Eingabedateien verwalten ein Python-Skript hinzufügen, das das Modell bei Bedarf herunterlädt und sicherstellt, dass es vollständig vorliegt. Den Befehl python "$InputFile::Path" --model-root-directory "$Options::AI.Onnx.QA.ModelRootDirectory" setzen und Vor Laufzeitbeginn ausführen aktivieren. Das bereitgestellte Skript legt den modellspezifischen Unterordner selbst an, sodass Projekte und Runtimes dieselbe Kopie nutzen.</value></data>
   <data name="OnnxQAFlowBlock_SpecialExplanation_Extractive" xml:space="preserve"><value>Dies ist extraktive Fragebeantwortung: Das Ergebnis wird aus dem Kontext kopiert. Für erklärende oder neu formulierte Antworten sollte der ONNX-GenAI-Flow-Block verwendet werden.</value></data>
 </root>
 

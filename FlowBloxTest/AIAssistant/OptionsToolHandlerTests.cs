@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 namespace FlowBloxTest.AIAssistant
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class OptionsToolHandlerTests
     {
         private const string TestIntegerOptionName = "AI.Assistant.Tests.Integer";

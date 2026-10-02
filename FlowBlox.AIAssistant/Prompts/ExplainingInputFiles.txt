@@ -10,9 +10,9 @@ Purpose:
 - Commands can be stored per managed input file using CreateOrUpdateInputFile arguments:
   - command (optional)
   - executeBeforeRuntime (optional)
-- Use placeholder $InputFile::Path inside command values.
+- Use the canonical FlowBlox placeholders `$InputFile::Path` and `$InputFile::RelativePath` inside command values.
 - If a managed input file is a script that should be runnable through `ExecuteInputFileCommand`, `command` is required. Creating the script content alone is not enough.
-- To run or test a configured script on demand, use `ExecuteInputFileCommand` for the managed input file key. This executes the stored command with working directory `$Project::InputDirectory` and resolves `$InputFile::Path` / `$InputFile::RelativePath`.
+- To run or test a configured script on demand, call only `ExecuteInputFileCommand` for the managed input file key. It materializes the selected file according to its sync mode before executing the stored command in `$Project::InputDirectory`; no separate synchronization step is needed.
 - It is allowed to request `ExecuteInputFileCommand` when executing or testing the script helps complete the user's task. The FlowBlox UI asks the user for confirmation before the command is executed.
 - stdout/stderr are returned to the AI Assistant after command completion. Use them to verify results and continue configuration. Keep script output compact and useful.
 - Before requesting long-running commands such as downloads, model exports, package installs, or large conversions, briefly tell the user that execution may take several minutes depending on bandwidth, hardware, and file size. Also mention that results are available after the command finishes.
@@ -20,6 +20,9 @@ Purpose:
 
 Path rule:
 - Managed input file key is always relative to $Project::InputDirectory.
+- This rule governs the managed file itself and the command's working directory, not every artifact produced by the command.
+- Store project-specific artifacts below `$Project::InputDirectory`.
+- For deliberately cross-project artifacts, the owning feature must define its own shared root with feature- and artifact-type-specific subdirectories; prefer `%USERPROFILE%\.flowblox\<feature>\<artifact-type>` as the user-writable convention. ONNX is one concrete example and uses `%USERPROFILE%\.flowblox\onnx\qa` and `%USERPROFILE%\.flowblox\onnx\genai` through their dedicated `ModelRootDirectory` options.
 
 Sync modes:
 1) CreateIfNotExists (default): write only if file is missing.
@@ -50,11 +53,12 @@ Use case 2 (helper script):
 - Provide a script file needed by the project setup (for example model/download preparation).
 - Recommended mode: AlwaysOverwrite.
 - Use this for fixed operational files that should be refreshed/updated automatically and are not user data templates.
-- If a helper script prepares a deterministic project-local resource path, downstream flow blocks may be configured to that expected path even before the script has been executed.
+- The helper script itself is materialized below `$Project::InputDirectory`. Its outputs may be project-specific or shared; pass the appropriate configured output/root directory to the script instead of assuming its working directory is the output directory.
+- If a helper script prepares a deterministic resource path, downstream flow blocks may be configured to that expected path even before the script has been executed.
 - Set `command` when the script should be runnable by the AI Assistant or by the Input Files UI.
 - Optionally set `executeBeforeRuntime` for automatic execution before runtime start.
 - Prefer on-demand testing via `ExecuteInputFileCommand` before enabling automatic runtime-start execution.
-- Do not set helper/download scripts to `executeBeforeRuntime=true` unless the user explicitly asks for automatic execution.
+- Do not set helper/download scripts to `executeBeforeRuntime=true` unless the user explicitly asks for automatic execution or the matching contextual guidance defines automatic provisioning as its default (for example ONNX QA/GenAI model setup).
 - For PowerShell scripts, a typical command is:
   - `powershell.exe -ExecutionPolicy Bypass -NoProfile -File "$InputFile::Path"`
 - For Python scripts, a typical command is:

@@ -11,6 +11,7 @@ namespace FlowBlox.Core.Constants
         public const string FlowBloxReportProblem = FlowBloxGitHubRepository + "/issues/new";
         public const string FlowBloxPublicApiBaseUrl = "https://www.flowblox.net/api/";
         public const string FlowBloxInstallerManifestUrl = "https://flowblox.net/app/FlowBloxInstallerUpdates.xml";
+        public const string PythonDownloads = "https://www.python.org/downloads/";
 
         public static IReadOnlyDictionary<string, string> GetAll()
         {

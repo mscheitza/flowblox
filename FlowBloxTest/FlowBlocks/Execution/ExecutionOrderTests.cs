@@ -5,6 +5,7 @@ using FlowBlox.Core.Provider.Project;
 namespace FlowBloxTest.FlowBlocks.Execution
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class ExecutionOrderTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;

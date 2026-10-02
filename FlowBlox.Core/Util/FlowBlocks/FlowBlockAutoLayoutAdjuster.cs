@@ -91,6 +91,8 @@ namespace FlowBlox.Core.Util.FlowBlocks
                 nextComponentTop = componentBottom + ComponentSpacing;
             }
 
+            ShiftLayoutBelowVerticalOrigin(locationMap);
+
             var updated = 0;
             foreach (var block in blocks)
             {
@@ -276,8 +278,8 @@ namespace FlowBlox.Core.Util.FlowBlocks
                     var targetTop = (int)Math.Round(avgCenter - (blockSize.Height / 2.0));
                     var current = locations[block];
                     TraceLine(
-                        $"Block center apply: Block={BlockName(block)}, CurrentTop={current.Y}, SizeH={blockSize.Height}, CandidateCount={candidates.Count}, Candidates=[{string.Join(", ", candidates.Select(x => x.ToString("F2")))}], AvgCenterY={avgCenter:F2}, TargetTopRaw={targetTop}, TargetTopClamped={Math.Max(0, targetTop)}");
-                    locations[block] = new Point(current.X, Math.Max(0, targetTop));
+                        $"Block center apply: Block={BlockName(block)}, CurrentTop={current.Y}, SizeH={blockSize.Height}, CandidateCount={candidates.Count}, Candidates=[{string.Join(", ", candidates.Select(x => x.ToString("F2")))}], AvgCenterY={avgCenter:F2}, TargetTop={targetTop}");
+                    locations[block] = new Point(current.X, targetTop);
                 }
 
                 TraceLine($"Relaxation pass end: Pass={pass + 1}/{RelaxationPasses}");
@@ -359,6 +361,22 @@ namespace FlowBlox.Core.Util.FlowBlocks
             return location.Y + (size.Height / 2.0);
         }
 
+        private static void ShiftLayoutBelowVerticalOrigin(Dictionary<BaseFlowBlock, Point> locations)
+        {
+            var minY = locations.Values.Select(x => x.Y).DefaultIfEmpty(0).Min();
+            if (minY >= 0)
+                return;
+
+            var offsetY = -minY + VerticalSpacing;
+            foreach (var block in locations.Keys.ToList())
+            {
+                var location = locations[block];
+                locations[block] = new Point(location.X, location.Y + offsetY);
+            }
+
+            TraceLine($"Shifted complete layout down by {offsetY} because MinY was {minY}.");
+        }
+
         private static void TraceBlocks(
             List<BaseFlowBlock> blocks,
             Dictionary<BaseFlowBlock, Size> sizeMap,
@@ -400,7 +418,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
             var avgCenter = candidates.Average();
             var targetTop = (int)Math.Round(avgCenter - (blockSize.Height / 2.0));
             var current = locations[block];
-            locations[block] = new Point(current.X, Math.Max(0, targetTop));
+            locations[block] = new Point(current.X, targetTop);
         }
 
         private static void RefitBranchSubgraphsBackward(
@@ -506,7 +524,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
                         foreach (var node in group.Nodes)
                         {
                             var current = locations[node];
-                            locations[node] = new Point(current.X, Math.Max(0, current.Y + delta));
+                            locations[node] = new Point(current.X, current.Y + delta);
                         }
                     }
 

@@ -1,114 +1,26 @@
-ONNX extractive question-answering model setup
+ONNX extractive QA model setup
 
-Use this prompt only on demand when the user wants to create, configure, compare or troubleshoot an `OnnxQAFlowBlock`, asks for a compatible local QA model, or asks the AI Assistant to generate a download/export script. Do not include it automatically in the session bootstrap.
+Use only for `OnnxQAFlowBlock` setup or troubleshooting.
 
-Purpose and boundary:
-- `OnnxQAFlowBlock` performs extractive QA. It returns a verbatim character span from `Context`; it does not generate, summarize or reformulate an answer.
-- Use `OnnxGenAIFlowBlock` for generative answers or explanations.
-- The QA block itself does not retrieve documents. A search/retrieval step must provide the relevant context first when the source corpus is large.
-- Treat the ONNX graph, configuration and tokenizer assets as one deployment unit. Never mix tokenizer files from unrelated checkpoints.
+Published script:
+- Retrieve `export_onnx_qa_model.py` with `GetPublishedScriptContent` (`scriptType="python"`) and store its unchanged content as a managed system input file. The script itself is project-specific and is materialized below `$Project::InputDirectory`.
+- Command: `python "$InputFile::Path" --model-root-directory "$Options::AI.Onnx.QA.ModelRootDirectory"`. To run it, call only `ExecuteInputFileCommand`; it materializes the script first, while the exported models go to the shared QA model root for reuse across projects.
+- Default to automatic provisioning: set `executeBeforeRuntime=true` so the script ensures the model exists before FlowBlock initialization. Use one-time manual execution only when the user explicitly requests manual-only provisioning. Tell the user whether the script was configured for automatic runtime-start execution or must be run manually before starting the runtime.
+- It defaults to `timpal0l/mdeberta-v3-base-squad2`, installs/imports the required Hugging Face/Transformers/Optimum packages, exports and validates graph/tokenizer, stores below the passed model root (default `%USERPROFILE%\.flowblox\onnx\qa`), and exits immediately when complete.
+- `--model-id` presets: `timpal0l/mdeberta-v3-base-squad2` (tokenizer `microsoft/mdeberta-v3-base`), `deepset/deberta-v3-base-squad2` (`microsoft/deberta-v3-base`), `deepset/xlm-roberta-base-squad2` (`FacebookAI/xlm-roberta-base`), and `deepset/gelectra-base-germanquad` (matching GELECTRA tokenizer). `--output-directory` overrides the exact folder.
+- If `python` is not recognized/found, direct the user to {{PythonDownloads}} and `PATH`; this is not an ONNX failure.
 
-Supported model/tokenizer families:
-- BERT, DistilBERT, ELECTRA and compatible WordPiece QA checkpoints with `vocab.txt`.
-- RoBERTa byte-level BPE checkpoints with `vocab.json` plus `merges.txt`.
-- DeBERTa-v2/v3 and mDeBERTa SentencePiece checkpoints with `spm.model` (or `tokenizer.model`).
-- XLM-RoBERTa and CamemBERT SentencePiece checkpoints with `sentencepiece.bpe.model`.
-- The ONNX graph must expose `input_ids` and `attention_mask`; `token_type_ids` is optional.
-- The outputs must be named `start_logits` and `end_logits`.
-- Do not claim arbitrary `tokenizer.json` compatibility. For SentencePiece models, preserve the original `.model` protobuf and any special-token metadata (`tokenizer.json`, `added_tokens.json`, `special_tokens_map.json`).
+Default behavior when the user did not specify a model:
+- Do not ask for a model/folder. Run the command above without `--model-id`; it reuses or creates `$Options::AI.Onnx.QA.ModelRootDirectory\mdeberta-v3-base-squad2`, matching the FlowBlock default. Observe `explaining_input_files` confirmation rules.
+- Only use `--model-id` when another model is explicitly requested; then set `ModelFolder` to that model's resulting directory.
 
-Model selection:
-- Default multilingual example: `timpal0l/mdeberta-v3-base-squad2`.
-  - Modern DeBERTa-v3 encoder and multilingual pretraining.
-  - Fine-tuned on English SQuAD 2.0; validate quality on the user's target languages and domain.
-  - Its fine-tuned repository lacks the original `spm.model`; copy that file from `microsoft/mdeberta-v3-base` after export.
-- Multilingual alternative with published German MLQA/XQuAD evaluation: `deepset/xlm-roberta-base-squad2`.
-  - Uses `sentencepiece.bpe.model` and RoBERTa pair formatting.
-  - Prefer the base variant for practical CPU use; the large variant is substantially heavier.
-- Strong English default: `deepset/deberta-v3-base-squad2`.
-- Lightweight English baseline: `deepset/roberta-base-squad2` or an explicitly validated distilled QA checkpoint.
-- German-only legacy option: `deepset/gelectra-base-germanquad` remains useful when its German benchmark/domain fit is better than a multilingual model.
-- ModernBERT is a current long-context encoder architecture, but a base checkpoint is not a QA model. Use it only when a trustworthy QA-fine-tuned checkpoint is available, exports successfully, has compatible tokenizer assets, and is evaluated on the target domain.
-- “State of the art” is not a single model ID. Compare candidates on representative question/context pairs, no-answer examples, latency, memory and the required languages.
+Contract and configuration:
+- Extractive QA returns a verbatim span from `Context`; large corpora require separate retrieval.
+- Keep graph, config and tokenizer from one checkpoint. Inputs: `input_ids`, `attention_mask`, optional `token_type_ids`; outputs: `start_logits`, `end_logits`.
+- Required: `model.onnx`, `config.json`, `tokenizer_config.json`, plus WordPiece `vocab.txt`, byte-level BPE `vocab.json` + `merges.txt`, or matching SentencePiece `.model`. A GenAI folder with `genai_config.json` is invalid.
+- Provider runtimes must exist and match the hardware; provider selection does not convert a model.
+- Default `ModelFolder`: `$Options::AI.Onnx.QA.ModelRootDirectory\mdeberta-v3-base-squad2`.
+- Defaults: `MaxSequenceLength=384`, `DocumentStride=128`, `MaxAnswerLength=30`. Enable/calibrate `AllowNoAnswer` and `NoAnswerThreshold` only for compatible checkpoints.
+- Validate language/domain, punctuation, non-ASCII text, long/sliding-window contexts, latency and memory.
 
-Recommended export workflow:
-1. Select a Hugging Face checkpoint whose task is `question-answering` and whose license is acceptable.
-2. Warn before downloading: model weights and Python packages can require several GB and several minutes.
-3. Create a project managed-input Python script when no suitable model folder already exists.
-4. Install/import `optimum-onnx[onnxruntime]` and call `optimum.exporters.onnx.main_export` with `task="question-answering"`.
-5. Export into a deterministic folder below `$Project::InputDirectory\Models\...`.
-6. Verify required ONNX inputs/outputs and tokenizer assets.
-7. Configure `OnnxQAFlowBlock.ModelFolder` with the deterministic folder, preferably using `$Project::InputDirectory`.
-8. For script execution, confirmation, stdout/stderr and `executeBeforeRuntime`, follow `explaining_input_files`.
-
-Generic Python export skeleton:
-
-```python
-from pathlib import Path
-from optimum.exporters.onnx import main_export
-
-MODEL_ID = "deepset/deberta-v3-base-squad2"
-TARGET = Path(__file__).resolve().parent / ".." / "Models" / "deberta-v3-base-squad2"
-TARGET.mkdir(parents=True, exist_ok=True)
-
-main_export(
-    model_name_or_path=MODEL_ID,
-    output=TARGET,
-    task="question-answering",
-)
-```
-
-mDeBERTa-v3 tokenizer completion:
-
-```python
-import shutil
-from huggingface_hub import hf_hub_download
-
-spm_source = hf_hub_download(
-    repo_id="microsoft/mdeberta-v3-base",
-    filename="spm.model",
-)
-shutil.copy2(spm_source, TARGET / "spm.model")
-```
-
-Model-folder checklist:
-- `model.onnx` exists. If the exporter chose another graph filename, rename it only when external-data references remain valid; otherwise export explicitly to the expected filename.
-- `config.json` and `tokenizer_config.json` exist.
-- WordPiece: `vocab.txt` exists.
-- RoBERTa byte-level BPE: `vocab.json` and `merges.txt` exist.
-- DeBERTa/mDeBERTa: `spm.model` or `tokenizer.model` exists, plus tokenizer special-token metadata.
-- XLM-R/CamemBERT: `sentencepiece.bpe.model` exists.
-- Inputs include `input_ids`, `attention_mask`, and optionally `token_type_ids`.
-- Outputs are `start_logits` and `end_logits`.
-- Do not select an ONNX Runtime GenAI folder with `genai_config.json`; that is a different runtime contract.
-
-FlowBlock configuration:
-- `Question`: the question to answer; field placeholders are supported.
-- `Context`: the source text from which the answer is copied; field placeholders are supported.
-- `MaxSequenceLength`: default 384. The model/tokenizer limit is also respected.
-- `DocumentStride`: default 128. Keep overlap smaller than the available context window.
-- `MaxAnswerLength`: default 30 tokens; raise only for domains with legitimately longer answers.
-- `AllowNoAnswer`: enable for SQuAD-2-style checkpoints when an empty result is meaningful.
-- `NoAnswerThreshold`: calibrate on representative answerable and unanswerable examples; do not assume one universal threshold.
-- `AiExecutionProvider` is read from the global FlowBlox ONNX setting.
-
-Validation guidance:
-- Test exact answer extraction, punctuation and non-ASCII text because the result must be the original `Context` substring.
-- Include answers close to sliding-window boundaries.
-- Include contexts longer than `MaxSequenceLength`.
-- Include questions with no answer when `AllowNoAnswer` is enabled.
-- Compare quality by language/domain rather than choosing solely by architecture age.
-- Benchmark CPU/GPU latency and memory using the actual execution provider.
-
-Useful references:
-- Optimum ONNX export overview and supported architectures: https://huggingface.co/docs/optimum-onnx/onnx/overview
-- Optimum ONNX Runtime question-answering class: https://huggingface.co/docs/optimum-onnx/en/onnxruntime/package_reference/modeling_ort#optimum.onnxruntime.ORTModelForQuestionAnswering
-- Hugging Face question-answering task guide: https://huggingface.co/docs/transformers/tasks/question_answering
-- Hugging Face DeBERTa-v2/v3 tokenizer documentation: https://huggingface.co/docs/transformers/model_doc/deberta-v2
-- Multilingual mDeBERTa-v3 SQuAD2 checkpoint: https://huggingface.co/timpal0l/mdeberta-v3-base-squad2
-- mDeBERTa base tokenizer source (`spm.model`): https://huggingface.co/microsoft/mdeberta-v3-base/tree/main
-- English DeBERTa-v3 SQuAD2 checkpoint: https://huggingface.co/deepset/deberta-v3-base-squad2
-- Multilingual XLM-R base SQuAD2 checkpoint: https://huggingface.co/deepset/xlm-roberta-base-squad2
-- Multilingual XLM-R large SQuAD2 checkpoint: https://huggingface.co/deepset/xlm-roberta-large-squad2
-- German GELECTRA GermanQuAD checkpoint: https://huggingface.co/deepset/gelectra-base-germanquad
-- ModernBERT architecture documentation: https://huggingface.co/docs/transformers/model_doc/modernbert
+For input-file creation, confirmation, stdout/stderr and `executeBeforeRuntime`, use `explaining_input_files`.

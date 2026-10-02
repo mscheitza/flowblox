@@ -1,7 +1,5 @@
 ﻿using FlowBlox.Core.Models.Project;
-using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Core.Util.ShellExecution;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Utilities;
 using MahApps.Metro.Controls;
@@ -262,14 +260,7 @@ namespace FlowBlox.UICore.ViewModels
                     return;
                 }
 
-                var command = FlowBloxInputFileHelper.ReplaceInputFilePlaceholders(rawCommand, _project, inputFile);
-                command = FlowBloxFieldHelper.ReplaceFieldsInString(command);
-
-                var result = FlowBloxShellExecutor.Execute(new FlowBloxShellExecutionRequest
-                {
-                    Command = command,
-                    WorkingDirectory = _project?.ProjectInputDirectory
-                });
+                var result = FlowBloxInputFileCommandExecutor.Execute(_project, inputFile);
 
                 if (result.Success)
                 {

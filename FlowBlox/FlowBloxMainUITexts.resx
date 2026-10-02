@@ -195,6 +195,12 @@
   <data name="AppWindow_itmOpenProjectOutputDir_Text" xml:space="preserve">
 		<value>Open project output directory</value>
 	</data>
+  <data name="AppWindow_itmOpenOnnxQaModelRootDirectory_Text" xml:space="preserve">
+		<value>Open &amp;QA model root directory</value>
+	</data>
+  <data name="AppWindow_itmOpenOnnxGenAiModelRootDirectory_Text" xml:space="preserve">
+		<value>Open &amp;GenAI model root directory</value>
+	</data>
   <data name="AppWindow_itmOpenProject_Text" xml:space="preserve">
 		<value>&amp;Open project</value>
 	</data>
@@ -257,6 +263,9 @@
 	</data>
   <data name="AppWindow_mnItmDirectories_Text" xml:space="preserve">
 		<value>&amp;Directories</value>
+	</data>
+  <data name="AppWindow_mnItmOnnxModelRootDirectories_Text" xml:space="preserve">
+		<value>ONNX model root &amp;directories</value>
 	</data>
   <data name="AppWindow_NewProjectConfirm_Message" xml:space="preserve">
 		<value>Do you really want to close the project "{0}" and create a new project?</value>

@@ -11,5 +11,9 @@ namespace FlowBlox.UICore.PopUp.Provider
         bool ShowFor<TTarget>(TTarget target, Window owner = null);
 
         bool ShowFor<TTarget>(TTarget target, ComponentPopupEvent popupEvent, Window owner = null);
+
+        bool HasProviderFor(object target, ComponentPopupEvent popupEvent = ComponentPopupEvent.Open);
+
+        bool ShowForForced(object target, ComponentPopupEvent popupEvent = ComponentPopupEvent.Open, Window owner = null);
     }
 }

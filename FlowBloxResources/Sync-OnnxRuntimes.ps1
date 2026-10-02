@@ -1,6 +1,8 @@
 #requires -Version 5.1
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+$RuntimeManifestFileName = "runtime-manifest.json"
+$RuntimeLayoutVersion = 1
 
 function Write-Info($msg)  { Write-Host "[INFO] $msg" -ForegroundColor Cyan }
 function Write-Warn($msg)  { Write-Host "[WARN] $msg" -ForegroundColor Yellow }
@@ -8,6 +10,60 @@ function Write-Err ($msg)  { Write-Host "[ERR ] $msg" -ForegroundColor Red }
 
 function Ensure-Directory([string]$path) {
     if (-not (Test-Path $path)) { New-Item -ItemType Directory -Path $path -Force | Out-Null }
+}
+
+function Reset-Directory([string]$path) {
+    if (Test-Path -LiteralPath $path) {
+        Remove-Item -LiteralPath $path -Recurse -Force
+    }
+    Ensure-Directory $path
+}
+
+function Test-RuntimeManifestMatches(
+    [string]$manifestPath,
+    [System.Collections.IDictionary]$expected) {
+    if (-not (Test-Path -LiteralPath $manifestPath)) { return $false }
+
+    try {
+        $actual = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+        foreach ($key in $expected.Keys) {
+            $property = $actual.PSObject.Properties[$key]
+            if ($null -eq $property -or [string]$property.Value -ne [string]$expected[$key]) {
+                return $false
+            }
+        }
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+function Prepare-RuntimeOutput(
+    [string]$path,
+    [System.Collections.IDictionary]$expectedManifest) {
+    Ensure-Directory $path
+    $manifestPath = Join-Path $path $RuntimeManifestFileName
+
+    if (-not (Test-Path -LiteralPath $manifestPath)) {
+        Write-Info "No runtime manifest found; preserving '$path' and using incremental copy."
+        return
+    }
+
+    if (Test-RuntimeManifestMatches $manifestPath $expectedManifest) {
+        Write-Info "Runtime manifest is current; using incremental copy: $path"
+        return
+    }
+
+    Write-Warn "Runtime version or layout changed; rebuilding: $path"
+    Reset-Directory $path
+}
+
+function Write-RuntimeManifest(
+    [string]$path,
+    [System.Collections.IDictionary]$manifest) {
+    $manifestPath = Join-Path $path $RuntimeManifestFileName
+    $manifest | ConvertTo-Json | Set-Content -LiteralPath $manifestPath -Encoding UTF8
+    Write-Info "Wrote runtime manifest: $manifestPath"
 }
 
 function Test-FileUpToDate([string]$sourceFile, [string]$destFile) {
@@ -88,6 +144,27 @@ function Test-PackageInCache([string]$nugetRoot, [string]$packageId, [string]$ve
     return (Test-Path $pkgPath)
 }
 
+function Get-PackageDependencyVersion(
+    [string]$nugetRoot,
+    [string]$packageId,
+    [string]$version,
+    [string]$dependencyId) {
+    $pkgPath = Join-Path $nugetRoot (Join-Path $packageId.ToLowerInvariant() $version)
+    $nuspec = Get-ChildItem -LiteralPath $pkgPath -Filter "*.nuspec" -File | Select-Object -First 1
+    if (-not $nuspec) {
+        throw "Could not find nuspec for $packageId $version."
+    }
+
+    [xml]$xml = Get-Content -LiteralPath $nuspec.FullName -Raw
+    $dependency = $xml.SelectSingleNode(
+        "//*[local-name()='dependency' and translate(@id, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='$($dependencyId.ToLowerInvariant())']")
+    if (-not $dependency -or [string]::IsNullOrWhiteSpace($dependency.version)) {
+        throw "Could not find dependency '$dependencyId' in $packageId $version."
+    }
+
+    return $dependency.version.Trim().Trim('[', ']', '(', ')').Split(',')[0].Trim()
+}
+
 function Ensure-PackagesInCache([string]$csprojDir, [hashtable[]]$packages) {
     # Create a temp csproj that references all required packages and dotnet restore it.
     # This will populate the NuGet global cache without touching your real project refs.
@@ -122,7 +199,7 @@ $refs
     # Restore
     $p = Start-Process -FilePath "dotnet" -ArgumentList @("restore", $tmpProj, "-v", "minimal") -NoNewWindow -PassThru -Wait
     if ($p.ExitCode -ne 0) {
-        Write-Warn "dotnet restore returned exit code $($p.ExitCode). Some packages may still be missing."
+        throw "dotnet restore returned exit code $($p.ExitCode)."
     }
 
     # Cleanup project file (keep folder for troubleshooting if needed)
@@ -132,14 +209,12 @@ $refs
 function Copy-RuntimeNative([string]$nugetRoot, [string]$packageId, [string]$version, [string]$rid, [string]$destDir) {
     $pkgBase = Join-Path $nugetRoot (Join-Path $packageId.ToLowerInvariant() $version)
     if (-not (Test-Path $pkgBase)) {
-        Write-Warn "Package not found in cache: $packageId $version"
-        return $false
+        throw "Package not found in cache: $packageId $version"
     }
 
     $src = Join-Path $pkgBase (Join-Path "runtimes\$rid" "native")
     if (-not (Test-Path $src)) {
-        Write-Warn "RID/native not found: $packageId $version -> runtimes\$rid\native"
-        return $false
+        throw "RID/native not found: $packageId $version -> runtimes\$rid\native"
     }
 
     Ensure-Directory $destDir
@@ -150,8 +225,7 @@ function Copy-RuntimeNative([string]$nugetRoot, [string]$packageId, [string]$ver
     $srcFiles = @(Get-ChildItem -LiteralPath $srcRoot -Recurse -File -Force -ErrorAction Stop)
 
     if ($srcFiles.Length -eq 0) {
-        Write-Warn "Source folder is empty: $src"
-        return $false
+        throw "Source folder is empty: $src"
     }
 
     $filesToCopy = @()
@@ -186,17 +260,21 @@ function Copy-RuntimeNative([string]$nugetRoot, [string]$packageId, [string]$ver
     return $true
 }
 
-function Write-Readme([string]$dataDir) {
-    $readmePath = Join-Path $dataDir "README.txt"
+function Write-Readme([string]$rootDir) {
+    $readmePath = Join-Path $rootDir "README.txt"
     $txt = @"
 FlowBlox Native ONNX Runtime Bundling
 ====================================
 
-This folder contains native runtime binaries copied from the local NuGet Global Packages cache.
+This README describes the native runtime binaries stored below this folder in:
+  data\onnxruntimes\...
+  data\onnxruntimesgenai\...
+
+Sync-OnnxRuntimes.ps1 copies these binaries from the local NuGet Global Packages cache.
 
 Why?
 -----
-FlowBlox deploys selected ONNX Runtime / ONNX Runtime GenAI native binaries (CPU/GPU/DirectML/OpenVINO)
+FlowBlox deploys selected ONNX Runtime / ONNX Runtime GenAI native binaries (CPU/CUDA/DirectML/OpenVINO)
 independently from NuGet to support dynamic runtime/provider loading.
 
 When to run this script?
@@ -205,8 +283,8 @@ Run Sync-OnnxRuntimes.ps1 whenever you change the managed NuGet versions in:
   ../FlowBlox.Core/FlowBlox.Core.csproj
 
 The script reads the managed versions:
-  - Microsoft.ML.OnnxRuntime
-  - Microsoft.ML.OnnxRuntimeGenAI
+  - Microsoft.ML.OnnxRuntime.Managed
+  - Microsoft.ML.OnnxRuntimeGenAI.Managed
 
 Then it:
   1) Ensures the corresponding runtime/provider packages are present in the NuGet global cache
@@ -219,8 +297,10 @@ Then it:
 
 Notes
 -----
-- If a provider package or RID is not available, the script prints a warning and continues.
-- GenAI GPU package names may vary between releases; warnings will show what is missing.
+- The sync fails if a required provider package, RID, or native file set is unavailable.
+- All GenAI provider packages must depend on the same ONNX Runtime version selected by FlowBlox.Core.
+- Each runtime output folder contains a runtime-manifest.json with the synchronized package and layout versions.
+- Matching manifests keep the existing folders and enable incremental copying. A version or layout change rebuilds only the affected runtime output folder.
 
 "@
     Set-Content -LiteralPath $readmePath -Value $txt -Encoding UTF8
@@ -237,8 +317,8 @@ function Sync-OrtAndGenAiRuntimes {
     $ortVer   = Get-PackageVersionFromCsproj $csprojPath "Microsoft.ML.OnnxRuntime.Managed"
 	$genaiVer = Get-PackageVersionFromCsproj $csprojPath "Microsoft.ML.OnnxRuntimeGenAI.Managed"
 
-    if (-not $ortVer)   { throw "Could not find PackageReference version for Microsoft.ML.OnnxRuntime in csproj." }
-    if (-not $genaiVer) { throw "Could not find PackageReference version for Microsoft.ML.OnnxRuntimeGenAI in csproj." }
+    if (-not $ortVer)   { throw "Could not find PackageReference version for Microsoft.ML.OnnxRuntime.Managed in csproj." }
+    if (-not $genaiVer) { throw "Could not find PackageReference version for Microsoft.ML.OnnxRuntimeGenAI.Managed in csproj." }
 
     Write-Info "Detected versions:"
     Write-Info "  ONNX Runtime     : $ortVer"
@@ -254,11 +334,10 @@ function Sync-OrtAndGenAiRuntimes {
         @{ Id = "Microsoft.ML.OnnxRuntime.Gpu.Windows";     Version = $ortVer },
 		@{ Id = "Microsoft.ML.OnnxRuntime.Gpu.Linux";     	Version = $ortVer },
         @{ Id = "Microsoft.ML.OnnxRuntime.DirectML";    	Version = $ortVer },
-        @{ Id = "Microsoft.ML.OnnxRuntime.OpenVINO";    	Version = $ortVer }
+        @{ Id = "Intel.ML.OnnxRuntime.OpenVino";        	Version = $ortVer }
     )
 
     # GenAI packages (same version as managed GenAI)
-    # CUDA package naming can vary; we try common candidates later for copying.
     $genaiPackages = @(
         @{ Id = "Microsoft.ML.OnnxRuntimeGenAI";            Version = $genaiVer },
         @{ Id = "Microsoft.ML.OnnxRuntimeGenAI.DirectML";   Version = $genaiVer },
@@ -281,10 +360,44 @@ function Sync-OrtAndGenAiRuntimes {
         Write-Info "All required packages already present in NuGet cache."
     }
 
-    # --- Create output dirs
+    foreach ($p in ($ortPackages + $genaiPackages)) {
+        if (-not (Test-PackageInCache $nugetRoot $p.Id $p.Version)) {
+            throw "Required package is unavailable after restore: $($p.Id) $($p.Version)"
+        }
+    }
+
+    $genAiOrtDependencies = @(
+        @{ Package = "Microsoft.ML.OnnxRuntimeGenAI";          Dependency = "Microsoft.ML.OnnxRuntime" },
+        @{ Package = "Microsoft.ML.OnnxRuntimeGenAI.DirectML"; Dependency = "Microsoft.ML.OnnxRuntime.DirectML" },
+        @{ Package = "Microsoft.ML.OnnxRuntimeGenAI.Cuda";     Dependency = "Microsoft.ML.OnnxRuntime.Gpu" }
+    )
+    foreach ($entry in $genAiOrtDependencies) {
+        $requiredOrtVersion = Get-PackageDependencyVersion `
+            $nugetRoot $entry.Package $genaiVer $entry.Dependency
+        if ($requiredOrtVersion -ne $ortVer) {
+            throw "$($entry.Package) $genaiVer requires $($entry.Dependency) $requiredOrtVersion, but FlowBlox.Core selects ONNX Runtime $ortVer. Choose a fully synchronized version set."
+        }
+    }
+    Write-Info "Verified: all GenAI provider packages use ONNX Runtime $ortVer."
+
+    $ortManifest = [ordered]@{
+        manifestVersion = 1
+        runtime = "onnxruntime"
+        layoutVersion = $RuntimeLayoutVersion
+        onnxRuntimeVersion = $ortVer
+    }
+    $genAiManifest = [ordered]@{
+        manifestVersion = 1
+        runtime = "onnxruntime-genai"
+        layoutVersion = $RuntimeLayoutVersion
+        onnxRuntimeVersion = $ortVer
+        onnxRuntimeGenAiVersion = $genaiVer
+    }
+
+    # Keep matching outputs for incremental copies; rebuild only after a version/layout change.
     Ensure-Directory $paths.DataDir
-    Ensure-Directory $paths.OrtOut
-    Ensure-Directory $paths.GenAiOut
+    Prepare-RuntimeOutput $paths.OrtOut $ortManifest
+    Prepare-RuntimeOutput $paths.GenAiOut $genAiManifest
 
     # --- Copy maps (RID -> destination)
     $ridMapCpu = @(
@@ -296,12 +409,21 @@ function Sync-OrtAndGenAiRuntimes {
         @{ Rid = "osx-arm64";  Dest = "cpu\osx-arm64" }
     )
 
+    # ONNX Runtime GenAI 0.14.1 does not publish an osx-x64 native binary.
+    $ridMapGenAiCpu = @(
+        @{ Rid = "win-x64";    Dest = "cpu\win-x64" },
+        @{ Rid = "win-arm64";  Dest = "cpu\win-arm64" },
+        @{ Rid = "linux-x64";  Dest = "cpu\linux-x64" },
+        @{ Rid = "linux-arm64";Dest = "cpu\linux-arm64" },
+        @{ Rid = "osx-arm64";  Dest = "cpu\osx-arm64" }
+    )
+
     $ridMapWin = @(
         @{ Rid = "win-x64";    Dest = "win-x64" },
         @{ Rid = "win-arm64";  Dest = "win-arm64" }
     )
 
-    $ridMapGpu = @(
+    $ridMapCuda = @(
         @{ Rid = "win-x64";    Dest = "win-x64" },
         @{ Rid = "linux-x64";  Dest = "linux-x64" }
     )
@@ -320,52 +442,51 @@ function Sync-OrtAndGenAiRuntimes {
         $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntime.DirectML" $ortVer $m.Rid $dest) -or $anyCopied
     }
 
-    foreach ($m in $ridMapGpu) {
-        $destWin = Join-Path (Join-Path $paths.OrtOut "gpu-windows") "win-x64"
-        $destLin = Join-Path (Join-Path $paths.OrtOut "gpu-linux") "linux-x64"
+    foreach ($m in $ridMapCuda) {
+        $destWin = Join-Path (Join-Path $paths.OrtOut "cuda") "win-x64"
+        $destLin = Join-Path (Join-Path $paths.OrtOut "cuda") "linux-x64"
         if ($m.Rid -eq "win-x64")   { $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntime.Gpu.Windows" $ortVer $m.Rid $destWin) -or $anyCopied }
         if ($m.Rid -eq "linux-x64") { $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntime.Gpu.Linux" $ortVer $m.Rid $destLin) -or $anyCopied }
     }
 
     # OpenVINO (commonly win-x64 only)
     $destOv = Join-Path (Join-Path $paths.OrtOut "openvino") "win-x64"
-    $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntime.OpenVINO" $ortVer "win-x64" $destOv) -or $anyCopied
+    $anyCopied = (Copy-RuntimeNative $nugetRoot "Intel.ML.OnnxRuntime.OpenVino" $ortVer "win-x64" $destOv) -or $anyCopied
 
     # --- Copy GenAI
     Write-Info "=== Copying ONNX Runtime GenAI native runtimes ==="
-    foreach ($m in $ridMapCpu) {
+    foreach ($m in $ridMapGenAiCpu) {
         $dest = Join-Path $paths.GenAiOut $m.Dest
+        $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntime" $ortVer $m.Rid $dest) -or $anyCopied
         $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntimeGenAI" $genaiVer $m.Rid $dest) -or $anyCopied
     }
 
     foreach ($m in $ridMapWin) {
         $dest = Join-Path (Join-Path $paths.GenAiOut "directml") $m.Dest
+        $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntime.DirectML" $ortVer $m.Rid $dest) -or $anyCopied
         $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntimeGenAI.DirectML" $genaiVer $m.Rid $dest) -or $anyCopied
     }
 
-    # GenAI CUDA: try common candidates
-    $cudaCandidates = @(
-        "Microsoft.ML.OnnxRuntimeGenAI.Cuda",
-        "Microsoft.ML.OnnxRuntimeGenAI.Gpu",
-        "Microsoft.ML.OnnxRuntimeGenAI.CUDA" # just in case casing differs
-    )
+    $destCudaWin = Join-Path (Join-Path $paths.GenAiOut "cuda") "win-x64"
+    $destCudaLin = Join-Path (Join-Path $paths.GenAiOut "cuda") "linux-x64"
+    $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntime.Gpu.Windows" $ortVer "win-x64" $destCudaWin) -or $anyCopied
+    $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntimeGenAI.Cuda" $genaiVer "win-x64" $destCudaWin) -or $anyCopied
+    $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntime.Gpu.Linux" $ortVer "linux-x64" $destCudaLin) -or $anyCopied
+    $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntimeGenAI.Cuda" $genaiVer "linux-x64" $destCudaLin) -or $anyCopied
 
-    foreach ($cand in $cudaCandidates) {
-        $pkgExists = Test-PackageInCache $nugetRoot $cand $genaiVer
-        if ($pkgExists) {
-            $destCudaWin = Join-Path (Join-Path $paths.GenAiOut "cuda") "win-x64"
-            $destCudaLin = Join-Path (Join-Path $paths.GenAiOut "cuda") "linux-x64"
-            $anyCopied = (Copy-RuntimeNative $nugetRoot $cand $genaiVer "win-x64"   $destCudaWin) -or $anyCopied
-            $anyCopied = (Copy-RuntimeNative $nugetRoot $cand $genaiVer "linux-x64" $destCudaLin) -or $anyCopied
-            break
-        }
-    }
+    # GenAI has no separate OpenVINO NuGet package. Combine its provider-neutral
+    # native library with the matching OpenVINO build of ONNX Runtime.
+    $destGenAiOpenVino = Join-Path (Join-Path $paths.GenAiOut "openvino") "win-x64"
+    $anyCopied = (Copy-RuntimeNative $nugetRoot "Intel.ML.OnnxRuntime.OpenVino" $ortVer "win-x64" $destGenAiOpenVino) -or $anyCopied
+    $anyCopied = (Copy-RuntimeNative $nugetRoot "Microsoft.ML.OnnxRuntimeGenAI" $genaiVer "win-x64" $destGenAiOpenVino) -or $anyCopied
 
     if (-not $anyCopied) {
         Write-Warn "No files were copied. Check package versions and availability in NuGet cache."
     }
 
-    Write-Readme $paths.DataDir
+    Write-RuntimeManifest $paths.OrtOut $ortManifest
+    Write-RuntimeManifest $paths.GenAiOut $genAiManifest
+    Write-Readme $paths.Root
     Write-Info "Done."
 }
 

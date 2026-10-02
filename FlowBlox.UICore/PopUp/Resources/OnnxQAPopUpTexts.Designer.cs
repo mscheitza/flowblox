@@ -62,7 +62,7 @@ namespace FlowBlox.UICore.PopUp.Resources {
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Python is required to download and export the example model. Download the latest release here and enable “Add Python to PATH” during setup:
-        ///https://www.python.org/downloads/ ähnelt.
+        ///{0} ähnelt.
         /// </summary>
         public static string Step1_Description {
             get {
@@ -80,7 +80,7 @@ namespace FlowBlox.UICore.PopUp.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Open the included page and run or download the ready-to-use Python script. It exports the SQuAD2 QA checkpoint and its SentencePiece tokenizer under onnxqa\mdeberta-v3-base-squad2:
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open the included page and run or download the published Python script. It uses multilingual mDeBERTa-v3 by default. Pass --model-id for another checkpoint, --model-root-directory for a user model root, or --output-directory for an exact model folder:
         ///{0} ähnelt.
         /// </summary>
         public static string Step2_Description {
@@ -99,7 +99,7 @@ namespace FlowBlox.UICore.PopUp.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Set ModelFolder to onnxqa\mdeberta-v3-base-squad2. The folder must contain model.onnx, config.json, tokenizer.json, tokenizer_config.json and spm.model. Enable AllowNoAnswer when empty answers are required and tune its threshold with representative data. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die ModelFolder points to the QA model root option and default model subfolder. The folder must contain model.onnx, config.json, tokenizer_config.json and the exported tokenizer assets. Enable AllowNoAnswer when empty answers are required and tune its threshold with representative data. ähnelt.
         /// </summary>
         public static string Step3_Description {
             get {

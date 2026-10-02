@@ -7,6 +7,7 @@ using FlowBlox.Test.Runtime;
 namespace FlowBloxTest.FlowBlocks.Json
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class JsonManyPathsSelectorFlowBlockTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;

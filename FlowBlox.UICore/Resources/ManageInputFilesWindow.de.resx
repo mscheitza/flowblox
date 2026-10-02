@@ -173,7 +173,7 @@
 		<value>Vor Laufzeitbeginn ausführen</value>
 	</data>
 	<data name="Hint_CommandFieldSelection" xml:space="preserve">
-		<value>Mit Strg+F Platzhalter einfügen, z.B. $InputFile:Path.</value>
+		<value>Mit Strg+F Platzhalter einfügen, z.B. $InputFile::Path.</value>
 	</data>
 	<data name="Header_SyncMode" xml:space="preserve">
 		<value>Synchronisationsmodus</value>

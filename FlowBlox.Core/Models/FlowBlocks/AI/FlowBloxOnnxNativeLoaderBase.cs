@@ -114,11 +114,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
                          || f.Contains(".so", StringComparison.OrdinalIgnoreCase));
         }
 
-        private static string GetProviderFolder(AiExecutionProviders provider)
+        internal static string GetProviderFolder(AiExecutionProviders provider)
         {
             return provider switch
             {
-                AiExecutionProviders.CUDA => "gpu",
+                AiExecutionProviders.CUDA => "cuda",
                 AiExecutionProviders.DirectML => "directml",
                 AiExecutionProviders.OpenVINO => "openvino",
                 _ => "cpu"

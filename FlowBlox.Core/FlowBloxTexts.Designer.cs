@@ -4059,6 +4059,15 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("FlowBloxComponentUIActions_ManageUserFields", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Quick Start ähnelt.
+        /// </summary>
+        public static string FlowBloxComponentUIActions_QuickStart {
+            get {
+                return ResourceManager.GetString("FlowBloxComponentUIActions_QuickStart", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die CreateIfNotExists ähnelt.
@@ -4446,7 +4455,7 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("FlowBloxToolboxCategory_JPath", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Regex ähnelt.
         /// </summary>
@@ -6113,6 +6122,67 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads JSON content and returns the value or values selected by a Newtonsoft.Json JPath expression. ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JPath selector ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON content ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_JsonContent {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_JsonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JPath ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_Path {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath expression used to select values from the JSON document. Use &apos;$&apos; for the root, dot notation for properties, &apos;[*]&apos; for all array items, &apos;[0]&apos; for an array index, and &apos;[?(...)]&apos; for filters. Examples: &apos;$.participants&apos;, &apos;$.participants[0]&apos;, &apos;$[*].id&apos;, &apos;$.addresses[?(@.Country == &apos;Germany&apos;)].Street&apos;. ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_Path_Tooltip {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_Path_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JPath examples:
+        ///- `$` selects the root content; items of a selected array are returned individually.
+        ///- `$[*].id` selects the id values of all objects in a root array.
+        ///- `$.participant.name` selects a single property value.
+        ///- `$.participant.addresses` selects the address array.
+        ///- `$.participant.addresses[0].Street` selects the street of the first address.
+        ///- `$.addresses[?(@.Country == &apos;Germany&apos;)]` selects address objects whose Country is Germany.
+        ///- `$.addresses[?(@.Country == &apos;Germany&apos;)].Street` selec [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_SpecialExplanation_PathExamples {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_SpecialExplanation_PathExamples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die JSON path properties in this flow block use Newtonsoft.Json JPath syntax. See [Querying JSON with JSON Path](https://www.newtonsoft.com/json/help/html/queryjsonselecttoken.htm). ähnelt.
         /// </summary>
         public static string JsonFlowBlocks_SpecialExplanation_JPathSyntax {
@@ -6120,7 +6190,7 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("JsonFlowBlocks_SpecialExplanation_JPathSyntax", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reads multiple JSON paths from one JSON source and maps the resolved values directly to result fields. ähnelt.
         /// </summary>
@@ -6419,7 +6489,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled and the path does not exist yet, an array is created at Path and a new object element is added to it. If disabled, a JSON object is created at Path. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die If enabled, the path must resolve to an array or a new array is created and an object is appended. If disabled, the path must resolve to an object or a new object is created. ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_IsArray_Tooltip {
             get {
@@ -6455,7 +6525,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath to the target node where the object should be created or updated (e.g. &apos;$.participants[0]&apos;). For array append, select the array property (e.g. &apos;$.participants&apos;) and enable IsArray. A new object element is appended and assignments set properties directly on that new element. Assignment PropertyName is treated as a literal property key, not as a path. An empty path targets the root object. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath to the target node where the object should be created or updated (e.g. &apos;$.participants[0]&apos;). Missing chains of simple object properties are created automatically. Missing array selectors, filters, wildcards, and recursive selectors cannot be created automatically. For array append, select the array property (e.g. &apos;$.participants&apos;) and enable IsArray. A new object element is appended and assignments set properties directly on that new element. Assignment PropertyName is treated as a lit [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         public static string JsonObjectWriterFlowBlock_Path_Tooltip {
             get {
@@ -6469,67 +6539,6 @@ namespace FlowBlox.Core {
         public static string JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks {
             get {
                 return ResourceManager.GetString("JsonObjectWriterFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reads JSON content and returns the value or values selected by a Newtonsoft.Json JPath expression. ähnelt.
-        /// </summary>
-        public static string JPathSelectorFlowBlock_Description {
-            get {
-                return ResourceManager.GetString("JPathSelectorFlowBlock_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path selector ähnelt.
-        /// </summary>
-        public static string JPathSelectorFlowBlock_DisplayName {
-            get {
-                return ResourceManager.GetString("JPathSelectorFlowBlock_DisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON content ähnelt.
-        /// </summary>
-        public static string JPathSelectorFlowBlock_JsonContent {
-            get {
-                return ResourceManager.GetString("JPathSelectorFlowBlock_JsonContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path ähnelt.
-        /// </summary>
-        public static string JPathSelectorFlowBlock_Path {
-            get {
-                return ResourceManager.GetString("JPathSelectorFlowBlock_Path", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath expression used to select values from the JSON document. Use &apos;$&apos; for the root, dot notation for properties, &apos;[*]&apos; for all array items, &apos;[0]&apos; for an array index, and &apos;[?(...)]&apos; for filters. Examples: &apos;$.participants&apos;, &apos;$.participants[0]&apos;, &apos;$[*].id&apos;, &apos;$.addresses[?(@.Country == &apos;Germany&apos;)].Street&apos;. ähnelt.
-        /// </summary>
-        public static string JPathSelectorFlowBlock_Path_Tooltip {
-            get {
-                return ResourceManager.GetString("JPathSelectorFlowBlock_Path_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JPath examples:
-        ///- `$` selects the root content; items of a selected array are returned individually.
-        ///- `$[*].id` selects the id values of all objects in a root array.
-        ///- `$.participant.name` selects a single property value.
-        ///- `$.participant.addresses` selects the address array.
-        ///- `$.participant.addresses[0].Street` selects the street of the first address.
-        ///- `$.addresses[?(@.Country == &apos;Germany&apos;)]` selects address objects whose Country is Germany.
-        ///- `$.addresses[?(@.Country == &apos;Germany&apos;)].Street` selects the  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
-        /// </summary>
-        public static string JPathSelectorFlowBlock_SpecialExplanation_PathExamples {
-            get {
-                return ResourceManager.GetString("JPathSelectorFlowBlock_SpecialExplanation_PathExamples", resourceCulture);
             }
         }
         
@@ -7510,7 +7519,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This flow block requires an ONNX Runtime GenAI-compatible model folder. The folder must contain genai_config.json, ONNX model files and tokenizer assets. Prefer ready-made Microsoft/Hugging Face or Foundry Local GenAI model folders and point ModelFolder to the concrete subfolder that contains genai_config.json. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die At initialization, ModelFolder must point to an ONNX Runtime GenAI-compatible folder containing genai_config.json, ONNX model files and tokenizer assets. Prefer ready-made Microsoft/Hugging Face or Foundry Local packages and select the concrete subfolder containing genai_config.json. ähnelt.
         /// </summary>
         public static string OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource {
             get {
@@ -7518,6 +7527,15 @@ namespace FlowBlox.Core {
             }
         }
         
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: keep reusable models in $Options::AI.Onnx.GenAI.ModelRootDirectory. Either select a locally managed model folder, or under Tools &gt; Manage input files add a Python script that downloads the model when missing and verifies that it is available. Set Command to python &quot;$InputFile::Path&quot; --model-root-directory &quot;$Options::AI.Onnx.GenAI.ModelRootDirectory&quot; and enable Execute before runtime start. The provided script creates the model-specific subfolder below this root so projects and runtimes share one copy. ähnelt.
+        /// </summary>
+        public static string OnnxGenAIFlowBlock_SpecialExplanation_ModelProvisioning {
+            get {
+                return ResourceManager.GetString("OnnxGenAIFlowBlock_SpecialExplanation_ModelProvisioning", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Token selection strategy ähnelt.
         /// </summary>
@@ -7536,6 +7554,222 @@ namespace FlowBlox.Core {
             }
         }
         
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die AI execution provider ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_AiExecutionProvider {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_AiExecutionProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Execution provider selected globally in the FlowBlox ONNX settings. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_AiExecutionProvider_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_AiExecutionProvider_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allow no answer ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_AllowNoAnswer {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_AllowNoAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allows an empty result when a SQuAD 2-style model scores the no-answer position above the best text span. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_AllowNoAnswer_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_AllowNoAnswer_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Context ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_Context {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_Context", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source text from which the answer is extracted verbatim. Long texts are processed in overlapping windows. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_Context_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_Context_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extracts the best answer span from a supplied context using a local ONNX question-answering model. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die ONNX question answering ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Document overlap ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_DocumentStride {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_DocumentStride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Number of context tokens repeated between adjacent windows so answers near a window boundary are not lost. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_DocumentStride_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_DocumentStride_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extended settings ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_Groups_ExtendedSettings {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_Groups_ExtendedSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum answer length ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_MaxAnswerLength {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_MaxAnswerLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum number of tokens considered for an answer span. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_MaxAnswerLength_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_MaxAnswerLength_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum sequence length ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_MaxSequenceLength {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_MaxSequenceLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum token count per model invocation, including question and special tokens. The model&apos;s own limit is always respected. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_MaxSequenceLength_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_MaxSequenceLength_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Model folder ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_ModelFolder {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_ModelFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Folder containing the model at FlowBlock initialization: model.onnx, configuration files and a supported tokenizer (vocab.txt, vocab.json with merges.txt, or a SentencePiece .model file). It may be managed locally or provisioned by a runtime-start input-file script. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_ModelFolder_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_ModelFolder_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die No-answer threshold ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_NoAnswerThreshold {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_NoAnswerThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Required difference between the no-answer score and best span score. Tune this value against representative validation data. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_NoAnswerThreshold_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_NoAnswerThreshold_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Question ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_Question {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Question to answer. The model searches for the answer in Context. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_Question_Tooltip {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_Question_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This is extractive question answering: the result is copied from Context. Use the ONNX GenAI flow block when an explanatory or newly generated answer is required. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_SpecialExplanation_Extractive {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_SpecialExplanation_Extractive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die At initialization, ModelFolder must contain the ONNX graph, configuration and tokenizer files from the same exported checkpoint; they form one deployment unit. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_SpecialExplanation_ModelFolder {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_SpecialExplanation_ModelFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: keep reusable models in $Options::AI.Onnx.QA.ModelRootDirectory. Either select a locally managed model folder, or under Tools &gt; Manage input files add a Python script that downloads the model when missing and verifies that it is available. Set Command to python &quot;$InputFile::Path&quot; --model-root-directory &quot;$Options::AI.Onnx.QA.ModelRootDirectory&quot; and enable Execute before runtime start. The provided script creates the model-specific subfolder below this root so projects and runtimes share one copy. ähnelt.
+        /// </summary>
+        public static string OnnxQAFlowBlock_SpecialExplanation_ModelProvisioning {
+            get {
+                return ResourceManager.GetString("OnnxQAFlowBlock_SpecialExplanation_ModelProvisioning", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Execution provider ähnelt.
         /// </summary>
@@ -7630,7 +7864,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Folder containing the ONNX Runtime GenAI model, including genai_config.json, *.onnx files and tokenizer assets. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Folder containing the ONNX Runtime GenAI model at FlowBlock initialization, including genai_config.json, *.onnx files and tokenizer assets. It may be managed locally or provisioned by a runtime-start input-file script. ähnelt.
         /// </summary>
         public static string OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip {
             get {
@@ -13931,30 +14165,6 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Very high ähnelt.
         /// </summary>
-        public static string OnnxQAFlowBlock_DisplayName => ResourceManager.GetString("OnnxQAFlowBlock_DisplayName", resourceCulture);
-        public static string OnnxQAFlowBlock_Description => ResourceManager.GetString("OnnxQAFlowBlock_Description", resourceCulture);
-        public static string OnnxQAFlowBlock_ModelFolder => ResourceManager.GetString("OnnxQAFlowBlock_ModelFolder", resourceCulture);
-        public static string OnnxQAFlowBlock_ModelFolder_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_ModelFolder_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_Question => ResourceManager.GetString("OnnxQAFlowBlock_Question", resourceCulture);
-        public static string OnnxQAFlowBlock_Question_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_Question_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_Context => ResourceManager.GetString("OnnxQAFlowBlock_Context", resourceCulture);
-        public static string OnnxQAFlowBlock_Context_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_Context_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_Groups_ExtendedSettings => ResourceManager.GetString("OnnxQAFlowBlock_Groups_ExtendedSettings", resourceCulture);
-        public static string OnnxQAFlowBlock_AiExecutionProvider => ResourceManager.GetString("OnnxQAFlowBlock_AiExecutionProvider", resourceCulture);
-        public static string OnnxQAFlowBlock_AiExecutionProvider_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_AiExecutionProvider_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_MaxSequenceLength => ResourceManager.GetString("OnnxQAFlowBlock_MaxSequenceLength", resourceCulture);
-        public static string OnnxQAFlowBlock_MaxSequenceLength_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_MaxSequenceLength_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_DocumentStride => ResourceManager.GetString("OnnxQAFlowBlock_DocumentStride", resourceCulture);
-        public static string OnnxQAFlowBlock_DocumentStride_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_DocumentStride_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_MaxAnswerLength => ResourceManager.GetString("OnnxQAFlowBlock_MaxAnswerLength", resourceCulture);
-        public static string OnnxQAFlowBlock_MaxAnswerLength_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_MaxAnswerLength_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_AllowNoAnswer => ResourceManager.GetString("OnnxQAFlowBlock_AllowNoAnswer", resourceCulture);
-        public static string OnnxQAFlowBlock_AllowNoAnswer_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_AllowNoAnswer_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_NoAnswerThreshold => ResourceManager.GetString("OnnxQAFlowBlock_NoAnswerThreshold", resourceCulture);
-        public static string OnnxQAFlowBlock_NoAnswerThreshold_Tooltip => ResourceManager.GetString("OnnxQAFlowBlock_NoAnswerThreshold_Tooltip", resourceCulture);
-        public static string OnnxQAFlowBlock_SpecialExplanation_ModelFolder => ResourceManager.GetString("OnnxQAFlowBlock_SpecialExplanation_ModelFolder", resourceCulture);
-        public static string OnnxQAFlowBlock_SpecialExplanation_Extractive => ResourceManager.GetString("OnnxQAFlowBlock_SpecialExplanation_Extractive", resourceCulture);
-
         public static string ZipCompressionStrength_VeryHigh {
             get {
                 return ResourceManager.GetString("ZipCompressionStrength_VeryHigh", resourceCulture);

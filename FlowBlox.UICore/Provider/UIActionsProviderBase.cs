@@ -58,6 +58,12 @@ namespace FlowBlox.UICore.Provider
                     if (string.IsNullOrEmpty(displayName))
                         continue;
 
+                    var visibilityMethod = type.GetMethod($"Is{method.Name}Visible", BindingFlags.Public | BindingFlags.Instance);
+                    var isVisible = visibilityMethod == null || visibilityMethod.ReturnType != typeof(bool) ||
+                        (bool)visibilityMethod.Invoke(instance, null);
+                    if (!isVisible)
+                        continue;
+
                     var canExecuteMethod = type.GetMethod($"Can{method.Name}", BindingFlags.Public | BindingFlags.Instance);
                     var enabled = canExecuteMethod != null && canExecuteMethod.ReturnType == typeof(bool)
                         ? (bool)canExecuteMethod.Invoke(instance, null)

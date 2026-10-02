@@ -1,4 +1,5 @@
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.AI.TokenSelector;
@@ -8,6 +9,7 @@ using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Provider.Toolbox;
 using Microsoft.ML.OnnxRuntimeGenAI;
 using Newtonsoft.Json;
 using SkiaSharp;
@@ -19,10 +21,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
     [FlowBloxUIGroup("OnnxRuntimeGenAIFlowBlock_Groups_ExtendedSettings", 10)]
     [Display(Name = "OnnxRuntimeGenAIFlowBlock_DisplayName", Description = "OnnxRuntimeGenAIFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     [FlowBloxSpecialExplanation("OnnxGenAIFlowBlock_SpecialExplanation_ManagedResource", Icon = SpecialExplanationIcon.Information)]
+    [FlowBloxSpecialExplanation("OnnxGenAIFlowBlock_SpecialExplanation_ModelProvisioning", Icon = SpecialExplanationIcon.Hint)]
     public class OnnxGenAIFlowBlock : BaseSingleResultFlowBlock
     {
+        public const string ModelRootDirectoryOptionName = "AI.Onnx.GenAI.ModelRootDirectory";
+        public const string DefaultModelFolderName = "Phi-4-mini-instruct-onnx";
+
+        private static readonly FlowBloxRuntimeModelCache<GenAIModelSession> ModelCache = new();
+
         private Model _model;
-        private Microsoft.ML.OnnxRuntimeGenAI.Tokenizer _tokenizer;
+        private Tokenizer _tokenizer;
         private string _resolvedModelFolder;
 
         #region Tab: Default
@@ -31,6 +39,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_ModelFolder", Description = "OnnxRuntimeGenAIFlowBlock_ModelFolder_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFolderSelection | UIOptions.EnableFieldSelection)]
         [FlowBloxFieldSelection(AllowedFieldSelectionModes = FieldSelectionModes.ProjectProperties)]
+        [FlowBloxOpenFromFileSystem(InitialDirectoryMethod = nameof(GetInitialModelDirectory))]
         public string ModelFolder { get; set; }
 
         [Display(Name = "OnnxRuntimeGenAIFlowBlock_Prompt", ResourceType = typeof(FlowBloxTexts), Order = 2)]
@@ -117,6 +126,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
         public OnnxGenAIFlowBlock()
         {
+            ModelFolder = $"$Options::{ModelRootDirectoryOptionName}\\{DefaultModelFolderName}";
             MaxNewTokens = 200;
 
             Temperature = 0.0f;
@@ -125,6 +135,22 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
 
             UseChatTemplate = true;
             SystemPrompt = "You are a helpful assistant.";
+            ChatTemplate = FlowBloxToolboxResourceProvider.GetToolboxElementContent(
+                ToolboxConstants.ChatTemplatesCategory,
+                ToolboxConstants.Phi4MiniInstructChatTemplateName);
+        }
+
+        public override void OptionsInit(List<OptionElement> defaults)
+        {
+            defaults.Add(new OptionElement(
+                ModelRootDirectoryOptionName,
+                @"$Options::Paths.GlobalDataDir\onnx\genai",
+                "User-specific root directory for ONNX Runtime GenAI models.",
+                OptionElement.OptionType.Text,
+                "ONNX GenAI: Model root directory",
+                isPlaceholderEnabled: true));
+
+            base.OptionsInit(defaults);
         }
 
         public override bool Execute(BaseRuntime runtime, object data)
@@ -204,29 +230,98 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
             if (!Directory.Exists(modelFolder))
                 throw new InvalidOperationException($"ONNX Runtime GenAI initialization failed: ModelFolder does not exist: '{modelFolder}'");
 
-            runtime.Report($"Loading ONNX model from folder: {modelFolder}");
-
             try
             {
-                _model = new Model(modelFolder);
-                _tokenizer = new Microsoft.ML.OnnxRuntimeGenAI.Tokenizer(_model);
+                var modelSession = ModelCache.Open(
+                    runtime,
+                    modelFolder,
+                    () => CreateModelSession(runtime, modelFolder),
+                    out var alreadyOpen);
+                _model = modelSession.Model;
+                _tokenizer = modelSession.Tokenizer;
+
+                if (alreadyOpen)
+                {
+                    runtime.Report(
+                        $"Inference session is already open; using cached session for FlowBlock '{Name}' " +
+                        $"and model folder: {modelFolder}");
+                }
             }
             catch (Exception ex)
             {
+                _model = null;
+                _tokenizer = null;
                 throw new InvalidOperationException($"ONNX Runtime GenAI initialization failed while loading model from '{modelFolder}'.", ex);
+            }
+        }
+
+        private static GenAIModelSession CreateModelSession(BaseRuntime runtime, string modelFolder)
+        {
+            runtime.Report($"Loading ONNX model from folder: {modelFolder}");
+
+            Model model = null;
+            Tokenizer tokenizer = null;
+            try
+            {
+                model = new Model(modelFolder);
+                tokenizer = new Tokenizer(model);
+                return new GenAIModelSession(model, tokenizer);
+            }
+            catch
+            {
+                tokenizer?.Dispose();
+                model?.Dispose();
+                throw;
             }
         }
 
         private string ResolveModelFolder() => 
             FlowBloxFieldHelper.ReplaceFieldsInString(ModelFolder);
 
+        private string GetInitialModelDirectory()
+        {
+            var directory = FlowBloxOptions.GetOptionInstance()
+                .GetOption(ModelRootDirectoryOptionName)?.Value;
+            return !string.IsNullOrWhiteSpace(directory) && Directory.Exists(directory)
+                ? directory
+                : string.Empty;
+        }
+
         public override void RuntimeFinished(BaseRuntime runtime)
         {
-            _tokenizer?.Dispose();
-            _model?.Dispose();
+            if (!string.IsNullOrWhiteSpace(_resolvedModelFolder))
+            {
+                var closed = ModelCache.Close(runtime, _resolvedModelFolder);
+                runtime.Report(closed
+                    ? $"Closed cached ONNX GenAI inference session after FlowBlock '{Name}' finished."
+                    : $"Cached ONNX GenAI inference session was already closed when FlowBlock '{Name}' finished.");
+            }
+
+            _tokenizer = null;
+            _model = null;
             _resolvedModelFolder = null;
 
             base.RuntimeFinished(runtime);
+        }
+
+        private sealed class GenAIModelSession : IDisposable
+        {
+            public GenAIModelSession(
+                Model model,
+                Tokenizer tokenizer)
+            {
+                Model = model;
+                Tokenizer = tokenizer;
+            }
+
+            public Model Model { get; }
+            public Tokenizer Tokenizer { get; }
+
+            public void Dispose()
+            {
+                Tokenizer.Dispose();
+                Model.Dispose();
+            }
         }
 
         private string GetResolvedModelFolder()

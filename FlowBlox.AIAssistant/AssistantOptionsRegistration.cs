@@ -18,13 +18,13 @@ namespace FlowBlox.AIAssistant
 
             defaults.Add(new OptionElement(
                 "AI.CommuncationProtocolDir",
-                @"%localappdata%\FlowBlox\logs\ai_assistant_protocol",
+                @"$Options::Paths.LocalAppDataDir\logs\ai_assistant_protocol",
                 "Directory path for AI assistant communication protocol files.",
                 OptionElement.OptionType.Text));
 
             defaults.Add(new OptionElement(
                 "AI.AssistantHistoryDirectory",
-                @"%localappdata%\FlowBlox\ai_assistant_histories",
+                @"$Options::Paths.LocalAppDataDir\ai_assistant_histories",
                 "Directory path for AI assistant history files.",
                 OptionElement.OptionType.Text));
         }

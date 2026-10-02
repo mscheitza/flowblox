@@ -3,6 +3,7 @@ namespace FlowBlox.Core.Constants
     public static class ToolboxConstants
     {
         public const string AIPromptTemplatesCategory = "AIPromptTemplates";
+        public const string ChatTemplatesCategory = "ChatTemplates";
 
         public const string SystemJsonOutputPromptTemplateName = "System - JSON Output";
         public const string SystemFlowBloxQuickUpdatePromptTemplateName = "System - FlowBlox Quick Update JSON Output";
@@ -11,5 +12,6 @@ namespace FlowBlox.Core.Constants
         public const string SystemSingleChoiceOutputPromptTemplateName = "System - Single Choice Output";
 
         public const string FlowBloxQuickUpdateConfiguratorName = "FlowBlox Quick Update Configurator";
+        public const string Phi4MiniInstructChatTemplateName = "Phi-4 mini Instruct";
     }
 }

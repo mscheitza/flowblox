@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 namespace FlowBloxTest.Models.Generators
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class AIPropertyValueGenerationStrategyTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;

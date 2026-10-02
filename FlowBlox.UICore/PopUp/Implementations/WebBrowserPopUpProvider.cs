@@ -12,7 +12,7 @@ namespace FlowBlox.UICore.PopUp.Implementations
         ComponentPopupProviderBase<WebBrowserFlowBlock>,
         IOptionsRegistration
     {
-        public override string OptionKey => PopupOptionNames.ShowWebBrowserPopupOnOpen;
+        public override string OptionKey => PopupOptionNames.WebBrowserQuickStartCompleted;
 
         protected override string WindowTitle => WebBrowserPopUpTexts.Window_Title;
 
@@ -33,15 +33,12 @@ namespace FlowBlox.UICore.PopUp.Implementations
 
         public void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions)
         {
-            SetOptionWasMissingAtInitialization(
-                !currentOptions.Any(x => x.Name == PopupOptionNames.ShowWebBrowserPopupOnOpen));
-
             defaults.Add(new OptionElement(
-                PopupOptionNames.ShowWebBrowserPopupOnOpen,
+                PopupOptionNames.WebBrowserQuickStartCompleted,
                 bool.FalseString,
-                "Controls whether the Web Browser component pop-up dialog is shown.",
+                "Tracks whether the Web Browser quick-start guidance has been completed.",
                 OptionElement.OptionType.Boolean,
-                "Web Browser: Show Component Pop-up"));
+                "Web Browser: Quick-Start completed"));
         }
     }
 }

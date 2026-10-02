@@ -16,25 +16,26 @@ namespace FlowBlox.UICore.PopUp.Implementations
         ComponentPopupProviderBase<OnnxGenAIFlowBlock>,
         IOptionsRegistration
     {
-        public override string OptionKey => PopupOptionNames.ShowOnnxGenAIPopupOnOpen;
+        public override string OptionKey => PopupOptionNames.OnnxGenAIQuickStartCompleted;
 
         protected override string WindowTitle => Text("Window_Title");
 
         protected override IReadOnlyList<ComponentPopupItem> CreateItems(OnnxGenAIFlowBlock target)
         {
-            var scriptPageUri = GetScriptPageUri();
+            var scriptPageUri = GetScriptPageUri("download_phi4_mini_instruct_onnx.html");
+            var largeScriptPageUri = GetScriptPageUri("download_large_cuda_genai_model.html");
 
             return
             [
                 new ComponentPopupItem(
                     Text("Step1_Headline"),
-                    Text("Step1_Description"),
+                    string.Format(CultureInfo.CurrentCulture, Text("Step1_Description"), GlobalUrls.PythonDownloads),
                     PopUpImageResourceHelper.GetImageSource(
                         OnnxGenAIPopUpImages.ResourceManager,
                         nameof(OnnxGenAIPopUpImages.OnnxGenAIQuickStart_1))),
                 new ComponentPopupItem(
                     Text("Step2_Headline"),
-                    string.Format(CultureInfo.CurrentCulture, Text("Step2_Description"), scriptPageUri),
+                    string.Format(CultureInfo.CurrentCulture, Text("Step2_Description"), scriptPageUri, largeScriptPageUri),
                     PopUpImageResourceHelper.GetImageSource(
                         OnnxGenAIPopUpImages.ResourceManager,
                         nameof(OnnxGenAIPopUpImages.OnnxGenAIQuickStart_2))),
@@ -49,27 +50,24 @@ namespace FlowBlox.UICore.PopUp.Implementations
 
         public void OptionsInit(List<OptionElement> defaults, List<OptionElement> currentOptions)
         {
-            SetOptionWasMissingAtInitialization(
-                !currentOptions.Any(x => x.Name == PopupOptionNames.ShowOnnxGenAIPopupOnOpen));
-
             defaults.Add(new OptionElement(
-                PopupOptionNames.ShowOnnxGenAIPopupOnOpen,
+                PopupOptionNames.OnnxGenAIQuickStartCompleted,
                 bool.FalseString,
-                "Controls whether the ONNX GenAI component pop-up dialog is shown.",
+                "Tracks whether the ONNX GenAI quick-start guidance has been completed.",
                 OptionElement.OptionType.Boolean,
-                "ONNX GenAI: Show Component Pop-up"));
+                "ONNX GenAI: Quick-Start completed"));
         }
 
         private static string Text(string key) =>
             FlowBloxResourceUtil.GetLocalizedString(key, typeof(OnnxGenAIPopUpTexts));
 
-        private static string GetScriptPageUri()
+        private static string GetScriptPageUri(string fileName)
         {
             var path = Path.Combine(
                 GlobalPaths.CurrentDirectory,
                 "data",
                 "html",
-                "download_phi4_onnx.html");
+                fileName);
 
             return new Uri(path).AbsoluteUri;
         }

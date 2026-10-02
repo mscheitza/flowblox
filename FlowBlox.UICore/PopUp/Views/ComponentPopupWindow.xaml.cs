@@ -26,11 +26,8 @@ namespace FlowBlox.UICore.PopUp.Views
 
             Title = title;
             _items = items ?? throw new ArgumentNullException(nameof(items));
-            ShowAgainCheckBox.IsChecked = false;
             ShowCurrentItem();
         }
-
-        public bool ShowAgain => ShowAgainCheckBox.IsChecked == true;
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
@@ -82,7 +79,7 @@ namespace FlowBlox.UICore.PopUp.Views
                 var url = match.Value.TrimEnd('.', ',', ';', ':', ')');
                 var linkButton = new Button
                 {
-                    Content = url,
+                    Content = GetLinkDisplayText(url),
                     Style = (Style)FindResource("DescriptionLinkStyle"),
                     ToolTip = url
                 };
@@ -100,6 +97,15 @@ namespace FlowBlox.UICore.PopUp.Views
 
             if (currentIndex < (description?.Length ?? 0))
                 DescriptionTextBlock.Inlines.Add(new Run(description[currentIndex..]));
+        }
+
+        private static string GetLinkDisplayText(string url)
+        {
+            if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || !uri.IsFile)
+                return url;
+
+            var fileName = Path.GetFileName(uri.LocalPath);
+            return string.IsNullOrWhiteSpace(fileName) ? url : fileName;
         }
 
         private static void OpenLink(string url)

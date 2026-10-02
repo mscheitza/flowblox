@@ -11,10 +11,11 @@ using System.Collections.ObjectModel;
 namespace FlowBloxTest.FlowBlocks.Json
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class JsonGenerationTests : FlowBloxTestsBase
     {
         private const string ParticipantsCsv = """
-            Vorname;Nachname;Geburtsdatum
+            FirstName;LastName;DateOfBirth
             Anna;Becker;1990-01-15
             Paul;Smith;1985-07-03
             Leyla;Yilmaz;2001-12-24
@@ -40,9 +41,9 @@ namespace FlowBloxTest.FlowBlocks.Json
             var tableReader = CreateFlowBlock<TableReaderFlowBlock>(jsonObject);
             tableReader.ReferencedTable = CreateCsvTable(ParticipantsCsv);
 
-            var firstName = CreateTableField(tableReader, "Vorname");
-            var lastName = CreateTableField(tableReader, "Nachname");
-            var dateOfBirth = CreateTableField(tableReader, "Geburtsdatum");
+            var firstName = CreateTableField(tableReader, "FirstName");
+            var lastName = CreateTableField(tableReader, "LastName");
+            var dateOfBirth = CreateTableField(tableReader, "DateOfBirth");
 
             var nodeWriter = CreateFlowBlock<JsonObjectWriterFlowBlock>(tableReader);
             nodeWriter.AssociatedJsonObject = jsonObject;
@@ -50,9 +51,9 @@ namespace FlowBloxTest.FlowBlocks.Json
             nodeWriter.IsArray = true;
             nodeWriter.Assignments = new ObservableCollection<JsonPropertyValueAssignment>
             {
-                new() { PropertyName = "vorname", FieldValue = firstName },
-                new() { PropertyName = "nachname", FieldValue = lastName },
-                new() { PropertyName = "geburtsdatum", FieldValue = dateOfBirth }
+                new() { PropertyName = "firstName", FieldValue = firstName },
+                new() { PropertyName = "lastName", FieldValue = lastName },
+                new() { PropertyName = "dateOfBirth", FieldValue = dateOfBirth }
             };
 
             var jsonOutput = CreateFlowBlock<JsonObjectOutputFlowBlock>(nodeWriter);
@@ -65,9 +66,9 @@ namespace FlowBloxTest.FlowBlocks.Json
             var expected = JToken.Parse("""
             {
               "participants": [
-                { "vorname": "Anna", "nachname": "Becker", "geburtsdatum": "1990-01-15" },
-                { "vorname": "Paul", "nachname": "Smith", "geburtsdatum": "1985-07-03" },
-                { "vorname": "Leyla", "nachname": "Yilmaz", "geburtsdatum": "2001-12-24" }
+                { "firstName": "Anna", "lastName": "Becker", "dateOfBirth": "1990-01-15" },
+                { "firstName": "Paul", "lastName": "Smith", "dateOfBirth": "1985-07-03" },
+                { "firstName": "Leyla", "lastName": "Yilmaz", "dateOfBirth": "2001-12-24" }
               ]
             }
             """);

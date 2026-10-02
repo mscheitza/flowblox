@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.PopUp.Resources
-{
+namespace FlowBlox.UICore.PopUp.Resources {
     using System;
     
     
@@ -20,31 +19,26 @@ namespace FlowBlox.UICore.PopUp.Resources
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class OnnxGenAIPopUpTexts
-    {
+    public class OnnxGenAIPopUpTexts {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal OnnxGenAIPopUpTexts()
-        {
+        internal OnnxGenAIPopUpTexts() {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.PopUp.Resources.OnnxGenAIPopUpTexts", typeof(OnnxGenAIPopUpTexts).Assembly);
                     resourceMan = temp;
                 }
@@ -57,26 +51,21 @@ namespace FlowBlox.UICore.PopUp.Resources
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Python is required to download the prepared model package. Download the latest release here and enable “Add Python to PATH” during setup:
-        ///https://www.python.org/downloads/ ähnelt.
+        ///{0} ähnelt.
         /// </summary>
-        public static string Step1_Description
-        {
-            get
-            {
+        public static string Step1_Description {
+            get {
                 return ResourceManager.GetString("Step1_Description", resourceCulture);
             }
         }
@@ -84,44 +73,39 @@ namespace FlowBlox.UICore.PopUp.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Install Python ähnelt.
         /// </summary>
-        public static string Step1_Headline
-        {
-            get
-            {
+        public static string Step1_Headline {
+            get {
                 return ResourceManager.GetString("Step1_Headline", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Open the included page, copy the ready-to-run Python script, save it as a .py file, and run it. The CPU INT4 model is about 10.9 GB and is stored next to the script under onnxgenai\phi-4:
-        ///{0} ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die For the recommended CPU quick start, open the Phi-4 Mini script (about 4.9 GB):
+        ///{0}
+        ///
+        ///For larger, complex requirements with suitable NVIDIA CUDA hardware, use the advanced model script. It defaults to Mistral 7B and supports further models through --model-id:
+        ///{1} ähnelt.
         /// </summary>
-        public static string Step2_Description
-        {
-            get
-            {
+        public static string Step2_Description {
+            get {
                 return ResourceManager.GetString("Step2_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Download the Phi-4 ONNX GenAI model ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Download the Phi-4 Mini Instruct ONNX GenAI model ähnelt.
         /// </summary>
-        public static string Step2_Headline
-        {
-            get
-            {
+        public static string Step2_Headline {
+            get {
                 return ResourceManager.GetString("Step2_Headline", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Set ModelFolder to the generated onnxgenai\phi-4 directory. It must contain genai_config.json, tokenizer.json, model.onnx, model.onnx.data, and the additional tokenizer assets downloaded by the script. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die ModelFolder points to the GenAI model root option and Phi-4 Mini Instruct subfolder. It must contain genai_config.json, tokenizer.json, model.onnx, model.onnx.data, and the additional tokenizer assets downloaded by the script. ähnelt.
         /// </summary>
-        public static string Step3_Description
-        {
-            get
-            {
+        public static string Step3_Description {
+            get {
                 return ResourceManager.GetString("Step3_Description", resourceCulture);
             }
         }
@@ -129,10 +113,8 @@ namespace FlowBlox.UICore.PopUp.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select the completed model folder ähnelt.
         /// </summary>
-        public static string Step3_Headline
-        {
-            get
-            {
+        public static string Step3_Headline {
+            get {
                 return ResourceManager.GetString("Step3_Headline", resourceCulture);
             }
         }
@@ -140,10 +122,8 @@ namespace FlowBlox.UICore.PopUp.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Set up ONNX GenAI text generation ähnelt.
         /// </summary>
-        public static string Window_Title
-        {
-            get
-            {
+        public static string Window_Title {
+            get {
                 return ResourceManager.GetString("Window_Title", resourceCulture);
             }
         }

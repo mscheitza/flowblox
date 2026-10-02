@@ -1,7 +1,5 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.Project;
-using FlowBlox.Core.Util.Fields;
-using FlowBlox.Core.Util.ShellExecution;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools
@@ -12,8 +10,9 @@ namespace FlowBlox.AIAssistant.Tools
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Executes the script command configured on a managed input file (resolved in $Project::InputDirectory). " +
-            "Use this to load required project inputs (for example a Python script that downloads ONNX models into the project input directory). " +
+            "Materializes the selected managed input file according to its sync mode and then executes its configured command in $Project::InputDirectory. " +
+            "The managed script is project-specific; the command may write cross-project artifacts to a separate, feature-specific shared root such as an ONNX ModelRootDirectory. " +
+            "No separate file synchronization or materialization call is required. " +
             "Script creation/update is always allowed; execution requires explicit user confirmation in the AI Assistant UI.",
             new JObject
             {
@@ -50,26 +49,13 @@ namespace FlowBlox.AIAssistant.Tools
                 if (string.IsNullOrWhiteSpace(rawCommand))
                     return Task.FromResult(ToolHandlerUtilities.Fail($"Input file '{normalizedKey}' has no command configured."));
 
-                // Keep input files synchronized before script execution (same behavior as runtime startup path).
-                FlowBloxInputFileHelper.SynchronizeInputFiles(project);
-
-                var resolvedCommand = FlowBloxInputFileHelper.ReplaceInputFilePlaceholders(rawCommand, project, inputFile);
-                resolvedCommand = FlowBloxFieldHelper.ReplaceFieldsInString(resolvedCommand ?? string.Empty);
-                if (string.IsNullOrWhiteSpace(resolvedCommand))
-                    return Task.FromResult(ToolHandlerUtilities.Fail($"Resolved command is empty for input file '{normalizedKey}'."));
-
-                var result = FlowBloxShellExecutor.Execute(new FlowBloxShellExecutionRequest
-                {
-                    Command = resolvedCommand,
-                    WorkingDirectory = project.ProjectInputDirectory,
-                    CancellationToken = ct
-                });
+                var result = FlowBloxInputFileCommandExecutor.Execute(project, inputFile, ct);
 
                 var payload = new JObject
                 {
                     ["key"] = normalizedKey,
                     ["workingDirectory"] = project.ProjectInputDirectory ?? string.Empty,
-                    ["command"] = resolvedCommand,
+                    ["command"] = result.Command,
                     ["success"] = result.Success,
                     ["exitCode"] = result.ExitCode,
                     ["standardOutput"] = result.StandardOutput ?? string.Empty,

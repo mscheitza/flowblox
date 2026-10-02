@@ -13,6 +13,7 @@ using FlowBloxTest.FlowBlocks.Execution;
 namespace FlowBloxTest.FlowBlocks.Xml
 {
     [TestClass]
+    [TestCategory(FlowBloxTestCategories.UnitTest)]
     public class XmlGenerationTests : FlowBloxTestsBase
     {
         private FlowBloxProject _project;
@@ -32,12 +33,12 @@ namespace FlowBloxTest.FlowBlocks.Xml
             var startFlowBlock = CreateFlowBlock<StartFlowBlock>();
 
             var xmlDocumentFlowBlock = CreateFlowBlock<XmlDocumentFlowBlock>(startFlowBlock);
-            xmlDocumentFlowBlock.XmlContent = "<root><teilnehmer-liste/></root>";
+            xmlDocumentFlowBlock.XmlContent = "<root><participants-list/></root>";
 
             var tableReader = CreateFlowBlock<TableReaderFlowBlock>(xmlDocumentFlowBlock);
 
-            var userField = CreateUserField("TeilnehmerListe-CsvContent");
-            userField.StringValue = "Vorname;Nachname;Sprache\nAnna;Becker;DE\nPaul;Smith;EN";
+            var userField = CreateUserField("ParticipantsList-CsvContent");
+            userField.StringValue = "FirstName;LastName;Language\nAnna;Becker;DE\nPaul;Smith;EN";
 
             var dataSource = CreateManagedObject<MemoryObject>();
             dataSource.Field = userField;
@@ -49,32 +50,32 @@ namespace FlowBloxTest.FlowBlocks.Xml
 
             tableReader.ReferencedTable = csvTable;
 
-            var field0_Vorname = registry.CreateField(tableReader, FieldNameGenerationMode.UseFallbackIndexOnly);
-            var field1_Nachname = registry.CreateField(tableReader, FieldNameGenerationMode.UseFallbackIndexOnly);
-            var field2_Sprache = registry.CreateField(tableReader, FieldNameGenerationMode.UseFallbackIndexOnly);
+            var field0_FirstName = registry.CreateField(tableReader, FieldNameGenerationMode.UseFallbackIndexOnly);
+            var field1_LastName = registry.CreateField(tableReader, FieldNameGenerationMode.UseFallbackIndexOnly);
+            var field2_Language = registry.CreateField(tableReader, FieldNameGenerationMode.UseFallbackIndexOnly);
 
             tableReader.MappingEntries = new ObservableCollection<TableSelectorMappingEntry>()
             {
                 new TableSelectorMappingEntry()
                 {
-                    ColumnName = "Vorname",
-                    Field = field0_Vorname
+                    ColumnName = "FirstName",
+                    Field = field0_FirstName
                 },
                 new TableSelectorMappingEntry()
                 {
-                    ColumnName = "Nachname",
-                    Field = field1_Nachname
+                    ColumnName = "LastName",
+                    Field = field1_LastName
                 },
                 new TableSelectorMappingEntry()
                 {
-                    ColumnName = "Sprache",
-                    Field = field2_Sprache
+                    ColumnName = "Language",
+                    Field = field2_Language
                 }
             };
 
             var nodeAppenderFlowBlock = CreateFlowBlock<XmlDocumentNodeWriterFlowBlock>(tableReader);
-            nodeAppenderFlowBlock.XPath = "/root/teilnehmer-liste";
-            nodeAppenderFlowBlock.NodeName = "teilnehmer";
+            nodeAppenderFlowBlock.XPath = "/root/participants-list";
+            nodeAppenderFlowBlock.NodeName = "participant";
             nodeAppenderFlowBlock.AssociatedXmlDocument = xmlDocumentFlowBlock;
             nodeAppenderFlowBlock.UpdateExistingNode = false;
     
@@ -82,18 +83,18 @@ namespace FlowBloxTest.FlowBlocks.Xml
             {
                 new XmlAssignment()
                 {
-                    XPath = "teilnehmer/vorname",
-                    FieldValue = field0_Vorname
+                    XPath = "participant/first-name",
+                    FieldValue = field0_FirstName
                 },
                 new XmlAssignment()
                 {
-                    XPath = "teilnehmer/nachname",
-                    FieldValue = field1_Nachname
+                    XPath = "participant/last-name",
+                    FieldValue = field1_LastName
                 },
                 new XmlAssignment()
                 {
-                    XPath = "teilnehmer/sprache",
-                    FieldValue = field2_Sprache
+                    XPath = "participant/language",
+                    FieldValue = field2_Language
                 }
             };
 
@@ -104,8 +105,8 @@ namespace FlowBloxTest.FlowBlocks.Xml
 
             var createdXml = xmlWriterFlowBlock.ResultField.StringValue;
             Assert.IsNotNull(createdXml);
-            Assert.IsTrue(createdXml.Contains("<vorname>Anna</vorname>"));
-            Assert.IsTrue(createdXml.Contains("<sprache>EN</sprache>"));
+            Assert.IsTrue(createdXml.Contains("<first-name>Anna</first-name>"));
+            Assert.IsTrue(createdXml.Contains("<language>EN</language>"));
             Console.WriteLine("Resulting XML:\n" + createdXml);
         }
 

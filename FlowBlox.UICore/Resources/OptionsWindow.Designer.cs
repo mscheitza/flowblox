@@ -255,6 +255,17 @@ namespace FlowBlox.UICore.Resources
                 return ResourceManager.GetString("Tooltip_Delete", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Insert option placeholder ähnelt.
+        /// </summary>
+        public static string Tooltip_InsertOptionPlaceholder
+        {
+            get
+            {
+                return ResourceManager.GetString("Tooltip_InsertOptionPlaceholder", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reset options ähnelt.

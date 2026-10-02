@@ -25,12 +25,12 @@ namespace FlowBlox.AIAssistant.Tools
                 ["generatedTemplate"] = "object (required): { textContent: string, converter?: string }",
                 ["supportedConverters"] = new JArray(SupportedConverters),
                 ["syncMode"] = "string? (CreateIfNotExists|AlwaysOverwrite, default: CreateIfNotExists)",
-                ["command"] = "string? (optional command; can use $InputFile:Path)",
+                ["command"] = "string? (optional command; can use $InputFile::Path)",
                 ["executeBeforeRuntime"] = "bool? (optional; execute command before runtime start)",
                 ["usageHint"] =
                     "Use generatedTemplate.textContent for input file content. " +
                     "Set generatedTemplate.converter='Csv2XlsxConverter' or 'Csv2XlsConverter' to convert CSV text to Excel. " +
-                    "Use command + executeBeforeRuntime for automatic execution scenarios. No attachments."
+                    "Set command for on-demand execution through ExecuteInputFileCommand; add executeBeforeRuntime only for automatic execution scenarios. No attachments."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -96,7 +96,7 @@ namespace FlowBlox.AIAssistant.Tools
                     ["sizeBytes"] = inputFile.ContentBytes?.LongLength ?? 0,
                     ["command"] = inputFile.Command ?? string.Empty,
                     ["executeBeforeRuntime"] = inputFile.ExecuteBeforeRuntime,
-                    ["placeholderHint"] = "$InputFile:Path",
+                    ["placeholderHint"] = "$InputFile::Path",
                     ["materializedPath"] = materializedPath,
                     ["projectInputDirectory"] = project.ProjectInputDirectory ?? string.Empty
                 };

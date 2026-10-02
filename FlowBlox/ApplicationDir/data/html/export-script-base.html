@@ -10,6 +10,8 @@
     h1 { margin-bottom: 8px; font-size: 30px; }
     p { line-height: 1.55; color: #46566d; }
     .notice { border-left: 4px solid #2384e8; padding: 10px 16px; background: #eaf4fc; border-radius: 8px; }
+    .special-hint { display: none; align-items: flex-start; gap: 10px; margin-top: 16px; padding: 12px 16px; border: 1px solid #ead28b; border-radius: 8px; background: #fff8d8; color: #66531b; line-height: 1.55; }
+    .special-hint svg { flex: 0 0 auto; width: 20px; height: 20px; margin-top: 2px; fill: #c28b00; }
     .code-card { position: relative; margin-top: 24px; overflow: hidden; border: 1px solid #cad8e8; border-radius: 16px; background: #17233a; box-shadow: 0 14px 38px rgba(34, 72, 112, .16); }
     .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px 14px; color: #c8d8ea; background: #21314e; }
     .actions { display: flex; gap: 8px; }
@@ -27,12 +29,20 @@
   <h1 id="heading">FlowBlox model script</h1>
   <p id="notice" class="notice">Loading script description…</p>
   <p id="description"></p>
+  <div id="special-hint" class="special-hint">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21h6v-1H9v1Zm3-20a7 7 0 0 0-4 12.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-3.26A7 7 0 0 0 12 1Zm2.7 11.31-.7.41V17h-4v-4.28l-.7-.41A5 5 0 1 1 14.7 12.31Z"/></svg>
+    <span id="special-hint-text"></span>
+  </div>
 
   <div class="code-card">
     <div class="toolbar">
       <span id="filename">model-script.py</span>
       <div class="actions">
         <button id="download" type="button" aria-label="Download Python script">Download .py</button>
+        <button id="copy-path" type="button" aria-label="Copy Python script file path">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H8a2 2 0 0 1-2-2V8h2v11h11v2Zm-4-4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2ZM5 5v10h10V5H5Z"/></svg>
+          <span id="copy-path-label">Copy script path</span>
+        </button>
         <button id="copy" type="button" aria-label="Copy Python script">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H8a2 2 0 0 1-2-2V8h2v11h11v2Zm-4-4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2ZM5 5v10h10V5H5Z"/></svg>
           <span id="copy-label">Copy</span>
@@ -44,24 +54,54 @@
   </div>
 
   <script>
-    let page = { filename: 'model-script.py', scriptUrl: '' };
+    let page = { filename: 'model-script.py', scriptUrl: '', specialHint: '' };
     let scriptText = '';
     const heading = document.getElementById('heading');
     const notice = document.getElementById('notice');
     const description = document.getElementById('description');
+    const specialHint = document.getElementById('special-hint');
+    const specialHintText = document.getElementById('special-hint-text');
     const filename = document.getElementById('filename');
     const script = document.getElementById('script');
     const scriptContainer = document.getElementById('script-container');
     const scriptFallback = document.getElementById('script-fallback');
     const copyButton = document.getElementById('copy');
     const copyLabel = document.getElementById('copy-label');
+    const copyPathLabel = document.getElementById('copy-path-label');
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand('copy');
+      area.remove();
+      if (!copied) throw new Error('Copy command was rejected.');
+    }
+
+    function getScriptFilePath() {
+      const url = new URL(page.scriptUrl, window.location.href);
+      if (url.protocol !== 'file:') return url.href;
+
+      let path = decodeURIComponent(url.pathname);
+      if (/^\/[A-Za-z]:\//.test(path)) path = path.substring(1);
+      return path.replaceAll('/', '\\');
+    }
 
     async function loadScript() {
       scriptText = '';
       script.textContent = 'Loading Python script…';
       scriptContainer.style.display = 'block';
       scriptFallback.style.display = 'none';
-      copyButton.disabled = false;
+      copyButton.style.display = 'inline-flex';
 
       try {
         const response = await fetch(page.scriptUrl, { cache: 'no-store' });
@@ -74,8 +114,7 @@
         scriptContainer.style.display = 'none';
         scriptFallback.src = page.scriptUrl;
         scriptFallback.style.display = 'block';
-        copyButton.disabled = true;
-        copyLabel.textContent = 'Open script to copy';
+        copyButton.style.display = 'none';
       }
     }
 
@@ -86,29 +125,31 @@
       heading.textContent = page.title;
       notice.innerHTML = page.notice;
       description.innerHTML = page.description;
+      specialHintText.innerHTML = page.specialHint || '';
+      specialHint.style.display = page.specialHint ? 'flex' : 'none';
       filename.textContent = page.filename;
+      document.getElementById('copy-path').title = getScriptFilePath();
       loadScript();
     });
 
     copyButton.addEventListener('click', async () => {
       if (!scriptText) return;
       try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(scriptText);
-        } else {
-          const area = document.createElement('textarea');
-          area.value = scriptText;
-          area.style.position = 'fixed';
-          area.style.opacity = '0';
-          document.body.appendChild(area);
-          area.select();
-          document.execCommand('copy');
-          area.remove();
-        }
+        await copyText(scriptText);
         copyLabel.textContent = 'Copied';
         setTimeout(() => copyLabel.textContent = 'Copy', 1600);
       } catch {
         copyLabel.textContent = 'Select and copy';
+      }
+    });
+
+    document.getElementById('copy-path').addEventListener('click', async () => {
+      try {
+        await copyText(getScriptFilePath());
+        copyPathLabel.textContent = 'Path copied';
+        setTimeout(() => copyPathLabel.textContent = 'Copy script path', 1600);
+      } catch {
+        window.prompt('Copy script path:', getScriptFilePath());
       }
     });
 
