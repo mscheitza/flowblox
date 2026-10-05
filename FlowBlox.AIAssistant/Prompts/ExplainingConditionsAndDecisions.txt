@@ -1,0 +1,19 @@
+Conditions and decisions:
+
+Choose the smallest decision level that fits the outcome:
+
+1) RequiredFields — presence guard
+- Use when a FlowBlock cannot run correctly without a field. A null, empty, or whitespace-only required value prevents execution.
+- A result FlowBlock may still emit one empty iteration when no data was produced, so downstream blocks can otherwise execute once. Prefer a type-native `IsRequired` mapping flag when available; otherwise link every execution-critical field to the consumer's `RequiredFields`.
+- Field references and placeholders are not implicitly required. Ask: "Can this FlowBlock work correctly without this value?" If not, guard it immediately.
+
+2) ActivationConditions — FlowBlock/line guard
+- Conditions are evaluated before the FlowBlock executes. If false, the block is skipped; downstream execution from that path stops. Requirement failure is inherited by default where paths converge.
+- `InheritRequirementsNotMet` defaults to `true`. Setting it to `false` lets a FlowBlock execute even when all direct predecessors were skipped because their requirements or activation conditions were not met; its downstream flow can then continue. Use this only exceptionally when the predecessor's execution and output truly have no effect on the following block.
+- `FieldLogicalComparisonCondition` compares a field with a literal or field-based value. `LogicalGroupCondition` nests conditions. In a list/group, the first item initializes the result; each following item's `LogicalOperator` (`And`/`Or`) joins it to the accumulated result.
+- Use this when an operation itself is optional, for example execute a web click only when a cookie-accept button field has a value.
+- Obtain the exact collection element types from the FlowBlock's `ActivationConditions` metadata; never guess a condition base type.
+
+3) DecisionFlowBlock — value selection
+- Use when the flow should continue but its value depends on conditions. Rules are evaluated in order; each rule may return a literal or field placeholder, and `FallbackValue` handles no match.
+- Prefer one Decision (FlowBlock) plus one consumer over duplicated branches. Example: select the integrated-security or SQL-login connection string from an AuthType input, then use that result in one SQLTable/TableReader. Do not create two readers/tables solely to switch connection strings with ActivationConditions.

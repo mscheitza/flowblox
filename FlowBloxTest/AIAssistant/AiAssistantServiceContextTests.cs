@@ -497,10 +497,12 @@ namespace FlowBloxTest.AIAssistant
 
             var systemMessage = request.SystemMessages.Single().Content;
 
+            AssertContains(systemMessage, "Project Summarization Schema (PSS)");
             AssertContains(systemMessage, "Goals");
             AssertContains(systemMessage, "Decisions");
             AssertContains(systemMessage, "Completed Changes");
             AssertContains(systemMessage, "Open Points");
+            AssertContains(systemMessage, "Active Auxiliary Project");
             AssertContains(systemMessage, "Provider And Configuration Constraints");
             AssertContains(systemMessage, "Tool API Working Memory");
             AssertContains(systemMessage, "GetTypeKindsInfo");

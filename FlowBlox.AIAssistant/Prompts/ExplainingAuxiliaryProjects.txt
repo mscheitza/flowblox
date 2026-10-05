@@ -1,0 +1,28 @@
+Auxiliary projects
+
+Use only for small helper flows that obtain information missing from the user request or main project, such as an SQL schema, web content, or search result.
+
+Distributed templates (`GetDistributedData`, `dataType="auxiliary_project"`):
+- Always check distributed data before building a project yourself; reusing a template saves tool calls and tokens.
+- Current templates cover URL navigation (`Navigate-to-URL.fbprj`), web search (`Web-Search.fbprj`), and SQL-to-CSV (`SQL-to-CSV.fbprj`). Use returned filenames rather than assuming this list is complete.
+- Copy a template into the current session with `CreateOrUpdateAuxiliaryProject(mode="full_content",copyFromDistributedData={dataType:"auxiliary_project",fileName:"Web-Search.fbprj"},...)`. The application template remains unchanged; only the session copy is edited.
+
+Default workflow:
+1. Call `GetAuxiliaryProjects` for this session's projects, descriptions, inputs, outputs, file paths, and open state.
+2. Prefer a distributed template. Otherwise create a minimal project with `CreateOrUpdateAuxiliaryProject`.
+3. If changes are needed, call `AuxiliaryProjectEditing(EDIT)` and use the normal project tools.
+4. While it is active, validate the smallest relevant path with `RunProjectDebugTest(reason,inputParameters)`. Read protocol output directly, generated results/field changes with `GetLastDebugArtefact`, and truncated debug values with `InspectFieldValue`. Fix and repeat only as needed.
+5. Call `AuxiliaryProjectEditing(SAVE)` when valid; it closes by default.
+6. For regular use, call `ExecuteProject(projectFile,reason,inputParameters,outputFields)` with the path from `GetAuxiliaryProjects`. It returns declared project outputs without another token-intensive debug run. Use `InspectOutputFieldValue` only for truncated outputs.
+
+Create/update contract:
+- `metadata_only`: create an empty project or update its description; `description` is required.
+- `full_content`: provide exactly one source, either `projectJson` or `copyFromDistributedData`; optional `description` overrides source metadata.
+- To rename, use `metadata_only`, pass the old name as `existingProjectName` and the new `projectName`. The filename follows the new name; an existing target filename is rejected.
+- File-level updates are rejected while an auxiliary project is open. Use `CLOSE` only to discard unsaved live changes.
+
+Storage and safety:
+- Projects are isolated below `$Options::Paths.LocalAppDataDir\ai_assistant_auxiliary_projects\<session-hash>` and remain active across assistant runs until `SAVE` or `CLOSE`.
+- Debugging an active auxiliary project and executing a saved project require a reason and user confirmation.
+- Pass secrets or main-project values through execution `inputParameters` using placeholders; keep flows read-only where possible and outputs bounded.
+- Main-project extensions are not transferred.

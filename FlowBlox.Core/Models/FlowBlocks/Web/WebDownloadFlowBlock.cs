@@ -3,6 +3,7 @@ using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.Web.WebBrowser;
 using FlowBlox.Core.Models.FlowBlocks.WebBrowser;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;

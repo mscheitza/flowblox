@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using FlowBlox.Core.Logging;
 
 namespace FlowBlox.UICore.PopUp.Views
 {
@@ -116,17 +117,19 @@ namespace FlowBlox.UICore.PopUp.Views
                  uri.Scheme != Uri.UriSchemeFile))
                 return;
 
+            var target = uri.IsFile ? uri.LocalPath : uri.AbsoluteUri;
             try
             {
-                var target = uri.IsFile ? uri.LocalPath : uri.AbsoluteUri;
                 if (uri.IsFile && !File.Exists(target))
                     return;
 
                 Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
             }
-            catch
+            catch (Exception ex)
             {
-                // Keep the popup usable if no browser can handle the link.
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    $"Failed to open component popup link '{target}'.",
+                    ex);
             }
         }
     }

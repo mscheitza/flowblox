@@ -2,8 +2,8 @@ ONNX extractive QA model setup
 
 Use only for `OnnxQAFlowBlock` setup or troubleshooting.
 
-Published script:
-- Retrieve `export_onnx_qa_model.py` with `GetPublishedScriptContent` (`scriptType="python"`) and store its unchanged content as a managed system input file. The script itself is project-specific and is materialized below `$Project::InputDirectory`.
+Distributed script:
+- Create the managed system input file from `copyFromDistributedData={dataType:"python",fileName:"export_onnx_qa_model.py"}`. Use `GetDistributedData(dataType="python")` to discover available filenames. The script is materialized below `$Project::InputDirectory`.
 - Command: `python "$InputFile::Path" --model-root-directory "$Options::AI.Onnx.QA.ModelRootDirectory"`. To run it, call only `ExecuteInputFileCommand`; it materializes the script first, while the exported models go to the shared QA model root for reuse across projects.
 - Default to automatic provisioning: set `executeBeforeRuntime=true` so the script ensures the model exists before FlowBlock initialization. Use one-time manual execution only when the user explicitly requests manual-only provisioning. Tell the user whether the script was configured for automatic runtime-start execution or must be run manually before starting the runtime.
 - It defaults to `timpal0l/mdeberta-v3-base-squad2`, installs/imports the required Hugging Face/Transformers/Optimum packages, exports and validates graph/tokenizer, stores below the passed model root (default `%USERPROFILE%\.flowblox\onnx\qa`), and exits immediately when complete.

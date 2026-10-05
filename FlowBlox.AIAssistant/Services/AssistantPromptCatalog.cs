@@ -14,7 +14,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string FlowBlocksManagingObjectKey = "explaining_flow_blocks_managing_an_object";
         public const string EditAndDeleteKey = "explaining_edit_and_delete";
         public const string NamingConventionsKey = "naming_conventions";
-        public const string ExecutionRequirementsKey = "execution_requirements_and_required_fields";
+        public const string ConditionsAndDecisionsKey = "explaining_conditions_and_decisions";
         public const string FlowOrganizationPatternsKey = "explaining_flow_organization_patterns";
         public const string DebuggingKey = "explaining_debugging";
         public const string InputFilesKey = "explaining_input_files";
@@ -30,6 +30,7 @@ namespace FlowBlox.AIAssistant.Services
         public const string SpecialProjectSpaceKey = "explaining_project_space";
         public const string SpecialTaskSchedulingKey = "explaining_task_scheduling";
         public const string SpecialUserInterfaceKey = "explaining_user_interface";
+        public const string SpecialAuxiliaryProjectsKey = "explaining_auxiliary_projects";
         public const string VersionNotesKey = "explaining_version_notes";
 
         private static readonly IReadOnlyDictionary<string, PromptEntryDefinition> Definitions =
@@ -77,11 +78,11 @@ namespace FlowBlox.AIAssistant.Services
                     "FlowBlox.AIAssistant.Prompts.NamingConventions.txt",
                     "Consistent naming rules for FlowBlocks and result-field descriptors.",
                     true),
-                [ExecutionRequirementsKey] = new PromptEntryDefinition(
-                    ExecutionRequirementsKey,
-                    "Execution Requirements and Required Fields",
-                    "FlowBlox.AIAssistant.Prompts.ExecutionRequirementsAndRequiredFields.txt",
-                    "How to ensure downstream execution is guarded when upstream result datasets are empty.",
+                [ConditionsAndDecisionsKey] = new PromptEntryDefinition(
+                    ConditionsAndDecisionsKey,
+                    "Explaining Conditions and Decisions",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingConditionsAndDecisions.txt",
+                    "How to choose between RequiredFields, ActivationConditions, and DecisionFlowBlock value selection.",
                     true),
                 [FlowOrganizationPatternsKey] = new PromptEntryDefinition(
                     FlowOrganizationPatternsKey,
@@ -172,6 +173,12 @@ namespace FlowBlox.AIAssistant.Services
                     "Explaining User Interface",
                     "FlowBlox.AIAssistant.Prompts.ExplainingUserInterface.txt",
                     "Special: on-demand guidance for FlowBlox UI panels, menus, toolbar actions, and common manual workflows.",
+                    false),
+                [SpecialAuxiliaryProjectsKey] = new PromptEntryDefinition(
+                    SpecialAuxiliaryProjectsKey,
+                    "Explaining Auxiliary Projects",
+                    "FlowBlox.AIAssistant.Prompts.ExplainingAuxiliaryProjects.txt",
+                    "Special: required guidance for temporary AI-built projects used to retrieve external information through FlowBlox capabilities.",
                     false),
                 [VersionNotesKey] = new PromptEntryDefinition(
                     VersionNotesKey,

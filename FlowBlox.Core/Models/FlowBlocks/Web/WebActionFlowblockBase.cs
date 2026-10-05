@@ -2,6 +2,7 @@ using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.FlowBlocks.Web;
+using FlowBlox.Core.Models.FlowBlocks.Web.WebBrowser;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Fields;

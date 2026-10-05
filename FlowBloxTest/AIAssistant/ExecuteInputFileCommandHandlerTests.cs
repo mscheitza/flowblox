@@ -42,6 +42,32 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
+        public async Task CreateInputFile_CopiesDistributedPythonData()
+        {
+            var project = new FlowBloxProject { ProjectName = "Distributed input file test" };
+            FlowBloxProjectManager.Instance.ActiveProject = project;
+            var response = await new DefaultToolApi().ExecuteAsync(
+                new ToolRequest
+                {
+                    ToolName = "CreateOrUpdateInputFile",
+                    Arguments = new JObject
+                    {
+                        ["key"] = "scripts/export_onnx_qa_model.py",
+                        ["copyFromDistributedData"] = new JObject
+                        {
+                            ["dataType"] = "python",
+                            ["fileName"] = "export_onnx_qa_model.py"
+                        }
+                    }
+                },
+                CancellationToken.None);
+
+            Assert.IsTrue(response.Ok, response.Error);
+            Assert.AreEqual(1, project.InputFiles.Count);
+            StringAssert.Contains(Encoding.UTF8.GetString(project.InputFiles[0].ContentBytes), "DEFAULT_MODEL_ROOT");
+        }
+
+        [TestMethod]
         public async Task ExecuteInputFileCommand_MaterializesMissingScriptBeforeExecution()
         {
             var inputFile = new FlowBloxInputFile

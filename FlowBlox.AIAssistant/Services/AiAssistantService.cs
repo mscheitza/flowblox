@@ -219,7 +219,10 @@ namespace FlowBlox.AIAssistant.Services
                 return result;
             }
 
-            using var registryScope = FlowBloxRegistryProvider.BeginProjectRegistryScope();
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            using var registryScope = project == null
+                ? null
+                : FlowBloxRegistryProvider.BeginScopedRegistry(project.FlowBloxRegistry);
 
             var maxToolRounds = Math.Clamp(
                 config.MaxToolRounds,
@@ -270,7 +273,8 @@ namespace FlowBlox.AIAssistant.Services
                         ? AssistantPromptBuilder.BuildInitialUserPrompt(
                             userPrompt,
                             shouldAttachProjectJson ? currentProjectJson : null,
-                            projectAttachmentInformation)
+                            projectAttachmentInformation,
+                            ToolHandlerUtilities.GetActiveAuxiliaryProjectName())
                         : string.Empty;
                     var modelPrompt = toolRound == 1
                         ? initialUserPrompt
@@ -462,7 +466,9 @@ namespace FlowBlox.AIAssistant.Services
 
                         }
 
-                        var toolApiResponse = AssistantPromptBuilder.BuildToolApiResponsePrompt(roundToolTranscript);
+                        var toolApiResponse = AssistantPromptBuilder.BuildToolApiResponsePrompt(
+                            roundToolTranscript,
+                            ToolHandlerUtilities.GetActiveAuxiliaryProjectName());
                         AppendMessagePair(session, assistantInstructionContent, toolApiResponse, exec.MessageMetadata);
                         assistantToolRequestPersisted = true;
                     }
@@ -504,6 +510,7 @@ namespace FlowBlox.AIAssistant.Services
             }
             finally
             {
+                ToolHandlerUtilities.SetCurrentSessionGuid(null);
                 Interlocked.Decrement(ref _activeRunCount);
                 protocolWriter?.TryWrite(_logger);
             }

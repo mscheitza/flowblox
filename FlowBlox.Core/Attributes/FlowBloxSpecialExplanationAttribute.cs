@@ -1,4 +1,5 @@
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Util.Resources;
 
 namespace FlowBlox.Core.Attributes
@@ -34,9 +35,11 @@ namespace FlowBlox.Core.Attributes
                 if (!string.IsNullOrWhiteSpace(localized) && !string.Equals(localized, valueOrResourceKey, StringComparison.Ordinal))
                     return localized;
             }
-            catch
+            catch (Exception ex)
             {
-                // Fall back to raw value/key to keep metadata resolution resilient.
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    $"Failed to resolve special-explanation resource '{valueOrResourceKey}'.",
+                    ex);
             }
 
             return valueOrResourceKey;

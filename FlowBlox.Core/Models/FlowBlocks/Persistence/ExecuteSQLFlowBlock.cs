@@ -43,7 +43,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Persistence
 
         public int ExecuteSQL(DbTypes dbType, string sqlConnectionstring, string sqlStatement)
         {
-            var dbConnection = DbConnectionProvider.Instance.GetOrCreateDbConnection(dbType, sqlConnectionstring);
+            var resolvedConnectionString = FlowBloxFieldHelper.ReplaceFieldsInString(sqlConnectionstring);
+            var dbConnection = DbConnectionProvider.Instance.GetOrCreateDbConnection(dbType, resolvedConnectionString);
             if (dbConnection != null)
             {
                 Dictionary<string, object> parameters;

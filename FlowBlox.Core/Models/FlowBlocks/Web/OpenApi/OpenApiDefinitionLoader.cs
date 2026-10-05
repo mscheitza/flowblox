@@ -119,18 +119,27 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web.OpenApi
 
         private static object CreateSchemaValue(IOpenApiSchema schema, int depth = 0)
         {
-            if (depth > 8) return null;
-            if (schema.Example != null) return ConvertExample(schema.Example.ToString());
-            if (schema.Default != null) return ConvertExample(schema.Default.ToString());
+            if (depth > 8)
+                return null;
+
+            if (schema.Example != null)
+                return ConvertExample(schema.Example.ToString());
+
+            if (schema.Default != null)
+                return ConvertExample(schema.Default.ToString());
+
             var type = schema.Type?.ToString() ?? string.Empty;
             if (type.Contains("Object", StringComparison.OrdinalIgnoreCase) || schema.Properties?.Count > 0)
                 return (schema.Properties ?? new Dictionary<string, IOpenApiSchema>())
                     .ToDictionary(x => x.Key, x => CreateSchemaValue(x.Value, depth + 1));
             if (type.Contains("Array", StringComparison.OrdinalIgnoreCase))
                 return schema.Items == null ? Array.Empty<object>() : new[] { CreateSchemaValue(schema.Items, depth + 1) };
-            if (type.Contains("Boolean", StringComparison.OrdinalIgnoreCase)) return false;
-            if (type.Contains("Integer", StringComparison.OrdinalIgnoreCase)) return 0;
-            if (type.Contains("Number", StringComparison.OrdinalIgnoreCase)) return 0.0;
+            if (type.Contains("Boolean", StringComparison.OrdinalIgnoreCase))
+                return false;
+            if (type.Contains("Integer", StringComparison.OrdinalIgnoreCase))
+                return 0;
+            if (type.Contains("Number", StringComparison.OrdinalIgnoreCase))
+                return 0.0;
             return schema.Enum?.FirstOrDefault()?.ToString() is { Length: > 0 } enumValue ? TrimJsonString(enumValue) : string.Empty;
         }
 
@@ -163,7 +172,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web.OpenApi
 
         private static int MethodOrder(string method) => method switch
         {
-            "GET" => 0, "POST" => 1, "PUT" => 2, "PATCH" => 3, "DELETE" => 4, _ => 5
+            "GET" => 0,
+            "POST" => 1,
+            "PUT" => 2,
+            "PATCH" => 3,
+            "DELETE" => 4,
+            _ => 5
         };
     }
 }

@@ -9,12 +9,27 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
     [Display(Name = "FieldCondition_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public class FieldComparisonCondition : ComparisonCondition
     {
+        private string _outputValue;
+
         [Required]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public FieldElement FieldElement { get; set; }
+
+        [Display(Name = "FieldComparisonCondition_OutputValue", Description = "FieldComparisonCondition_OutputValue_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 30)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
+        public string OutputValue
+        {
+            get => _outputValue;
+            set
+            {
+                _outputValue = value;
+                OnPropertyChanged();
+            }
+        }
 
         public virtual bool Compare() => Compare(FieldElement?.Value);
 

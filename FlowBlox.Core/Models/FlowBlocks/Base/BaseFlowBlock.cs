@@ -674,7 +674,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 .Any(previous => ReferenceEquals(previous, candidate));
         }
 
-        [Display(Name = "BaseFlowBlock_InputIgnoreDuplicates", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 1)]
+        [Display(Name = "BaseFlowBlock_InputIgnoreDuplicates", Description = "BaseFlowBlock_InputIgnoreDuplicates_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 1)]
         public bool InputIgnoreDuplicates { get; set; }
 
         [Display(Name = "BaseFlowBlock_InputBehaviorAssignments", Description = "BaseFlowBlock_InputBehaviorAssignments_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 2)]

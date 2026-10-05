@@ -491,7 +491,7 @@ namespace FlowBlox.Core.Models.Project
                 Dictionary<string, AssemblyLoadContext> loadContexts = null;
                 List<FlowBloxProjectExtension> extensions = null;
 
-                if (!string.IsNullOrWhiteSpace(extensionsJson))
+                if (!DisableExtensionLoading.IsActive && !string.IsNullOrWhiteSpace(extensionsJson))
                 {
                     extensions = JsonConvert.DeserializeObject<List<FlowBloxProjectExtension>>(extensionsJson);
 
@@ -551,7 +551,9 @@ namespace FlowBlox.Core.Models.Project
             {
                 // Dependencies / extensions JSON (*.fbdeps)
                 var depsPath = BuildSidecarPath(fileName, DependenciesFileSuffix);
-                string depsJson = File.Exists(depsPath) ? File.ReadAllText(depsPath) : null;
+                string depsJson = !DisableExtensionLoading.IsActive && File.Exists(depsPath)
+                    ? File.ReadAllText(depsPath)
+                    : null;
 
                 // Local data (*.fblocaldata)
                 var localDataPath = BuildSidecarPath(fileName, LocalDataFileSuffix);

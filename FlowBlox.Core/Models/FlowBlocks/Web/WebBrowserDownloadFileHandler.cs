@@ -2,6 +2,7 @@ using OpenQA.Selenium;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using FlowBlox.Core.Logging;
 
 namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
 {
@@ -294,9 +295,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.WebBrowser
                 {
                     cookieContainer.Add(new System.Net.Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain));
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Ignore cookies that cannot be mapped to .NET cookies.
+                    FlowBloxLogManager.Instance.GetLogger().Error(
+                        $"Failed to map browser cookie '{cookie.Name}' to a .NET cookie.",
+                        ex);
                 }
             }
 

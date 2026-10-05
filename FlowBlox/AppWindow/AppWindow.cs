@@ -46,7 +46,6 @@ namespace FlowBlox.AppWindow
 {
     public partial class AppWindow : Form
     {
-        private const string ProjectFileExtension = ".fbprj";
         private const string UpdateDownloadDirectoryName = "updates";
         private const string UpdateNotificationId = "app.update.available";
         private const string UpdateStatusNotificationId = "app.update.status";
@@ -567,24 +566,12 @@ namespace FlowBlox.AppWindow
         }
 
         private static string EnsureProjectFileExtension(string fileNameOrPath)
-        {
-            if (string.IsNullOrWhiteSpace(fileNameOrPath))
-                return string.Empty;
-
-            if (string.IsNullOrWhiteSpace(Path.GetExtension(fileNameOrPath)))
-                return fileNameOrPath + ProjectFileExtension;
-
-            return fileNameOrPath;
-        }
+            => FlowBloxProjectFileNameHelper.EnsureExtension(fileNameOrPath);
 
         private string BuildDefaultProjectFileName()
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;
-            var safeProjectName = IOUtil.GetValidFileName(project?.ProjectName ?? string.Empty).Trim('_');
-            if (string.IsNullOrWhiteSpace(safeProjectName))
-                safeProjectName = "Project";
-
-            return EnsureProjectFileExtension(safeProjectName);
+            return FlowBloxProjectFileNameHelper.FromProjectName(project?.ProjectName);
         }
 
         private void ConfigureSaveProjectDialogDefaults()
@@ -874,7 +861,7 @@ namespace FlowBlox.AppWindow
                 UpdateUI();
             }
 
-            if (!project.Notice.Equals(string.Empty))
+            if (!string.IsNullOrEmpty(project.Notice))
             {
                 FlowBloxMessageBox.Show(
                     this,

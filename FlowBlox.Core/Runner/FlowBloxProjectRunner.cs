@@ -1,7 +1,9 @@
 ﻿using FlowBlox.Core.Authentication;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Constants;
 using FlowBlox.Core.ExternalServices.FlowBloxWebApi;
 using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Runtime.Debugging;
 using FlowBlox.Core.Provider;
@@ -241,9 +243,11 @@ namespace FlowBlox.Core.Runner
                             $"Debug runtime timeout reached ({maxRuntimeSeconds}s).");
                     }
                 }
-                catch (TaskCanceledException)
+                catch (TaskCanceledException ex)
                 {
-                    // ignored
+                    FlowBloxLogManager.Instance.GetLogger().Error(
+                        "The debug runtime timeout monitor was cancelled before completion.",
+                        ex);
                 }
             });
         }
@@ -337,14 +341,23 @@ namespace FlowBlox.Core.Runner
                 if (userFields.TryGetValue(fieldElement.Name, out var stringValue))
                 {
                     fieldElement.StringValue = stringValue;
-                    Report($"User field '{fieldElement.Name}' set to '{stringValue}'.", FlowBloxLogLevel.Info);
+                    var displayValue = fieldElement.IsPassword
+                        ? GlobalConstants.HiddenSensitiveValue
+                        : stringValue;
+
+                    Report($"User field '{fieldElement.Name}' set to '{displayValue}'.", FlowBloxLogLevel.Info);
                 }
                 else
                 {
                     if (string.IsNullOrEmpty(fieldElement.StringValue))
                         Report($"No value provided for input field '{fieldElement.Name}'.", FlowBloxLogLevel.Warning);
                     else
-                        Report($"No value provided for input field '{fieldElement.Name}', using current value '{fieldElement.StringValue}'.", FlowBloxLogLevel.Info);
+                    {
+                        var displayValue = fieldElement.IsPassword
+                            ? GlobalConstants.HiddenSensitiveValue
+                            : fieldElement.StringValue;
+                        Report($"No value provided for input field '{fieldElement.Name}', using current value '{displayValue}'.", FlowBloxLogLevel.Info);
+                    }
                 }
             }
         }

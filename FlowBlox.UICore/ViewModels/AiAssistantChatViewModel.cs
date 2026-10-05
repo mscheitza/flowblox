@@ -3,6 +3,7 @@ using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.AIAssistant.Tools;
 using FlowBlox.Core.Logging;
@@ -10,6 +11,7 @@ using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
+using FlowBlox.UICore.Views;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -23,6 +25,7 @@ namespace FlowBlox.UICore.ViewModels
     public class AiAssistantChatViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly AiAssistantService _service;
+        private readonly IDialogService _dialogService;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
         private readonly IRuntimeStateService _runtimeStateService;
         private readonly SynchronizationContext? _uiContext;
@@ -165,6 +168,7 @@ namespace FlowBlox.UICore.ViewModels
         public AiAssistantChatViewModel()
         {
             _uiContext = SynchronizationContext.Current;
+            _dialogService = FlowBloxServiceLocator.Instance.GetService<IDialogService>();
             _messageBoxService = FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>();
             _runtimeStateService = FlowBloxServiceLocator.Instance.GetService<IRuntimeStateService>();
             var toolApi = new DefaultToolApi
@@ -397,9 +401,49 @@ namespace FlowBlox.UICore.ViewModels
 
         private bool ConfirmToolExecutionRequest(ToolRequest request)
         {
-            if (request == null || !string.Equals(request.ToolName, "ExecuteInputFileCommand", StringComparison.OrdinalIgnoreCase))
+            if (request == null)
                 return true;
 
+            if (string.Equals(request.ToolName, "ExecuteInputFileCommand", StringComparison.OrdinalIgnoreCase) &&
+                !ConfirmInputFileCommandExecution(request))
+                return false;
+
+            if (string.Equals(request.ToolName, "RunProjectDebugTest", StringComparison.OrdinalIgnoreCase) &&
+                !ConfirmExternalProjectDebugExecution(request))
+                return false;
+
+            if (string.Equals(request.ToolName, "ExecuteProject", StringComparison.OrdinalIgnoreCase) &&
+                !ConfirmProjectExecution(request))
+                return false;
+
+            return true;
+        }
+
+        private bool ConfirmExternalProjectDebugExecution(ToolRequest request)
+        {
+            var projectFile = FlowBloxFieldHelper.ReplaceFieldsInString(
+                request.Arguments?.Value<string>("projectFile") ??
+                request.Arguments?.Value<string>("confirmationProjectFile") ??
+                string.Empty);
+
+            var reason = (request.Arguments?.Value<string>("reason") ?? string.Empty).Trim();
+            return string.IsNullOrWhiteSpace(reason) ||
+                   ShowExternalProjectExecutionConfirmation(projectFile, reason);
+        }
+
+        private bool ConfirmProjectExecution(ToolRequest request)
+        {
+            var reason = (request.Arguments?.Value<string>("reason") ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(reason))
+                return true;
+
+            var projectFile = FlowBloxFieldHelper.ReplaceFieldsInString(
+                request.Arguments?.Value<string>("projectFile") ?? string.Empty);
+            return ShowExternalProjectExecutionConfirmation(projectFile, reason);
+        }
+
+        private bool ConfirmInputFileCommandExecution(ToolRequest request)
+        {
             var key = request.Arguments?.Value<string>("key") ?? string.Empty;
             var message = string.Format(
                 FlowBloxResourceUtil.GetLocalizedString("Message_ExecuteInputFileCommand_Confirm_Description", typeof(Resources.AiAssistantChatView)),
@@ -409,6 +453,35 @@ namespace FlowBlox.UICore.ViewModels
             var decision = ShowMessageBoxOnUiThread(message, title, FlowBloxMessageBoxTypes.Question);
 
             return decision == FlowBloxMessageBoxDialogResult.Yes;
+        }
+
+        private bool ShowExternalProjectExecutionConfirmation(string projectFile, string reason)
+        {
+            bool? Show()
+            {
+                var window = new ExternalProjectExecutionConfirmationWindow(projectFile, reason);
+                return _dialogService.ShowWPFDialog(window);
+            }
+
+            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
+            {
+                bool? result = false;
+                Exception? exception = null;
+                _uiContext.Send(_ =>
+                {
+                    try { result = Show(); }
+                    catch (Exception ex) { exception = ex; }
+                }, null);
+                if (exception != null)
+                    throw exception;
+                return result == true;
+            }
+
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher != null && !dispatcher.CheckAccess())
+                return dispatcher.Invoke(Show) == true;
+
+            return Show() == true;
         }
 
         private FlowBloxMessageBoxDialogResult? ShowMessageBoxOnUiThread(

@@ -1629,6 +1629,12 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("BaseFlowBlock_InputIgnoreDuplicates", resourceCulture);
             }
         }
+
+        public static string BaseFlowBlock_InputIgnoreDuplicates_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseFlowBlock_InputIgnoreDuplicates_Tooltip", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name ähnelt.
@@ -1834,6 +1840,24 @@ namespace FlowBlox.Core {
         public static string BpeAiTokenizer_TokenizerConfiguration {
             get {
                 return ResourceManager.GetString("BpeAiTokenizer_TokenizerConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Brave web search provider ähnelt.
+        /// </summary>
+        public static string BraveWebSearchProvider_DisplayName {
+            get {
+                return ResourceManager.GetString("BraveWebSearchProvider_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Brave web search providers ähnelt.
+        /// </summary>
+        public static string BraveWebSearchProvider_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("BraveWebSearchProvider_DisplayName_Plural", resourceCulture);
             }
         }
         
@@ -3071,11 +3095,23 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Evaluates configured field conditions in order and outputs the field value of the first matching rule. Rule order defines priority. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Implements an if/then/else decision: evaluates field conditions in order and outputs the configured value of the first matching rule or a fallback value. ähnelt.
         /// </summary>
         public static string DecisionFlowBlock_Description {
             get {
                 return ResourceManager.GetString("DecisionFlowBlock_Description", resourceCulture);
+            }
+        }
+
+        public static string DecisionFlowBlock_Decisions {
+            get {
+                return ResourceManager.GetString("DecisionFlowBlock_Decisions", resourceCulture);
+            }
+        }
+
+        public static string DecisionFlowBlock_Decisions_Tooltip {
+            get {
+                return ResourceManager.GetString("DecisionFlowBlock_Decisions_Tooltip", resourceCulture);
             }
         }
         
@@ -3085,6 +3121,18 @@ namespace FlowBlox.Core {
         public static string DecisionFlowBlock_DisplayName {
             get {
                 return ResourceManager.GetString("DecisionFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+
+        public static string DecisionFlowBlock_FallbackValue {
+            get {
+                return ResourceManager.GetString("DecisionFlowBlock_FallbackValue", resourceCulture);
+            }
+        }
+
+        public static string DecisionFlowBlock_FallbackValue_Tooltip {
+            get {
+                return ResourceManager.GetString("DecisionFlowBlock_FallbackValue_Tooltip", resourceCulture);
             }
         }
         
@@ -3097,12 +3145,9 @@ namespace FlowBlox.Core {
             }
         }
         
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The following fields were used multiple times: {0} ähnelt.
-        /// </summary>
-        public static string DecisionFlowBlock_Validation_DuplicateFields {
+        public static string DecisionFlowBlock_SpecialExplanation_ConditionalOutputs {
             get {
-                return ResourceManager.GetString("DecisionFlowBlock_Validation_DuplicateFields", resourceCulture);
+                return ResourceManager.GetString("DecisionFlowBlock_SpecialExplanation_ConditionalOutputs", resourceCulture);
             }
         }
         
@@ -3645,6 +3690,18 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("FieldComparisonCondition_DisplayName", resourceCulture);
             }
         }
+
+        public static string FieldComparisonCondition_OutputValue {
+            get {
+                return ResourceManager.GetString("FieldComparisonCondition_OutputValue", resourceCulture);
+            }
+        }
+
+        public static string FieldComparisonCondition_OutputValue_Tooltip {
+            get {
+                return ResourceManager.GetString("FieldComparisonCondition_OutputValue_Tooltip", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field condition ähnelt.
@@ -4059,7 +4116,7 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("FlowBloxComponentUIActions_ManageUserFields", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Quick Start ähnelt.
         /// </summary>
@@ -7528,14 +7585,14 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: keep reusable models in $Options::AI.Onnx.GenAI.ModelRootDirectory. Either select a locally managed model folder, or under Tools &gt; Manage input files add a Python script that downloads the model when missing and verifies that it is available. Set Command to python &quot;$InputFile::Path&quot; --model-root-directory &quot;$Options::AI.Onnx.GenAI.ModelRootDirectory&quot; and enable Execute before runtime start. The provided script creates the model-specific subfolder below this root so projects and runtimes share one copy. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: keep reusable models in $Options::AI.Onnx.GenAI.ModelRootDirectory. Either select a locally managed model folder, or under Tools &gt; Manage input files add a Python script that downloads the model when missing and verifies that it is available. Set Command to python &quot;$InputFile::Path&quot; --model-root-directory &quot;$Options::AI.Onnx.GenAI.ModelRootDirectory&quot; and enable Execute before runtime start. The provided script creates the model-specific subfolder below this root so projects and runtimes share  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         public static string OnnxGenAIFlowBlock_SpecialExplanation_ModelProvisioning {
             get {
                 return ResourceManager.GetString("OnnxGenAIFlowBlock_SpecialExplanation_ModelProvisioning", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Token selection strategy ähnelt.
         /// </summary>
@@ -7762,14 +7819,14 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: keep reusable models in $Options::AI.Onnx.QA.ModelRootDirectory. Either select a locally managed model folder, or under Tools &gt; Manage input files add a Python script that downloads the model when missing and verifies that it is available. Set Command to python &quot;$InputFile::Path&quot; --model-root-directory &quot;$Options::AI.Onnx.QA.ModelRootDirectory&quot; and enable Execute before runtime start. The provided script creates the model-specific subfolder below this root so projects and runtimes share one copy. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Best practice: keep reusable models in $Options::AI.Onnx.QA.ModelRootDirectory. Either select a locally managed model folder, or under Tools &gt; Manage input files add a Python script that downloads the model when missing and verifies that it is available. Set Command to python &quot;$InputFile::Path&quot; --model-root-directory &quot;$Options::AI.Onnx.QA.ModelRootDirectory&quot; and enable Execute before runtime start. The provided script creates the model-specific subfolder below this root so projects and runtimes share one co [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         public static string OnnxQAFlowBlock_SpecialExplanation_ModelProvisioning {
             get {
                 return ResourceManager.GetString("OnnxQAFlowBlock_SpecialExplanation_ModelProvisioning", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Execution provider ähnelt.
         /// </summary>
@@ -11095,6 +11152,60 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads a source table once and writes the complete data table to another table without column mappings. ähnelt.
+        /// </summary>
+        public static string TableConverterFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("TableConverterFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Convert table ähnelt.
+        /// </summary>
+        public static string TableConverterFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("TableConverterFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Source table ähnelt.
+        /// </summary>
+        public static string TableConverterFlowBlock_SourceTable {
+            get {
+                return ResourceManager.GetString("TableConverterFlowBlock_SourceTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Readable table whose current data is transferred unchanged. ähnelt.
+        /// </summary>
+        public static string TableConverterFlowBlock_SourceTable_Tooltip {
+            get {
+                return ResourceManager.GetString("TableConverterFlowBlock_SourceTable_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Target table ähnelt.
+        /// </summary>
+        public static string TableConverterFlowBlock_TargetTable {
+            get {
+                return ResourceManager.GetString("TableConverterFlowBlock_TargetTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Writable table receiving the complete source data. ähnelt.
+        /// </summary>
+        public static string TableConverterFlowBlock_TargetTable_Tooltip {
+            get {
+                return ResourceManager.GetString("TableConverterFlowBlock_TargetTable_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Table selector ähnelt.
         /// </summary>
         public static string TableReaderFlowBlock {
@@ -13068,6 +13179,321 @@ namespace FlowBlox.Core {
         public static string WebRequestParameter_Value {
             get {
                 return ResourceManager.GetString("WebRequestParameter_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Age ähnelt.
+        /// </summary>
+        public static string WebSearchDestinations_Age {
+            get {
+                return ResourceManager.GetString("WebSearchDestinations_Age", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Description ähnelt.
+        /// </summary>
+        public static string WebSearchDestinations_Description {
+            get {
+                return ResourceManager.GetString("WebSearchDestinations_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Language ähnelt.
+        /// </summary>
+        public static string WebSearchDestinations_Language {
+            get {
+                return ResourceManager.GetString("WebSearchDestinations_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Page date ähnelt.
+        /// </summary>
+        public static string WebSearchDestinations_PageAge {
+            get {
+                return ResourceManager.GetString("WebSearchDestinations_PageAge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search query ähnelt.
+        /// </summary>
+        public static string WebSearchDestinations_Query {
+            get {
+                return ResourceManager.GetString("WebSearchDestinations_Query", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Rank ähnelt.
+        /// </summary>
+        public static string WebSearchDestinations_Rank {
+            get {
+                return ResourceManager.GetString("WebSearchDestinations_Rank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Title ähnelt.
+        /// </summary>
+        public static string WebSearchDestinations_Title {
+            get {
+                return ResourceManager.GetString("WebSearchDestinations_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die URL ähnelt.
+        /// </summary>
+        public static string WebSearchDestinations_Url {
+            get {
+                return ResourceManager.GetString("WebSearchDestinations_Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Country ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_Country {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_Country", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional two-letter country code used to localize results, for example DE or US. ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_Country_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_Country_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Searches the web through a configured provider and emits one result dataset per search hit. ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web search ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum results ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_MaxResults {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_MaxResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum number of web results returned (1 to 20). ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_MaxResults_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_MaxResults_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Provider ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_Provider {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_Provider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Managed web search provider containing endpoint, credentials and timeout. ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_Provider_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_Provider_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search query ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_Query {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_Query", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search terms. Field, project and option placeholders are supported. ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_Query_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_Query_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result fields ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_ResultFields {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_ResultFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maps the fixed web-search result properties to FlowBlox fields. ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_ResultFields_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_ResultFields_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Safe search ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_SafeSearch {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_SafeSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Filtering level for explicit content. ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_SafeSearch_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_SafeSearch_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search language ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_SearchLanguage {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_SearchLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional language code for results, for example de or en. ähnelt.
+        /// </summary>
+        public static string WebSearchFlowBlock_SearchLanguage_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchFlowBlock_SearchLanguage_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die API key ähnelt.
+        /// </summary>
+        public static string WebSearchProviderBase_ApiKey {
+            get {
+                return ResourceManager.GetString("WebSearchProviderBase_ApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Secret API key used by the search provider. Field placeholders are supported. ähnelt.
+        /// </summary>
+        public static string WebSearchProviderBase_ApiKey_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchProviderBase_ApiKey_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Base URL ähnelt.
+        /// </summary>
+        public static string WebSearchProviderBase_BaseUrl {
+            get {
+                return ResourceManager.GetString("WebSearchProviderBase_BaseUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Search endpoint URL. Change only for a compatible proxy or endpoint. ähnelt.
+        /// </summary>
+        public static string WebSearchProviderBase_BaseUrl_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchProviderBase_BaseUrl_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web search provider ähnelt.
+        /// </summary>
+        public static string WebSearchProviderBase_DisplayName {
+            get {
+                return ResourceManager.GetString("WebSearchProviderBase_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Web search providers ähnelt.
+        /// </summary>
+        public static string WebSearchProviderBase_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("WebSearchProviderBase_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Timeout (seconds) ähnelt.
+        /// </summary>
+        public static string WebSearchProviderBase_TimeoutSeconds {
+            get {
+                return ResourceManager.GetString("WebSearchProviderBase_TimeoutSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum duration of a search request. ähnelt.
+        /// </summary>
+        public static string WebSearchProviderBase_TimeoutSeconds_Tooltip {
+            get {
+                return ResourceManager.GetString("WebSearchProviderBase_TimeoutSeconds_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Moderate ähnelt.
+        /// </summary>
+        public static string WebSearchSafeSearch_Moderate {
+            get {
+                return ResourceManager.GetString("WebSearchSafeSearch_Moderate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Off ähnelt.
+        /// </summary>
+        public static string WebSearchSafeSearch_Off {
+            get {
+                return ResourceManager.GetString("WebSearchSafeSearch_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Strict ähnelt.
+        /// </summary>
+        public static string WebSearchSafeSearch_Strict {
+            get {
+                return ResourceManager.GetString("WebSearchSafeSearch_Strict", resourceCulture);
             }
         }
         

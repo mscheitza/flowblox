@@ -3,7 +3,7 @@
 Purpose:
 - Use managed input files when a flow expects input files in a defined format (for example CSV, XLSX, JSON, XML).
 - Managed input files are synchronized to $Project::InputDirectory after AI Assistant actions and on project load.
-- Use generatedTemplate with textContent as default content source.
+- Use `generatedTemplate` for authored text or `copyFromDistributedData` for an application-provided file.
 - Supported converters: Csv2XlsxConverter (CSV text -> XLSX file), Csv2XlsConverter (CSV text -> XLS file).
 - FlowBlox v{{FLOWBLOX_VERSION}} note: direct binary-content authoring via AI Assistant managed-input-file calls is not supported; provide textContent and optional converter instead.
 - For content inspection, use GetInputFileContent for a specific key (returns mimeType, key, textContent, converter, message).
@@ -71,6 +71,7 @@ syncMode decision quick guide:
 - Template structure must be changed -> temporary AlwaysOverwrite (migration), then revert to CreateIfNotExists.
 
 Tool hint (`CreateOrUpdateInputFile`):
+- Provide exactly one source: `generatedTemplate` or `copyFromDistributedData={dataType,fileName}`.
 - Warning: AlwaysOverwrite can destroy user-entered data.
 - Use AlwaysOverwrite only for system-generated files or explicit temporary migration/debug use.
 - For user-editable templates, CreateIfNotExists is the default.

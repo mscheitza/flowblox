@@ -2,11 +2,11 @@ ONNX Runtime GenAI model setup
 
 Use only for `OnnxGenAIFlowBlock` setup or troubleshooting.
 
-Published scripts (`GetPublishedScriptContent`, `scriptType="python"`):
+Distributed scripts (`GetDistributedData`, `dataType="python"`):
 - CPU default: `download_phi4_mini_instruct_onnx.py` (about 4.9 GB).
 - CUDA opt-in: `download_large_cuda_genai_model.py`. Mistral 7B INT4 is its default; `--model-id` also selects Phi-3 Medium 14B INT4 or DeepSeek R1 Distill Qwen 7B INT4. Use `--list-models` for exact IDs.
 - Never propose, download or configure a CUDA model unless the user explicitly requests a larger/GPU model. Confirm download size and free disk space first.
-- Store returned content unchanged as a managed system input file. The script itself is project-specific and is materialized below `$Project::InputDirectory`.
+- Create the managed system input file with `copyFromDistributedData={dataType:"python",fileName:<script>}`. It is materialized below `$Project::InputDirectory`.
 - Command: `python "$InputFile::Path" --model-root-directory "$Options::AI.Onnx.GenAI.ModelRootDirectory"`. To run it, call only `ExecuteInputFileCommand`; it materializes the script first, while downloaded models go to the shared GenAI model root for reuse across projects.
 - Default to automatic provisioning: set `executeBeforeRuntime=true` so the script ensures the model exists before FlowBlock initialization. Use one-time manual execution only when the user explicitly requests manual-only provisioning. Tell the user whether the script was configured for automatic runtime-start execution or must be run manually before starting the runtime.
 - Scripts use `huggingface_hub`, default below the passed model root (default `%USERPROFILE%\.flowblox\onnx\genai`), validate required files and exit immediately when complete. `--output-directory` selects an exact folder.

@@ -1,4 +1,5 @@
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Logging;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -103,11 +104,17 @@ namespace FlowBlox.AppWindow.Contents
             {
                 _dispatcher.BeginInvoke(new Action(() => ApplyPending(version)));
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException ex)
             {
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    "Failed to schedule a runtime focus update because the UI dispatcher was already disposed.",
+                    ex);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    "Failed to schedule a runtime focus update because the UI dispatcher was unavailable.",
+                    ex);
             }
         }
 

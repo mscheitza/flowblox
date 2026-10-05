@@ -16,11 +16,13 @@ namespace FlowBlox.AIAssistant.Builder
             {
                 Role = "system",
                 Content =
-                    "You maintain a compact, durable structured summary for the FlowBlox AI Assistant conversation. " +
-                    "Merge only the provided new messages into the current summary and return the full updated summary. " +
-                    "Use exactly these Markdown sections: Goals, Decisions, Completed Changes, Open Points, User Preferences, Provider And Configuration Constraints, Important Identifiers, Tool API Working Memory. " +
+                    "Maintain a compact, durable Project Summarization Schema (PSS) for the FlowBlox AI Assistant conversation. " +
+                    "Merge only the provided new messages into the current summary and return the complete updated PSS. " +
+                    "The PSS uses these Markdown sections: Goals, Decisions, Completed Changes, Open Points, User Preferences, Provider And Configuration Constraints, Important Identifiers, Tool API Working Memory. " +
+                    "If the latest provided message says an auxiliary project is still being edited, maintain a separate 'Active Auxiliary Project' PSS with Name, Purpose, Input Fields, and Output Fields. " +
+                    "If it says no auxiliary project is active, remove that PSS and retain only the project's usage instructions in the main PSS Tool API Working Memory. " +
                     "Use concise bullet points. Write '(none)' for empty sections. Do not include chat messages verbatim unless an exact identifier, property path, type name, resolver value, tool name, or error message is important. " +
-                    "In Tool API Working Memory, preserve reusable technical facts learned from tool responses, especially GetTypeKindsInfo, GetManagedObjectKindsInfo, GetComponentSnapshot, GetFlowBlockSnapshot, UpdateFlowBlock, UpdateManagedObject, ConnectFlowBlocks, and failed tool calls. " +
+                    "In Tool API Working Memory, preserve reusable technical facts learned from tool responses, especially auxiliary-project state, GetDistributedData, GetAuxiliaryProjects, ExecuteProject, GetTypeKindsInfo, GetManagedObjectKindsInfo, snapshot/update/connect tools, and failed tool calls. " +
                     "Keep exact FlowBlox type names, property/update paths, collection paths, supported enum values, placeholder names, option names, resolver syntax and concrete resolver values like {\"resolveFieldElementByFQName\":\"$FlowBlock::Field\"}, referenced flow block names, connection direction, selection-filter constraints, and design hints needed for later updates or connections. " +
                     "Prefer compact grouped bullets by FlowBlock/ManagedObject/type. " +
                     "Remove obsolete technical facts when newer tool responses clearly supersede them."

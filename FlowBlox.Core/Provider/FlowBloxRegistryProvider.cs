@@ -1,4 +1,3 @@
-using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 
@@ -9,7 +8,7 @@ namespace FlowBlox.Core.Provider
         private static readonly object _registryChainSync = new();
         private static readonly List<FlowBloxRegistry> _registryChain = new();
         private static readonly HashSet<FlowBloxRegistry> _nestedTransactionRegistries = new();
-        private static readonly AsyncLocal<FlowBloxRegistry> _scopedProjectRegistry = new();
+        private static readonly AsyncLocal<FlowBloxRegistry> _scopedRegistry = new();
 
         public static event EventHandler TransactionsChanged;
 
@@ -24,9 +23,9 @@ namespace FlowBlox.Core.Provider
 
         public static FlowBloxRegistry GetRegistry()
         {
-            var scopedProjectRegistry = _scopedProjectRegistry.Value;
-            if (scopedProjectRegistry != null)
-                return scopedProjectRegistry;
+            var scopedRegistry = _scopedRegistry.Value;
+            if (scopedRegistry != null)
+                return scopedRegistry;
 
             lock (_registryChainSync)
             {
@@ -36,26 +35,28 @@ namespace FlowBlox.Core.Provider
 
             var registry = ThreadBasedGridElementRegistryProvider.GetManagedObject();
             if (registry == null)
-                registry = ResolveProjectRegistry();
+            {
+                var project = FlowBloxProjectManager.Instance.ActiveProject;
+                registry = project?.FlowBloxRegistry;
+            }
 
             return registry;
         }
 
         [Obsolete("This is only for FlowBlox internal use. Use GetRegistry instead.", false)]
-        public static FlowBloxRegistry GetProjectRegistry() => ResolveProjectRegistry();
-
-        public static IDisposable BeginProjectRegistryScope()
+        public static FlowBloxRegistry GetProjectRegistry()
         {
-            var registry = ResolveProjectRegistry();
-            var previousRegistry = _scopedProjectRegistry.Value;
-            _scopedProjectRegistry.Value = registry;
-            return new ProjectRegistryScope(previousRegistry);
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            return project?.FlowBloxRegistry;
         }
 
-        private static FlowBloxRegistry ResolveProjectRegistry()
+        public static IDisposable BeginScopedRegistry(FlowBloxRegistry registry)
         {
-            FlowBloxProject project = FlowBloxProjectManager.Instance.ActiveProject;
-            return project?.FlowBloxRegistry;
+            ArgumentNullException.ThrowIfNull(registry);
+
+            var previousRegistry = _scopedRegistry.Value;
+            _scopedRegistry.Value = registry;
+            return new ScopedRegistryScope(previousRegistry);
         }
 
         public static FlowBloxRegistry OpenTransaction(
@@ -174,12 +175,12 @@ namespace FlowBlox.Core.Provider
         private static void OnTransactionsChanged() =>
             TransactionsChanged?.Invoke(null, EventArgs.Empty);
 
-        private sealed class ProjectRegistryScope : IDisposable
+        private sealed class ScopedRegistryScope : IDisposable
         {
             private readonly FlowBloxRegistry _previousRegistry;
             private bool _disposed;
 
-            public ProjectRegistryScope(FlowBloxRegistry previousRegistry)
+            public ScopedRegistryScope(FlowBloxRegistry previousRegistry)
             {
                 _previousRegistry = previousRegistry;
             }
@@ -190,7 +191,7 @@ namespace FlowBlox.Core.Provider
                     return;
 
                 _disposed = true;
-                _scopedProjectRegistry.Value = _previousRegistry;
+                _scopedRegistry.Value = _previousRegistry;
             }
         }
     }

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using FlowBlox.Core.Logging;
 
 namespace FlowBlox.UICore.Utilities
 {
@@ -126,9 +127,11 @@ namespace FlowBlox.UICore.Utilities
                 });
                 e.Handled = true;
             }
-            catch
+            catch (Exception ex)
             {
-                // Ignore failures and keep UI stable.
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    "Failed to open a link from a WPF text block.",
+                    ex);
             }
         }
     }

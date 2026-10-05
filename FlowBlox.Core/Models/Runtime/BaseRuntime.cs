@@ -1,5 +1,6 @@
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
@@ -639,9 +640,11 @@ namespace FlowBlox.Core.Models.Runtime
                 {
                     _cancellationTokenSource.Cancel();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignored
+                    FlowBloxLogManager.Instance.GetLogger().Error(
+                        "Failed to cancel the runtime cancellation token source during runtime shutdown.",
+                        ex);
                 }
 
                 TaskRunner.CancelPendingWorkItems();

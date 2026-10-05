@@ -1,11 +1,14 @@
 ﻿using FlowBlox.AIAssistant.Models;
 using Newtonsoft.Json.Linq;
+using FlowBlox.Core.Provider;
 
 namespace FlowBlox.AIAssistant.Tools
 {
     public class DefaultToolApi : IFlowBloxAIToolApi
     {
         private const string ExecuteInputFileCommandToolName = "ExecuteInputFileCommand";
+        private const string RunProjectDebugTestToolName = "RunProjectDebugTest";
+        private const string ExecuteProjectToolName = "ExecuteProject";
         private readonly Dictionary<string, IToolHandler> _handlers;
         private readonly List<ToolDefinition> _definitions;
         public Func<ToolRequest, bool>? ToolExecutionConfirmationCallback { get; set; }
@@ -57,6 +60,10 @@ namespace FlowBlox.AIAssistant.Tools
 
         private async Task<ToolResponse> ExecuteHandlerAndNotifyChanges(IToolHandler handler, ToolRequest request, CancellationToken ct)
         {
+            var project = ToolHandlerUtilities.TryGetProject();
+            using var registryScope = project == null
+                ? null
+                : FlowBloxRegistryProvider.BeginScopedRegistry(project.FlowBloxRegistry);
             var response = await handler
                 .HandleAsync(request.Arguments ?? new JObject(), ct)
                 .ConfigureAwait(false);
@@ -76,19 +83,49 @@ namespace FlowBlox.AIAssistant.Tools
             return string.Equals(
                 request.ToolName,
                 ExecuteInputFileCommandToolName,
-                StringComparison.OrdinalIgnoreCase);
+                StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(request.ToolName, ExecuteProjectToolName, StringComparison.OrdinalIgnoreCase) ||
+                (string.Equals(request.ToolName, RunProjectDebugTestToolName, StringComparison.OrdinalIgnoreCase) &&
+                 (!string.IsNullOrWhiteSpace(request.Arguments?.Value<string>("projectFile")) ||
+                  ToolHandlerUtilities.IsAuxiliaryProjectActive()));
         }
 
         private bool IsToolExecutionApproved(ToolRequest request)
         {
             try
             {
-                return ToolExecutionConfirmationCallback?.Invoke(request) == true;
+                return ToolExecutionConfirmationCallback?.Invoke(CreateConfirmationRequest(request)) == true;
             }
-            catch
+            catch (Exception ex)
             {
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    $"The confirmation callback for AI Assistant tool '{request.ToolName}' failed.",
+                    ex);
                 return false;
             }
+        }
+
+        private static ToolRequest CreateConfirmationRequest(ToolRequest request)
+        {
+            if (!string.Equals(request.ToolName, RunProjectDebugTestToolName, StringComparison.OrdinalIgnoreCase) ||
+                !string.IsNullOrWhiteSpace(request.Arguments?.Value<string>("projectFile")) ||
+                !AuxiliaryProjectSessionStore.TryGetActiveProjectInfo(
+                    ToolHandlerUtilities.CurrentSessionGuid,
+                    out _,
+                    out var projectFile))
+            {
+                return request;
+            }
+
+            var arguments = request.Arguments == null
+                ? new JObject()
+                : new JObject(request.Arguments);
+            arguments["confirmationProjectFile"] = projectFile;
+            return new ToolRequest
+            {
+                ToolName = request.ToolName,
+                Arguments = arguments
+            };
         }
 
         private List<IToolHandler> CreateHandlers()
@@ -98,7 +135,12 @@ namespace FlowBlox.AIAssistant.Tools
                 new GetProjectJsonHandler(),
                 new GetExplanationManifestHandler(),
                 new GetExplanationContentHandler(),
-                new GetPublishedScriptContentHandler(),
+                new GetDistributedDataHandler(),
+                new GetDistributedDataContentHandler(),
+                new GetProjectMetadataHandler(),
+                new GetAuxiliaryProjectsHandler(),
+                new CreateOrUpdateAuxiliaryProjectHandler(),
+                new AuxiliaryProjectEditingHandler(),
                 new GetRootCategoriesHandler(),
                 new GetCategoryChildrenHandler(),
                 new SearchFlowBlockHandler(),
@@ -128,10 +170,12 @@ namespace FlowBlox.AIAssistant.Tools
                 new ExecuteInputFileCommandHandler(),
                 new DeleteInputFileHandler(),
                 new RunProjectDebugTestHandler(),
+                new ExecuteProjectHandler(),
                 new RunTestDefinitionHandler(),
                 new RunGenerationStrategiesHandler(),
                 new GetLastDebugArtefactHandler(),
                 new InspectFieldValueHandler(),
+                new InspectOutputFieldValueHandler(),
                 new BatchExecuteToolRequestsHandler(ExecuteAsync)
             ];
         }

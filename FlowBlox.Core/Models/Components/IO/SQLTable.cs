@@ -58,7 +58,10 @@ namespace FlowBlox.Core.Models.Components.IO
 
         public override void RegisterPropertyChangedEventHandlers()
         {
-            foreach (FieldElement fieldElement in FlowBloxFieldHelper.GetFieldElementsFromString(SQLStatement))
+            var referencedFields = FlowBloxFieldHelper.GetFieldElementsFromString(SQLConnectionstring)
+                .Concat(FlowBloxFieldHelper.GetFieldElementsFromString(SQLStatement))
+                .Distinct();
+            foreach (FieldElement fieldElement in referencedFields)
             {
                 fieldElement.OnValueChanged += new FieldElement.FieldElementValueChangedEventHandler(FieldElement_ValueChange);
             }
@@ -90,12 +93,12 @@ namespace FlowBlox.Core.Models.Components.IO
 
         public DataTable Read()
         {
-            var dbConnection = DbConnectionProvider.Instance.GetOrCreateDbConnection(DbType, SQLConnectionstring);
+            var resolvedConnectionString = FlowBloxFieldHelper.ReplaceFieldsInString(SQLConnectionstring);
+            var dbConnection = DbConnectionProvider.Instance.GetOrCreateDbConnection(DbType, resolvedConnectionString);
             if (dbConnection != null)
             {
                 Dictionary<string, object> parameters;
-                string sqlStatement = SQLStatement;
-                FlowBloxFieldHelper.ReplaceFieldsInSQL(sqlStatement, this.DbType, out parameters);
+                var sqlStatement = FlowBloxFieldHelper.ReplaceFieldsInSQL(SQLStatement, DbType, out parameters);
                 return DbConnectionUtil.GetOutputAsDataTable(sqlStatement, parameters, dbConnection);
             }
             throw new InvalidOperationException($"Unable to connect to \"{SQLConnectionstring}\".");

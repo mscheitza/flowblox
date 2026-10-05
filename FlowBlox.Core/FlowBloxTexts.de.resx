@@ -198,6 +198,9 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="BaseFlowBlock_InputIgnoreDuplicates" xml:space="preserve">
 		<value>Duplikate in Eingabedatensätzen ignorieren</value>
 	</data>
+	<data name="BaseFlowBlock_InputIgnoreDuplicates_Tooltip" xml:space="preserve">
+		<value>Entfernt doppelte Eingabe- und Ausgabedatensätze durch Vergleich aller Feldwerte. Nur das erste Vorkommen wird verarbeitet oder ausgegeben.</value>
+	</data>
 	<data name="BaseFlowBlock_Name" xml:space="preserve">
 		<value>Name</value>
 	</data>
@@ -403,16 +406,34 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>SQL-Tabellen</value>
 	</data>
 	<data name="DecisionFlowBlock_Description" xml:space="preserve">
-		<value>Prüft konfigurierte Feldbedingungen in Reihenfolge und gibt den Feldwert der ersten zutreffenden Regel aus. Die Reihenfolge der Regeln definiert die Priorität.</value>
+		<value>Bildet eine If-Then-Else-Entscheidung ab: Prüft Feldbedingungen in Reihenfolge und gibt den konfigurierten Wert der ersten zutreffenden Regel oder einen Rückfallwert aus.</value>
+	</data>
+	<data name="DecisionFlowBlock_Decisions" xml:space="preserve">
+		<value>Regeln</value>
+	</data>
+	<data name="DecisionFlowBlock_Decisions_Tooltip" xml:space="preserve">
+		<value>Bedingungen, die von oben nach unten geprüft werden. Die erste zutreffende Regel bestimmt die Ausgabe.</value>
 	</data>
 	<data name="DecisionFlowBlock_DisplayName" xml:space="preserve">
 		<value>Entscheidung</value>
 	</data>
+	<data name="DecisionFlowBlock_FallbackValue" xml:space="preserve">
+		<value>Rückfallwert</value>
+	</data>
+	<data name="DecisionFlowBlock_FallbackValue_Tooltip" xml:space="preserve">
+		<value>Ausgabewert, wenn keine Regel zutrifft. Felder werden unterstützt. Leer lassen, um ein leeres Ergebnis zu erzeugen.</value>
+	</data>
 	<data name="DecisionFlowBlock_Groups_Decisions" xml:space="preserve">
 		<value>Entscheidungen</value>
 	</data>
-	<data name="DecisionFlowBlock_Validation_DuplicateFields" xml:space="preserve">
-		<value>Die folgenden Felder wurden mehrfach verwendet: {0}</value>
+	<data name="DecisionFlowBlock_SpecialExplanation_ConditionalOutputs" xml:space="preserve">
+		<value>Jede Regel kann einen festen oder feldbasierten Ausgabewert zurückgeben. Die Regeln werden der Reihe nach geprüft. Ein leerer Regelausgabewert behält das bisherige Verhalten bei und gibt das verglichene Feld aus; trifft nichts zu, wird der Rückfallwert oder ohne konfigurierten Rückfall ein leeres Ergebnis ausgegeben.</value>
+	</data>
+	<data name="FieldComparisonCondition_OutputValue" xml:space="preserve">
+		<value>Ausgabewert</value>
+	</data>
+	<data name="FieldComparisonCondition_OutputValue_Tooltip" xml:space="preserve">
+		<value>Fester oder feldbasierter Wert, der bei zutreffender Bedingung ausgegeben wird. Leer lassen, um den Wert des verglichenen Feldes auszugeben.</value>
 	</data>
 	<data name="Direction_Decode" xml:space="preserve">
 		<value>Dekodieren</value>
@@ -4342,6 +4363,49 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="OnnxQAFlowBlock_SpecialExplanation_ModelFolder" xml:space="preserve"><value>Bei der Initialisierung muss ModelFolder den ONNX-Graphen, die Konfiguration und die Tokenizer-Dateien desselben exportierten Checkpoints enthalten; sie bilden eine gemeinsame Deployment-Einheit.</value></data>
   <data name="OnnxQAFlowBlock_SpecialExplanation_ModelProvisioning" xml:space="preserve"><value>Best Practice: Wiederverwendbare Modelle unter $Options::AI.Onnx.QA.ModelRootDirectory ablegen. Entweder einen lokal verwalteten Modellordner auswählen oder unter Extras &gt; Eingabedateien verwalten ein Python-Skript hinzufügen, das das Modell bei Bedarf herunterlädt und sicherstellt, dass es vollständig vorliegt. Den Befehl python "$InputFile::Path" --model-root-directory "$Options::AI.Onnx.QA.ModelRootDirectory" setzen und Vor Laufzeitbeginn ausführen aktivieren. Das bereitgestellte Skript legt den modellspezifischen Unterordner selbst an, sodass Projekte und Runtimes dieselbe Kopie nutzen.</value></data>
   <data name="OnnxQAFlowBlock_SpecialExplanation_Extractive" xml:space="preserve"><value>Dies ist extraktive Fragebeantwortung: Das Ergebnis wird aus dem Kontext kopiert. Für erklärende oder neu formulierte Antworten sollte der ONNX-GenAI-Flow-Block verwendet werden.</value></data>
+  <data name="TableConverterFlowBlock_DisplayName" xml:space="preserve"><value>Tabelle konvertieren</value></data>
+  <data name="TableConverterFlowBlock_Description" xml:space="preserve"><value>Liest eine Quelltabelle einmalig und schreibt die vollständige Datentabelle ohne Spaltenzuordnungen in eine andere Tabelle.</value></data>
+  <data name="TableConverterFlowBlock_SourceTable" xml:space="preserve"><value>Quelltabelle</value></data>
+  <data name="TableConverterFlowBlock_SourceTable_Tooltip" xml:space="preserve"><value>Lesbare Tabelle, deren aktuelle Daten unverändert übertragen werden.</value></data>
+  <data name="TableConverterFlowBlock_TargetTable" xml:space="preserve"><value>Zieltabelle</value></data>
+  <data name="TableConverterFlowBlock_TargetTable_Tooltip" xml:space="preserve"><value>Beschreibbare Tabelle, die die vollständigen Quelldaten empfängt.</value></data>
+  <data name="WebSearchProviderBase_DisplayName" xml:space="preserve"><value>Websuchanbieter</value></data>
+  <data name="WebSearchProviderBase_DisplayName_Plural" xml:space="preserve"><value>Websuchanbieter</value></data>
+  <data name="WebSearchProviderBase_ApiKey" xml:space="preserve"><value>API-Schlüssel</value></data>
+  <data name="WebSearchProviderBase_ApiKey_Tooltip" xml:space="preserve"><value>Geheimer API-Schlüssel des Suchanbieters. Feldplatzhalter werden unterstützt.</value></data>
+  <data name="WebSearchProviderBase_BaseUrl" xml:space="preserve"><value>Basis-URL</value></data>
+  <data name="WebSearchProviderBase_BaseUrl_Tooltip" xml:space="preserve"><value>URL des Suchendpunkts. Nur für einen kompatiblen Proxy oder Endpunkt ändern.</value></data>
+  <data name="WebSearchProviderBase_TimeoutSeconds" xml:space="preserve"><value>Zeitlimit (Sekunden)</value></data>
+  <data name="WebSearchProviderBase_TimeoutSeconds_Tooltip" xml:space="preserve"><value>Maximale Dauer einer Suchanfrage.</value></data>
+  <data name="BraveWebSearchProvider_DisplayName" xml:space="preserve"><value>Brave-Websuchanbieter</value></data>
+  <data name="BraveWebSearchProvider_DisplayName_Plural" xml:space="preserve"><value>Brave-Websuchanbieter</value></data>
+  <data name="WebSearchFlowBlock_DisplayName" xml:space="preserve"><value>Websuche</value></data>
+  <data name="WebSearchFlowBlock_Description" xml:space="preserve"><value>Durchsucht das Web über einen konfigurierten Anbieter und erzeugt einen Ergebnisdatensatz pro Treffer.</value></data>
+  <data name="WebSearchFlowBlock_Provider" xml:space="preserve"><value>Anbieter</value></data>
+  <data name="WebSearchFlowBlock_Provider_Tooltip" xml:space="preserve"><value>Verwalteter Websuchanbieter mit Endpunkt, Zugangsdaten und Zeitlimit.</value></data>
+  <data name="WebSearchFlowBlock_Query" xml:space="preserve"><value>Suchbegriffe</value></data>
+  <data name="WebSearchFlowBlock_Query_Tooltip" xml:space="preserve"><value>Suchbegriffe. Feld-, Projekt- und Optionsplatzhalter werden unterstützt.</value></data>
+  <data name="WebSearchFlowBlock_MaxResults" xml:space="preserve"><value>Maximale Treffer</value></data>
+  <data name="WebSearchFlowBlock_MaxResults_Tooltip" xml:space="preserve"><value>Maximale Anzahl zurückgegebener Webtreffer (1 bis 20).</value></data>
+  <data name="WebSearchFlowBlock_Country" xml:space="preserve"><value>Land</value></data>
+  <data name="WebSearchFlowBlock_Country_Tooltip" xml:space="preserve"><value>Optionaler zweistelliger Ländercode zur Lokalisierung der Treffer, zum Beispiel DE oder US.</value></data>
+  <data name="WebSearchFlowBlock_SearchLanguage" xml:space="preserve"><value>Suchsprache</value></data>
+  <data name="WebSearchFlowBlock_SearchLanguage_Tooltip" xml:space="preserve"><value>Optionaler Sprachcode für Treffer, zum Beispiel de oder en.</value></data>
+  <data name="WebSearchFlowBlock_SafeSearch" xml:space="preserve"><value>Sichere Suche</value></data>
+  <data name="WebSearchFlowBlock_SafeSearch_Tooltip" xml:space="preserve"><value>Filterstufe für explizite Inhalte.</value></data>
+  <data name="WebSearchFlowBlock_ResultFields" xml:space="preserve"><value>Ergebnisfelder</value></data>
+  <data name="WebSearchFlowBlock_ResultFields_Tooltip" xml:space="preserve"><value>Ordnet die festen Eigenschaften eines Websuchtreffers FlowBlox-Feldern zu.</value></data>
+  <data name="WebSearchSafeSearch_Off" xml:space="preserve"><value>Aus</value></data>
+  <data name="WebSearchSafeSearch_Moderate" xml:space="preserve"><value>Moderat</value></data>
+  <data name="WebSearchSafeSearch_Strict" xml:space="preserve"><value>Strikt</value></data>
+  <data name="WebSearchDestinations_Title" xml:space="preserve"><value>Titel</value></data>
+  <data name="WebSearchDestinations_Url" xml:space="preserve"><value>URL</value></data>
+  <data name="WebSearchDestinations_Description" xml:space="preserve"><value>Beschreibung</value></data>
+  <data name="WebSearchDestinations_Age" xml:space="preserve"><value>Alter</value></data>
+  <data name="WebSearchDestinations_PageAge" xml:space="preserve"><value>Seitendatum</value></data>
+  <data name="WebSearchDestinations_Language" xml:space="preserve"><value>Sprache</value></data>
+  <data name="WebSearchDestinations_Rank" xml:space="preserve"><value>Rang</value></data>
+  <data name="WebSearchDestinations_Query" xml:space="preserve"><value>Suchbegriffe</value></data>
 </root>
 
 

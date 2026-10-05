@@ -12,6 +12,8 @@ namespace FlowBloxTest.FlowBlocks.IO
         public int ReadCount { get; private set; }
         public int WriteCount { get; private set; }
         public int ListenerCount => _listeners.Count;
+        public DataTable DataToRead { get; set; } = new();
+        public DataTable LastWrittenData { get; private set; }
 
         public bool CanRead(BaseRuntime runtime = null) => true;
 
@@ -30,12 +32,13 @@ namespace FlowBloxTest.FlowBlocks.IO
         public DataTable Read()
         {
             ReadCount++;
-            return new DataTable();
+            return DataToRead;
         }
 
         public void Write(DataTable dataTable)
         {
             WriteCount++;
+            LastWrittenData = dataTable;
         }
 
         public void RaiseDataSourceChanged()

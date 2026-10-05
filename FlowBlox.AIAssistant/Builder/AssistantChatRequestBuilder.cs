@@ -259,8 +259,11 @@ namespace FlowBlox.AIAssistant.Builder
                     else
                         items.Add(obj);
                 }
-                catch (JsonException)
+                catch (JsonException ex)
                 {
+                    FlowBloxLogManager.Instance.GetLogger().Error(
+                        "Failed to parse a JSON line from a persisted Tool API response while rebuilding AI Assistant chat history.",
+                        ex);
                 }
             }
 

@@ -120,7 +120,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
             try
             {
                 _endpoints = OpenApiDefinitionLoader.Load(_openApiSource, forceRefresh);
-                foreach (var endpoint in _endpoints) EndpointSuggestions.Add(endpoint.DisplayName);
+                foreach (var endpoint in _endpoints)
+                    EndpointSuggestions.Add(endpoint.DisplayName);
             }
             catch (Exception ex)
             {
@@ -169,10 +170,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
             {
                 var copy = new OpenApiParameterValue
                 {
-                    Name = parameter.Name, Location = parameter.Location, Required = parameter.Required,
-                    Description = parameter.Description, Value = parameter.Value
+                    Name = parameter.Name,
+                    Location = parameter.Location,
+                    Required = parameter.Required,
+                    Description = parameter.Description,
+                    Value = parameter.Value
                 };
-                if (string.Equals(copy.Location, "Header", StringComparison.OrdinalIgnoreCase)) HeaderParameters.Add(copy);
+                if (string.Equals(copy.Location, "Header", StringComparison.OrdinalIgnoreCase))
+                    HeaderParameters.Add(copy);
                 else RequestParameters.Add(copy);
             }
             NotifyEndpointPropertiesChanged();
@@ -227,6 +232,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
             SetParentElement(data);
             EnsureDefinitionLoaded();
             var descriptor = FindEndpoint() ?? throw new ValidationException("The selected OpenAPI endpoint is unavailable.");
+
             var result = InvokeEndpoint(descriptor).GetAwaiter().GetResult();
             var values = new ResultFieldByEnumValueResultBuilder<OpenApiRestDestinations>()
                 .For(OpenApiRestDestinations.Payload, result.Payload)
@@ -250,15 +256,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
                 var value = FlowBloxFieldHelper.ReplaceFieldsInString(parameter.Value ?? string.Empty);
                 if (parameter.Required && string.IsNullOrWhiteSpace(value))
                     throw new ValidationException($"Required OpenAPI parameter '{parameter.Name}' is empty.");
-                if (string.IsNullOrEmpty(value)) continue;
+
+                if (string.IsNullOrEmpty(value))
+                    continue;
+
                 if (string.Equals(parameter.Location, "Path", StringComparison.OrdinalIgnoreCase))
                     path = path.Replace("{" + parameter.Name + "}", Uri.EscapeDataString(value), StringComparison.OrdinalIgnoreCase);
                 else if (string.Equals(parameter.Location, "Cookie", StringComparison.OrdinalIgnoreCase))
                     cookies.Add($"{parameter.Name}={value}");
                 else query.Add($"{Uri.EscapeDataString(parameter.Name)}={Uri.EscapeDataString(value)}");
             }
+
             var url = (baseUrl ?? string.Empty) + "/" + path.TrimStart('/');
-            if (query.Count > 0) url += (url.Contains('?') ? "&" : "?") + string.Join("&", query);
+            if (query.Count > 0)
+                url += (url.Contains('?') ? "&" : "?") + string.Join("&", query);
+
             try
             {
                 using var client = new HttpClient();

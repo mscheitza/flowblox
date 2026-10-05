@@ -37,5 +37,19 @@ namespace FlowBlox.Core.Provider.Project
         }
 
         public string ActiveProjectPath { get; set; }
+
+        public void InitializeScopedProject(FlowBloxProject project)
+        {
+            ArgumentNullException.ThrowIfNull(project);
+            using var scope = FlowBloxRegistryProvider.BeginScopedRegistry(project.FlowBloxRegistry);
+            project.OnProjectLoaded();
+        }
+
+        public void CloseScopedProject(FlowBloxProject project)
+        {
+            ArgumentNullException.ThrowIfNull(project);
+            using var scope = FlowBloxRegistryProvider.BeginScopedRegistry(project.FlowBloxRegistry);
+            project.OnProjectClosed();
+        }
     }
 }

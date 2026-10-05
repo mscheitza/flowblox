@@ -3,47 +3,36 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.Runtime;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Util.Resources;
 using System.Collections.ObjectModel;
 using SkiaSharp;
+using FlowBlox.Core.Util.Fields;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Logic
 {
     [FlowBloxUIGroup("DecisionFlowBlock_Groups_Decisions", 0)]
     [Display(Name = "DecisionFlowBlock_DisplayName", Description = "DecisionFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("DecisionFlowBlock_SpecialExplanation_ConditionalOutputs", Icon = SpecialExplanationIcon.Hint)]
     public class DecisionFlowBlock : BaseSingleResultFlowBlock
     {
-        [Display(Name = "DecisionFlowBlock_Decisions", ResourceType = typeof(FlowBloxTexts), GroupName = "DecisionFlowBlock_Groups_Decisions", Order = 0)]
-        [CustomValidation(typeof(DecisionFlowBlock), nameof(ValidateDecisions))]
+        [Display(Name = "DecisionFlowBlock_Decisions", Description = "DecisionFlowBlock_Decisions_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "DecisionFlowBlock_Groups_Decisions", Order = 0)]
         [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
         [FlowBloxDataGrid(
             GridColumnMemberNames = new[]
             {
                 nameof(FieldComparisonCondition.FieldElement),
                 nameof(FieldComparisonCondition.Operator),
-                nameof(FieldComparisonCondition.Value)
+                nameof(FieldComparisonCondition.Value),
+                nameof(FieldComparisonCondition.OutputValue)
             }, IsMovable = true)]
         public ObservableCollection<FieldComparisonCondition> Decisions { get; set; }
 
-        public static ValidationResult ValidateDecisions(List<FieldComparisonCondition> decisions, ValidationContext context)
-        {
-            var duplicates = decisions
-                .GroupBy(x => x.FieldElement)
-                .Where(g => g.Count() > 1)
-                .Select(g => g.Key)
-                .ToList();
-
-            if (duplicates.Any())
-            {
-                var errorMessage = string.Format(FlowBloxResourceUtil.GetLocalizedString("DecisionFlowBlock_Validation_DuplicateFields"), string.Join(", ", duplicates.Select(x => x.Name).ToArray()));
-                return new ValidationResult(errorMessage, [context.MemberName]);
-            }
-
-            return ValidationResult.Success;
-        }
+        [Display(Name = "DecisionFlowBlock_FallbackValue", Description = "DecisionFlowBlock_FallbackValue_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "DecisionFlowBlock_Groups_Decisions", Order = 2)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
+        public string FallbackValue { get; set; }
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.source_branch, 16, SKColors.Goldenrod);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.source_branch, 32, SKColors.Goldenrod);
@@ -71,16 +60,26 @@ namespace FlowBlox.Core.Models.FlowBlocks.Logic
                 Wait(runtime);
                 SetParentElement(data);
 
-                string result = null;
-                foreach(var decision in Decisions)
+                foreach (var decision in Decisions)
                 {
                     if (decision.Compare())
                     {
-                        result = decision.FieldElement.StringValue;
-                        break;
+                        var result = string.IsNullOrEmpty(decision.OutputValue)
+                            ? decision.FieldElement?.StringValue
+                            : FlowBloxFieldHelper.ReplaceFieldsInString(decision.OutputValue);
+
+                        GenerateResult(runtime, result);
+                        return;
                     }
                 }
-                GenerateResult(runtime, result);
+
+                if (string.IsNullOrEmpty(FallbackValue))
+                {
+                    GenerateResult(runtime);
+                    return;
+                }
+
+                GenerateResult(runtime, FlowBloxFieldHelper.ReplaceFieldsInString(FallbackValue));
             });
         }
     }

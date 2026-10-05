@@ -9,7 +9,7 @@ namespace FlowBloxTest.Provider
     public class FlowBloxRegistryProviderTests
     {
         [TestMethod]
-        public void BeginProjectRegistryScope_ReturnsProjectRegistryWhenTransactionIsOpen()
+        public void BeginScopedRegistry_ReturnsScopedRegistryWhenTransactionIsOpen()
         {
             var project = new FlowBloxProject();
             FlowBloxProjectManager.Instance.ActiveProject = project;
@@ -18,7 +18,7 @@ namespace FlowBloxTest.Provider
 
             try
             {
-                using var scope = FlowBloxRegistryProvider.BeginProjectRegistryScope();
+                using var scope = FlowBloxRegistryProvider.BeginScopedRegistry(project.FlowBloxRegistry);
 
                 Assert.AreSame(project.FlowBloxRegistry, FlowBloxRegistryProvider.GetRegistry());
             }
@@ -29,7 +29,7 @@ namespace FlowBloxTest.Provider
         }
 
         [TestMethod]
-        public async Task BeginProjectRegistryScope_FlowsAcrossAwait()
+        public async Task BeginScopedRegistry_FlowsAcrossAwait()
         {
             var project = new FlowBloxProject();
             FlowBloxProjectManager.Instance.ActiveProject = project;
@@ -38,7 +38,7 @@ namespace FlowBloxTest.Provider
 
             try
             {
-                using var scope = FlowBloxRegistryProvider.BeginProjectRegistryScope();
+                using var scope = FlowBloxRegistryProvider.BeginScopedRegistry(project.FlowBloxRegistry);
 
                 await Task.Delay(1);
 

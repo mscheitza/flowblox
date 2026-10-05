@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text;
+using FlowBlox.Core.Logging;
 
 namespace FlowBlox.Core.Util.ShellExecution
 {
@@ -166,9 +167,11 @@ namespace FlowBlox.Core.Util.ShellExecution
                 if (!process.HasExited)
                     process.Kill(entireProcessTree: true);
             }
-            catch
+            catch (Exception ex)
             {
-                // Intentionally ignored: best effort during cancellation/timeout.
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    "Failed to terminate a shell process during cancellation or timeout handling.",
+                    ex);
             }
         }
     }

@@ -51,12 +51,15 @@ namespace FlowBlox.AIAssistant.Builder
         public static string BuildInitialUserPrompt(
             string userPrompt,
             string? projectJson,
-            ProjectAttachmentInformation projectAttachmentInformation)
+            ProjectAttachmentInformation projectAttachmentInformation,
+            string? activeAuxiliaryProjectName = null)
         {
             var sb = new StringBuilder();
             sb.AppendLine("User prompt:");
             sb.AppendLine(userPrompt);
             sb.AppendLine();
+
+            AppendAuxiliaryProjectContext(sb, activeAuxiliaryProjectName);
 
             var attachmentReasonText = BuildProjectAttachmentInformationText(projectAttachmentInformation);
             if (!string.IsNullOrWhiteSpace(attachmentReasonText))
@@ -76,7 +79,9 @@ namespace FlowBlox.AIAssistant.Builder
             return sb.ToString();
         }
 
-        public static string BuildToolApiResponsePrompt(IReadOnlyList<string> toolTranscript)
+        public static string BuildToolApiResponsePrompt(
+            IReadOnlyList<string> toolTranscript,
+            string? activeAuxiliaryProjectName = null)
         {
             var sb = new StringBuilder();
             sb.AppendLine("Tool execution updates since last assistant request:");
@@ -91,7 +96,23 @@ namespace FlowBlox.AIAssistant.Builder
                     sb.AppendLine(item);
             }
 
-            return sb.ToString();
+            sb.AppendLine();
+            AppendAuxiliaryProjectContext(sb, activeAuxiliaryProjectName);
+
+            return sb.ToString().TrimEnd();
+        }
+
+        private static void AppendAuxiliaryProjectContext(StringBuilder sb, string? projectName)
+        {
+            if (string.IsNullOrWhiteSpace(projectName))
+            {
+                sb.AppendLine("Auxiliary project context: none; project tools target the main project.");
+                sb.AppendLine();
+                return;
+            }
+
+            sb.AppendLine($"Auxiliary project context: editing '{projectName}'; all project tools target this auxiliary project.");
+            sb.AppendLine();
         }
 
         private static string BuildToolDefinitionsText(IReadOnlyList<ToolDefinition> toolDefinitions)
@@ -155,7 +176,7 @@ namespace FlowBlox.AIAssistant.Builder
             AddPromptSection(sections, "Topic: FlowBlocks Managing an Object", AssistantPromptCatalog.FlowBlocksManagingObjectKey);
             AddPromptSection(sections, "Topic: Update / Delete Handling", AssistantPromptCatalog.EditAndDeleteKey);
             AddPromptSection(sections, "Topic: Naming Conventions", AssistantPromptCatalog.NamingConventionsKey);
-            AddPromptSection(sections, "Topic: Execution Requirements / Required Fields", AssistantPromptCatalog.ExecutionRequirementsKey);
+            AddPromptSection(sections, "Topic: Conditions and Decisions", AssistantPromptCatalog.ConditionsAndDecisionsKey);
             AddPromptSection(sections, "Topic: Flow Organization Patterns", AssistantPromptCatalog.FlowOrganizationPatternsKey);
             AddPromptSection(sections, "Topic: Debugging", AssistantPromptCatalog.DebuggingKey);
             AddPromptSection(sections, "Topic: Version Notes", AssistantPromptCatalog.VersionNotesKey);
@@ -203,8 +224,11 @@ namespace FlowBlox.AIAssistant.Builder
 
                 return entryAssembly.GetName().Version?.ToString() ?? "unknown";
             }
-            catch
+            catch (Exception ex)
             {
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    "Failed to resolve the FlowBlox application version for the AI Assistant prompt.",
+                    ex);
                 return "unknown";
             }
         }

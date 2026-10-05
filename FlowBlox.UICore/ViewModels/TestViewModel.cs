@@ -6,6 +6,7 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Logging;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
@@ -466,9 +467,11 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     testExecutor.Shutdown();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignore cleanup errors to keep status reporting robust
+                    FlowBloxLogManager.Instance.GetLogger().Error(
+                        "Failed to shut down the test executor after running a test from the test view.",
+                        ex);
                 }
             }
 
@@ -565,9 +568,11 @@ namespace FlowBlox.UICore.ViewModels
                 if (File.Exists(path))
                     File.Delete(path);
             }
-            catch
+            catch (Exception ex)
             {
-                // ignore cleanup errors
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    $"Failed to delete temporary test file '{path}'.",
+                    ex);
             }
         }
 
