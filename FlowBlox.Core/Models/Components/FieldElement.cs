@@ -6,7 +6,6 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components.Modifier;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider;
@@ -14,7 +13,6 @@ using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using SkiaSharp;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
@@ -199,15 +197,14 @@ namespace FlowBlox.Core.Models.Components
             }
             set
             {
-                bool changed = _fieldName != value;
-                bool isNew = string.IsNullOrEmpty(_fieldName);
+                string oldFieldName = _fieldName;
+                bool changed = oldFieldName != value;
+                bool isNew = string.IsNullOrEmpty(oldFieldName);
 
                 this._fieldName = value;
 
                 if (!isNew && changed)
                 {
-                    string oldFieldName = _fieldName;
-
                     string fQOld = GetFullyQualifiedName(Source, UserField, oldFieldName);
                     string fQNew = GetFullyQualifiedName(Source, UserField, value);
 

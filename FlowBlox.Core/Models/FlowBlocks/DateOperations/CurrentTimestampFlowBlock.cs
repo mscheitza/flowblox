@@ -40,9 +40,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var timestamp = UseUtc ? DateTime.UtcNow : DateTime.Now;
                 var resultString = FieldResultFormatter.FormatResult(ResultField, timestamp);

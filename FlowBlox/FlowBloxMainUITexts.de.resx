@@ -792,11 +792,7 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   </data>
   <data name="ProjectPanel_Legend_RecursiveCall_Tooltip" xml:space="preserve">
     <value>Rekursiver Aufruf:
-Datensätze werden per Feldübertragungen vom Quell-Flow-Block
-über den Rekursion-Flow-Block an den Ziel-Flow-Block übertragen.
-Anschließend werden alle übertragenen Datensätze
-am Ziel-Flow-Block über den Flow abgearbeitet.
-Das wiederholt sich, solange der Quell-Flow-Block den rekursiven Aufruf liefert.</value>
+Der RecursiveCall-Flow-Block ruft den verbundenen, früheren Ziel-Flow-Block erneut auf. Das Ziel muss auf dem eingehenden Ausführungspfad des RecursiveCall-Flow-Blocks liegen.</value>
   </data>
   <data name="AppWindow_itmRecentProjects_Text" xml:space="preserve">
     <value>Zuletzt geöffnete Projekte</value>
@@ -834,4 +830,5 @@ Das wiederholt sich, solange der Quell-Flow-Block den rekursiven Aufruf liefert.
   <data name="AppWindow_itmNotifications_Text" xml:space="preserve"><value>Benachrichtigungen...</value></data>
   <data name="AppWindow_Notifications_LoadError_Title" xml:space="preserve"><value>Benachrichtigungen konnten nicht geladen werden</value></data>
   <data name="AppWindow_Notifications_SaveError_Title" xml:space="preserve"><value>Benachrichtigungen konnten nicht gespeichert werden</value></data>
+  <data name="AppWindow_itmOpenExampleProject_Text" xml:space="preserve"><value>Beispielprojekt öffnen...</value></data>
 </root>

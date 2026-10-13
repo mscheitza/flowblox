@@ -1,43 +1,37 @@
-Use this on-demand when you need repeated flow execution with dynamic handover (for example next-page loops).
+Use this guidance for controlled loops whose target lies earlier on the incoming execution path.
 
-Core block:
-- `RecursiveCallFlowBlock` (`Recursive call`)
+Choose the block by intent:
+- `RecursiveCallFlowBlock` executes `TargetFlowBlock` itself again. It does not transfer fields. Use it when an operation must genuinely run again with its current inputs, for example polling a table or retrying a request.
+- `InjectionFlowBlock` transfers values through `FieldTransferConfigs` into the output fields of `TargetFlowBlock`, then executes the target's successors. The target itself is not executed again. Use it to hand new state into an already completed result step, for example a next-page URL.
 
-What it does:
-- Calls a configured target flow block and transfers field values via explicit mappings.
-- Transfers are defined in `FieldTransferConfigs` (`Field transfers`) with:
-  - `TransferFrom`
-  - `TransferTo`
-- During execution, each mapped source value is copied to the mapped target field, then the target flow block's next flow blocks are executed.
-- Mental model: source output is handed over to target output fields; then successors of the target run as if the target produced that dataset.
+Mental model:
+- Recursive call: "run that earlier operation again".
+- Injection: "treat these mapped values as the earlier result and continue after it".
 
 Required setup:
-1. Set `TargetFlowBlock`.
-2. Configure `FieldTransferConfigs` so all target result fields are mapped.
-   - Validation requires full target-field coverage.
-3. Ensure target is reachable on the upstream path (validated by the block).
-   - "Reachable on path" means same connected execution graph/branch, not a direct successor link.
-   - Single-input targets are still valid recursion targets when they are already on that path.
+1. Connect exactly one incoming execution path to the recursive/injection block.
+2. Set `TargetFlowBlock` to a block on that upstream path. The block itself and unrelated branches are not valid targets.
+3. For Injection, configure `FieldTransferConfigs` with `TransferFrom` and `TransferTo`. Every output field of a result target must be covered.
+4. Ensure only the repeat path reaches the recursive/injection block; the success or termination path must bypass it.
 
-Paging-style recursion pattern (compact):
-- Typical chain:
-  - paging entry block (page N state, for example search/submit or page-load event)
-  - data-iteration block (for example card/row selector)
-  - data field selectors/writers
-  - next-page block (resolve/click next page)
-  - `RecursiveCallFlowBlock`
-- Important scope rule:
-  - next-page selector/click must be connected to the paging entry path (per page), not to the data-iteration block (per item).
-  - otherwise next-page logic runs once per extracted item instead of once per page.
-- Recursion target should be the paging entry block (same semantic type, same state model).
-- Map `TransferFrom` fields from next-page output to paging-entry target fields (`TransferTo`), usually DOM/URL state fields.
-- Result: downstream flow continues with next-page state as if it came from the paging entry block.
-- Recursion naturally stops when no usable next-page value is produced for the mapped chain.
+Retry/polling example:
+- Flow: `TableReader -> result check -> no-result branch -> DelayFlowBlock -> RecursiveCallFlowBlock`.
+- Set the `RecursiveCallFlowBlock` target to `TableReader`.
+- Configure the no-result branch with conditions so Delay and Recursive call run only while no row/result is available.
+- `DelayFlowBlock` prevents a tight loop; the recursive call then executes `TableReader` again.
+- When rows are returned, route execution through the success branch instead, so the recursive call is no longer reached.
+- For bounded retries, execute an `IndexFlowBlock` in the retry branch and require its result to satisfy `Index < RetryLimit` before continuing to Delay and Recursive call. Set the Index block's `AssociatedContextualObject` to the flow block immediately before the recursive target (for example the predecessor of `TableReader`), so the counter resets for each new outer input context while recursive attempts within that context keep incrementing. Once the limit is reached, the condition is false and no further recursive iteration is created.
 
-Important notes:
-- `RecursiveCallFlowBlock` itself has one incoming execution path (`ReferencedFlowBlocks` expected as single source for transfer candidates).
-- `connect_flow_blocks`/`disconnect_flow_blocks` with source = `RecursiveCallFlowBlock` operate on `TargetFlowBlock` association (invoke mode), not normal `ReferencedFlowBlocks` wiring.
-- Prefer recursion for controlled loop handover; use normal linear flow when one-pass processing is sufficient.
-- Keep mappings explicit and stable; avoid ambiguous field semantics between source and target.
-- Prefer recursion targets of the same type/category where possible (for example web paging event -> web paging event).
-- Do not target data-record selectors/iterators as recursion entry, because this mixes data-record output with paging state handover.
+Paging/injection example:
+- Typical chain: `page entry -> item extraction -> next-page discovery -> InjectionFlowBlock`.
+- Set the page-entry result block as the Injection target and map the discovered next-page URL/state to its corresponding output field.
+- Injection resumes at the page-entry block's successors using the new state, without repeating the page-entry block itself.
+- Keep next-page discovery on the per-page path, not below a per-item iterator; otherwise it runs once per extracted item.
+- The loop stops when no usable next-page value reaches the Injection path.
+
+Important behavior:
+- Connections originating from either block set `TargetFlowBlock`; they do not create a normal `ReferencedFlowBlocks` edge.
+- The target must already be reachable through `ReferencedFlowBlocks`; this prevents jumps into unrelated branches.
+- Prefer stable, semantically equivalent source/target fields for Injection mappings.
+- Every recursive path needs a reliable termination condition. For bounded retries, guard Delay and Recursive call with `Index < RetryLimit` using an appropriately contextualized `IndexFlowBlock`; when the condition becomes false, no further recursive iteration is created.
+- Recursion inside an iteration context waits for all results, including recursive results, before an associated collector continues.

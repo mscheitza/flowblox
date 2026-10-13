@@ -49,9 +49,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var separators = Separators
                     .Select(x => x.ResolveSeparator())

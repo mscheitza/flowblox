@@ -45,9 +45,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
 
         public override bool Execute(BaseRuntime runtime, object data) => Invoke(runtime, data, () =>
         {
-            runtime.Focus(this);
-            Wait(runtime);
-            SetParentElement(data);
             if (Connection == null) throw new ValidationException("No SFTP connection is configured.");
             var path = FlowBloxFieldHelper.ReplaceFieldsInString(RemotePath ?? string.Empty)?.Trim();
             if (string.IsNullOrWhiteSpace(path)) throw new ValidationException("The SFTP remote path is empty.");

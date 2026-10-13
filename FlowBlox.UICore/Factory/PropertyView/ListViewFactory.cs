@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Attributes;
+﻿using ListViewFactoryResources = FlowBlox.UICore.Resources.ClassResources.ListViewFactory;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Components;
@@ -22,6 +23,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -155,7 +157,20 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             // RelayCommands with central enable logic
             var addCommand = new RelayCommand(ExecuteCreate, CanAdd);
-            var editCommand = new RelayCommand(() => ExecuteEdit(listView.SelectedItem), () => CanEdit(listView.SelectedItem));
+            var editCommand = new RelayCommand(() => ExecuteEdit(listView.SelectedItem),
+                () => _uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true && CanEdit(listView.SelectedItem));
+            listView.MouseDoubleClick += (s, e) =>
+            {
+                if (e.ChangedButton != MouseButton.Left)
+                    return;
+
+                var row = ItemsControl.ContainerFromElement(listView, e.OriginalSource as DependencyObject) as ListViewItem;
+                if (row == null || !ReferenceEquals(row.Content, listView.SelectedItem) || !editCommand.CanExecute(null))
+                    return;
+
+                e.Handled = true;
+                editCommand.Execute(null);
+            };
             var deleteCommand = new RelayCommand(
                 async () => await ExecuteDeleteItemsAsync(listView.SelectedItems.Cast<object>().ToList()),
                 () => listView.SelectedItems.Count > 0 && !_readOnly);
@@ -163,27 +178,27 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var linkCommand = new RelayCommand(async () => await ExecuteLink(), CanLink);
 
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Create) == true)
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.Plus, FlowBloxResourceUtil.GetLocalizedString("Buttons_Add"), addCommand, Brushes.Green));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.Plus, FlowBloxResourceUtil.GetLocalizedString("Buttons_Add", typeof(ListViewFactoryResources)), addCommand, Brushes.Green));
 
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Link) == true)
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.Link, FlowBloxResourceUtil.GetLocalizedString("Buttons_Link"), linkCommand, Brushes.Blue));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.Link, FlowBloxResourceUtil.GetLocalizedString("Buttons_Link", typeof(ListViewFactoryResources)), linkCommand, Brushes.Blue));
 
             if (ShouldShowEditButton && _uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.Pencil, FlowBloxResourceUtil.GetLocalizedString("Buttons_Edit"), editCommand, Brushes.Orange));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.Pencil, FlowBloxResourceUtil.GetLocalizedString("Buttons_Edit", typeof(ListViewFactoryResources)), editCommand, Brushes.Orange));
 
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.Delete, FlowBloxResourceUtil.GetLocalizedString("Buttons_Remove"), deleteCommand, Brushes.DarkRed));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.Delete, FlowBloxResourceUtil.GetLocalizedString("Buttons_Remove", typeof(ListViewFactoryResources)), deleteCommand, Brushes.DarkRed));
 
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Unlink) == true)
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.LinkOff, FlowBloxResourceUtil.GetLocalizedString("Buttons_Unlink"), unlinkCommand, Brushes.DarkRed));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.LinkOff, FlowBloxResourceUtil.GetLocalizedString("Buttons_Unlink", typeof(ListViewFactoryResources)), unlinkCommand, Brushes.DarkRed));
 
             var moveUpCommand = new RelayCommand(() => MoveItem(listView, -1), () => CanMoveUp(listView.SelectedIndex));
             var moveDownCommand = new RelayCommand(() => MoveItem(listView, 1), () => CanMoveDown(listView.SelectedIndex));
 
             if (_listViewAttribute?.IsMovable == true)
             {
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowUp, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveUp"), moveUpCommand, Brushes.Blue));
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowDown, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveDown"), moveDownCommand, Brushes.Blue));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowUp, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveUp", typeof(ListViewFactoryResources)), moveUpCommand, Brushes.Blue));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowDown, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveDown", typeof(ListViewFactoryResources)), moveDownCommand, Brushes.Blue));
             }
 
             // RelayCommands with enable logic
@@ -252,23 +267,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
             return button;
         }
 
-        protected override object CreateNewInstance(Type type)
+        protected override Type GetExplicitItemFactoryType(Type type)
         {
-            if (_listViewAttribute.LVItemFactory != null)
-            {
-                var factoryType = _listViewAttribute.LVItemFactory;
-                var factoryInstance = (IItemFactory<IFlowBloxComponent>)Activator.CreateInstance(factoryType);
-                var result = factoryInstance.Create();
-
-                if (result == null || !type.IsInstanceOfType(result))
-                    throw new InvalidOperationException($"Factory returned an incompatible instance. Expected type: {type.FullName}, actual: {result?.GetType().FullName ?? "null"}");
-
-                return result;
-            }
-            else
-            {
-                return base.CreateNewInstance(type);
-            }
+            return _listItemType.IsAssignableFrom(type) ? _listViewAttribute.ItemFactory : null;
         }
 
         protected virtual void ExecuteCreate()
@@ -296,8 +297,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
                     (MetroWindow)_window,
-                    FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Title"),
-                    string.Format(FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Message"), _property.Name));
+                    FlowBloxResourceUtil.GetLocalizedString("MissingFilterMethod_Title", typeof(ListViewFactoryResources)),
+                    string.Format(FlowBloxResourceUtil.GetLocalizedString("MissingFilterMethod_Message", typeof(ListViewFactoryResources)), _property.Name));
                 return;
             }
 
@@ -314,8 +315,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
                     (MetroWindow)_window,
-                    FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Title"),
-                    FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Message"));
+                    FlowBloxResourceUtil.GetLocalizedString("NoItemsFound_Title", typeof(ListViewFactoryResources)),
+                    FlowBloxResourceUtil.GetLocalizedString("NoItemsFound_Message", typeof(ListViewFactoryResources)));
                 return;
             }
 
@@ -342,8 +343,8 @@ namespace FlowBlox.UICore.Factory.PropertyView
             else
             {
                 var dialog = new MultiValueSelectionDialog(
-                    FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Title"),
-                    FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Text"),
+                    FlowBloxResourceUtil.GetLocalizedString("SelectionDialog_Title", typeof(ListViewFactoryResources)),
+                    FlowBloxResourceUtil.GetLocalizedString("SelectionDialog_Message", typeof(ListViewFactoryResources)),
                     new GenericSelectionHandler<object>(items.Cast<object>(), x => x.ToString()))
                 {
                     Owner = _window,

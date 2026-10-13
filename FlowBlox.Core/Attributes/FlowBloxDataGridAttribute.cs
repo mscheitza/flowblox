@@ -12,6 +12,8 @@ namespace FlowBlox.Core.Attributes
 
         public bool IsMovable { get; set; }
 
+        public Type ItemFactory { get; set; }
+
         /// <summary>
         /// If set, only these item properties are rendered as columns (whitelist).
         /// If empty, all eligible public instance properties are considered.

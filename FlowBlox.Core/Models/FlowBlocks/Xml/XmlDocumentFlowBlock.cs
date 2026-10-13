@@ -49,8 +49,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 string content = FlowBloxFieldHelper.ReplaceFieldsInString(XmlContent);
                 InternalXmlDocument = new XmlDocument();

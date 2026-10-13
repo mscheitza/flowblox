@@ -63,8 +63,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 var associated = this.AssociatedJsonObject ?? GetPreviousFlowBlockOnPath<JsonObjectFlowBlock>(this);
                 if (associated == null)

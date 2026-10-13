@@ -1,4 +1,5 @@
 using FlowBlox.AIAssistant.Models;
+using FlowBlox.Core.Util.DistributedData;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.Handler
@@ -12,7 +13,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             "Lists filenames distributed with FlowBlox in the central application data directory.",
             new JObject
             {
-                ["dataType"] = "string? (optional: python or auxiliary_project)"
+                ["dataType"] = "string? (optional: python, auxiliary_project, or example_project)"
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)

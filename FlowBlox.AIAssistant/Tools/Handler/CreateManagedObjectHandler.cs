@@ -1,6 +1,7 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using Newtonsoft.Json.Linq;
 
@@ -13,7 +14,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Creates managed object.",
+            "Creates managed objects except FieldElement. Use CreateField for FlowBlock result fields or CreateUserField for Input/Memory user fields.",
             new JObject
             {
                 ["typeFullName"] = "string",
@@ -29,6 +30,12 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 || type.IsAbstract)
             {
                 return Task.FromResult(ToolHandlerUtilities.Fail("typeFullName invalid."));
+            }
+
+            if (typeof(FieldElement).IsAssignableFrom(type))
+            {
+                return Task.FromResult(ToolHandlerUtilities.Fail(
+                    "FieldElement cannot be created with CreateManagedObject. Use CreateField with sourceFlowBlockName for a BaseResultFlowBlock result field, or CreateUserField for an Input/Memory user field."));
             }
 
             var managedObject = Activator.CreateInstance(type) as IManagedObject;

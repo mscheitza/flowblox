@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core;
+﻿using MemoryObjectUIActionsResources = FlowBlox.UICore.Resources.ClassResources.MemoryObjectUIActions;
+using FlowBlox.Core;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Logging;
@@ -102,8 +103,8 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
             try
             {
                 var dialog = new MultiValueSelectionDialog(
-                    FlowBloxResourceUtil.GetLocalizedString("FileOpenMode_Dialog_Title", typeof(FlowBloxTexts)),
-                    FlowBloxResourceUtil.GetLocalizedString("FileOpenMode_Dialog_Message", typeof(FlowBloxTexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("Dialog_Title", typeof(MemoryObjectUIActionsResources)),
+                    FlowBloxResourceUtil.GetLocalizedString("Dialog_Message", typeof(MemoryObjectUIActionsResources)),
                     new GenericSelectionHandler<FileOpenMode>(
                         Enum.GetValues(typeof(FileOpenMode)).Cast<FileOpenMode>().ToList(),
                         mode => mode.GetDisplayName()

@@ -1,6 +1,8 @@
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.Resources;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,6 +14,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
     public abstract class BaseSingleResultCollectorFlowBlock : BaseSingleResultFlowBlock
     {
         private readonly List<string> _stagedValues = new List<string>();
+
+        [JsonIgnore]
+        [DeepCopierIgnore]
+        internal CollectorCore Collector { get; } = new CollectorCore();
 
         protected IReadOnlyList<string> StagedValues => _stagedValues;
 
@@ -37,36 +43,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             return InputDatasets_CurrentIndex == InputDatasets_Count - 1;
         }
 
-        public override bool CanDisplayAssociatedIterationContextHint()
-        {
-            if (ReferencedFlowBlocks.OfType<BaseResultFlowBlock>().Count() == 1 &&
-                AssociatedIterationContext == null)
-            {
-                return true;
-            }
+        public override bool CanDisplayAssociatedIterationContextHint() =>
+            Collector.CanDisplayAssociatedIterationContextHint(this, base.CanDisplayAssociatedIterationContextHint());
 
-            return base.CanDisplayAssociatedIterationContextHint();
-        }
-
-        public override BaseFlowBlock IterationContext
-        {
-            get
-            {
-                if (AssociatedIterationContext != null)
-                    return AssociatedIterationContext;
-
-                if (ReferencedFlowBlocks.OfType<BaseResultFlowBlock>().Count() == 1)
-                {
-                    var referencedFlowBlock = ReferencedFlowBlocks.OfType<BaseResultFlowBlock>().Single();
-                    if (referencedFlowBlock.ReferencedFlowBlocks.Count == 1)
-                        return referencedFlowBlock.ReferencedFlowBlocks.Single();
-
-                    return referencedFlowBlock.IterationContext;
-                }
-
-                return base.IterationContext;
-            }
-        }
+        public override BaseFlowBlock IterationContext =>
+            Collector.ResolveIterationContext(this, base.IterationContext);
 
         private void BaseSingleResultCollectorFlowBlock_OnBeforeInputProcessing()
         {

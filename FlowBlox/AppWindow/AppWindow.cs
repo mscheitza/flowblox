@@ -41,6 +41,7 @@ using FlowBlox.Provider;
 using FlowBlox.Controls;
 using FlowBlox.Util.Controls;
 using FlowBlox.Util.WPF;
+using FlowBlox.Core.Util.DistributedData;
 
 namespace FlowBlox.AppWindow
 {
@@ -107,6 +108,7 @@ namespace FlowBlox.AppWindow
             InitializeComponent();
             FlowBloxStyle.ApplyStyle(this);
             FlowBloxUILocalizationUtil.Localize(this);
+            ApplyExampleProjectMenuIcon();
 
             _componentProvider = FlowBloxServiceLocator.Instance.GetService<FlowBloxProjectComponentProvider>();
             _appNotificationService = FlowBloxServiceLocator.Instance.GetService<IAppNotificationService>();
@@ -265,13 +267,15 @@ namespace FlowBlox.AppWindow
 
             itmCreateProject.Enabled = !isRuntimeActive;
             itmOpenProject.Enabled = !isRuntimeActive;
+            itmOpenExampleProject.Enabled = !isRuntimeActive;
             itmRecentProjects.Enabled = !isRuntimeActive && itmRecentProjects.DropDownItems.Count > 0;
             itmCloseProject.Enabled = isProjectActive && !isRuntimeActive;
             itmUserFields.Enabled = isProjectActive;
             itmManageInputFiles.Enabled = isProjectActive;
 
             itmEditProject.Enabled = isProjectActive && (!isRuntimeActive);
-            itmSaveProject.Enabled = isProjectActive && (!isRuntimeActive);
+            var isDistributedDataProject = IsActiveProjectFromDistributedData();
+            itmSaveProject.Enabled = isProjectActive && !isRuntimeActive && !isDistributedDataProject;
             itmSaveAs.Enabled = isProjectActive && (!isRuntimeActive);
 
             itmDockablePanels.Enabled = isProjectActive;
@@ -282,7 +286,7 @@ namespace FlowBlox.AppWindow
             itmOpenProjectInputDir.Enabled = isProjectActive;
             itmOpenProjectOutputDir.Enabled = isProjectActive;
 
-            itmSaveToProjectSpace.Enabled = isProjectActive;
+            itmSaveToProjectSpace.Enabled = isProjectActive && !isRuntimeActive && !isDistributedDataProject;
 
             var changelist = _componentProvider.GetCurrentChangelist();
             this.itmUndo.Enabled = (changelist != null) && (!isRuntimeActive) && changelist.CanUndo;
@@ -611,6 +615,9 @@ namespace FlowBlox.AppWindow
 
         private void rbSaveProject_Click(object sender, EventArgs e)
         {
+            if (IsActiveProjectFromDistributedData())
+                return;
+
             try
             {
                 if (string.IsNullOrWhiteSpace(_recentProjectPath))
@@ -697,7 +704,7 @@ namespace FlowBlox.AppWindow
 
                 if (result == DialogResult.Yes)
                 {
-                    if (_recentProjectPath.Equals(string.Empty))
+                    if (string.IsNullOrWhiteSpace(_recentProjectPath) || IsActiveProjectFromDistributedData())
                     {
                         ConfigureSaveProjectDialogDefaults();
                         if (saveProjectDialog.ShowDialog(this) == DialogResult.OK)
@@ -741,6 +748,33 @@ namespace FlowBlox.AppWindow
             }
 
             FlowBloxProjectManager.Instance.ActiveProjectPath = fileName;
+        }
+
+        private bool IsActiveProjectFromDistributedData() =>
+            DistributedDataCatalog.IsDistributedDataPath(_recentProjectPath) ||
+            DistributedDataCatalog.IsDistributedDataPath(FlowBloxProjectManager.Instance.ActiveProjectPath);
+
+        private void ApplyExampleProjectMenuIcon()
+        {
+            try
+            {
+                var resourceUri = new Uri(
+                    "/FlowBlox;component/Icons/presentation-play-custom.png",
+                    UriKind.Relative);
+                var resource = System.Windows.Application.GetResourceStream(resourceUri);
+                if (resource == null)
+                    return;
+
+                using var resourceStream = resource.Stream;
+                using var sourceImage = new Bitmap(resourceStream);
+                itmOpenExampleProject.Image = new Bitmap(sourceImage);
+            }
+            catch (Exception ex)
+            {
+                FlowBloxLogManager.Instance.GetLogger().Error(
+                    "Failed to load the example-project menu icon.",
+                    ex);
+            }
         }
 
         private void itmOptions_Click(object sender, EventArgs e)
@@ -1433,6 +1467,9 @@ namespace FlowBlox.AppWindow
 
         private void itmSaveToProjectSpace_Click(object sender, EventArgs e)
         {
+            if (IsActiveProjectFromDistributedData())
+                return;
+
             var project = FlowBloxProjectManager.Instance.ActiveProject;
             var dialog = new CreateOrUpdatePSProjectWindow(
                 project,
@@ -1461,6 +1498,21 @@ namespace FlowBlox.AppWindow
                 CloseProject();
                 UnloadProject();
                 await OpenProjectFromProjectSpaceAsync(projectGuid, version);
+            });
+        }
+
+        private async void itmOpenExampleProject_Click(object sender, EventArgs e)
+        {
+            await OpenProjectWithConfirmationAsync(async () =>
+            {
+                var dialog = new ExampleProjectsWindow();
+                WindowsFormWPFHelper.ShowDialog(dialog, this);
+                if (dialog.DialogResult != true || dialog.Tag is not string projectFile)
+                    return;
+
+                CloseProject();
+                _recentProjectPath = projectFile;
+                await OpenProjectFromRecentProjectPathAsync();
             });
         }
 

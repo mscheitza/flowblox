@@ -13,7 +13,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             "Materializes the selected managed input file according to its sync mode and then executes its configured command in $Project::InputDirectory. " +
             "The managed script is project-specific; the command may write cross-project artifacts to a separate, feature-specific shared root such as an ONNX ModelRootDirectory. " +
             "No separate file synchronization or materialization call is required. " +
-            "Script creation/update is always allowed; execution requires explicit user confirmation in the AI Assistant UI.",
+            "Script creation/update is always allowed. Call execution directly; the AI Assistant UI requests user confirmation automatically.",
             new JObject
             {
                 ["key"] = "string (required, input file relative path under $Project::InputDirectory)",

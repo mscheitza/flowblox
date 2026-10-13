@@ -1,0 +1,58 @@
+{
+  "ToolboxElements": [
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Text placeholder",
+      "Content": "{0}",
+      "Description": "Outputs the first format parameter as text."
+    },
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Multiple values",
+      "Content": "{0} | {1}",
+      "Description": "Outputs the first two format parameters separated by a vertical bar."
+    },
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Date (German)",
+      "Content": "{0:dd.MM.yyyy HH:mm:ss}",
+      "Description": "Formats a DateTime parameter using a German-style date and 24-hour time."
+    },
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Date (ISO 8601 round-trip)",
+      "Content": "{0:O}",
+      "Description": "Formats a DateTime parameter using the ISO 8601 round-trip format."
+    },
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Boolean",
+      "Content": "Enabled: {0}",
+      "Description": "Outputs a Boolean parameter as True or False."
+    },
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Number (2 decimals)",
+      "Content": "{0:N2}",
+      "Description": "Formats a numeric parameter with grouping and two decimal places."
+    },
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Currency",
+      "Content": "{0:C2}",
+      "Description": "Formats a numeric parameter as currency using the current culture."
+    },
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Percent",
+      "Content": "{0:P2}",
+      "Description": "Formats a numeric parameter as a percentage with two decimal places."
+    },
+    {
+      "ToolboxCategory": "CompositeFormat",
+      "Name": "Literal braces",
+      "Content": "{{{0}}}",
+      "Description": "Outputs the first format parameter enclosed in literal braces."
+    }
+  ]
+}

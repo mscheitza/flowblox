@@ -14,6 +14,7 @@ using FlowBlox.Core.Util.Fields;
 namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
 {
     [Display(Name = "FormatFlowBlock_DisplayName", Description = "FormatFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
+    [FlowBloxSpecialExplanation("FormatFlowBlock_SpecialExplanation_CompositeFormatting", Icon = SpecialExplanationIcon.Information)]
     public class FormatFlowBlock : BaseSingleResultFlowBlock
     {
         public FormatFlowBlock()
@@ -27,18 +28,26 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
 
         public string FieldName { get; set; }
 
-        private string _formatExpression;
 
-        [Display(Name = "FormatFlowBlock_FormatExpression", ResourceType = typeof(FlowBloxTexts), Order = 0)]
-        [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [Display(
+            Name = "FormatFlowBlock_AllowEmptyFormatExpression",
+            Description = "FormatFlowBlock_AllowEmptyFormatExpression_Tooltip",
+            ResourceType = typeof(FlowBloxTexts),
+            Order = 0)]
+        public bool AllowEmptyFormatExpression { get; set; } = false;
+
+        [Display(Name = "FormatFlowBlock_FormatExpression", Description = "FormatFlowBlock_FormatExpression_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [FlowBloxUI(
+            UiOptions = UIOptions.EnableFieldSelection,
+            ToolboxCategory = nameof(FlowBloxToolboxCategory.CompositeFormat))]
         [FlowBloxTextBox(MultiLine = true, IsCodingMode = true)]
         [CustomValidation(typeof(FormatFlowBlock), nameof(ValidateFormatExpression))]
-        [Required()]
+        [RequiredIf(nameof(AllowEmptyFormatExpression), false)]
         public string FormatExpression { get; set; }
 
         private ObservableCollection<FormatParameterDefinition> _formatParameterDefinitions;
 
-        [Display(Name = "FormatFlowBlock_FormatParameters", ResourceType = typeof(FlowBloxTexts), Order = 1)]
+        [Display(Name = "FormatFlowBlock_FormatParameters", Description = "FormatFlowBlock_FormatParameters_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<FormatParameterDefinition> FormatParameterDefinitions
         {
@@ -90,6 +99,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         {
             var properties = base.GetDisplayableProperties();
             properties.Add(nameof(FormatExpression));
+            properties.Add(nameof(AllowEmptyFormatExpression));
             return properties;
         }
 
@@ -97,12 +107,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         {
             return base.Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
-                var resolvedFormatExpression = FlowBloxFieldHelper.ReplaceFieldsInString(FormatExpression ?? string.Empty);
-                if (string.IsNullOrWhiteSpace(resolvedFormatExpression))
+                var formatExpression = FormatExpression ?? string.Empty;
+                var resolvedFormatExpression = FlowBloxFieldHelper.ReplaceFieldsInString(formatExpression);
+                if (!string.IsNullOrWhiteSpace(formatExpression) &&
+                    string.IsNullOrWhiteSpace(resolvedFormatExpression))
                 {
                     CreateNotification(runtime, FormatFlowBlockNotifications.FormatExpressionMissingAfterResolving);
                     GenerateResult(runtime);

@@ -10,6 +10,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Resources\ExampleProjectsWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExampleProjectsWindow.resx</DependentUpon>
+    </Compile>
     <None Remove="Resources\Highlighting\SQL.xshd" />
   </ItemGroup>
   <ItemGroup>
@@ -245,10 +250,90 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PropertyWindow.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\ClassResources\AsposeWordToPdfFlowBlockUIActions.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AsposeWordToPdfFlowBlockUIActions.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\MemoryObjectUIActions.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MemoryObjectUIActions.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\SimplePropertyInputControlWithOptionalButtonsCreator.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SimplePropertyInputControlWithOptionalButtonsCreator.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\TextBoxWithOptionalButtonsCreator.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TextBoxWithOptionalButtonsCreator.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\MessageBoxHelper.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MessageBoxHelper.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\PropertyViewControlFactoryBase.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PropertyViewControlFactoryBase.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\ActivationConditionAwareTextboxColumnFactory.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ActivationConditionAwareTextboxColumnFactory.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\AssociationControlFactory.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssociationControlFactory.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\ListFactoryBase.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ListFactoryBase.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\ListViewFactory.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ListViewFactory.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\WpfPropertyViewControlFactory.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WpfPropertyViewControlFactory.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\AssociatedFlowBlockResolvableCustomHintTextResolver.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssociatedFlowBlockResolvableCustomHintTextResolver.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\AssociatedFlowBlockResolvableHintTextResolver.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssociatedFlowBlockResolvableHintTextResolver.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\AssociationControlTextConverter.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssociationControlTextConverter.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\AssociationConverter.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AssociationConverter.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\ClassResources\WpfPropertyWindowProvider.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>WpfPropertyWindowProvider.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ClassResources\DataGridFactory.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataGridFactory.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\ClassResources\UIActionsProviderBase.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -478,12 +563,124 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PropertyWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AsposeWordToPdfFlowBlockUIActions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AsposeWordToPdfFlowBlockUIActions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AsposeWordToPdfFlowBlockUIActions.de.resx">
+      <DependentUpon>AsposeWordToPdfFlowBlockUIActions.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\MemoryObjectUIActions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MemoryObjectUIActions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\MemoryObjectUIActions.de.resx">
+      <DependentUpon>MemoryObjectUIActions.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\SimplePropertyInputControlWithOptionalButtonsCreator.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SimplePropertyInputControlWithOptionalButtonsCreator.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\SimplePropertyInputControlWithOptionalButtonsCreator.de.resx">
+      <DependentUpon>SimplePropertyInputControlWithOptionalButtonsCreator.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\TextBoxWithOptionalButtonsCreator.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TextBoxWithOptionalButtonsCreator.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\TextBoxWithOptionalButtonsCreator.de.resx">
+      <DependentUpon>TextBoxWithOptionalButtonsCreator.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\MessageBoxHelper.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageBoxHelper.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\MessageBoxHelper.de.resx">
+      <DependentUpon>MessageBoxHelper.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\PropertyViewControlFactoryBase.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PropertyViewControlFactoryBase.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\PropertyViewControlFactoryBase.de.resx">
+      <DependentUpon>PropertyViewControlFactoryBase.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\ActivationConditionAwareTextboxColumnFactory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ActivationConditionAwareTextboxColumnFactory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\ActivationConditionAwareTextboxColumnFactory.de.resx">
+      <DependentUpon>ActivationConditionAwareTextboxColumnFactory.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociationControlFactory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AssociationControlFactory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociationControlFactory.de.resx">
+      <DependentUpon>AssociationControlFactory.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\ListFactoryBase.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ListFactoryBase.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\ListFactoryBase.de.resx">
+      <DependentUpon>ListFactoryBase.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\ListViewFactory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ListViewFactory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\ListViewFactory.de.resx">
+      <DependentUpon>ListViewFactory.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\WpfPropertyViewControlFactory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>WpfPropertyViewControlFactory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\WpfPropertyViewControlFactory.de.resx">
+      <DependentUpon>WpfPropertyViewControlFactory.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociatedFlowBlockResolvableCustomHintTextResolver.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AssociatedFlowBlockResolvableCustomHintTextResolver.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociatedFlowBlockResolvableCustomHintTextResolver.de.resx">
+      <DependentUpon>AssociatedFlowBlockResolvableCustomHintTextResolver.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociatedFlowBlockResolvableHintTextResolver.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AssociatedFlowBlockResolvableHintTextResolver.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociatedFlowBlockResolvableHintTextResolver.de.resx">
+      <DependentUpon>AssociatedFlowBlockResolvableHintTextResolver.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociationControlTextConverter.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AssociationControlTextConverter.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociationControlTextConverter.de.resx">
+      <DependentUpon>AssociationControlTextConverter.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociationConverter.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AssociationConverter.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\AssociationConverter.de.resx">
+      <DependentUpon>AssociationConverter.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\ClassResources\WpfPropertyWindowProvider.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>WpfPropertyWindowProvider.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ClassResources\WpfPropertyWindowProvider.de.resx">
       <DependentUpon>WpfPropertyWindowProvider.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\DataGridFactory.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DataGridFactory.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\DataGridFactory.de.resx">
+      <DependentUpon>DataGridFactory.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ClassResources\UIActionsProviderBase.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -541,6 +738,20 @@
     <EmbeddedResource Update="PopUp\Resources\ComponentPopupWindowResources.resx">
       <LastGenOutput>ComponentPopupWindowResources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\ClassResources\PropertyViewSchemaResolver.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PropertyViewSchemaResolver.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Resources\ClassResources\PropertyViewSchemaResolver.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PropertyViewSchemaResolver.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ClassResources\PropertyViewSchemaResolver.de.resx">
+      <DependentUpon>PropertyViewSchemaResolver.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

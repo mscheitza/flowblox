@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ObjectCreationReadOnlyTitle" xml:space="preserve">
+    <value>Lesemodus</value>
+  </data>
+  <data name="ObjectCreationReadOnlyMessage" xml:space="preserve">
+    <value>Im Lesemodus können keine Objekte erstellt werden.</value>
+  </data>
+  <data name="Buttons_Add" xml:space="preserve">
+		<value>Hinzufügen</value>
+	</data>
+  <data name="Buttons_Edit" xml:space="preserve">
+		<value>Bearbeiten</value>
+	</data>
+  <data name="Buttons_MoveDown" xml:space="preserve">
+		<value>Nach unten</value>
+	</data>
+  <data name="Buttons_MoveUp" xml:space="preserve">
+		<value>Nach oben</value>
+	</data>
+  <data name="Buttons_Remove" xml:space="preserve">
+		<value>Entfernen</value>
+	</data>
+  <data name="EnableFieldSelection_Tooltip" xml:space="preserve">
+		<value>Feld einfügen oder ausgewählten Text ersetzen</value>
+	</data>
+</root>

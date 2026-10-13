@@ -14,6 +14,7 @@ namespace FlowBlox.Core.Services
                 FlowBloxToolboxCategory.JPath,
                 FlowBloxToolboxCategory.CounterFormat,
                 FlowBloxToolboxCategory.Format,
+                FlowBloxToolboxCategory.CompositeFormat,
                 FlowBloxToolboxCategory.SQL,
                 FlowBloxToolboxCategory.Filter,
                 FlowBloxToolboxCategory.DBConnection,
@@ -29,6 +30,7 @@ namespace FlowBlox.Core.Services
             [
                 "FlowBlox.Core.Files.globalToolbox_counterformat.json",
                 "FlowBlox.Core.Files.globalToolbox_format.json",
+                "FlowBlox.Core.Files.globalToolbox_compositeformat.json",
                 "FlowBlox.Core.Files.globalToolbox_regex.json",
                 "FlowBlox.Core.Files.globalToolbox_regex_extended.json",
                 "FlowBlox.Core.Files.globalToolbox_dbconnection.json",

@@ -42,9 +42,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Selection
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (StartEndPatterns == null || StartEndPatterns.Count == 0)
                 {

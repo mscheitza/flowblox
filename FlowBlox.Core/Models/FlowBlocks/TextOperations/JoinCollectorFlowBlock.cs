@@ -77,9 +77,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 string separator = Separator;
                 if (SpecialSeparator == Enums.SpecialSeparator.Tab)

@@ -46,7 +46,7 @@ namespace FlowBlox.Core.Models.Base
         public bool ShouldSerializeRequiredFields() => HandleRequirements;
 
         [ActivationCondition(MemberName = nameof(HandleRequirements), Value = true)]
-        [Display(Name = "FlowBloxComponent_RequiredFields", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 0)]
+        [Display(Name = "FlowBloxComponent_RequiredFields", Description = "FlowBloxComponent_RequiredFields_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 0)]
         [FlowBloxUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
@@ -116,13 +116,6 @@ namespace FlowBlox.Core.Models.Base
 
         [JsonIgnore]
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.component, 32);
-
-        /// <summary>
-        /// Indicates whether the component has finished loading.
-        /// This flag is relevant for event handling: certain events should be suppressed
-        /// during the component's loading phase and only executed after it is fully initialized.
-        /// </summary>
-        protected bool IsLoaded { get; private set; }
 
         private string GetComponentAssemblyVersion()
         {
@@ -226,10 +219,10 @@ namespace FlowBlox.Core.Models.Base
         /// before executing any component-specific logic.
         /// </para>
         /// </summary>
-        public virtual void OnAfterLoad()
+        public override void OnAfterLoad()
         {
             this.RegisterPropertyChangedEventHandlers();
-            this.IsLoaded = true;
+            base.OnAfterLoad();
         }
 
         /// <summary>

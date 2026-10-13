@@ -34,7 +34,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             {
                 ["thinking"] = new Dictionary<string, object>
                 {
-                    ["type"] = "enabled"
+                    ["type"] = ReasoningEffort == AIReasoningEffort.None
+                        ? "disabled"
+                        : "enabled"
                 }
             };
 #pragma warning restore SKEXP0010

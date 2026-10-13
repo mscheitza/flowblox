@@ -18,7 +18,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Logic
     public class DecisionFlowBlock : BaseSingleResultFlowBlock
     {
         [Display(Name = "DecisionFlowBlock_Decisions", Description = "DecisionFlowBlock_Decisions_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "DecisionFlowBlock_Groups_Decisions", Order = 0)]
-        [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
+        [FlowBloxUI(Factory = UIFactory.GridView)]
         [FlowBloxDataGrid(
             GridColumnMemberNames = new[]
             {
@@ -56,9 +56,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Logic
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 foreach (var decision in Decisions)
                 {

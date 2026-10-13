@@ -55,6 +55,17 @@ namespace FlowBlox.Core.Models.Runtime
             }
         }
 
+        internal void ScheduleInvocation(BaseFlowBlock block, object data, bool increaseExecutionLayer)
+        {
+            if (!_runtime.ExecutionFlowEnabled || block == null)
+                return;
+            var items = new List<IRuntimeWorkItem>();
+            if (increaseExecutionLayer) items.Add(ExecutionLayerWorkItem.Increase());
+            items.Add(new InvokeFlowBlockWorkItem(block, data));
+            if (increaseExecutionLayer) items.Add(ExecutionLayerWorkItem.Decrease());
+            EnqueueBatchInExecutionOrder(items);
+        }
+
         public void CancelPendingWorkItems()
         {
             _stack.Clear();

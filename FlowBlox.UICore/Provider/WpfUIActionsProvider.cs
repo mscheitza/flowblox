@@ -13,11 +13,12 @@ namespace FlowBlox.UICore.Provider
         private static string RemoveMnemonicAmpersand(string input)
             => string.IsNullOrEmpty(input) ? input : RemoveAmpersandRegex.Replace(input, string.Empty);
 
-        protected override UIActionViewModel CreateItem(string displayName, EventHandler clickHandler, bool enabled, SKImage icon16)
+        protected override UIActionViewModel CreateItem(string displayName, string description, EventHandler clickHandler, bool enabled, SKImage icon16)
         {
             return new UIActionViewModel
             {
                 DisplayName = RemoveMnemonicAmpersand(displayName),
+                ToolTip = string.IsNullOrWhiteSpace(description) ? RemoveMnemonicAmpersand(displayName) : description,
                 IsEnabled = enabled,
                 Icon = icon16 != null ? 
                     SkiaWpfImageHelper.ConvertToImageSource(icon16) : 

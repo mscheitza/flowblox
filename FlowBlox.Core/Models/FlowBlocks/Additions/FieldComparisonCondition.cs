@@ -1,7 +1,9 @@
 ﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Provider;
+using FlowBlox.Core.Util.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Additions
@@ -12,11 +14,39 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         private string _outputValue;
 
         [Required]
+        [CustomValidation(typeof(FieldComparisonCondition), nameof(ValidateFieldElement))]
+        [DependsOnProperty(MemberName = nameof(Operator))]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public FieldElement FieldElement { get; set; }
+
+        public static ValidationResult ValidateFieldElement(FieldElement fieldElement, ValidationContext validationContext)
+        {
+            if (fieldElement == null)
+                return ValidationResult.Success;
+
+            var fieldValue = fieldElement.Value;
+            if (fieldValue is byte[])
+            {
+                var message = FlowBloxResourceUtil.GetLocalizedString("FieldComparisonCondition_Validation_ByteArrayNotSupported");
+                return new ValidationResult(message, [validationContext.MemberName]);
+            }
+
+            var op = validationContext.ObjectInstance is FieldComparisonCondition condition
+                ? condition.Operator
+                : ((FieldLogicalComparisonCondition)validationContext.ObjectInstance).Operator;
+            var isStringField = fieldValue is string || (fieldValue == null
+                && (fieldElement.FieldType == null || fieldElement.FieldType.FieldType == FieldTypes.Text));
+            if ((op == ComparisonOperator.Contains || op == ComparisonOperator.NotContains) && !isStringField)
+            {
+                var message = FlowBloxResourceUtil.GetLocalizedString("FieldComparisonCondition_Validation_ContainsRequiresText");
+                return new ValidationResult(message, [validationContext.MemberName]);
+            }
+
+            return ValidationResult.Success;
+        }
 
         [Display(Name = "FieldComparisonCondition_OutputValue", Description = "FieldComparisonCondition_OutputValue_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 30)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
@@ -31,7 +61,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             }
         }
 
-        public virtual bool Compare() => Compare(FieldElement?.Value);
+        public virtual bool Compare() => Compare(FieldElement?.Value, FieldElement?.FieldType?.GetSpecialParsingStrategy());
 
         public override string DisplayName => GetDisplayName(f => f?.FullyQualifiedName);
 

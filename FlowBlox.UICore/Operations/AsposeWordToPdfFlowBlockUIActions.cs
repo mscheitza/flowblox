@@ -1,3 +1,4 @@
+using AsposeWordToPdfFlowBlockUIActionsResources = FlowBlox.UICore.Resources.ClassResources.AsposeWordToPdfFlowBlockUIActions;
 using FlowBlox.Core;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Logging;
@@ -45,16 +46,16 @@ namespace FlowBlox.Grid.Elements.UI.CustomActions
                 options.Save();
 
                 _messageBoxService.ShowMessageBox(
-                    FlowBloxResourceUtil.GetLocalizedString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Success", typeof(FlowBloxTexts)),
-                    FlowBloxResourceUtil.GetLocalizedString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Title", typeof(FlowBloxTexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("ImportLicense_Success", typeof(AsposeWordToPdfFlowBlockUIActionsResources)),
+                    FlowBloxResourceUtil.GetLocalizedString("ImportLicense_Title", typeof(AsposeWordToPdfFlowBlockUIActionsResources)),
                     FlowBloxMessageBoxTypes.Information);
             }
             catch (Exception ex)
             {
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
                 _messageBoxService.ShowMessageBox(
-                    FlowBloxResourceUtil.GetLocalizedString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Failed", typeof(FlowBloxTexts)),
-                    FlowBloxResourceUtil.GetLocalizedString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Title", typeof(FlowBloxTexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("ImportLicense_Failed", typeof(AsposeWordToPdfFlowBlockUIActionsResources)),
+                    FlowBloxResourceUtil.GetLocalizedString("ImportLicense_Title", typeof(AsposeWordToPdfFlowBlockUIActionsResources)),
                     FlowBloxMessageBoxTypes.Error);
             }
         }

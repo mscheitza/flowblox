@@ -72,6 +72,7 @@ namespace FlowBloxTest.AIAssistant
                     "RequiredFields",
                     "InputIgnoreDuplicates",
                     "InputBehaviorAssignments",
+                    "OutputIgnoreDuplicates",
                     "ActivationConditions",
                     "GenerationStrategies"
                 },

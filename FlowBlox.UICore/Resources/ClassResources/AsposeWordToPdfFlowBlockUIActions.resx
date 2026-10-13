@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ImportLicense_Failed" xml:space="preserve"><value>The Aspose.Words license could not be imported.</value></data>
+  <data name="ImportLicense_Success" xml:space="preserve"><value>The Aspose.Words license was imported and stored in the application options.</value></data>
+  <data name="ImportLicense_Title" xml:space="preserve"><value>Aspose.Words license</value></data>
+</root>

@@ -484,7 +484,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Preferred reasoning effort for providers and models that support it. Lower values can reduce latency and reasoning token usage. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Preferred reasoning effort for providers and models that support it. Select None to omit the reasoning parameter for models without reasoning support. ähnelt.
         /// </summary>
         public static string AIProvider_ReasoningEffort_Tooltip {
             get {
@@ -813,33 +813,6 @@ namespace FlowBlox.Core {
         public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense {
             get {
                 return ResourceManager.GetString("AsposeWordToPdfFlowBlockUIActions_ImportLicense", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The Aspose.Words license could not be imported. ähnelt.
-        /// </summary>
-        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense_Failed {
-            get {
-                return ResourceManager.GetString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Failed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The Aspose.Words license was imported and stored in the application options. ähnelt.
-        /// </summary>
-        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense_Success {
-            get {
-                return ResourceManager.GetString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Success", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Aspose.Words license ähnelt.
-        /// </summary>
-        public static string AsposeWordToPdfFlowBlockUIActions_ImportLicense_Title {
-            get {
-                return ResourceManager.GetString("AsposeWordToPdfFlowBlockUIActions_ImportLicense_Title", resourceCulture);
             }
         }
         
@@ -1195,33 +1168,6 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic resolution not possible. ähnelt.
-        /// </summary>
-        public static string AssociationControlFactory_NotResolvable {
-            get {
-                return ResourceManager.GetString("AssociationControlFactory_NotResolvable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Resolved automatically: {0} ähnelt.
-        /// </summary>
-        public static string AssociationControlFactory_Resolvable {
-            get {
-                return ResourceManager.GetString("AssociationControlFactory_Resolvable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Please select... ähnelt.
-        /// </summary>
-        public static string AssociationTextBox_Empty {
-            get {
-                return ResourceManager.GetString("AssociationTextBox_Empty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Match count ähnelt.
         /// </summary>
         public static string AWSCompareFacesDestinations_MatchCount {
@@ -1501,6 +1447,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Additional conditions that control execution of this flow block. If the activation conditions as a whole are not met, the flow block is not executed. ähnelt.
+        /// </summary>
+        public static string BaseFlowBlock_ActivationConditions_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseFlowBlock_ActivationConditions_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Iteration Context ähnelt.
         /// </summary>
         public static string BaseFlowBlock_AssociatedIterationContext {
@@ -1519,6 +1474,27 @@ namespace FlowBlox.Core {
         public static string BaseFlowBlock_AssociatedIterationContext_Tooltip {
             get {
                 return ResourceManager.GetString("BaseFlowBlock_AssociatedIterationContext_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic behavior assignment ähnelt.
+        /// </summary>
+        public static string BaseFlowBlock_AutomaticInputBehaviorAssignment {
+            get {
+                return ResourceManager.GetString("BaseFlowBlock_AutomaticInputBehaviorAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die When enabled, input behaviors are determined automatically when inputs change. Typical cases:
+        ///* With multiple inputs, the first dataset from each input is selected.
+        ///* With one input, all datasets are processed in sequence.
+        ///* If all existing inputs use RowWise, new inputs inherit that setting (also applies to RowWiseValid). ähnelt.
+        /// </summary>
+        public static string BaseFlowBlock_AutomaticInputBehaviorAssignment_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseFlowBlock_AutomaticInputBehaviorAssignment_Tooltip", resourceCulture);
             }
         }
         
@@ -1613,7 +1589,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Defines per input flow block how its input datasets are selected or combined. The resulting combined datasets are processed one after another. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Defines how input datasets are selected or combined within an iteration context. Combined datasets are processed sequentially. Automatic behavior assignment can adapt compatible settings when inputs change. ähnelt.
         /// </summary>
         public static string BaseFlowBlock_InputBehaviorAssignments_Tooltip {
             get {
@@ -1629,7 +1605,10 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("BaseFlowBlock_InputIgnoreDuplicates", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Removes duplicate input records collected in the iteration context by comparing all field values. Only the first occurrence is processed. ähnelt.
+        /// </summary>
         public static string BaseFlowBlock_InputIgnoreDuplicates_Tooltip {
             get {
                 return ResourceManager.GetString("BaseFlowBlock_InputIgnoreDuplicates_Tooltip", resourceCulture);
@@ -1673,6 +1652,33 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Automatic iteration-context resolution: the context is set to the predecessor of the calling flow block. If that predecessor already has an iteration context, that context is reused. ähnelt.
+        /// </summary>
+        public static string BaseMultiResultCollectorFlowBlock_SpecialExplanation_AutoIterationContext {
+            get {
+                return ResourceManager.GetString("BaseMultiResultCollectorFlowBlock_SpecialExplanation_AutoIterationContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die This collector flow block stages complete datasets across the active iteration context and processes them together when the last input dataset is reached. ähnelt.
+        /// </summary>
+        public static string BaseMultiResultCollectorFlowBlock_SpecialExplanation_IterationScope {
+            get {
+                return ResourceManager.GetString("BaseMultiResultCollectorFlowBlock_SpecialExplanation_IterationScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The iteration context can be overridden manually when datasets should be collected across a wider or different scope. ähnelt.
+        /// </summary>
+        public static string BaseMultiResultCollectorFlowBlock_SpecialExplanation_ManualOverride {
+            get {
+                return ResourceManager.GetString("BaseMultiResultCollectorFlowBlock_SpecialExplanation_ManualOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die End index ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_EndIndex {
@@ -1696,6 +1702,15 @@ namespace FlowBlox.Core {
         public static string BaseResultFlowBlock_IgnoreDuplicates {
             get {
                 return ResourceManager.GetString("BaseResultFlowBlock_IgnoreDuplicates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Removes duplicate result records by comparing all field values. Only the first occurrence is passed to subsequent flow blocks. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_IgnoreDuplicates_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_IgnoreDuplicates_Tooltip", resourceCulture);
             }
         }
         
@@ -1862,24 +1877,6 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
-        /// </summary>
-        public static string Buttons_Add {
-            get {
-                return ResourceManager.GetString("Buttons_Add", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
-        /// </summary>
-        public static string Buttons_Apply {
-            get {
-                return ResourceManager.GetString("Buttons_Apply", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
         public static string Buttons_Cancel {
@@ -1889,56 +1886,236 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Collection query field mapping ähnelt.
         /// </summary>
-        public static string Buttons_Edit {
+        public static string CollectionQueryFieldMapping_DisplayName {
             get {
-                return ResourceManager.GetString("Buttons_Edit", resourceCulture);
+                return ResourceManager.GetString("CollectionQueryFieldMapping_DisplayName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Link ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input field ähnelt.
         /// </summary>
-        public static string Buttons_Link {
+        public static string CollectionQueryFieldMapping_InputField {
             get {
-                return ResourceManager.GetString("Buttons_Link", resourceCulture);
+                return ResourceManager.GetString("CollectionQueryFieldMapping_InputField", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Move down ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output field ähnelt.
         /// </summary>
-        public static string Buttons_MoveDown {
+        public static string CollectionQueryFieldMapping_OutputField {
             get {
-                return ResourceManager.GetString("Buttons_MoveDown", resourceCulture);
+                return ResourceManager.GetString("CollectionQueryFieldMapping_OutputField", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Move up ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Collects incoming datasets and returns a single record, aggregate value, or predicate result. ähnelt.
         /// </summary>
-        public static string Buttons_MoveUp {
+        public static string CollectionQueryFlowBlock_Description {
             get {
-                return ResourceManager.GetString("Buttons_MoveUp", resourceCulture);
+                return ResourceManager.GetString("CollectionQueryFlowBlock_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Collection query ähnelt.
         /// </summary>
-        public static string Buttons_Remove {
+        public static string CollectionQueryFlowBlock_DisplayName {
             get {
-                return ResourceManager.GetString("Buttons_Remove", resourceCulture);
+                return ResourceManager.GetString("CollectionQueryFlowBlock_DisplayName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Unlink ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Element index ähnelt.
         /// </summary>
-        public static string Buttons_Unlink {
+        public static string CollectionQueryFlowBlock_ElementIndex {
             get {
-                return ResourceManager.GetString("Buttons_Unlink", resourceCulture);
+                return ResourceManager.GetString("CollectionQueryFlowBlock_ElementIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Zero-based index used by ElementAt. ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_ElementIndex_Tooltip {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_ElementIndex_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output mappings ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_Groups_OutputMappings {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_Groups_OutputMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Query ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_Groups_Query {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_Groups_Query", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Operation ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_Operation {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_Operation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Input/output field mappings ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_OutputMappings {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_OutputMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maps incoming fields to the output fields used by the selected query operation. Any and All return a Boolean predicate result instead. ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_OutputMappings_Tooltip {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_OutputMappings_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Predicate ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_Predicate {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_Predicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Predicate result field ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_PredicateResultField {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_PredicateResultField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Predicates ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_Predicates {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_Predicates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Conditions evaluated for each incoming dataset. They filter value operations and define Any/All. ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlock_Predicates_Tooltip {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlock_Predicates_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Synchronize output fields ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlockUIActions_SynchronizeOutputFields {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlockUIActions_SynchronizeOutputFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Adds missing output fields, updates names and data types, and removes obsolete fields when they are deletable. ähnelt.
+        /// </summary>
+        public static string CollectionQueryFlowBlockUIActions_SynchronizeOutputFields_Tooltip {
+            get {
+                return ResourceManager.GetString("CollectionQueryFlowBlockUIActions_SynchronizeOutputFields_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die All ähnelt.
+        /// </summary>
+        public static string CollectionQueryOperation_All {
+            get {
+                return ResourceManager.GetString("CollectionQueryOperation_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Any ähnelt.
+        /// </summary>
+        public static string CollectionQueryOperation_Any {
+            get {
+                return ResourceManager.GetString("CollectionQueryOperation_Any", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Average ähnelt.
+        /// </summary>
+        public static string CollectionQueryOperation_Average {
+            get {
+                return ResourceManager.GetString("CollectionQueryOperation_Average", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Element at ähnelt.
+        /// </summary>
+        public static string CollectionQueryOperation_ElementAt {
+            get {
+                return ResourceManager.GetString("CollectionQueryOperation_ElementAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die First ähnelt.
+        /// </summary>
+        public static string CollectionQueryOperation_First {
+            get {
+                return ResourceManager.GetString("CollectionQueryOperation_First", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Last ähnelt.
+        /// </summary>
+        public static string CollectionQueryOperation_Last {
+            get {
+                return ResourceManager.GetString("CollectionQueryOperation_Last", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Maximum ähnelt.
+        /// </summary>
+        public static string CollectionQueryOperation_Maximum {
+            get {
+                return ResourceManager.GetString("CollectionQueryOperation_Maximum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Minimum ähnelt.
+        /// </summary>
+        public static string CollectionQueryOperation_Minimum {
+            get {
+                return ResourceManager.GetString("CollectionQueryOperation_Minimum", resourceCulture);
             }
         }
         
@@ -3095,23 +3272,29 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Implements an if/then/else decision: evaluates field conditions in order and outputs the configured value of the first matching rule or a fallback value. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Rules ähnelt.
         /// </summary>
-        public static string DecisionFlowBlock_Description {
-            get {
-                return ResourceManager.GetString("DecisionFlowBlock_Description", resourceCulture);
-            }
-        }
-
         public static string DecisionFlowBlock_Decisions {
             get {
                 return ResourceManager.GetString("DecisionFlowBlock_Decisions", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Conditions evaluated from top to bottom. The first matching rule determines the output. ähnelt.
+        /// </summary>
         public static string DecisionFlowBlock_Decisions_Tooltip {
             get {
                 return ResourceManager.GetString("DecisionFlowBlock_Decisions_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Implements an if/then/else decision: evaluates field conditions in order and outputs the configured value of the first matching rule or a fallback value. ähnelt.
+        /// </summary>
+        public static string DecisionFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("DecisionFlowBlock_Description", resourceCulture);
             }
         }
         
@@ -3123,13 +3306,19 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("DecisionFlowBlock_DisplayName", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fallback value ähnelt.
+        /// </summary>
         public static string DecisionFlowBlock_FallbackValue {
             get {
                 return ResourceManager.GetString("DecisionFlowBlock_FallbackValue", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output used when no rule matches. Fields are supported. Leave empty to produce an empty result. ähnelt.
+        /// </summary>
         public static string DecisionFlowBlock_FallbackValue_Tooltip {
             get {
                 return ResourceManager.GetString("DecisionFlowBlock_FallbackValue_Tooltip", resourceCulture);
@@ -3145,6 +3334,9 @@ namespace FlowBlox.Core {
             }
         }
         
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Each rule may return a literal or field-based output value. Rules are checked in order. An empty rule output preserves the previous behavior and returns its compared field; if nothing matches, the fallback is returned or an empty result when no fallback is configured. ähnelt.
+        /// </summary>
         public static string DecisionFlowBlock_SpecialExplanation_ConditionalOutputs {
             get {
                 return ResourceManager.GetString("DecisionFlowBlock_SpecialExplanation_ConditionalOutputs", resourceCulture);
@@ -3175,6 +3367,42 @@ namespace FlowBlox.Core {
         public static string DeepSeekAIProvider_DisplayName_Plural {
             get {
                 return ResourceManager.GetString("DeepSeekAIProvider_DisplayName_Plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delay (milliseconds) ähnelt.
+        /// </summary>
+        public static string DelayFlowBlock_DelayMilliseconds {
+            get {
+                return ResourceManager.GetString("DelayFlowBlock_DelayMilliseconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Waiting time before the next flow blocks are invoked. Example: 5000 for five seconds. ähnelt.
+        /// </summary>
+        public static string DelayFlowBlock_DelayMilliseconds_Tooltip {
+            get {
+                return ResourceManager.GetString("DelayFlowBlock_DelayMilliseconds_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Waits for the configured duration, then continues with the next flow blocks. ähnelt.
+        /// </summary>
+        public static string DelayFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("DelayFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Delay ähnelt.
+        /// </summary>
+        public static string DelayFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("DelayFlowBlock_DisplayName", resourceCulture);
             }
         }
         
@@ -3690,16 +3918,40 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("FieldComparisonCondition_DisplayName", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output value ähnelt.
+        /// </summary>
         public static string FieldComparisonCondition_OutputValue {
             get {
                 return ResourceManager.GetString("FieldComparisonCondition_OutputValue", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional literal or field-based value returned when this condition matches. By default, the value of the compared field is returned. ähnelt.
+        /// </summary>
         public static string FieldComparisonCondition_OutputValue_Tooltip {
             get {
                 return ResourceManager.GetString("FieldComparisonCondition_OutputValue_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fields with a ByteArray value cannot be used in comparisons. Select a field of a supported type. ähnelt.
+        /// </summary>
+        public static string FieldComparisonCondition_Validation_ByteArrayNotSupported {
+            get {
+                return ResourceManager.GetString("FieldComparisonCondition_Validation_ByteArrayNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The Contains and NotContains operators require a text field. Select a text field or a different comparison operator. ähnelt.
+        /// </summary>
+        public static string FieldComparisonCondition_Validation_ContainsRequiresText {
+            get {
+                return ResourceManager.GetString("FieldComparisonCondition_Validation_ContainsRequiresText", resourceCulture);
             }
         }
         
@@ -4078,6 +4330,15 @@ namespace FlowBlox.Core {
         public static string FlowBloxComponent_RequiredFields {
             get {
                 return ResourceManager.GetString("FlowBloxComponent_RequiredFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fields whose values are required for this flow block. If a required value is missing, the flow block is not executed. ähnelt.
+        /// </summary>
+        public static string FlowBloxComponent_RequiredFields_Tooltip {
+            get {
+                return ResourceManager.GetString("FlowBloxComponent_RequiredFields_Tooltip", resourceCulture);
             }
         }
         
@@ -4469,6 +4730,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Composite formatting ähnelt.
+        /// </summary>
+        public static string FlowBloxToolboxCategory_CompositeFormat {
+            get {
+                return ResourceManager.GetString("FlowBloxToolboxCategory_CompositeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Counter Format ähnelt.
         /// </summary>
         public static string FlowBloxToolboxCategory_CounterFormat {
@@ -4757,6 +5027,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allow empty format expression ähnelt.
+        /// </summary>
+        public static string FormatFlowBlock_AllowEmptyFormatExpression {
+            get {
+                return ResourceManager.GetString("FormatFlowBlock_AllowEmptyFormatExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Allows an empty format expression and outputs an empty string. If disabled, a format expression is required. ähnelt.
+        /// </summary>
+        public static string FormatFlowBlock_AllowEmptyFormatExpression_Tooltip {
+            get {
+                return ResourceManager.GetString("FormatFlowBlock_AllowEmptyFormatExpression_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Formats text or numeric values using placeholders according to .NET formatting rules. See: https://learn.microsoft.com/en-us/dotnet/standard/base-types/composite-formatting ähnelt.
         /// </summary>
         public static string FormatFlowBlock_Description {
@@ -4784,11 +5072,38 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die .NET composite format string. Placeholders {0}, {1}, and so on reference the format parameters in list order and may include alignment or type-specific format specifiers. ähnelt.
+        /// </summary>
+        public static string FormatFlowBlock_FormatExpression_Tooltip {
+            get {
+                return ResourceManager.GetString("FormatFlowBlock_FormatExpression_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Format parameters ähnelt.
         /// </summary>
         public static string FormatFlowBlock_FormatParameters {
             get {
                 return ResourceManager.GetString("FormatFlowBlock_FormatParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fields passed to string.Format as typed values in list order. The first field supplies {0}, the second {1}, and so on. ähnelt.
+        /// </summary>
+        public static string FormatFlowBlock_FormatParameters_Tooltip {
+            get {
+                return ResourceManager.GetString("FormatFlowBlock_FormatParameters_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The format expression uses .NET string.Format. Use {0}, {1}, and so on for parameters in list order, or {0:Format} for type-specific formatting. Parameters are passed as typed field values. Ready-to-use expressions are available in the Composite formatting toolbox; use {{ and }} for literal braces. ähnelt.
+        /// </summary>
+        public static string FormatFlowBlock_SpecialExplanation_CompositeFormatting {
+            get {
+                return ResourceManager.GetString("FormatFlowBlock_SpecialExplanation_CompositeFormatting", resourceCulture);
             }
         }
         
@@ -4955,47 +5270,11 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Create ähnelt.
-        /// </summary>
-        public static string Global_Create {
-            get {
-                return ResourceManager.GetString("Global_Create", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Content ähnelt.
         /// </summary>
         public static string Global_DefaultResultFieldName {
             get {
                 return ResourceManager.GetString("Global_DefaultResultFieldName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The delete action cannot be performed because it would violate existing dependencies: {0} ähnelt.
-        /// </summary>
-        public static string Global_DependencyViolation_Message {
-            get {
-                return ResourceManager.GetString("Global_DependencyViolation_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The component to be deleted &quot;{0}&quot; is used by &quot;{1}&quot; ähnelt.
-        /// </summary>
-        public static string Global_DependencyViolation_Message_Entry {
-            get {
-                return ResourceManager.GetString("Global_DependencyViolation_Message_Entry", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Dependency violation ähnelt.
-        /// </summary>
-        public static string Global_DependencyViolation_Title {
-            get {
-                return ResourceManager.GetString("Global_DependencyViolation_Title", resourceCulture);
             }
         }
         
@@ -5014,24 +5293,6 @@ namespace FlowBlox.Core {
         public static string Global_FieldElement {
             get {
                 return ResourceManager.GetString("Global_FieldElement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The selection method &apos;{0}&apos; was not found in the target class &apos;{1}&apos;. ähnelt.
-        /// </summary>
-        public static string Global_FilterMethodNotFound_Message {
-            get {
-                return ResourceManager.GetString("Global_FilterMethodNotFound_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Selection method not found ähnelt.
-        /// </summary>
-        public static string Global_FilterMethodNotFound_Title {
-            get {
-                return ResourceManager.GetString("Global_FilterMethodNotFound_Title", resourceCulture);
             }
         }
         
@@ -5081,33 +5342,6 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Error ähnelt.
-        /// </summary>
-        public static string Global_MessageBox_Error_Title {
-            get {
-                return ResourceManager.GetString("Global_MessageBox_Error_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Notice ähnelt.
-        /// </summary>
-        public static string Global_MessageBox_Notification_Title {
-            get {
-                return ResourceManager.GetString("Global_MessageBox_Notification_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Warning ähnelt.
-        /// </summary>
-        public static string Global_MessageBox_Warning_Title {
-            get {
-                return ResourceManager.GetString("Global_MessageBox_Warning_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The following types do not have a DisplayAttribute: {0} ähnelt.
         /// </summary>
         public static string Global_MissingDisplayAttributes_Message {
@@ -5122,24 +5356,6 @@ namespace FlowBlox.Core {
         public static string Global_MissingDisplayAttributes_Title {
             get {
                 return ResourceManager.GetString("Global_MissingDisplayAttributes_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die No selection method (SelectionFilterMethod) was defined for the property &apos;{0}&apos;. ähnelt.
-        /// </summary>
-        public static string Global_MissingFilterMethod_Message {
-            get {
-                return ResourceManager.GetString("Global_MissingFilterMethod_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Selection method missing ähnelt.
-        /// </summary>
-        public static string Global_MissingFilterMethod_Title {
-            get {
-                return ResourceManager.GetString("Global_MissingFilterMethod_Title", resourceCulture);
             }
         }
         
@@ -5167,33 +5383,6 @@ namespace FlowBlox.Core {
         public static string Global_Name {
             get {
                 return ResourceManager.GetString("Global_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die No selectable objects could be found. ähnelt.
-        /// </summary>
-        public static string Global_NoItemsFound_Message {
-            get {
-                return ResourceManager.GetString("Global_NoItemsFound_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die No selection possible ähnelt.
-        /// </summary>
-        public static string Global_NoItemsFound_Title {
-            get {
-                return ResourceManager.GetString("Global_NoItemsFound_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Not applicable ähnelt.
-        /// </summary>
-        public static string Global_NotApplicable {
-            get {
-                return ResourceManager.GetString("Global_NotApplicable", resourceCulture);
             }
         }
         
@@ -5230,33 +5419,6 @@ namespace FlowBlox.Core {
         public static string Global_Selection {
             get {
                 return ResourceManager.GetString("Global_Selection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Please select an entry from the list. ähnelt.
-        /// </summary>
-        public static string Global_SelectionDialog_Message {
-            get {
-                return ResourceManager.GetString("Global_SelectionDialog_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Select entry ähnelt.
-        /// </summary>
-        public static string Global_SelectionDialog_Title {
-            get {
-                return ResourceManager.GetString("Global_SelectionDialog_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Unlink ähnelt.
-        /// </summary>
-        public static string Global_Unlink {
-            get {
-                return ResourceManager.GetString("Global_Unlink", resourceCulture);
             }
         }
         
@@ -5914,6 +6076,60 @@ namespace FlowBlox.Core {
         public static string IndexFlowBlock_InitialIndex_Tooltip {
             get {
                 return ResourceManager.GetString("IndexFlowBlock_InitialIndex_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Injects mapped field values into the output fields of an earlier result flow block and continues with its successors. ähnelt.
+        /// </summary>
+        public static string InjectionFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("InjectionFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Injection ähnelt.
+        /// </summary>
+        public static string InjectionFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("InjectionFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field transfers ähnelt.
+        /// </summary>
+        public static string InjectionFlowBlock_FieldTransferConfigs {
+            get {
+                return ResourceManager.GetString("InjectionFlowBlock_FieldTransferConfigs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Field transfers ähnelt.
+        /// </summary>
+        public static string InjectionFlowBlock_Groups_FieldTransfers {
+            get {
+                return ResourceManager.GetString("InjectionFlowBlock_Groups_FieldTransfers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The mapped field values are written to the target&apos;s output fields and processed by its successors. The target flow block itself is not executed again. Use the Recursive call flow block when the target must execute again. ähnelt.
+        /// </summary>
+        public static string InjectionFlowBlock_SpecialExplanation_TargetPathAndTransfer {
+            get {
+                return ResourceManager.GetString("InjectionFlowBlock_SpecialExplanation_TargetPathAndTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die All fields of the target flow block must be mapped. Mappings are missing for: {0} ähnelt.
+        /// </summary>
+        public static string InjectionFlowBlock_Validation_UnmappedFields {
+            get {
+                return ResourceManager.GetString("InjectionFlowBlock_Validation_UnmappedFields", resourceCulture);
             }
         }
         
@@ -6753,16 +6969,6 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die No records available.
-        ///Use the &quot;+&quot; button to add entries to the table. ähnelt.
-        /// </summary>
-        public static string ListFactoryBase_NoDataAvailable_Text {
-            get {
-                return ResourceManager.GetString("ListFactoryBase_NoDataAvailable_Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The selected element contains unsaved changes. Do you want to discard them? ähnelt.
         /// </summary>
         public static string ListViewSplitModeFactory_DiscardChanges_Message {
@@ -6831,6 +7037,15 @@ namespace FlowBlox.Core {
         public static string LogicalCondition {
             get {
                 return ResourceManager.GetString("LogicalCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Condition ähnelt.
+        /// </summary>
+        public static string LogicalCondition_Condition {
+            get {
+                return ResourceManager.GetString("LogicalCondition_Condition", resourceCulture);
             }
         }
         
@@ -8839,24 +9054,6 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Off ähnelt.
-        /// </summary>
-        public static string PropertyControlResolver_ToggleSwitch_OffContent {
-            get {
-                return ResourceManager.GetString("PropertyControlResolver_ToggleSwitch_OffContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die On ähnelt.
-        /// </summary>
-        public static string PropertyControlResolver_ToggleSwitch_OnContent {
-            get {
-                return ResourceManager.GetString("PropertyControlResolver_ToggleSwitch_OnContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Data source ähnelt.
         /// </summary>
         public static string PropertyNames_DataSource {
@@ -8974,7 +9171,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Calls a target flow block and transfers defined output field values from the input flow block using a configurable field mapping. All output fields of the target flow block must be covered by a mapping. This flow block is particularly suitable for implementing repeated processes. Note that the target flow block must be on the path of the input flow block. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Invokes an earlier flow block on the incoming execution path again and repeats its regular successor path. No fields are transferred. ähnelt.
         /// </summary>
         public static string RecursiveCallFlowBlock_Description {
             get {
@@ -8992,65 +9189,45 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Field transfers ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The target flow block itself is executed again, followed by its regular execution path. No fields are transferred. The target must already lie on the incoming execution path.$$CONTINUE$$
+        ///
+        ///Example of a delayed retry:
+        ///- Execute a database query and check its result.
+        ///- If no result is available: execute Index and check whether Index &lt; RetryLimit. Only then execute Delay -&gt; Recursive call with the database query as its target.
+        ///- As soon as a result is available, continue along the regular success branch.
+        ///
+        ///Set A [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
-        public static string RecursiveCallFlowBlock_FieldTransferConfigs {
+        public static string RecursiveCallFlowBlock_SpecialExplanation_TargetInvocation {
             get {
-                return ResourceManager.GetString("RecursiveCallFlowBlock_FieldTransferConfigs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Transfers ähnelt.
-        /// </summary>
-        public static string RecursiveCallFlowBlock_Groups_Transferrations {
-            get {
-                return ResourceManager.GetString("RecursiveCallFlowBlock_Groups_Transferrations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Warning: All result fields of the target flow block must be fully covered by FieldTransferConfigs. Without complete field-transfer mapping, validation/execution will fail. ähnelt.
-        /// </summary>
-        public static string RecursiveCallFlowBlock_SpecialExplanation_TargetPathAndTransfer {
-            get {
-                return ResourceManager.GetString("RecursiveCallFlowBlock_SpecialExplanation_TargetPathAndTransfer", resourceCulture);
+                return ResourceManager.GetString("RecursiveCallFlowBlock_SpecialExplanation_TargetInvocation", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Target flow block ähnelt.
         /// </summary>
-        public static string RecursiveCallFlowBlock_TargetFlowBlock {
+        public static string RecursiveTargetFlowBlockBase_TargetFlowBlock {
             get {
-                return ResourceManager.GetString("RecursiveCallFlowBlock_TargetFlowBlock", resourceCulture);
+                return ResourceManager.GetString("RecursiveTargetFlowBlockBase_TargetFlowBlock", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The target flow block from which execution continues after transferring the configured field values. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die An earlier flow block on the incoming execution path. Depending on the flow block used, the target is executed again or receives injected output values that are processed by its successors. ähnelt.
         /// </summary>
-        public static string RecursiveCallFlowBlock_TargetFlowBlock_Tooltip {
+        public static string RecursiveTargetFlowBlockBase_TargetFlowBlock_Tooltip {
             get {
-                return ResourceManager.GetString("RecursiveCallFlowBlock_TargetFlowBlock_Tooltip", resourceCulture);
+                return ResourceManager.GetString("RecursiveTargetFlowBlockBase_TargetFlowBlock_Tooltip", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The target flow block must lie on the current execution path. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The target flow block must lie on the incoming execution path. ähnelt.
         /// </summary>
-        public static string RecursiveCallFlowBlock_Validation_TargetNotReachable {
+        public static string RecursiveTargetFlowBlockBase_Validation_TargetNotReachable {
             get {
-                return ResourceManager.GetString("RecursiveCallFlowBlock_Validation_TargetNotReachable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die All fields of the target flow block must be mapped. Mappings are missing for the following fields: {0} ähnelt.
-        /// </summary>
-        public static string RecursiveCallFlowBlock_Validation_UnmappedFields {
-            get {
-                return ResourceManager.GetString("RecursiveCallFlowBlock_Validation_UnmappedFields", resourceCulture);
+                return ResourceManager.GetString("RecursiveTargetFlowBlockBase_Validation_TargetNotReachable", resourceCulture);
             }
         }
         
@@ -9240,6 +9417,15 @@ namespace FlowBlox.Core {
         public static string ReplaceModifier_Search {
             get {
                 return ResourceManager.GetString("ReplaceModifier_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The property &quot;{0}&quot; must be provided. ähnelt.
+        /// </summary>
+        public static string RequiredIfAttribute_ValidationFailed_Message {
+            get {
+                return ResourceManager.GetString("RequiredIfAttribute_ValidationFailed_Message", resourceCulture);
             }
         }
         
@@ -11287,6 +11473,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Column type ähnelt.
+        /// </summary>
+        public static string TableSelectorColumnCondition_ColumnType {
+            get {
+                return ResourceManager.GetString("TableSelectorColumnCondition_ColumnType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type definition for this column condition. Select DateTime, Float, or Double to configure the date/time format or number separators used to parse its comparison value. The default type is Text. ähnelt.
+        /// </summary>
+        public static string TableSelectorColumnCondition_ColumnType_Tooltip {
+            get {
+                return ResourceManager.GetString("TableSelectorColumnCondition_ColumnType_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Table selector mapping entry ähnelt.
         /// </summary>
         public static string TableSelectorMappingEntry {
@@ -11409,42 +11613,6 @@ namespace FlowBlox.Core {
         public static string TableWriterFlowBlock_Validation_DuplicateColumnNames {
             get {
                 return ResourceManager.GetString("TableWriterFlowBlock_Validation_DuplicateColumnNames", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Insert field or replace selected text ähnelt.
-        /// </summary>
-        public static string TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip {
-            get {
-                return ResourceManager.GetString("TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Select file ähnelt.
-        /// </summary>
-        public static string TextBoxWithOptionalButtonsCreator_EnableFileSelection_Tooltip {
-            get {
-                return ResourceManager.GetString("TextBoxWithOptionalButtonsCreator_EnableFileSelection_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Select folder ähnelt.
-        /// </summary>
-        public static string TextBoxWithOptionalButtonsCreator_EnableFolderSelection_Tooltip {
-            get {
-                return ResourceManager.GetString("TextBoxWithOptionalButtonsCreator_EnableFolderSelection_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Open toolbox ähnelt.
-        /// </summary>
-        public static string TextBoxWithOptionalButtonsCreator_EnableToolbox_Tooltip {
-            get {
-                return ResourceManager.GetString("TextBoxWithOptionalButtonsCreator_EnableToolbox_Tooltip", resourceCulture);
             }
         }
         
@@ -12783,13 +12951,13 @@ namespace FlowBlox.Core {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Best practice for links across multiple pages:
         ///- Step 1: Web-Event (search/submit) -&gt; Web-Selector (collect target links)
-        ///- Step 2: Web-Event (search/submit) -&gt; Web-Selector (collect links from the next page) -&gt; Web-Event (click next page)
-        ///- Step 3: Web-Event (click next page) -&gt; Recursive-Call back to the search/submit step, mapping returned DOM to input.$$CONTINUE$$
+        ///- Step 2: From the paging path, use a Web-Selector to check for the next-page element -&gt; Web-Event (click next page)
+        ///- Step 3: Web-Event (click next page) -&gt; Injection back to the search/submit result flow block; map the current DOM content to its result field. Injection then resumes at the target&apos;s successors.$$CONTINUE$$
         ///
-        ///Repeat until no next page is available.
+        ///Repeat until no next-page element is available.
         ///
         ///Do/Don&apos;t:
-        ///- Do: route Recursive-Call back to the paging entry element (for example search/s [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///- Do: [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         public static string WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction {
             get {

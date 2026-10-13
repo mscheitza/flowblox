@@ -116,9 +116,6 @@ namespace FlowBlox.Core.Models.FlowBlocks
         {
             return this.Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (string.IsNullOrWhiteSpace(ProjectSpaceGuid) && string.IsNullOrWhiteSpace(ProjectFile))
                     throw new ValidationException("Either the project file or a Project Space GUID must be specified.");

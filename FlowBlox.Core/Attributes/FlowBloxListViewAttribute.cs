@@ -5,14 +5,14 @@
     {
         public string[] LVColumnMemberNames { get; set; }
 
-        public Type LVItemFactory { get; set; }
+        public Type ItemFactory { get; set; }
 
         public bool IsMovable { get; set; }
 
         public FlowBloxListViewAttribute()
         {
             LVColumnMemberNames = [];
-            LVItemFactory = null;
+            ItemFactory = null;
         }
     }
 }

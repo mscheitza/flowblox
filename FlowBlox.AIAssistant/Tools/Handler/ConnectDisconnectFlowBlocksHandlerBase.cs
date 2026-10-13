@@ -29,13 +29,19 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
             if (Connect)
             {
-                // Recursive-Call uses TargetFlowBlock association, not ReferencedFlowBlocks wiring.
+                // Recursive target blocks use TargetFlowBlock association, not ReferencedFlowBlocks wiring.
                 // Therefore, cardinality checks on "to" must not block this mode.
-                if (from is RecursiveCallFlowBlock recursiveCallFrom)
+                if (from is RecursiveTargetFlowBlockBase recursiveCallFrom)
                 {
                     if (ReferenceEquals(from, to))
                     {
                         return Task.FromResult(ToolHandlerUtilities.Fail("Cannot connect a flow block to itself."));
+                    }
+
+                    if (!recursiveCallFrom.GetPossibleTargetFlowBlocks().Contains(to))
+                    {
+                        return Task.FromResult(ToolHandlerUtilities.Fail(
+                            $"Target flow block '{to.Name}' is not on the incoming path of '{from.Name}'."));
                     }
 
                     var wasChanged = !ReferenceEquals(recursiveCallFrom.TargetFlowBlock, to);
@@ -72,7 +78,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 }));
             }
 
-            if (from is RecursiveCallFlowBlock recursiveCallFromOnDisconnect)
+            if (from is RecursiveTargetFlowBlockBase recursiveCallFromOnDisconnect)
             {
                 var disconnectedInvoke = ReferenceEquals(recursiveCallFromOnDisconnect.TargetFlowBlock, to);
                 if (disconnectedInvoke)

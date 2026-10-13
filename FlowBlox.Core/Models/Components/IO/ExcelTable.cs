@@ -33,16 +33,23 @@ namespace FlowBlox.Core.Models.Components.IO
                 var dataTable = new DataTable();
                 using (var package = new ExcelPackage(memoryStream))
                 {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-                    foreach (var firstRowCell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
+                    var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+                    if (worksheet == null)
+                        return dataTable;
+
+                    var dimension = worksheet.Dimension;
+                    if (dimension == null)
+                        return dataTable;
+
+                    foreach (var firstRowCell in worksheet.Cells[1, 1, 1, dimension.End.Column])
                     {
                         dataTable.Columns.Add(FirstRowHeader ? firstRowCell.Text : $"Column {firstRowCell.Start.Column}");
                     }
 
                     var startRow = FirstRowHeader ? 2 : 1;
-                    for (int rowNum = startRow; rowNum <= worksheet.Dimension.End.Row; rowNum++)
+                    for (int rowNum = startRow; rowNum <= dimension.End.Row; rowNum++)
                     {
-                        var wsRow = worksheet.Cells[rowNum, 1, rowNum, worksheet.Dimension.End.Column];
+                        var wsRow = worksheet.Cells[rowNum, 1, rowNum, dimension.End.Column];
                         DataRow row = dataTable.Rows.Add();
                         foreach (var cell in wsRow)
                         {

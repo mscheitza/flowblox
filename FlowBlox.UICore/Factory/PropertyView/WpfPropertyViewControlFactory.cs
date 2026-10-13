@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Interfaces;
+﻿using WpfPropertyViewControlFactoryResources = FlowBlox.UICore.Resources.ClassResources.WpfPropertyViewControlFactory;
+using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Events;
 using FlowBlox.UICore.Factory.Base;
@@ -68,9 +69,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
         {
             await MessageBoxHelper.ShowMessageBoxAsync(
                     (MetroWindow)owner,
-                    FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Title"),
+                    FlowBloxResourceUtil.GetLocalizedString("DependencyViolation_Title", typeof(WpfPropertyViewControlFactoryResources)),
                     string.Format(
-                        FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message"),
+                        FlowBloxResourceUtil.GetLocalizedString("DependencyViolation_Message", typeof(WpfPropertyViewControlFactoryResources)),
                         string.Join(Environment.NewLine, allReferences.Select(description => " - " + description)))
                 );
         }

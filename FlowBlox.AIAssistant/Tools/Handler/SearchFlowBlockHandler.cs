@@ -22,12 +22,8 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {
-            var searchForNames = ParseSearchTerms(args);
-            var normalizedTerms = searchForNames
-                .Select(x => (x ?? string.Empty).Trim())
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
+            var normalizedTerms = ToolHandlerUtilities.ParseContainsSearchTerms(
+                args["searchForNames"] ?? args["SearchForNames"]);
 
             var candidates = ToolHandlerUtilities.GetProject()
                 .CreateInstances<BaseFlowBlock>()
@@ -65,32 +61,6 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             };
 
             return Task.FromResult(ToolHandlerUtilities.Ok(payload));
-        }
-
-        private static IEnumerable<string> ParseSearchTerms(JObject args)
-        {
-            var commaSeparated = args.Value<string>("searchForNames")
-                                 ?? args.Value<string>("SearchForNames")
-                                 ?? string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(commaSeparated))
-            {
-                return commaSeparated
-                    .Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => x.Trim());
-            }
-
-            var arrayToken = args["searchForNames"] ?? args["SearchForNames"];
-            if (arrayToken is JArray arr)
-            {
-                return arr
-                    .Values<string>()
-                    .Where(x => !string.IsNullOrWhiteSpace(x))
-                    .SelectMany(x => x.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
-                    .Select(x => x.Trim());
-            }
-
-            return Array.Empty<string>();
         }
 
         private static bool Matches(SearchCandidate candidate, string term)

@@ -1,4 +1,5 @@
 using FlowBlox.AIAssistant.Models;
+using FlowBlox.Core.Util.DistributedData;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.Handler
@@ -12,7 +13,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             "Returns one file from FlowBlox's central distributed data directory.",
             new JObject
             {
-                ["dataType"] = "string (python or auxiliary_project)",
+                ["dataType"] = "string (python, auxiliary_project, or example_project)",
                 ["fileName"] = "string (plain filename including extension)"
             });
 

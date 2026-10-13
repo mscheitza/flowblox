@@ -134,9 +134,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var webBrowserFlowBlock = AssociatedWebBrowser ?? GetPreviousFlowBlockOnPath<WebBrowserFlowBlock>(this);
                 var webBrowser = webBrowserFlowBlock.InternalWebBrowser;

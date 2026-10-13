@@ -85,9 +85,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         {
             return this.Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 try
                 {

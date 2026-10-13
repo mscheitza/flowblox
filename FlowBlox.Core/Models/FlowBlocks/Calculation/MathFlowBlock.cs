@@ -39,9 +39,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Calculation
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (string.IsNullOrWhiteSpace(MathExpression))
                 {

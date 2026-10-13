@@ -158,9 +158,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 // Determine URL first; empty URL means "no navigation".
                 string url = FlowBloxFieldHelper.ReplaceFieldsInString(Url);

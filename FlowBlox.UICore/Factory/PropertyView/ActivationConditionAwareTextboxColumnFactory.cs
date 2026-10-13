@@ -1,3 +1,4 @@
+using ActivationConditionAwareTextboxColumnFactoryResources = FlowBlox.UICore.Resources.ClassResources.ActivationConditionAwareTextboxColumnFactory;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.UICore.Converters.PropertyView;
@@ -78,7 +79,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             ActivationConditionAttribute activationCondition)
         {
             var text = new FrameworkElementFactory(typeof(TextBlock));
-            text.SetValue(TextBlock.TextProperty, FlowBloxResourceUtil.GetLocalizedString("Global_NotApplicable"));
+            text.SetValue(TextBlock.TextProperty, FlowBloxResourceUtil.GetLocalizedString("NotApplicable", typeof(ActivationConditionAwareTextboxColumnFactoryResources)));
             text.SetValue(TextBlock.BackgroundProperty, new SolidColorBrush(Color.FromRgb(255, 232, 204)));
             text.SetValue(TextBlock.ForegroundProperty, Brushes.DarkSlateGray);
             text.SetValue(TextBlock.PaddingProperty, new Thickness(4, 2, 4, 2));

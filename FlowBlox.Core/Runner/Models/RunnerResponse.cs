@@ -16,6 +16,8 @@ namespace FlowBlox.Core.Runner.Contracts
         public List<string> Warnings { get; set; }
         public string ErrorMessage { get; set; }
         public string Exception { get; set; }
+        public string AbortMessage { get; set; }
+        public string AbortException { get; set; }
 
         public string ProjectName { get; set; }
         public DateTime StartedUtc { get; set; }

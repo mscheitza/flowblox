@@ -12,6 +12,7 @@
     <None Remove="Files\globalToolbox_chattemplates.json" />
     <None Remove="Files\globalToolbox_aiprompttemplates.json" />
     <None Remove="Files\globalToolbox_counterformat.json" />
+    <None Remove="Files\globalToolbox_compositeformat.json" />
     <None Remove="Files\globalToolbox_dbconnection.json" />
     <None Remove="Files\globalToolbox_format.json" />
     <None Remove="Files\globalToolbox_regex.json" />
@@ -88,6 +89,7 @@
     <EmbeddedResource Include="Files\globalToolbox_aiprompttemplates.json" />
     <EmbeddedResource Include="Files\globalToolbox_dbconnection.json" />
     <EmbeddedResource Include="Files\globalToolbox_counterformat.json" />
+    <EmbeddedResource Include="Files\globalToolbox_compositeformat.json" />
     <EmbeddedResource Include="Files\globalToolbox_format.json" />
     <EmbeddedResource Include="Files\globalToolbox_regex.json" />
     <EmbeddedResource Include="Files\globalToolbox_regex_extended.json" />

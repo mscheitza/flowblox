@@ -807,12 +807,7 @@ The application will now restart to restore a clean environment.</value>
 	</data>
   <data name="ProjectPanel_Legend_RecursiveCall_Tooltip" xml:space="preserve">
     <value>Recursive call:
-Datasets are transferred through field transfers
-from the source flow block, via the recursion flow block,
-to the target flow block.
-Afterwards, all transferred datasets are processed
-through the flow from the target flow block.
-This repeats while the source flow block keeps producing the recursive call.</value>
+The Recursive Call flow block invokes the connected earlier target flow block again. The target must lie on the Recursive Call flow block's incoming execution path.</value>
   </data>
   <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
     <value>Build, Test, and Run Flows (based on .NET)</value>
@@ -835,4 +830,5 @@ This repeats while the source flow block keeps producing the recursive call.</va
   <data name="AppWindow_itmNotifications_Text" xml:space="preserve"><value>Notifications...</value></data>
   <data name="AppWindow_Notifications_LoadError_Title" xml:space="preserve"><value>Notifications could not be loaded</value></data>
   <data name="AppWindow_Notifications_SaveError_Title" xml:space="preserve"><value>Notifications could not be saved</value></data>
+  <data name="AppWindow_itmOpenExampleProject_Text" xml:space="preserve"><value>Open example project...</value></data>
 </root>

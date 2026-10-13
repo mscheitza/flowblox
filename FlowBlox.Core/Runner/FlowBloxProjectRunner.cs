@@ -130,10 +130,8 @@ namespace FlowBlox.Core.Runner
                 // Forward runtime logs and optionally abort on warnings/errors.
                 string abortReason = null;
 
-                runtime.LogMessageCreated += (rt, msg, level) =>
+                runtime.LogEntryCreated += (rt, msg, level, exception) =>
                 {
-                    Report(msg, level);
-
                     if (abortReason == null)
                     {
                         if (request.AbortOnError && level == FlowBloxLogLevel.Error)
@@ -141,6 +139,12 @@ namespace FlowBlox.Core.Runner
 
                         if (request.AbortOnWarning && level == FlowBloxLogLevel.Warning)
                             abortReason = "Aborted due to a warning log message.";
+
+                        if (abortReason != null)
+                        {
+                            response.AbortMessage = msg;
+                            response.AbortException = exception?.ToString();
+                        }
                     }
 
                     if (request.AbortOnError && level == FlowBloxLogLevel.Error)
@@ -149,6 +153,8 @@ namespace FlowBlox.Core.Runner
                     if (request.AbortOnWarning && level == FlowBloxLogLevel.Warning)
                         rt.CancelExecution(RuntimeCancellationKind.AbortOnWarningOrError, abortReason);
                 };
+
+                runtime.LogMessageCreated += (_, msg, level) => Report(msg, level);
 
                 StartDebugTimeoutIfConfigured(runtime, out timeoutCts);
 

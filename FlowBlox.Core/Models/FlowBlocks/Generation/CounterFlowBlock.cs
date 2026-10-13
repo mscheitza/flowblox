@@ -99,7 +99,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Generation
             properties.Add(nameof(StartValue));
             properties.Add(nameof(FinalValue));
             properties.Add(nameof(Format));
-            properties.Add(nameof(AlphaRange));
+            if (CounterType == CounterTypes.Alphanumeric)
+                properties.Add(nameof(AlphaRange));
             return properties;
         }
 
@@ -107,9 +108,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Generation
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (CounterType == CounterTypes.Integer)
                 {

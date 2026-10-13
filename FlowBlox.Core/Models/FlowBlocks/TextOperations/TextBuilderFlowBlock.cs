@@ -47,8 +47,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 var initialText = FlowBloxFieldHelper.ReplaceFieldsInString(InitialText ?? string.Empty);
                 InternalStringBuilder = new StringBuilder(initialText);

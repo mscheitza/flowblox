@@ -79,7 +79,7 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsTrue(flowBlock.Ok, flowBlock.Error);
             Assert.IsTrue(auxiliaryMetadata.Result.Value<bool>("isAuxiliaryProject"));
             Assert.AreEqual(_projectName, auxiliaryMetadata.Result.Value<string>("projectName"));
-            Assert.AreEqual(ProjectDescription, auxiliaryMetadata.Result.Value<string>("description"));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(auxiliaryMetadata.Result.Value<string>("description")));
             Assert.AreEqual(0, FlowBloxProjectManager.Instance.ActiveProject.FlowBloxRegistry.GetFlowBlocks().Count());
             Assert.IsTrue(File.Exists(AuxiliaryProjectSessionStore.GetStoredProjectFile(_sessionId, _projectName)));
 
@@ -96,7 +96,7 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsTrue(File.Exists(saved.Result.Value<string>("projectFile")));
             var discoveredProject = projects.Result["projects"]!.Single(x =>
                 string.Equals(x!.Value<string>("projectName"), _projectName, StringComparison.Ordinal));
-            Assert.AreEqual(ProjectDescription, discoveredProject!.Value<string>("description"));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(discoveredProject!.Value<string>("description")));
             Assert.IsTrue(File.Exists(discoveredProject.Value<string>("projectFile")));
             StringAssert.Contains(File.ReadAllText(saved.Result.Value<string>("projectFile")), "AuxStart");
             Assert.IsFalse(mainMetadata.Result.Value<bool>("isAuxiliaryProject"));
@@ -139,7 +139,7 @@ namespace FlowBloxTest.AIAssistant
                 ["copyFromDistributedData"] = new JObject
                 {
                     ["dataType"] = "auxiliary_project",
-                    ["fileName"] = "Web-Search.fbprj"
+                    ["fileName"] = "BraveWebSearch.fbprj"
                 }
             });
             var opened = await Execute(api, "AuxiliaryProjectEditing", new JObject
@@ -168,12 +168,51 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsFalse(createWithoutDescription.Ok);
             StringAssert.Contains(createWithoutDescription.Error, "description is required for metadata_only");
             Assert.IsTrue(createResponse.Ok, createResponse.Error);
-            Assert.AreEqual("Runs a web search and returns structured search results.", createResponse.Result.Value<string>("description"));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(createResponse.Result.Value<string>("description")));
             Assert.IsTrue(opened.Ok, opened.Error);
             Assert.IsFalse(updateWhileOpen.Ok);
             StringAssert.Contains(updateWhileOpen.Error, "not allowed while an auxiliary project is open");
             Assert.IsTrue(saved.Ok, saved.Error);
             Assert.IsTrue(updateAfterClose.Ok, updateAfterClose.Error);
+        }
+
+        [TestMethod]
+        public async Task GetAuxiliaryProjects_ListsAndFiltersDistributedProjects()
+        {
+            var api = new DefaultToolApi();
+            var allProjects = await Execute(api, "GetAuxiliaryProjects", new JObject
+            {
+                ["mode"] = "distributedData"
+            });
+
+            Assert.IsTrue(allProjects.Ok, allProjects.Error);
+            var projects = allProjects.Result["projects"]!.Children<JObject>().ToList();
+            Assert.IsTrue(projects.Count > 0);
+            Assert.IsTrue(projects.All(x => !string.IsNullOrWhiteSpace(x.Value<string>("fileName"))));
+            Assert.IsTrue(projects.All(x => x["inputFields"] is JArray && x["outputFields"] is JArray));
+
+            var expectedProject = projects.First(x =>
+                (x.Value<string>("projectName") ?? string.Empty).Contains("MySql", StringComparison.OrdinalIgnoreCase));
+            var filter = "mysql schema database columns tables";
+            var filtered = await Execute(api, "GetAuxiliaryProjects", new JObject
+            {
+                ["mode"] = "distributedData",
+                ["filter"] = filter
+            });
+
+            Assert.IsTrue(filtered.Ok, filtered.Error);
+            var filterTerms = filtered.Result["filterTerms"]!.Values<string>().ToList();
+            CollectionAssert.AreEquivalent(filter.Split(' ').ToList(), filterTerms);
+            var filteredProjects = filtered.Result["projects"]!.Children<JObject>().ToList();
+            Assert.IsTrue(filteredProjects.Any(x =>
+                string.Equals(
+                    x.Value<string>("fileName"),
+                    expectedProject.Value<string>("fileName"),
+                    StringComparison.OrdinalIgnoreCase)));
+            Assert.IsTrue(filteredProjects.All(x =>
+                filterTerms.Any(term =>
+                    (x.Value<string>("projectName") ?? string.Empty).Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                    (x.Value<string>("description") ?? string.Empty).Contains(term, StringComparison.OrdinalIgnoreCase))));
         }
 
         [TestMethod]

@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Attributes;
+﻿using PropertyViewControlFactoryBaseResources = FlowBlox.UICore.Resources.ClassResources.PropertyViewControlFactoryBase;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
@@ -78,6 +79,13 @@ namespace FlowBlox.UICore.Factory.Base
             {
                 _registry.PostProcessManagedObjectCreated(managedObject);
             }
+            
+            if (newInstance is FlowBloxReactiveObject reactiveObject && 
+                newInstance is not IFlowBloxComponent && 
+                newInstance is not IManagedObject)
+            {
+                reactiveObject.OnAfterLoad();
+            }
 
             _registry.Register(newInstance);
 
@@ -86,6 +94,9 @@ namespace FlowBlox.UICore.Factory.Base
 
         protected virtual object CreateNewInstance(Type type)
         {
+            if (TryCreateInstanceWithItemFactory(type, out var factoryInstance))
+                return factoryInstance;
+
             ConstructorInfo constructor = type.GetConstructor([_target.GetType()]);
             object instance;
             if (constructor != null)
@@ -102,6 +113,23 @@ namespace FlowBlox.UICore.Factory.Base
             }
 
             return instance;
+        }
+
+        protected virtual Type GetExplicitItemFactoryType(Type type) => null;
+
+        private bool TryCreateInstanceWithItemFactory(Type type, out object instance)
+        {
+            instance = null;
+            var factoryType = GetExplicitItemFactoryType(type);
+            if (factoryType == null)
+                return false;
+
+            var factory = (IItemFactory<object>)Activator.CreateInstance(factoryType);
+            instance = factory.Create();
+            if (instance == null || !type.IsInstanceOfType(instance))
+                throw new InvalidOperationException($"Factory returned an incompatible instance. Expected type: {type.FullName}, actual: {instance?.GetType().FullName ?? "null"}");
+
+            return true;
         }
 
         protected virtual void DeleteInstance(object instance)
@@ -130,7 +158,7 @@ namespace FlowBlox.UICore.Factory.Base
             foreach (var dependency in dependencies.Where(x => !excludedTargets.Contains(x)))
             {
                 allReferences.Add(string.Format(
-                    FlowBloxResourceUtil.GetLocalizedString("Global_DependencyViolation_Message_Entry"),
+                    FlowBloxResourceUtil.GetLocalizedString("DependencyViolation_Message_Entry", typeof(PropertyViewControlFactoryBaseResources)),
                     instance,
                     dependency));
             }

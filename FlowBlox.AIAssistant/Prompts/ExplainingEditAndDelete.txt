@@ -17,7 +17,9 @@ Update rules:
   - missing parent paths are created automatically (GetOrCreate behavior)
 - Creation split:
   - FlowBloxReactiveObject-only: create/update via Update path
-  - ManagedObjects/FlowBlocks: create via dedicated tool calls (CreateManagedObject/CreateFlowBlock), then reference via Update
+  - FlowBlocks: create via CreateFlowBlock, then reference via Update
+  - FieldElements: create result fields via CreateField with the owning BaseResultFlowBlock in sourceFlowBlockName (sets Source); create Input/Memory user fields via CreateUserField (no source FlowBlock). BaseSingleResultFlowBlock creates its default ResultField automatically.
+  - Other ManagedObjects: create via CreateManagedObject, then reference via Update. CreateManagedObject rejects FieldElement and its derived types.
 
 Typed index GetOrCreate (reactive-only collections):
 - Optional syntax: /Collection/<index>:<FullTypeName>/...

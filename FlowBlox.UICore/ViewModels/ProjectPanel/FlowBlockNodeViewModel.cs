@@ -262,7 +262,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
                 if (typeof(System.Collections.IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType.IsGenericType)
                 {
-                    RenderListProperties(propertyName, propertyValue);
+                    RenderListProperties(property, propertyValue);
                     continue;
                 }
 
@@ -281,11 +281,12 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             }
         }
 
-        private void RenderListProperties(string propertyName, object propertyValue)
+        private void RenderListProperties(PropertyInfo property, object propertyValue)
         {
             var list = (System.Collections.IEnumerable)propertyValue;
             var listType = propertyValue.GetType().GetGenericArguments()[0];
-            var displayName = ResolveDisplayName(listType, propertyName);
+            var propertyName = property.Name;
+            var displayName = FlowBloxResourceUtil.GetItemDisplayName(property, listType);
             var index = 0;
 
             foreach (var item in list)
@@ -334,11 +335,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
 
             foreach (var field in resultFlowBlock.Fields)
             {
-                Rows.Add(new FlowBlockRenderRowViewModel("field", string.Empty, field.Name, field.FullyQualifiedName, field));
+                Rows.Add(new FlowBlockRenderRowViewModel("field", string.Empty, field.Name, field.FullyQualifiedName, field, parent: InternalFlowBlock));
                 foreach (var modifier in field.Modifiers)
-                    Rows.Add(new FlowBlockRenderRowViewModel("modifier", "mod", CleanValue(modifier.ToString()), modifier.ToString(), modifier));
+                    Rows.Add(new FlowBlockRenderRowViewModel("modifier", "mod", CleanValue(modifier.ToString()), modifier.ToString(), modifier, parent: InternalFlowBlock));
                 foreach (var condition in field.Conditions)
-                    Rows.Add(new FlowBlockRenderRowViewModel("condition", "cond", CleanValue(condition.ShortDisplayName), condition.DisplayName, condition));
+                    Rows.Add(new FlowBlockRenderRowViewModel("condition", "cond", CleanValue(condition.ShortDisplayName), condition.DisplayName, condition, parent: InternalFlowBlock));
             }
         }
 
@@ -360,7 +361,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private void RenderActivationConditions()
         {
             foreach (var condition in InternalFlowBlock.ActivationConditions)
-                Rows.Add(new FlowBlockRenderRowViewModel("activation", "if", CleanValue(condition.ShortDisplayName), condition.DisplayName, condition));
+                Rows.Add(new FlowBlockRenderRowViewModel("activation", "if", CleanValue(condition.ShortDisplayName), condition.DisplayName, condition, parent: InternalFlowBlock));
         }
 
         private static string ResolveDisplayName(MemberInfo member, string fallback)

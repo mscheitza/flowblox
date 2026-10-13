@@ -134,15 +134,6 @@
 	<data name="AssociatedFlowBlockRequired_ValidationMessage" xml:space="preserve">
 		<value>"{0}" muss gesetzt sein oder ein vorheriger Flow-Block vom Typ "{1}" muss im Ablauf vorhanden sein.</value>
 	</data>
-	<data name="AssociationControlFactory_NotResolvable" xml:space="preserve">
-		<value>Keine automatische Ermittlung möglich.</value>
-	</data>
-	<data name="AssociationControlFactory_Resolvable" xml:space="preserve">
-		<value>Automatisch ermittelt: {0}</value>
-	</data>
-	<data name="AssociationTextBox_Empty" xml:space="preserve">
-		<value>Bitte wählen...</value>
-	</data>
 	<data name="Base64ToTextModifier_DisplayName" xml:space="preserve">
 		<value>Base64-codierten Text entschlüsseln</value>
 	</data>
@@ -151,6 +142,9 @@
 	</data>
 	<data name="BaseFlowBlock_ActivationConditions" xml:space="preserve">
 		<value>Aktivierungsbedingungen</value>
+	</data>
+	<data name="BaseFlowBlock_ActivationConditions_Tooltip" xml:space="preserve">
+		<value>Zusätzliche Bedingungen, welche die Ausführung dieses Flow-Blocks steuern. Sind die Aktivierungsbedingungen insgesamt nicht erfüllt, wird der Flow-Block nicht ausgeführt.</value>
 	</data>
 	<data name="BaseFlowBlock_AssociatedIterationContext" xml:space="preserve">
 		<value>Iterationskontext</value>
@@ -193,13 +187,13 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Eingabeverhalten</value>
 	</data>
 	<data name="BaseFlowBlock_InputBehaviorAssignments_Tooltip" xml:space="preserve">
-		<value>Definiert pro Eingangs-FlowBlock, wie dessen Eingangsdatensätze ausgewählt oder kombiniert werden. Die daraus entstehenden kombinierten Datensätze werden nacheinander verarbeitet.</value>
+		<value>Legt fest, wie Eingabedatensätze innerhalb eines Iterationskontexts ausgewählt oder kombiniert werden. Kombinierte Datensätze werden nacheinander verarbeitet. Die automatische Verhaltenszuweisung kann passende Einstellungen bei geänderten Eingängen anpassen.</value>
 	</data>
 	<data name="BaseFlowBlock_InputIgnoreDuplicates" xml:space="preserve">
 		<value>Duplikate in Eingabedatensätzen ignorieren</value>
 	</data>
 	<data name="BaseFlowBlock_InputIgnoreDuplicates_Tooltip" xml:space="preserve">
-		<value>Entfernt doppelte Eingabe- und Ausgabedatensätze durch Vergleich aller Feldwerte. Nur das erste Vorkommen wird verarbeitet oder ausgegeben.</value>
+		<value>Entfernt doppelte, im Iterationskontext gesammelte Eingabedatensätze durch Vergleich aller Feldwerte. Nur das erste Vorkommen wird verarbeitet.</value>
 	</data>
 	<data name="BaseFlowBlock_Name" xml:space="preserve">
 		<value>Name</value>
@@ -224,6 +218,9 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	</data>
 	<data name="BaseResultFlowBlock_IgnoreDuplicates" xml:space="preserve">
 		<value>Duplikate in Ergebnisdatensätzen entfernen</value>
+	</data>
+	<data name="BaseResultFlowBlock_IgnoreDuplicates_Tooltip" xml:space="preserve">
+		<value>Entfernt doppelte Ergebnisdatensätze durch Vergleich aller Feldwerte. Nur das erste Vorkommen wird an nachfolgende Flow-Blocks weitergegeben.</value>
 	</data>
 	<data name="BaseResultFlowBlock_OutputBehavior" xml:space="preserve">
 		<value>Ausgabeverhalten</value>
@@ -258,32 +255,8 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="BpeAiTokenizer_TokenizerConfiguration" xml:space="preserve">
 		<value>Tokenizer-Konfiguration</value>
 	</data>
-	<data name="Buttons_Add" xml:space="preserve">
-		<value>Hinzufügen</value>
-	</data>
-	<data name="Buttons_Apply" xml:space="preserve">
-		<value>Übernehmen</value>
-	</data>
 	<data name="Buttons_Cancel" xml:space="preserve">
 		<value>Zurück</value>
-	</data>
-	<data name="Buttons_Edit" xml:space="preserve">
-		<value>Bearbeiten</value>
-	</data>
-	<data name="Buttons_Link" xml:space="preserve">
-		<value>Verknüpfen</value>
-	</data>
-	<data name="Buttons_MoveDown" xml:space="preserve">
-		<value>Nach unten</value>
-	</data>
-	<data name="Buttons_MoveUp" xml:space="preserve">
-		<value>Nach oben</value>
-	</data>
-	<data name="Buttons_Remove" xml:space="preserve">
-		<value>Entfernen</value>
-	</data>
-	<data name="Buttons_Unlink" xml:space="preserve">
-		<value>Trennen</value>
 	</data>
 	<data name="ComparisonOperator_Contains" xml:space="preserve">
 		<value>enthält</value>
@@ -433,7 +406,10 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Ausgabewert</value>
 	</data>
 	<data name="FieldComparisonCondition_OutputValue_Tooltip" xml:space="preserve">
-		<value>Fester oder feldbasierter Wert, der bei zutreffender Bedingung ausgegeben wird. Leer lassen, um den Wert des verglichenen Feldes auszugeben.</value>
+		<value>Optionaler fester oder feldbasierter Wert, der bei zutreffender Bedingung ausgegeben wird. Standardmäßig wird der Wert des verglichenen Feldes ausgegeben.</value>
+	</data>
+	<data name="LogicalCondition_Condition" xml:space="preserve">
+		<value>Bedingung</value>
 	</data>
 	<data name="Direction_Decode" xml:space="preserve">
 		<value>Dekodieren</value>
@@ -594,6 +570,9 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="FlowBloxComponent_RequiredFields" xml:space="preserve">
 		<value>Erforderliche Felder</value>
 	</data>
+	<data name="FlowBloxComponent_RequiredFields_Tooltip" xml:space="preserve">
+		<value>Felder, deren Werte für diesen Flow-Block erforderlich sind. Fehlt ein erforderlicher Wert, wird der Flow-Block nicht ausgeführt.</value>
+	</data>
 	<data name="FlowBloxComponentUIActions_ManageUserFields" xml:space="preserve">
 		<value>Benutzerfelder verwalten</value>
 	</data>
@@ -687,20 +666,38 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="FormatFlowBlock_Description" xml:space="preserve">
 		<value>Formatiert Texte oder numerische Werte mithilfe von Platzhaltern gemäß den .NET-Formatierungsregeln. Siehe: https://learn.microsoft.com/en-us/dotnet/standard/base-types/composite-formatting</value>
 	</data>
+	<data name="FormatFlowBlock_AllowEmptyFormatExpression" xml:space="preserve">
+		<value>Leeren Format-Ausdruck unterstützen</value>
+	</data>
+	<data name="FormatFlowBlock_AllowEmptyFormatExpression_Tooltip" xml:space="preserve">
+		<value>Erlaubt einen leeren Format-Ausdruck und gibt eine leere Zeichenfolge aus. Wenn deaktiviert, ist ein Format-Ausdruck erforderlich.</value>
+	</data>
 	<data name="FormatFlowBlock_DisplayName" xml:space="preserve">
 		<value>Formatieren</value>
 	</data>
 	<data name="FormatFlowBlock_FormatExpression" xml:space="preserve">
 		<value>Format-Ausdruck</value>
 	</data>
+	<data name="FormatFlowBlock_FormatExpression_Tooltip" xml:space="preserve">
+		<value>.NET-Verbundformatzeichenfolge. Die Platzhalter {0}, {1} usw. verweisen in Listenreihenfolge auf die Formatparameter und können Ausrichtungen oder typspezifische Formatbezeichner enthalten.</value>
+	</data>
 	<data name="FormatFlowBlock_FormatParameters" xml:space="preserve">
 		<value>Format-Parameter</value>
+	</data>
+	<data name="FormatFlowBlock_FormatParameters_Tooltip" xml:space="preserve">
+		<value>Felder, die string.Format in Listenreihenfolge als typisierte Werte übergeben werden. Das erste Feld belegt {0}, das zweite {1} usw.</value>
+	</data>
+	<data name="FormatFlowBlock_SpecialExplanation_CompositeFormatting" xml:space="preserve">
+		<value>Der Format-Ausdruck verwendet .NET string.Format. Verwenden Sie {0}, {1} usw. für die Parameter in Listenreihenfolge oder {0:Format} für eine typspezifische Formatierung. Die Parameter werden als typisierte Feldwerte übergeben. Einsatzbereite Ausdrücke finden Sie in der Toolbox Verbundformatierung; mit {{ und }} werden geschweifte Klammern ausgegeben.</value>
 	</data>
 	<data name="FormatFlowBlock_Validation_InvalidFieldElementCount" xml:space="preserve">
 		<value>Die Anzahl der Formatparameter ({0}) stimmt nicht mit der Anzahl der verknüpften Feld-Elemente ({1}) überein.</value>
 	</data>
 	<data name="FormatFlowBlock_Validation_InvalidFormatExpression" xml:space="preserve">
 		<value>Der Format-Ausdruck ist ungültig. Bitte prüfen Sie Platzhalter und maskierte geschweifte Klammern.</value>
+	</data>
+	<data name="RequiredIfAttribute_ValidationFailed_Message" xml:space="preserve">
+		<value>Die Angabe der Eigenschaft "{0}" ist erforderlich.</value>
 	</data>
 	<data name="FormatParameterDefinition" xml:space="preserve">
 		<value>Format-Parameter</value>
@@ -711,33 +708,14 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="Global_Add" xml:space="preserve">
 		<value>Hinzufügen</value>
 	</data>
-	<data name="Global_Create" xml:space="preserve">
-		<value>Erstellen</value>
-	</data>
 	<data name="Global_DefaultResultFieldName" xml:space="preserve">
 		<value>Inhalt</value>
-	</data>
-	<data name="Global_DependencyViolation_Message" xml:space="preserve">
-		<value>Die Löschaktion kann nicht durchgeführt werden, weil dadurch bestehende Abhängkeiten verletzt werden:
-{0}</value>
-	</data>
-	<data name="Global_DependencyViolation_Message_Entry" xml:space="preserve">
-		<value>Die zu löschende Komponente "{0}" wird von "{1}" verwendet</value>
-	</data>
-	<data name="Global_DependencyViolation_Title" xml:space="preserve">
-		<value>Verletzung von Abhängigkeiten</value>
 	</data>
 	<data name="Global_Edit" xml:space="preserve">
 		<value>Bearbeiten</value>
 	</data>
 	<data name="Global_FieldElement" xml:space="preserve">
 		<value>Feldelement</value>
-	</data>
-	<data name="Global_FilterMethodNotFound_Message" xml:space="preserve">
-		<value>Die Auswahlmethode '{0}' wurde nicht in der Zielklasse '{1}' gefunden.</value>
-	</data>
-	<data name="Global_FilterMethodNotFound_Title" xml:space="preserve">
-		<value>Auswahlmethode nicht gefunden</value>
 	</data>
 	<data name="Global_FlowBlock" xml:space="preserve">
 		<value>Flow-Block</value>
@@ -754,24 +732,12 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="Global_Link" xml:space="preserve">
 		<value>Verknüpfen</value>
 	</data>
-	<data name="Global_MessageBox_Error_Title" xml:space="preserve">
-		<value>Fehler</value>
-	</data>
-	<data name="Global_MessageBox_Notification_Title" xml:space="preserve">
-		<value>Hinweis</value>
-	</data>
 	<data name="Global_MissingDisplayAttributes_Message" xml:space="preserve">
 		<value>Die folgenden Typen besitzen kein DisplayAttribute:
 {0}</value>
 	</data>
 	<data name="Global_MissingDisplayAttributes_Title" xml:space="preserve">
 		<value>Anzeige-Fehler</value>
-	</data>
-	<data name="Global_MissingFilterMethod_Message" xml:space="preserve">
-		<value>Für die Eigenschaft '{0}' wurde keine Auswahlmethode (SelectionFilterMethod) definiert.</value>
-	</data>
-	<data name="Global_MissingFilterMethod_Title" xml:space="preserve">
-		<value>Auswahlmethode fehlt</value>
 	</data>
 	<data name="Global_MoveDown" xml:space="preserve">
 		<value>Nach unten</value>
@@ -781,12 +747,6 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	</data>
 	<data name="Global_Name" xml:space="preserve">
 		<value>Name</value>
-	</data>
-	<data name="Global_NoItemsFound_Message" xml:space="preserve">
-		<value>Es konnten keine auswählbaren Objekte gefunden werden.</value>
-	</data>
-	<data name="Global_NoItemsFound_Title" xml:space="preserve">
-		<value>Keine Auswahl möglich</value>
 	</data>
 	<data name="Global_Remove" xml:space="preserve">
 		<value>Entfernen</value>
@@ -799,15 +759,6 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	</data>
 	<data name="Global_Selection" xml:space="preserve">
 		<value>Auswahl</value>
-	</data>
-	<data name="Global_SelectionDialog_Message" xml:space="preserve">
-		<value>Wählen Sie bitte einen Eintrag aus der Liste aus.</value>
-	</data>
-	<data name="Global_SelectionDialog_Title" xml:space="preserve">
-		<value>Eintrag auswählen</value>
-	</data>
-	<data name="Global_Unlink" xml:space="preserve">
-		<value>Trennen</value>
 	</data>
 	<data name="Global_ValidationFailed_Title" xml:space="preserve">
 		<value>Validierung fehlgeschlagen</value>
@@ -861,25 +812,10 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Übertragen nach</value>
 	</data>
 	<data name="RecursiveCallFlowBlock_Description" xml:space="preserve">
-		<value>Ruft einen Ziel-Flow-Block auf und überträgt dabei definierte Ausgabe-Feldwerte aus dem Eingangs-Flow-Block mittels konfigurierbarem Feldmapping. Alle Ausgabefelder des Ziel-Flow-Blocks müssen durch ein Mapping abgedeckt sein. Dieser Flow-Block eignet sich insbesondere zur Realisierung wiederholter Abläufe. Beachten Sie, dass der Ziel-Flow-Block auf dem Pfad des Eingangs-Flow-Blocks liegen muss.</value>
+		<value>Ruft einen früheren Flow-Block auf dem eingehenden Ausführungspfad erneut auf und durchläuft dessen regulären Folgepfad erneut. Dabei werden keine Felder übertragen.</value>
 	</data>
 	<data name="RecursiveCallFlowBlock_DisplayName" xml:space="preserve">
 		<value>Rekursiver Aufruf</value>
-	</data>
-	<data name="RecursiveCallFlowBlock_FieldTransferConfigs" xml:space="preserve">
-		<value>Feldübertragungen</value>
-	</data>
-	<data name="RecursiveCallFlowBlock_Groups_Transferrations" xml:space="preserve">
-		<value>Übertragungen</value>
-	</data>
-	<data name="RecursiveCallFlowBlock_TargetFlowBlock" xml:space="preserve">
-		<value>Ziel-Flowblock</value>
-	</data>
-	<data name="RecursiveCallFlowBlock_Validation_TargetNotReachable" xml:space="preserve">
-		<value>Der Ziel-Flow-Block muss im aktuellen Ausführungspfad liegen.</value>
-	</data>
-	<data name="RecursiveCallFlowBlock_Validation_UnmappedFields" xml:space="preserve">
-		<value>Alle Felder des Ziel-Flow-Blocks müssen abgebildet werden. Es fehlen Übertragungen für folgende Felder: {0}</value>
 	</data>
 	<data name="JoinFlowBlock_Description" xml:space="preserve">
 		<value>Fügt ausgewählte Feldwerte aus dem Datensatz der aktuellen Iteration mit einem Trennzeichen zu einem Ausgabewert zusammen.</value>
@@ -916,6 +852,15 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	</data>
 	<data name="BaseSingleResultCollectorFlowBlock_SpecialExplanation_ManualOverride" xml:space="preserve">
 		<value>Der Iterationskontext kann manuell überschrieben werden, wenn Werte über einen größeren oder anderen Bereich gesammelt werden sollen.</value>
+	</data>
+	<data name="BaseMultiResultCollectorFlowBlock_SpecialExplanation_IterationScope" xml:space="preserve">
+		<value>Dieser Collector-Flow-Block sammelt vollständige Datensätze über den aktiven Iterationskontext und verarbeitet sie gemeinsam, sobald das letzte Input-Dataset erreicht ist.</value>
+	</data>
+	<data name="BaseMultiResultCollectorFlowBlock_SpecialExplanation_AutoIterationContext" xml:space="preserve">
+		<value>Automatische Ermittlung des Iterationskontexts: Der Kontext wird auf den Vorgänger des aufrufenden Flow-Blocks gesetzt. Wenn dieser Vorgänger bereits einen Iterationskontext besitzt, wird dieser Kontext übernommen.</value>
+	</data>
+	<data name="BaseMultiResultCollectorFlowBlock_SpecialExplanation_ManualOverride" xml:space="preserve">
+		<value>Der Iterationskontext kann manuell überschrieben werden, wenn Datensätze über einen größeren oder anderen Bereich gesammelt werden sollen.</value>
 	</data>
 	<data name="JsonObjectFlowBlock_Description" xml:space="preserve">
 		<value>Erstellt aus dem angegebenen Inhalt ein JSON-Objekt, verwaltet das interne JSON-Objekt und stellt es anderen Flow-Blocks zur Verfügung.</value>
@@ -1037,10 +982,6 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	</data>
 	<data name="LineExtractorModifier_StartLine" xml:space="preserve">
 		<value>Erste Zeile</value>
-	</data>
-	<data name="ListFactoryBase_NoDataAvailable_Text" xml:space="preserve">
-		<value>Es sind keine Datensätze vorhanden.
-Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</value>
 	</data>
 	<data name="ListViewSplitModeFactory_NoElementSelected_Text" xml:space="preserve">
 		<value>Bitte wählen Sie ein Element in der Liste aus, um die Details anzuzeigen.</value>
@@ -1455,18 +1396,6 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 	</data>
 	<data name="TableWriterFlowBlock_Validation_DuplicateColumnNames" xml:space="preserve">
 		<value>Duplikate in Spaltenbezeichnern gefunden: {0}. Jeder Spaltenbezeichner muss eindeutig sein.</value>
-	</data>
-	<data name="TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip" xml:space="preserve">
-		<value>Feld einfügen oder ausgewählten Text ersetzen</value>
-	</data>
-	<data name="TextBoxWithOptionalButtonsCreator_EnableFileSelection_Tooltip" xml:space="preserve">
-		<value>Datei auswählen</value>
-	</data>
-	<data name="TextBoxWithOptionalButtonsCreator_EnableFolderSelection_Tooltip" xml:space="preserve">
-		<value>Ordner auswählen</value>
-	</data>
-	<data name="TextBoxWithOptionalButtonsCreator_EnableToolbox_Tooltip" xml:space="preserve">
-		<value>Toolbox öffnen</value>
 	</data>
 	<data name="TiktokenAiTokenizer_Description" xml:space="preserve">
 		<value>Verwendet die Tiktoken-Tokenisierung mit vorkonfiguriertem Vokabular und Kodierung für GPT-basierte Modelle.</value>
@@ -2027,7 +1956,7 @@ Nutzen Sie die Schaltfläche "+", um der Tabelle Datensätze hinzuzufügen.</val
 		<value>Reasoning-Aufwand</value>
 	</data>
 	<data name="AIProvider_ReasoningEffort_Tooltip" xml:space="preserve">
-		<value>Bevorzugter Reasoning-Aufwand für Provider und Modelle, die diese Einstellung unterstützen. Niedrigere Werte können Latenz und Reasoning-Tokenverbrauch reduzieren.</value>
+		<value>Bevorzugter Reasoning-Aufwand für Provider und Modelle, die diese Einstellung unterstützen. None lässt den Reasoning-Parameter für Modelle ohne Reasoning-Unterstützung weg.</value>
 	</data>
 	<data name="AIProvider_TimeoutSeconds" xml:space="preserve">
 		<value>Timeout (Sekunden)</value>
@@ -2545,12 +2474,6 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="FieldElement_UsePasswordChar_Tooltip" xml:space="preserve">
 		<value>Maskiert den Feldwert in der Feldansicht. Für Passwortfelder werden keine Klartextwerte in Protokollen oder Logdateien geschrieben und nicht an den AI Assistant weitergegeben.</value>
 	</data>
-	<data name="PropertyControlResolver_ToggleSwitch_OnContent" xml:space="preserve">
-		<value>An</value>
-	</data>
-	<data name="PropertyControlResolver_ToggleSwitch_OffContent" xml:space="preserve">
-		<value>Aus</value>
-	</data>
 	<data name="ExecuteProjectFlowBlock_ProjectFile_Description" xml:space="preserve">
 		<value>Wählen Sie die auszuführende FlowBlox-Projektdatei aus. Feldplatzhalter werden unterstützt.</value>
 	</data>
@@ -2574,9 +2497,6 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	</data>
 	<data name="ExecuteProjectFlowBlock_ParameterMappings_Description" xml:space="preserve">
 		<value>Ordnet Werte als User Fields oder Option Overrides für das Kindprojekt zu. Feldplatzhalter werden unterstützt.</value>
-	</data>
-	<data name="Global_MessageBox_Warning_Title" xml:space="preserve">
-		<value>Warnung</value>
 	</data>
 	<data name="AIPropertyValueGenerationStrategy_DisplayName" xml:space="preserve">
 		<value>KI-Propertywert-Generierung</value>
@@ -2607,6 +2527,9 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	</data>
 	<data name="FlowBloxToolboxCategory_Format" xml:space="preserve">
 		<value>Format</value>
+	</data>
+	<data name="FlowBloxToolboxCategory_CompositeFormat" xml:space="preserve">
+		<value>Verbundformatierung</value>
 	</data>
 	<data name="FlowBloxToolboxCategory_SQL" xml:space="preserve">
 		<value>SQL</value>
@@ -3010,9 +2933,6 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
 	<data name="FlowBloxTestConfiguration_UserInput_Description" xml:space="preserve">
     <value>Manueller oder erwarteter Wert. Er kann einen Wert für einen nicht ausgeführten Flow-Block liefern oder als erwarteter Wert dienen: Dann ist das Feld nur gültig, wenn dieser Wert in den Ergebnissen vorkommt, entsprechend einer AnyValue-Erwartung. Weitere AnyValue-Erwartungen sind optional.</value>
   </data>
-	<data name="Global_NotApplicable" xml:space="preserve">
-    <value>Nicht zutreffend</value>
-  </data>
 	<data name="FloxBloxCategory_DateOperations" xml:space="preserve">
     <value>Datumsoperationen</value>
   </data>
@@ -3168,12 +3088,6 @@ Mehrstufige XPath-Ausdrücke sind hier nicht erlaubt.</value>
   </data>
 	<data name="ProjectOutputIteratorFlowBlock_AssociatedExecuteProjectFlowBlock_Tooltip" xml:space="preserve">
     <value>Der Projekt ausführen-Flow-Block, dessen Ausgabe von diesem Iterator verwendet wird.</value>
-  </data>
-	<data name="RecursiveCallFlowBlock_TargetFlowBlock_Tooltip" xml:space="preserve">
-    <value>Der Ziel-Flow-Block, ab dem die Ausführung nach der Übertragung der konfigurierten Feldwerte fortgesetzt wird.</value>
-  </data>
-	<data name="RecursiveCallFlowBlock_SpecialExplanation_TargetPathAndTransfer" xml:space="preserve">
-    <value>Achtung: Alle Ergebnisfelder des Target-Flow-Blocks müssen vollständig über FieldTransferConfigs abgedeckt sein. Ohne vollständige Feldübertragungen schlägt die Validierung bzw. Ausführung fehl.</value>
   </data>
 	<data name="XmlDocumentOutputFlowBlock_AssociatedXmlDocument_Tooltip" xml:space="preserve">
     <value>Der XML-Dokument-Flow-Block, der das interne XML-Dokument für die Ausgabe verwaltet.</value>
@@ -3383,14 +3297,15 @@ Vorteil:
 	<data name="WebEventFlowBlock_SpecialExplanation_BestPractice_MultiPageLinkExtraction" xml:space="preserve">
     <value>Best Practice für Links auf mehreren Seiten:
 - Schritt 1: Web-Event (Search/Submit) -> Web-Selector (Target Links erfassen)
-- Schritt 2: Web-Event (Search/Submit) -> Web-Selector (Links der nächsten Seite erfassen) -> Web-Event (Next Page klicken)
-- Schritt 3: Web-Event (Next Page klicken) -> Recursive-Call zurück auf den Search/Submit-Schritt, mit Mapping des erzeugten DOM auf den Input $$CONTINUE$$
+- Schritt 2: Vom Paging-Pfad aus das Next-Page-Element per Web-Selector prüfen -> Web-Event (Next Page klicken)
+- Schritt 3: Web-Event (Next Page klicken) -> Injection zurück auf den Search/Submit-Ergebnis-Flow-Block; den aktuellen DOM-Content dessen Ergebnisfeld zuordnen. Die Injection setzt anschließend bei den Nachfolgern des Ziels fort.$$CONTINUE$$
 
-Wiederholen, bis keine Next-Page mehr vorhanden ist.
+Wiederholen, bis kein Next-Page-Element mehr vorhanden ist.
 
 Do/Don't:
-- Do: Recursive-Call auf das Paging-Element zurückführen (z. B. Search/Submit-Web-Event).
-- Don't: Recursive-Call auf Datensatz-Selectoren/Iteratoren setzen, da diese Datensatz-Ausgaben statt Paging-State liefern.
+- Do: Injection auf den Ergebnis-Flow-Block am Paging-Einstieg zurückführen (z. B. Search/Submit-Web-Event).
+- Don't: Rekursiver Aufruf verwenden, wenn Search/Submit nicht erneut ausgeführt werden soll. Er führt den Ziel-Flow-Block tatsächlich nochmals aus.
+- Don't: Injection auf Datensatz-Selektoren oder -Iteratoren setzen, da diese Datensatzausgaben statt des Paging-Zustands liefern.
 - Do: NextPage-Selector/-Click vom Paging-Element aus aufrufen (pro Seite).
 - Don't: NextPage-Selector/-Click hinter den Datensatz-Iterator hängen, sonst läuft Paging pro Datensatz statt pro Seite.
 
@@ -4196,9 +4111,6 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="AsposeWordToPdfFlowBlock_Option_License_DisplayName" xml:space="preserve"><value>Aspose.Words: Lizenz (Base64)</value></data>
   <data name="AsposeWordToPdfFlowBlock_Option_License_Description" xml:space="preserve"><value>Base64-codierte Aspose.Words-Lizenz. Sie wird über die Lizenzimport-Aktion des Flow-Blocks hinterlegt.</value></data>
   <data name="AsposeWordToPdfFlowBlockUIActions_ImportLicense" xml:space="preserve"><value>Aspose-Lizenz importieren</value></data>
-  <data name="AsposeWordToPdfFlowBlockUIActions_ImportLicense_Title" xml:space="preserve"><value>Aspose.Words-Lizenz</value></data>
-  <data name="AsposeWordToPdfFlowBlockUIActions_ImportLicense_Success" xml:space="preserve"><value>Die Aspose.Words-Lizenz wurde importiert und in den Anwendungsoptionen gespeichert.</value></data>
-  <data name="AsposeWordToPdfFlowBlockUIActions_ImportLicense_Failed" xml:space="preserve"><value>Die Aspose.Words-Lizenz konnte nicht importiert werden.</value></data>
   <data name="TextBuilderFlowBlock_DisplayName" xml:space="preserve"><value>Text-Builder</value></data>
   <data name="TextBuilderFlowBlock_Description" xml:space="preserve"><value>Erstellt einen intern verwalteten Text-Builder und initialisiert ihn optional mit Text.</value></data>
   <data name="TextBuilderFlowBlock_InitialText" xml:space="preserve"><value>Ausgangstext</value></data>
@@ -4406,6 +4318,62 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="WebSearchDestinations_Language" xml:space="preserve"><value>Sprache</value></data>
   <data name="WebSearchDestinations_Rank" xml:space="preserve"><value>Rang</value></data>
   <data name="WebSearchDestinations_Query" xml:space="preserve"><value>Suchbegriffe</value></data>
+  <data name="RecursiveTargetFlowBlockBase_TargetFlowBlock" xml:space="preserve"><value>Ziel-Flow-Block</value></data>
+  <data name="RecursiveTargetFlowBlockBase_TargetFlowBlock_Tooltip" xml:space="preserve"><value>Ein früherer Flow-Block auf dem eingehenden Ausführungspfad. Abhängig vom verwendeten Flow-Block wird das Ziel erneut ausgeführt oder es erhält injizierte Ausgabewerte, die bei seinen Nachfolgern weiterverarbeitet werden.</value></data>
+  <data name="RecursiveTargetFlowBlockBase_Validation_TargetNotReachable" xml:space="preserve"><value>Der Ziel-Flow-Block muss auf dem eingehenden Ausführungspfad liegen.</value></data>
+  <data name="RecursiveCallFlowBlock_SpecialExplanation_TargetInvocation" xml:space="preserve"><value>Der Ziel-Flow-Block wird selbst erneut ausgeführt; danach folgt sein regulärer Ausführungspfad. Es werden keine Felder übertragen. Das Ziel muss bereits auf dem eingehenden Ausführungspfad liegen.$$CONTINUE$$
+
+Beispiel für einen verzögerten Retry:
+- Datenbankabfrage ausführen und das Ergebnis prüfen.
+- Wenn kein Ergebnis vorhanden ist: Index ausführen und prüfen, ob Index &lt; RetryLimit ist. Nur dann Delay -&gt; Rekursiver Aufruf mit der Datenbankabfrage als Ziel ausführen.
+- Sobald ein Ergebnis vorliegt, den regulären Erfolgszweig fortsetzen.
+
+Setzen Sie AssociatedContextualObject des Index-Flow-Blocks auf den Flow-Block unmittelbar vor dem Ziel, beispielsweise auf den Vorgänger der Datenbankabfrage. Dadurch wird der Zähler für einen neuen Eingangskontext zurückgesetzt und zählt die rekursiven Versuche innerhalb dieses Kontexts weiter. Sobald RetryLimit erreicht ist, ist die Retry-Bedingung nicht mehr erfüllt; Delay und Rekursiver Aufruf werden nicht ausgeführt und es entsteht keine weitere rekursive Iteration.</value></data>
+  <data name="InjectionFlowBlock_DisplayName" xml:space="preserve"><value>Injection</value></data>
+  <data name="InjectionFlowBlock_Description" xml:space="preserve"><value>Injiziert zugeordnete Feldwerte in die Ausgabefelder eines früheren Ergebnis-Flow-Blocks und setzt bei dessen Nachfolgern fort.</value></data>
+  <data name="InjectionFlowBlock_Groups_FieldTransfers" xml:space="preserve"><value>Feldübertragungen</value></data>
+  <data name="InjectionFlowBlock_FieldTransferConfigs" xml:space="preserve"><value>Feldübertragungen</value></data>
+  <data name="InjectionFlowBlock_Validation_UnmappedFields" xml:space="preserve"><value>Alle Felder des Ziel-Flow-Blocks müssen zugeordnet sein. Zuordnungen fehlen für: {0}</value></data>
+  <data name="InjectionFlowBlock_SpecialExplanation_TargetPathAndTransfer" xml:space="preserve"><value>Die zugeordneten Feldwerte werden in die Ausgabefelder des Ziels geschrieben und bei dessen Nachfolgern weiterverarbeitet. Der Ziel-Flow-Block selbst wird nicht erneut ausgeführt. Verwenden Sie den Flow-Block Rekursiver Aufruf, wenn das Ziel nochmals ausgeführt werden soll.</value></data>
+  <data name="DelayFlowBlock_DisplayName" xml:space="preserve"><value>Verzögerung</value></data>
+  <data name="DelayFlowBlock_Description" xml:space="preserve"><value>Wartet die konfigurierte Dauer und ruft anschließend die nächsten Flow-Blöcke auf.</value></data>
+  <data name="DelayFlowBlock_DelayMilliseconds" xml:space="preserve"><value>Verzögerung (Millisekunden)</value></data>
+  <data name="DelayFlowBlock_DelayMilliseconds_Tooltip" xml:space="preserve"><value>Wartezeit vor dem Aufruf der nächsten Flow-Blöcke. Beispiel: 5000 für fünf Sekunden.</value></data>
+  <data name="CollectionQueryFlowBlock_DisplayName" xml:space="preserve"><value>Collection-Abfrage</value></data>
+  <data name="CollectionQueryFlowBlock_Description" xml:space="preserve"><value>Sammelt eingehende Datensätze und gibt einen einzelnen Datensatz, Aggregatwert oder Prädikatswert aus.</value></data>
+  <data name="CollectionQueryFlowBlock_Groups_Query" xml:space="preserve"><value>Abfrage</value></data>
+  <data name="CollectionQueryFlowBlock_Groups_OutputMappings" xml:space="preserve"><value>Ausgabezuordnungen</value></data>
+  <data name="CollectionQueryFlowBlock_Operation" xml:space="preserve"><value>Operation</value></data>
+  <data name="CollectionQueryFlowBlock_ElementIndex" xml:space="preserve"><value>Elementindex</value></data>
+  <data name="CollectionQueryFlowBlock_ElementIndex_Tooltip" xml:space="preserve"><value>Nullbasierter Index für ElementAt.</value></data>
+  <data name="CollectionQueryFlowBlock_Predicates" xml:space="preserve"><value>Prädikate</value></data>
+  <data name="CollectionQueryFlowBlock_Predicates_Tooltip" xml:space="preserve"><value>Bedingungen, die je eingehendem Datensatz ausgewertet werden. Sie filtern Wertoperationen und definieren Any/All.</value></data>
+  <data name="CollectionQueryFlowBlock_OutputMappings" xml:space="preserve"><value>Eingangs-/Ausgangsfeldzuordnungen</value></data>
+  <data name="CollectionQueryFlowBlock_OutputMappings_Tooltip" xml:space="preserve"><value>Ordnet Eingangsfelder den Ausgabefeldern für die gewählte Abfrageoperation zu. Any und All liefern stattdessen ein boolesches Prädikat-Ergebnis.</value></data>
+  <data name="CollectionQueryFlowBlock_PredicateResultField" xml:space="preserve"><value>Prädikat-Ergebnisfeld</value></data>
+  <data name="CollectionQueryFieldMapping_DisplayName" xml:space="preserve"><value>Collection-Abfrage-Feldzuordnung</value></data>
+  <data name="CollectionQueryFieldMapping_InputField" xml:space="preserve"><value>Eingangsfeld</value></data>
+  <data name="CollectionQueryFieldMapping_OutputField" xml:space="preserve"><value>Ausgangsfeld</value></data>
+  <data name="CollectionQueryFlowBlockUIActions_SynchronizeOutputFields" xml:space="preserve"><value>Ausgabefelder synchronisieren</value></data>
+  <data name="CollectionQueryFlowBlockUIActions_SynchronizeOutputFields_Tooltip" xml:space="preserve"><value>Fügt fehlende Ausgabefelder hinzu, aktualisiert Namen und Datentypen und entfernt veraltete Felder, sofern sie löschbar sind.</value></data>
+  <data name="CollectionQueryOperation_First" xml:space="preserve"><value>Erstes</value></data>
+  <data name="CollectionQueryOperation_Last" xml:space="preserve"><value>Letztes</value></data>
+  <data name="CollectionQueryOperation_ElementAt" xml:space="preserve"><value>Element an Index</value></data>
+  <data name="CollectionQueryOperation_Minimum" xml:space="preserve"><value>Minimum</value></data>
+  <data name="CollectionQueryOperation_Maximum" xml:space="preserve"><value>Maximum</value></data>
+  <data name="CollectionQueryOperation_Average" xml:space="preserve"><value>Durchschnitt</value></data>
+  <data name="CollectionQueryOperation_Any" xml:space="preserve"><value>Mindestens eines (Any)</value></data>
+  <data name="CollectionQueryOperation_All" xml:space="preserve"><value>Alle (All)</value></data>
+  <data name="FieldComparisonCondition_Validation_ByteArrayNotSupported" xml:space="preserve"><value>Felder mit einem ByteArray-Wert können nicht für Vergleiche verwendet werden. Wählen Sie ein Feld mit einem unterstützten Datentyp.</value></data>
+  <data name="FieldComparisonCondition_Validation_ContainsRequiresText" xml:space="preserve"><value>Die Operatoren „Enthält“ und „Enthält nicht“ erfordern ein Textfeld. Wählen Sie ein Textfeld oder einen anderen Vergleichsoperator.</value></data>
+  <data name="TableSelectorColumnCondition_ColumnType" xml:space="preserve"><value>Spaltentyp</value></data>
+  <data name="TableSelectorColumnCondition_ColumnType_Tooltip" xml:space="preserve"><value>Typdefinition für diese Spaltenbedingung. Wählen Sie DateTime, Float oder Double, um das Datums-/Zeitformat oder die Zahlentrennzeichen für das Einlesen des Vergleichswerts festzulegen. Der Standardtyp ist Text.</value></data>
+  <data name="CollectionQueryFlowBlock_Predicate" xml:space="preserve"><value>Prädikat</value></data>
+  <data name="BaseFlowBlock_AutomaticInputBehaviorAssignment" xml:space="preserve"><value>Automatische Verhaltenszuweisung</value></data>
+  <data name="BaseFlowBlock_AutomaticInputBehaviorAssignment_Tooltip" xml:space="preserve"><value>Wenn diese Option aktiviert ist, werden die Eingabeverhalten bei geänderten Eingängen automatisch bestimmt. Typische Fälle:
+* Bei mehreren Eingängen wird jeweils der erste Datensatz ausgewählt.
+* Bei einem Eingang werden alle Datensätze nacheinander verarbeitet.
+* Sind alle bisherigen Eingänge auf RowWise eingestellt, übernehmen neue Eingänge diese Einstellung (gilt auch für RowWiseValid).</value></data>
 </root>
 
 

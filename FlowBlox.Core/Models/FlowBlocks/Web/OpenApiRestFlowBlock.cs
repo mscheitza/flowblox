@@ -227,9 +227,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
 
         public override bool Execute(BaseRuntime runtime, object data) => Invoke(runtime, data, () =>
         {
-            runtime.Focus(this);
-            Wait(runtime);
-            SetParentElement(data);
             EnsureDefinitionLoaded();
             var descriptor = FindEndpoint() ?? throw new ValidationException("The selected OpenAPI endpoint is unavailable.");
 

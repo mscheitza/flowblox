@@ -1,5 +1,6 @@
 using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Interfaces;
@@ -43,10 +44,16 @@ namespace FlowBlox.UICore.Manager
 				_registry.ReplaceRef((BaseFlowBlock)source, (BaseFlowBlock)copy);
 			}
 
-			if (copy is IFlowBloxComponent)
-			{
-				((IFlowBloxComponent)copy).OnAfterLoad();
-			}
+            if (copy is IFlowBloxComponent component)
+            {
+                component.OnAfterLoad();
+            }
+            else if (copy is FlowBloxReactiveObject reactiveObject &&
+                     copy is not IManagedObject &&
+                     copy is not IFlowBloxComponent)
+            {
+                reactiveObject.OnAfterLoad();
+            }
 		}
 
 		public class OpenResult
@@ -110,39 +117,33 @@ namespace FlowBlox.UICore.Manager
 				throw new InvalidOperationException("The transaction is not the current registry transaction and cannot be committed.");
 
 			// Create restore object
-			var restoreDeepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(target));
-			var restoreObject = restoreDeepCopier.Copy(target);
+			var editAction = new FlowBloxEditAction { Target = target };
+			editAction.CaptureRestoreState();
 
 			// Copy changes to the target object
-			_deepCopier.SpecialMode = DeepCopierSpecialMode.Recopy;
 			_deepCopier.PropertyActions = FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(transientTarget);
+			_deepCopier.SpecialMode = DeepCopierSpecialMode.Recopy;
 			_deepCopier.Copy(transientTarget, target);
 			var protocol = _deepCopier.GetProtocol();
 			StoreProtocol(transientTarget, protocol, true);
 
 			// Create repetition object
-			var repetitionDeepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(target));
-			var repetitionObject = repetitionDeepCopier.Copy(target);
+			editAction.CaptureRepetitionState();
 
 			// Create and append change
-			CreateAndAppendChange(target, restoreObject, repetitionObject);
+			CreateAndAppendChange(editAction);
 
             // Committing the changes to the registry
             FlowBloxRegistryProvider.CommitTransaction(_transactionRegistry);
 			_transactionRegistry = null;
 		}
 
-		private void CreateAndAppendChange(object target, object restoreObject, object repetitionObject)
+		private void CreateAndAppendChange(FlowBloxEditAction editAction)
 		{
 			if (_detached)
 				return;
 
-            _componentProvider.GetCurrentChangelist()?.AddChange(new FlowBloxEditAction()
-            {
-                Target = target,
-                RestoreObject = restoreObject,
-                RepetitionObject = repetitionObject
-            });
+            _componentProvider.GetCurrentChangelist()?.AddChange(editAction);
         }
 
 		private void StoreProtocol(string protocol, string filePath)

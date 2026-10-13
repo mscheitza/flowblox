@@ -8,7 +8,7 @@ namespace FlowBlox.Core.Actions
     {
         private BaseFlowBlock _recentTargetFlowBlock;
 
-        public RecursiveCallFlowBlock From { get; set; }
+        public RecursiveTargetFlowBlockBase From { get; set; }
 
         public BaseFlowBlock To { get; set; }
 

@@ -13,8 +13,14 @@ Explaining IterationContext and multi-input behavior:
 
 3) Multi-input combination and default resolution
 - If multiple input flow blocks connect to one successor, FlowBlox combines input datasets based on each input flow block's `InputBehavior`.
-- The default behavior is `First`: suitable when only one input dataset is expected or only the first input dataset is relevant.
+- `AutomaticInputBehaviorAssignment` defaults to `true` and determines compatible input behaviors when input references change. Typical cases:
+  - One input: process all datasets in sequence (`Cross`).
+  - Multiple inputs: select the first dataset from each input (`First`).
+  - Existing inputs uniformly use `RowWise` or `RowWiseValid`: new default assignments inherit the exact same behavior, including Valid filtering.
+- Existing configured behaviors remain unchanged unless a matching rule applies. For Cross/First rules, Valid variants are recognized as equivalent, but the assigned defaults are plain `Cross`/`First`; mixed First/FirstValid inputs are supported.
+- Set `AutomaticInputBehaviorAssignment=false` to retain configured behaviors when references change; new assignments use `First`. Editing a behavior does not disable this option.
 - IterationContext default for multi-input: first common upstream flow block across all incoming paths.
+- `InputBehaviorAssignments` are relevant and synchronized only while an IterationContext exists. Removing the context clears them; setting one again recreates them from the current inputs.
 - Successor executes once per resulting combined dataset.
 - For each combined dataset, mapped values are applied before execution.
 

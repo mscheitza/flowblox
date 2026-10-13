@@ -148,7 +148,7 @@ namespace FlowBlox.AIAssistant.Services
                     SpecialFlowRecursionKey,
                     "Explaining Flow Recursion",
                     "FlowBlox.AIAssistant.Prompts.ExplainingFlowRecursion.txt",
-                    "Special: on-demand guidance for RecursiveCallFlowBlock setup and paging-style recursion loops.",
+                    "Special: compact guidance for RecursiveCallFlowBlock, InjectionFlowBlock, paging, polling, and retry loops.",
                     false),
                 [SpecialExtensionsKey] = new PromptEntryDefinition(
                     SpecialExtensionsKey,

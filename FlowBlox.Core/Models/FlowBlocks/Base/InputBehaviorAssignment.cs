@@ -7,11 +7,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
     [Serializable()]
     public class InputBehaviorAssignment : FlowBloxReactiveObject
     {
-        public InputBehaviorAssignment()
-        {
-            this.Behavior = InputBehavior.First;
-        }
-
         [Required()]
         [Display(Name = "Global_FlowBlock", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.ComboBox, ReadOnly = true)]
@@ -19,6 +14,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
 
         [Display(Name = "InputBehaviorAssignment_Behavior", ResourceType = typeof(FlowBloxTexts), Order = 1)]
-        public InputBehavior Behavior { get; set; }
+        public InputBehavior Behavior { get; set; } = InputBehavior.First;
     }
 }

@@ -86,9 +86,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (Provider == null)
                     throw new InvalidOperationException("No web search provider has been configured.");

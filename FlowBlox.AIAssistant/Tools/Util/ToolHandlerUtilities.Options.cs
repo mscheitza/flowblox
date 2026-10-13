@@ -35,11 +35,8 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
         public static ToolResponse SearchOptions(JObject args)
         {
-            var normalizedTerms = ParseSearchTerms(args)
-                .Select(x => (x ?? string.Empty).Trim())
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
+            var normalizedTerms = ParseContainsSearchTerms(
+                args["searchForNames"] ?? args["SearchForNames"]);
 
             var candidates = FlowBloxOptions.GetOptionInstance()
                 .GetOptions();
@@ -113,32 +110,6 @@ namespace FlowBlox.AIAssistant.Tools.Util
             return
                 $"The AI assistant is not currently permitted to {operation}. " +
                 "Enable this in AI Assistant Configuration > Permissions > Options access.";
-        }
-
-        private static IEnumerable<string> ParseSearchTerms(JObject args)
-        {
-            var commaSeparated = args.Value<string>("searchForNames")
-                                 ?? args.Value<string>("SearchForNames")
-                                 ?? string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(commaSeparated))
-            {
-                return commaSeparated
-                    .Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => x.Trim());
-            }
-
-            var arrayToken = args["searchForNames"] ?? args["SearchForNames"];
-            if (arrayToken is JArray arr)
-            {
-                return arr
-                    .Values<string>()
-                    .Where(x => !string.IsNullOrWhiteSpace(x))
-                    .SelectMany(x => x.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries))
-                    .Select(x => x.Trim());
-            }
-
-            return Array.Empty<string>();
         }
 
         private static bool OptionMatches(OptionElement option, string term)

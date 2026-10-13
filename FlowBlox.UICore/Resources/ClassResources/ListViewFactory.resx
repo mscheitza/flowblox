@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Buttons_Add" xml:space="preserve">
+		<value>Add</value>
+	</data>
+  <data name="Buttons_Edit" xml:space="preserve">
+		<value>Edit</value>
+	</data>
+  <data name="Buttons_Link" xml:space="preserve">
+		<value>Link</value>
+	</data>
+  <data name="Buttons_MoveDown" xml:space="preserve">
+		<value>Move down</value>
+	</data>
+  <data name="Buttons_MoveUp" xml:space="preserve">
+		<value>Move up</value>
+	</data>
+  <data name="Buttons_Remove" xml:space="preserve">
+		<value>Remove</value>
+	</data>
+  <data name="Buttons_Unlink" xml:space="preserve">
+		<value>Unlink</value>
+	</data>
+  <data name="MissingFilterMethod_Message" xml:space="preserve">
+		<value>No selection method (SelectionFilterMethod) was defined for the property '{0}'.</value>
+	</data>
+  <data name="MissingFilterMethod_Title" xml:space="preserve">
+		<value>Selection method missing</value>
+	</data>
+  <data name="NoItemsFound_Message" xml:space="preserve">
+		<value>No selectable objects could be found.</value>
+	</data>
+  <data name="NoItemsFound_Title" xml:space="preserve">
+		<value>No selection possible</value>
+	</data>
+  <data name="SelectionDialog_Message" xml:space="preserve">
+		<value>Please select an entry from the list.</value>
+	</data>
+  <data name="SelectionDialog_Title" xml:space="preserve">
+		<value>Select entry</value>
+	</data>
+</root>

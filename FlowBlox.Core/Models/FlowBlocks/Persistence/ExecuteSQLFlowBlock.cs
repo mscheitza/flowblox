@@ -70,9 +70,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Persistence
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var updatedRows = ExecuteSQL();
                 runtime.Report($"Successfully executed SQL Query: Updated row count is {updatedRows}");

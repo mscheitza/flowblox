@@ -1,17 +1,19 @@
 using FlowBlox.Core.Constants;
 
-namespace FlowBlox.AIAssistant.Tools.Resolver
+namespace FlowBlox.Core.Util.DistributedData
 {
-    internal static class DistributedDataCatalog
+    public static class DistributedDataCatalog
     {
         public const string PythonType = "python";
         public const string AuxiliaryProjectType = "auxiliary_project";
+        public const string ExampleProjectType = "example_project";
 
         private static readonly IReadOnlyDictionary<string, string> SupportedTypes =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 [PythonType] = ".py",
-                [AuxiliaryProjectType] = ".fbprj"
+                [AuxiliaryProjectType] = ".fbprj",
+                [ExampleProjectType] = ".fbprj"
             };
 
         public static IReadOnlyList<DistributedDataType> GetDataTypes() =>
@@ -46,6 +48,21 @@ namespace FlowBlox.AIAssistant.Tools.Resolver
 
         public static bool IsSupportedType(string dataType) =>
             SupportedTypes.ContainsKey(dataType ?? string.Empty);
+
+        public static bool IsDistributedDataPath(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return false;
+
+            var fullPath = Path.GetFullPath(path);
+            return GetApplicationDataDirectories().Any(directory =>
+            {
+                var directoryPath = Path.GetFullPath(directory)
+                    .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
+                    Path.DirectorySeparatorChar;
+                return fullPath.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase);
+            });
+        }
 
         public static bool IsPlainName(string value) =>
             !string.IsNullOrWhiteSpace(value) &&
@@ -96,5 +113,5 @@ namespace FlowBlox.AIAssistant.Tools.Resolver
         }
     }
 
-    internal sealed record DistributedDataType(string Name, IReadOnlyList<string> FileNames);
+    public sealed record DistributedDataType(string Name, IReadOnlyList<string> FileNames);
 }

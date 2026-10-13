@@ -58,22 +58,55 @@
 
         public bool Visible { get; set; }
 
+        /// <summary>
+        /// Selects the editor used for this property; Default lets the UI choose based on its type.
+        /// </summary>
         public UIFactory Factory { get; set; }
 
+        /// <summary>
+        /// Specifies a factory type implementing IItemFactory&lt;T&gt; with a public parameterless constructor.
+        /// The association editor calls Create() to create an instance compatible with the property type.
+        /// </summary>
+        public Type ItemFactory { get; set; }
+
+        /// <summary>
+        /// Specifies the registered toolbox category identifier for selectable text templates, not a display label.
+        /// For example, nameof(FlowBloxToolboxCategory.Regex) offers regular-expression templates.
+        /// </summary>
         public string ToolboxCategory { get; set; }
 
+        /// <summary>
+        /// Names a parameterless instance method returning the selectable items as a list.
+        /// Define a public method on the current class, for example nameof(GetAvailableItems); nested objects can use their parent's method.
+        /// </summary>
         public string SelectionFilterMethod { get; set; }
 
+        /// <summary>
+        /// Names a property on the current class or its parent whose PropertyChanged notification refreshes the selection list.
+        /// Use the property name; the owning object must implement INotifyPropertyChanged.
+        /// </summary>
         public string SelectionFilterDependency { get; set; }
 
+        /// <summary>
+        /// Names a public parameterless method on the current class returning bool.
+        /// Returning true makes the property's editor read-only.
+        /// </summary>
         public string ReadOnlyMethod { get; set; }
 
         public UIOptions UiOptions { get; set; }
         
+        /// <summary>
+        /// Overrides the type display name of list items rendered on a FlowBlock card.
+        /// Uses the property DisplayAttribute resource type, or a literal name when none is defined.
+        /// </summary>
+        public string ItemDisplayName { get; set; }
+
+        /// <summary>
+        /// Specifies the public member path on each selectable item whose value is shown in the selection control.
+        /// For example, "Name" displays each item's Name instead of its default string representation.
+        /// </summary>
         public string SelectionDisplayMember { get; set; }
         
-        public int Width { get; set; }
-        public int Height { get; set; }
 
         public bool Maximize { get; set; }
         

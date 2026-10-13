@@ -12,6 +12,7 @@
     <Feature Id="MainFeature" Title="FlowBlox" Level="1">
       <ComponentGroupRef Id="FlowBloxFiles" />
       <ComponentRef Id="StartMenuShortcutComponent" />
+      <ComponentRef Id="ProjectFileAssociationComponent" />
     </Feature>
   </Package>
 
@@ -23,6 +24,24 @@
     <StandardDirectory Id="ProgramMenuFolder">
       <Directory Id="ApplicationProgramsFolder" Name="FlowBlox" />
     </StandardDirectory>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="ProjectFileAssociationComponent" Guid="5C8BA2C7-095B-4EED-A04B-85C14C8E5429">
+        <ProgId Id="FlowBlox.Project"
+                Description="FlowBlox Project"
+                Icon="FlowBloxExecutable"
+                Advertise="no">
+          <Extension Id="fbprj" ContentType="application/x-flowblox-project">
+            <Verb Id="open"
+                  Command="Open"
+                  TargetFile="FlowBloxExecutable"
+                  Argument="--project &quot;%1&quot;" />
+          </Extension>
+        </ProgId>
+      </Component>
+    </DirectoryRef>
   </Fragment>
 
   <Fragment>

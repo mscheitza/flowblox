@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
+using FlowBlox.Core.Util.FlowBlocks;
 using SkiaSharp;
 using System.Collections;
 using System.ComponentModel;
@@ -15,6 +16,39 @@ namespace FlowBlox.Core.Models.Base
     /// </summary>
     public class FlowBloxReactiveObject : INotifyPropertyChanged, INotifyDataErrorInfo
     {
+        [ThreadStatic]
+        private static HashSet<FlowBloxReactiveObject> _afterLoadVisitedObjects;
+
+        /// <summary>
+        /// Indicates whether initialization has completed and user changes may be tracked.
+        /// </summary>
+        protected bool IsLoaded { get; private set; }
+
+        public IEnumerable<FlowBloxReactiveObject> GetNestedReactiveObjects() => FlowBlockObjectCollector.CollectNestedReactiveObjectsRecursive(this);
+
+        public virtual void OnAfterLoad()
+        {
+            var ownsTraversal = _afterLoadVisitedObjects == null;
+            _afterLoadVisitedObjects ??= new HashSet<FlowBloxReactiveObject>(ReferenceEqualityComparer.Instance);
+            try
+            {
+                if (!_afterLoadVisitedObjects.Add(this))
+                    return;
+
+                IsLoaded = true;
+                foreach (var reactiveObject in GetNestedReactiveObjects())
+                {
+                    if (!_afterLoadVisitedObjects.Contains(reactiveObject))
+                        reactiveObject.OnAfterLoad();
+                }
+            }
+            finally
+            {
+                if (ownsTraversal)
+                    _afterLoadVisitedObjects = null;
+            }
+        }
+
         [JsonIgnore]
         public virtual SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.cube_outline, 16, new SKColor(84, 110, 122));
 

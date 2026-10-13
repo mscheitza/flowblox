@@ -376,7 +376,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             }
 
             FlowBloxBaseAction connectAction;
-            if (startNode.InternalFlowBlock is RecursiveCallFlowBlock recursiveCallFlowBlock)
+            if (startNode.InternalFlowBlock is RecursiveTargetFlowBlockBase recursiveCallFlowBlock)
             {
                 connectAction = new FlowBloxInvokeAction
                 {
@@ -1142,7 +1142,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                     arrows.Add(new FlowBlockArrowViewModel(node, iterationSource, "iteration", 10d));
                 }
 
-                if (node.InternalFlowBlock is RecursiveCallFlowBlock recursive &&
+                if (node.InternalFlowBlock is RecursiveTargetFlowBlockBase recursive &&
                     recursive.TargetFlowBlock != null &&
                     _nodesByFlowBlock.TryGetValue(recursive.TargetFlowBlock, out var recursionTarget))
                 {
@@ -1323,7 +1323,8 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             ShowPropertyWindow(
                 row.Target,
                 row.PreselectedProperty,
-                row.PreselectedInstance as FlowBloxReactiveObject);
+                row.PreselectedInstance as FlowBloxReactiveObject,
+                row.Parent);
         }
 
         public void SelectRow(FlowBlockRenderRowViewModel row)
@@ -1342,13 +1343,14 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             Clipboard.SetText(row.Value);
         }
 
-        private void ShowPropertyWindow(object target, string preselectedProperty = null, FlowBloxReactiveObject preselectedInstance = null)
+        private void ShowPropertyWindow(object target, string preselectedProperty = null, FlowBloxReactiveObject preselectedInstance = null, object parent = null)
         {
             if (target == null)
                 return;
 
             var dialog = new FlowBlox.UICore.Views.PropertyWindow(new FlowBlox.UICore.Views.PropertyWindowArgs(
                 target,
+                parent: parent,
                 readOnly: IsProjectEditingReadOnly,
                 preselectedProperty: preselectedProperty,
                 preselectedInstance: preselectedInstance));
@@ -1468,7 +1470,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 disconnectAction.Invoke();
                 _componentProvider?.GetCurrentChangelist()?.AddChange(disconnectAction);
             }
-            else if (arrow.Kind == "recursive" && arrow.From.InternalFlowBlock is RecursiveCallFlowBlock recursive)
+            else if (arrow.Kind == "recursive" && arrow.From.InternalFlowBlock is RecursiveTargetFlowBlockBase recursive)
             {
                 var disconnectAction = new FlowBloxRecursiveCallDisconnectAction
                 {
@@ -1495,6 +1497,9 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             var endFlowBlock = endNode.InternalFlowBlock;
             if (startFlowBlock == null || endFlowBlock == null)
                 return false;
+
+            if (startFlowBlock is RecursiveTargetFlowBlockBase recursiveTarget)
+                return recursiveTarget.GetPossibleTargetFlowBlocks().Contains(endFlowBlock);
 
             if (startFlowBlock is NoteFlowBlock || endFlowBlock is NoteFlowBlock)
                 return false;

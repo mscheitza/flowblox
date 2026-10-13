@@ -1,4 +1,5 @@
 using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Models.FlowBlocks.AIRemote.Enums;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using Microsoft.SemanticKernel;
@@ -82,7 +83,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             if (request.MaxTokens is > 0)
                 settings.MaxTokens = request.MaxTokens;
 
-            settings.ReasoningEffort = GetReasoningEffortValue();
+            if (ReasoningEffort != AIReasoningEffort.None)
+                settings.ReasoningEffort = GetReasoningEffortValue();
+
             ConfigureExecutionSettings(settings, request);
 
             return settings;

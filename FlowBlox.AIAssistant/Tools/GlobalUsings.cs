@@ -4,3 +4,4 @@ global using FlowBlox.AIAssistant.Tools.Resolver;
 global using FlowBlox.AIAssistant.Tools.State;
 global using FlowBlox.AIAssistant.Tools.Util;
 global using FlowBlox.Core.Logging;
+global using FlowBlox.Core.Util;

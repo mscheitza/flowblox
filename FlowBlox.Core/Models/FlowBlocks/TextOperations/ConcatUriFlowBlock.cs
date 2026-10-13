@@ -43,9 +43,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         {
             return base.Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var parts = UriParts?
                     .Select(p => p?.Value)

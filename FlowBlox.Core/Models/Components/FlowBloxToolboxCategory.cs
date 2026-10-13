@@ -37,6 +37,11 @@ namespace FlowBlox.Core.Models.Components
             "FlowBloxToolboxCategory_Format",
             typeof(FlowBloxTexts));
 
+        public static readonly FlowBloxToolboxCategoryItem CompositeFormat = new(
+            nameof(CompositeFormat),
+            "FlowBloxToolboxCategory_CompositeFormat",
+            typeof(FlowBloxTexts));
+
         public static readonly FlowBloxToolboxCategoryItem SQL = new(
             nameof(SQL),
             "FlowBloxToolboxCategory_SQL",

@@ -64,8 +64,18 @@ namespace FlowBlox.Core.Util.DeepCopier
             if (SpecialMode == DeepCopierSpecialMode.Recopy)
                 _recopies.TryAdd(source, copy);
 
-            ReflectionHelper.CopyValueTypedProperties(source, source.GetType(), copy, copy.GetType());
             var properties = ReflectionHelper.GetProperties(source.GetType(), BindingFlags.Instance | BindingFlags.Public);
+            foreach (var property in properties)
+            {
+                if ((property.PropertyType.IsValueType || property.PropertyType == typeof(string)) &&
+                    property.CanRead && IsCopyableProperty(property))
+                {
+                    var destinationProperty = copy.GetType().GetProperty(property.Name);
+                    if (destinationProperty != null && destinationProperty.CanWrite)
+                        destinationProperty.SetValue(copy, property.GetValue(source));
+                }
+            }
+
             foreach (var property in properties)
             {
                 if (IsCopyableEnumerable(property))
@@ -79,6 +89,14 @@ namespace FlowBlox.Core.Util.DeepCopier
             }
             OnAfterCopy?.Invoke(source, copy);
             return copy;
+        }
+
+        /// <summary>
+        /// Clears cached recopy results while preserving the original copy mappings and current mode.
+        /// </summary>
+        public void ClearRecopyCache()
+        {
+            _recopies.Clear();
         }
 
         public T Copy(T source)

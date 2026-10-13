@@ -112,7 +112,7 @@
                         <DataTemplate>
                             <Button Command="{Binding Command}"
                                 IsEnabled="{Binding IsEnabled}"
-                                ToolTip="{Binding DisplayName}"
+                                ToolTip="{Binding ToolTip}"
                                 Margin="3,0"
                                 Padding="6,3"
                                 MinWidth="80"

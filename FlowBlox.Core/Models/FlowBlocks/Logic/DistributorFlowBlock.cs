@@ -60,9 +60,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Logic
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
                 runtime.Report($"Source field value \"{InputField.StringValue}\" will be distributed to the following fields: {string.Join(", ", Fields.Select(x => x.Name))}");
                 var resultEntry = Fields.ToDictionary(x => x, y => InputField.StringValue);
                 GenerateResult(runtime, new List<Dictionary<FieldElement, string>>() { resultEntry });

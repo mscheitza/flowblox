@@ -8,11 +8,12 @@ namespace FlowBlox.UI
 {
     public class UIActionsToolstripMenuItemsProvider : UIActionsProviderBase<ToolStripMenuItem>
     {
-        protected override ToolStripMenuItem CreateItem(string displayName, EventHandler clickHandler, bool enabled, SKImage icon16)
+        protected override ToolStripMenuItem CreateItem(string displayName, string description, EventHandler clickHandler, bool enabled, SKImage icon16)
         {
             var menuItem = new ToolStripMenuItem(displayName, FlowBloxMainUIImages.execute_16, clickHandler)
             {
-                Enabled = enabled
+                Enabled = enabled,
+                ToolTipText = string.IsNullOrWhiteSpace(description) ? displayName : description
             };
             menuItem.Image = icon16 != null ?
                 SkiaToSystemDrawingHelper.ToSystemDrawingImage(icon16) :

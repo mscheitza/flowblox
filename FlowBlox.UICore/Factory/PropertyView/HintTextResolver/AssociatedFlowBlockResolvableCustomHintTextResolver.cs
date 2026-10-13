@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core;
+﻿using AssociatedFlowBlockResolvableCustomHintTextResolverResources = FlowBlox.UICore.Resources.ClassResources.AssociatedFlowBlockResolvableCustomHintTextResolver;
+using FlowBlox.Core;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Resources;
@@ -108,11 +109,11 @@ namespace FlowBlox.UICore.Factory.PropertyView.HintTextResolver
             if (resolved is BaseFlowBlock resolvedFlowBlock)
             {
                 return string.Format(
-                    FlowBloxResourceUtil.GetLocalizedString("AssociationControlFactory_Resolvable", typeof(FlowBloxTexts)),
+                    FlowBloxResourceUtil.GetLocalizedString("Resolvable", typeof(AssociatedFlowBlockResolvableCustomHintTextResolverResources)),
                     resolvedFlowBlock.Name);
             }
 
-            return FlowBloxResourceUtil.GetLocalizedString("AssociationControlFactory_NotResolvable", typeof(FlowBloxTexts));
+            return FlowBloxResourceUtil.GetLocalizedString("NotResolvable", typeof(AssociatedFlowBlockResolvableCustomHintTextResolverResources));
         }
     }
 }

@@ -100,9 +100,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var jsonText = FlowBloxFieldHelper.ReplaceFieldsInString(JsonContent ?? string.Empty)?.Trim();
                 if (string.IsNullOrWhiteSpace(jsonText))

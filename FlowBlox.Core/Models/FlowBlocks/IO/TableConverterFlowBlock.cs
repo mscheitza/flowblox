@@ -45,9 +45,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (SourceTable == null)
                     throw new InvalidOperationException("No source table has been configured.");

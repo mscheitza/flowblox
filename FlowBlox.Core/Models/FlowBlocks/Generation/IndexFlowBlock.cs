@@ -64,6 +64,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Generation
         public override void RuntimeStarted(BaseRuntime runtime)
         {
             base.RuntimeStarted(runtime);
+            ResetCurrentIndex(runtime);
 
             if (AssociatedContextualObject != null)
             {
@@ -112,9 +113,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Generation
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 EnsureInitialized();
 

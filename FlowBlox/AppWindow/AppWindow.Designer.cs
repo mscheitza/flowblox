@@ -60,6 +60,7 @@ namespace FlowBlox.AppWindow
             mnItmProject = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenProject = new System.Windows.Forms.ToolStripMenuItem();
             itmOpenFromProjectSpace = new System.Windows.Forms.ToolStripMenuItem();
+            itmOpenExampleProject = new System.Windows.Forms.ToolStripMenuItem();
             itmRecentProjects = new System.Windows.Forms.ToolStripMenuItem();
             toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             itmEditProject = new System.Windows.Forms.ToolStripMenuItem();
@@ -319,7 +320,7 @@ namespace FlowBlox.AppWindow
             // 
             // mnItmProject
             // 
-            mnItmProject.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmCreateProject, itmOpenProject, itmOpenFromProjectSpace, itmRecentProjects, toolStripSeparator11, itmEditProject, toolStripSeparator2, itmSaveProject, itmSaveToProjectSpace, itmSaveAs, toolStripSeparator3, itmCloseProject, toolStripSeparator4, itmQuitApplication });
+            mnItmProject.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { itmCreateProject, itmOpenProject, itmOpenFromProjectSpace, itmOpenExampleProject, itmRecentProjects, toolStripSeparator11, itmEditProject, toolStripSeparator2, itmSaveProject, itmSaveToProjectSpace, itmSaveAs, toolStripSeparator3, itmCloseProject, toolStripSeparator4, itmQuitApplication });
             mnItmProject.ForeColor = System.Drawing.SystemColors.ControlText;
             mnItmProject.Name = "mnItmProject";
             mnItmProject.Size = new System.Drawing.Size(118, 19);
@@ -341,7 +342,14 @@ namespace FlowBlox.AppWindow
             itmOpenFromProjectSpace.Size = new System.Drawing.Size(243, 22);
             itmOpenFromProjectSpace.Text = "itmOpenFromProjectSpace_Text";
             itmOpenFromProjectSpace.Click += itmOpenFromProjectSpace_Click;
-            // 
+            //
+            // itmOpenExampleProject
+            //
+            itmOpenExampleProject.Name = "itmOpenExampleProject";
+            itmOpenExampleProject.Size = new System.Drawing.Size(243, 22);
+            itmOpenExampleProject.Text = "itmOpenExampleProject_Text";
+            itmOpenExampleProject.Click += itmOpenExampleProject_Click;
+            //
             // itmRecentProjects
             // 
             itmRecentProjects.Name = "itmRecentProjects";
@@ -746,6 +754,7 @@ namespace FlowBlox.AppWindow
         private System.Windows.Forms.ToolStripMenuItem itmResetDockablePanels;
         private System.Windows.Forms.ToolStripMenuItem itmSaveToProjectSpace;
         private System.Windows.Forms.ToolStripMenuItem itmOpenFromProjectSpace;
+        private System.Windows.Forms.ToolStripMenuItem itmOpenExampleProject;
         private System.Windows.Forms.ToolStripMenuItem itmFbProjects;
         private System.Windows.Forms.ToolStripMenuItem itmFbExtensions;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

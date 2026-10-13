@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FlowBloxMainIcon.ico" />
+    <Resource Include="Icons\presentation-play-custom.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -131,6 +132,8 @@
     <PackageReference Include="MahApps.Metro" Version="2.4.11" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="6.2.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.9" />
+    <!-- Keeps the shared MSI dependency set aligned with FlowBlox.WorkerService. -->
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.9" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
     <PackageReference Include="ObjectListView.Repack.NET6Plus" Version="2.9.5" />
@@ -179,14 +182,12 @@
     <Exec Command="&quot;$(ProjectDir)postbuild.bat&quot; &quot;$(TargetDir)&quot;" />
   </Target>
   <Target Name="CopyRunnerHostToOutput" AfterTargets="Build">
-    <Message Importance="high" Text="[FlowBlox] Copying RunnerHost from $(RunnerHostOutputDir) to $(TargetDir)" />
+    <Message Importance="high" Text="[FlowBlox] Copying RunnerHost application files from $(RunnerHostOutputDir) to $(TargetDir)" />
     <ItemGroup>
       <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.exe" />
       <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.dll" />
       <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.runtimeconfig.json" />
-      <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.deps.json" Condition="Exists('$(RunnerHostOutputDir)FlowBlox.RunnerHost.deps.json')" />
-      <RunnerHostFiles Include="$(RunnerHostOutputDir)CommandLine.dll" Condition="Exists('$(RunnerHostOutputDir)CommandLine.dll')" />
-      <RunnerHostFiles Include="$(RunnerHostOutputDir)System.Security.Cryptography.ProtectedData.dll" Condition="Exists('$(RunnerHostOutputDir)System.Security.Cryptography.ProtectedData.dll')" />
+      <RunnerHostFiles Include="$(RunnerHostOutputDir)FlowBlox.RunnerHost.deps.json" />
     </ItemGroup>
     <Copy SourceFiles="@(RunnerHostFiles)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" Condition="Exists('$(RunnerHostOutputDir)FlowBlox.RunnerHost.exe')" />
   </Target>

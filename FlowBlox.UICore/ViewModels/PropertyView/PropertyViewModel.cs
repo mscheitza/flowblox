@@ -1,9 +1,9 @@
 ﻿using FlowBlox.Core.Extensions;
-using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Validations;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Manager;
@@ -11,11 +11,9 @@ using FlowBlox.UICore.Resolver;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.Views;
 using MahApps.Metro.Controls;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -352,73 +350,11 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         private bool ValidateTarget(object target, out List<string> messages)
         {
-            messages = new List<string>();
-            var isValid = true;
-
-            // Validate target
-            if (target is FlowBloxReactiveObject reactiveTarget)
-            {
-                var itemResults = reactiveTarget.ValidateObject();
-                foreach (var entry in itemResults)
-                {
-                    foreach (var msg in entry.Value)
-                    {
-                        messages.Add(msg);
-                    }
-                }
-
-                if (itemResults.Count > 0)
-                    isValid = false;
-            }
-
-            // Validate objects contained in collection-type properties of the target
-            var properties = target.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var prop in properties)
-            {
-                if (prop.PropertyType.IsGenericType &&
-                    typeof(IList).IsAssignableFrom(prop.PropertyType.GetGenericTypeDefinition()))
-                {
-                    var itemType = prop.PropertyType.GetGenericArguments()[0];
-
-                    if (ShouldValidateCollectionItems(itemType))
-                    {
-                        var collection = prop.GetValue(target) as IEnumerable;
-                        if (collection == null) 
-                            continue;
-
-                        int index = 0;
-                        foreach (var item in collection)
-                        {
-                            if (item is FlowBloxReactiveObject reactiveItem)
-                            {
-                                var itemResults = reactiveItem.ValidateObject();
-                                foreach (var entry in itemResults)
-                                {
-                                    foreach (var msg in entry.Value)
-                                    {
-                                        messages.Add($"[{prop.Name}[{index}]] {msg}");
-                                    }
-                                }
-
-                                if (itemResults.Count > 0)
-                                {
-                                    isValid = false;
-                                }
-                            }
-
-                            index++;
-                        }
-                    }
-                }
-            }
-
-            return isValid;
+            messages = target is FlowBloxReactiveObject reactiveTarget
+                ? FlowBloxComponentValidator.Validate(reactiveTarget)
+                : new List<string>();
+            return messages.Count == 0;
         }
-
-        private static bool ShouldValidateCollectionItems(Type itemType)
-            => typeof(FlowBloxReactiveObject).IsAssignableFrom(itemType) &&
-               !typeof(BaseFlowBlock).IsAssignableFrom(itemType) &&
-               !typeof(IManagedObject).IsAssignableFrom(itemType);
 
         public event PropertyChangedEventHandler PropertyChanged;
 

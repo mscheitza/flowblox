@@ -166,8 +166,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 if (!ResultFields.Any())
                     throw new InvalidOperationException("No result fields have been configured.");

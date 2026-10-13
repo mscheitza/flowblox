@@ -5,6 +5,7 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Models.Base;
 using System.Globalization;
 using FlowBlox.Core.Extensions;
+using FlowBlox.Core.Util.Parsing;
 using Newtonsoft.Json;
 
 namespace FlowBlox.Core.Models.Components
@@ -103,6 +104,17 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
+        public IValueParsingStrategy GetSpecialParsingStrategy()
+        {
+            switch (FieldType)
+            {
+                case FieldTypes.DateTime: return new DateTimeParsingStrategy(DateFormat);
+                case FieldTypes.Float: return new FloatParsingStrategy(GetNumberFormat());
+                case FieldTypes.Double: return new DoubleParsingStrategy(GetNumberFormat());
+                default: return null;
+            }
+        }
+
         public NumberFormatInfo GetNumberFormat()
         {
             var referencedField = GetReferencedField();
@@ -159,11 +171,7 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
-                var format = GetNumberFormat();
-                if (float.TryParse(fieldElement.StringValue, NumberStyles.Float | NumberStyles.AllowThousands, format, out float result))
-                    return result;
-
-                throw new FormatException($"Failed to convert value '{fieldElement.StringValue}' to float using decimal separator '{DecimalSeparator}' and group separator '{GroupSeparator}'.");
+                return new FloatParsingStrategy(GetNumberFormat()).Parse(fieldElement.StringValue);
             }
         }
 
@@ -175,11 +183,7 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
-                var format = GetNumberFormat();
-                if (double.TryParse(fieldElement.StringValue, NumberStyles.Float | NumberStyles.AllowThousands, format, out double result))
-                    return result;
-
-                throw new FormatException($"Failed to convert value '{fieldElement.StringValue}' to double using decimal separator '{DecimalSeparator}' and group separator '{GroupSeparator}'.");
+                return new DoubleParsingStrategy(GetNumberFormat()).Parse(fieldElement.StringValue);
             }
         }
 
@@ -191,14 +195,7 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
-                try
-                {
-                    return DateTime.ParseExact(fieldElement.StringValue, DateFormat, CultureInfo.InvariantCulture);
-                }
-                catch (Exception)
-                {
-                    throw new FormatException($"Failed to convert value '{fieldElement.StringValue}' to DateTime using format '{DateFormat}'.");
-                }
+                return new DateTimeParsingStrategy(DateFormat).Parse(fieldElement.StringValue);
             }
         }
 

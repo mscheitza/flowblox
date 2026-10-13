@@ -281,9 +281,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 _result = string.Empty;
                 _fileName = string.Empty;

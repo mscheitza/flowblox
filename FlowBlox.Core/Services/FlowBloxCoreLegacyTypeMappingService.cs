@@ -33,8 +33,9 @@ namespace FlowBlox.Core.Services
                         "FlowBlox.Core.Models.FlowBlocks.Additions.SummarizationCondition, FlowBlox.Core"
                     ]),
                 new FlowBloxLegacyTypeMapping(
-                    typeof(RecursiveCallFlowBlock),
+                    typeof(InjectionFlowBlock),
                     [
+                        "FlowBlox.Core.Models.FlowBlocks.ControlFlow.RecursiveCallFlowBlock, FlowBlox.Core",
                         "FlowBlox.Core.Models.FlowBlocks.InvokerFlowBlock, FlowBlox.Core"
                     ]),
                 new FlowBloxLegacyTypeMapping(

@@ -83,9 +83,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Authorization
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var resolvedEndpoint = FlowBloxFieldHelper.ReplaceFieldsInString(TokenEndpoint ?? string.Empty)?.Trim();
                 var resolvedClientId = FlowBloxFieldHelper.ReplaceFieldsInString(ClientId ?? string.Empty)?.Trim();

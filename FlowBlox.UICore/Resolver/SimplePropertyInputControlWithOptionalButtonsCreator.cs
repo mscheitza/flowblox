@@ -1,3 +1,4 @@
+using SimplePropertyInputControlWithOptionalButtonsCreatorResources = FlowBlox.UICore.Resources.ClassResources.SimplePropertyInputControlWithOptionalButtonsCreator;
 using FlowBlox.Core;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Constants;
@@ -94,8 +95,8 @@ namespace FlowBlox.UICore.Resolver
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = new Thickness(0, 4, 0, 4),
                     MinWidth = 80,
-                    OnContent = FlowBloxResourceUtil.GetLocalizedString("PropertyControlResolver_ToggleSwitch_OnContent", typeof(FlowBloxTexts)),
-                    OffContent = FlowBloxResourceUtil.GetLocalizedString("PropertyControlResolver_ToggleSwitch_OffContent", typeof(FlowBloxTexts))
+                    OnContent = FlowBloxResourceUtil.GetLocalizedString("ToggleSwitch_OnContent", typeof(SimplePropertyInputControlWithOptionalButtonsCreatorResources)),
+                    OffContent = FlowBloxResourceUtil.GetLocalizedString("ToggleSwitch_OffContent", typeof(SimplePropertyInputControlWithOptionalButtonsCreatorResources))
                 };
 
                 toggle.SetBinding(ToggleSwitch.IsOnProperty, binding);
@@ -194,7 +195,7 @@ namespace FlowBlox.UICore.Resolver
                 Margin = new Thickness(4, 0, 0, 0),
                 Padding = new Thickness(6, 0, 6, 0),
                 VerticalAlignment = VerticalAlignment.Center,
-                ToolTip = FlowBloxResourceUtil.GetLocalizedString("TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip", typeof(FlowBloxTexts)),
+                ToolTip = FlowBloxResourceUtil.GetLocalizedString("EnableFieldSelection_Tooltip", typeof(SimplePropertyInputControlWithOptionalButtonsCreatorResources)),
                 IsEnabled = !readOnly
             };
 
@@ -248,7 +249,7 @@ namespace FlowBlox.UICore.Resolver
                 Margin = new Thickness(4, 0, 0, 0),
                 Padding = new Thickness(6, 0, 6, 0),
                 VerticalAlignment = VerticalAlignment.Center,
-                ToolTip = FlowBloxResourceUtil.GetLocalizedString("Global_Unlink", typeof(FlowBloxTexts)),
+                ToolTip = FlowBloxResourceUtil.GetLocalizedString("Unlink", typeof(SimplePropertyInputControlWithOptionalButtonsCreatorResources)),
                 IsEnabled = !readOnly
             };
 

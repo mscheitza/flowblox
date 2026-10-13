@@ -3,6 +3,7 @@ using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Util.DeepCopier;
+using FlowBlox.Core.Util.Parsing;
 using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
 using SkiaSharp;
@@ -55,7 +56,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         [DeepCopierIgnore]
         internal ComparisonCore Comparison { get; } = new ComparisonCore();
 
-        public virtual bool Compare(object leftValue) => Comparison.Check(Operator, Value, leftValue);
+        public virtual bool Compare(object leftValue) => Compare(leftValue, null);
+
+        public virtual bool Compare(object leftValue, IValueParsingStrategy parsingStrategy) => Comparison.Check(Operator, Value, leftValue, parsingStrategy);
 
         [Display(Name = "PropertyNames_Name", ResourceType = typeof(FlowBloxTexts))]
         [FlowBloxUI(Visible = false, ReadOnly = true)]

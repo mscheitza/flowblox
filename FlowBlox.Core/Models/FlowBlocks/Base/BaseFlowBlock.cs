@@ -335,7 +335,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         private string _name;
 
         /// <summary>
-        /// Der Elementbezeichner des Grid-Elements.
+        /// The element identifier of the grid element.
         /// </summary>
         [Display(Name = "BaseFlowBlock_Name", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Default", Order = -10)]
         [CustomValidation(typeof(FlowBloxComponent), nameof(ValidateName))]
@@ -513,9 +513,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             if (!this.IsLoaded)
                 return;
 
-            SyncReferencedFlowBlocksWithInputBehaviorAssignments();
             OnPropertyChanged(nameof(IterationContext));
             OnPropertyChanged(nameof(HasIterationContext));
+            SyncReferencedFlowBlocksWithInputBehaviorAssignments();
             ReferencedFlowBlocksChanged?.Invoke(new ReferencedFlowBlocksChangedEventArgs(
                 this,
                 addedFlowBlocks ?? Array.Empty<BaseFlowBlock>(),
@@ -536,21 +536,53 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         private void SyncReferencedFlowBlocksWithInputBehaviorAssignments()
         {
+            // Preserve deserialized assignments and input behaviors while the component is loading.
+            if (!IsLoaded)
+                return;
+
+            // Input behaviors are relevant only within an iteration context.
+            // Remove all existing assignments when the iteration context is no longer available.
+            if (!HasIterationContext)
+            {
+                if (InputBehaviorAssignments.Count > 0)
+                {
+                    InputBehaviorAssignments.Clear();
+                    OnPropertyChanged(nameof(InputBehaviorAssignments));
+                }
+
+                return;
+            }
+
+            // Reevaluate input behaviors only when the represented referenced flow blocks
+            // have actually changed.
+            var previousAssignments = InputBehaviorAssignments.ToList();
+
+            if (!SyncInputBehaviorAssignmentReferences())
+                return;
+
+            SyncInputBehaviorsAfterReferenceChange(previousAssignments);
+            OnPropertyChanged(nameof(InputBehaviorAssignments));
+        }
+
+        private bool SyncInputBehaviorAssignmentReferences()
+        {
             bool anyChange = false;
 
-            // Fehlende hinzufügen
+            // Create missing assignments for newly added references.
             foreach (var missingFb in _referencedFlowBlocks.Where(x => !this.InputBehaviorAssignments.Any(y => y.FlowBlock == x)))
             {
-                this.InputBehaviorAssignments.Add(new InputBehaviorAssignment()
+                var assignment = new InputBehaviorAssignment()
                 {
-                    Behavior = InputBehavior.First,
                     FlowBlock = missingFb
-                });
+                };
+                if (IsLoaded)
+                    assignment.OnAfterLoad();
+                this.InputBehaviorAssignments.Add(assignment);
 
                 anyChange = true;
             }
 
-            // Nicht mehr vorhandene entfernen
+            // Remove assignments for references that no longer exist.
             foreach (var unusedInputBehaviorAssignment in this.InputBehaviorAssignments
                 .Where(x => !_referencedFlowBlocks.Any(y => y == x.FlowBlock))
                 .ToList())
@@ -559,7 +591,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 anyChange = true;
             }
 
-            // Doppelte FlowBlock-Zuweisungen bereinigen
+            // Remove duplicate assignments for each referenced flow block.
             var duplicates = this.InputBehaviorAssignments
                 .GroupBy(x => x.FlowBlock)
                 .Where(g => g.Count() > 1)
@@ -572,8 +604,65 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 anyChange = true;
             }
 
-            if (anyChange)
-                OnPropertyChanged(nameof(this.InputBehaviorAssignments));
+            return anyChange;
+        }
+
+        private void SyncInputBehaviorsAfterReferenceChange(IReadOnlyCollection<InputBehaviorAssignment> previousAssignments)
+        {
+            if (!AutomaticInputBehaviorAssignment)
+                return;
+
+            var orderedAssignments = _referencedFlowBlocks
+                .Select(flowBlock => InputBehaviorAssignments.Single(assignment => assignment.FlowBlock == flowBlock))
+                .ToList();
+
+            // Initial inputs: Cross for one input, First for multiple inputs.
+            if (previousAssignments.Count == 0)
+            {
+                var initialBehavior = orderedAssignments.Count == 1 ? InputBehavior.Cross : InputBehavior.First;
+                foreach (var assignment in orderedAssignments)
+                    assignment.Behavior = initialBehavior;
+                return;
+            }
+
+            // One to multiple: Cross/CrossValid plus First/FirstValid inputs becomes First.
+            if (previousAssignments.Count == 1 && orderedAssignments.Count > 1)
+            {
+                var firstBehavior = orderedAssignments[0].Behavior;
+                var firstInputUsesCross = firstBehavior == InputBehavior.Cross || firstBehavior == InputBehavior.CrossValid;
+                var remainingInputsUseFirst = orderedAssignments.Skip(1).All(assignment =>
+                    assignment.Behavior == InputBehavior.First || assignment.Behavior == InputBehavior.FirstValid);
+
+                if (firstInputUsesCross && remainingInputsUseFirst)
+                {
+                    foreach (var assignment in orderedAssignments)
+                        assignment.Behavior = InputBehavior.First;
+                    return;
+                }
+            }
+
+            // Multiple to one: uniform or mixed First/FirstValid inputs become Cross.
+            if (previousAssignments.Count > 1 && orderedAssignments.Count == 1)
+            {
+                var allPreviousInputsUseFirst = previousAssignments.All(assignment =>
+                    assignment.Behavior == InputBehavior.First || assignment.Behavior == InputBehavior.FirstValid);
+                if (allPreviousInputsUseFirst)
+                    orderedAssignments[0].Behavior = InputBehavior.Cross;
+                return;
+            }
+
+            // New default inputs inherit uniform RowWise/RowWiseValid, preserving Valid filtering.
+            var previousBehavior = previousAssignments.First().Behavior;
+            if (previousBehavior != InputBehavior.RowWise && previousBehavior != InputBehavior.RowWiseValid)
+                return;
+            if (!previousAssignments.All(assignment => assignment.Behavior == previousBehavior))
+                return;
+
+            foreach (var assignment in orderedAssignments.Except(previousAssignments))
+            {
+                if (assignment.Behavior == InputBehavior.First)
+                    assignment.Behavior = previousBehavior;
+            }
         }
 
         public bool HasIterationContext 
@@ -609,6 +698,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IterationContext));
                 OnPropertyChanged(nameof(HasIterationContext));
+
+                if (IsLoaded)
+                    SyncReferencedFlowBlocksWithInputBehaviorAssignments();
             }
         }
 
@@ -675,9 +767,14 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         }
 
         [Display(Name = "BaseFlowBlock_InputIgnoreDuplicates", Description = "BaseFlowBlock_InputIgnoreDuplicates_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 1)]
+        [ActivationCondition(MemberName = nameof(HasIterationContext), Value = true)]
         public bool InputIgnoreDuplicates { get; set; }
 
-        [Display(Name = "BaseFlowBlock_InputBehaviorAssignments", Description = "BaseFlowBlock_InputBehaviorAssignments_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 2)]
+        [Display(Name = "BaseFlowBlock_AutomaticInputBehaviorAssignment", Description = "BaseFlowBlock_AutomaticInputBehaviorAssignment_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 2)]
+        [ActivationCondition(MemberName = nameof(HasIterationContext), Value = true)]
+        public bool AutomaticInputBehaviorAssignment { get; set; } = true;
+
+        [Display(Name = "BaseFlowBlock_InputBehaviorAssignments", Description = "BaseFlowBlock_InputBehaviorAssignments_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseFlowBlock_Groups_Input", Order = 3)]
         [ActivationCondition(MemberName = nameof(HasIterationContext), Value = true)]
         [ConditionallyRequired]
         [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.Edit)]
@@ -686,7 +783,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [Display(Name = "BaseFlowBlock_InheritRequirementsNotMet", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 0)]
         public bool InheritRequirementsNotMet { get; set; }
 
-        [Display(Name = "BaseFlowBlock_ActivationConditions", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 2)]
+        [Display(Name = "BaseFlowBlock_ActivationConditions", Description = "BaseFlowBlock_ActivationConditions_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "Global_Groups_Requirements", Order = 2)]
         [FlowBloxUI(
             Factory = UIFactory.GridView,
             UiOptions = UIOptions.EnableFieldSelection,
@@ -929,9 +1026,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public void SetParentElement(object parentElement)
         {
             if (parentElement is BaseFlowBlock)
-            {
                 this.Parent = (BaseFlowBlock)parentElement;
-            }
         }
 
         public abstract bool Execute(BaseRuntime runtime, object data);
@@ -964,6 +1059,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         internal void ExecuteNextFlowBlocks(BaseRuntime runtime, bool increaseExecutionLayer)
         {
             runtime.TaskRunner.ScheduleNext(this, increaseExecutionLayer);
+        }
+
+        /// <summary>
+        /// Schedules this flow block for another execution with the same parent context.
+        /// </summary>
+        /// <param name="runtime">The runtime that owns the work queue and current execution state.</param>
+        /// <param name="increaseExecutionLayer">If true, the repeated execution runs one execution layer deeper.</param>
+        public virtual void Repeat(BaseRuntime runtime, bool increaseExecutionLayer = true)
+        {
+            runtime.TaskRunner.ScheduleInvocation(this, Parent, increaseExecutionLayer);
         }
 
         public override void RuntimeStarted(BaseRuntime runtime)
@@ -1113,8 +1218,16 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         protected virtual bool Invoke(BaseRuntime runtime, object data, Action executor)
         {
+            Action preparedExecutor = () =>
+            {
+                runtime.Focus(this);
+                Wait(runtime);
+                SetParentElement(data);
+                executor();
+            };
+
             if (!runtime.ExecutionFlowEnabled)
-                return InvokeExecutor(runtime, executor);
+                return InvokeExecutor(runtime, preparedExecutor);
 
             if (this.HasIterationContext)
             {
@@ -1127,11 +1240,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     _passedResults.Add(runtime, (BaseResultFlowBlock)callingFlowBlock);
                 }
 
-                this._storedExecutor = executor;
+                this._storedExecutor = preparedExecutor;
             }
             else
             {
-                return InvokeExecutor(runtime, executor);
+                return InvokeExecutor(runtime, preparedExecutor);
             }
 
             return true;

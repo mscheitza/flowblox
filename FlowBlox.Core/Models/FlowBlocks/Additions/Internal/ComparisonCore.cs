@@ -1,20 +1,66 @@
 ﻿using FlowBlox.Core.Enums;
 using FlowBlox.Core.Util.Fields;
+using FlowBlox.Core.Util.Parsing;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Additions
 {
     internal sealed class ComparisonCore
     {
-        public bool Check(ComparisonOperator op, string rawRightValue, object leftValue)
-        {
-            if (leftValue is int || leftValue is int?)
-                return Check(op, rawRightValue, (int?)leftValue);
+        private delegate bool ValueParser<T>(string value, out T result);
 
-            if (leftValue is DateTime || leftValue is DateTime?)
-                return Check(op, rawRightValue, (DateTime?)leftValue);
+        private static readonly IReadOnlyDictionary<Type, Func<string, IValueParsingStrategy, object>> _converters =
+            new Dictionary<Type, Func<string, IValueParsingStrategy, object>>
+            {
+                [typeof(int)] = (value, strategy) => Parse<int>(value, (string text, out int result) => int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out result)),
+                [typeof(long)] = (value, strategy) => Parse<long>(value, (string text, out long result) => long.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out result)),
+                [typeof(float)] = (value, strategy) => ParseSpecial(value, typeof(float), strategy),
+                [typeof(double)] = (value, strategy) => ParseSpecial(value, typeof(double), strategy),
+                [typeof(bool)] = (value, strategy) => Parse<bool>(value, bool.TryParse),
+                [typeof(DateTime)] = (value, strategy) => ParseSpecial(value, typeof(DateTime), strategy)
+            };
+
+        public bool Check(ComparisonOperator op, string rawRightValue, object leftValue, IValueParsingStrategy parsingStrategy = null)
+        {
+            if (leftValue is byte[])
+                throw new NotSupportedException("Comparisons of ByteArray values are not supported.");
+
+            if (op == ComparisonOperator.HasValue)
+                return leftValue != null && (leftValue is not string text || !string.IsNullOrEmpty(text));
+
+            if (op == ComparisonOperator.HasNoValue)
+                return leftValue == null || leftValue is string text && string.IsNullOrEmpty(text);
+
+            // Nullable value types box as their underlying type, or as null.
+            if (leftValue != null && _converters.TryGetValue(leftValue.GetType(), out var converter))
+                return CheckTyped(op, rawRightValue, (IComparable)leftValue, converter, parsingStrategy);
 
             return Check(op, rawRightValue, leftValue?.ToString());
+        }
+
+        private static object ParseSpecial(string value, Type valueType, IValueParsingStrategy strategy)
+        {
+            if (strategy == null)
+                throw new InvalidOperationException($"A parsing strategy is required for {valueType.Name} comparisons.");
+            if (strategy.ValueType != valueType)
+                throw new InvalidOperationException($"The parsing strategy for {strategy.ValueType.Name} cannot be used for {valueType.Name} comparisons.");
+            try
+            {
+                return strategy.Parse(value);
+            }
+            catch (FormatException exception)
+            {
+                throw new InvalidOperationException($"Invalid comparison value for {valueType.Name} operation.", exception);
+            }
+        }
+
+        private static object Parse<T>(string value, ValueParser<T> parser)
+        {
+            if (!parser(value, out var result))
+                throw new InvalidOperationException($"Invalid comparison value for {typeof(T).Name} operation.");
+
+            return result;
         }
 
         public bool Check(ComparisonOperator op, string rawRightValue, string left)
@@ -25,8 +71,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             {
                 case ComparisonOperator.HasValue: return !string.IsNullOrEmpty(left);
                 case ComparisonOperator.HasNoValue: return string.IsNullOrEmpty(left);
-                case ComparisonOperator.Equals: return left == right;
-                case ComparisonOperator.NotEquals: return left != right;
+                case ComparisonOperator.Equals:
+                    return left == right || (string.IsNullOrEmpty(left) && string.IsNullOrEmpty(right));
+                case ComparisonOperator.NotEquals:
+                    return left != right && !(string.IsNullOrEmpty(left) && string.IsNullOrEmpty(right));
                 case ComparisonOperator.GreaterThan: return string.Compare(left, right) > 0;
                 case ComparisonOperator.LowerThan: return string.Compare(left, right) < 0;
                 case ComparisonOperator.GreaterThanOrEquals: return string.Compare(left, right) >= 0;
@@ -58,43 +106,29 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             }
         }
 
-        public bool Check(ComparisonOperator op, string rawRightValue, int? left)
+        private bool CheckTyped(ComparisonOperator op, string rawRightValue, IComparable left, Func<string, IValueParsingStrategy, object> converter, IValueParsingStrategy parsingStrategy)
         {
-            if (!int.TryParse(GetRuntimeValue(rawRightValue), out int right))
-                throw new InvalidOperationException("Invalid comparison value for Integer operation.");
+            if (op != ComparisonOperator.Equals &&
+                op != ComparisonOperator.NotEquals &&
+                op != ComparisonOperator.GreaterThan &&
+                op != ComparisonOperator.LowerThan &&
+                op != ComparisonOperator.GreaterThanOrEquals &&
+                op != ComparisonOperator.LowerThanOrEquals)
+                throw new NotSupportedException($"This operator is not supported for {left.GetType().Name}.");
+
+            var right = converter(GetRuntimeValue(rawRightValue), parsingStrategy);
+            var comparison = left.CompareTo(right);
 
             switch (op)
             {
-                case ComparisonOperator.HasValue: return left.HasValue;
-                case ComparisonOperator.HasNoValue: return !left.HasValue;
-                case ComparisonOperator.Equals: return left == right;
-                case ComparisonOperator.NotEquals: return left != right;
-                case ComparisonOperator.GreaterThan: return left > right;
-                case ComparisonOperator.LowerThan: return left < right;
-                case ComparisonOperator.GreaterThanOrEquals: return left >= right;
-                case ComparisonOperator.LowerThanOrEquals: return left <= right;
+                case ComparisonOperator.Equals: return comparison == 0;
+                case ComparisonOperator.NotEquals: return comparison != 0;
+                case ComparisonOperator.GreaterThan: return comparison > 0;
+                case ComparisonOperator.LowerThan: return comparison < 0;
+                case ComparisonOperator.GreaterThanOrEquals: return comparison >= 0;
+                case ComparisonOperator.LowerThanOrEquals: return comparison <= 0;
                 default:
-                    throw new NotSupportedException("This operator is not supported for Integer.");
-            }
-        }
-
-        public bool Check(ComparisonOperator op, string rawRightValue, DateTime? left)
-        {
-            if (!DateTime.TryParse(GetRuntimeValue(rawRightValue), out DateTime right))
-                throw new InvalidOperationException("Invalid comparison value for DateTime operation.");
-
-            switch (op)
-            {
-                case ComparisonOperator.HasValue: return left.HasValue;
-                case ComparisonOperator.HasNoValue: return !left.HasValue;
-                case ComparisonOperator.Equals: return left == right;
-                case ComparisonOperator.NotEquals: return left != right;
-                case ComparisonOperator.GreaterThan: return left > right;
-                case ComparisonOperator.LowerThan: return left < right;
-                case ComparisonOperator.GreaterThanOrEquals: return left >= right;
-                case ComparisonOperator.LowerThanOrEquals: return left <= right;
-                default:
-                    throw new NotSupportedException("This operator is not supported for DateTime.");
+                    throw new NotSupportedException($"This operator is not supported for {left.GetType().Name}.");
             }
         }
 

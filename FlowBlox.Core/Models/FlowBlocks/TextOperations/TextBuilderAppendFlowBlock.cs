@@ -56,8 +56,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 var textBuilder = AssociatedTextBuilder ?? GetPreviousFlowBlockOnPath<TextBuilderFlowBlock>(this);
                 if (textBuilder?.InternalStringBuilder == null)

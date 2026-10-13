@@ -11,13 +11,15 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             string tooltip = null,
             object target = null,
             string preselectedProperty = null,
-            object preselectedInstance = null)
+            object preselectedInstance = null,
+            object parent = null)
         {
             Kind = kind;
             Label = label;
             Value = value;
             Tooltip = tooltip ?? value;
             Target = target;
+            Parent = parent;
             PreselectedProperty = preselectedProperty;
             PreselectedInstance = preselectedInstance;
         }
@@ -30,6 +32,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             ? null
             : Tooltip;
         public object Target { get; }
+        public object Parent { get; }
         public string PreselectedProperty { get; }
         public object PreselectedInstance { get; }
         public bool CanNavigate => Target != null;

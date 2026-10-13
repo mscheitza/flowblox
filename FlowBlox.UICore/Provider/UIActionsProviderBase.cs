@@ -14,7 +14,7 @@ namespace FlowBlox.UICore.Provider
 {
     public abstract class UIActionsProviderBase<TItem>
     {
-        protected abstract TItem CreateItem(string displayName, EventHandler clickHandler, bool enabled, SKImage icon16);
+        protected abstract TItem CreateItem(string displayName, string description, EventHandler clickHandler, bool enabled, SKImage icon16);
 
         public List<TItem> GetToolStripItemsForComponent<T>(T component, bool includePropertyWindowOnlyActions = true) where T : IFlowBloxComponent
         {
@@ -57,6 +57,7 @@ namespace FlowBlox.UICore.Provider
                     var displayName = FlowBloxResourceUtil.GetDisplayName(displayAttribute);
                     if (string.IsNullOrEmpty(displayName))
                         continue;
+                    var description = FlowBloxResourceUtil.GetDescription(displayAttribute);
 
                     var visibilityMethod = type.GetMethod($"Is{method.Name}Visible", BindingFlags.Public | BindingFlags.Instance);
                     var isVisible = visibilityMethod == null || visibilityMethod.ReturnType != typeof(bool) ||
@@ -73,6 +74,7 @@ namespace FlowBlox.UICore.Provider
 
                     var item = CreateItem(
                         displayName,
+                        description,
                         (sender, e) => ExecuteAction(method, instance),
                         enabled,
                         icon16);

@@ -160,6 +160,15 @@ namespace FlowBlox.Core.Util.FlowBlocks
             return result;
         }
 
+        public static IEnumerable<FlowBloxReactiveObject> CollectNestedReactiveObjectsRecursive(object root)
+        {
+            return CollectObjects<FlowBloxReactiveObject>(
+                root,
+                new HashSet<object>(ReferenceEqualityComparer.Instance),
+                excludedTypes: [typeof(ManagedObject), typeof(BaseFlowBlock)])
+                .Where(x => !ReferenceEquals(x, root) && x is not ManagedObject && x is not BaseFlowBlock);
+        }
+
         public static IEnumerable<FieldElement> CollectReferencedFieldElementsRecursive(object root)
         {
             var reactiveObjects = CollectObjects<FlowBloxReactiveObject>(

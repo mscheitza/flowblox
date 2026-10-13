@@ -76,9 +76,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
         {
             return this.Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var values = new Dictionary<string, object>();
                 foreach (var entry in MappingEntries)

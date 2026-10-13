@@ -40,11 +40,31 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         }
     }
 
+    public class TableSelectorColumnConditionItemFactory : IItemFactory<TableSelectorColumnCondition>
+    {
+        public TableSelectorColumnCondition Create()
+        {
+            return new TableSelectorColumnCondition
+            {
+                ColumnType = new TypeElement { FieldType = FieldTypes.Text }
+            };
+        }
+    }
+
     public class TableSelectorColumnCondition : ComparisonCondition
     {
+        [Display(Name = "TableSelectorColumnCondition_ColumnType", Description = "TableSelectorColumnCondition_ColumnType_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = -1)]
+        [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Edit)]
+        public TypeElement ColumnType { get; set; }
+
         [Required()]
         [Display(Name = "TableSelectorColumnCondition_ColumnName", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         public string ColumnName { get; set; }
+
+        public override bool Compare(object leftValue)
+        {
+            return base.Compare(leftValue, ColumnType?.GetSpecialParsingStrategy());
+        }
     }
 
     [FlowBloxUIGroup("TableReaderFlowBlock_Groups_FieldColumnMapping", 0)]
@@ -59,8 +79,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         [Display(Name = "TableReaderFlowBlock_DatasetColumnConditions", ResourceType = typeof(FlowBloxTexts), GroupName = "TableReaderFlowBlock_Groups_DatasetColumnConditions", Order = 0)]
         [FlowBloxUI(Factory = UIFactory.GridView, DisplayLabel = false)]
         [FlowBloxDataGrid(
+            ItemFactory = typeof(TableSelectorColumnConditionItemFactory),
             GridColumnMemberNames = new[]
             {
+                nameof(TableSelectorColumnCondition.ColumnType),
                 nameof(TableSelectorColumnCondition.ColumnName),
                 nameof(TableSelectorColumnCondition.Operator),
                 nameof(TableSelectorColumnCondition.Value)
@@ -68,6 +90,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         public ObservableCollection<TableSelectorColumnCondition> ColumnConditions { get; set; }
 
         [Display(Name = "TableReaderFlowBlock_ReferencedTable", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [Required]
         [FlowBloxUI(Factory = UIFactory.Association, SelectionFilterMethod = nameof(GetPossibleReadableTables), SelectionDisplayMember = nameof(IReadableTable.Name))]
         public IReadableTable ReferencedTable { get; set; }
 
@@ -113,9 +136,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (ReferencedTable == null)
                     throw new Exception("The is no Table defined for TableSelectorElement [" + Name + "].");

@@ -9,4 +9,7 @@
   <data name="DiscardChangesMessage" xml:space="preserve"><value>Das ausgewählte Element enthält ungespeicherte Änderungen. Möchten Sie diese verwerfen?</value></data>
   <data name="DiscardChangesTitle" xml:space="preserve"><value>Ungespeicherte Änderungen</value></data>
   <data name="NoElementSelectedText" xml:space="preserve"><value>Bitte wählen Sie ein Element in der Liste aus, um die Details anzuzeigen.</value></data>
+  <data name="Buttons_Apply" xml:space="preserve">
+		<value>Übernehmen</value>
+	</data>
 </root>

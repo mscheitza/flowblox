@@ -48,9 +48,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var templateBytes = FlowBloxBinaryContentHelper.Resolve(TemplateField);
                 var documentBytes = OpenXmlTemplateProcessor.ReplacePlaceholders(

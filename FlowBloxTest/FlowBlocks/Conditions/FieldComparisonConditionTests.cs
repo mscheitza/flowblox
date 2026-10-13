@@ -58,6 +58,22 @@ namespace FlowBloxTest.FlowBlocks.Conditions
         }
 
         [TestMethod]
+        [DataRow(null, null, true)]
+        [DataRow("", "", true)]
+        [DataRow(null, "", true)]
+        [DataRow("", null, true)]
+        [DataRow(null, "value", false)]
+        [DataRow("value", "", false)]
+        [DataRow("", " ", false)]
+        [DataRow(" ", null, false)]
+        public void Text_Equals_TreatsNullAndEmptyAsEquivalent(string? left, string? right, bool equal)
+        {
+            var field = FieldMockCreator.CreateStringField("Text", left);
+            Assert.AreEqual(equal, CreateCondition(field, ComparisonOperator.Equals, right).Compare());
+            Assert.AreEqual(!equal, CreateCondition(field, ComparisonOperator.NotEquals, right).Compare());
+        }
+
+        [TestMethod]
         public void Text_Contains_And_NotContains()
         {
             var f = FieldMockCreator.CreateStringField("Text", "Hello World");

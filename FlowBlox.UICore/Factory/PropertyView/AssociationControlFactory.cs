@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Attributes;
+﻿using AssociationControlFactoryResources = FlowBlox.UICore.Resources.ClassResources.AssociationControlFactory;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Resources;
@@ -40,6 +41,11 @@ namespace FlowBlox.UICore.Factory.PropertyView
             _unlinkCommand = new RelayCommand(ExecuteUnlink, CanUnlink);
             _editCommand = new RelayCommand(ExecuteEdit, CanEdit);
             _deleteCommand = new RelayCommand(ExecuteDelete, CanDelete);
+        }
+
+        protected override Type GetExplicitItemFactoryType(Type type)
+        {
+            return _property.PropertyType.IsAssignableFrom(type) ? _uiAttribute?.ItemFactory : null;
         }
 
         private string _resolvedFlowBlockHintText;
@@ -217,9 +223,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
                     (MetroWindow)_window,
-                    FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Title"),
+                    FlowBloxResourceUtil.GetLocalizedString("MissingFilterMethod_Title", typeof(AssociationControlFactoryResources)),
                     string.Format(
-                        FlowBloxResourceUtil.GetLocalizedString("Global_MissingFilterMethod_Message"),
+                        FlowBloxResourceUtil.GetLocalizedString("MissingFilterMethod_Message", typeof(AssociationControlFactoryResources)),
                         _property.Name));
 
                 return;
@@ -234,9 +240,9 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
                     (MetroWindow)_window,
-                    FlowBloxResourceUtil.GetLocalizedString("Global_FilterMethodNotFound_Title"),
+                    FlowBloxResourceUtil.GetLocalizedString("FilterMethodNotFound_Title", typeof(AssociationControlFactoryResources)),
                     string.Format(
-                        FlowBloxResourceUtil.GetLocalizedString("Global_FilterMethodNotFound_Message"),
+                        FlowBloxResourceUtil.GetLocalizedString("FilterMethodNotFound_Message", typeof(AssociationControlFactoryResources)),
                         _uiAttribute.SelectionFilterMethod,
                         _target.GetType().Name));
 
@@ -248,15 +254,15 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 await MessageBoxHelper.ShowMessageBoxAsync(
                     (MetroWindow)_window,
-                    FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Title"),
-                    FlowBloxResourceUtil.GetLocalizedString("Global_NoItemsFound_Message"));
+                    FlowBloxResourceUtil.GetLocalizedString("NoItemsFound_Title", typeof(AssociationControlFactoryResources)),
+                    FlowBloxResourceUtil.GetLocalizedString("NoItemsFound_Message", typeof(AssociationControlFactoryResources)));
 
                 return;
             }
 
             var dialog = new MultiValueSelectionDialog(
-                FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Title"),
-                FlowBloxResourceUtil.GetLocalizedString("Global_SelectionDialog_Text"),
+                FlowBloxResourceUtil.GetLocalizedString("SelectionDialog_Title", typeof(AssociationControlFactoryResources)),
+                FlowBloxResourceUtil.GetLocalizedString("SelectionDialog_Message", typeof(AssociationControlFactoryResources)),
                 new GenericSelectionHandler<object>(items.Cast<object>(), x => x.ToString()))
             {
                 Owner = _window,

@@ -164,9 +164,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AI
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var modelFolder = !string.IsNullOrWhiteSpace(_resolvedModelFolder) ? _resolvedModelFolder : ResolveModelFolder();
                 if (string.IsNullOrWhiteSpace(modelFolder) || !Directory.Exists(modelFolder))

@@ -6,22 +6,41 @@ namespace FlowBlox.Core.Actions
 {
     public class FlowBloxEditAction : FlowBloxBaseAction
     {
+        private DynamicDeepCopier _restoreDeepCopier;
+        private DynamicDeepCopier _repetitionDeepCopier;
+
         public object Target { get; set; }
-        public object RestoreObject { get; set; }
-        public object RepetitionObject { get; set; }
+        public object RestoreObject { get; private set; }
+        public object RepetitionObject { get; private set; }
+
+        public void CaptureRestoreState()
+        {
+            _restoreDeepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(Target));
+            RestoreObject = _restoreDeepCopier.Copy(Target);
+        }
+
+        public void CaptureRepetitionState()
+        {
+            _repetitionDeepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(Target));
+            RepetitionObject = _repetitionDeepCopier.Copy(Target);
+        }
 
         public override void Undo()
         {
-            var deepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(Target));
-            deepCopier.Copy(RestoreObject, Target);
+            _restoreDeepCopier.PropertyActions = FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(RestoreObject);
+            _restoreDeepCopier.ClearRecopyCache();
+            _restoreDeepCopier.SpecialMode = DeepCopierSpecialMode.Recopy;
+            _restoreDeepCopier.Copy(RestoreObject, Target);
             OnAfterExecute();
             base.Undo();
         }
 
         public override void Invoke()
         {
-            var deepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(Target));
-            deepCopier.Copy(RepetitionObject, Target);
+            _repetitionDeepCopier.PropertyActions = FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(RepetitionObject);
+            _repetitionDeepCopier.ClearRecopyCache();
+            _repetitionDeepCopier.SpecialMode = DeepCopierSpecialMode.Recopy;
+            _repetitionDeepCopier.Copy(RepetitionObject, Target);
             OnAfterExecute();
             base.Invoke();
         }

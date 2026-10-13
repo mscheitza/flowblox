@@ -69,6 +69,14 @@ namespace FlowBlox.Core.Util
 
         public void InitDefaults(bool overwrite)
         {
+            // Parsing formats are owned by field and column type definitions.
+            lock (_saveLock)
+            {
+                OptionCollection.Remove("Parsing.DateTimeFormat");
+                OptionCollection.Remove("Parsing.DecimalSeparator");
+                OptionCollection.Remove("Parsing.GroupSeparator");
+            }
+
             var defaultOptions = new List<OptionElement>
             {
                 new OptionElement("Account.LoginData", "", "The encrypted login data for the user account. This option stores the login token securely using encryption.", OptionElement.OptionType.Password),

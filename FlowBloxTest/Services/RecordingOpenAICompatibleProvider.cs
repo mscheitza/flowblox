@@ -28,6 +28,7 @@ namespace FlowBloxTest.Services
         public int SummaryRequestCount { get; private set; }
         public List<IReadOnlyList<ChatMessageContent>> NormalChatHistories { get; } = new();
         public List<IReadOnlyList<ChatMessageContent>> SummaryChatHistories { get; } = new();
+        public List<OpenAIPromptExecutionSettings> ExecutionSettings { get; } = new();
 
         protected override Task<ChatMessageContent> SendChatMessageContentAsync(
             IChatCompletionService chatService,
@@ -36,6 +37,7 @@ namespace FlowBloxTest.Services
             OpenAIPromptExecutionSettings executionSettings,
             CancellationToken ct)
         {
+            ExecutionSettings.Add(executionSettings);
             var snapshot = chatHistory.ToList();
             if (request.Source == "FlowBloxAIAssistantSummary")
             {

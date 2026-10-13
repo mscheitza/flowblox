@@ -2,9 +2,13 @@
 using FlowBlox.Core;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Interfaces;
+using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Enums;
+using FlowBlox.UICore.Interfaces;
+using DataGridFactoryResources = FlowBlox.UICore.Resources.ClassResources.DataGridFactory;
 using FlowBlox.UICore.Factory.Adapter;
 using FlowBlox.UICore.PropertyView.Converters;
 using FlowBlox.UICore.PropertyView.Resolver;
@@ -101,7 +105,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             var dataGrid = new DataGrid
             {
                 AutoGenerateColumns = false,
-                IsReadOnly = _uiAttribute?.ReadOnly ?? false,
+                IsReadOnly = _readOnly || _uiAttribute?.ReadOnly == true,
                 CanUserAddRows = false,
                 CanUserDeleteRows = _uiAttribute?.Operations.HasFlag(UIOperations.Delete) ?? false,
                 CanUserSortColumns = _dataGridAttribute?.IsMovable != true,
@@ -281,9 +285,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
                             Header = headerText,
                             ItemsSource = SelectionItemsSourceResolver.ResolveItemsSource(selectionMethodResolution, childProperty),
                             SelectedValueBinding = new Binding(childProperty.Name) { 
-                                Mode = BindingMode.TwoWay 
+                                Mode = IsPropertyReadOnly(childProperty, uiAttribute) ? BindingMode.OneWay : BindingMode.TwoWay
                             },
-                            DisplayMemberPath = uiAttribute.SelectionDisplayMember
+                            DisplayMemberPath = uiAttribute.SelectionDisplayMember,
+                            IsReadOnly = IsPropertyReadOnly(childProperty, uiAttribute)
                         };
                         dataGrid.Columns.Add(column);
                         AttachSelectionFilterDependencyRefresh(dataGrid, column, childProperty, uiAttribute, selectionMethodResolution);
@@ -315,7 +320,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         {
                             VisualTree = CreateAssociationButtonTemplate(childProperty)
                         },
-                        IsReadOnly = _readOnly
+                        IsReadOnly = IsPropertyReadOnly(childProperty, uiAttribute)
                     };
                     dataGrid.Columns.Add(buttonColumn);
                 }
@@ -371,7 +376,33 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     if (success)
                         FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);
                 }
-            }, () => dataGrid.SelectedItems.Count == 1 && !_readOnly);
+            }, () => dataGrid.SelectedItems.Count == 1 && _uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true);
+
+            dataGrid.MouseDoubleClick += (s, e) =>
+            {
+                if (e.ChangedButton != MouseButton.Left || !_editCommand.CanExecute(null))
+                    return;
+
+                var source = dataGrid.InputHitTest(e.GetPosition(dataGrid)) as DependencyObject;
+                while (source != null && source != dataGrid && source is not DataGridCell)
+                {
+                    if (source is System.Windows.Controls.Primitives.ButtonBase)
+                        return;
+
+                    source = source is FrameworkContentElement content ? content.Parent : VisualTreeHelper.GetParent(source);
+                }
+
+                var cell = source as DataGridCell;
+                if (cell == null || !cell.IsReadOnly)
+                    return;
+
+                var row = ItemsControl.ContainerFromElement(dataGrid, cell) as DataGridRow;
+                if (row == null || !ReferenceEquals(row.Item, dataGrid.SelectedItem))
+                    return;
+
+                e.Handled = true;
+                _editCommand.Execute(null);
+            };
 
             _moveUpCommand = new RelayCommand(() =>
             {
@@ -390,26 +421,26 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Create) == true)
             {
-                var addButton = CreateButton(PackIconMaterialKind.Plus, FlowBloxResourceUtil.GetLocalizedString("Buttons_Add"), _addCommand, Brushes.Green);
+                var addButton = CreateButton(PackIconMaterialKind.Plus, FlowBloxResourceUtil.GetLocalizedString("Buttons_Add", typeof(DataGridFactoryResources)), _addCommand, Brushes.Green);
                 toolBar.Items.Add(addButton);
             }
 
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Edit) == true)
             {
-                var editButton = CreateButton(PackIconMaterialKind.Pencil, FlowBloxResourceUtil.GetLocalizedString("Buttons_Edit"), _editCommand, Brushes.Orange);
+                var editButton = CreateButton(PackIconMaterialKind.Pencil, FlowBloxResourceUtil.GetLocalizedString("Buttons_Edit", typeof(DataGridFactoryResources)), _editCommand, Brushes.Orange);
                 toolBar.Items.Add(editButton);
             }
 
             if (_uiAttribute?.Operations.HasFlag(UIOperations.Delete) == true)
             {
-                var removeButton = CreateButton(PackIconMaterialKind.Delete, FlowBloxResourceUtil.GetLocalizedString("Buttons_Remove"), _deleteCommand, Brushes.DarkRed);
+                var removeButton = CreateButton(PackIconMaterialKind.Delete, FlowBloxResourceUtil.GetLocalizedString("Buttons_Remove", typeof(DataGridFactoryResources)), _deleteCommand, Brushes.DarkRed);
                 toolBar.Items.Add(removeButton);
             }
 
             if (_dataGridAttribute?.IsMovable == true)
             {
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowUp, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveUp"), _moveUpCommand, Brushes.Blue));
-                toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowDown, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveDown"), _moveDownCommand, Brushes.Blue));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowUp, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveUp", typeof(DataGridFactoryResources)), _moveUpCommand, Brushes.Blue));
+                toolBar.Items.Add(CreateButton(PackIconMaterialKind.ArrowDown, FlowBloxResourceUtil.GetLocalizedString("Buttons_MoveDown", typeof(DataGridFactoryResources)), _moveDownCommand, Brushes.Blue));
             }
 
             var container = new System.Windows.Controls.Grid();
@@ -559,7 +590,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             buttonFactory.SetValue(FrameworkElement.HeightProperty, 24d);
             buttonFactory.SetValue(FrameworkElement.MarginProperty, new Thickness(6, 0, 0, 0));
             buttonFactory.SetValue(Control.PaddingProperty, new Thickness(0));
-            buttonFactory.SetValue(Control.ToolTipProperty, FlowBloxResourceUtil.GetLocalizedString("TextBoxWithOptionalButtonsCreator_EnableFieldSelection_Tooltip", typeof(FlowBloxTexts)));
+            buttonFactory.SetValue(Control.ToolTipProperty, FlowBloxResourceUtil.GetLocalizedString("EnableFieldSelection_Tooltip", typeof(DataGridFactoryResources)));
             buttonFactory.SetValue(UIElement.IsEnabledProperty, !isReadOnly);
             buttonFactory.SetValue(FrameworkElement.TagProperty, new FieldSelectionDialogContext
             {
@@ -656,6 +687,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         private FrameworkElementFactory CreateAssociationButtonTemplate(PropertyInfo property)
         {
+            var readOnly = IsPropertyReadOnly(property, property.GetCustomAttribute<FlowBloxUIAttribute>());
             var factory = new FrameworkElementFactory(typeof(Button));
             factory.SetValue(Button.ContentProperty, new Binding(property.Name)
             {
@@ -671,6 +703,16 @@ namespace FlowBlox.UICore.Factory.PropertyView
                     var isNew = false;
                     if (item == null)
                     {
+                        if (readOnly)
+                        {
+                            FlowBloxServiceLocator.Instance.GetService<IFlowBloxMessageBoxService>()
+                                ?.ShowMessageBox(
+                                    FlowBloxResourceUtil.GetLocalizedString("ObjectCreationReadOnlyMessage", typeof(DataGridFactoryResources)),
+                                    FlowBloxResourceUtil.GetLocalizedString("ObjectCreationReadOnlyTitle", typeof(DataGridFactoryResources)),
+                                    FlowBloxMessageBoxTypes.Information);
+                            return;
+                        }
+
                         var newInstance = CreateNewInstance(_window, property.PropertyType);
                         if (newInstance == null)
                             return;
@@ -680,7 +722,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         item = newInstance;
                         isNew = true;
                     }
-                    var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(item, parent: _target, readOnly: false, isNew: isNew));
+                    var propertyView = new Views.PropertyWindow(new PropertyWindowArgs(item, parent: _target, readOnly: readOnly, isNew: isNew));
                     propertyView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                     propertyView.Owner = _window;
                     if (propertyView.ShowDialog() == true)
@@ -691,6 +733,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 }
             }));
             return factory;
+        }
+
+        protected override Type GetExplicitItemFactoryType(Type type)
+        {
+            var itemType = _property.PropertyType.GetGenericArguments()[0];
+            return itemType.IsAssignableFrom(type) ? _dataGridAttribute?.ItemFactory : null;
         }
 
         private void AddNewItem(IList list, Type listItemType, DataGrid dataGrid)

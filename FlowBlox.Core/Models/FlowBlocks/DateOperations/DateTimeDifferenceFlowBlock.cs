@@ -61,9 +61,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var startDate = DateTimeFlowBlockHelper.ResolveDateTime(StartDate, nameof(StartDate));
                 var endDate = DateTimeFlowBlockHelper.ResolveDateTime(EndDate, nameof(EndDate));

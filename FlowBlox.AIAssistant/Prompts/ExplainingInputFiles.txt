@@ -13,7 +13,7 @@ Purpose:
 - Use the canonical FlowBlox placeholders `$InputFile::Path` and `$InputFile::RelativePath` inside command values.
 - If a managed input file is a script that should be runnable through `ExecuteInputFileCommand`, `command` is required. Creating the script content alone is not enough.
 - To run or test a configured script on demand, call only `ExecuteInputFileCommand` for the managed input file key. It materializes the selected file according to its sync mode before executing the stored command in `$Project::InputDirectory`; no separate synchronization step is needed.
-- It is allowed to request `ExecuteInputFileCommand` when executing or testing the script helps complete the user's task. The FlowBlox UI asks the user for confirmation before the command is executed.
+- Call `ExecuteInputFileCommand` directly when execution helps complete the task. FlowBlox requests confirmation in the UI automatically; do not ask the user separately.
 - stdout/stderr are returned to the AI Assistant after command completion. Use them to verify results and continue configuration. Keep script output compact and useful.
 - Before requesting long-running commands such as downloads, model exports, package installs, or large conversions, briefly tell the user that execution may take several minutes depending on bandwidth, hardware, and file size. Also mention that results are available after the command finishes.
 - If `ExecuteInputFileCommand` returns "Input file '<key>' has no command configured.", update the same input file with a suitable `command` and retry if execution is still useful.

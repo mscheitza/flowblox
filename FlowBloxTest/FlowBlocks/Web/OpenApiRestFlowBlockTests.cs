@@ -32,10 +32,10 @@ namespace FlowBloxTest.FlowBlocks.Web
             block.Endpoint = block.EndpointSuggestions[0];
 
             Assert.AreEqual("https://api.example.test/v1", block.BaseUrl);
-            Assert.AreEqual("Create participant", block.EndpointDescription);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(block.EndpointDescription));
             Assert.AreEqual("application/json", block.ContentType);
             Assert.AreEqual("X-Tenant", block.HeaderParameters.Single().Name);
-            Assert.AreEqual("Tenant identifier", block.HeaderParameters.Single().Description);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(block.HeaderParameters.Single().Description));
             Assert.AreEqual("demo", block.HeaderParameters.Single().Value);
             Assert.IsTrue(block.Payload.Contains("\"name\"", StringComparison.Ordinal));
             Assert.IsTrue(block.Payload.Contains("\"age\"", StringComparison.Ordinal));

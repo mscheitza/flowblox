@@ -385,7 +385,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                         },
                         new TextBlock
                         {
-                            Text = FlowBloxResourceUtil.GetLocalizedString("Buttons_Apply"),
+                            Text = FlowBloxResourceUtil.GetLocalizedString("Buttons_Apply", typeof(ListViewSplitModeFactoryResources)),
                             VerticalAlignment = VerticalAlignment.Center
                         }
                     }

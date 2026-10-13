@@ -9,4 +9,7 @@
   <data name="DiscardChangesMessage" xml:space="preserve"><value>The selected element contains unsaved changes. Do you want to discard them?</value></data>
   <data name="DiscardChangesTitle" xml:space="preserve"><value>Unsaved changes</value></data>
   <data name="NoElementSelectedText" xml:space="preserve"><value>Please select an element from the list to view its details.</value></data>
+  <data name="Buttons_Apply" xml:space="preserve">
+		<value>Apply</value>
+	</data>
 </root>

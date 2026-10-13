@@ -112,9 +112,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Communication
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 var port = FlowBloxFieldHelper.GetSimplePropertyOrFieldValue(this, x => x.Port);
                 var useSsl = FlowBloxFieldHelper.GetSimplePropertyOrFieldValue(this, x => x.UseSsl);

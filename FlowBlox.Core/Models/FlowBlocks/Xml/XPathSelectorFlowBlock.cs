@@ -52,8 +52,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 var xmlContent = FlowBloxFieldHelper.ReplaceFieldsInString(XmlContent);
                 if (string.IsNullOrWhiteSpace(xmlContent))

@@ -132,9 +132,6 @@ namespace FlowBloxSampleExtension.Models.FlowBlocks.SampleCategory
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 // Resolve all field placeholders in the output template first
                 // (for example "$user::..." or mapped field references).

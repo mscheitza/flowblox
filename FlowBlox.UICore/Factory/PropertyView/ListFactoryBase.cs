@@ -1,3 +1,4 @@
+using ListFactoryBaseResources = FlowBlox.UICore.Resources.ClassResources.ListFactoryBase;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Util.Resources;
 using MahApps.Metro.IconPacks;
@@ -98,7 +99,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             var text = new TextBlock
             {
-                Text = FlowBloxResourceUtil.GetLocalizedString("ListFactoryBase_NoDataAvailable_Text"),
+                Text = FlowBloxResourceUtil.GetLocalizedString("NoDataAvailable_Text", typeof(ListFactoryBaseResources)),
                 FontSize = 14,
                 Foreground = Brushes.Gray,
                 Margin = new Thickness(10, 0, 0, 0),

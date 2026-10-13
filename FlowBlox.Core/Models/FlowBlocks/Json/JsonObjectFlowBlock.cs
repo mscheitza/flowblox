@@ -48,8 +48,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 var content = FlowBloxFieldHelper.ReplaceFieldsInString(JsonContent);
                 var token = JToken.Parse(content);

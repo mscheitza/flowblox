@@ -1,4 +1,5 @@
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.FlowBlocks.ControlFlow;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Actions;
 using FlowBlox.Core.Provider;
@@ -28,7 +29,6 @@ namespace FlowBlox.Core.Util.FlowBlocks
         private const int HorizontalSpacing = 80;
         private const int VerticalSpacing = 40;
         private const int ComponentSpacing = 140;
-        private const int RelaxationPasses = 3;
 
         public static FlowBlockAutoLayoutResult AdjustCurrentRegistryLayout()
         {
@@ -132,6 +132,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
         {
             var components = new List<List<BaseFlowBlock>>();
             var visited = new HashSet<BaseFlowBlock>();
+            var blockSet = blocks.ToHashSet();
 
             foreach (var start in blocks)
             {
@@ -153,7 +154,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
                             queue.Enqueue(next);
                     }
 
-                    foreach (var prev in current.ReferencedFlowBlocks.Where(x => blocks.Contains(x)))
+                    foreach (var prev in current.ReferencedFlowBlocks.Where(blockSet.Contains))
                     {
                         if (visited.Add(prev))
                             queue.Enqueue(prev);
@@ -175,119 +176,106 @@ namespace FlowBlox.Core.Util.FlowBlocks
         {
             var componentSet = new HashSet<BaseFlowBlock>(component);
             var predecessors = component.ToDictionary(
-                x => x,
-                x => x.ReferencedFlowBlocks.Where(componentSet.Contains).ToList());
+                block => block,
+                block => block.ReferencedFlowBlocks.Where(componentSet.Contains).ToList());
+            var roots = GetRoots(component, predecessors);
+            var rootSet = roots.ToHashSet();
+            var pendingInputs = predecessors.ToDictionary(pair => pair.Key, pair => pair.Value.Count);
+            var ready = new Queue<BaseFlowBlock>(roots);
+            var scheduled = roots.ToHashSet();
+            var executionOrder = new List<BaseFlowBlock>();
+
+            // Release a shared successor only after every incoming path has finished.
+            // Cycles have no dependency order; anchor the remaining cycle and ignore its
+            // backward edges during measurement and placement.
+            while (executionOrder.Count < component.Count)
+            {
+                if (ready.Count == 0)
+                {
+                    var cycleRoot = component.First(block => !scheduled.Contains(block));
+                    rootSet.Add(cycleRoot);
+                    scheduled.Add(cycleRoot);
+                    ready.Enqueue(cycleRoot);
+                    TraceLine($"Cycle anchor: Block={BlockName(cycleRoot)}");
+                }
+
+                var block = ready.Dequeue();
+                executionOrder.Add(block);
+                foreach (var next in successors[block])
+                {
+                    pendingInputs[next]--;
+                    if (pendingInputs[next] == 0 && scheduled.Add(next))
+                        ready.Enqueue(next);
+                }
+            }
+
+            var orderIndices = executionOrder
+                .Select((block, index) => (block, index))
+                .ToDictionary(pair => pair.block, pair => pair.index);
+            var pathChildren = component.ToDictionary(
+                block => block,
+                block => successors[block].Where(next =>
+                    predecessors[next].Count == 1 && !rootSet.Contains(next) &&
+                    orderIndices[next] > orderIndices[block]).ToList());
+            var pathBounds = new Dictionary<BaseFlowBlock, (double Top, double Bottom)>();
+            var childCenterOffsets = new Dictionary<BaseFlowBlock, double>();
+
+            // Measure each separate path once, stopping before a shared successor.
+            // Bounds are relative to the block center and include nested branches.
+            for (var index = executionOrder.Count - 1; index >= 0; index--)
+            {
+                var block = executionOrder[index];
+                var children = pathChildren[block];
+                var top = -sizeMap[block].Height / 2.0;
+                var bottom = sizeMap[block].Height / 2.0;
+                var totalHeight = children.Sum(child => pathBounds[child].Bottom - pathBounds[child].Top)
+                    + Math.Max(0, children.Count - 1) * VerticalSpacing;
+                var cursor = -totalHeight / 2.0;
+
+                foreach (var child in children)
+                {
+                    var bounds = pathBounds[child];
+                    var centerOffset = children.Count == 1 ? 0 : cursor - bounds.Top;
+                    if (children.Count == 1 && successors[block].Count == 1 && child is RecursiveTargetFlowBlockBase)
+                        centerOffset = sizeMap[block].Height / 2.0 + VerticalSpacing + sizeMap[child].Height / 2.0;
+
+                    childCenterOffsets[child] = centerOffset;
+                    top = Math.Min(top, centerOffset + bounds.Top);
+                    bottom = Math.Max(bottom, centerOffset + bounds.Bottom);
+                    cursor += bounds.Bottom - bounds.Top + VerticalSpacing;
+                }
+
+                pathBounds[block] = (top, bottom);
+                TraceLine($"Path bounds: Block={BlockName(block)}, TopOffset={top:F2}, BottomOffset={bottom:F2}, ChildCount={children.Count}");
+            }
 
             var locations = new Dictionary<BaseFlowBlock, Point>();
-            var roots = GetRoots(component, predecessors);
-
             var rootCursorY = componentTop;
-            foreach (var root in roots)
-            {
-                var rootSize = sizeMap[root];
-                var sourceLocation = root.Location;
-
-                var x = sourceLocation.X > 0 ? sourceLocation.X : componentLeft;
-                var y = sourceLocation.Y > 0 ? sourceLocation.Y : rootCursorY;
-
-                locations[root] = new Point(Math.Max(0, x), Math.Max(0, y));
-                TraceLine($"Root placement: Block={BlockName(root)}, Source=({sourceLocation.X},{sourceLocation.Y}), Final=({locations[root].X},{locations[root].Y}), Size=({rootSize.Width},{rootSize.Height})");
-                rootCursorY += rootSize.Height + VerticalSpacing;
-            }
-
-            foreach (var block in component.Where(x => !locations.ContainsKey(x)))
+            foreach (var block in executionOrder)
             {
                 var size = sizeMap[block];
-                locations[block] = new Point(componentLeft, rootCursorY);
-                rootCursorY += size.Height + VerticalSpacing;
-            }
-
-            for (var pass = 0; pass < RelaxationPasses; pass++)
-            {
-                TraceLine($"Relaxation pass start: Pass={pass + 1}/{RelaxationPasses}");
-                var centerCandidates = component.ToDictionary(
-                    x => x,
-                    _ => new List<double>());
-
-                foreach (var parent in component)
+                if (rootSet.Contains(block))
                 {
-                    if (!successors.TryGetValue(parent, out var children))
-                        continue;
-
-                    var orderedChildren = children.Where(componentSet.Contains).ToList();
-                    if (orderedChildren.Count == 0)
-                        continue;
-
-                    var parentLocation = locations[parent];
-                    var parentSize = sizeMap[parent];
-                    var parentCenter = GetCenterY(parentLocation, parentSize);
-                    var nextX = parentLocation.X + parentSize.Width + HorizontalSpacing;
-
-                    // Use actual child heights so centered groups remain stable even when blocks differ in size.
-                    var stackedHeight = orderedChildren
-                        .Select(child => sizeMap[child].Height)
-                        .Sum() + (Math.Max(0, orderedChildren.Count - 1) * VerticalSpacing);
-                    var currentTop = parentCenter - (stackedHeight / 2.0);
-                    var rangeTop = currentTop;
-                    var rangeBottom = currentTop + stackedHeight;
-
-                    TraceLine(
-                        $"Parent center calc: Block={BlockName(parent)}, ParentLoc=({parentLocation.X},{parentLocation.Y}), ParentSize=({parentSize.Width},{parentSize.Height}), ParentCenterY={parentCenter:F2}, ChildCount={orderedChildren.Count}, StackedHeight={stackedHeight:F2}, RangeTop={rangeTop:F2}, RangeBottom={rangeBottom:F2}, NextX={nextX}");
-
-                    for (var i = 0; i < orderedChildren.Count; i++)
-                    {
-                        var child = orderedChildren[i];
-                        var childLocation = locations[child];
-                        var childSize = sizeMap[child];
-                        var targetCenter = currentTop + (childSize.Height / 2.0);
-
-                        centerCandidates[child].Add(targetCenter);
-                        ApplyCenterAverageIfNotRoot(child, roots, centerCandidates, sizeMap, locations);
-                        TraceLine(
-                            $"Child target center: Parent={BlockName(parent)}, Child={BlockName(child)}, ChildIndex={i}, ChildLoc=({childLocation.X},{childLocation.Y}), ChildSize=({childSize.Width},{childSize.Height}), TargetCenterY={targetCenter:F2}");
-                        currentTop += childSize.Height + VerticalSpacing;
-
-                        if (childLocation.X < nextX)
-                            locations[child] = new Point(nextX, childLocation.Y);
-
-                        if (predecessors[child].Count > 1)
-                        {
-                            var predecessorCenter = predecessors[child]
-                                .Select(p => GetCenterY(locations[p], sizeMap[p]))
-                                .Average();
-                            centerCandidates[child].Add(predecessorCenter);
-                            ApplyCenterAverageIfNotRoot(child, roots, centerCandidates, sizeMap, locations);
-                            var predecessorsText = string.Join(", ", predecessors[child].Select(BlockName));
-                            TraceLine(
-                                $"Child predecessor center: Child={BlockName(child)}, Predecessors=[{predecessorsText}], PredecessorCenterY={predecessorCenter:F2}");
-                        }
-                    }
+                    var source = block.Location;
+                    var x = source.X > 0 ? source.X : componentLeft;
+                    var y = source.Y > 0 ? source.Y : rootCursorY;
+                    locations[block] = new Point(Math.Max(0, x), Math.Max(0, y));
+                    rootCursorY += (int)Math.Ceiling(pathBounds[block].Bottom - pathBounds[block].Top) + VerticalSpacing;
+                    TraceLine($"Root placement: Block={BlockName(block)}, Final=({locations[block].X},{locations[block].Y})");
+                    continue;
                 }
 
-                foreach (var block in component)
-                {
-                    if (roots.Contains(block))
-                        continue;
+                var inputs = predecessors[block].Where(locations.ContainsKey).ToList();
+                var center = inputs.Average(input => GetCenterY(locations[input], sizeMap[input]));
+                if (inputs.Count == 1 && childCenterOffsets.TryGetValue(block, out var offset))
+                    center += offset;
+                var nextX = inputs.Max(input => locations[input].X + sizeMap[input].Width + HorizontalSpacing);
+                if (inputs.Count == 1 && successors[inputs[0]].Count == 1 && block is RecursiveTargetFlowBlockBase)
+                    nextX = locations[inputs[0]].X;
 
-                    var blockSize = sizeMap[block];
-                    var candidates = centerCandidates[block];
-                    if (candidates.Count == 0)
-                        continue;
-
-                    var avgCenter = candidates.Average();
-                    var targetTop = (int)Math.Round(avgCenter - (blockSize.Height / 2.0));
-                    var current = locations[block];
-                    TraceLine(
-                        $"Block center apply: Block={BlockName(block)}, CurrentTop={current.Y}, SizeH={blockSize.Height}, CandidateCount={candidates.Count}, Candidates=[{string.Join(", ", candidates.Select(x => x.ToString("F2")))}], AvgCenterY={avgCenter:F2}, TargetTop={targetTop}");
-                    locations[block] = new Point(current.X, targetTop);
-                }
-
-                TraceLine($"Relaxation pass end: Pass={pass + 1}/{RelaxationPasses}");
+                locations[block] = new Point(nextX, (int)Math.Round(center - size.Height / 2.0));
+                TraceLine($"Path placement: Block={BlockName(block)}, InputCount={inputs.Count}, Final=({locations[block].X},{locations[block].Y})");
             }
-
-            // Phase 2: branch-wise backward refit.
-            // Keep branch sub-graphs coherent and separated from each other.
-            RefitBranchSubgraphsBackward(component, successors, sizeMap, locations);
 
             return locations;
         }
@@ -398,169 +386,6 @@ namespace FlowBlox.Core.Util.FlowBlocks
         private static string BlockName(BaseFlowBlock block)
         {
             return block?.Name ?? block?.GetType().Name ?? "<null>";
-        }
-
-        private static void ApplyCenterAverageIfNotRoot(
-            BaseFlowBlock block,
-            List<BaseFlowBlock> roots,
-            Dictionary<BaseFlowBlock, List<double>> centerCandidates,
-            Dictionary<BaseFlowBlock, Size> sizeMap,
-            Dictionary<BaseFlowBlock, Point> locations)
-        {
-            if (roots.Contains(block))
-                return;
-
-            var candidates = centerCandidates[block];
-            if (candidates.Count == 0)
-                return;
-
-            var blockSize = sizeMap[block];
-            var avgCenter = candidates.Average();
-            var targetTop = (int)Math.Round(avgCenter - (blockSize.Height / 2.0));
-            var current = locations[block];
-            locations[block] = new Point(current.X, targetTop);
-        }
-
-        private static void RefitBranchSubgraphsBackward(
-            List<BaseFlowBlock> component,
-            Dictionary<BaseFlowBlock, List<BaseFlowBlock>> successors,
-            Dictionary<BaseFlowBlock, Size> sizeMap,
-            Dictionary<BaseFlowBlock, Point> locations)
-        {
-            var componentSet = new HashSet<BaseFlowBlock>(component);
-
-            var branchSources = component
-                .Where(x => successors.TryGetValue(x, out var next) && next.Count > 1)
-                .OrderBy(x => locations.TryGetValue(x, out var p) ? p.X : int.MinValue)
-                .ThenBy(x => locations.TryGetValue(x, out var p) ? p.Y : int.MinValue)
-                .ToList();
-
-            // backward: right-most/deeper branches first
-            for (int i = branchSources.Count - 1; i >= 0; i--)
-            {
-                var source = branchSources[i];
-                var children = successors[source]
-                    .Where(componentSet.Contains)
-                    .OrderBy(x => locations.TryGetValue(x, out var p) ? p.Y : int.MinValue)
-                    .ThenBy(BlockName)
-                    .ToList();
-
-                if (children.Count <= 1)
-                    continue;
-
-                // If at least one direct branch child has no own downstream sub-flow,
-                // keep the standard alignment for this branching source.
-                var hasChildWithoutSubflow = children.Any(child =>
-                    !successors.TryGetValue(child, out var childNext) ||
-                    childNext == null ||
-                    childNext.Count == 0);
-
-                if (hasChildWithoutSubflow)
-                {
-                    TraceLine($"Branch refit skipped for {BlockName(source)} because at least one child has no sub-flow.");
-                    continue;
-                }
-
-                var childRoots = new HashSet<BaseFlowBlock>(children);
-                var groups = new List<(BaseFlowBlock Child, HashSet<BaseFlowBlock> Nodes, int Top, int Bottom)>();
-                bool hasSharedNodes = false;
-
-                foreach (var child in children)
-                {
-                    var nodes = CollectSubgraphNodes(child, successors, componentSet);
-                    nodes.Add(child);
-
-                    // If subgraphs merge, deterministic shifting is unsafe -> skip this source.
-                    if (groups.Any(g => g.Nodes.Overlaps(nodes)))
-                    {
-                        hasSharedNodes = true;
-                        break;
-                    }
-
-                    var top = nodes.Min(n => locations[n].Y);
-                    var bottom = nodes.Max(n => locations[n].Y + sizeMap[n].Height);
-                    groups.Add((child, nodes, top, bottom));
-                }
-
-                if (hasSharedNodes)
-                {
-                    TraceLine($"Branch refit skipped for {BlockName(source)} due to shared/merged child sub-graphs.");
-                    continue;
-                }
-
-                if (groups.Count <= 1)
-                    continue;
-
-                var hasOverlapOrTooSmallSpacing = false;
-                for (var g = 1; g < groups.Count; g++)
-                {
-                    var spacing = groups[g].Top - groups[g - 1].Bottom;
-                    if (spacing < VerticalSpacing)
-                    {
-                        hasOverlapOrTooSmallSpacing = true;
-                        break;
-                    }
-                }
-
-                if (!hasOverlapOrTooSmallSpacing)
-                {
-                    TraceLine($"Branch refit not required for {BlockName(source)}.");
-                    continue;
-                }
-
-                var totalHeight = groups.Sum(g => g.Bottom - g.Top) + ((groups.Count - 1) * VerticalSpacing);
-                var sourceCenter = GetCenterY(locations[source], sizeMap[source]);
-                var targetTop = sourceCenter - (totalHeight / 2.0);
-
-                TraceLine($"Branch refit start: Source={BlockName(source)}, ChildCount={groups.Count}, TotalHeight={totalHeight}, SourceCenter={sourceCenter:F2}, TargetTop={targetTop:F2}");
-
-                foreach (var group in groups)
-                {
-                    var groupHeight = group.Bottom - group.Top;
-                    var delta = (int)Math.Round(targetTop - group.Top);
-
-                    if (delta != 0)
-                    {
-                        foreach (var node in group.Nodes)
-                        {
-                            var current = locations[node];
-                            locations[node] = new Point(current.X, current.Y + delta);
-                        }
-                    }
-
-                    targetTop += groupHeight + VerticalSpacing;
-                }
-
-                TraceLine($"Branch refit end: Source={BlockName(source)}");
-            }
-        }
-
-        private static HashSet<BaseFlowBlock> CollectSubgraphNodes(
-            BaseFlowBlock start,
-            Dictionary<BaseFlowBlock, List<BaseFlowBlock>> successors,
-            HashSet<BaseFlowBlock> componentSet)
-        {
-            var result = new HashSet<BaseFlowBlock>();
-            var stack = new Stack<BaseFlowBlock>();
-            stack.Push(start);
-
-            while (stack.Count > 0)
-            {
-                var current = stack.Pop();
-                if (!result.Add(current))
-                    continue;
-
-                if (!successors.TryGetValue(current, out var nextBlocks))
-                    continue;
-
-                foreach (var next in nextBlocks)
-                {
-                    if (componentSet.Contains(next))
-                        stack.Push(next);
-                }
-            }
-
-            return result;
         }
 
         private static void TraceLine(string message)

@@ -3,16 +3,13 @@ using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.DeepCopier;
+using FlowBlox.Core.Util.Parsing;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Additions
 {
-    // TODO: Wichtig!
-    // Beim Close manchmal eine Null-Reference Exception in Group-Viewn
-    // Wenn man einfach 2 Elemente anlegt oder Field dann kommen Exceptions beim Speichern (Conditions ohne Field)
-
     [Display(Name = "LogicalComparisonCondition_DisplayName", ResourceType = typeof(FlowBloxTexts))]
     public abstract class LogicalComparisonCondition : LogicalCondition
     {
@@ -51,7 +48,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             }
         }
 
-        public virtual bool Compare(object leftValue) => ComparisonCore.Check(Operator, Value, leftValue);
+        public virtual bool Compare(object leftValue) => Compare(leftValue, null);
+
+        public virtual bool Compare(object leftValue, IValueParsingStrategy parsingStrategy) => ComparisonCore.Check(Operator, Value, leftValue, parsingStrategy);
 
         protected string GetComparisonDisplayName()
         {

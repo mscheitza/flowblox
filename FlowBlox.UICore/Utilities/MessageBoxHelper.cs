@@ -1,4 +1,5 @@
-﻿using FlowBlox.Core.Util.Resources;
+﻿using MessageBoxHelperResources = FlowBlox.UICore.Resources.ClassResources.MessageBoxHelper;
+using FlowBlox.Core.Util.Resources;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
@@ -24,7 +25,7 @@ namespace FlowBlox.UICore.Utilities
                 return null;
 
             var result = await window.ShowMessageAsync(
-                FlowBloxResourceUtil.GetLocalizedString("Global_MessageBox_Question_Title"),
+                FlowBloxResourceUtil.GetLocalizedString("Question_Title", typeof(MessageBoxHelperResources)),
                 question,
                 MessageDialogStyle.AffirmativeAndNegative);
 
@@ -67,13 +68,13 @@ namespace FlowBlox.UICore.Utilities
                 return;
 
             if (messageBoxType == MessageBoxType.Notification)
-                await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Global_MessageBox_Notification_Title"), description);
+                await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Notification_Title", typeof(MessageBoxHelperResources)), description);
 
             if (messageBoxType == MessageBoxType.Warning)
-                await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Global_MessageBox_Warning_Title"), description);
+                await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Warning_Title", typeof(MessageBoxHelperResources)), description);
 
             if (messageBoxType == MessageBoxType.Error)
-                await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Global_MessageBox_Error_Title"), description);
+                await window.ShowMessageAsync(FlowBloxResourceUtil.GetLocalizedString("Error_Title", typeof(MessageBoxHelperResources)), description);
         }
 
         public static async Task ShowMessageBoxAsync(MetroWindow window, string title, string description)

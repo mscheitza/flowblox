@@ -138,9 +138,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (ZipArchiveObject == null)
                     throw new InvalidOperationException("No ZIP archive object is assigned to the flow block.");

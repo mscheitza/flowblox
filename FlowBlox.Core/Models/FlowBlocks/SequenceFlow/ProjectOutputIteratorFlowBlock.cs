@@ -108,9 +108,6 @@ namespace FlowBlox.Core.Models.FlowBlocks
         {
             return this.Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 string responseJson = this.InputField.StringValue;
                 if (string.IsNullOrWhiteSpace(responseJson))

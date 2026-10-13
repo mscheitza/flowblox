@@ -6,24 +6,26 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Extensions;
-using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Runtime.Debugging;
+using FlowBlox.Core.Validations;
 
 namespace FlowBlox.Core.Models.Runtime
 {
     public abstract partial class BaseRuntime : IDisposable
     {
         public delegate void LogMessageCreatedEventHandler(BaseRuntime runtime, string message, FlowBloxLogLevel logLevel);
+        internal delegate void LogEntryCreatedEventHandler(BaseRuntime runtime, string message, FlowBloxLogLevel logLevel, Exception exception);
         public delegate void FinishedEventHandler(object result);
         public delegate void RuntimeStartedEventHandler(BaseRuntime runtime);
         public delegate void FocusChangedEventHandler(BaseFlowBlock flowBlock);
         public delegate void PauseEventHandler(bool isPaused);
 
         public event LogMessageCreatedEventHandler LogMessageCreated;
+        internal event LogEntryCreatedEventHandler LogEntryCreated;
         public event RuntimeStartedEventHandler RuntimeStarted;
         public event FinishedEventHandler Finish;
         public event FocusChangedEventHandler FocusChanged;
@@ -104,6 +106,7 @@ namespace FlowBlox.Core.Models.Runtime
 
         public virtual void Report(string message, FlowBloxLogLevel logLevel = FlowBloxLogLevel.Info, Exception e = null)
         {
+            LogEntryCreated?.Invoke(this, message, logLevel, e);
             LogMessageCreated?.Invoke(this, message, logLevel);
 
             if (e != null)
@@ -471,7 +474,7 @@ namespace FlowBlox.Core.Models.Runtime
             if (startFlowBlock == null)
                 return;
 
-            var invalidBlocks = new Dictionary<BaseFlowBlock, List<ValidationResult>>();
+            var invalidBlocks = new Dictionary<BaseFlowBlock, List<string>>();
             var visited = new HashSet<BaseFlowBlock>();
 
             ValidateFlowBlocksRecursive(startFlowBlock, visited, invalidBlocks);
@@ -483,9 +486,9 @@ namespace FlowBlox.Core.Models.Runtime
             foreach (var kvp in invalidBlocks)
             {
                 errorMessage += $"\n\nFlowBlock: {kvp.Key.Name}";
-                foreach (var validationResult in kvp.Value)
+                foreach (var validationMessage in kvp.Value)
                 {
-                    errorMessage += $"\n  - {validationResult.ErrorMessage}";
+                    errorMessage += $"\n  - {validationMessage}";
                 }
             }
 
@@ -495,7 +498,7 @@ namespace FlowBlox.Core.Models.Runtime
         private void ValidateFlowBlocksRecursive(
             BaseFlowBlock flowBlock,
             HashSet<BaseFlowBlock> visited,
-            Dictionary<BaseFlowBlock, List<ValidationResult>> invalidBlocks)
+            Dictionary<BaseFlowBlock, List<string>> invalidBlocks)
         {
             ValidateFlowBlocksRecursive(flowBlock, visited, invalidBlocks, out _);
         }
@@ -503,7 +506,7 @@ namespace FlowBlox.Core.Models.Runtime
         private void ValidateFlowBlocksRecursive(
             BaseFlowBlock flowBlock,
             HashSet<BaseFlowBlock> visited,
-            Dictionary<BaseFlowBlock, List<ValidationResult>> invalidBlocks,
+            Dictionary<BaseFlowBlock, List<string>> invalidBlocks,
             out bool validationCancelled)
         {
             validationCancelled = false;
@@ -522,9 +525,7 @@ namespace FlowBlox.Core.Models.Runtime
 
             if (!ShouldSkipValidation(flowBlock))
             {
-                var context = new ValidationContext(flowBlock, serviceProvider: null, items: null);
-                var results = new List<ValidationResult>();
-                Validator.TryValidateObject(flowBlock, context, results, true);
+                var results = FlowBloxComponentValidator.Validate(flowBlock);
 
                 if (results.Any())
                     invalidBlocks[flowBlock] = results;

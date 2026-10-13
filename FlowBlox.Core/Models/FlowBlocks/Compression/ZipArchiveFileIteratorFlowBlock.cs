@@ -104,8 +104,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Compression
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 var resultMap = new List<Dictionary<FieldElement, string>>();
 

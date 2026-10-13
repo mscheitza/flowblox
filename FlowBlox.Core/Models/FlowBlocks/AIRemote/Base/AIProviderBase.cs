@@ -256,8 +256,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Base
             return reasoningEffort switch
             {
                 AIReasoningEffort.Low => "low",
+                AIReasoningEffort.Medium => "medium",
                 AIReasoningEffort.High => "high",
-                _ => "medium"
+                _ => throw new InvalidOperationException(
+                    $"Reasoning effort '{reasoningEffort}' does not have a provider request value.")
             };
         }
 

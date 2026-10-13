@@ -70,8 +70,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 var associatedXmlDocument = this.AssociatedXmlDocument ?? GetPreviousFlowBlockOnPath<XmlDocumentFlowBlock>(this);
                 if (associatedXmlDocument == null)

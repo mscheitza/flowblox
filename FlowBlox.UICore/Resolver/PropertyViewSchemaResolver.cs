@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PropertyViewSchemaResolverResources = FlowBlox.UICore.Resources.ClassResources.PropertyViewSchemaResolver;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Windows;
 using FlowBlox.Core.Attributes;
@@ -45,7 +46,8 @@ namespace FlowBlox.UICore.Resolver
             {
                 var tabViewModel = new TabViewModel
                 {
-                    TabTitle = FlowBloxResourceUtil.GetLocalizedString(propertyGroup.Key),
+                    TabTitle = FlowBloxResourceUtil.GetLocalizedString(propertyGroup.Key)
+                        ?? FlowBloxResourceUtil.GetLocalizedString("UnknownGroupTabTitle", typeof(PropertyViewSchemaResolverResources)),
                 };
 
                 foreach (var property in propertyGroup.OrderBy(p => p.GetCustomAttribute<DisplayAttribute>().GetOrder() ?? 0))

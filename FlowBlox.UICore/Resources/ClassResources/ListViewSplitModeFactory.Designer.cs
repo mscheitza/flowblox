@@ -61,6 +61,15 @@ namespace FlowBlox.UICore.Resources.ClassResources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
+        /// </summary>
+        public static string Buttons_Apply {
+            get {
+                return ResourceManager.GetString("Buttons_Apply", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Continue editing ähnelt.
         /// </summary>
         public static string ContinueEditingButton {

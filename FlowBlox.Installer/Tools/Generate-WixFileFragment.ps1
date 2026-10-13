@@ -124,7 +124,12 @@ foreach ($file in $files) {
 
     $dirId = $dirIds[$directory]
     $componentId = New-StableId -Prefix 'CMP_' -Text $relative
-    $fileId = New-StableId -Prefix 'FIL_' -Text $relative
+    $fileId = if ($relative -ieq 'FlowBlox.exe') {
+        'FlowBloxExecutable'
+    }
+    else {
+        New-StableId -Prefix 'FIL_' -Text $relative
+    }
     $sourcePath = "$sourceVar\\$relativeEscaped"
 
     [void]$sb.AppendLine("      <Component Id=`"$componentId`" Directory=`"$dirId`" Guid=`"*`">")

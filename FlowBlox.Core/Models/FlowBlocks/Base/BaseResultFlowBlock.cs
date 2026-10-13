@@ -19,6 +19,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         public delegate void OutputDatasetProcessingChangedEventHandler(BaseRuntime runtime);
         public event OutputDatasetProcessingChangedEventHandler OutputDatasetProcessingChanged;
 
+        [Display(Name = "BaseResultFlowBlock_IgnoreDuplicates", Description = "BaseResultFlowBlock_IgnoreDuplicates_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = -1)]
+        public bool OutputIgnoreDuplicates { get; set; }
+
         [Display(Name = "BaseResultFlowBlock_OutputBehavior", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
         [CustomValidation(typeof(BaseResultFlowBlock), nameof(ValidateOutputBehavior))]
         public OutputBehavior OutputBehavior { get; set; }
@@ -224,7 +227,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         private IEnumerable<Dictionary<FieldElement, string>> GetFilteredResultMap(IEnumerable<Dictionary<FieldElement, string>> resultMap)
         {
-            if (!InputIgnoreDuplicates || resultMap == null)
+            if (!OutputIgnoreDuplicates || resultMap == null)
                 return resultMap;
 
             var uniqueResultMaps = new List<Dictionary<FieldElement, string>>();

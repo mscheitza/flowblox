@@ -21,6 +21,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
         private FieldElement _fieldElement;
 
         [Required]
+        [CustomValidation(typeof(FieldComparisonCondition), nameof(FieldComparisonCondition.ValidateFieldElement))]
+        [DependsOnProperty(MemberName = nameof(Operator))]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.ComboBox,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
@@ -37,7 +39,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
             }
         }
 
-        public override bool Check() => Compare(FieldElement?.Value);
+        public override bool Check() => Compare(FieldElement?.Value, FieldElement?.FieldType?.GetSpecialParsingStrategy());
 
         public override string DisplayName => GetDisplayName(f => f?.FullyQualifiedName);
 

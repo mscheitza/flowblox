@@ -128,9 +128,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AWS
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (Provider == null)
                     throw new InvalidOperationException("No AWS provider configured.");

@@ -1,6 +1,6 @@
 ﻿namespace FlowBlox.Core.Interfaces
 {
-    public interface IItemFactory<out T> where T : IFlowBloxComponent
+    public interface IItemFactory<out T>
     {
         public T Create();
     }

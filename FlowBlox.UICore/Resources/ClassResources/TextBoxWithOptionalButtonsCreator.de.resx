@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="EnableFieldSelection_Tooltip" xml:space="preserve">
+		<value>Feld einfügen oder ausgewählten Text ersetzen</value>
+	</data>
+  <data name="EnableFileSelection_Tooltip" xml:space="preserve">
+		<value>Datei auswählen</value>
+	</data>
+  <data name="EnableFolderSelection_Tooltip" xml:space="preserve">
+		<value>Ordner auswählen</value>
+	</data>
+  <data name="EnableToolbox_Tooltip" xml:space="preserve">
+		<value>Toolbox öffnen</value>
+	</data>
+</root>

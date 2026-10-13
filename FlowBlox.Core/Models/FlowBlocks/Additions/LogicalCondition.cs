@@ -26,7 +26,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Additions
 
         public abstract bool Check();
 
-        [Display(Name = "PropertyNames_Name", ResourceType = typeof(FlowBloxTexts))]
+        [Display(Name = "LogicalCondition_Condition", ResourceType = typeof(FlowBloxTexts))]
         [FlowBloxUI(Visible = false, ReadOnly = true)]
         public abstract string DisplayName { get; }
 

@@ -15,6 +15,9 @@ namespace FlowBlox.UICore.ViewModels
 {
     public class ManageInputFilesViewModel : INotifyPropertyChanged
     {
+        private const string DefaultInputFileNamePrefix = "new-file";
+        private const string DefaultInputFileName = DefaultInputFileNamePrefix + ".txt";
+
         private readonly Window _ownerWindow;
         private readonly FlowBloxProject _project;
         private readonly bool _isReadOnly;
@@ -105,7 +108,7 @@ namespace FlowBlox.UICore.ViewModels
 
             var tpl = new FlowBloxInputFile
             {
-                RelativePath = "new-file.txt",
+                RelativePath = DefaultInputFileName,
                 ContentBase64 = "",
                 Command = "",
                 ExecuteBeforeRuntime = false
@@ -138,8 +141,9 @@ namespace FlowBlox.UICore.ViewModels
                 var bytes = File.ReadAllBytes(ofd.FileName);
                 SelectedInputFile.ContentBytes = bytes;
 
-                // If RelativePath is empty, use the selected file name.
-                if (string.IsNullOrWhiteSpace(SelectedInputFile.RelativePath))
+                // Replace an empty or automatically generated file name with the uploaded file name.
+                if (string.IsNullOrWhiteSpace(SelectedInputFile.FileName)
+                    || SelectedInputFile.FileName.StartsWith(DefaultInputFileNamePrefix, StringComparison.OrdinalIgnoreCase))
                     SelectedInputFile.RelativePath = Path.GetFileName(ofd.FileName);
 
                 OnPropertyChanged(nameof(InputFiles));

@@ -5,7 +5,7 @@ namespace FlowBlox.Core.Actions
 {
     public class FlowBloxRecursiveCallDisconnectAction : FlowBloxBaseAction
     {
-        public RecursiveCallFlowBlock RecursiveCallFlowBlock { get; set; }
+        public RecursiveTargetFlowBlockBase RecursiveCallFlowBlock { get; set; }
 
         public BaseFlowBlock TargetFlowBlock { get; set; }
 

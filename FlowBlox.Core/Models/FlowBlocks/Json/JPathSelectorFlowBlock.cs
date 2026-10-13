@@ -55,8 +55,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
 
                 var jsonText = FlowBloxFieldHelper.ReplaceFieldsInString(JsonContent);
                 var path = FlowBloxFieldHelper.ReplaceFieldsInString(Path);

@@ -32,9 +32,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
         {
             return Invoke(runtime, Data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(Data);
                 ExecuteNextFlowBlocks(runtime);
             });
         }

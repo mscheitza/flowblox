@@ -124,9 +124,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         {
             return Invoke(runtime, data, () =>
             {
-                runtime.Focus(this);
-                Wait(runtime);
-                SetParentElement(data);
 
                 if (!ResultFields.Any())
                     throw new InvalidOperationException("No result fields have been configured.");
