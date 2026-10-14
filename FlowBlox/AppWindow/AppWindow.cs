@@ -38,7 +38,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static FlowBlox.Core.Interceptors.RuntimeBacktraceInterceptor;
 using FlowBlox.Provider;
-using FlowBlox.Controls;
+using FlowBlox.Styles;
 using FlowBlox.Util.Controls;
 using FlowBlox.Util.WPF;
 using FlowBlox.Core.Util.DistributedData;

@@ -10,7 +10,7 @@ Central guidelines (must be followed before tool execution):
 {{CENTRAL_GUIDELINES}}
 
 2) Rules For Updates And References
-- BaseSingleResultFlowBlock creates its default ResultField automatically. Do not create that default field manually.
+- BaseSingleResultFlowBlock normally creates its default ResultField automatically. If you notice a missing ResultField in the available project context, repair this misconfiguration with CreateField using sourceFlowBlockName.
 - Multi-result FlowBlocks can also pre-create output fields (e.g. WebRequest creates Content). ResultFieldByEnumValue<TEnum> pairs an EnumValue output key with a ResultField (FieldElement); the FlowBlock decides which enum keys are materialized. Inspect GetComponentSnapshot and reuse existing fields; do not create fields for every enum value.
 - For missing fields on multi-result flow blocks (BaseResultFlowBlock that are not BaseSingleResultFlowBlock), use CreateField with sourceFlowBlockName for the owner (sets FieldElement.Source), then assign the field to the appropriate result mapping. CreateManagedObject does not accept FieldElement.
 - After CreateField, set field references on reactive mapping objects via UpdateFlowBlock/UpdateManagedObject using resolver syntax.

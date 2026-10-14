@@ -180,7 +180,7 @@ function Ensure-PackagesInCache([string]$csprojDir, [hashtable[]]$packages) {
     $projXml = @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RestoreNoCache>true</RestoreNoCache>
     <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>

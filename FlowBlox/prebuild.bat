@@ -6,9 +6,9 @@ set "CURRENT_DIR=%~dp0"
 set "SOURCE_DIR=%CURRENT_DIR%ApplicationDir"
 
 if /i "%MODE%"=="DEBUG" (
-  set "TARGET_DIR=%CURRENT_DIR%bin\Debug\net8.0-windows10.0.19041.0\"
+  set "TARGET_DIR=%CURRENT_DIR%bin\Debug\net10.0-windows10.0.19041.0\"
 ) else (
-  set "TARGET_DIR=%CURRENT_DIR%bin\Release\net8.0-windows10.0.19041.0\"
+  set "TARGET_DIR=%CURRENT_DIR%bin\Release\net10.0-windows10.0.19041.0\"
 )
 
 if not exist "%SOURCE_DIR%" (

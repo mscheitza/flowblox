@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
     <OutputType>WinExe</OutputType>
@@ -52,7 +52,6 @@
     <None Remove="Icons\extension.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Controls\NumericTextBox.cs" />
     <Compile Update="FlowBloxMainUIImages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -68,9 +67,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>FlowBloxMainUITexts.de.resx</DependentUpon>
     </Compile>
-    <Compile Update="Controls\SplitTableLayoutPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -80,9 +76,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Update="Controls\DoubleBufferedPanel.cs">
-      <SubType>Component</SubType>
     </Compile>
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
@@ -131,16 +124,12 @@
     <PackageReference Include="FastColoredTextBox.Net5" Version="2.16.26" />
     <PackageReference Include="MahApps.Metro" Version="2.4.11" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="6.2.1" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.12" />
     <!-- Keeps the shared MSI dependency set aligned with FlowBlox.WorkerService. -->
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.9" />
-    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.12" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
     <PackageReference Include="ObjectListView.Repack.NET6Plus" Version="2.9.5" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Management" Version="10.0.9" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
+    <PackageReference Include="System.Management" Version="10.0.12" />
     <PackageReference Include="TaskScheduler" Version="2.12.1" />
   </ItemGroup>
   <ItemGroup>

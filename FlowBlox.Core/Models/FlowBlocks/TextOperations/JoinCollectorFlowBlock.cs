@@ -77,7 +77,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         {
             return Invoke(runtime, data, () =>
             {
-
                 string separator = Separator;
                 if (SpecialSeparator == Enums.SpecialSeparator.Tab)
                     separator = "\t";

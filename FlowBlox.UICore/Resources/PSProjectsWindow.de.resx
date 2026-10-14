@@ -246,4 +246,7 @@
 	<data name="Tooltip_RefreshVersions" xml:space="preserve">
 		<value>Versionen aktualisieren</value>
 	</data>
+  <data name="Tooltip_CopyToClipboard" xml:space="preserve">
+    <value>In die Zwischenablage kopieren</value>
+  </data>
 </root>

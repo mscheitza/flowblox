@@ -10,6 +10,7 @@ Type model:
 
 Update rules:
 - Always use path-based updates: /Property/0/Nested.
+- UpdateManagedObject accepts the fully qualified field name in name to target a FieldElement; other ManagedObjects use their Name.
 - Never guess/invent property names or nested paths; inspect target metadata first with `GetTypeKindsInfo` (or `GetManagedObjectKindsInfo` for managed objects) before write operations.
 - For FlowBloxReactiveObject-only values:
   - never assign direct JSON object/array blobs to parent properties
@@ -18,7 +19,9 @@ Update rules:
 - Creation split:
   - FlowBloxReactiveObject-only: create/update via Update path
   - FlowBlocks: create via CreateFlowBlock, then reference via Update
-  - FieldElements: create result fields via CreateField with the owning BaseResultFlowBlock in sourceFlowBlockName (sets Source); create Input/Memory user fields via CreateUserField (no source FlowBlock). BaseSingleResultFlowBlock creates its default ResultField automatically.
+  - FieldElements: create result fields via CreateField with the owning BaseResultFlowBlock in sourceFlowBlockName (sets Source); create Input/Memory user fields via CreateUserField (no source FlowBlock). 
+  - BaseSingleResultFlowBlock normally creates its default ResultField automatically. If you notice a missing ResultField in the available project context, repair it with CreateField using sourceFlowBlockName.
+  - BaseSingleResultFlowBlock missing field creation: use DefaultResultFieldType for fieldType and, when set, DefaultResultFieldName for overrideName; otherwise use nameGenerationMode="DeriveFromFlowBlock" (the default for single-result blocks).
   - Other ManagedObjects: create via CreateManagedObject, then reference via Update. CreateManagedObject rejects FieldElement and its derived types.
 
 Typed index GetOrCreate (reactive-only collections):

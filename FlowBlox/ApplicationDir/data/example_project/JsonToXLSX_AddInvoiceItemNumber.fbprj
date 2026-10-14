@@ -1127,7 +1127,7 @@
       {
         "$id": "48",
         "$type": "FlowBlox.Core.Models.Components.IO.FileObject, FlowBlox.Core",
-        "FilePath": "${ProjectDir}\\Out\\JsonToXLSX_AddInvoiceItemNumber.xlsx",
+        "FilePath": "$Project::OutputDirectory\\JsonToXLSX_AddInvoiceItemNumber.xlsx",
         "Name": "FileObject0",
         "RequiredFields": {
           "$type": "System.Collections.ObjectModel.ObservableCollection`1[[FlowBlox.Core.Models.Components.FieldElement, FlowBlox.Core]], System.ObjectModel",
@@ -1419,7 +1419,7 @@
   "ProjectGuid": "114833e6-5e73-416c-a735-8037b29a7e2b",
   "ProjectName": "Add invoice item number",
   "Author": "",
-  "ProjectDescription": "",
+  "ProjectDescription": "Reads participants and their order items from a JSON document and exports the data to an Excel workbook. An index and a calculation assign item position numbers in increments of ten.",
   "Notice": "",
   "GridSizeX": 3479,
   "GridSizeY": 1392,

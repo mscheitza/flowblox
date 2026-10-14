@@ -214,7 +214,7 @@
     <value>Der Name der Erweiterung muss mit dem Dateinamen der *.DLL übereinstimmen.</value>
   </data>
   <data name="VersionView_Expander_Notes_Note3" xml:space="preserve">
-    <value>Die *.DLL muss kompatibel mit .NET 6 sein.</value>
+    <value>Die *.DLL muss kompatibel mit .NET 10 sein.</value>
   </data>
   <data name="VersionView_Expander_Notes_Note4" xml:space="preserve">
     <value>Es muss eine *.deps.json beiliegen, welche die Abhängigkeiten von der Extension enthält.</value>

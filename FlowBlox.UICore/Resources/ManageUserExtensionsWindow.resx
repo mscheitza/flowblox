@@ -214,7 +214,7 @@
   <value>The extension name must match the file name of the *.dll.</value>
 </data>
   <data name="VersionView_Expander_Notes_Note3" xml:space="preserve">
-  <value>The *.dll must be compatible with .NET 6.</value>
+  <value>The *.dll must be compatible with .NET 10.</value>
 </data>
   <data name="VersionView_Expander_Notes_Note4" xml:space="preserve">
   <value>A *.deps.json file must be included that contains the dependencies of the extension.</value>

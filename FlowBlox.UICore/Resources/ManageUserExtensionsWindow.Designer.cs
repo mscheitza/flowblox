@@ -480,7 +480,7 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The *.dll must be compatible with .NET 6. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The *.dll must be compatible with .NET 10. ähnelt.
         /// </summary>
         public static string VersionView_Expander_Notes_Note3
         {

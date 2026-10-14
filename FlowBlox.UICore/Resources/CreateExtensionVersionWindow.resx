@@ -171,4 +171,7 @@
   <data name="Watermark_Description" xml:space="preserve">
     <value>Automatically detected from selected DLL metadata</value>
   </data>
+  <data name="Label_Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
 </root>

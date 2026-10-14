@@ -169,6 +169,17 @@ namespace FlowBlox.UICore.Resources
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Comment ähnelt.
+        /// </summary>
+        public static string Label_Comment
+        {
+            get
+            {
+                return ResourceManager.GetString("Label_Comment", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Library path ähnelt.
         /// </summary>
         public static string Label_LibraryPath

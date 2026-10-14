@@ -62,7 +62,7 @@ namespace FlowBloxTest.Util.FlowBlocks
                 recursiveCall.Location.Y);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true, false)]
         [DataRow(true, true)]
         [DataRow(false, false)]

@@ -1,4 +1,6 @@
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Fields;
 using Newtonsoft.Json;
@@ -17,12 +19,22 @@ namespace FlowBloxTest.Util
         private const string CycleAOption = "Tests.Options.CycleA";
         private const string CycleBOption = "Tests.Options.CycleB";
 
+        private FlowBloxProject? _previousActiveProject;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _previousActiveProject = FlowBloxProjectManager.Instance.ActiveProject;
+            FlowBloxProjectManager.Instance.ActiveProject = new FlowBloxProject();
+        }
+
         [TestCleanup]
         public void Cleanup()
         {
             var options = FlowBloxOptions.GetOptionInstance();
             foreach (var key in new[] { RootOption, ChildOption, NestedOption, SelfOption, CycleAOption, CycleBOption })
                 options.OptionCollection.Remove(key);
+            FlowBloxProjectManager.Instance.ActiveProject = _previousActiveProject;
         }
 
         [TestMethod]

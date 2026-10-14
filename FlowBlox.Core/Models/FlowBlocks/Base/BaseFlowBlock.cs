@@ -360,6 +360,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         }
 
         [JsonIgnore()]
+        [DeepCopierIgnore()]
         public BaseFlowBlock Parent { get; protected set; }
 
         public abstract FlowBlockCategory GetCategory();

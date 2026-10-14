@@ -650,8 +650,8 @@
       {
         "$id": "30",
         "$type": "FlowBlox.Core.Models.Components.IO.FileObject, FlowBlox.Core",
-        "FilePath": "${ProjectDir}\\Output\\AIDemo_QA_Output.xlsx",
-        "Name": "FileObject_AIDemoOutput",
+        "FilePath": "$Project::OutputDirectory\\AI_QA_Output.xlsx",
+        "Name": "FileObject_QAOutput",
         "RequiredFields": {
           "$type": "System.Collections.ObjectModel.ObservableCollection`1[[FlowBlox.Core.Models.Components.FieldElement, FlowBlox.Core]], System.ObjectModel",
           "$values": []
@@ -665,7 +665,7 @@
           "$ref": "30"
         },
         "FirstRowHeader": true,
-        "Name": "ExcelTable_AIDemoOutput",
+        "Name": "ExcelTable_QAOutput",
         "RequiredFields": {
           "$type": "System.Collections.ObjectModel.ObservableCollection`1[[FlowBlox.Core.Models.Components.FieldElement, FlowBlox.Core]], System.ObjectModel",
           "$values": []
@@ -859,9 +859,9 @@
     ]
   },
   "ProjectGuid": "73565dab-1ec7-4121-8928-ef0b23d9df2b",
-  "ProjectName": "AIDemo",
+  "ProjectName": "ONNX Question Answering",
   "Author": "",
-  "ProjectDescription": "",
+  "ProjectDescription": "Extracts invoice numbers, customer names, and total amounts from three sample invoices using a local ONNX question-answering model. The results are written to an Excel workbook, and an included Python script helps prepare the required model.",
   "Notice": "",
   "GridSizeX": 3000,
   "GridSizeY": 1338,

@@ -25,7 +25,7 @@ $applicationProjects = @(
     @{ Name = "FlowBlox"; Path = $flowBloxProject; Framework = $null },
     @{ Name = "FlowBlox.CLI"; Path = (Join-Path $repoRoot "FlowBlox.CLI\FlowBlox.CLI.csproj"); Framework = $null },
     @{ Name = "FlowBlox.RunnerHost"; Path = (Join-Path $repoRoot "FlowBlox.RunnerHost\FlowBlox.RunnerHost.csproj"); Framework = $null },
-    @{ Name = "FlowBlox.WorkerService"; Path = (Join-Path $repoRoot "FlowBlox.WorkerService\FlowBlox.WorkerService.csproj"); Framework = "net8.0-windows10.0.19041.0" }
+    @{ Name = "FlowBlox.WorkerService"; Path = (Join-Path $repoRoot "FlowBlox.WorkerService\FlowBlox.WorkerService.csproj"); Framework = "net10.0-windows10.0.19041.0" }
 )
 
 function Assert-SafeOutputDirectory {

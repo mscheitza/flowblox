@@ -17,6 +17,9 @@ namespace FlowBlox.Core.Util.FlowBlocks
         {
             if (parentObj is BaseFlowBlock flowBlock)
             {
+                if (propertyName == nameof(BaseFlowBlock.Parent))
+                    return true;
+
                 if (propertyName == nameof(BaseFlowBlock.ReferencedFlowBlocks))
                     return true;
             }

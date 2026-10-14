@@ -4374,6 +4374,60 @@ Setzen Sie AssociatedContextualObject des Index-Flow-Blocks auf den Flow-Block u
 * Bei mehreren Eingängen wird jeweils der erste Datensatz ausgewählt.
 * Bei einem Eingang werden alle Datensätze nacheinander verarbeitet.
 * Sind alle bisherigen Eingänge auf RowWise eingestellt, übernehmen neue Eingänge diese Einstellung (gilt auch für RowWiseValid).</value></data>
+  <data name="AIPropertyValueGenerationStrategy_Provider" xml:space="preserve">
+    <value>KI-Anbieter</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_Provider_Tooltip" xml:space="preserve">
+    <value>Wählen Sie den KI-Anbieter (z. B. OpenAI oder Anthropic), der den Wert der Zieleigenschaft erzeugt.</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_PromptTemplate" xml:space="preserve">
+    <value>Prompt</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_PromptTemplate_Tooltip" xml:space="preserve">
+    <value>Die Prompt-Vorlage für die Generierung. Platzhalter werden anhand des Testkontexts und der verfügbaren Felder aufgelöst.</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_SystemInstruction" xml:space="preserve">
+    <value>Systemanweisung</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_SystemInstruction_Tooltip" xml:space="preserve">
+    <value>Optionale Systemanweisung, die die KI-Ausgabe für diese Generierungsstrategie steuert.</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_ModelOverride" xml:space="preserve">
+    <value>Modell überschreiben</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_ModelOverride_Tooltip" xml:space="preserve">
+    <value>Optionaler Modellname, der das Standardmodell des Anbieters für diese Strategie ersetzt.</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_Temperature" xml:space="preserve">
+    <value>Temperatur</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_Temperature_Tooltip" xml:space="preserve">
+    <value>Steuert die Zufälligkeit der erzeugten Werte. Verwenden Sie 0 für deterministische Ergebnisse.</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_MaxTokens" xml:space="preserve">
+    <value>Maximale Tokenanzahl</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_MaxTokens_Tooltip" xml:space="preserve">
+    <value>Optionale Begrenzung der Tokenanzahl in der erzeugten Ausgabe.</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_TimeoutSecondsOverride" xml:space="preserve">
+    <value>Zeitlimit überschreiben (Sekunden)</value>
+  </data>
+  <data name="AIPropertyValueGenerationStrategy_TimeoutSecondsOverride_Tooltip" xml:space="preserve">
+    <value>Optionales Zeitlimit für die Ausführung dieser Strategie. Ohne Angabe wird das Standardzeitlimit des Anbieters verwendet.</value>
+  </data>
+  <data name="AnthropicAIProvider_DisplayName" xml:space="preserve">
+    <value>Anthropic-Anbieter</value>
+  </data>
+  <data name="AnthropicAIProvider_DisplayName_Plural" xml:space="preserve">
+    <value>Anthropic-Anbieter</value>
+  </data>
+  <data name="FloxBloxCategory_Communication" xml:space="preserve">
+    <value>Kommunikation</value>
+  </data>
+  <data name="FloxBloxCategory_Authorization" xml:space="preserve">
+    <value>Autorisierung</value>
+  </data>
 </root>
 
 

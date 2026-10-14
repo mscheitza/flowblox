@@ -1589,9 +1589,9 @@
     ]
   },
   "ProjectGuid": "2cb36e59-9a4b-400a-a786-263324defc5d",
-  "ProjectName": "Polling Demo",
+  "ProjectName": "Polling",
   "Author": "",
-  "ProjectDescription": "",
+  "ProjectDescription": "Simulates polling a job queue through empty, pending, and successful states using sample JSON data. It checks for a successful job, repeats the flow after a delay while none is available, and creates a semaphore file when a job succeeds.",
   "Notice": "",
   "GridSizeX": 5555,
   "GridSizeY": 2000,

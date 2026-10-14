@@ -1,6 +1,6 @@
 ﻿using FlowBlox.AppWindow.ContentFactories;
 using FlowBlox.AppWindow.Contents;
-using FlowBlox.Controls;
+using FlowBlox.Styles;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

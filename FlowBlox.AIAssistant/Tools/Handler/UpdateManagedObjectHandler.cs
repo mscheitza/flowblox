@@ -1,5 +1,6 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Components;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.Handler
@@ -33,9 +34,9 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             var registry = ToolHandlerUtilities.GetRegistry();
             var name = args.Value<string>("name");
 
-            var managedObject = registry.GetManagedObjects()
-                .OfType<FlowBloxComponent>()
-                .FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.OrdinalIgnoreCase));
+            var managedObject = !string.IsNullOrWhiteSpace(name) && FieldElement.IsFullyQualifiedName(name)
+                ? ToolHandlerUtilities.ResolveFieldElementByFQName(registry, name)
+                : ToolHandlerUtilities.ResolveManagedObjectByName(registry, name) as FlowBloxComponent;
 
             if (managedObject == null)
                 return Task.FromResult(ToolHandlerUtilities.Fail($"Managed object '{name}' was not found."));

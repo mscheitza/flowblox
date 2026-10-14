@@ -18,7 +18,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["fieldType"] = "FieldTypes? (default Text)",
                 ["nameGenerationMode"] = "FieldNameGenerationMode? (default UseFallbackIndexOnly)",
                 ["overrideName"] = "string?",
-                ["usageHint"] = "Before CreateField, call GetComponentSnapshot and create only missing fields. BaseSingleResultFlowBlock (incl. BasePipeFlowBlock) manages ResultField itself; do not create it via CreateField."
+                ["usageHint"] = "Before CreateField, call GetComponentSnapshot and create only missing fields. BaseSingleResultFlowBlock (incl. BasePipeFlowBlock) normally creates ResultField automatically; if you notice a missing ResultField, repair it with CreateField using sourceFlowBlockName."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -36,25 +36,34 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     $"BaseResultFlowBlock '{sourceFlowBlockName}' was not found."));
             }
 
-            if (source is BaseSingleResultFlowBlock)
+            var singleResultSource = source as BaseSingleResultFlowBlock;
+            if (singleResultSource != null && singleResultSource.ResultField != null)
             {
                 return Task.FromResult(ToolHandlerUtilities.Fail(
-                    $"Flow block '{source.Name}' derives from BaseSingleResultFlowBlock and already auto-creates its result field."));
+                    $"Flow block '{source.Name}' already has a ResultField. Reuse or update it instead of creating another field."));
             }
 
             var fieldTypeValue = args.Value<string>("fieldType");
-            var fieldType = ParseEnum(fieldTypeValue, FieldTypes.Text);
+            var fieldType = ParseEnum(fieldTypeValue, singleResultSource?.DefaultResultFieldType ?? FieldTypes.Text);
 
             var modeValue = args.Value<string>("nameGenerationMode");
-            var nameGenerationMode = ParseEnum(modeValue, FieldNameGenerationMode.UseFallbackIndexOnly);
+            var nameGenerationMode = ParseEnum(modeValue, singleResultSource != null
+                ? FieldNameGenerationMode.DeriveFromFlowBlock
+                : FieldNameGenerationMode.UseFallbackIndexOnly);
 
             var field = registry.CreateField(source, nameGenerationMode, fieldType);
 
             var overrideName = args.Value<string>("overrideName");
+            if (string.IsNullOrWhiteSpace(overrideName))
+                overrideName = singleResultSource?.DefaultResultFieldName;
+
             if (!string.IsNullOrWhiteSpace(overrideName))
             {
                 field.Name = overrideName;
             }
+
+            if (singleResultSource != null)
+                singleResultSource.ResultField = field;
 
             return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
             {

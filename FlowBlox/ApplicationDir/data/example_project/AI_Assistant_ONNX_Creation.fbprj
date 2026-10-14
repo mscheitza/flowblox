@@ -1102,9 +1102,9 @@
     ]
   },
   "ProjectGuid": "940fb387-7cb3-4025-82fd-aef429a0e17a",
-  "ProjectName": "AI Assistant ONNX Creation Demo",
+  "ProjectName": "AI Assistant ONNX Creation",
   "Author": "",
-  "ProjectDescription": "",
+  "ProjectDescription": "Reads XML invoices from the input directory and uses a local ONNX generative AI model to extract invoice details into structured JSON. The extracted fields are written to an Excel workbook, and an included Python script downloads the required model.",
   "Notice": "",
   "GridSizeX": 3418,
   "GridSizeY": 2000,

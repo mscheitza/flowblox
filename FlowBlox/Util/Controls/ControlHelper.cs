@@ -1,5 +1,4 @@
-﻿using FlowBlox.Controls;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows.Forms;
 
 namespace FlowBlox.Util.Controls
@@ -78,8 +77,6 @@ namespace FlowBlox.Util.Controls
                         numericUpDown.Select(0, numericUpDown.Text.Length);
                     else if (targetControl is MaskedTextBox maskedTextBox)
                         maskedTextBox.Select(0, maskedTextBox.Text.Length);
-                    else if (targetControl is NumericTextBox numericTextBox)
-                        numericTextBox.Select(0, numericTextBox.Text.Length);
                 }
 
             }

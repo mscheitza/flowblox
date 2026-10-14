@@ -10,7 +10,7 @@ Explaining FlowBlox Extensions:
 
 2) Project structure
 - Core extension:
-  - Create a .NET class library with target framework up to .NET 8.
+  - Create a .NET class library with target framework compatible with .NET 10.
   - Reference `FlowBlox.Core.dll`.
   - Implement FlowBlocks and/or managed objects in the core extension assembly.
 - Optional UI extension:

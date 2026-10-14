@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
 	<!-- 
     Microsoft ResX Schema 
@@ -211,4 +211,10 @@
 	<data name="Message_InputFileCommandSuccess" xml:space="preserve">
 		<value>Command der Eingabedatei wurde erfolgreich ausgeführt.</value>
 	</data>
+  <data name="SyncMode_CreateIfNotExists" xml:space="preserve">
+    <value>Nur anlegen, wenn nicht vorhanden</value>
+  </data>
+  <data name="SyncMode_Overwrite" xml:space="preserve">
+    <value>Überschreiben</value>
+  </data>
 </root>

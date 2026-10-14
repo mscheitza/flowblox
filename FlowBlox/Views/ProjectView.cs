@@ -1,4 +1,4 @@
-﻿using FlowBlox.Controls;
+﻿using FlowBlox.Styles;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Util.Controls;
