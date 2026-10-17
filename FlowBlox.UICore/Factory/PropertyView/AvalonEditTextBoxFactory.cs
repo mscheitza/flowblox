@@ -54,10 +54,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             if (textAttr.MultiLine)
             {
-                ParentScrollViewerMouseWheelForwarder.Register(
-                    editor,
-                    () => editor.HorizontalOffset,
-                    editor.ScrollToHorizontalOffset);
+                ParentScrollViewerMouseWheelForwarder.Register(editor);
             }
 
             if (_target is INotifyPropertyChanged inpc)

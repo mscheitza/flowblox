@@ -441,6 +441,7 @@ namespace FlowBlox.UICore.Resolver
             {
                 candidates.Add((activeProject.ProjectInputDirectory, "$Project::InputDirectory"));
                 candidates.Add((activeProject.ProjectOutputDirectory, "$Project::OutputDirectory"));
+                candidates.Add((activeProject.ProjectDirectory, "$Project::Directory"));
             }
 
             var options = FlowBloxOptions.GetOptionInstance();

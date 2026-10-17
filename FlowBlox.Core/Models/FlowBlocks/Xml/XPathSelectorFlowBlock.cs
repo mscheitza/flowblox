@@ -25,6 +25,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         [Required]
         public string XPath { get; set; }
 
+        [Display(Name = "XPathSelectorFlowBlock_ResultMode", Description = "XPathSelectorFlowBlock_ResultMode_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [FlowBloxUI(Factory = UIFactory.Default)]
+        public XPathResultMode ResultMode { get; set; } = XPathResultMode.InnerXml;
+
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.text_search, 16, SKColors.MediumSeaGreen);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.text_search, 32, SKColors.MediumSeaGreen);
 
@@ -45,6 +49,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
         {
             var properties = base.GetDisplayableProperties();
             properties.Add(nameof(XPath));
+            properties.Add(nameof(ResultMode));
             return properties;
         }
 
@@ -72,7 +77,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
                 var xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(xmlContent);
 
-                var values = XPathSelector.SelectValues(xmlDocument, xpath);
+                var values = XPathSelector.SelectValues(xmlDocument, xpath, ResultMode);
                 if (values.Count == 0)
                     CreateNotification(runtime, XPathSelectorNotifications.NoMatchingValuesFound);
 

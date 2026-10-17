@@ -1688,6 +1688,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output mode “Range” only: Last record to output (zero-based). ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_EndIndex_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_EndIndex_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Output ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_Groups_Output {
@@ -1706,7 +1715,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Removes duplicate result records by comparing all field values. Only the first occurrence is passed to subsequent flow blocks. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Removes duplicate output records. ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_IgnoreDuplicates_Tooltip {
             get {
@@ -1724,6 +1733,15 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Limits output. Default: “All”; for successor flow blocks with iteration context, prefer their input behavior. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_OutputBehavior_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_OutputBehavior_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Start index ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_StartIndex {
@@ -1733,11 +1751,101 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output mode “Range” only: First record to output (zero-based). ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_StartIndex_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_StartIndex_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Start value ähnelt.
         /// </summary>
         public static string BaseResultFlowBlock_StartValue {
             get {
                 return ResourceManager.GetString("BaseResultFlowBlock_StartValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Output mode “Range” only: Starts at the first record with this exact field value. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_StartValue_Tooltip {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_StartValue_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die For output behavior “Range”, at least one of start value, start index, or end index must be specified. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_Validation_RangeCriterionRequired {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_Validation_RangeCriterionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die For output behavior “Range”, configure either a start value or index parameters, not both. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_Validation_RangeModesMutuallyExclusive {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_Validation_RangeModesMutuallyExclusive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die For output behavior “Range”, the start index must be less than the end index. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_Validation_StartIndexMustPrecedeEndIndex {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_Validation_StartIndexMustPrecedeEndIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die End index {0} is outside the result set containing {1} records. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_Warning_EndIndexOutsideResultRange {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_Warning_EndIndexOutsideResultRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die End index {0} must be greater than start index {1}. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_Warning_IndexOrderInvalid {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_Warning_IndexOrderInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start index {0} is outside the result set containing {1} records. ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlock_Warning_StartIndexOutsideResultRange {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlock_Warning_StartIndexOutsideResultRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Index output unavailable ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlockNotifications_IndexOutputUnavailable {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlockNotifications_IndexOutputUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Start value not found ähnelt.
+        /// </summary>
+        public static string BaseResultFlowBlockNotifications_StartValueNotFound {
+            get {
+                return ResourceManager.GetString("BaseResultFlowBlockNotifications_StartValueNotFound", resourceCulture);
             }
         }
         
@@ -3493,6 +3601,15 @@ namespace FlowBlox.Core {
         public static string EnumerationFlowBlock_DisplayName {
             get {
                 return ResourceManager.GetString("EnumerationFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Parameter to enumerate ähnelt.
+        /// </summary>
+        public static string EnumerationFlowBlock_Parameter {
+            get {
+                return ResourceManager.GetString("EnumerationFlowBlock_Parameter", resourceCulture);
             }
         }
         
@@ -6395,6 +6512,123 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Reads multiple JPaths from one JSON source and maps the resolved values directly to result fields. ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select multiple JPaths ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mappings ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorFlowBlock_Groups_Mappings {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorFlowBlock_Groups_Mappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON content ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorFlowBlock_JsonContent {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorFlowBlock_JsonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JSON source content used for all configured path mappings. ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorFlowBlock_JsonContent_Tooltip {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorFlowBlock_JsonContent_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JPath mappings ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorFlowBlock_MappingEntries {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorFlowBlock_MappingEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JPath mapping entry ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorMappingEntry_DisplayName {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorMappingEntry_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fallback value ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorMappingEntry_FallbackValue {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorMappingEntry_FallbackValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value returned for a row when JPath finds no value below its row root. Only available when a row root path is configured. ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorMappingEntry_FallbackValue_Tooltip {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorMappingEntry_FallbackValue_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die JPath ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorMappingEntry_JPath {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorMappingEntry_JPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath expression used to resolve values from the JSON content, for example &apos;$.participants[0].name&apos;, &apos;$[*].id&apos;, or &apos;$.addresses[?(@.Country == &apos;Germany&apos;)].Street&apos;. ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorMappingEntry_JPath_Tooltip {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorMappingEntry_JPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Row root path ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorMappingEntry_RowPath {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorMappingEntry_RowPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value. ähnelt.
+        /// </summary>
+        public static string JPathMultiSelectorMappingEntry_RowPath_Tooltip {
+            get {
+                return ResourceManager.GetString("JPathMultiSelectorMappingEntry_RowPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Reads JSON content and returns the value or values selected by a Newtonsoft.Json JPath expression. ähnelt.
         /// </summary>
         public static string JPathSelectorFlowBlock_Description {
@@ -6409,6 +6643,24 @@ namespace FlowBlox.Core {
         public static string JPathSelectorFlowBlock_DisplayName {
             get {
                 return ResourceManager.GetString("JPathSelectorFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Fallback value ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_FallbackValue {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_FallbackValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Value returned for a row when JPath finds no value below its row root. Only available when a row root path is configured. ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_FallbackValue_Tooltip {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_FallbackValue_Tooltip", resourceCulture);
             }
         }
         
@@ -6440,6 +6692,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Row root path ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_RowPath {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_RowPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value. ähnelt.
+        /// </summary>
+        public static string JPathSelectorFlowBlock_RowPath_Tooltip {
+            get {
+                return ResourceManager.GetString("JPathSelectorFlowBlock_RowPath_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die JPath examples:
         ///- `$` selects the root content; items of a selected array are returned individually.
         ///- `$[*].id` selects the id values of all objects in a root array.
@@ -6461,87 +6731,6 @@ namespace FlowBlox.Core {
         public static string JsonFlowBlocks_SpecialExplanation_JPathSyntax {
             get {
                 return ResourceManager.GetString("JsonFlowBlocks_SpecialExplanation_JPathSyntax", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Reads multiple JSON paths from one JSON source and maps the resolved values directly to result fields. ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorFlowBlock_Description {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Select multiple JSON paths ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorFlowBlock_DisplayName {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_DisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Mappings ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorFlowBlock_Groups_Mappings {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_Groups_Mappings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON content ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorFlowBlock_JsonContent {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_JsonContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON source content used for all configured path mappings. ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Path mappings ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorFlowBlock_MappingEntries {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorFlowBlock_MappingEntries", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path mapping entry ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorMappingEntry_DisplayName {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorMappingEntry_DisplayName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die JSON path ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorMappingEntry_JsonPath {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorMappingEntry_JsonPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Newtonsoft.Json JPath expression used to resolve values from the JSON content, for example &apos;$.participants[0].name&apos;, &apos;$[*].id&apos;, or &apos;$.addresses[?(@.Country == &apos;Germany&apos;)].Street&apos;. ähnelt.
-        /// </summary>
-        public static string JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip {
-            get {
-                return ResourceManager.GetString("JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip", resourceCulture);
             }
         }
         
@@ -8636,6 +8825,24 @@ namespace FlowBlox.Core {
         public static string OpenApiRestFlowBlock_EndpointDescription_Tooltip {
             get {
                 return ResourceManager.GetString("OpenApiRestFlowBlock_EndpointDescription_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Parameters ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_Groups_Parameters {
+            get {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_Groups_Parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Payload ähnelt.
+        /// </summary>
+        public static string OpenApiRestFlowBlock_Groups_Payload {
+            get {
+                return ResourceManager.GetString("OpenApiRestFlowBlock_Groups_Payload", resourceCulture);
             }
         }
         
@@ -14307,6 +14514,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result format ähnelt.
+        /// </summary>
+        public static string XmlDocumentXPathSelector_ResultMode {
+            get {
+                return ResourceManager.GetString("XmlDocumentXPathSelector_ResultMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Returns either the content inside each matched node or its complete XML. For attributes, outer XML includes the attribute name. ähnelt.
+        /// </summary>
+        public static string XmlDocumentXPathSelector_ResultMode_Tooltip {
+            get {
+                return ResourceManager.GetString("XmlDocumentXPathSelector_ResultMode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die XPath ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelector_XPath {
@@ -14316,7 +14541,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression applied to the managed XML document. Select elements to return their inner XML, or end the expression with an attribute step such as &apos;//item/@id&apos; to return attribute values. Fields from input flow blocks can be used. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression applied to the managed XML document. Elements, text nodes, CDATA sections, and attributes such as &apos;//item/@id&apos; can be selected. ähnelt.
         /// </summary>
         public static string XmlDocumentXPathSelector_XPath_Tooltip {
             get {
@@ -14348,6 +14573,24 @@ namespace FlowBlox.Core {
         public static string XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks {
             get {
                 return ResourceManager.GetString("XmlDocumentXPathSelectorFlowBlock_SpecialExplanation_ExternalFlowBlocks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Inner XML ähnelt.
+        /// </summary>
+        public static string XPathResultMode_InnerXml {
+            get {
+                return ResourceManager.GetString("XPathResultMode_InnerXml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Outer XML ähnelt.
+        /// </summary>
+        public static string XPathResultMode_OuterXml {
+            get {
+                return ResourceManager.GetString("XPathResultMode_OuterXml", resourceCulture);
             }
         }
         
@@ -14397,6 +14640,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Result format ähnelt.
+        /// </summary>
+        public static string XPathSelectorFlowBlock_ResultMode {
+            get {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_ResultMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Returns either the content inside each matched node or its complete XML. For attributes, outer XML includes the attribute name. ähnelt.
+        /// </summary>
+        public static string XPathSelectorFlowBlock_ResultMode_Tooltip {
+            get {
+                return ResourceManager.GetString("XPathSelectorFlowBlock_ResultMode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die XML content ähnelt.
         /// </summary>
         public static string XPathSelectorFlowBlock_XmlContent {
@@ -14424,7 +14685,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression applied directly to the XML content. Select elements to return their inner XML, or end the expression with an attribute step such as &apos;//item/@id&apos; to return attribute values. Fields from input flow blocks can be used. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die XPath expression applied directly to the XML content. Elements, text nodes, CDATA sections, and attributes such as &apos;//item/@id&apos; can be selected. ähnelt.
         /// </summary>
         public static string XPathSelectorFlowBlock_XPath_Tooltip {
             get {

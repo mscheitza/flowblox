@@ -1,6 +1,7 @@
 ﻿using FlowBlox.Core.Enums;
 using FlowBlox.Core;
 using FlowBlox.Core.Extensions;
+using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
@@ -23,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Threading;
 using FlowBlox.Core.Models.Components;
 
 namespace FlowBlox.UICore.ViewModels
@@ -38,6 +40,11 @@ namespace FlowBlox.UICore.ViewModels
         private bool _hasExplicitFlowBlockContext;
         private bool _hideLastLayerNeighbours;
         private bool _suppressDirtyTracking;
+        private readonly HashSet<FlowBloxReactiveObject> _validationSources = new(ReferenceEqualityComparer.Instance);
+        private readonly Dictionary<FlowBloxReactiveObject, IReadOnlyList<string>> _validationErrors = new(ReferenceEqualityComparer.Instance);
+        private readonly Dictionary<FlowBloxReactiveObject, BaseFlowBlock> _validationSourceOwners = new(ReferenceEqualityComparer.Instance);
+        private readonly object _validationErrorsSync = new();
+        private int _validationRefreshScheduled;
 
         public TestDefinitionViewModel()
         {
@@ -53,6 +60,8 @@ namespace FlowBlox.UICore.ViewModels
             Configurations = new ObservableCollection<FlowBloxFieldTestConfiguration>();
             SortedEntries = new ObservableCollection<FlowBlockTestDataset>();
             RuntimeLogs = new ObservableCollection<RuntimeLog>();
+            ValidationMessages = new ObservableCollection<string>();
+            RefreshValidationSubscriptions();
             _hideLastLayerNeighbours = ResolveHideLastLayerNeighboursOption();
             BindingOperations.EnableCollectionSynchronization(RuntimeLogs, new object());
         }
@@ -105,6 +114,7 @@ namespace FlowBlox.UICore.ViewModels
                propertyName == nameof(FlowBlockTestDataset.UIIsTargetFlowBlock) ||
                propertyName == nameof(FlowBlockTestDataset.UIIsTargetNeighbour) ||
                propertyName == nameof(FlowBlockTestDataset.UIIsVisibleInCurrentContext) ||
+               propertyName == nameof(FlowBlockTestDataset.UIHasFlowBlockValidationErrors) ||
                propertyName == nameof(FlowBloxFieldTestConfiguration.UIRequiredForExecution);
 
         private void LoadCurrentCondfigurations(FlowBloxTestDefinition testDefinition, BaseFlowBlock currentFlowBlock)
@@ -147,6 +157,7 @@ namespace FlowBlox.UICore.ViewModels
 
             SelectedConfiguration.ExpectationConditions.Add(ec);
             SelectedExpectation = ec;
+            RefreshValidationSubscriptions();
             MarkDirty("Expectation added");
         }
 
@@ -157,6 +168,7 @@ namespace FlowBlox.UICore.ViewModels
 
             SelectedConfiguration.ExpectationConditions.Remove(SelectedExpectation);
             SelectedExpectation = null;
+            RefreshValidationSubscriptions();
             MarkDirty("Expectation deleted");
         }
 
@@ -210,6 +222,7 @@ namespace FlowBlox.UICore.ViewModels
                         _testDefinition.Entries.CollectionChanged += Entries_CollectionChanged;
 
                     RefreshSortedEntries();
+                    RefreshValidationSubscriptions();
                     _suppressDirtyTracking = false;
                     OnPropertyChanged(nameof(TestDefinition));
                     OnPropertyChanged(nameof(CanExecute));
@@ -220,6 +233,7 @@ namespace FlowBlox.UICore.ViewModels
         private void Entries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             RefreshSortedEntries();
+            RefreshValidationSubscriptions();
             MarkDirty("Test dataset collection changed");
         }
 
@@ -248,6 +262,7 @@ namespace FlowBlox.UICore.ViewModels
             {
                 _currentFlowBlock = value;
                 LoadCurrentFlowBlock();
+                RefreshValidationSubscriptions();
                 OnPropertyChanged(nameof(CurrentFlowBlock));
             }
         }
@@ -342,6 +357,137 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public ObservableCollection<RuntimeLog> RuntimeLogs { get; set; }
+
+        public ObservableCollection<string> ValidationMessages { get; }
+
+        public bool HasValidationMessages => ValidationMessages.Count > 0;
+
+        private void RefreshValidationSubscriptions()
+        {
+            DetachValidationSubscriptions();
+            _validationSourceOwners.Clear();
+            lock (_validationErrorsSync)
+                _validationErrors.Clear();
+
+            if (_testDefinition != null)
+            {
+                AddValidationSource(_testDefinition);
+                foreach (var source in _testDefinition.GetNestedReactiveObjects())
+                    AddValidationSource(source);
+
+                var flowBlocks = _testDefinition.Entries
+                    .Select(entry => entry.FlowBlock)
+                    .Append(_currentFlowBlock)
+                    .Concat(_capturedFlowBlocks ?? Enumerable.Empty<BaseFlowBlock>())
+                    .ExceptNull()
+                    .Distinct((IEqualityComparer<BaseFlowBlock>)ReferenceEqualityComparer.Instance);
+
+                foreach (var flowBlock in flowBlocks)
+                {
+                    AddValidationSource(flowBlock, flowBlock);
+                    foreach (var source in flowBlock.GetNestedReactiveObjects())
+                        AddValidationSource(source, flowBlock);
+                }
+            }
+
+            RefreshValidationMessages();
+        }
+
+        public void DetachValidationSubscriptions()
+        {
+            foreach (var source in _validationSources)
+                source.ErrorsChanged -= ValidationSource_ErrorsChanged;
+
+            _validationSources.Clear();
+        }
+
+        private void AddValidationSource(FlowBloxReactiveObject source, BaseFlowBlock? owner = null)
+        {
+            if (source == null)
+                return;
+
+            if (owner != null)
+                _validationSourceOwners[source] = ResolveOriginalFlowBlock(owner);
+
+            if (!_validationSources.Add(source))
+                return;
+
+            source.ErrorsChanged += ValidationSource_ErrorsChanged;
+            UpdateValidationErrors(source);
+        }
+
+        private void ValidationSource_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            if (sender is not FlowBloxReactiveObject source)
+                return;
+
+            UpdateValidationErrors(source);
+            ScheduleValidationMessagesRefresh();
+        }
+
+        private void UpdateValidationErrors(FlowBloxReactiveObject source)
+        {
+            var errors = source.GetErrors(null)
+                .Cast<string>()
+                .Where(message => !string.IsNullOrWhiteSpace(message))
+                .ToList();
+
+            lock (_validationErrorsSync)
+                _validationErrors[source] = errors;
+        }
+
+        private void ScheduleValidationMessagesRefresh()
+        {
+            if (Interlocked.Exchange(ref _validationRefreshScheduled, 1) != 0)
+                return;
+
+            var dispatcher = _ownerWindow?.Dispatcher ?? Application.Current?.Dispatcher;
+            if (dispatcher == null)
+            {
+                Interlocked.Exchange(ref _validationRefreshScheduled, 0);
+                RefreshValidationMessages();
+                return;
+            }
+
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                Interlocked.Exchange(ref _validationRefreshScheduled, 0);
+                RefreshValidationMessages();
+            }), DispatcherPriority.DataBind);
+        }
+
+        public void RefreshValidationMessages()
+        {
+            List<KeyValuePair<FlowBloxReactiveObject, IReadOnlyList<string>>> errorsBySource;
+            lock (_validationErrorsSync)
+                errorsBySource = _validationErrors.ToList();
+
+            var distinctMessages = errorsBySource
+                .SelectMany(entry => entry.Value)
+                .Where(message => !string.IsNullOrWhiteSpace(message))
+                .Distinct(StringComparer.CurrentCulture)
+                .ToList();
+
+            ValidationMessages.Clear();
+            foreach (var message in distinctMessages)
+                ValidationMessages.Add(message);
+
+            var invalidFlowBlocks = errorsBySource
+                .Where(entry => entry.Value.Count > 0 && _validationSourceOwners.ContainsKey(entry.Key))
+                .Select(entry => _validationSourceOwners[entry.Key])
+                .ToHashSet((IEqualityComparer<BaseFlowBlock>)ReferenceEqualityComparer.Instance);
+
+            foreach (var entry in _testDefinition?.Entries ?? Enumerable.Empty<FlowBlockTestDataset>())
+            {
+                entry.UIHasFlowBlockValidationErrors = entry.FlowBlock != null &&
+                    invalidFlowBlocks.Contains(ResolveOriginalFlowBlock(entry.FlowBlock));
+            }
+
+            OnPropertyChanged(nameof(HasValidationMessages));
+        }
+
+        private static BaseFlowBlock ResolveOriginalFlowBlock(BaseFlowBlock flowBlock)
+            => FlowBloxRegistryProvider.GetRegistry().GetOriginalRef(flowBlock) as BaseFlowBlock ?? flowBlock;
 
         public RelayCommand ExecuteTestCommand { get; }
         public RelayCommand EditConditionsCommand { get; }

@@ -12,6 +12,8 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public string TabTitle { get; set; }
 
+        public string GroupKey { get; set; }
+
         public ObservableCollection<PropertyControlViewModel> Controls { get; set; }
 
         public bool HasMaximizedControl => Controls.Any(x => x.Maximize);

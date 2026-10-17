@@ -213,6 +213,9 @@ All inputs are collected during each referenced iteration and this flow block ex
 	<data name="BaseResultFlowBlock_EndIndex" xml:space="preserve">
 		<value>End index</value>
 	</data>
+	<data name="BaseResultFlowBlock_EndIndex_Tooltip" xml:space="preserve">
+		<value>Output mode “Range” only: Last record to output (zero-based).</value>
+	</data>
 	<data name="BaseResultFlowBlock_Groups_Output" xml:space="preserve">
 		<value>Output</value>
 	</data>
@@ -220,16 +223,49 @@ All inputs are collected during each referenced iteration and this flow block ex
 		<value>Remove duplicates in result records</value>
 	</data>
 	<data name="BaseResultFlowBlock_IgnoreDuplicates_Tooltip" xml:space="preserve">
-		<value>Removes duplicate result records by comparing all field values. Only the first occurrence is passed to subsequent flow blocks.</value>
+		<value>Removes duplicate output records.</value>
 	</data>
 	<data name="BaseResultFlowBlock_OutputBehavior" xml:space="preserve">
 		<value>Output behavior</value>
 	</data>
+	<data name="BaseResultFlowBlock_OutputBehavior_Tooltip" xml:space="preserve">
+		<value>Limits output. Default: “All”; for successor flow blocks with iteration context, prefer their input behavior.</value>
+	</data>
 	<data name="BaseResultFlowBlock_StartIndex" xml:space="preserve">
 		<value>Start index</value>
 	</data>
+	<data name="BaseResultFlowBlock_StartIndex_Tooltip" xml:space="preserve">
+		<value>Output mode “Range” only: First record to output (zero-based).</value>
+	</data>
 	<data name="BaseResultFlowBlock_StartValue" xml:space="preserve">
 		<value>Start value</value>
+	</data>
+	<data name="BaseResultFlowBlock_StartValue_Tooltip" xml:space="preserve">
+		<value>Output mode “Range” only: Starts at the first record with this exact field value.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Validation_RangeCriterionRequired" xml:space="preserve">
+		<value>For output behavior “Range”, at least one of start value, start index, or end index must be specified.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Validation_RangeModesMutuallyExclusive" xml:space="preserve">
+		<value>For output behavior “Range”, configure either a start value or index parameters, not both.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Validation_StartIndexMustPrecedeEndIndex" xml:space="preserve">
+		<value>For output behavior “Range”, the start index must be less than the end index.</value>
+	</data>
+	<data name="BaseResultFlowBlockNotifications_StartValueNotFound" xml:space="preserve">
+		<value>Start value not found</value>
+	</data>
+	<data name="BaseResultFlowBlockNotifications_IndexOutputUnavailable" xml:space="preserve">
+		<value>Index output unavailable</value>
+	</data>
+	<data name="BaseResultFlowBlock_Warning_StartIndexOutsideResultRange" xml:space="preserve">
+		<value>Start index {0} is outside the result set containing {1} records.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Warning_EndIndexOutsideResultRange" xml:space="preserve">
+		<value>End index {0} is outside the result set containing {1} records.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Warning_IndexOrderInvalid" xml:space="preserve">
+		<value>End index {0} must be greater than start index {1}.</value>
 	</data>
 	<data name="BertTokenizer_Description" xml:space="preserve">
 		<value>Uses a BERT-format vocabulary to tokenize text.</value>
@@ -443,6 +479,9 @@ All inputs are collected during each referenced iteration and this flow block ex
 	</data>
 	<data name="EnumerationFlowBlock_Parameters" xml:space="preserve">
 		<value>Parameters to enumerate</value>
+	</data>
+	<data name="EnumerationFlowBlock_Parameter" xml:space="preserve">
+		<value>Parameter to enumerate</value>
 	</data>
 	<data name="EnumerationFlowBlock_Parameters_Tooltip" xml:space="preserve">
 		<value>Fields whose values should be output individually.</value>
@@ -933,6 +972,18 @@ All inputs are collected during each referenced iteration and this flow block ex
 	<data name="JPathSelectorFlowBlock_Path" xml:space="preserve">
 		<value>JPath</value>
 	</data>
+	<data name="JPathSelectorFlowBlock_RowPath" xml:space="preserve">
+    <value>Row root path</value>
+  </data>
+	<data name="JPathSelectorFlowBlock_RowPath_Tooltip" xml:space="preserve">
+    <value>Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value.</value>
+  </data>
+	<data name="JPathSelectorFlowBlock_FallbackValue" xml:space="preserve">
+    <value>Fallback value</value>
+  </data>
+	<data name="JPathSelectorFlowBlock_FallbackValue_Tooltip" xml:space="preserve">
+    <value>Value returned for a row when JPath finds no value below its row root. Only available when a row root path is configured.</value>
+  </data>
 	<data name="JPathSelectorFlowBlock_SpecialExplanation_PathExamples" xml:space="preserve">
 		<value>JPath examples:
 - `$` selects the root content; items of a selected array are returned individually.
@@ -1763,7 +1814,13 @@ All inputs are collected during each referenced iteration and this flow block ex
 		<value>XML document (Flow Block)</value>
 	</data>
 	<data name="XmlDocumentXPathSelector_XPath_Tooltip" xml:space="preserve">
-		<value>XPath expression applied to the managed XML document. Select elements to return their inner XML, or end the expression with an attribute step such as '//item/@id' to return attribute values. Fields from input flow blocks can be used.</value>
+		<value>XPath expression applied to the managed XML document. Elements, text nodes, CDATA sections, and attributes such as '//item/@id' can be selected.</value>
+	</data>
+	<data name="XmlDocumentXPathSelector_ResultMode" xml:space="preserve">
+		<value>Result format</value>
+	</data>
+	<data name="XmlDocumentXPathSelector_ResultMode_Tooltip" xml:space="preserve">
+		<value>Returns either the content inside each matched node or its complete XML. For attributes, outer XML includes the attribute name.</value>
 	</data>
 	<data name="XPathSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Selects XML node content by XPath.</value>
@@ -1781,7 +1838,19 @@ All inputs are collected during each referenced iteration and this flow block ex
 		<value>XPath</value>
 	</data>
 	<data name="XPathSelectorFlowBlock_XPath_Tooltip" xml:space="preserve">
-		<value>XPath expression applied directly to the XML content. Select elements to return their inner XML, or end the expression with an attribute step such as '//item/@id' to return attribute values. Fields from input flow blocks can be used.</value>
+		<value>XPath expression applied directly to the XML content. Elements, text nodes, CDATA sections, and attributes such as '//item/@id' can be selected.</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_ResultMode" xml:space="preserve">
+		<value>Result format</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_ResultMode_Tooltip" xml:space="preserve">
+		<value>Returns either the content inside each matched node or its complete XML. For attributes, outer XML includes the attribute name.</value>
+	</data>
+	<data name="XPathResultMode_InnerXml" xml:space="preserve">
+		<value>Inner XML</value>
+	</data>
+	<data name="XPathResultMode_OuterXml" xml:space="preserve">
+		<value>Outer XML</value>
 	</data>
 	<data name="XPathSelectorFlowBlock_Notification_XmlContentIsEmpty" xml:space="preserve">
 		<value>XML content is empty</value>
@@ -3822,34 +3891,46 @@ If a Join collector should aggregate links across all page iterations:
 	<data name="SMTPFlowBlock_Attachments_Tooltip" xml:space="preserve">
     <value>Attachment mappings generated from configured fields.</value>
   </data>
-	<data name="JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip" xml:space="preserve">
+	<data name="JPathMultiSelectorMappingEntry_JPath_Tooltip" xml:space="preserve">
 		<value>Newtonsoft.Json JPath expression used to resolve values from the JSON content, for example '$.participants[0].name', '$[*].id', or '$.addresses[?(@.Country == 'Germany')].Street'.</value>
 	</data>
 	<data name="JsonFlowBlocks_SpecialExplanation_JPathSyntax" xml:space="preserve">
 		<value>JSON path properties in this flow block use Newtonsoft.Json JPath syntax. See [Querying JSON with JSON Path](https://www.newtonsoft.com/json/help/html/queryjsonselecttoken.htm).</value>
 	</data>
-	<data name="JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip" xml:space="preserve">
+	<data name="JPathMultiSelectorFlowBlock_JsonContent_Tooltip" xml:space="preserve">
     <value>JSON source content used for all configured path mappings.</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_Description" xml:space="preserve">
-    <value>Reads multiple JSON paths from one JSON source and maps the resolved values directly to result fields.</value>
+	<data name="JPathMultiSelectorFlowBlock_Description" xml:space="preserve">
+    <value>Reads multiple JPaths from one JSON source and maps the resolved values directly to result fields.</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_DisplayName" xml:space="preserve">
-    <value>Select multiple JSON paths</value>
+	<data name="JPathMultiSelectorFlowBlock_DisplayName" xml:space="preserve">
+    <value>Select multiple JPaths</value>
   </data>
-	<data name="JsonManyPathsSelectorMappingEntry_JsonPath" xml:space="preserve">
-    <value>JSON path</value>
+	<data name="JPathMultiSelectorMappingEntry_JPath" xml:space="preserve">
+    <value>JPath</value>
   </data>
-	<data name="JsonManyPathsSelectorMappingEntry_DisplayName" xml:space="preserve">
-    <value>JSON path mapping entry</value>
+	<data name="JPathMultiSelectorMappingEntry_RowPath" xml:space="preserve">
+    <value>Row root path</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_Groups_Mappings" xml:space="preserve">
+	<data name="JPathMultiSelectorMappingEntry_RowPath_Tooltip" xml:space="preserve">
+    <value>Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value.</value>
+  </data>
+	<data name="JPathMultiSelectorMappingEntry_FallbackValue" xml:space="preserve">
+    <value>Fallback value</value>
+  </data>
+	<data name="JPathMultiSelectorMappingEntry_FallbackValue_Tooltip" xml:space="preserve">
+    <value>Value returned for a row when JPath finds no value below its row root. Only available when a row root path is configured.</value>
+  </data>
+	<data name="JPathMultiSelectorMappingEntry_DisplayName" xml:space="preserve">
+    <value>JPath mapping entry</value>
+  </data>
+	<data name="JPathMultiSelectorFlowBlock_Groups_Mappings" xml:space="preserve">
     <value>Mappings</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_MappingEntries" xml:space="preserve">
-    <value>Path mappings</value>
+	<data name="JPathMultiSelectorFlowBlock_MappingEntries" xml:space="preserve">
+    <value>JPath mappings</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_JsonContent" xml:space="preserve">
+	<data name="JPathMultiSelectorFlowBlock_JsonContent" xml:space="preserve">
     <value>JSON content</value>
   </data>
   <data name="DateTimeComponentAdjustFlowBlock_Groups_Adjustments" xml:space="preserve">
@@ -4267,6 +4348,8 @@ If a Join collector should aggregate links across all page iterations:
   <data name="SftpUploadFlowBlock_Overwrite_Tooltip" xml:space="preserve"><value>Allows an existing remote file to be replaced.</value></data>
   <data name="OpenApiRestFlowBlock_DisplayName" xml:space="preserve"><value>OpenAPI REST endpoint</value></data>
   <data name="OpenApiRestFlowBlock_Description" xml:space="preserve"><value>Loads a Swagger/OpenAPI definition, provides its endpoints and parameters as generated UI, and invokes the selected REST operation.</value></data>
+  <data name="OpenApiRestFlowBlock_Groups_Parameters" xml:space="preserve"><value>Parameters</value></data>
+  <data name="OpenApiRestFlowBlock_Groups_Payload" xml:space="preserve"><value>Payload</value></data>
   <data name="OpenApiRestFlowBlock_OpenApiSource" xml:space="preserve"><value>OpenAPI source</value></data>
   <data name="OpenApiRestFlowBlock_OpenApiSource_Tooltip" xml:space="preserve"><value>HTTP(S) URL, local file path, or directly pasted Swagger/OpenAPI JSON or YAML. URL definitions are cached in memory for 15 minutes.</value></data>
   <data name="OpenApiRestFlowBlock_Endpoint" xml:space="preserve"><value>Endpoint</value></data>

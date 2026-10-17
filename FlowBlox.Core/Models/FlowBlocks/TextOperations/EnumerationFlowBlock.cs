@@ -18,6 +18,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         [FlowBloxUI(Factory = UIFactory.ListView, Operations = UIOperations.Link | UIOperations.Unlink,
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(GetPossibleFieldElements))]
+        [FlowBloxCardList(
+            ItemDisplayName = "EnumerationFlowBlock_Parameter",
+            DisplayPropertyNames = [nameof(FieldElement.Name), nameof(FieldElement.FieldType)])]
         [FlowBloxFieldSelection(DefaultRequiredValue = false)]
         [FlowBloxListView(LVColumnMemberNames = new[] { nameof(FieldElement.FlowBlockName), nameof(FieldElement.Name) })]
         public ObservableCollection<FieldElement> Parameters { get; set; } = new();

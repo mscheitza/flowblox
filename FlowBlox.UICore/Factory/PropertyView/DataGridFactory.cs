@@ -112,6 +112,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
                 SelectionMode = DataGridSelectionMode.Extended,
                 ColumnWidth = DataGridLength.Auto
             };
+            ParentScrollViewerMouseWheelForwarder.Register(dataGrid);
             SetCellStyle(dataGrid);
 
             var emptyMessage = CreateEmptyMessage(list);

@@ -96,12 +96,6 @@
         public UIOptions UiOptions { get; set; }
         
         /// <summary>
-        /// Overrides the type display name of list items rendered on a FlowBlock card.
-        /// Uses the property DisplayAttribute resource type, or a literal name when none is defined.
-        /// </summary>
-        public string ItemDisplayName { get; set; }
-
-        /// <summary>
         /// Specifies the public member path on each selectable item whose value is shown in the selection control.
         /// For example, "Name" displays each item's Name instead of its default string representation.
         /// </summary>

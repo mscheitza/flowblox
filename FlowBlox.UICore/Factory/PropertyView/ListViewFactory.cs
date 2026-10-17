@@ -60,6 +60,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 Margin = new Thickness(0, 5, 0, 10)
             };
+            ParentScrollViewerMouseWheelForwarder.Register(listView);
 
             var gridView = new GridView();
             listView.View = gridView;

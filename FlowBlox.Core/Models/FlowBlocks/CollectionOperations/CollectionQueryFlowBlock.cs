@@ -74,7 +74,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.CollectionOperations
         public int ElementIndex { get; set; }
 
         [Display(Name = "CollectionQueryFlowBlock_Predicates", Description = "CollectionQueryFlowBlock_Predicates_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "CollectionQueryFlowBlock_Groups_Query", Order = 2)]
-        [FlowBloxUI(Factory = UIFactory.GridView, ItemDisplayName = "CollectionQueryFlowBlock_Predicate", UiOptions = UIOptions.EnableFieldSelection, CreatableTypes = [typeof(FieldLogicalComparisonCondition), typeof(LogicalGroupCondition)])]
+        [FlowBloxUI(Factory = UIFactory.GridView, UiOptions = UIOptions.EnableFieldSelection, CreatableTypes = [typeof(FieldLogicalComparisonCondition), typeof(LogicalGroupCondition)])]
+        [FlowBloxCardList(ItemDisplayName = "CollectionQueryFlowBlock_Predicate")]
         [FlowBloxDataGrid(GridColumnMemberNames = [nameof(LogicalCondition.LogicalOperator), nameof(LogicalCondition.DisplayName)])]
         public ObservableCollection<LogicalCondition> Predicates { get; set; }
 

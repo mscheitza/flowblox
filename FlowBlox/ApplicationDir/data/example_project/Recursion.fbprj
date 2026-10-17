@@ -1466,9 +1466,9 @@
     ]
   },
   "ProjectGuid": "46b4e7f9-eb3e-47ad-9450-6dd28876a391",
-  "ProjectName": "quotes.toscrape.com - Recursion Example",
+  "ProjectName": "quotes.toscrape.com - Recursion",
   "Author": "",
-  "ProjectDescription": "Follows the pagination links on quotes.toscrape.com and extracts quote text from each page. An injection block feeds the next page back into the existing flow, and the collected quotes are written to a JSON file in the project's output directory.",
+  "ProjectDescription": "Follows the pagination links on quotes.toscrape.com and extracts quote text from each page. An injection block recursively feeds the next page back into the existing flow, and the collected quotes are written to a JSON file in the project's output directory.",
   "Notice": "",
   "GridSizeX": 3428,
   "GridSizeY": 1282,

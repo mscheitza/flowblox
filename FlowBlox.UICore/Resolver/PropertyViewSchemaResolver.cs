@@ -46,6 +46,7 @@ namespace FlowBlox.UICore.Resolver
             {
                 var tabViewModel = new TabViewModel
                 {
+                    GroupKey = propertyGroup.Key,
                     TabTitle = FlowBloxResourceUtil.GetLocalizedString(propertyGroup.Key)
                         ?? FlowBloxResourceUtil.GetLocalizedString("UnknownGroupTabTitle", typeof(PropertyViewSchemaResolverResources)),
                 };

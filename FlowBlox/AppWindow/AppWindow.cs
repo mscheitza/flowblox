@@ -931,7 +931,9 @@ namespace FlowBlox.AppWindow
             try
             {
                 UnloadProject();
-                FlowBloxProjectManager.Instance.ActiveProjectPath = null;
+                FlowBloxProjectManager.Instance.ActiveProjectPath = string.IsNullOrWhiteSpace(project.ProjectFilePath)
+                    ? null
+                    : project.ProjectFilePath;
                 FlowBloxProjectManager.Instance.ActiveProject = project;
 
                 AfterProjectFullyInitialized(exceptAiAssistantView: true);

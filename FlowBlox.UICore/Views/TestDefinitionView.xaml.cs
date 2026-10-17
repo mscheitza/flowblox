@@ -104,7 +104,12 @@ namespace FlowBlox.UICore.Views
             => _transactionEventHandler.Cancel();
 
         private void TestDefinitionView_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-            => _transactionEventHandler.HandleClosing(sender, e);
+        {
+            if (DataContext is TestDefinitionViewModel viewModel)
+                viewModel.DetachValidationSubscriptions();
+
+            _transactionEventHandler.HandleClosing(sender, e);
+        }
 
         private void InsertFieldPlaceholderButton_Click(object sender, RoutedEventArgs e)
         {

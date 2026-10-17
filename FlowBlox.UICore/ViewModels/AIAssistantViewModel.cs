@@ -11,6 +11,7 @@ namespace FlowBlox.UICore.ViewModels
     {
         public Guid ProjectGuid { get; init; }
         public string ProjectName { get; init; }
+        public string ProjectFilePath { get; init; }
         public string ProjectJson { get; init; }
         public string ExtensionsJson { get; init; }
         public string ProjectSpaceGuid { get; init; }

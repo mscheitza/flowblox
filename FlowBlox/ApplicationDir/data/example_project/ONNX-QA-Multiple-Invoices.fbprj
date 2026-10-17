@@ -859,9 +859,9 @@
     ]
   },
   "ProjectGuid": "73565dab-1ec7-4121-8928-ef0b23d9df2b",
-  "ProjectName": "ONNX Question Answering",
+  "ProjectName": "ONNX QA Multiple Invoices",
   "Author": "",
-  "ProjectDescription": "Extracts invoice numbers, customer names, and total amounts from three sample invoices using a local ONNX question-answering model. The results are written to an Excel workbook, and an included Python script helps prepare the required model.",
+  "ProjectDescription": "Processes multiple sample invoice texts with a local ONNX question-answering model and extracts the invoice number, customer name, and total amount from each invoice. The results are written to an Excel workbook, and an included Python script helps prepare the required model.",
   "Notice": "",
   "GridSizeX": 3000,
   "GridSizeY": 1338,

@@ -2,7 +2,9 @@ using FlowBlox.Core.Models.FlowBlocks.Json;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Test.Runtime;
+using System.Reflection;
 
 namespace FlowBloxTest.FlowBlocks.Json
 {
@@ -72,6 +74,78 @@ namespace FlowBloxTest.FlowBlocks.Json
             CollectionAssert.AreEqual(
                 new[] { "{\"name\":\"first\"}", "{\"name\":\"second\"}" },
                 GetResultValues(selector));
+        }
+
+        [TestMethod]
+        public void Execute_RowPathPreservesRowsAndUsesFallbackForMissingValues()
+        {
+            var selector = CreateSelector("""
+            [
+              { "id": 1, "category": { "name": "Dogs" } },
+              { "id": 2, "category": { } },
+              { "id": 3 },
+              { "id": 4, "category": { "name": "Cats" } }
+            ]
+            """, "$[*].category.name");
+            selector.RowPath = "$[*]";
+            selector.FallbackValue = "No category";
+
+            var runtime = new FlowBloxUnitTestRuntime(_project);
+
+            Assert.IsTrue(selector.Execute(runtime, null));
+            CollectionAssert.AreEqual(
+                new[] { "Dogs", "No category", "No category", "Cats" },
+                GetResultValues(selector));
+        }
+
+        [TestMethod]
+        public void Execute_RowPathWithUnsetFallbackUsesEmptyString()
+        {
+            var selector = CreateSelector("""
+            [
+              { "category": { "name": "Dogs" } },
+              { "category": { } },
+              { }
+            ]
+            """, "$[*].category.name");
+            selector.RowPath = "$[*]";
+
+            var runtime = new FlowBloxUnitTestRuntime(_project);
+
+            Assert.IsTrue(selector.Execute(runtime, null));
+            CollectionAssert.AreEqual(new[] { "Dogs", string.Empty, string.Empty }, GetResultValues(selector));
+        }
+
+        [TestMethod]
+        public void Execute_WithoutRowPathKeepsExistingMatchOnlyBehavior()
+        {
+            var selector = CreateSelector("""
+            [
+              { "category": { "name": "Dogs" } },
+              { "category": { } },
+              { }
+            ]
+            """, "$[*].category.name");
+
+            var runtime = new FlowBloxUnitTestRuntime(_project);
+
+            Assert.IsTrue(selector.Execute(runtime, null));
+            CollectionAssert.AreEqual(new[] { "Dogs" }, GetResultValues(selector));
+        }
+
+        [TestMethod]
+        public void FallbackValue_IsActiveOnlyWhenRowPathIsConfigured()
+        {
+            var selector = CreateSelector("[]", "$[*].name");
+            var activationCondition = typeof(JPathSelectorFlowBlock)
+                .GetProperty(nameof(JPathSelectorFlowBlock.FallbackValue))!
+                .GetCustomAttribute<ActivationConditionAttribute>()!;
+
+            Assert.IsFalse(activationCondition.IsActive(selector));
+
+            selector.RowPath = "$[*]";
+
+            Assert.IsTrue(activationCondition.IsActive(selector));
         }
 
         private JPathSelectorFlowBlock CreateSelector(string jsonContent, string path)

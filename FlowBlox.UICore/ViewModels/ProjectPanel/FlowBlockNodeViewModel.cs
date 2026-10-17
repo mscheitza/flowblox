@@ -1,18 +1,14 @@
-using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
-using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Drawing;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace FlowBlox.UICore.ViewModels.ProjectPanel
@@ -35,7 +31,9 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private string _warningMessage = string.Empty;
         private string _errorMessage = string.Empty;
         private readonly FlowBlockNodeCenterPreservationGuard _centerPreservationGuard;
+        private readonly FlowBlockNodePropertyRenderer _propertyRenderer;
         private readonly FlowBloxComponentChangeSubscription _componentChangeSubscription;
+        private readonly FlowBloxResultFieldNameChangeSubscription _resultFieldNameChangeSubscription;
 
         public FlowBlockNodeViewModel(BaseFlowBlock flowBlock)
         {
@@ -43,6 +41,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             InternalFlowBlock = flowBlock ?? throw new ArgumentNullException(nameof(flowBlock));
             LayoutTraceId = Interlocked.Increment(ref _nextLayoutTraceId);
             _centerPreservationGuard = new FlowBlockNodeCenterPreservationGuard(this);
+            _propertyRenderer = new FlowBlockNodePropertyRenderer(flowBlock);
             _componentChangeSubscription = new FlowBloxComponentChangeSubscription(
                 flowBlock,
                 _ => FlowBlock_OnComponentChanged());
@@ -52,7 +51,12 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             flowBlock.OnUndoWarn += FlowBlock_OnUndoWarn;
             flowBlock.OnUndoError += FlowBlock_OnUndoError;
             if (flowBlock is BaseResultFlowBlock resultFlowBlock)
+            {
                 resultFlowBlock.OutputDatasetProcessingChanged += ResultFlowBlock_OutputDatasetProcessingChanged;
+                _resultFieldNameChangeSubscription = new FlowBloxResultFieldNameChangeSubscription(
+                    resultFlowBlock,
+                    _ => ResultFieldNameChanged());
+            }
             flowBlock.RefreshNotExecutedState();
             RefreshRows(preserveCenter: false);
             LogLayoutTrace(
@@ -215,10 +219,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
                 }
                 else
                 {
-                    RenderProperties();
-                    RenderFields();
-                    RenderRequiredFields();
-                    RenderActivationConditions();
+                    _propertyRenderer.Render(Rows);
                 }
 
                 OnPropertyChanged(nameof(Rows));
@@ -248,136 +249,21 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             NotifyLayoutChanged();
         }
 
-        private void RenderProperties()
-        {
-            foreach (var propertyName in InternalFlowBlock.GetDisplayableProperties())
-            {
-                var property = InternalFlowBlock.GetType().GetProperty(propertyName);
-                if (property == null)
-                    continue;
-
-                var propertyValue = FlowBloxFieldHelper.GetPropertyValueOrSelectedField(InternalFlowBlock, property);
-                if (propertyValue == null)
-                    continue;
-
-                if (typeof(System.Collections.IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType.IsGenericType)
-                {
-                    RenderListProperties(property, propertyValue);
-                    continue;
-                }
-
-                var displayValue = CleanValue(propertyValue.ToString());
-                if (string.IsNullOrWhiteSpace(displayValue))
-                    continue;
-
-                var displayName = ResolveDisplayName(property, propertyName);
-                Rows.Add(new FlowBlockRenderRowViewModel(
-                    "property",
-                    displayName,
-                    displayValue,
-                    propertyValue.ToString(),
-                    InternalFlowBlock,
-                    propertyName));
-            }
-        }
-
-        private void RenderListProperties(PropertyInfo property, object propertyValue)
-        {
-            var list = (System.Collections.IEnumerable)propertyValue;
-            var listType = propertyValue.GetType().GetGenericArguments()[0];
-            var propertyName = property.Name;
-            var displayName = FlowBloxResourceUtil.GetItemDisplayName(property, listType);
-            var index = 0;
-
-            foreach (var item in list)
-            {
-                var renderedProperties = new List<FlowBlockRenderRowViewModel>();
-                foreach (var itemProperty in listType.GetProperties())
-                {
-                    var displayAttribute = itemProperty.GetCustomAttribute<DisplayAttribute>();
-                    if (displayAttribute == null)
-                        continue;
-
-                    var itemPropertyValue = itemProperty.GetValue(item);
-                    if (itemPropertyValue == null)
-                        continue;
-
-                    var displayValue = CleanValue(itemPropertyValue.ToString());
-                    if (string.IsNullOrWhiteSpace(displayValue))
-                        continue;
-
-                    var itemDisplayName = FlowBloxResourceUtil.GetDisplayName(displayAttribute, true);
-                    renderedProperties.Add(new FlowBlockRenderRowViewModel(
-                        "property",
-                        itemDisplayName,
-                        displayValue,
-                        itemPropertyValue.ToString(),
-                        InternalFlowBlock,
-                        $"{propertyName}[{index}].{itemProperty.Name}",
-                        item));
-                }
-
-                if (renderedProperties.Count > 0)
-                {
-                    Rows.Add(new FlowBlockRenderRowViewModel("header", $"{displayName} #{index + 1}", string.Empty));
-                    foreach (var renderedProperty in renderedProperties)
-                        Rows.Add(renderedProperty);
-                }
-
-                index++;
-            }
-        }
-
-        private void RenderFields()
-        {
-            if (InternalFlowBlock is not BaseResultFlowBlock resultFlowBlock)
-                return;
-
-            foreach (var field in resultFlowBlock.Fields)
-            {
-                Rows.Add(new FlowBlockRenderRowViewModel("field", string.Empty, field.Name, field.FullyQualifiedName, field, parent: InternalFlowBlock));
-                foreach (var modifier in field.Modifiers)
-                    Rows.Add(new FlowBlockRenderRowViewModel("modifier", "mod", CleanValue(modifier.ToString()), modifier.ToString(), modifier, parent: InternalFlowBlock));
-                foreach (var condition in field.Conditions)
-                    Rows.Add(new FlowBlockRenderRowViewModel("condition", "cond", CleanValue(condition.ShortDisplayName), condition.DisplayName, condition, parent: InternalFlowBlock));
-            }
-        }
-
-        private void RenderRequiredFields()
-        {
-            foreach (var requiredFieldContext in InternalFlowBlock.GetRequiredFieldContexts())
-            {
-                Rows.Add(new FlowBlockRenderRowViewModel(
-                    "required",
-                    "req",
-                    requiredFieldContext.FieldElement.Name,
-                    requiredFieldContext.FieldElement.FullyQualifiedName,
-                    requiredFieldContext.FlowBloxComponent,
-                    nameof(FlowBloxComponent.RequiredFields),
-                    requiredFieldContext.FieldElement));
-            }
-        }
-
-        private void RenderActivationConditions()
-        {
-            foreach (var condition in InternalFlowBlock.ActivationConditions)
-                Rows.Add(new FlowBlockRenderRowViewModel("activation", "if", CleanValue(condition.ShortDisplayName), condition.DisplayName, condition, parent: InternalFlowBlock));
-        }
-
-        private static string ResolveDisplayName(MemberInfo member, string fallback)
-        {
-            var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
-            return displayAttribute != null ? FlowBloxResourceUtil.GetDisplayName(displayAttribute, true) : fallback;
-        }
-
-        private static string CleanValue(string value)
-            => string.IsNullOrEmpty(value) ? string.Empty : value.Replace(Environment.NewLine, " ").Trim();
-
         private void FlowBlock_OnComponentChanged()
             => SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
+                if (InternalFlowBlock is BaseResultFlowBlock)
+                    _resultFieldNameChangeSubscription?.Rebind();
+
                 OnPropertyChanged(nameof(HasOverriddenNotifications));
                 LogRefreshRowsRequested("ComponentChanged");
+                RefreshRows();
+            });
+
+        private void ResultFieldNameChanged()
+            => SynchronizationContextHelper.PostToUi(_uiContext, () =>
+            {
+                LogRefreshRowsRequested("ResultField.PropertyChanged:Name");
                 RefreshRows();
             });
 
@@ -540,6 +426,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             InternalFlowBlock.OnUndoError -= FlowBlock_OnUndoError;
             if (InternalFlowBlock is BaseResultFlowBlock resultFlowBlock)
                 resultFlowBlock.OutputDatasetProcessingChanged -= ResultFlowBlock_OutputDatasetProcessingChanged;
+            _resultFieldNameChangeSubscription?.Dispose();
             _componentChangeSubscription.Dispose();
             _centerPreservationGuard.Dispose();
         }

@@ -134,6 +134,16 @@ namespace FlowBlox.Core.Services
                     typeof(JPathSelectorFlowBlock),
                     [
                         "FlowBlox.Core.Models.FlowBlocks.Json.JsonPathSelectorFlowBlock, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(JPathMultiSelectorFlowBlock),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.Json.JsonManyPathsSelectorFlowBlock, FlowBlox.Core"
+                    ]),
+                new FlowBloxLegacyTypeMapping(
+                    typeof(JPathMultiSelectorMappingEntry),
+                    [
+                        "FlowBlox.Core.Models.FlowBlocks.Json.JsonManyPathsSelectorMappingEntry, FlowBlox.Core"
                     ])
             ];
         }

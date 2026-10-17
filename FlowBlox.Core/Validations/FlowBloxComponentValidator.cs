@@ -81,9 +81,7 @@ namespace FlowBlox.Core.Validations
             List<string> messages)
         {
             if (child is not FlowBloxReactiveObject reactiveChild || child is IFlowBloxComponent)
-            {
                 return;
-            }
 
             var path = string.IsNullOrWhiteSpace(parentPath)
                 ? childPath

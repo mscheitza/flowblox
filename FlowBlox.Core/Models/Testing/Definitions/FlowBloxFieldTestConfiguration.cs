@@ -118,6 +118,7 @@ namespace FlowBlox.Core.Models.Testing
         })]
         [Display(Name = "FlowBloxTestConfiguration_UserInput", Description = "FlowBloxTestConfiguration_UserInput_Description", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string UserInput
         {
             get => _userInput;

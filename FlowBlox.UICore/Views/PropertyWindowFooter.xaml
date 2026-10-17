@@ -41,6 +41,17 @@
                 Style="{StaticResource FlowBlox.WindowActionButton.Back}" />
 
         <Grid Visibility="{Binding DisplaySaveButton, Converter={StaticResource BoolToVisibilityConverter}}">
+            <!-- Keeps Enter mapped to the currently active Save action.
+                 MahApps SplitButton does not participate in WPF's default-button handling itself. -->
+            <Button Command="{Binding SelectedSaveButtonAction.Command}"
+                IsDefault="True"
+                IsHitTestVisible="False"
+                Focusable="False"
+                IsTabStop="False"
+                Width="0"
+                Height="0"
+                Opacity="0" />
+
             <StackPanel Orientation="Horizontal"
                         Visibility="{Binding EnableApplySplitButton, Converter={StaticResource BoolToInverseVisibilityConverter}}">
                 <Button Command="{Binding ApplyWithoutVerificationCommand}"

@@ -1,3 +1,4 @@
+using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Interfaces;
 
 namespace FlowBlox.UICore.Utilities
@@ -25,7 +26,7 @@ namespace FlowBlox.UICore.Utilities
                 return;
 
             var components = new HashSet<IFlowBloxComponent> { _rootComponent };
-            foreach (var managedObject in _rootComponent.GetAssociatedManagedObjects().Where(x => x != null))
+            foreach (var managedObject in _rootComponent.GetAssociatedManagedObjects().ExceptNull())
                 components.Add(managedObject);
 
             foreach (var component in _subscribedComponents.Except(components).ToList())

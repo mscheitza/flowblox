@@ -5,6 +5,7 @@ using FlowBlox.Core.Models.FlowBlocks.Additions;
 using System.ComponentModel.DataAnnotations;
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util.Fields;
+using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Provider;
@@ -22,63 +23,87 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [Display(Name = "BaseResultFlowBlock_IgnoreDuplicates", Description = "BaseResultFlowBlock_IgnoreDuplicates_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = -1)]
         public bool OutputIgnoreDuplicates { get; set; }
 
-        [Display(Name = "BaseResultFlowBlock_OutputBehavior", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
+        [Display(Name = "BaseResultFlowBlock_OutputBehavior", Description = "BaseResultFlowBlock_OutputBehavior_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
         [CustomValidation(typeof(BaseResultFlowBlock), nameof(ValidateOutputBehavior))]
         public OutputBehavior OutputBehavior { get; set; }
 
         private string _startValue;
 
-        [Display(Name = "BaseResultFlowBlock_StartValue", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
+        [Display(Name = "BaseResultFlowBlock_StartValue", Description = "BaseResultFlowBlock_StartValue_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 0)]
+        [ActivationCondition(ActivationMethod = nameof(IsStartValueActive))]
+        [DependsOnProperty(MemberNames = [nameof(OutputBehavior), nameof(StartValue), nameof(StartIndex), nameof(EndIndex)])]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBloxFieldSelection(DefaultRequiredValue = false)]
+        [FlowBloxTextBox(MultiLine = true)]
         public string StartValue
         {
             get => _startValue;
             set
             {
+                if (_startValue == value)
+                    return;
+
                 _startValue = value;
 
-                if (!string.IsNullOrEmpty(_startValue))
+                if (!string.IsNullOrEmpty(_startValue) && OutputBehavior != OutputBehavior.Range)
                 {
                     OutputBehavior = OutputBehavior.Range;
                     OnPropertyChanged(nameof(OutputBehavior));
                 }
+
+                OnPropertyChanged();
             }
         }
 
         private int? _startIndex;
 
-        [Display(Name = "BaseResultFlowBlock_StartIndex", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 1)]
+        [Display(Name = "BaseResultFlowBlock_StartIndex", Description = "BaseResultFlowBlock_StartIndex_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 1)]
+        [ActivationCondition(ActivationMethod = nameof(AreRangeIndicesActive))]
+        [DependsOnProperty(MemberNames = [nameof(OutputBehavior), nameof(StartValue), nameof(StartIndex), nameof(EndIndex)])]
+        [Range(0, int.MaxValue)]
         public int? StartIndex
         {
             get => _startIndex;
             set
             {
+                if (_startIndex == value)
+                    return;
+
                 _startIndex = value;
                 
-                if (_startIndex != null)
+                if (_startIndex != null && OutputBehavior != OutputBehavior.Range)
                 {
                     OutputBehavior = OutputBehavior.Range;
                     OnPropertyChanged(nameof(OutputBehavior));
                 }
+
+                OnPropertyChanged();
             }
         }
 
         private int? _endIndex;
 
-        [Display(Name = "BaseResultFlowBlock_EndIndex", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 2)]
+        [Display(Name = "BaseResultFlowBlock_EndIndex", Description = "BaseResultFlowBlock_EndIndex_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "BaseResultFlowBlock_Groups_Output", Order = 2)]
+        [ActivationCondition(ActivationMethod = nameof(AreRangeIndicesActive))]
+        [DependsOnProperty(MemberNames = [nameof(OutputBehavior), nameof(StartValue), nameof(StartIndex), nameof(EndIndex)])]
+        [Range(0, int.MaxValue)]
         public int? EndIndex
         {
             get => _endIndex;
             set
             {
+                if (_endIndex == value)
+                    return;
+
                 _endIndex = value;
 
-                if (_endIndex != null)
+                if (_endIndex != null && OutputBehavior != OutputBehavior.Range)
                 {
                     OutputBehavior = OutputBehavior.Range;
                     OnPropertyChanged(nameof(OutputBehavior));
                 }
+
+                OnPropertyChanged();
             }
         }
 
@@ -91,12 +116,65 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                 !instance.StartIndex.HasValue &&
                 !instance.EndIndex.HasValue)
             {
-                return new ValidationResult("When OutputBehavior is Range, either StartValue, StartIndex or EndIndex must be specified.", [context.MemberName]);
+                return new ValidationResult(
+                    FlowBloxResourceUtil.GetLocalizedString(
+                        "BaseResultFlowBlock_Validation_RangeCriterionRequired",
+                        typeof(FlowBloxTexts)),
+                    [context.MemberName]);
             }
+
+            if (outputBehavior == OutputBehavior.Range &&
+                instance != null &&
+                !string.IsNullOrWhiteSpace(instance.StartValue) &&
+                (instance.StartIndex.HasValue || instance.EndIndex.HasValue))
+            {
+                return new ValidationResult(
+                    FlowBloxResourceUtil.GetLocalizedString(
+                        "BaseResultFlowBlock_Validation_RangeModesMutuallyExclusive",
+                        typeof(FlowBloxTexts)),
+                    [context.MemberName]);
+            }
+
+            if (outputBehavior == OutputBehavior.Range &&
+                instance?.StartIndex.HasValue == true &&
+                instance.EndIndex.HasValue &&
+                instance.StartIndex.Value >= instance.EndIndex.Value)
+            {
+                return new ValidationResult(
+                    FlowBloxResourceUtil.GetLocalizedString(
+                        "BaseResultFlowBlock_Validation_StartIndexMustPrecedeEndIndex",
+                        typeof(FlowBloxTexts)),
+                    [context.MemberName]);
+            }
+
             return ValidationResult.Success;
         }
 
+        protected bool IsStartValueActive()
+        {
+            var hasStartValue = !string.IsNullOrWhiteSpace(StartValue);
+            var hasIndex = StartIndex.HasValue || EndIndex.HasValue;
+            return OutputBehavior == OutputBehavior.Range && (!hasIndex || hasStartValue);
+        }
+
+        protected bool AreRangeIndicesActive()
+        {
+            var hasStartValue = !string.IsNullOrWhiteSpace(StartValue);
+            var hasIndex = StartIndex.HasValue || EndIndex.HasValue;
+            return OutputBehavior == OutputBehavior.Range && (!hasStartValue || hasIndex);
+        }
+
         public abstract List<FieldElement> Fields { get; }
+
+        public override List<Type> NotificationTypes
+        {
+            get
+            {
+                var notificationTypes = base.NotificationTypes;
+                notificationTypes.Add(typeof(BaseResultFlowBlockNotifications));
+                return notificationTypes;
+            }
+        }
 
         [JsonIgnore()]
         [DeepCopierIgnore()]
@@ -318,7 +396,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
 
         private void ApplyOutputBehavior(BaseRuntime runtime, ref IEnumerable<Dictionary<FieldElement, string>> resultMap)
         {
-            if (resultMap == null || !resultMap.Any())
+            if (resultMap == null)
+                return;
+
+            if (OutputBehavior != OutputBehavior.Range && !resultMap.Any())
                 return;
 
             if (this.OutputBehavior == OutputBehavior.First)
@@ -337,37 +418,82 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             }
             else if (this.OutputBehavior == OutputBehavior.Range)
             {
-                int startIndex = this.StartIndex ?? 0;
-                int endIndex = this.EndIndex ?? resultMap.Count() - 1;
-
                 string startValue = this.StartValue;
                 startValue = FlowBloxFieldHelper.ReplaceFieldsInString(startValue);
-
-                runtime.Report("Use StartIndex=" + startIndex.ToString() + " EndIndex=" + endIndex.ToString() + " StartValue=" + startValue);
-
-                bool startValueFound = false;
                 var resultMapList = resultMap.ToList();
-                List<Dictionary<FieldElement, string>> filteredResults = new List<Dictionary<FieldElement, string>>();
-                if (!string.IsNullOrEmpty(startValue))
+
+                if (!string.IsNullOrWhiteSpace(startValue))
                 {
-                    for (int i = 0; i < resultMapList.Count; i++)
+                    runtime.Report("Use StartValue=" + startValue);
+
+                    var matchingStartIndex = resultMapList.FindIndex(x => x.Values.Contains(startValue));
+                    if (matchingStartIndex < 0)
                     {
-                        if (resultMapList[i].Values.Contains(startValue))
-                        {
-                            startIndex = i;
-                            startValueFound = true;
-                            break;
-                        }
+                        CreateNotification(runtime, BaseResultFlowBlockNotifications.StartValueNotFound);
+                        resultMap = new List<Dictionary<FieldElement, string>>();
+                        return;
                     }
 
-                    if (startValueFound)
-                        filteredResults = resultMapList.Skip(startIndex).ToList();
+                    resultMap = resultMapList.Skip(matchingStartIndex).ToList();
+                    return;
                 }
 
-                if (!startValueFound)
-                    filteredResults = resultMapList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList();
+                var hasInvalidStartIndex = StartIndex.HasValue &&
+                    (StartIndex.Value < 0 || StartIndex.Value >= resultMapList.Count);
+                var hasInvalidEndIndex = EndIndex.HasValue &&
+                    (EndIndex.Value < 0 || EndIndex.Value >= resultMapList.Count);
+                var hasInvalidIndexOrder = StartIndex.HasValue &&
+                    EndIndex.HasValue &&
+                    StartIndex.Value >= EndIndex.Value;
 
-                resultMap = filteredResults;
+                if (hasInvalidStartIndex || hasInvalidEndIndex || hasInvalidIndexOrder)
+                {
+                    if (hasInvalidStartIndex)
+                    {
+                        runtime.Report(
+                            string.Format(
+                                FlowBloxResourceUtil.GetLocalizedString(
+                                    "BaseResultFlowBlock_Warning_StartIndexOutsideResultRange",
+                                    typeof(FlowBloxTexts)),
+                                StartIndex.GetValueOrDefault(),
+                                resultMapList.Count),
+                            FlowBloxLogLevel.Warning);
+                    }
+
+                    if (hasInvalidEndIndex)
+                    {
+                        runtime.Report(
+                            string.Format(
+                                FlowBloxResourceUtil.GetLocalizedString(
+                                    "BaseResultFlowBlock_Warning_EndIndexOutsideResultRange",
+                                    typeof(FlowBloxTexts)),
+                                EndIndex.GetValueOrDefault(),
+                                resultMapList.Count),
+                            FlowBloxLogLevel.Warning);
+                    }
+
+                    if (hasInvalidIndexOrder)
+                    {
+                        runtime.Report(
+                            string.Format(
+                                FlowBloxResourceUtil.GetLocalizedString(
+                                    "BaseResultFlowBlock_Warning_IndexOrderInvalid",
+                                    typeof(FlowBloxTexts)),
+                                EndIndex.GetValueOrDefault(),
+                                StartIndex.GetValueOrDefault()),
+                            FlowBloxLogLevel.Warning);
+                    }
+
+                    CreateNotification(runtime, BaseResultFlowBlockNotifications.IndexOutputUnavailable);
+                    resultMap = new List<Dictionary<FieldElement, string>>();
+                    return;
+                }
+
+                int startIndex = this.StartIndex ?? 0;
+                int endIndex = this.EndIndex ?? resultMapList.Count - 1;
+
+                runtime.Report("Use StartIndex=" + startIndex.ToString() + " EndIndex=" + endIndex.ToString());
+                resultMap = resultMapList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList();
             }
         }
 
@@ -399,10 +525,25 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             if (this.OutputBehavior != OutputBehavior.All)
                 properties.Add(nameof(OutputBehavior));
 
-            properties.Add(nameof(StartValue));
-            properties.Add(nameof(StartIndex));
-            properties.Add(nameof(EndIndex));
+            if (this.OutputBehavior == OutputBehavior.Range)
+            {
+                properties.Add(nameof(StartValue));
+                properties.Add(nameof(StartIndex));
+                properties.Add(nameof(EndIndex));
+            }
+
             return properties;
+        }
+
+        public enum BaseResultFlowBlockNotifications
+        {
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "BaseResultFlowBlockNotifications_StartValueNotFound", ResourceType = typeof(FlowBloxTexts))]
+            StartValueNotFound,
+
+            [FlowBloxNotification(NotificationType = NotificationType.Warning)]
+            [Display(Name = "BaseResultFlowBlockNotifications_IndexOutputUnavailable", ResourceType = typeof(FlowBloxTexts))]
+            IndexOutputUnavailable
         }
 
         protected sealed override bool InvokeExecutor(BaseRuntime runtime, Action executor)

@@ -31,7 +31,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             displayText.SetBinding(TextBlock.TextProperty, CreateValueBinding(property, isReadOnly: true));
             displayText.SetBinding(
                 UIElement.VisibilityProperty,
-                CreateActivationBinding(activationCondition, showWhenActive: true));
+                CreateActivationBinding(property, activationCondition, showWhenActive: true));
 
             var editText = new FrameworkElementFactory(typeof(TextBox));
             editText.SetValue(Control.VerticalContentAlignmentProperty, VerticalAlignment.Center);
@@ -39,15 +39,15 @@ namespace FlowBlox.UICore.Factory.PropertyView
             editText.SetBinding(TextBox.TextProperty, CreateValueBinding(property, isReadOnly));
             editText.SetBinding(
                 UIElement.VisibilityProperty,
-                CreateActivationBinding(activationCondition, showWhenActive: true));
+                CreateActivationBinding(property, activationCondition, showWhenActive: true));
 
             var displayGrid = new FrameworkElementFactory(typeof(System.Windows.Controls.Grid));
             displayGrid.AppendChild(displayText);
-            displayGrid.AppendChild(CreateInactiveCellText(activationCondition));
+            displayGrid.AppendChild(CreateInactiveCellText(property, activationCondition));
 
             var editGrid = new FrameworkElementFactory(typeof(System.Windows.Controls.Grid));
             editGrid.AppendChild(editText);
-            editGrid.AppendChild(CreateInactiveCellText(activationCondition));
+            editGrid.AppendChild(CreateInactiveCellText(property, activationCondition));
 
             return new DataGridTemplateColumn
             {
@@ -76,6 +76,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
         }
 
         private static FrameworkElementFactory CreateInactiveCellText(
+            PropertyInfo property,
             ActivationConditionAttribute activationCondition)
         {
             var text = new FrameworkElementFactory(typeof(TextBlock));
@@ -87,11 +88,12 @@ namespace FlowBlox.UICore.Factory.PropertyView
             text.SetValue(UIElement.IsHitTestVisibleProperty, false);
             text.SetBinding(
                 UIElement.VisibilityProperty,
-                CreateActivationBinding(activationCondition, showWhenActive: false));
+                CreateActivationBinding(property, activationCondition, showWhenActive: false));
             return text;
         }
 
         private static MultiBinding CreateActivationBinding(
+            PropertyInfo property,
             ActivationConditionAttribute activationCondition,
             bool showWhenActive)
         {
@@ -105,6 +107,10 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
             if (!string.IsNullOrWhiteSpace(activationCondition.MemberName))
                 binding.Bindings.Add(new Binding(activationCondition.MemberName));
+
+            var dependsOnProperty = property.GetCustomAttribute<DependsOnPropertyAttribute>();
+            foreach (var memberName in dependsOnProperty?.GetMemberNames() ?? [])
+                binding.Bindings.Add(new Binding(memberName));
 
             return binding;
         }

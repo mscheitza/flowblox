@@ -33,6 +33,52 @@ namespace FlowBloxTest.FlowBlocks.Xml
         }
 
         [TestMethod]
+        public void XPathFlowBlocks_DefaultToInnerXml()
+        {
+            Assert.AreEqual(XPathResultMode.InnerXml, new XPathSelectorFlowBlock().ResultMode);
+            Assert.AreEqual(XPathResultMode.InnerXml, new XmlDocumentXPathSelectorFlowBlock().ResultMode);
+        }
+
+        [TestMethod]
+        public void SelectValues_UsesInnerXmlByDefault()
+        {
+            var document = new XmlDocument();
+            document.LoadXml("<root><Country><Code>DE</Code></Country></root>");
+
+            var values = XPathSelector.SelectValues(document, "//Country");
+
+            CollectionAssert.AreEqual(new[] { "<Code>DE</Code>" }, values);
+        }
+
+        [TestMethod]
+        public void SelectValues_ReturnsOuterXmlForElements()
+        {
+            var document = new XmlDocument();
+            document.LoadXml("<root><Country><Code>DE</Code></Country></root>");
+
+            var values = XPathSelector.SelectValues(
+                document,
+                "//Country",
+                XPathResultMode.OuterXml);
+
+            CollectionAssert.AreEqual(new[] { "<Country><Code>DE</Code></Country>" }, values);
+        }
+
+        [TestMethod]
+        public void SelectValues_ReturnsOuterXmlForAttributes()
+        {
+            var document = new XmlDocument();
+            document.LoadXml("<root><item id=\"one\"/></root>");
+
+            var values = XPathSelector.SelectValues(
+                document,
+                "//item/@id",
+                XPathResultMode.OuterXml);
+
+            CollectionAssert.AreEqual(new[] { "id=\"one\"" }, values);
+        }
+
+        [TestMethod]
         public void XPathSelectorFlowBlock_UsesXmlContentAndReturnsAllMatches()
         {
             var startFlowBlock = CreateFlowBlock<StartFlowBlock>();
@@ -62,6 +108,23 @@ namespace FlowBloxTest.FlowBlocks.Xml
         }
 
         [TestMethod]
+        public void XPathSelectorFlowBlock_ReturnsOuterXml()
+        {
+            var startFlowBlock = CreateFlowBlock<StartFlowBlock>();
+            var selector = CreateFlowBlock<XPathSelectorFlowBlock>(startFlowBlock);
+            selector.XmlContent = "<root><Country><Code>DE</Code></Country></root>";
+            selector.XPath = "//Country";
+            selector.ResultMode = XPathResultMode.OuterXml;
+
+            var runtime = new FlowBloxUnitTestRuntime(_project);
+
+            Assert.IsTrue(selector.Execute(runtime, null));
+            CollectionAssert.AreEqual(
+                new[] { "<Country><Code>DE</Code></Country>" },
+                GetResultValues(selector));
+        }
+
+        [TestMethod]
         public void XmlDocumentXPathSelectorFlowBlock_ReturnsAttributeValuesFromManagedDocument()
         {
             var startFlowBlock = CreateFlowBlock<StartFlowBlock>();
@@ -77,6 +140,27 @@ namespace FlowBloxTest.FlowBlocks.Xml
             Assert.IsTrue(document.Execute(runtime, null));
             Assert.IsTrue(selector.Execute(runtime, null));
             CollectionAssert.AreEqual(new[] { "one", "two" }, GetResultValues(selector));
+        }
+
+        [TestMethod]
+        public void XmlDocumentXPathSelectorFlowBlock_ReturnsOuterXmlFromManagedDocument()
+        {
+            var startFlowBlock = CreateFlowBlock<StartFlowBlock>();
+            var document = CreateFlowBlock<XmlDocumentFlowBlock>(startFlowBlock);
+            document.XmlContent = "<root><Country><Code>DE</Code></Country></root>";
+
+            var selector = CreateFlowBlock<XmlDocumentXPathSelectorFlowBlock>(document);
+            selector.AssociatedXmlDocument = document;
+            selector.XPath = "//Country";
+            selector.ResultMode = XPathResultMode.OuterXml;
+
+            var runtime = new FlowBloxUnitTestRuntime(_project);
+
+            Assert.IsTrue(document.Execute(runtime, null));
+            Assert.IsTrue(selector.Execute(runtime, null));
+            CollectionAssert.AreEqual(
+                new[] { "<Country><Code>DE</Code></Country>" },
+                GetResultValues(selector));
         }
 
         private static string[] GetResultValues(FlowBlox.Core.Models.FlowBlocks.Base.BaseSingleResultFlowBlock selector)

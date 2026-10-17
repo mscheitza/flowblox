@@ -5,7 +5,6 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
@@ -17,6 +16,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     [Display(Name = "JPathSelectorFlowBlock_DisplayName", Description = "JPathSelectorFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class JPathSelectorFlowBlock : BaseSingleResultFlowBlock
     {
+        private string _rowPath;
+
         [Display(Name = "JPathSelectorFlowBlock_JsonContent", Description = "JPathSelectorFlowBlock_JsonContent_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBloxTextBox(IsCodingMode = true, MultiLine = true, SyntaxHighlighting = "JSON")]
@@ -27,6 +28,29 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.JPath))]
         [Required]
         public string Path { get; set; }
+
+        [Display(Name = "JPathSelectorFlowBlock_RowPath", Description = "JPathSelectorFlowBlock_RowPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.JPath))]
+        public string RowPath
+        {
+            get => _rowPath;
+            set
+            {
+                if (_rowPath == value)
+                    return;
+
+                _rowPath = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [Display(Name = "JPathSelectorFlowBlock_FallbackValue", Description = "JPathSelectorFlowBlock_FallbackValue_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
+        [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
+        [ActivationCondition(ActivationMethod = nameof(IsFallbackValueActive))]
+        [DependsOnProperty(MemberName = nameof(RowPath))]
+        public string FallbackValue { get; set; }
+
+        private bool IsFallbackValueActive() => !string.IsNullOrWhiteSpace(RowPath);
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.selection_ellipse_arrow_inside, 16, SKColors.Goldenrod);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.selection_ellipse_arrow_inside, 32, SKColors.Goldenrod);
@@ -73,6 +97,21 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                 }
 
                 var rootToken = JToken.Parse(jsonText);
+                var rowPath = FlowBloxFieldHelper.ReplaceFieldsInString(RowPath)?.Trim();
+                if (!string.IsNullOrWhiteSpace(rowPath))
+                {
+                    var fallbackValue = FlowBloxFieldHelper.ReplaceFieldsInString(FallbackValue) ?? string.Empty;
+                    if (!JPathRowValueResolver.TryResolve(rootToken, path, rowPath, fallbackValue, out var rowValues))
+                    {
+                        CreateNotification(runtime, JPathSelectorNotifications.JsonTokenCouldNotBeResolved);
+                        GenerateResult(runtime);
+                        return;
+                    }
+
+                    GenerateResult(runtime, rowValues);
+                    return;
+                }
+
                 var resultTokens = rootToken.SelectTokens(path, errorWhenNoMatch: false).ToList();
                 if (resultTokens.Count == 0)
                 {
@@ -88,11 +127,11 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
                     if (resultToken is JArray array)
                     {
                         foreach (var item in array)
-                            results.Add(SerializeToken(item));
+                            results.Add(JPathTokenSerializer.Serialize(item));
                     }
                     else
                     {
-                        results.Add(SerializeToken(resultToken));
+                        results.Add(JPathTokenSerializer.Serialize(resultToken));
                     }
                 }
 
@@ -101,13 +140,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
                 GenerateResult(runtime, results);
             });
-        }
-
-        private static string SerializeToken(JToken token)
-        {
-            return token is JValue value
-                ? value.Value?.ToString()
-                : JsonConvert.SerializeObject(token, Formatting.None);
         }
 
         public enum JPathSelectorNotifications

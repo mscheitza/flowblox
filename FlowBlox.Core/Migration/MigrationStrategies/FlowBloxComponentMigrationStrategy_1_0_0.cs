@@ -97,6 +97,7 @@ namespace FlowBlox.Core.Migration.MigrationStrategies
         /// </summary>
         protected override void OnVisitObject(Type? currentType, JObject obj)
         {
+            MigrateJPathMultiSelectorMappingEntryJPath(currentType, obj);
             MigrateLegacyJsonPath(currentType, obj);
 
             // WebRequestFlowBlock.ResultField -> ResultFields migration
@@ -106,6 +107,29 @@ namespace FlowBlox.Core.Migration.MigrationStrategies
             {
                 MigrateWebRequestResultField(obj);
             }
+        }
+
+        private static void MigrateJPathMultiSelectorMappingEntryJPath(Type? currentType, JObject obj)
+        {
+            const string legacyTypeName =
+                "FlowBlox.Core.Models.FlowBlocks.Json.JsonManyPathsSelectorMappingEntry";
+            var serializedTypeName = obj.Value<string>("$type");
+            var isLegacyMappingEntry = serializedTypeName?.StartsWith(
+                legacyTypeName + ",",
+                StringComparison.Ordinal) == true;
+
+            if ((currentType == null || !typeof(JPathMultiSelectorMappingEntry).IsAssignableFrom(currentType)) &&
+                !isLegacyMappingEntry)
+                return;
+
+            var legacyJsonPathProperty = obj.Property("JsonPath");
+            if (legacyJsonPathProperty == null)
+                return;
+
+            if (obj.Property(nameof(JPathMultiSelectorMappingEntry.JPath)) == null)
+                obj.Add(nameof(JPathMultiSelectorMappingEntry.JPath), legacyJsonPathProperty.Value.DeepClone());
+
+            legacyJsonPathProperty.Remove();
         }
 
         private static void MigrateLegacyJsonPath(Type? currentType, JObject obj)
@@ -121,7 +145,10 @@ namespace FlowBlox.Core.Migration.MigrationStrategies
             {
                 Type type when typeof(JPathSelectorFlowBlock).IsAssignableFrom(type) => nameof(JPathSelectorFlowBlock.Path),
                 Type type when typeof(JsonObjectWriterFlowBlock).IsAssignableFrom(type) => nameof(JsonObjectWriterFlowBlock.Path),
-                Type type when typeof(JsonManyPathsSelectorMappingEntry).IsAssignableFrom(type) => nameof(JsonManyPathsSelectorMappingEntry.JsonPath),
+                Type type when typeof(JPathMultiSelectorMappingEntry).IsAssignableFrom(type) => nameof(JPathMultiSelectorMappingEntry.JPath),
+                _ when serializedTypeName?.StartsWith(
+                    "FlowBlox.Core.Models.FlowBlocks.Json.JsonManyPathsSelectorMappingEntry,",
+                    StringComparison.Ordinal) == true => nameof(JPathMultiSelectorMappingEntry.JPath),
                 _ when isLegacySelector => nameof(JPathSelectorFlowBlock.Path),
                 _ => null
             };

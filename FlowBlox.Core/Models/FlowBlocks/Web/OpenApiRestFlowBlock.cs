@@ -16,6 +16,8 @@ using System.Text;
 
 namespace FlowBlox.Core.Models.FlowBlocks.Web
 {
+    [FlowBloxUIGroup("OpenApiRestFlowBlock_Groups_Parameters", 0)]
+    [FlowBloxUIGroup("OpenApiRestFlowBlock_Groups_Payload", 1)]
     [Display(Name = "OpenApiRestFlowBlock_DisplayName", Description = "OpenApiRestFlowBlock_Description", ResourceType = typeof(FlowBloxTexts))]
     public class OpenApiRestFlowBlock : BaseResultFlowBlock
     {
@@ -78,20 +80,20 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string BearerToken { get; set; }
 
-        [Display(Name = "OpenApiRestFlowBlock_HeaderParameters", Description = "OpenApiRestFlowBlock_HeaderParameters_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 6)]
+        [Display(Name = "OpenApiRestFlowBlock_HeaderParameters", Description = "OpenApiRestFlowBlock_HeaderParameters_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "OpenApiRestFlowBlock_Groups_Parameters", Order = 0)]
         [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.None)]
         [FlowBloxDataGrid(GridColumnMemberNames = [nameof(OpenApiParameterValue.Name), nameof(OpenApiParameterValue.Required), nameof(OpenApiParameterValue.Description), nameof(OpenApiParameterValue.Value)])]
         public ObservableCollection<OpenApiParameterValue> HeaderParameters { get; set; }
 
-        [Display(Name = "OpenApiRestFlowBlock_RequestParameters", Description = "OpenApiRestFlowBlock_RequestParameters_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 7)]
+        [Display(Name = "OpenApiRestFlowBlock_RequestParameters", Description = "OpenApiRestFlowBlock_RequestParameters_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "OpenApiRestFlowBlock_Groups_Parameters", Order = 1)]
         [FlowBloxUI(Factory = UIFactory.GridView, Operations = UIOperations.None)]
         [FlowBloxDataGrid(GridColumnMemberNames = [nameof(OpenApiParameterValue.Name), nameof(OpenApiParameterValue.Location), nameof(OpenApiParameterValue.Required), nameof(OpenApiParameterValue.Description), nameof(OpenApiParameterValue.Value)])]
         public ObservableCollection<OpenApiParameterValue> RequestParameters { get; set; }
 
-        [Display(Name = "OpenApiRestFlowBlock_ContentType", Description = "OpenApiRestFlowBlock_ContentType_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 8)]
+        [Display(Name = "OpenApiRestFlowBlock_ContentType", Description = "OpenApiRestFlowBlock_ContentType_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "OpenApiRestFlowBlock_Groups_Payload", Order = 0)]
         public string ContentType { get; set; }
 
-        [Display(Name = "OpenApiRestFlowBlock_Payload", Description = "OpenApiRestFlowBlock_Payload_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 9)]
+        [Display(Name = "OpenApiRestFlowBlock_Payload", Description = "OpenApiRestFlowBlock_Payload_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "OpenApiRestFlowBlock_Groups_Payload", Order = 1)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBloxTextBox(MultiLine = true, IsCodingMode = true, SyntaxHighlighting = "JSON")]
         public string Payload { get; set; }

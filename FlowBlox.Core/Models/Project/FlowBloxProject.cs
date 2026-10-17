@@ -86,6 +86,21 @@ namespace FlowBlox.Core.Models.Project
         public string ProjectOutputDirectory => GetProjectOutputDirectory(ProjectName);
 
         /// <summary>
+        /// Gets the absolute path of the local project file.
+        /// The value is empty for projects that have not been saved locally, such as newly created or Project Space projects.
+        /// </summary>
+        [JsonIgnore]
+        public string ProjectFilePath { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Gets the directory containing the local project file.
+        /// </summary>
+        [JsonIgnore]
+        public string ProjectDirectory => string.IsNullOrWhiteSpace(ProjectFilePath)
+            ? string.Empty
+            : Path.GetDirectoryName(ProjectFilePath) ?? string.Empty;
+
+        /// <summary>
         /// Builds the input directory path for the given project name.
         /// </summary>
         public string GetProjectInputDirectory(string projectName)
@@ -168,6 +183,20 @@ namespace FlowBlox.Core.Models.Project
                     DisplayName = "Output Directory",
                     Description = "Resolved output directory for this project.",
                     Value = ProjectOutputDirectory ?? string.Empty
+                },
+                new FlowBloxProjectPropertyElement
+                {
+                    Key = "Directory",
+                    DisplayName = "Project Directory",
+                    Description = "Directory containing the local project file. Empty if the project has not been saved locally.",
+                    Value = ProjectDirectory
+                },
+                new FlowBloxProjectPropertyElement
+                {
+                    Key = "FilePath",
+                    DisplayName = "Project File Path",
+                    Description = "Absolute path of the local project file. Empty if the project has not been saved locally.",
+                    Value = ProjectFilePath
                 },
                 new FlowBloxProjectPropertyElement
                 {
@@ -513,6 +542,8 @@ namespace FlowBlox.Core.Models.Project
                 var project = JsonConvert.DeserializeObject<FlowBloxProject>(projectFileContent, settings);
                 if (project == null)
                     throw new Exception("Failed to deserialize FlowBloxProject from JSON.");
+
+                project.SetProjectFilePath(fileNameForAdjustments);
 
                 if (extensions != null && extensions.Count > 0)
                 {
@@ -903,6 +934,8 @@ namespace FlowBlox.Core.Models.Project
                 var localData = BuildLocalDataForSave();
                 JsonHelper.SerializeToFile(localDataPath, localData);
 
+                SetProjectFilePath(fileName);
+
                 _logger.Info($"Project saved successfully to {fileName}");
             }
             catch (Exception ex)
@@ -910,6 +943,13 @@ namespace FlowBlox.Core.Models.Project
                 _logger.Error($"Failed to save project to file: {fileName}", ex);
                 throw;
             }
+        }
+
+        internal void SetProjectFilePath(string fileName)
+        {
+            ProjectFilePath = string.IsNullOrWhiteSpace(fileName)
+                ? string.Empty
+                : Path.GetFullPath(fileName);
         }
 
         private FlowBloxProjectLocalData BuildLocalDataForSave()

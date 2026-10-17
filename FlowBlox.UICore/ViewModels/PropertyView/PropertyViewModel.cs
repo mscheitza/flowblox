@@ -35,6 +35,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
         private object _preselectedInstance;
         private object _transientTarget;
         private TabViewModel _selectedTab;
+        private bool _isRestoringTabSelection;
         private readonly Window _window;
 
         public ObservableCollection<TabViewModel> Tabs { get; }
@@ -58,7 +59,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 _selectedTab = value;
                 OnPropertyChanged();
 
-                if (tabWasSelected)
+                if (tabWasSelected && !_isRestoringTabSelection)
                     CloseNestedTransactions();
             }
         }
@@ -120,19 +121,51 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 nestedTransaction);
             _transientTarget = _transactionEventHandler.Open();
 
-            _ = ResolveTabsAndPresectProperty();
+            _ = ResolveTabsAndPreselectProperty();
         }
 
-        private async Task ResolveTabsAndPresectProperty()
+        private async Task ResolveTabsAndPreselectProperty()
         {
             await ResolveTabs();
             PreselectProperty();
+        }
+
+        private async Task ResolveTabsAndRestoreSelectedTab(string groupKey)
+        {
+            await ResolveTabs();
+            RestoreSelectedTab(groupKey);
         }
 
         private void PreselectProperty()
         {
             if (!string.IsNullOrEmpty(_preselectedProperty))
                 SelectProperty(_preselectedProperty);
+        }
+
+        private string GetSelectedTabGroupKey()
+            => SelectedTab?.GroupKey;
+
+        private void RestoreSelectedTab(string groupKey)
+        {
+            if (string.IsNullOrWhiteSpace(groupKey))
+                return;
+
+            var tab = Tabs.FirstOrDefault(x =>
+                string.Equals(x.GroupKey, groupKey, StringComparison.Ordinal) &&
+                x.Controls.Any(control => control.IsActive));
+
+            if (tab == null)
+                return;
+
+            _isRestoringTabSelection = true;
+            try
+            {
+                SelectedTab = tab;
+            }
+            finally
+            {
+                _isRestoringTabSelection = false;
+            }
         }
 
         private void SelectProperty(string propertyName)
@@ -247,6 +280,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
 
         public async Task<bool> ApplyAsync(MetroWindow window, bool withoutVerification = false)
         {
+            var selectedTabGroupKey = GetSelectedTabGroupKey();
             if (!await PrepareCommitAsync(window, withoutVerification))
                 return false;
 
@@ -254,7 +288,7 @@ namespace FlowBlox.UICore.ViewModels.PropertyView
                 return false;
 
             _transientTarget = _transactionEventHandler.WorkingCopy;
-            await ResolveTabsAndPresectProperty();
+            await ResolveTabsAndRestoreSelectedTab(selectedTabGroupKey);
             IsDirty = false;
             return true;
         }

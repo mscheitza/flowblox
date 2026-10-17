@@ -1,7 +1,6 @@
 using FlowBlox.Core.Attributes;
 using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 using System.Resources;
 
 namespace FlowBlox.Core.Util.Resources
@@ -28,29 +27,6 @@ namespace FlowBlox.Core.Util.Resources
             if (string.IsNullOrEmpty(localizedString))
                 localizedString = resourceManager.GetString(GetConcattedResourceName(GlobalPrefix, name));
             return localizedString;
-        }
-
-        public static string GetItemDisplayName(PropertyInfo targetProperty, Type itemType)
-        {
-            if (targetProperty == null)
-                throw new ArgumentNullException(nameof(targetProperty));
-            if (itemType == null)
-                throw new ArgumentNullException(nameof(itemType));
-
-            var itemDisplayName = targetProperty.GetCustomAttribute<FlowBloxUIAttribute>()?.ItemDisplayName;
-            if (string.IsNullOrEmpty(itemDisplayName))
-            {
-                var displayAttribute = itemType.GetCustomAttribute<DisplayAttribute>();
-                return displayAttribute != null 
-                    ? GetDisplayName(displayAttribute, true) 
-                    : targetProperty.Name;
-            }
-
-            return GetDisplayName(new DisplayAttribute
-            {
-                Name = itemDisplayName,
-                ResourceType = targetProperty.GetCustomAttribute<DisplayAttribute>()?.ResourceType
-            });
         }
 
         public static string GetDisplayName(DisplayAttribute displayAttribute, bool requireDisplayName = true)

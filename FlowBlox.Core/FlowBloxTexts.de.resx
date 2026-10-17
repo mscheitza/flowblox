@@ -213,6 +213,9 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="BaseResultFlowBlock_EndIndex" xml:space="preserve">
 		<value>End-Index</value>
 	</data>
+	<data name="BaseResultFlowBlock_EndIndex_Tooltip" xml:space="preserve">
+		<value>Nur im Ausgabemodus „Bereich“: Letzter auszugebender Datensatz (Index ab 0).</value>
+	</data>
 	<data name="BaseResultFlowBlock_Groups_Output" xml:space="preserve">
 		<value>Ausgabe</value>
 	</data>
@@ -220,16 +223,49 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>Duplikate in Ergebnisdatensätzen entfernen</value>
 	</data>
 	<data name="BaseResultFlowBlock_IgnoreDuplicates_Tooltip" xml:space="preserve">
-		<value>Entfernt doppelte Ergebnisdatensätze durch Vergleich aller Feldwerte. Nur das erste Vorkommen wird an nachfolgende Flow-Blocks weitergegeben.</value>
+		<value>Entfernt doppelte Ausgabedatensätze.</value>
 	</data>
 	<data name="BaseResultFlowBlock_OutputBehavior" xml:space="preserve">
 		<value>Ausgabeverhalten</value>
 	</data>
+	<data name="BaseResultFlowBlock_OutputBehavior_Tooltip" xml:space="preserve">
+		<value>Begrenzt die Ausgabe. Standard: „Alle“; bei Folge-Flow-Blocks mit Iterationskontext bevorzugt deren Eingabeverhalten nutzen.</value>
+	</data>
 	<data name="BaseResultFlowBlock_StartIndex" xml:space="preserve">
 		<value>Start-Index</value>
 	</data>
+	<data name="BaseResultFlowBlock_StartIndex_Tooltip" xml:space="preserve">
+		<value>Nur im Ausgabemodus „Bereich“: Erster auszugebender Datensatz (Index ab 0).</value>
+	</data>
 	<data name="BaseResultFlowBlock_StartValue" xml:space="preserve">
 		<value>Start-Wert</value>
+	</data>
+	<data name="BaseResultFlowBlock_StartValue_Tooltip" xml:space="preserve">
+		<value>Nur im Ausgabemodus „Bereich“: Beginnt beim ersten Datensatz mit diesem exakten Feldwert.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Validation_RangeCriterionRequired" xml:space="preserve">
+		<value>Beim Ausgabeverhalten „Bereich“ muss mindestens ein Start-Wert, Start-Index oder End-Index angegeben werden.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Validation_RangeModesMutuallyExclusive" xml:space="preserve">
+		<value>Beim Ausgabeverhalten „Bereich“ darf entweder ein Start-Wert oder ein Indexbereich konfiguriert werden, nicht beides.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Validation_StartIndexMustPrecedeEndIndex" xml:space="preserve">
+		<value>Beim Ausgabeverhalten „Bereich“ muss der Start-Index kleiner als der End-Index sein.</value>
+	</data>
+	<data name="BaseResultFlowBlockNotifications_StartValueNotFound" xml:space="preserve">
+		<value>Startwert nicht gefunden</value>
+	</data>
+	<data name="BaseResultFlowBlockNotifications_IndexOutputUnavailable" xml:space="preserve">
+		<value>Indexausgabe nicht möglich</value>
+	</data>
+	<data name="BaseResultFlowBlock_Warning_StartIndexOutsideResultRange" xml:space="preserve">
+		<value>Der Start-Index {0} liegt außerhalb der Ergebnismenge mit {1} Datensätzen.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Warning_EndIndexOutsideResultRange" xml:space="preserve">
+		<value>Der End-Index {0} liegt außerhalb der Ergebnismenge mit {1} Datensätzen.</value>
+	</data>
+	<data name="BaseResultFlowBlock_Warning_IndexOrderInvalid" xml:space="preserve">
+		<value>Der End-Index {0} muss größer als der Start-Index {1} sein.</value>
 	</data>
 	<data name="BertTokenizer_Description" xml:space="preserve">
 		<value>Verwendet ein Vokabular im BERT-Format zur Tokenisierung von Text.</value>
@@ -443,6 +479,9 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	</data>
 	<data name="EnumerationFlowBlock_Parameters" xml:space="preserve">
 		<value>Zu enumerierende Parameter</value>
+	</data>
+	<data name="EnumerationFlowBlock_Parameter" xml:space="preserve">
+		<value>Zu enumerierender Parameter</value>
 	</data>
 	<data name="EnumerationFlowBlock_Parameters_Tooltip" xml:space="preserve">
 		<value>Felder, deren Werte einzeln ausgegeben werden sollen.</value>
@@ -931,6 +970,18 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 	<data name="JPathSelectorFlowBlock_Path" xml:space="preserve">
 		<value>JPath</value>
 	</data>
+	<data name="JPathSelectorFlowBlock_RowPath" xml:space="preserve">
+    <value>Zeilen-/Ausgangspunkt</value>
+  </data>
+	<data name="JPathSelectorFlowBlock_RowPath_Tooltip" xml:space="preserve">
+    <value>Optionaler JPath, der pro ausgewähltem JSON-Knoten eine Ausgabezeile festlegt, zum Beispiel $[*]. Fehlende JPath-Werte behalten dadurch ihre Zeile und verwenden den Fallback-Wert.</value>
+  </data>
+	<data name="JPathSelectorFlowBlock_FallbackValue" xml:space="preserve">
+    <value>Fallback-Wert</value>
+  </data>
+	<data name="JPathSelectorFlowBlock_FallbackValue_Tooltip" xml:space="preserve">
+    <value>Wert für eine Zeile, wenn JPath unter ihrem Ausgangsknoten keinen Wert findet. Nur bei gesetztem Zeilen-/Ausgangspunkt verfügbar.</value>
+  </data>
 	<data name="JPathSelectorFlowBlock_SpecialExplanation_PathExamples" xml:space="preserve">
 		<value>JPath-Beispiele:
 - `$` wählt den Root-Inhalt aus; Elemente eines ausgewählten Arrays werden einzeln ausgegeben.
@@ -1755,7 +1806,13 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>XML-Dokument (Flow-Block)</value>
 	</data>
 	<data name="XmlDocumentXPathSelector_XPath_Tooltip" xml:space="preserve">
-		<value>XPath-Ausdruck, der auf das verwaltete XML-Dokument angewendet wird. Elemente liefern ihr inneres XML; endet der Ausdruck mit einem Attributschritt wie '//item/@id', werden Attributwerte ausgegeben. Felder aus Eingabe-Flow-Blocks können verwendet werden.</value>
+		<value>XPath-Ausdruck für das verwaltete XML-Dokument. Auswählbar sind Elemente, Textknoten, CDATA-Abschnitte und Attribute wie '//item/@id'.</value>
+	</data>
+	<data name="XmlDocumentXPathSelector_ResultMode" xml:space="preserve">
+		<value>Ergebnisformat</value>
+	</data>
+	<data name="XmlDocumentXPathSelector_ResultMode_Tooltip" xml:space="preserve">
+		<value>Liefert entweder den Inhalt jedes gefundenen Knotens oder sein vollständiges XML. Bei Attributen enthält äußeres XML auch den Attributnamen.</value>
 	</data>
 	<data name="XPathSelectorFlowBlock_Description" xml:space="preserve">
 		<value>Liest XML-Knoteninhalte per XPath.</value>
@@ -1773,7 +1830,19 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
 		<value>XPath</value>
 	</data>
 	<data name="XPathSelectorFlowBlock_XPath_Tooltip" xml:space="preserve">
-		<value>XPath-Ausdruck, der direkt auf den XML-Inhalt angewendet wird. Elemente liefern ihr inneres XML; endet der Ausdruck mit einem Attributschritt wie '//item/@id', werden Attributwerte ausgegeben. Felder aus Eingabe-Flow-Blocks können verwendet werden.</value>
+		<value>XPath-Ausdruck für den XML-Inhalt. Auswählbar sind Elemente, Textknoten, CDATA-Abschnitte und Attribute wie '//item/@id'.</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_ResultMode" xml:space="preserve">
+		<value>Ergebnisformat</value>
+	</data>
+	<data name="XPathSelectorFlowBlock_ResultMode_Tooltip" xml:space="preserve">
+		<value>Liefert entweder den Inhalt jedes gefundenen Knotens oder sein vollständiges XML. Bei Attributen enthält äußeres XML auch den Attributnamen.</value>
+	</data>
+	<data name="XPathResultMode_InnerXml" xml:space="preserve">
+		<value>Inneres XML</value>
+	</data>
+	<data name="XPathResultMode_OuterXml" xml:space="preserve">
+		<value>Äußeres XML</value>
 	</data>
 	<data name="XPathSelectorFlowBlock_Notification_XmlContentIsEmpty" xml:space="preserve">
 		<value>Der XML-Inhalt ist leer</value>
@@ -3631,34 +3700,46 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
 	<data name="SMTPFlowBlock_Attachments_Tooltip" xml:space="preserve">
     <value>Anhangszuordnungen, die aus konfigurierten Feldern erzeugt werden.</value>
   </data>
-	<data name="JsonManyPathsSelectorMappingEntry_JsonPath_Tooltip" xml:space="preserve">
+	<data name="JPathMultiSelectorMappingEntry_JPath_Tooltip" xml:space="preserve">
 		<value>Newtonsoft.Json-JPath-Ausdruck zur Auflösung von Werten aus dem JSON-Inhalt, zum Beispiel '$.participants[0].name', '$[*].id' oder '$.addresses[?(@.Country == 'Germany')].Street'.</value>
 	</data>
 	<data name="JsonFlowBlocks_SpecialExplanation_JPathSyntax" xml:space="preserve">
 		<value>JSON-Pfad-Properties in diesem Flow-Block verwenden die Newtonsoft.Json-JPath-Syntax. Siehe [JSON mit JSON Path abfragen](https://www.newtonsoft.com/json/help/html/queryjsonselecttoken.htm).</value>
 	</data>
-	<data name="JsonManyPathsSelectorFlowBlock_JsonContent_Tooltip" xml:space="preserve">
+	<data name="JPathMultiSelectorFlowBlock_JsonContent_Tooltip" xml:space="preserve">
     <value>JSON-Quellinhalt, der für alle konfigurierten Pfadzuordnungen verwendet wird.</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_Description" xml:space="preserve">
-    <value>Liest mehrere JSON-Pfade aus einer JSON-Quelle und ordnet die aufgelösten Werte direkt Ergebnisfeldern zu.</value>
+	<data name="JPathMultiSelectorFlowBlock_Description" xml:space="preserve">
+    <value>Liest mehrere JPaths aus einer JSON-Quelle und ordnet die aufgelösten Werte direkt Ergebnisfeldern zu.</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_DisplayName" xml:space="preserve">
-    <value>Mehrere JSON-Pfade auswählen</value>
+	<data name="JPathMultiSelectorFlowBlock_DisplayName" xml:space="preserve">
+    <value>Mehrere JPaths auswählen</value>
   </data>
-	<data name="JsonManyPathsSelectorMappingEntry_JsonPath" xml:space="preserve">
-    <value>JSON-Pfad</value>
+	<data name="JPathMultiSelectorMappingEntry_JPath" xml:space="preserve">
+    <value>JPath</value>
   </data>
-	<data name="JsonManyPathsSelectorMappingEntry_DisplayName" xml:space="preserve">
-    <value>JSON-Pfad-Zuordnungseintrag</value>
+	<data name="JPathMultiSelectorMappingEntry_RowPath" xml:space="preserve">
+    <value>Zeilen-/Ausgangspunkt</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_Groups_Mappings" xml:space="preserve">
+	<data name="JPathMultiSelectorMappingEntry_RowPath_Tooltip" xml:space="preserve">
+    <value>Optionaler JPath, der pro ausgewähltem JSON-Knoten eine Ausgabezeile festlegt, zum Beispiel $[*]. Fehlende JPath-Werte behalten dadurch ihre Zeile und verwenden den Fallback-Wert.</value>
+  </data>
+	<data name="JPathMultiSelectorMappingEntry_FallbackValue" xml:space="preserve">
+    <value>Fallback-Wert</value>
+  </data>
+	<data name="JPathMultiSelectorMappingEntry_FallbackValue_Tooltip" xml:space="preserve">
+    <value>Wert für eine Zeile, wenn JPath unter ihrem Ausgangsknoten keinen Wert findet. Nur bei gesetztem Zeilen-/Ausgangspunkt verfügbar.</value>
+  </data>
+	<data name="JPathMultiSelectorMappingEntry_DisplayName" xml:space="preserve">
+    <value>JPath-Zuordnungseintrag</value>
+  </data>
+	<data name="JPathMultiSelectorFlowBlock_Groups_Mappings" xml:space="preserve">
     <value>Zuordnungen</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_MappingEntries" xml:space="preserve">
-    <value>Pfadzuordnungen</value>
+	<data name="JPathMultiSelectorFlowBlock_MappingEntries" xml:space="preserve">
+    <value>JPath-Zuordnungen</value>
   </data>
-	<data name="JsonManyPathsSelectorFlowBlock_JsonContent" xml:space="preserve">
+	<data name="JPathMultiSelectorFlowBlock_JsonContent" xml:space="preserve">
     <value>JSON-Inhalt</value>
   </data>
   <data name="DateTimeComponentAdjustFlowBlock_Groups_Adjustments" xml:space="preserve">
@@ -4215,6 +4296,8 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="SftpUploadFlowBlock_Overwrite_Tooltip" xml:space="preserve"><value>Erlaubt das Ersetzen einer vorhandenen entfernten Datei.</value></data>
   <data name="OpenApiRestFlowBlock_DisplayName" xml:space="preserve"><value>OpenAPI-REST-Endpunkt</value></data>
   <data name="OpenApiRestFlowBlock_Description" xml:space="preserve"><value>Lädt eine Swagger-/OpenAPI-Beschreibung, erzeugt eine Oberfläche für Endpunkte und Parameter und ruft die ausgewählte REST-Operation auf.</value></data>
+  <data name="OpenApiRestFlowBlock_Groups_Parameters" xml:space="preserve"><value>Parameter</value></data>
+  <data name="OpenApiRestFlowBlock_Groups_Payload" xml:space="preserve"><value>Payload</value></data>
   <data name="OpenApiRestFlowBlock_OpenApiSource" xml:space="preserve"><value>OpenAPI-Quelle</value></data>
   <data name="OpenApiRestFlowBlock_OpenApiSource_Tooltip" xml:space="preserve"><value>HTTP(S)-URL, lokaler Dateipfad oder direkt eingefügtes Swagger-/OpenAPI-JSON beziehungsweise YAML. URL-Beschreibungen werden 15 Minuten im Arbeitsspeicher gecacht.</value></data>
   <data name="OpenApiRestFlowBlock_Endpoint" xml:space="preserve"><value>Endpunkt</value></data>

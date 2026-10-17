@@ -13,6 +13,7 @@ namespace FlowBlox.Core.Models.Testing
         private bool _uIIsTargetFlowBlock;
         private bool _uIIsTargetNeighbour;
         private bool _uIIsVisibleInCurrentContext = true;
+        private bool _uIHasFlowBlockValidationErrors;
         private List<FlowBloxFieldTestConfiguration> _flowBloxTestConfigurations;
 
         [JsonIgnore]
@@ -99,6 +100,20 @@ namespace FlowBlox.Core.Models.Testing
                 if (_uIIsVisibleInCurrentContext != value)
                 {
                     _uIIsVisibleInCurrentContext = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public bool UIHasFlowBlockValidationErrors
+        {
+            get => _uIHasFlowBlockValidationErrors;
+            set
+            {
+                if (_uIHasFlowBlockValidationErrors != value)
+                {
+                    _uIHasFlowBlockValidationErrors = value;
                     OnPropertyChanged();
                 }
             }

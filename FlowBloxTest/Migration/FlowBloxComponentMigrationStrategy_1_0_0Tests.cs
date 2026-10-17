@@ -1,5 +1,7 @@
 using FlowBlox.Core.Migration.MigrationStrategies;
 using FlowBlox.Core.Models.FlowBlocks.Json;
+using FlowBlox.Core.Services;
+using FlowBlox.Core.Util.Json.SerializationBinder;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBloxTest.Migration
@@ -14,8 +16,7 @@ namespace FlowBloxTest.Migration
             var cases = new[]
             {
                 (Type: typeof(JPathSelectorFlowBlock), Property: nameof(JPathSelectorFlowBlock.Path), Legacy: "addresses/@Country=Germany/Street", Expected: "$.addresses[?(@.Country == 'Germany')].Street"),
-                (Type: typeof(JsonObjectWriterFlowBlock), Property: nameof(JsonObjectWriterFlowBlock.Path), Legacy: "participants/0", Expected: "$.participants[0]"),
-                (Type: typeof(JsonManyPathsSelectorMappingEntry), Property: nameof(JsonManyPathsSelectorMappingEntry.JsonPath), Legacy: "$/id", Expected: "$[*].id")
+                (Type: typeof(JsonObjectWriterFlowBlock), Property: nameof(JsonObjectWriterFlowBlock.Path), Legacy: "participants/0", Expected: "$.participants[0]")
             };
             var strategy = new FlowBloxComponentMigrationStrategy_1_0_0();
 
@@ -31,6 +32,38 @@ namespace FlowBloxTest.Migration
 
                 Assert.AreEqual(migrationCase.Expected, component.Value<string>(migrationCase.Property));
             }
+        }
+
+        [TestMethod]
+        public void Migrate_JsonManyPathsMappingEntry_RenamesJsonPathAndTranslatesLegacySyntax()
+        {
+            var component = new JObject
+            {
+                ["$type"] = "FlowBlox.Core.Models.FlowBlocks.Json.JsonManyPathsSelectorMappingEntry, FlowBlox.Core",
+                ["JsonPath"] = "$/category/name"
+            };
+
+            new FlowBloxComponentMigrationStrategy_1_0_0().Migrate(component);
+
+            Assert.IsNull(component.Property("JsonPath"));
+            Assert.AreEqual("$[*].category.name", component.Value<string>(nameof(JPathMultiSelectorMappingEntry.JPath)));
+        }
+
+        [TestMethod]
+        public void LegacyTypeMappings_ResolveJsonManyPathsTypesToJPathMultiSelectorTypes()
+        {
+            var mappings = new FlowBloxCoreLegacyTypeMappingService().GetLegacyTypeMappings();
+            var binder = new FlowBloxSerializationBinder([], mappings);
+
+            var flowBlockType = binder.BindToType(
+                "FlowBlox.Core",
+                "FlowBlox.Core.Models.FlowBlocks.Json.JsonManyPathsSelectorFlowBlock");
+            var mappingEntryType = binder.BindToType(
+                "FlowBlox.Core",
+                "FlowBlox.Core.Models.FlowBlocks.Json.JsonManyPathsSelectorMappingEntry");
+
+            Assert.AreEqual(typeof(JPathMultiSelectorFlowBlock), flowBlockType);
+            Assert.AreEqual(typeof(JPathMultiSelectorMappingEntry), mappingEntryType);
         }
 
         [TestMethod]

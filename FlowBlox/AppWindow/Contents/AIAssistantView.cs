@@ -70,6 +70,7 @@ namespace FlowBlox.AppWindow.Contents
             {
                 ProjectGuid = project.ProjectGuid,
                 ProjectName = project.ProjectName ?? string.Empty,
+                ProjectFilePath = project.ProjectFilePath,
                 ProjectJson = JsonConvert.SerializeObject(project, JsonSettings.ProjectExport()),
                 ExtensionsJson = JsonConvert.SerializeObject(project.Extensions ?? new()),
                 ProjectSpaceGuid = project.ProjectSpaceGuid ?? string.Empty,
@@ -90,7 +91,8 @@ namespace FlowBlox.AppWindow.Contents
                     snapshot.ExtensionsJson,
                     string.IsNullOrWhiteSpace(snapshot.ProjectSpaceGuid) ? null : snapshot.ProjectSpaceGuid,
                     snapshot.ProjectSpaceVersion,
-                    string.IsNullOrWhiteSpace(snapshot.ProjectSpaceEndpointUri) ? null : snapshot.ProjectSpaceEndpointUri);
+                    string.IsNullOrWhiteSpace(snapshot.ProjectSpaceEndpointUri) ? null : snapshot.ProjectSpaceEndpointUri,
+                    string.IsNullOrWhiteSpace(snapshot.ProjectFilePath) ? null : snapshot.ProjectFilePath);
 
                 return await AppWindow.Instance.RestoreProjectStateWithoutConfirmationAsync(restoredProject);
             }

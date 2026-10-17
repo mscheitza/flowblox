@@ -6,9 +6,13 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
     {
         public static List<string> SelectValues(
             XmlDocument xmlDocument,
-            string xpath)
+            string xpath,
+            XPathResultMode resultMode = XPathResultMode.InnerXml)
         {
             ArgumentNullException.ThrowIfNull(xmlDocument);
+
+            if (resultMode is not XPathResultMode.InnerXml and not XPathResultMode.OuterXml)
+                throw new ArgumentOutOfRangeException(nameof(resultMode), resultMode, null);
 
             var nodes = xmlDocument.SelectNodes(xpath);
             if (nodes == null || nodes.Count == 0)
@@ -18,6 +22,12 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
 
             foreach (XmlNode node in nodes)
             {
+                if (resultMode == XPathResultMode.OuterXml)
+                {
+                    values.Add(node.OuterXml ?? string.Empty);
+                    continue;
+                }
+
                 if (node is XmlAttribute or XmlText or XmlCDataSection)
                 {
                     values.Add(node.Value ?? string.Empty);
