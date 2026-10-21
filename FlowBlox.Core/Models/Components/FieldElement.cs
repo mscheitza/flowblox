@@ -251,10 +251,11 @@ namespace FlowBlox.Core.Models.Components
             get
             {
                 var runtime = _threadLocalRuntime.Value;
-                if (runtime != null && 
-                    _runtimeToFieldValue.TryGetValue(runtime, out var value))
+                string value;
+                lock (_runtimeFieldValueSync)
                 {
-                    return value;
+                    if (runtime != null && _runtimeToFieldValue.TryGetValue(runtime, out value))
+                        return value;
                 }
                 return _stringValue;
             }
@@ -428,6 +429,7 @@ namespace FlowBlox.Core.Models.Components
         }
 
         private readonly Dictionary<BaseRuntime, string> _runtimeToFieldValue = new Dictionary<BaseRuntime, string>();
+        private readonly object _runtimeFieldValueSync = new object();
 
         private ThreadLocal<BaseRuntime> _threadLocalRuntime = new ThreadLocal<BaseRuntime>(() => null);
 
@@ -435,19 +437,43 @@ namespace FlowBlox.Core.Models.Components
         {
             this.Pending = false;
             string oldValue = this.StringValue;
+
+            if (runtimeBound)
+            {
+                lock (_runtimeFieldValueSync)
+                    _runtimeToFieldValue[runtime] = value;
+
+                _threadLocalRuntime.Value = runtime;
+            }
+
             if (oldValue != value)
             {
-                if (runtimeBound)
-                {
-                    _threadLocalRuntime.Value = runtime;
-                    _runtimeToFieldValue[runtime] = value;
-                }
-                else
+                if (!runtimeBound)
                     this.StringValue = value;
 
                 OnValueChanged?.Invoke(this, oldValue, value);
                 runtime.NotifyFieldChange(this, oldValue, value);
             }
+        }
+
+        internal void ReleaseRuntimeValue(BaseRuntime runtime)
+        {
+            if (runtime == null)
+                return;
+
+            lock (_runtimeFieldValueSync)
+                _runtimeToFieldValue.Remove(runtime);
+
+            if (ReferenceEquals(_threadLocalRuntime.Value, runtime))
+                _threadLocalRuntime.Value = null;
+        }
+
+        internal void ReleaseAllRuntimeValues()
+        {
+            lock (_runtimeFieldValueSync)
+                _runtimeToFieldValue.Clear();
+
+            _threadLocalRuntime.Value = null;
         }
 
         public void SetValue(BaseRuntime runtime, string value, bool runtimeBound = false)

@@ -67,5 +67,18 @@ namespace FlowBlox.UICore.Views
                 item.Focus();
             }
         }
+
+        private void ManagedObjectsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var current = e.OriginalSource as DependencyObject;
+            while (current != null && current is not ListViewItem)
+                current = VisualTreeHelper.GetParent(current);
+
+            if (current is not ListViewItem || DataContext is not ManagedObjectsViewModel vm)
+                return;
+
+            if (vm.EditCommand.CanExecute(null))
+                vm.EditCommand.Execute(null);
+        }
     }
 }

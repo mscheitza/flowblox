@@ -1,4 +1,4 @@
-Flow organization pattern (readability + maintenance):
+# Explaining Flow Organization Patterns
 - Prefer standard Downstream Flow Design by default:
   `A -> B -> C -> D`
   Use this when blocks are tightly dependent and each step clearly builds on the previous one.

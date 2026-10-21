@@ -95,6 +95,40 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
+        public void Parse_AcceptsDeepSeekCallsContainerWithFullwidthDsmlMarker()
+        {
+            var parser = new AiResponseInstructionParserService();
+            const string output = """
+                <｜｜DSML｜｜ calls>
+                <｜｜DSML｜｜ invoke name="FlowBloxAIToolApi-GetTypeKindsInfo">
+                <｜｜DSML｜｜ parameter name="typeFullName" string="true">FlowBlox.Core.Models.FlowBlocks.Web.WebRequestFlowBlock</｜｜DSML｜｜ parameter>
+                </｜｜DSML｜｜ invoke>
+                <｜｜DSML｜｜ invoke name="FlowBloxAIToolApi-GetTypeKindsInfo">
+                <｜｜DSML｜｜ parameter name="typeFullName" string="true">FlowBlox.Core.Models.FlowBlocks.Web.WebSelectorFlowBlock</｜｜DSML｜｜ parameter>
+                </｜｜DSML｜｜ invoke>
+                <｜｜DSML｜｜ invoke name="FlowBloxAIToolApi-GetCategoryChildren">
+                <｜｜DSML｜｜ parameter name="categoryPath" string="true">Selection</｜｜DSML｜｜ parameter>
+                </｜｜DSML｜｜ invoke>
+                </｜｜DSML｜｜ calls>
+                """;
+
+            var result = parser.Parse(output, new DeepSeekAIProvider());
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(3, result.Instruction.ToolCalls.Count);
+            Assert.AreEqual("GetTypeKindsInfo", result.Instruction.ToolCalls[0].ToolName);
+            Assert.AreEqual(
+                "FlowBlox.Core.Models.FlowBlocks.Web.WebRequestFlowBlock",
+                result.Instruction.ToolCalls[0].Arguments.Value<string>("typeFullName"));
+            Assert.AreEqual("GetTypeKindsInfo", result.Instruction.ToolCalls[1].ToolName);
+            Assert.AreEqual(
+                "FlowBlox.Core.Models.FlowBlocks.Web.WebSelectorFlowBlock",
+                result.Instruction.ToolCalls[1].Arguments.Value<string>("typeFullName"));
+            Assert.AreEqual("GetCategoryChildren", result.Instruction.ToolCalls[2].ToolName);
+            Assert.AreEqual("Selection", result.Instruction.ToolCalls[2].Arguments.Value<string>("categoryPath"));
+        }
+
+        [TestMethod]
         public void Parse_TreatsDeepSeekDsmlAsToolCallsBeforeEmbeddedJson()
         {
             var parser = new AiResponseInstructionParserService();

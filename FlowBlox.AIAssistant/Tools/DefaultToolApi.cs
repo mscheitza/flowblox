@@ -8,7 +8,7 @@ namespace FlowBlox.AIAssistant.Tools
     {
         private const string ExecuteInputFileCommandToolName = "ExecuteInputFileCommand";
         private const string RunProjectDebugTestToolName = "RunProjectDebugTest";
-        private const string ExecuteProjectToolName = "ExecuteProject";
+        private const string ExecuteExternalProjectToolName = "ExecuteExternalProject";
         private readonly Dictionary<string, IToolHandler> _handlers;
         private readonly List<ToolDefinition> _definitions;
         public Func<ToolRequest, bool>? ToolExecutionConfirmationCallback { get; set; }
@@ -84,7 +84,7 @@ namespace FlowBlox.AIAssistant.Tools
                 request.ToolName,
                 ExecuteInputFileCommandToolName,
                 StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(request.ToolName, ExecuteProjectToolName, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(request.ToolName, ExecuteExternalProjectToolName, StringComparison.OrdinalIgnoreCase) ||
                 (string.Equals(request.ToolName, RunProjectDebugTestToolName, StringComparison.OrdinalIgnoreCase) &&
                  (!string.IsNullOrWhiteSpace(request.Arguments?.Value<string>("projectFile")) ||
                   ToolHandlerUtilities.IsAuxiliaryProjectActive()));
@@ -134,7 +134,7 @@ namespace FlowBlox.AIAssistant.Tools
             [
                 new GetProjectJsonHandler(),
                 new GetExplanationManifestHandler(),
-                new GetExplanationContentHandler(),
+                new LoadExplanationContentHandler(),
                 new GetDistributedDataHandler(),
                 new GetDistributedDataContentHandler(),
                 new GetProjectMetadataHandler(),
@@ -170,7 +170,7 @@ namespace FlowBlox.AIAssistant.Tools
                 new ExecuteInputFileCommandHandler(),
                 new DeleteInputFileHandler(),
                 new RunProjectDebugTestHandler(),
-                new ExecuteProjectHandler(),
+                new ExecuteExternalProjectHandler(),
                 new RunTestDefinitionHandler(),
                 new RunGenerationStrategiesHandler(),
                 new GetLastDebugArtefactHandler(),

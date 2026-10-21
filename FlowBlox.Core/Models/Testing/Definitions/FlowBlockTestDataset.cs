@@ -44,6 +44,7 @@ namespace FlowBlox.Core.Models.Testing
                     _execute = value;
                     ParentTestDefinition?.RecalculateRequiredFlagsAcrossDefinition();
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(UIAssociatedFlowBlockRequirementSatisfied));
                 }
             }
         }
@@ -59,9 +60,14 @@ namespace FlowBlox.Core.Models.Testing
                 {
                     _uIAssociatedFlowBlockRequiredForExecution = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(UIAssociatedFlowBlockRequirementSatisfied));
                 }
             }
         }
+
+        [JsonIgnore]
+        public bool UIAssociatedFlowBlockRequirementSatisfied =>
+            !UIAssociatedFlowBlockRequiredForExecution || Execute;
 
         [JsonIgnore]
         public bool UIIsTargetFlowBlock

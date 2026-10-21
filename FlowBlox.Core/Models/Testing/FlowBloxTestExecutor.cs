@@ -71,6 +71,23 @@ namespace FlowBlox.Core.Models.Testing
                 throw new InvalidOperationException($"Please call \"{nameof(Initialize)}\" before calling \"{nameof(ExecuteTest)}.");
             }
 
+            var userFields = _registry.GetUserFields();
+            foreach (var userField in userFields)
+                userField.ReleaseAllRuntimeValues();
+
+            try
+            {
+                return ExecuteTestCore();
+            }
+            finally
+            {
+                foreach (var userField in userFields)
+                    userField.ReleaseRuntimeValue(_localRuntime);
+            }
+        }
+
+        private FlowBloxTestResult ExecuteTestCore()
+        {
             var fieldValueAssignments = new Dictionary<string, string>();
 
             if (!ValidateAssociatedFlowBlockExecution())

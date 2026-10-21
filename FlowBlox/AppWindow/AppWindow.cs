@@ -50,14 +50,13 @@ namespace FlowBlox.AppWindow
         private const string UpdateDownloadDirectoryName = "updates";
         private const string UpdateNotificationId = "app.update.available";
         private const string UpdateStatusNotificationId = "app.update.status";
+        private const string ProjectGuidChangedNotificationId = "project.guid.changed";
         private const string CreatingProjectOverlayText = "Creating project...";
         private const string LoadingProjectOverlayText = "Loading project...";
         private const string RestoringProjectStateOverlayText = "Restoring state...";
         private static readonly TimeSpan BeforeProjectRestoreUiDelay = TimeSpan.FromMilliseconds(50);
         private static readonly TimeSpan AfterProjectActivationUiDelay = TimeSpan.FromSeconds(2.5f);
-        private static readonly TimeSpan UpdateNotificationLifetime = TimeSpan.FromDays(14);
-        private static readonly TimeSpan UpdateStatusNotificationLifetime = TimeSpan.FromSeconds(15);
-        private static readonly TimeSpan UpdateErrorNotificationLifetime = TimeSpan.FromSeconds(15);
+        private static readonly TimeSpan DefaultNotificationLifetime = TimeSpan.FromSeconds(15);
         private static AppWindow _appWindow;
         public static AppWindow Instance
         {
@@ -102,6 +101,7 @@ namespace FlowBlox.AppWindow
 
         private FlowBloxProjectComponentProvider _componentProvider;
         private ProjectChangelist _subscribedChangelist;
+        private FlowBloxProject _subscribedProjectForGuidChanges;
 
         public AppWindow()
         {
@@ -123,6 +123,7 @@ namespace FlowBlox.AppWindow
 
             RefreshRecentProjectsMenu();
             SubscribeCurrentChangelist();
+            SubscribeCurrentProjectGuidChanges();
             this.UpdateUI();
             this.Size = new Size(1420, 1000);
         }
@@ -131,6 +132,7 @@ namespace FlowBlox.AppWindow
         {
             FlowBloxProjectManager.Instance.ProjectChanged -= ProjectManager_ProjectChanged;
             UnsubscribeCurrentChangelist();
+            UnsubscribeCurrentProjectGuidChanges();
             _notificationActionLabelStyleHandler?.Dispose();
             base.OnFormClosed(e);
         }
@@ -216,7 +218,47 @@ namespace FlowBlox.AppWindow
         private void ProjectManager_ProjectChanged(object sender, ProjectChangedEventArgs e)
         {
             SubscribeCurrentChangelist();
+            SubscribeCurrentProjectGuidChanges();
             UpdateUI();
+        }
+
+        private void SubscribeCurrentProjectGuidChanges()
+        {
+            var project = FlowBloxProjectManager.Instance.ActiveProject;
+            if (ReferenceEquals(_subscribedProjectForGuidChanges, project))
+                return;
+
+            UnsubscribeCurrentProjectGuidChanges();
+            _subscribedProjectForGuidChanges = project;
+            if (_subscribedProjectForGuidChanges != null)
+                _subscribedProjectForGuidChanges.ProjectGuidChanged += Project_ProjectGuidChanged;
+        }
+
+        private void UnsubscribeCurrentProjectGuidChanges()
+        {
+            if (_subscribedProjectForGuidChanges == null)
+                return;
+
+            _subscribedProjectForGuidChanges.ProjectGuidChanged -= Project_ProjectGuidChanged;
+            _subscribedProjectForGuidChanges = null;
+        }
+
+        private void Project_ProjectGuidChanged(object sender, ProjectGuidChangedEventArgs e)
+        {
+            var message = string.Format(
+                FlowBloxResourceUtil.GetLocalizedString(
+                    "AppWindow_Notification_ProjectGuidChanged_Message",
+                    typeof(FlowBloxMainUITexts)),
+                e.NewProjectGuid);
+
+            _appNotificationService.Publish(new AppNotification
+            {
+                Id = ProjectGuidChangedNotificationId,
+                Message = message,
+                ActionText = string.Empty,
+                ActionType = AppNotificationActionType.None,
+                ExpiresUtc = DateTimeOffset.UtcNow.Add(DefaultNotificationLifetime)
+            });
         }
 
         private void SubscribeCurrentChangelist()
@@ -276,7 +318,9 @@ namespace FlowBlox.AppWindow
             itmEditProject.Enabled = isProjectActive && (!isRuntimeActive);
             var isDistributedDataProject = IsActiveProjectFromDistributedData();
             itmSaveProject.Enabled = isProjectActive && !isRuntimeActive && !isDistributedDataProject;
-            itmSaveAs.Enabled = isProjectActive && (!isRuntimeActive);
+            itmSaveAs.Enabled = isProjectActive
+                && !isRuntimeActive
+                && !string.IsNullOrWhiteSpace(_recentProjectPath);
 
             itmDockablePanels.Enabled = isProjectActive;
             itmResetDockablePanels.Enabled = isProjectActive;
@@ -626,9 +670,10 @@ namespace FlowBlox.AppWindow
 
                     if (saveProjectDialog.ShowDialog(this) == DialogResult.OK)
                     {
-                        _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
+                        var newProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
-                        SaveActiveProjectFile(_recentProjectPath);
+                        SaveActiveProjectFile(newProjectPath);
+                        _recentProjectPath = newProjectPath;
                     }
                 }
                 else
@@ -656,15 +701,19 @@ namespace FlowBlox.AppWindow
 
         private void rbSaveProjectAs_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(_recentProjectPath))
+                return;
+
             try
             {
                 ConfigureSaveProjectDialogDefaults();
 
                 if (saveProjectDialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
+                    var newProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
-                    SaveActiveProjectFile(_recentProjectPath);
+                    SaveActiveProjectFile(newProjectPath, generateNewProjectGuid: true);
+                    _recentProjectPath = newProjectPath;
                 }
             }
             catch (Exception Exception)
@@ -709,9 +758,10 @@ namespace FlowBlox.AppWindow
                         ConfigureSaveProjectDialogDefaults();
                         if (saveProjectDialog.ShowDialog(this) == DialogResult.OK)
                         {
-                            _recentProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
+                        var newProjectPath = EnsureProjectFileExtension(saveProjectDialog.FileName);
 
-                            SaveActiveProjectFile(_recentProjectPath);
+                        SaveActiveProjectFile(newProjectPath);
+                        _recentProjectPath = newProjectPath;
                         }
                     }
                     else
@@ -734,13 +784,13 @@ namespace FlowBlox.AppWindow
             this._dockContentProjectPanel.RestoreProjectAfterSaveAttempt(project);
         }
 
-        private void SaveActiveProjectFile(string fileName)
+        private void SaveActiveProjectFile(string fileName, bool generateNewProjectGuid = false)
         {
             var project = FlowBloxProjectManager.Instance.ActiveProject;
             PrepareProjectForSave(project);
             try
             {
-                project.Save(fileName);
+                project.Save(fileName, generateNewProjectGuid);
             }
             finally
             {
@@ -1242,7 +1292,7 @@ namespace FlowBlox.AppWindow
                     {
                         PublishUpdateStatusNotification(
                             FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_NotPackaged_Message", typeof(FlowBloxMainUITexts)),
-                            UpdateErrorNotificationLifetime);
+                            DefaultNotificationLifetime);
                     }
 
                     return;
@@ -1255,7 +1305,7 @@ namespace FlowBlox.AppWindow
                     {
                         PublishUpdateStatusNotification(
                             FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Error_Message", typeof(FlowBloxMainUITexts)),
-                            UpdateErrorNotificationLifetime);
+                            DefaultNotificationLifetime);
                     }
 
                     return;
@@ -1271,7 +1321,7 @@ namespace FlowBlox.AppWindow
                         ActionText = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Notification_UpdateAvailable_Action_Text", typeof(FlowBloxMainUITexts)),
                         ActionType = AppNotificationActionType.DownloadUpdateInstaller,
                         ActionData = latestUpdate.InstallerUrl,
-                        ExpiresUtc = DateTimeOffset.UtcNow.Add(UpdateNotificationLifetime)
+                        ExpiresUtc = DateTimeOffset.UtcNow.Add(DefaultNotificationLifetime)
                     });
                 }
                 else
@@ -1287,7 +1337,7 @@ namespace FlowBlox.AppWindow
                 logger.Exception(ex);
                 PublishUpdateStatusNotification(
                     FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateCheck_Exception_Message", typeof(FlowBloxMainUITexts)),
-                    UpdateErrorNotificationLifetime);
+                    DefaultNotificationLifetime);
             }
         }
 
@@ -1324,7 +1374,7 @@ namespace FlowBlox.AppWindow
                 Message = message,
                 ActionText = string.Empty,
                 ActionType = AppNotificationActionType.None,
-                ExpiresUtc = DateTimeOffset.UtcNow.Add(lifetime ?? UpdateStatusNotificationLifetime)
+                ExpiresUtc = DateTimeOffset.UtcNow.Add(lifetime ?? DefaultNotificationLifetime)
             });
         }
 
@@ -1381,7 +1431,7 @@ namespace FlowBlox.AppWindow
                         {
                             PublishUpdateStatusNotification(
                                 FlowBloxResourceUtil.GetLocalizedString("AppWindow_UpdateInstall_Failed_Message", typeof(FlowBloxMainUITexts)),
-                                UpdateErrorNotificationLifetime);
+                                DefaultNotificationLifetime);
                             break;
                         }
 
@@ -1393,7 +1443,7 @@ namespace FlowBlox.AppWindow
                             ActionText = FlowBloxResourceUtil.GetLocalizedString("AppWindow_Notification_UpdateInstallDownloaded_Action_Text", typeof(FlowBloxMainUITexts)),
                             ActionType = AppNotificationActionType.InstallDownloadedUpdate,
                             ActionData = installerPath,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(UpdateNotificationLifetime)
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(DefaultNotificationLifetime)
                         });
                         break;
                     case AppNotificationActionType.InstallDownloadedUpdate:

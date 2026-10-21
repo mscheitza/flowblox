@@ -31,8 +31,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
             set => SetRequiredInputField(ref _templateField, value);
         }
 
-        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_word_outline, 16, SKColors.RoyalBlue);
-        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_word_outline, 32, SKColors.RoyalBlue);
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_document_edit_outline, 16, SKColors.RoyalBlue);
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.file_document_edit_outline, 32, SKColors.RoyalBlue);
 
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.Generation;
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;

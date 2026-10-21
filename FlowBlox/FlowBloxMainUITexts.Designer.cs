@@ -19,7 +19,7 @@ namespace FlowBlox {
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class FlowBloxMainUITexts {
@@ -651,6 +651,15 @@ namespace FlowBlox {
         internal static string AppWindow_NewProjectConfirm_Title {
             get {
                 return ResourceManager.GetString("AppWindow_NewProjectConfirm_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die A new internal project GUID was generated: {0} ähnelt.
+        /// </summary>
+        internal static string AppWindow_Notification_ProjectGuidChanged_Message {
+            get {
+                return ResourceManager.GetString("AppWindow_Notification_ProjectGuidChanged_Message", resourceCulture);
             }
         }
         

@@ -9,9 +9,9 @@ using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.Handler
 {
-    internal sealed class ExecuteProjectHandler : ToolHandlerBase
+    internal sealed class ExecuteExternalProjectHandler : ToolHandlerBase
     {
-        public override string Name => "ExecuteProject";
+        public override string Name => "ExecuteExternalProject";
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,

@@ -23,7 +23,10 @@ namespace FlowBlox.UICore.ViewModels
         private readonly Action<FlowBloxProject> _restoreProjectAfterSaveAttempt;
 
         private readonly string _initialProjectGuid;
+        private readonly Guid _initialInternalProjectGuid;
+        private readonly bool _hasPersistedProjectOrigin;
         private string _backupProjectGuid;
+        private bool _newProjectIdentityCreated;
 
         private bool _suppressTabEffects;
         private bool _isBusy;
@@ -238,6 +241,10 @@ namespace FlowBlox.UICore.ViewModels
             _project = project;
             _prepareProjectForSave = prepareProjectForSave;
             _restoreProjectAfterSaveAttempt = restoreProjectAfterSaveAttempt;
+            _initialInternalProjectGuid = project.ProjectGuid;
+            _hasPersistedProjectOrigin =
+                !string.IsNullOrWhiteSpace(project.ProjectFilePath) ||
+                !string.IsNullOrWhiteSpace(project.ProjectSpaceGuid);
 
             // Only if the stored endpoint matches the current API environment, the existing ProjectSpaceGuid is considered valid for update.
             if (string.Equals(_project.ProjectSpaceEndpointUri, ApiUrl, StringComparison.OrdinalIgnoreCase))
@@ -305,6 +312,12 @@ namespace FlowBlox.UICore.ViewModels
         private void ApplyUpdateExistingMode()
         {
             ErrorText = string.Empty;
+
+            if (_newProjectIdentityCreated)
+            {
+                _project.ProjectGuid = _initialInternalProjectGuid;
+                _newProjectIdentityCreated = false;
+            }
 
             var restoreGuid = !string.IsNullOrWhiteSpace(_initialProjectGuid)
                 ? _initialProjectGuid
@@ -427,9 +440,16 @@ namespace FlowBlox.UICore.ViewModels
                 // Upload content ZIP
                 _prepareProjectForSave?.Invoke(_project);
                 FlowBloxWebApiService.ApiResponse saveContent;
+                var generateNewProjectGuid = SelectedTabIndex == 0
+                    && _hasPersistedProjectOrigin
+                    && !_newProjectIdentityCreated;
                 try
                 {
-                    saveContent = await _project.SaveToProjectSpaceAsync(ProjectGuid, UserToken, _flowBloxWebApiService.Value);
+                    saveContent = await _project.SaveToProjectSpaceAsync(
+                        ProjectGuid,
+                        UserToken,
+                        _flowBloxWebApiService.Value,
+                        generateNewProjectGuid);
                 }
                 finally
                 {
@@ -444,6 +464,9 @@ namespace FlowBlox.UICore.ViewModels
 
                     return;
                 }
+
+                if (generateNewProjectGuid)
+                    _newProjectIdentityCreated = true;
 
                 // Refresh timestamps
                 var remoteResp = await _flowBloxWebApiService.Value.GetProjectAsync(new FbProjectRequest { Guid = ProjectGuid }, UserToken);

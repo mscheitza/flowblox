@@ -1,6 +1,9 @@
 using FlowBlox.Core.Enums;
+using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.FlowBlocks.TextOperations;
 using FlowBlox.Core.Models.Project;
+using FlowBlox.Core.Models.Runtime;
+using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Provider.Project;
 
 namespace FlowBloxTest.Components
@@ -28,6 +31,87 @@ namespace FlowBloxTest.Components
             field.Name = "CurrentName";
 
             Assert.AreEqual("Value: $User::CurrentName", formatFlowBlock.FormatExpression);
+        }
+
+        [TestMethod]
+        public void ReleaseAllRuntimeValues_RestoresPersistentUserFieldValue()
+        {
+            var project = CreateProjectWithStartFlowBlock(out _);
+            var field = project.FlowBloxRegistry.CreateUserField(
+                UserFieldTypes.Input,
+                FieldTypes.Text,
+                "Input");
+            field.StringValue = "Original";
+
+            var firstRuntime = new TransientRuntime(project);
+            field.SetValueWithoutEvaluation(firstRuntime, "First test value", runtimeBound: true);
+            Assert.AreEqual("First test value", field.StringValue);
+
+            field.ReleaseAllRuntimeValues();
+
+            Assert.AreEqual("Original", field.StringValue);
+        }
+
+        [TestMethod]
+        public void RuntimeBoundValue_IsBoundWhenItEqualsCurrentlyVisibleValue()
+        {
+            var project = CreateProjectWithStartFlowBlock(out _);
+            var field = project.FlowBloxRegistry.CreateUserField(
+                UserFieldTypes.Input,
+                FieldTypes.Text,
+                "Input");
+            field.StringValue = "Same value";
+            var runtime = new TransientRuntime(project);
+
+            field.SetValueWithoutEvaluation(runtime, "Same value", runtimeBound: true);
+            field.StringValue = "Changed persistent value";
+
+            Assert.AreEqual("Same value", field.StringValue);
+
+            field.ReleaseRuntimeValue(runtime);
+            Assert.AreEqual("Changed persistent value", field.StringValue);
+        }
+
+        [TestMethod]
+        public void ExecuteTest_WithKeep_ReleasesPreviousUserFieldRuntimeValuesAtTestStart()
+        {
+            var project = CreateProjectWithStartFlowBlock(out var startFlowBlock);
+            var field = project.FlowBloxRegistry.CreateUserField(
+                UserFieldTypes.Input,
+                FieldTypes.Text,
+                "Input");
+            field.StringValue = "Original";
+
+            var previousRuntime = new TransientRuntime(project);
+            field.SetValueWithoutEvaluation(previousRuntime, "Previous test value", runtimeBound: true);
+
+            var testDefinition = new FlowBloxTestDefinition { Name = "Keep user field" };
+            startFlowBlock.TestDefinitions.Add(testDefinition);
+            var userFieldConfiguration = testDefinition.Entries
+                .Single(x => x.FlowBlock == null)
+                .FlowBloxTestConfigurations
+                .Single(x => x.FieldElement == field);
+            userFieldConfiguration.SelectionMode = FlowBloxTestConfigurationSelectionMode.Keep;
+
+            var executor = new FlowBloxTestExecutor();
+            executor.Initialize(testDefinition, startFlowBlock);
+            var result = executor.ExecuteTest();
+            executor.Shutdown();
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual("Original", result.FieldValueAssignments[field.FullyQualifiedName]);
+            Assert.AreEqual("Original", field.StringValue);
+        }
+
+        private static FlowBloxProject CreateProjectWithStartFlowBlock(out StartFlowBlock startFlowBlock)
+        {
+            var project = new FlowBloxProject();
+            FlowBloxProjectManager.Instance.ActiveProject = project;
+
+            startFlowBlock = project.FlowBloxRegistry.CreateFlowBlockUnregistered<StartFlowBlock>();
+            project.FlowBloxRegistry.PostProcessFlowBlockCreated(startFlowBlock);
+            project.FlowBloxRegistry.Register(startFlowBlock);
+            return project;
         }
     }
 }

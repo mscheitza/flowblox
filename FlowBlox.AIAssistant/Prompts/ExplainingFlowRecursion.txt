@@ -1,3 +1,5 @@
+# Explaining Flow Recursion
+
 Use this guidance for controlled loops whose target lies earlier on the incoming execution path.
 
 Choose the block by intent:

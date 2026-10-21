@@ -831,4 +831,5 @@ The Recursive Call flow block invokes the connected earlier target flow block ag
   <data name="AppWindow_Notifications_LoadError_Title" xml:space="preserve"><value>Notifications could not be loaded</value></data>
   <data name="AppWindow_Notifications_SaveError_Title" xml:space="preserve"><value>Notifications could not be saved</value></data>
   <data name="AppWindow_itmOpenExampleProject_Text" xml:space="preserve"><value>Open example project...</value></data>
+  <data name="AppWindow_Notification_ProjectGuidChanged_Message" xml:space="preserve"><value>A new internal project GUID was generated: {0}</value></data>
 </root>

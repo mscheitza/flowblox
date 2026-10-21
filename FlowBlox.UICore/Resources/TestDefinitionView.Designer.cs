@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources
-{
+namespace FlowBlox.UICore.Resources {
     using System;
     
     
@@ -20,31 +19,26 @@ namespace FlowBlox.UICore.Resources
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class TestDefinitionView
-    {
+    public class TestDefinitionView {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal TestDefinitionView()
-        {
+        internal TestDefinitionView() {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.TestDefinitionView", typeof(TestDefinitionView).Assembly);
                     resourceMan = temp;
                 }
@@ -57,14 +51,11 @@ namespace FlowBlox.UICore.Resources
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
@@ -72,10 +63,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Apply ähnelt.
         /// </summary>
-        public static string Button_Apply
-        {
-            get
-            {
+        public static string Button_Apply {
+            get {
                 return ResourceManager.GetString("Button_Apply", resourceCulture);
             }
         }
@@ -83,10 +72,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
-        public static string Button_Back
-        {
-            get
-            {
+        public static string Button_Back {
+            get {
                 return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
@@ -94,10 +81,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Execute ähnelt.
         /// </summary>
-        public static string Button_Execute
-        {
-            get
-            {
+        public static string Button_Execute {
+            get {
                 return ResourceManager.GetString("Button_Execute", resourceCulture);
             }
         }
@@ -105,10 +90,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
-        public static string Button_Save
-        {
-            get
-            {
+        public static string Button_Save {
+            get {
                 return ResourceManager.GetString("Button_Save", resourceCulture);
             }
         }
@@ -116,10 +99,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Save and close ähnelt.
         /// </summary>
-        public static string Button_SaveAndClose
-        {
-            get
-            {
+        public static string Button_SaveAndClose {
+            get {
                 return ResourceManager.GetString("Button_SaveAndClose", resourceCulture);
             }
         }
@@ -127,10 +108,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Expectation target ähnelt.
         /// </summary>
-        public static string Column_ExpectationTarget
-        {
-            get
-            {
+        public static string Column_ExpectationTarget {
+            get {
                 return ResourceManager.GetString("Column_ExpectationTarget", resourceCulture);
             }
         }
@@ -138,10 +117,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Index ähnelt.
         /// </summary>
-        public static string Column_Index
-        {
-            get
-            {
+        public static string Column_Index {
+            get {
                 return ResourceManager.GetString("Column_Index", resourceCulture);
             }
         }
@@ -149,10 +126,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Comparison operator ähnelt.
         /// </summary>
-        public static string Column_Operator
-        {
-            get
-            {
+        public static string Column_Operator {
+            get {
                 return ResourceManager.GetString("Column_Operator", resourceCulture);
             }
         }
@@ -160,10 +135,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Value ähnelt.
         /// </summary>
-        public static string Column_Value
-        {
-            get
-            {
+        public static string Column_Value {
+            get {
                 return ResourceManager.GetString("Column_Value", resourceCulture);
             }
         }
@@ -171,10 +144,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Generator notes ähnelt.
         /// </summary>
-        public static string Expander_GeneratorHints_Header
-        {
-            get
-            {
+        public static string Expander_GeneratorHints_Header {
+            get {
                 return ResourceManager.GetString("Expander_GeneratorHints_Header", resourceCulture);
             }
         }
@@ -182,10 +153,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automatic regeneration during runtime start is only performed when this test case is marked as &quot;Required for runtime execution&quot; and generation strategies exist on the affected flow block. ähnelt.
         /// </summary>
-        public static string Expander_GeneratorHints_Note1
-        {
-            get
-            {
+        public static string Expander_GeneratorHints_Note1 {
+            get {
                 return ResourceManager.GetString("Expander_GeneratorHints_Note1", resourceCulture);
             }
         }
@@ -193,10 +162,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Minimum at the target flow block: define at least two expectations, one for the value and one for the dataset count. ähnelt.
         /// </summary>
-        public static string Expander_GeneratorHints_Note2
-        {
-            get
-            {
+        public static string Expander_GeneratorHints_Note2 {
+            get {
                 return ResourceManager.GetString("Expander_GeneratorHints_Note2", resourceCulture);
             }
         }
@@ -204,10 +171,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Recommended value expectation: use target &quot;First value&quot; or &quot;Any value&quot; and comparison &quot;equals&quot; with the expected value. ähnelt.
         /// </summary>
-        public static string Expander_GeneratorHints_Note3
-        {
-            get
-            {
+        public static string Expander_GeneratorHints_Note3 {
+            get {
                 return ResourceManager.GetString("Expander_GeneratorHints_Note3", resourceCulture);
             }
         }
@@ -215,10 +180,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Required count expectation: use target &quot;Number of datasets&quot; and comparison &quot;equals&quot; with the expected count. More expectation conditions usually improve generator output quality. ähnelt.
         /// </summary>
-        public static string Expander_GeneratorHints_Note4
-        {
-            get
-            {
+        public static string Expander_GeneratorHints_Note4 {
+            get {
                 return ResourceManager.GetString("Expander_GeneratorHints_Note4", resourceCulture);
             }
         }
@@ -226,10 +189,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Tip: Instead of &quot;Any value&quot;, you can use selection mode &quot;User input expected&quot;. This combines expectation and selection when downstream flow blocks should be executed. ähnelt.
         /// </summary>
-        public static string Expander_GeneratorHints_Note5
-        {
-            get
-            {
+        public static string Expander_GeneratorHints_Note5 {
+            get {
                 return ResourceManager.GetString("Expander_GeneratorHints_Note5", resourceCulture);
             }
         }
@@ -237,10 +198,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test cases and test expectations can be used by generators to derive targeted values based on a failed test case. ähnelt.
         /// </summary>
-        public static string Expander_GeneratorHints_Text
-        {
-            get
-            {
+        public static string Expander_GeneratorHints_Text {
+            get {
                 return ResourceManager.GetString("Expander_GeneratorHints_Text", resourceCulture);
             }
         }
@@ -248,10 +207,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test case guidance ähnelt.
         /// </summary>
-        public static string Expander_TestCaseHelp_Header
-        {
-            get
-            {
+        public static string Expander_TestCaseHelp_Header {
+            get {
                 return ResourceManager.GetString("Expander_TestCaseHelp_Header", resourceCulture);
             }
         }
@@ -259,10 +216,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die A test case can be executed in the flow block context and from the test view. If no current flow block is passed, the last assigned target flow block is used. ähnelt.
         /// </summary>
-        public static string Expander_TestCaseHelp_Note1
-        {
-            get
-            {
+        public static string Expander_TestCaseHelp_Note1 {
+            get {
                 return ResourceManager.GetString("Expander_TestCaseHelp_Note1", resourceCulture);
             }
         }
@@ -270,10 +225,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Important: If a preceding flow block is not executed, set required field values manually so downstream checks can run reliably. ähnelt.
         /// </summary>
-        public static string Expander_TestCaseHelp_Note2
-        {
-            get
-            {
+        public static string Expander_TestCaseHelp_Note2 {
+            get {
                 return ResourceManager.GetString("Expander_TestCaseHelp_Note2", resourceCulture);
             }
         }
@@ -281,10 +234,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Use an automatic selection mode when values should be determined from flow block execution. ähnelt.
         /// </summary>
-        public static string Expander_TestCaseHelp_Note3
-        {
-            get
-            {
+        public static string Expander_TestCaseHelp_Note3 {
+            get {
                 return ResourceManager.GetString("Expander_TestCaseHelp_Note3", resourceCulture);
             }
         }
@@ -292,10 +243,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Expectations are evaluated per field. If an expectation is not met, the test fails. Set &quot;Required for runtime execution&quot; only when this test should run automatically at runtime start. ähnelt.
         /// </summary>
-        public static string Expander_TestCaseHelp_Note4
-        {
-            get
-            {
+        public static string Expander_TestCaseHelp_Note4 {
+            get {
                 return ResourceManager.GetString("Expander_TestCaseHelp_Note4", resourceCulture);
             }
         }
@@ -303,10 +252,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Log level ähnelt.
         /// </summary>
-        public static string GridViewColumn_LogLevel
-        {
-            get
-            {
+        public static string GridViewColumn_LogLevel {
+            get {
                 return ResourceManager.GetString("GridViewColumn_LogLevel", resourceCulture);
             }
         }
@@ -314,10 +261,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Message ähnelt.
         /// </summary>
-        public static string GridViewColumn_Message
-        {
-            get
-            {
+        public static string GridViewColumn_Message {
+            get {
                 return ResourceManager.GetString("GridViewColumn_Message", resourceCulture);
             }
         }
@@ -325,10 +270,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Timestamp ähnelt.
         /// </summary>
-        public static string GridViewColumn_Timestamp
-        {
-            get
-            {
+        public static string GridViewColumn_Timestamp {
+            get {
                 return ResourceManager.GetString("GridViewColumn_Timestamp", resourceCulture);
             }
         }
@@ -336,10 +279,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die A test case describes a complete test run from the first executed flow block to the current or last assigned target flow block. If a flow block is executed, its activation requirements must be fulfilled, for example required field values and activation conditions. Required values to be set are marked, and additional guidance is available in the expanders below. ähnelt.
         /// </summary>
-        public static string Header_Description_Main
-        {
-            get
-            {
+        public static string Header_Description_Main {
+            get {
                 return ResourceManager.GetString("Header_Description_Main", resourceCulture);
             }
         }
@@ -347,21 +288,17 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test case configuration ähnelt.
         /// </summary>
-        public static string Header_Title_Main
-        {
-            get
-            {
+        public static string Header_Title_Main {
+            get {
                 return ResourceManager.GetString("Header_Title_Main", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die An executed flow block depends on this associated flow block. Enable execution so its required runtime state is initialized. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die An executed flow block depends on this associated flow block. Green indicates that its execution is enabled and the required runtime state will be initialized. ähnelt.
         /// </summary>
-        public static string Icon_AssociatedFlowBlockRequiredForExecution_Tooltip
-        {
-            get
-            {
+        public static string Icon_AssociatedFlowBlockRequiredForExecution_Tooltip {
+            get {
                 return ResourceManager.GetString("Icon_AssociatedFlowBlockRequiredForExecution_Tooltip", resourceCulture);
             }
         }
@@ -369,21 +306,17 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die This is the current target flow block. The test ends here and the test results are read from this flow block. This flow block must be executed for test execution in this context. ähnelt.
         /// </summary>
-        public static string Icon_TargetFlowBlock_Tooltip
-        {
-            get
-            {
+        public static string Icon_TargetFlowBlock_Tooltip {
+            get {
                 return ResourceManager.GetString("Icon_TargetFlowBlock_Tooltip", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This test configuration is required for execution. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This test configuration is required for execution. Green indicates that a valid value selection is configured. ähnelt.
         /// </summary>
-        public static string Icon_UIRequiredForExecution_FieldConfiguration_Tooltip
-        {
-            get
-            {
+        public static string Icon_UIRequiredForExecution_FieldConfiguration_Tooltip {
+            get {
                 return ResourceManager.GetString("Icon_UIRequiredForExecution_FieldConfiguration_Tooltip", resourceCulture);
             }
         }
@@ -391,21 +324,17 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Hide other flow blocks in the last layer ähnelt.
         /// </summary>
-        public static string Label_HideLastLayerNeighbours
-        {
-            get
-            {
+        public static string Label_HideLastLayerNeighbours {
+            get {
                 return ResourceManager.GetString("Label_HideLastLayerNeighbours", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Hides sibling flow blocks in the target layer in flow-block context. In the test view without flow-block context, all flow blocks remain visible. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Hides sibling flow blocks in the target layer and their entire successor trees in flow-block context. In the test view without flow-block context, all flow blocks remain visible. ähnelt.
         /// </summary>
-        public static string Label_HideLastLayerNeighbours_Tooltip
-        {
-            get
-            {
+        public static string Label_HideLastLayerNeighbours_Tooltip {
+            get {
                 return ResourceManager.GetString("Label_HideLastLayerNeighbours_Tooltip", resourceCulture);
             }
         }
@@ -413,10 +342,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Name: ähnelt.
         /// </summary>
-        public static string Label_Name
-        {
-            get
-            {
+        public static string Label_Name {
+            get {
                 return ResourceManager.GetString("Label_Name", resourceCulture);
             }
         }
@@ -424,10 +351,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Required for runtime execution ähnelt.
         /// </summary>
-        public static string Label_RequiredForExecution
-        {
-            get
-            {
+        public static string Label_RequiredForExecution {
+            get {
                 return ResourceManager.GetString("Label_RequiredForExecution", resourceCulture);
             }
         }
@@ -435,10 +360,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Selected test configuration ähnelt.
         /// </summary>
-        public static string Label_SelectedConfiguration
-        {
-            get
-            {
+        public static string Label_SelectedConfiguration {
+            get {
                 return ResourceManager.GetString("Label_SelectedConfiguration", resourceCulture);
             }
         }
@@ -446,10 +369,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Open in editor ähnelt.
         /// </summary>
-        public static string MenuItem_OpenInEditor
-        {
-            get
-            {
+        public static string MenuItem_OpenInEditor {
+            get {
                 return ResourceManager.GetString("MenuItem_OpenInEditor", resourceCulture);
             }
         }
@@ -460,10 +381,8 @@ namespace FlowBlox.UICore.Resources
         ///Message(s):
         ///{0} ähnelt.
         /// </summary>
-        public static string Message_RuntimeInitializationFailed
-        {
-            get
-            {
+        public static string Message_RuntimeInitializationFailed {
+            get {
                 return ResourceManager.GetString("Message_RuntimeInitializationFailed", resourceCulture);
             }
         }
@@ -471,10 +390,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die A test configuration can be defined for each field. ähnelt.
         /// </summary>
-        public static string StackPanel_SelectedConfiguration_Tooltip
-        {
-            get
-            {
+        public static string StackPanel_SelectedConfiguration_Tooltip {
+            get {
                 return ResourceManager.GetString("StackPanel_SelectedConfiguration_Tooltip", resourceCulture);
             }
         }
@@ -482,10 +399,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test expectations ähnelt.
         /// </summary>
-        public static string TabItem_Expectations
-        {
-            get
-            {
+        public static string TabItem_Expectations {
+            get {
                 return ResourceManager.GetString("TabItem_Expectations", resourceCulture);
             }
         }
@@ -493,10 +408,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Runtime logs ähnelt.
         /// </summary>
-        public static string TabItem_RuntimeLogs
-        {
-            get
-            {
+        public static string TabItem_RuntimeLogs {
+            get {
                 return ResourceManager.GetString("TabItem_RuntimeLogs", resourceCulture);
             }
         }
@@ -504,10 +417,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test results ähnelt.
         /// </summary>
-        public static string TabItem_TestResults
-        {
-            get
-            {
+        public static string TabItem_TestResults {
+            get {
                 return ResourceManager.GetString("TabItem_TestResults", resourceCulture);
             }
         }
@@ -515,10 +426,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit in editor ähnelt.
         /// </summary>
-        public static string Text_EditInEditor
-        {
-            get
-            {
+        public static string Text_EditInEditor {
+            get {
                 return ResourceManager.GetString("Text_EditInEditor", resourceCulture);
             }
         }
@@ -526,10 +435,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Execute ähnelt.
         /// </summary>
-        public static string Text_Execute
-        {
-            get
-            {
+        public static string Text_Execute {
+            get {
                 return ResourceManager.GetString("Text_Execute", resourceCulture);
             }
         }
@@ -537,10 +444,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Field label ähnelt.
         /// </summary>
-        public static string Text_FieldLabel
-        {
-            get
-            {
+        public static string Text_FieldLabel {
+            get {
                 return ResourceManager.GetString("Text_FieldLabel", resourceCulture);
             }
         }
@@ -548,10 +453,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Flow block ähnelt.
         /// </summary>
-        public static string Text_FlowBlock
-        {
-            get
-            {
+        public static string Text_FlowBlock {
+            get {
                 return ResourceManager.GetString("Text_FlowBlock", resourceCulture);
             }
         }
@@ -559,10 +462,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Selection mode ähnelt.
         /// </summary>
-        public static string Text_SelectionMode
-        {
-            get
-            {
+        public static string Text_SelectionMode {
+            get {
                 return ResourceManager.GetString("Text_SelectionMode", resourceCulture);
             }
         }
@@ -570,10 +471,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please enter the index... ähnelt.
         /// </summary>
-        public static string Text_SelectionMode_Index_Watermark
-        {
-            get
-            {
+        public static string Text_SelectionMode_Index_Watermark {
+            get {
                 return ResourceManager.GetString("Text_SelectionMode_Index_Watermark", resourceCulture);
             }
         }
@@ -581,10 +480,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die To determine a field value automatically from a flow block execution, use a selection mode from the &quot;Automatic selection&quot; category. To define a selection and an expectation at the same time, use &quot;User input expected&quot;. To set a value manually (for example without execution) for a field, use &quot;Manual input&quot;. ähnelt.
         /// </summary>
-        public static string Text_SelectionMode_InfoTooltip
-        {
-            get
-            {
+        public static string Text_SelectionMode_InfoTooltip {
+            get {
                 return ResourceManager.GetString("Text_SelectionMode_InfoTooltip", resourceCulture);
             }
         }
@@ -592,10 +489,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test expectations ähnelt.
         /// </summary>
-        public static string Text_TestExpectations
-        {
-            get
-            {
+        public static string Text_TestExpectations {
+            get {
                 return ResourceManager.GetString("Text_TestExpectations", resourceCulture);
             }
         }
@@ -603,10 +498,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die User input / field value ähnelt.
         /// </summary>
-        public static string Text_UserInputFieldValue
-        {
-            get
-            {
+        public static string Text_UserInputFieldValue {
+            get {
                 return ResourceManager.GetString("Text_UserInputFieldValue", resourceCulture);
             }
         }
@@ -614,10 +507,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Test definition ähnelt.
         /// </summary>
-        public static string Title
-        {
-            get
-            {
+        public static string Title {
+            get {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
@@ -625,10 +516,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
-        public static string Toolbar_Add
-        {
-            get
-            {
+        public static string Toolbar_Add {
+            get {
                 return ResourceManager.GetString("Toolbar_Add", resourceCulture);
             }
         }
@@ -636,10 +525,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
-        public static string Toolbar_Delete
-        {
-            get
-            {
+        public static string Toolbar_Delete {
+            get {
                 return ResourceManager.GetString("Toolbar_Delete", resourceCulture);
             }
         }

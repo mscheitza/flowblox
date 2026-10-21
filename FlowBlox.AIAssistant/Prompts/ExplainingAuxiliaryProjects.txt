@@ -1,4 +1,4 @@
-Auxiliary projects
+# Explaining Auxiliary Projects
 
 Use only for small helper flows that obtain information missing from the user request or main project, such as an SQL schema, web content, or search result.
 
@@ -13,10 +13,10 @@ Default workflow:
 3. If changes are needed, call `AuxiliaryProjectEditing(EDIT)` and use the normal project tools.
 4. While it is active, validate the smallest relevant path with `RunProjectDebugTest(reason,inputParameters)`. Read protocol output directly, generated results/field changes with `GetLastDebugArtefact`, and truncated debug values with `InspectFieldValue`. Fix and repeat only as needed.
 5. Hard completion rule: after `EDIT` and all required editing/debugging steps, always finish with `AuxiliaryProjectEditing(SAVE)` (closes by default).
-   - Verify `isOpen=false` with `GetAuxiliaryProjects` before reporting completion or using the project through `ExecuteProject`.
+   - Verify `isOpen=false` with `GetAuxiliaryProjects` before reporting completion or using the project through `ExecuteExternalProject`.
    - Keep it open only while work or a user decision is pending; never leave an edited project unresolved when the requested work is complete.
    - Use `CLOSE` only to discard unsaved changes.
-6. For regular use, call `ExecuteProject(projectFile,reason,inputParameters,outputFields)` with the path from `GetAuxiliaryProjects`. It returns declared project outputs without another token-intensive debug run. Use `InspectOutputFieldValue` only for truncated outputs.
+6. For regular use, call `ExecuteExternalProject(projectFile,reason,inputParameters,outputFields)` with the path from `GetAuxiliaryProjects`. It returns declared project outputs without another token-intensive debug run. Use `InspectOutputFieldValue` only for truncated outputs.
 
 Create/update contract:
 - `metadata_only`: create an empty project or update its description; `description` is required.

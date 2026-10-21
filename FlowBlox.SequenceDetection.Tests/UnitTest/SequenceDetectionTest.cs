@@ -120,5 +120,27 @@ namespace FlowBlox.SequenceDetectionTests.UnitTest
             List<string> result = new List<string>();
             SequenceSearch.Instance.SearchFor(c1, patternDescription!, ref result);
         }
+
+        [TestMethod]
+        public void FindPatternForBooksToScrape_ProductRatingWithDuplicateRating()
+        {
+            var content = ResourceUtil.GetResourceAsStringRelatedTo<SequenceDetectionTest>(
+                Assembly.GetExecutingAssembly(),
+                "Mockup.HTMLContent_DuplicateMatch_MultilineTermination.html");
+            var pattern = SequenceDetectionService.Instance.Detect(new SequenceDetectionInputData
+            {
+                Entries =
+                [
+                    new SequenceDetectionInputEntry(content, "Two", 1)
+                ]
+            });
+
+            Assert.IsNotNull(pattern);
+
+            var results = new List<string>();
+            SequenceSearch.Instance.SearchFor(content, pattern, ref results);
+
+            CollectionAssert.AreEqual(new[] { "Two" }, results);
+        }
     }
 }

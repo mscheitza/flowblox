@@ -1,4 +1,4 @@
-Explaining "FlowBlock manages object":
+# Explaining FlowBlocks Managing an Object
 
 - Some flow blocks initialize and manage a runtime object (for example XmlDocumentFlowBlock, JsonObjectFlowBlock).
 - Downstream blocks on the same path work on this managed object (node writers, selectors, outputs).

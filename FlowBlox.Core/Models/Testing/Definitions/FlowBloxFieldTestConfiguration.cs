@@ -35,9 +35,21 @@ namespace FlowBlox.Core.Models.Testing
                 {
                     _uIRequiredForExecution = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(UIRequirementSatisfied));
                 }
             }
         }
+
+        [JsonIgnore]
+        public bool UIRequirementSatisfied => !UIRequiredForExecution || SelectionMode switch
+        {
+            FlowBloxTestConfigurationSelectionMode.UserInput => !string.IsNullOrWhiteSpace(UserInput),
+            FlowBloxTestConfigurationSelectionMode.UserInput_ExpectedValue => !string.IsNullOrWhiteSpace(UserInput),
+            FlowBloxTestConfigurationSelectionMode.First => true,
+            FlowBloxTestConfigurationSelectionMode.Index => Index >= 0,
+            FlowBloxTestConfigurationSelectionMode.Last => true,
+            _ => false
+        };
 
         public FieldElement FieldElement
         {
@@ -73,6 +85,7 @@ namespace FlowBlox.Core.Models.Testing
                     _selectionMode = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsIndexVisible));
+                    OnPropertyChanged(nameof(UIRequirementSatisfied));
                 }
             }
         }
@@ -128,6 +141,7 @@ namespace FlowBlox.Core.Models.Testing
                 {
                     _userInput = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(UIRequirementSatisfied));
                 }
             }
         }
@@ -194,6 +208,7 @@ namespace FlowBlox.Core.Models.Testing
                 {
                     _index = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(UIRequirementSatisfied));
                 }
             }
         }

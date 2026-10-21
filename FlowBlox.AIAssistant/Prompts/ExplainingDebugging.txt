@@ -1,4 +1,4 @@
-Debugging Guide (compact)
+# Explaining Debugging
 
 Verification default:
 - After creating a complete flow or making larger flow behavior changes, verify the changed behavior with a debug/test run before finishing, unless the user explicitly says not to run verification.
@@ -33,4 +33,7 @@ Field-value limiting:
 - For detailed navigation inside truncated or oversized debug field values, use `InspectFieldValue`.
 - `InspectFieldValue.searchMode=StartAt` returns content starting at `searchIndex` or the first matched `searchValues` marker.
 - `InspectFieldValue.searchMode=LookAround` treats `searchIndex` or the first matched `searchValues` marker as the center and returns context before and after it.
+- For `InspectFieldValue` and `InspectOutputFieldValue`, set optional `maxTokens` to the smallest useful scope; omit it only when the configured maximum is genuinely needed. Start small and repeat with a larger scope only if the result lacks required context.
+- To verify whether a value occurs, search a distinctive fragment with a small budget. To derive a selector, use `LookAround` and request only enough surrounding content to identify stable boundaries.
+- Example: if a user supplied an absolute link but the document may contain a relative URL, search distinctive link/path fragments first; about 50-100 tokens often suffice to confirm the representation and inspect its immediate surroundings.
 - For generated result datasets, `GetLastDebugArtefact` returns `resultDatasetCount`, `includedDatasetCount`, and whether later datasets were omitted due to the field-value token limit.

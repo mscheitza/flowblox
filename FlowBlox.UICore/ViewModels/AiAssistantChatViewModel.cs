@@ -55,6 +55,7 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand CopyTranscriptEntryCommand { get; }
         public RelayCommand OpenTranscriptEntryInEditorCommand { get; }
         public RelayCommand OpenCommunicationProtocolDirectoryCommand { get; }
+        public RelayCommand OpenConversationSummaryCommand { get; }
         public RelayCommand UndoProjectStateCommand { get; }
         public RelayCommand RedoProjectStateCommand { get; }
         public RelayCommand ResetTokenUsageCommand { get; }
@@ -93,6 +94,9 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public bool CanEditInput => !IsBusy;
+        public string CurrentConversationSummary => _service.CurrentConversationSummary;
+        public bool HasConversationSummary => !string.IsNullOrWhiteSpace(CurrentConversationSummary);
+
         public bool CanGoBackToHistory
         {
             get => !IsBusy && _canGoBackToHistory;
@@ -162,6 +166,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public event EventHandler? NewHistoryRequested;
         public event EventHandler? HistoryRequested;
+        public event EventHandler? ConversationSummaryRequested;
         public event EventHandler? BeforeAutomaticLayoutAdjustment;
         private bool _isProviderConfigured;
 
@@ -182,6 +187,7 @@ namespace FlowBlox.UICore.ViewModels
             _service.TranscriptLineAdded += Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged += Service_EstimatedUsedTokensChanged;
             _service.CommunicationStatusChanged += Service_CommunicationStatusChanged;
+            _service.ConversationSummaryChanged += Service_ConversationSummaryChanged;
             _service.BeforeAutomaticLayoutAdjustment += Service_BeforeAutomaticLayoutAdjustment;
 
             NewHistoryCommand = new RelayCommand(() => NewHistoryRequested?.Invoke(this, EventArgs.Empty), () => !IsBusy);
@@ -191,6 +197,9 @@ namespace FlowBlox.UICore.ViewModels
             CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
             OpenTranscriptEntryInEditorCommand = new RelayCommand(OpenTranscriptEntryInEditor);
             OpenCommunicationProtocolDirectoryCommand = new RelayCommand(OpenCommunicationProtocolDirectory);
+            OpenConversationSummaryCommand = new RelayCommand(
+                () => ConversationSummaryRequested?.Invoke(this, EventArgs.Empty),
+                () => HasConversationSummary);
             UndoProjectStateCommand = new RelayCommand(async () => await UndoProjectStateAsync(), () => CanUndoProjectState);
             RedoProjectStateCommand = new RelayCommand(async () => await RedoProjectStateAsync(), () => CanRedoProjectState);
             ResetTokenUsageCommand = new RelayCommand(ResetTokenUsage, () => HasEstimatedUsedTokens);
@@ -393,6 +402,24 @@ namespace FlowBlox.UICore.ViewModels
             CommunicationStatusText = text;
         }
 
+        private void Service_ConversationSummaryChanged(object? sender, EventArgs e)
+        {
+            void NotifySummaryChanged()
+            {
+                OnPropertyChanged(nameof(CurrentConversationSummary));
+                OnPropertyChanged(nameof(HasConversationSummary));
+                OpenConversationSummaryCommand.Invalidate();
+            }
+
+            if (_uiContext != null && _uiContext != SynchronizationContext.Current)
+            {
+                _uiContext.Post(_ => NotifySummaryChanged(), null);
+                return;
+            }
+
+            NotifySummaryChanged();
+        }
+
         private void ResetTokenUsage()
         {
             _service.ResetEstimatedUsedTokens();
@@ -412,7 +439,7 @@ namespace FlowBlox.UICore.ViewModels
                 !ConfirmExternalProjectDebugExecution(request))
                 return false;
 
-            if (string.Equals(request.ToolName, "ExecuteProject", StringComparison.OrdinalIgnoreCase) &&
+            if (string.Equals(request.ToolName, "ExecuteExternalProject", StringComparison.OrdinalIgnoreCase) &&
                 !ConfirmProjectExecution(request))
                 return false;
 
@@ -818,6 +845,7 @@ namespace FlowBlox.UICore.ViewModels
             _service.TranscriptLineAdded -= Service_TranscriptLineAdded;
             _service.EstimatedUsedTokensChanged -= Service_EstimatedUsedTokensChanged;
             _service.CommunicationStatusChanged -= Service_CommunicationStatusChanged;
+            _service.ConversationSummaryChanged -= Service_ConversationSummaryChanged;
             _service.BeforeAutomaticLayoutAdjustment -= Service_BeforeAutomaticLayoutAdjustment;
         }
     }

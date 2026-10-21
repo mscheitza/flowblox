@@ -158,6 +158,15 @@
                                                     Style="{StaticResource FlowBlox.ToolbarIconBase}" />
                     </Button>
 
+                    <Button Style="{StaticResource ToolbarButtonStyle}"
+                            ToolTip="{x:Static resources:AiAssistantControl.Tooltip_OpenConversationSummary}"
+                            Command="{Binding ChatViewModel.OpenConversationSummaryCommand}">
+                        <iconPacks:PackIconMaterial Kind="DatabaseEyeOutline"
+                                                    Width="18"
+                                                    Height="18"
+                                                    Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                    </Button>
+
                     <Button x:Name="SettingsButton"
                             Style="{StaticResource ToolbarButtonStyle}"
                             ToolTip="{x:Static resources:AiAssistantControl.Tooltip_Configure}">

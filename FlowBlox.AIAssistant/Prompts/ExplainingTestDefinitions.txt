@@ -2,32 +2,46 @@ Use this only when the user explicitly asks to create/configure test cases.
 If setup complexity is high or scope is unclear, load deep-dive catalog key `explaining_test_definitions_deep_dive`.
 
 Goal:
-- Create a `FlowBloxTestDefinition` managed object.
-- Link it to a target flow block.
+- If the user provided test data for external or generated content, verify those values against an actual debug result before creating the test definition.
+- Ensure the flow-block connections from the start block through the intended target are correct.
+- Create only a `FlowBloxTestDefinition` managed object, preferably with just its name.
+- Link it to the target flow block and let synchronization create all test data structures.
 - Inspect generated test rows/entries.
-- Apply focused updates to test configuration.
+- Apply focused updates only to the generated test configuration.
+
+Generator-driven test setup:
+- When the user requests a test-driven approach with generators, create/configure the test definition when the successively built flow first reaches a generator-dependent target, then follow `explaining_generators` and call `RunGenerationStrategies`.
+- The Assistant must provide test evidence and expectations, not manually generate the selector/pattern/configuration that the generation strategy is meant to produce.
+
+Hard rule -- never create test data manually:
+- Never create, add, replace, or pre-populate `FlowBloxTestDefinition.Entries` / `FlowBlockTestDataset` objects.
+- Never create, add, replace, or pre-populate `FlowBloxFieldTestConfiguration` objects.
+- These objects are owned by automatic synchronization when the definition is linked to a target flow block. Only update the synchronized objects after reading them with `GetComponentSnapshot`.
 
 Recommended tool-call order:
-1. `CreateManagedObject` with type `FlowBloxTestDefinition`.
-2. `UpdateFlowBlock` to connect the created test definition in `TestDefinitions` (exact property name).
+1. If the user supplies expected values/counts for dynamic content, run `RunProjectDebugTest` first. Use `GetLastDebugArtefact`, then `InspectFieldValue` with `searchValues` to verify that the values actually occur before creating the test definition. For links, also search likely relative and absolute URL variants.
+2. Ensure all flow-block connections up to the target are correct; synchronization derives its scope from that connected flow.
+3. `CreateManagedObject` with type `FlowBloxTestDefinition`, preferably setting only `Name`. Do not supply `Entries` or nested test configuration.
+4. `UpdateFlowBlock` to connect the created test definition in `TestDefinitions` (exact property name).
    Use standard link operation, for example `path=/TestDefinitions/Link` with value `{"resolveManagedObjectByName":"<testDefinitionName>"}`.
-3. `GetComponentSnapshot` with `kind=managedObject` and `name=<testDefinitionName>` to inspect generated `Entries`.
-4. Before any write updates, call kind info tools (prefer `GetTypeKindsInfo`, optionally `GetManagedObjectKindsInfo`) for `FlowBloxTestDefinition` and nested types to confirm paths/options.
-5. `UpdateManagedObject` with precise path updates to configure:
+5. `GetComponentSnapshot` with `kind=managedObject` and `name=<testDefinitionName>` to discover the automatically generated `Entries`, datasets, and field configurations.
+6. Before any write updates, call kind info tools (prefer `GetTypeKindsInfo`, optionally `GetManagedObjectKindsInfo`) for `FlowBloxTestDefinition` and nested types to confirm paths/options.
+7. `UpdateManagedObject` with precise path updates to existing synchronized objects to configure:
 - per-entry execution behavior,
 - field selection mode,
 - user input / expected values,
 - expectation conditions.
-6. Optionally run `RunTestDefinition` when the user requests execution or when generator troubleshooting requires test protocol/test results.
+8. Optionally run `RunTestDefinition` when the user requests execution or when generator troubleshooting requires test protocol/test results.
 
 Important behavior:
 - Linking a test definition in a flow block's `TestDefinitions` auto-synchronizes rows from start to that target and sets that target row's `Execute=true`.
+- Connecting/linking is the creation trigger for `FlowBlockTestDataset` and `FlowBloxFieldTestConfiguration`; a snapshot taken before linking is not a substitute for the required post-link snapshot.
 - The link serves three purposes: assignment to the target/generator, convenient opening in flow-block context, and target/scope resolution. If opened from TestView without a current flow block, the latest linked/synchronized target in execution order is used.
 - One test definition may be linked to multiple target flow blocks and can contain both branches after a shared predecessor. Do not create a separate definition merely because the flow branches.
 - For each entry with `Execute=true`, activation prerequisites must be satisfied:
   - activation conditions of the flow block,
   - required fields must have a valid value strategy (at least manual input or an automatic selection mode),
-  - for user fields (`UserFieldType=Input` or `UserFieldType=Memory`), prefer `SelectionMode=Keep` to preserve the current project value; use another mode only when there is a clear reason,
+  - for user-field configurations used by the test (`UserFieldType=Input`, and relevant `Memory` fields), use `SelectionMode=UserInput` and set `UserInput` explicitly. Do not rely on `Keep`: project defaults and locally loaded values can change, making the test non-reproducible,
   - for properties marked with `AssociatedFlowBlockResolvableAttribute`, resolve required associated flow blocks with `ResolveAssociatedFlowBlock` and ensure they are covered by the test setup.
 - UI markers distinguish these prerequisites: the orange requirement marker denotes a required field value; the purple link marker denotes an associated flow block whose runtime state must be initialized, normally by setting its dataset `Execute=true`.
 - `RequiredForExecution=true` means this test definition is executed automatically at runtime start. If an expectation fails, FlowBlox can run generation strategies on the affected flow block and repeat the step once.

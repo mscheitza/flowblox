@@ -15,6 +15,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             new JObject
             {
                 ["flowBlockName"] = "string",
+                ["maxProtocolEntries"] = "optional: int (default: 20). Returns the latest entries in chronological order.",
                 ["usageHint"] = "After generator configuration on a flow block, run this tool to generate values. Then verify generated target values via GetComponentSnapshot."
             });
 
@@ -23,6 +24,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             try
             {
                 var flowBlockName = (args.Value<string>("flowBlockName") ?? string.Empty).Trim();
+                var maxProtocolEntries = Math.Max(1, args.Value<int?>("maxProtocolEntries") ?? 20);
                 if (string.IsNullOrWhiteSpace(flowBlockName))
                 {
                     return ToolHandlerUtilities.Fail("flowBlockName is required.");
@@ -72,13 +74,16 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
                 ct.ThrowIfCancellationRequested();
 
-                var protocol = new JArray(protocolEntries);
+                var protocolEntryCountTotal = protocolEntries.Count;
+                var protocol = ProtocolEntryWindowing.TakeLastInOriginalOrder(protocolEntries, maxProtocolEntries);
                 var payload = new JObject
                 {
                     ["flowBlockName"] = flowBlock.Name,
                     ["generationStrategyCount"] = flowBlock.GenerationStrategies.Count,
                     ["success"] = success,
                     ["protocolEntryCount"] = protocol.Count,
+                    ["protocolEntryCountTotal"] = protocolEntryCountTotal,
+                    ["maxProtocolEntries"] = maxProtocolEntries,
                     ["protocol"] = protocol
                 };
 

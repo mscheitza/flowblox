@@ -46,8 +46,11 @@ namespace FlowBlox.SequenceDetection
 
                 var regex = new Regex(RegexUtil.ExcapeRegexValue(entry.Match));
                 var matchCollection = regex.Matches(entry.Content);
+                Diagnostics.SequenceDetectionTraceWriter.Write(
+                    $"Match '{entry.Match}': {matchCollection.Count} candidate occurrence(s), expected result count {entry.Count}.");
                 foreach (Match match in matchCollection)
-                {   
+                {
+                    Diagnostics.SequenceDetectionTraceWriter.Write($"Starting occurrence at index {match.Index}.");
                     tasks.Add(Task.Run(() =>
                     {
                         var adjustableMatch = new AdjustableMatch(match.Value, match.Index, match.Length);
@@ -76,7 +79,10 @@ namespace FlowBlox.SequenceDetection
 
                 var pattern = completedTask.GetAwaiter().GetResult();
                 if (pattern == null)
+                {
+                    Diagnostics.SequenceDetectionTraceWriter.Write("Occurrence rejected without a pattern.");
                     continue;
+                }
 
                 cancellationToken.Cancel();
                 return pattern;

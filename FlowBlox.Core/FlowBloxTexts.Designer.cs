@@ -376,7 +376,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Controls randomness of generated values. Use 0 for deterministic results. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional sampling temperature. Leave empty to use the provider default; this is recommended because some models do not support 0. ähnelt.
         /// </summary>
         public static string AIPropertyValueGenerationStrategy_Temperature_Tooltip {
             get {
@@ -1096,6 +1096,24 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Summarization style ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_SummarizationStyle {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_SummarizationStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls how conversation history, current project state, decisions, diagnostics, and reusable FlowBlox knowledge are organized in the durable summary. ähnelt.
+        /// </summary>
+        public static string AssistantConfiguration_SummarizationStyle_Tooltip {
+            get {
+                return ResourceManager.GetString("AssistantConfiguration_SummarizationStyle_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Summary compaction rate ähnelt.
         /// </summary>
         public static string AssistantConfiguration_SummaryCompactionRate {
@@ -1155,6 +1173,24 @@ namespace FlowBlox.Core {
         public static string AssistantOptionsAccessLevel_ReadWrite {
             get {
                 return ResourceManager.GetString("AssistantOptionsAccessLevel_ReadWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Detailed project memory (classic) ähnelt.
+        /// </summary>
+        public static string AssistantSummarizationStyle_DetailedProjectMemory {
+            get {
+                return ResourceManager.GetString("AssistantSummarizationStyle_DetailedProjectMemory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Structured project history and memory ähnelt.
+        /// </summary>
+        public static string AssistantSummarizationStyle_StructuredHistoricalMemory {
+            get {
+                return ResourceManager.GetString("AssistantSummarizationStyle_StructuredHistoricalMemory", resourceCulture);
             }
         }
         
@@ -6620,7 +6656,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value. Required when a fallback value is configured. ähnelt.
         /// </summary>
         public static string JPathMultiSelectorMappingEntry_RowPath_Tooltip {
             get {
@@ -6701,7 +6737,7 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value. Required when a fallback value is configured. ähnelt.
         /// </summary>
         public static string JPathSelectorFlowBlock_RowPath_Tooltip {
             get {
@@ -8937,6 +8973,132 @@ namespace FlowBlox.Core {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Body output ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_BodyMode {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_BodyMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls whether body paragraphs are omitted, included as plain text, or enclosed in &lt;body&gt; tags. ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_BodyMode_Tooltip {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_BodyMode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extracts paragraph text from the headers, body, and footers of a DOCX document. ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_Description {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Extract text from OpenXML Word document ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_DisplayName {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Footer output ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_FooterMode {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_FooterMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls whether footer paragraphs are omitted, included as plain text, or enclosed in &lt;footer&gt; tags. ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_FooterMode_Tooltip {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_FooterMode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Advanced settings ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_Groups_Advanced {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_Groups_Advanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Header output ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_HeaderMode {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_HeaderMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Controls whether header paragraphs are omitted, included as plain text, or enclosed in &lt;header&gt; tags. ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_HeaderMode_Tooltip {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_HeaderMode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Text could not be extracted from the OpenXML Word document. ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_Notification_FailedToExtractText {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_Notification_FailedToExtractText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Split at page breaks ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_SplitAtPageBreaks {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_SplitAtPageBreaks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Creates one result per explicit or saved rendered page break. DOCX does not store reliable layout page boundaries, so pagination can differ when the document is rendered. ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_SplitAtPageBreaks_Tooltip {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_SplitAtPageBreaks_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Word document ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_WordDocumentField {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_WordDocumentField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DOCX document as a byte array, Base64 string, or existing file path. ähnelt.
+        /// </summary>
+        public static string OpenXml2TextFlowBlock_WordDocumentField_Tooltip {
+            get {
+                return ResourceManager.GetString("OpenXml2TextFlowBlock_WordDocumentField_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Replaces FlowBlox field placeholders throughout a DOCX template while preserving its formatting, headers, and footers. ähnelt.
         /// </summary>
         public static string OpenXmlTemplateFlowBlock_Description {
@@ -8969,6 +9131,33 @@ namespace FlowBlox.Core {
         public static string OpenXmlTemplateFlowBlock_TemplateField_Tooltip {
             get {
                 return ResourceManager.GetString("OpenXmlTemplateFlowBlock_TemplateField_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Exclude ähnelt.
+        /// </summary>
+        public static string OpenXmlTextSectionMode_Exclude {
+            get {
+                return ResourceManager.GetString("OpenXmlTextSectionMode_Exclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Include without tags ähnelt.
+        /// </summary>
+        public static string OpenXmlTextSectionMode_Include {
+            get {
+                return ResourceManager.GetString("OpenXmlTextSectionMode_Include", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Include with tags ähnelt.
+        /// </summary>
+        public static string OpenXmlTextSectionMode_IncludeWithTags {
+            get {
+                return ResourceManager.GetString("OpenXmlTextSectionMode_IncludeWithTags", resourceCulture);
             }
         }
         

@@ -12,6 +12,12 @@ Core model (exact types/properties):
 - Assertions: `FlowBloxFieldTestConfiguration.ExpectationConditions` (`ExpectationCondition`)
 - Count assertion target: `ExpectationCondition.ExpectationConditionTarget=NumberOfDatasets`
 
+Non-negotiable creation rule:
+- Create only the `FlowBloxTestDefinition` (preferably with just `Name`) and link it to the target flow block.
+- Never manually create, add, replace, or pre-populate `Entries`, `FlowBlockTestDataset`, or `FlowBloxFieldTestConfiguration` objects. Linking runs automatic synchronization and creates them from the connected start-to-target flow.
+- Immediately take a managed-object snapshot after linking, then update only the synchronized datasets/configurations returned by that snapshot (for example `Execute`, `SelectionMode`, `UserInput`, and `ExpectationConditions`).
+- Therefore, ensure the flow-block connections are correct before linking the definition; they determine which datasets synchronization produces.
+
 Link/scope semantics:
 - Linking a test definition to a flow block synchronizes `Entries` from start flow block up to that linked target.
 - You do not need to link every flow block.
@@ -23,8 +29,13 @@ Link/scope semantics:
 
 Execution-result semantics:
 - Use `RunTestDefinition` to execute test definitions via AI tools.
-- It returns protocol logs and serialized `testResults` for the target flow block.
+- It returns protocol logs, serialized target `testResults`, and `fieldValueAssignments`.
 - `targetFlowBlockName` is optional; if omitted, latest linked flow block is used.
+
+Evidence before test creation:
+- When the user provides expected values or counts for dynamic/external content, verify them before creating the test definition: run `RunProjectDebugTest`, locate the relevant generated result with `GetLastDebugArtefact`, and use `InspectFieldValue.searchValues` against the actual content.
+- Do not assume supplied text occurs verbatim. For links, explicitly check relative and absolute URL forms; use the verified representation when configuring expectations.
+- For every user-field configuration used by the test, use deterministic manual input: set `SelectionMode=UserInput` and `UserInput` explicitly. Do not use `Keep` for test inputs because project defaults and locally loaded values can vary.
 
 Validity rules (must enforce):
 - `ExpectationConditions` are evaluated only when `FlowBlockTestDataset.Execute=true`.

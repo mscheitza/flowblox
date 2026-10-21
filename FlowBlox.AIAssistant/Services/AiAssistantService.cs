@@ -11,6 +11,7 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Services;
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.Compression;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Json;
 using Newtonsoft.Json;
@@ -39,6 +40,7 @@ namespace FlowBlox.AIAssistant.Services
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
         public event EventHandler<int>? EstimatedUsedTokensChanged;
         public event EventHandler<AssistantCommunicationStatusChangedEventArgs>? CommunicationStatusChanged;
+        public event EventHandler? ConversationSummaryChanged;
         public event EventHandler? BeforeAutomaticLayoutAdjustment;
 
         public AiAssistantService(
@@ -67,6 +69,7 @@ namespace FlowBlox.AIAssistant.Services
             }
 
             RaiseEstimatedUsedTokensChanged(estimatedUsedTokens);
+            ConversationSummaryChanged?.Invoke(this, EventArgs.Empty);
         }
 
 
@@ -93,8 +96,14 @@ namespace FlowBlox.AIAssistant.Services
                 session.Messages.AddRange(sessionMessages);
                 session.SummarizedMessageCount = Math.Clamp(session.SummarizedMessageCount, 0, session.Messages.Count);
                 _session = session;
+                ExplanationSessionStore.Restore(
+                    session.SessionId,
+                    (history?.LoadedExplanationKeys ?? [])
+                        .Where(IsLoadableExplanationKey));
                 RaiseEstimatedUsedTokensChanged(session.EstimatedUsedTokens);
             }
+
+            ConversationSummaryChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateHistorySessionMetadata(AiAssistantHistoryDocument history)
@@ -109,6 +118,7 @@ namespace FlowBlox.AIAssistant.Services
                 history.ConversationSummary = session.ConversationSummary;
                 history.SummarizedMessageCount = session.SummarizedMessageCount;
                 history.EstimatedUsedTokens = session.EstimatedUsedTokens;
+                history.LoadedExplanationKeys = ExplanationSessionStore.GetLoadedKeys(session.SessionId).ToList();
                 history.SessionMessages = session.Messages
                     .Where(x => !string.IsNullOrWhiteSpace(x?.CompleteMessage))
                     .Select(x => x.Clone())
@@ -122,6 +132,15 @@ namespace FlowBlox.AIAssistant.Services
             {
                 lock (_sessionSync)
                     return Math.Max(0, _session?.EstimatedUsedTokens ?? 0);
+            }
+        }
+
+        public string CurrentConversationSummary
+        {
+            get
+            {
+                lock (_sessionSync)
+                    return _session?.ConversationSummary ?? string.Empty;
             }
         }
 
@@ -300,7 +319,8 @@ namespace FlowBlox.AIAssistant.Services
                         minLatestMessages,
                         config.Provider,
                         tokenBudget,
-                        session.SummarizedMessageCount);
+                        session.SummarizedMessageCount,
+                        GetLoadedExplanationContents(session.SessionId));
                     summaryTargetMessageCount = Math.Max(
                         summaryTargetMessageCount,
                         CalculateSummaryCompactionTarget(
@@ -320,7 +340,8 @@ namespace FlowBlox.AIAssistant.Services
                         minLatestMessages,
                         config.Provider,
                         tokenBudget,
-                        session.SummarizedMessageCount);
+                        session.SummarizedMessageCount,
+                        GetLoadedExplanationContents(session.SessionId));
                     var chatRequest = chatRequestResult.Request;
                     if (toolRound == 1)
                         AppendSingleSessionMessage(session, "user", initialUserPrompt);
@@ -587,6 +608,23 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
+        private static IReadOnlyList<string> GetLoadedExplanationContents(string sessionId)
+        {
+            return ExplanationSessionStore.GetLoadedKeys(sessionId)
+                .Select(key => AssistantPromptCatalog.TryGetEntry(key, out var entry) && entry?.IsIncludedInInitialPrompt == false
+                    ? entry.Content
+                    : null)
+                .Where(content => !string.IsNullOrWhiteSpace(content))
+                .Cast<string>()
+                .ToList();
+        }
+
+        private static bool IsLoadableExplanationKey(string key)
+        {
+            return AssistantPromptCatalog.TryGetEntry(key, out var entry) &&
+                   entry?.IsIncludedInInitialPrompt == false;
+        }
+
         private void AppendSingleSessionMessage(AssistantSessionState session, string role, string content)
         {
             if (session == null || string.IsNullOrWhiteSpace(content))
@@ -656,7 +694,10 @@ namespace FlowBlox.AIAssistant.Services
                 if (messagesToSummarize.Count == 0)
                     return;
 
-                var summaryRequest = AssistantSummaryRequestBuilder.Build(currentSummary, messagesToSummarize);
+                var summaryRequest = AssistantSummaryRequestBuilder.Build(
+                    currentSummary,
+                    messagesToSummarize,
+                    config.SummarizationStyle);
                 var tokenBudget = BuildTokenBudget(config);
                 var summaryResult = await ExecuteChatWithCommunicationStatusAsync(
                     summaryRequest,
@@ -677,6 +718,10 @@ namespace FlowBlox.AIAssistant.Services
                     session.ConversationSummary = summaryResult.OutputText.Trim();
                     session.SummarizedMessageCount = Math.Max(session.SummarizedMessageCount, targetSummarizedMessageCount);
                 }
+
+                ConversationSummaryChanged?.Invoke(this, EventArgs.Empty);
+
+                ToolHandlerUtilities.ClearLivePropertyDescriptionCache(session.SessionId);
             }
             catch (OperationCanceledException)
             {

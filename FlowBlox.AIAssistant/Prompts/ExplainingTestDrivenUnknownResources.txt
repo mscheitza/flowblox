@@ -14,5 +14,6 @@ Lean sequence:
 
 Rules:
 - Prefer this test-driven approach only for unknown/inaccessible content.
+- If the user also requests generator-driven construction, use the successive workflow from `explaining_generators`: stop at each generator-dependent target and call `RunGenerationStrategies` instead of deriving and writing its selector/pattern/configuration yourself.
 - If the required behavior is clear and accessible, create the final flow directly.
 - Keep each iteration small and verifiable.

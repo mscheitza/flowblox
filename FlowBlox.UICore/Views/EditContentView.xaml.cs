@@ -1,4 +1,4 @@
-﻿using FlowBlox.UICore.ViewModels;
+using FlowBlox.UICore.ViewModels;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Factory.Adapter;
 using FlowBlox.UICore.Models.FieldSelection;
@@ -8,25 +8,31 @@ using System.Windows;
 namespace FlowBlox.UICore.Views
 {
     /// <summary>
-    /// Interaction logic for EditContentView.xaml
+    /// Interaction logic for EditContentView.xaml.
     /// </summary>
     public partial class EditContentView : MetroWindow
     {
-        private EditContentViewModel _viewModel;
+        private readonly EditContentViewModel _viewModel;
 
-        public EditContentView(string content, bool enableFieldSelection = false)
+        public EditContentView(string content, bool enableFieldSelection = false, bool isReadOnly = false)
         {
             InitializeComponent();
-            _viewModel = new EditContentViewModel(this);
-            _viewModel.ContentText = content;
-            this.DataContext = _viewModel;
-            InsertFieldPlaceholderButton.Visibility = enableFieldSelection
-                ? Visibility.Visible
-                : Visibility.Collapsed;
+
+            _viewModel = new EditContentViewModel(this)
+            {
+                ContentText = content,
+                EnableFieldSelection = enableFieldSelection,
+                IsReadOnly = isReadOnly
+            };
+
+            DataContext = _viewModel;
         }
 
         private void InsertFieldPlaceholderButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_viewModel.IsReadOnly || !_viewModel.EnableFieldSelection)
+                return;
+
             var args = new FieldSelectionWindowArgs
             {
                 SelectionMode = FieldSelectionMode.Options,
@@ -46,12 +52,6 @@ namespace FlowBlox.UICore.Views
                 this);
         }
 
-        public string ContentText
-        {
-            get
-            {
-                return _viewModel.ContentText;
-            }
-        }
+        public string ContentText => _viewModel.ContentText;
     }
 }

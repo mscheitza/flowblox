@@ -831,4 +831,5 @@ Der RecursiveCall-Flow-Block ruft den verbundenen, früheren Ziel-Flow-Block ern
   <data name="AppWindow_Notifications_LoadError_Title" xml:space="preserve"><value>Benachrichtigungen konnten nicht geladen werden</value></data>
   <data name="AppWindow_Notifications_SaveError_Title" xml:space="preserve"><value>Benachrichtigungen konnten nicht gespeichert werden</value></data>
   <data name="AppWindow_itmOpenExampleProject_Text" xml:space="preserve"><value>Beispielprojekt öffnen...</value></data>
+  <data name="AppWindow_Notification_ProjectGuidChanged_Message" xml:space="preserve"><value>Eine neue interne Projekt-GUID wurde erzeugt: {0}</value></data>
 </root>

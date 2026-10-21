@@ -33,7 +33,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private readonly FlowBlockNodeCenterPreservationGuard _centerPreservationGuard;
         private readonly FlowBlockNodePropertyRenderer _propertyRenderer;
         private readonly FlowBloxComponentChangeSubscription _componentChangeSubscription;
-        private readonly FlowBloxResultFieldNameChangeSubscription _resultFieldNameChangeSubscription;
+        private readonly FlowBloxDefinedManagedObjectsChangeSubscription _definedManagedObjectsChangeSubscription;
 
         public FlowBlockNodeViewModel(BaseFlowBlock flowBlock)
         {
@@ -51,12 +51,10 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             flowBlock.OnUndoWarn += FlowBlock_OnUndoWarn;
             flowBlock.OnUndoError += FlowBlock_OnUndoError;
             if (flowBlock is BaseResultFlowBlock resultFlowBlock)
-            {
                 resultFlowBlock.OutputDatasetProcessingChanged += ResultFlowBlock_OutputDatasetProcessingChanged;
-                _resultFieldNameChangeSubscription = new FlowBloxResultFieldNameChangeSubscription(
-                    resultFlowBlock,
-                    _ => ResultFieldNameChanged());
-            }
+            _definedManagedObjectsChangeSubscription = new FlowBloxDefinedManagedObjectsChangeSubscription(
+                flowBlock,
+                _ => DefinedManagedObjectChanged());
             flowBlock.RefreshNotExecutedState();
             RefreshRows(preserveCenter: false);
             LogLayoutTrace(
@@ -252,18 +250,17 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
         private void FlowBlock_OnComponentChanged()
             => SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
-                if (InternalFlowBlock is BaseResultFlowBlock)
-                    _resultFieldNameChangeSubscription?.Rebind();
+                _definedManagedObjectsChangeSubscription.Rebind();
 
                 OnPropertyChanged(nameof(HasOverriddenNotifications));
                 LogRefreshRowsRequested("ComponentChanged");
                 RefreshRows();
             });
 
-        private void ResultFieldNameChanged()
+        private void DefinedManagedObjectChanged()
             => SynchronizationContextHelper.PostToUi(_uiContext, () =>
             {
-                LogRefreshRowsRequested("ResultField.PropertyChanged:Name");
+                LogRefreshRowsRequested("DefinedManagedObject.PropertyChanged");
                 RefreshRows();
             });
 
@@ -426,7 +423,7 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             InternalFlowBlock.OnUndoError -= FlowBlock_OnUndoError;
             if (InternalFlowBlock is BaseResultFlowBlock resultFlowBlock)
                 resultFlowBlock.OutputDatasetProcessingChanged -= ResultFlowBlock_OutputDatasetProcessingChanged;
-            _resultFieldNameChangeSubscription?.Dispose();
+            _definedManagedObjectsChangeSubscription.Dispose();
             _componentChangeSubscription.Dispose();
             _centerPreservationGuard.Dispose();
         }

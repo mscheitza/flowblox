@@ -27,7 +27,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["maxRuntimeSeconds"] = "int? (default: 30)",
                 ["includeTargetExecution"] = "bool? (default: false, only relevant when target is set)",
                 ["maxCapturedFieldValueChanges"] = "int? (default: 100)",
-                ["maxProtocolEntries"] = "int? (default: 250)",
+                ["maxProtocolEntries"] = "optional: int (default: 250). Returns the latest entries in chronological order.",
                 ["projectFile"] = "string? (defaults to the project currently targeted by project tools)",
                 ["reason"] = "string? (required for an external or active auxiliary project; explain why execution is needed)",
                 ["inputParameters"] = "object? (input user-field name to textual value; values support FlowBlox placeholders)",
@@ -196,13 +196,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         private static JArray BuildProtocol(JArray protocol, int maxEntries)
         {
-            var result = new JArray();
-            foreach (var entry in protocol.Take(maxEntries))
-            {
-                result.Add(entry);
-            }
-
-            return result;
+            return ProtocolEntryWindowing.TakeLastInOriginalOrder(protocol, maxEntries);
         }
 
         private static JArray GetArrayIgnoreCase(JObject root, params string[] keys)

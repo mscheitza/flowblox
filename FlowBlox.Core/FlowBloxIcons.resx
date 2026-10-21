@@ -220,6 +220,12 @@
   <data name="file_word_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\file-word-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="file_document_edit_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file-document-edit-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="file_document_arrow_right_outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\file-document-arrow-right-outline.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\folder-open.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

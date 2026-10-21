@@ -45,6 +45,7 @@ namespace FlowBlox.AppWindow.Contents
             if (_viewModel != null)
             {
                 _viewModel.ConfigureProjectStateAccess(CaptureCurrentProjectState, RestoreProjectStateAsync);
+                _viewModel.ChatViewModel.ConversationSummaryRequested += ChatViewModel_ConversationSummaryRequested;
             }
         }
 
@@ -56,6 +57,27 @@ namespace FlowBlox.AppWindow.Contents
         internal void ConfigureBeforeAutomaticLayoutAdjustment(Action beforeAutomaticLayoutAdjustment)
         {
             _viewModel?.ConfigureBeforeAutomaticLayoutAdjustment(beforeAutomaticLayoutAdjustment);
+        }
+
+        internal void ShowCurrentSummary()
+        {
+            if (_viewModel == null)
+                return;
+
+            var summaryWindow = new EditContentView(_viewModel.CurrentConversationSummary)
+            {
+                Title = "AI Assistant Summary",
+                Height = 760,
+                Width = 980
+            };
+
+            var owner = ControlHelper.FindParentOfType<Form>(this, true);
+            WindowsFormWPFHelper.ShowDialog(summaryWindow, owner);
+        }
+
+        private void ChatViewModel_ConversationSummaryRequested(object sender, EventArgs e)
+        {
+            ShowCurrentSummary();
         }
 
         private AIAssistantProjectStateSnapshot? CaptureCurrentProjectState()
@@ -111,6 +133,7 @@ namespace FlowBlox.AppWindow.Contents
                 _assistantControl.ConfigurationRequested -= AssistantControl_ConfigurationRequested;
                 if (_viewModel != null)
                 {
+                    _viewModel.ChatViewModel.ConversationSummaryRequested -= ChatViewModel_ConversationSummaryRequested;
                     _viewModel.Dispose();
                 }
             }

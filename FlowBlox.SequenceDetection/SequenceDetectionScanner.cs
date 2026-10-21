@@ -1,4 +1,5 @@
 ﻿using FlowBlox.SequenceDetection.Data;
+using FlowBlox.SequenceDetection.Diagnostics;
 using FlowBlox.SequenceDetection.Model;
 using FlowBlox.SequenceDetection.Util;
 using System.Text.RegularExpressions;
@@ -7,7 +8,9 @@ namespace FlowBlox.SequenceDetection
 {
     internal class SequenceDetectionScanner
     {
-        static readonly Regex RegexFindSequences = new Regex(@"[a-zA-Z0-9äöüÄÖÜß]+|[^a-zA-Z0-9äöüÄÖÜß]+", RegexOptions.Compiled | RegexOptions.Multiline);
+        static readonly Regex RegexFindSequences = new Regex(
+            @"[a-zA-Z0-9äöüÄÖÜß]+|[^\r\na-zA-Z0-9äöüÄÖÜß]+|\r\n|\r|\n",
+            RegexOptions.Compiled | RegexOptions.Multiline);
 
         const int SequenceLimit = 500;
         const double AverageLengthTolerance = 0.75;
@@ -30,6 +33,8 @@ namespace FlowBlox.SequenceDetection
             string contentAfterMatch = content.Substring(match.Index + match.Length);
             var listOfAllPhrases = CreateListOfAllPhrases(contentUntilMatch, contentAfterMatch);
             var orderedByDesc = listOfAllPhrases.OrderByDescending(x => x.Score);
+            SequenceDetectionTraceWriter.Write(
+                $"Layer {layer}: match index {match.Index}, {listOfAllPhrases.Count} phrase candidate(s).");
             foreach (var phraseEntry in orderedByDesc)
             {
                 if (_cancellationToken != null &&
@@ -40,20 +45,33 @@ namespace FlowBlox.SequenceDetection
                     
                 if (!contentUntilEntry.Contains(phraseEntry.Phrase!))
                 {
-                    var sequenceDetection = new SequenceDetectionPattern(parent);
-                    sequenceDetection.Sequence = phraseEntry.Phrase;
+                    SequenceDetectionTraceWriter.Write(
+                        $"Layer {layer}: trying unique phrase '{phraseEntry.Phrase}' " +
+                        $"at index {phraseEntry.Index}, distance {phraseEntry.Distance}, score {phraseEntry.Score:R}.");
+                    var sequenceDetection = new SequenceDetectionPattern(parent)
+                    {
+                        Sequence = phraseEntry.Phrase
+                    };
                     if (phraseEntry.Distance > 0)
                     {
                         var newIndex = phraseEntry.Index + phraseEntry.Length;
                         string newContent = content.Substring(newIndex);
                         var subSequence = FindPatternForMockup(newContent, match.CopyAndAdjust(-newIndex), count, sequenceDetection, layer + 1);
                         if (subSequence == null)
-                            return null;
+                        {
+                            SequenceDetectionTraceWriter.Write(
+                                $"Layer {layer}: phrase '{phraseEntry.Phrase}' has no continuation; trying the next candidate.");
+                            DetachFromParent(sequenceDetection);
+                            continue;
+                        }
                     }
                     else
                     {
                         if (!AddTerminationSequence(sequenceDetection, contentAfterMatch, match.Value, TerminationSequenceMode.ValueTerminationSequence))
-                            return null;
+                        {
+                            DetachFromParent(sequenceDetection);
+                            continue;
+                        }
                     }
                     if (!sequenceDetection.HasIterationTerminationSequence && count > 1)
                     {
@@ -67,7 +85,14 @@ namespace FlowBlox.SequenceDetection
                     return sequenceDetection;
                 }
             }
-            return default(SequenceDetectionPattern);
+            SequenceDetectionTraceWriter.Write($"Layer {layer}: no usable phrase candidate found.");
+            return default;
+        }
+
+        private static void DetachFromParent(SequenceDetectionPattern pattern)
+        {
+            if (pattern.Parent != null && ReferenceEquals(pattern.Parent.Next, pattern))
+                pattern.Parent.Next = null;
         }
 
         private bool AddIterationTerminationSequence(SequenceDetectionPattern pattern, AdjustableMatch match, string phrase, string contentAfterMatch, long count)
@@ -132,6 +157,10 @@ namespace FlowBlox.SequenceDetection
         {
             var listOfAfterwardsPhrases = CreateListOfAllPhrases(contentAfterMatch, rightMode: true);
             var orderByDesc = listOfAfterwardsPhrases.OrderByDescending(x => x.Score);
+            SequenceDetectionTraceWriter.Write(
+                $"Termination ({mode}): {listOfAfterwardsPhrases.Count} candidate(s), " +
+                $"{listOfAfterwardsPhrases.Count(x => x.Distance == 0)} at distance zero, " +
+                $"content starts with '{CreateTracePreview(contentAfterMatch)}'.");
             foreach (var afterwardsPhraseEntry in orderByDesc.Where(x =>
                 mode != TerminationSequenceMode.ValueTerminationSequence ||
                 x.Distance == 0))
@@ -161,6 +190,14 @@ namespace FlowBlox.SequenceDetection
             }
 
             return false;
+        }
+
+        private static string CreateTracePreview(string value)
+        {
+            var preview = value.Substring(0, Math.Min(value.Length, 80));
+            return preview
+                .Replace("\r", "\\r", StringComparison.Ordinal)
+                .Replace("\n", "\\n", StringComparison.Ordinal);
         }
 
         private void AddCombinations(string content, string contentAfterMatch, bool rightMode, MatchCollection matchCollection, int index, int range, Dictionary<string, int> phraseToCount, List<PhraseEntry> phrases)

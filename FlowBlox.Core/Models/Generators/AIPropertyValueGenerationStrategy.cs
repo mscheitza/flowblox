@@ -73,7 +73,7 @@ namespace FlowBlox.Core.Models.Generators
         public string ModelOverride { get; set; }
 
         [Display(Name = "AIPropertyValueGenerationStrategy_Temperature", Description = "AIPropertyValueGenerationStrategy_Temperature_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPropertyValueGenerationStrategy_Groups_AdditionalSettings", Order = 1)]
-        public double? Temperature { get; set; }
+        public double? Temperature { get; set; } = null;
 
         [Display(Name = "AIPropertyValueGenerationStrategy_MaxTokens", Description = "AIPropertyValueGenerationStrategy_MaxTokens_Tooltip", ResourceType = typeof(FlowBloxTexts), GroupName = "AIPropertyValueGenerationStrategy_Groups_AdditionalSettings", Order = 2)]
         public int? MaxTokens { get; set; }

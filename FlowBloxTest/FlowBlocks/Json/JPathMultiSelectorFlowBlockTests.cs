@@ -1,11 +1,9 @@
-using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.Json;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Test.Runtime;
 using Newtonsoft.Json;
-using System.Reflection;
 
 namespace FlowBloxTest.FlowBlocks.Json
 {
@@ -93,18 +91,15 @@ namespace FlowBloxTest.FlowBlocks.Json
         }
 
         [TestMethod]
-        public void FallbackValue_IsActiveOnlyWhenEntryRowPathIsConfigured()
+        public void ValidateObject_FallbackValueWithoutRowPath_ReportsRowPathError()
         {
-            var mapping = new JPathMultiSelectorMappingEntry();
-            var activationCondition = typeof(JPathMultiSelectorMappingEntry)
-                .GetProperty(nameof(JPathMultiSelectorMappingEntry.FallbackValue))!
-                .GetCustomAttribute<ActivationConditionAttribute>()!;
+            var mapping = new JPathMultiSelectorMappingEntry { FallbackValue = "Missing" };
 
-            Assert.IsFalse(activationCondition.IsActive(mapping));
+            var errors = mapping.ValidateObject();
 
+            Assert.IsTrue(errors.ContainsKey(nameof(JPathMultiSelectorMappingEntry.RowPath)));
             mapping.RowPath = "$[*]";
-
-            Assert.IsTrue(activationCondition.IsActive(mapping));
+            Assert.IsFalse(mapping.ValidateObject().ContainsKey(nameof(JPathMultiSelectorMappingEntry.RowPath)));
         }
 
         [TestMethod]

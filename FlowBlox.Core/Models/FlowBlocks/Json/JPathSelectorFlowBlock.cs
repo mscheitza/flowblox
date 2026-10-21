@@ -17,6 +17,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     public class JPathSelectorFlowBlock : BaseSingleResultFlowBlock
     {
         private string _rowPath;
+        private string _fallbackValue;
 
         [Display(Name = "JPathSelectorFlowBlock_JsonContent", Description = "JPathSelectorFlowBlock_JsonContent_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
@@ -31,6 +32,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
         [Display(Name = "JPathSelectorFlowBlock_RowPath", Description = "JPathSelectorFlowBlock_RowPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.JPath))]
+        [CustomValidation(typeof(JPathRowPathValidator), nameof(JPathRowPathValidator.ValidateRowPath))]
+        [DependsOnProperty(MemberName = nameof(FallbackValue))]
         public string RowPath
         {
             get => _rowPath;
@@ -46,11 +49,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
         [Display(Name = "JPathSelectorFlowBlock_FallbackValue", Description = "JPathSelectorFlowBlock_FallbackValue_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
-        [ActivationCondition(ActivationMethod = nameof(IsFallbackValueActive))]
-        [DependsOnProperty(MemberName = nameof(RowPath))]
-        public string FallbackValue { get; set; }
+        public string FallbackValue
+        {
+            get => _fallbackValue;
+            set
+            {
+                if (_fallbackValue == value)
+                    return;
 
-        private bool IsFallbackValueActive() => !string.IsNullOrWhiteSpace(RowPath);
+                _fallbackValue = value;
+                OnPropertyChanged();
+            }
+        }
 
         public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.selection_ellipse_arrow_inside, 16, SKColors.Goldenrod);
         public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.selection_ellipse_arrow_inside, 32, SKColors.Goldenrod);

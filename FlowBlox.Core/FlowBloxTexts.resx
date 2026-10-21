@@ -976,7 +976,7 @@ All inputs are collected during each referenced iteration and this flow block ex
     <value>Row root path</value>
   </data>
 	<data name="JPathSelectorFlowBlock_RowPath_Tooltip" xml:space="preserve">
-    <value>Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value.</value>
+    <value>Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value. Required when a fallback value is configured.</value>
   </data>
 	<data name="JPathSelectorFlowBlock_FallbackValue" xml:space="preserve">
     <value>Fallback value</value>
@@ -2048,7 +2048,7 @@ Note: Once a provider is loaded, switching providers within the same process is 
 		<value>Temperature</value>
 	</data>
 	<data name="AIPropertyValueGenerationStrategy_Temperature_Tooltip" xml:space="preserve">
-		<value>Controls randomness of generated values. Use 0 for deterministic results.</value>
+		<value>Optional sampling temperature. Leave empty to use the provider default; this is recommended because some models do not support 0.</value>
 	</data>
 	<data name="AIPropertyValueGenerationStrategy_MaxTokens" xml:space="preserve">
 		<value>Max tokens</value>
@@ -3913,7 +3913,7 @@ If a Join collector should aggregate links across all page iterations:
     <value>Row root path</value>
   </data>
 	<data name="JPathMultiSelectorMappingEntry_RowPath_Tooltip" xml:space="preserve">
-    <value>Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value.</value>
+    <value>Optional JPath defining one output row per selected JSON node, for example $[*]. Missing JPath values then preserve the row and use the fallback value. Required when a fallback value is configured.</value>
   </data>
 	<data name="JPathMultiSelectorMappingEntry_FallbackValue" xml:space="preserve">
     <value>Fallback value</value>
@@ -4057,6 +4057,18 @@ If a Join collector should aggregate links across all page iterations:
 	</data>
 	<data name="AssistantConfiguration_SummaryCompactionRate_Tooltip" xml:space="preserve">
 		<value>Fraction of summarizable conversation messages compressed at once when the assistant needs to update the summary. For example, 0.4 compresses 40% while still keeping the configured minimum latest messages verbatim.</value>
+	</data>
+	<data name="AssistantConfiguration_SummarizationStyle" xml:space="preserve">
+		<value>Summarization style</value>
+	</data>
+	<data name="AssistantConfiguration_SummarizationStyle_Tooltip" xml:space="preserve">
+		<value>Controls how conversation history, current project state, decisions, diagnostics, and reusable FlowBlox knowledge are organized in the durable summary.</value>
+	</data>
+	<data name="AssistantSummarizationStyle_DetailedProjectMemory" xml:space="preserve">
+		<value>Detailed project memory (classic)</value>
+	</data>
+	<data name="AssistantSummarizationStyle_StructuredHistoricalMemory" xml:space="preserve">
+		<value>Structured project history and memory</value>
 	</data>
 	<data name="AssistantConfiguration_MaxContextTokens" xml:space="preserve">
 		<value>Maximum context tokens</value>
@@ -4509,6 +4521,23 @@ Set AssociatedContextualObject of the Index flow block to the flow block immedia
 * With multiple inputs, the first dataset from each input is selected.
 * With one input, all datasets are processed in sequence.
 * If all existing inputs use RowWise, new inputs inherit that setting (also applies to RowWiseValid).</value></data>
+  <data name="OpenXml2TextFlowBlock_DisplayName" xml:space="preserve"><value>Extract text from OpenXML Word document</value></data>
+  <data name="OpenXml2TextFlowBlock_Description" xml:space="preserve"><value>Extracts paragraph text from the headers, body, and footers of a DOCX document.</value></data>
+  <data name="OpenXml2TextFlowBlock_WordDocumentField" xml:space="preserve"><value>Word document</value></data>
+  <data name="OpenXml2TextFlowBlock_WordDocumentField_Tooltip" xml:space="preserve"><value>DOCX document as a byte array, Base64 string, or existing file path.</value></data>
+  <data name="OpenXml2TextFlowBlock_Groups_Advanced" xml:space="preserve"><value>Advanced settings</value></data>
+  <data name="OpenXml2TextFlowBlock_HeaderMode" xml:space="preserve"><value>Header output</value></data>
+  <data name="OpenXml2TextFlowBlock_HeaderMode_Tooltip" xml:space="preserve"><value>Controls whether header paragraphs are omitted, included as plain text, or enclosed in &lt;header&gt; tags.</value></data>
+  <data name="OpenXml2TextFlowBlock_BodyMode" xml:space="preserve"><value>Body output</value></data>
+  <data name="OpenXml2TextFlowBlock_BodyMode_Tooltip" xml:space="preserve"><value>Controls whether body paragraphs are omitted, included as plain text, or enclosed in &lt;body&gt; tags.</value></data>
+  <data name="OpenXml2TextFlowBlock_FooterMode" xml:space="preserve"><value>Footer output</value></data>
+  <data name="OpenXml2TextFlowBlock_FooterMode_Tooltip" xml:space="preserve"><value>Controls whether footer paragraphs are omitted, included as plain text, or enclosed in &lt;footer&gt; tags.</value></data>
+  <data name="OpenXml2TextFlowBlock_SplitAtPageBreaks" xml:space="preserve"><value>Split at page breaks</value></data>
+  <data name="OpenXml2TextFlowBlock_SplitAtPageBreaks_Tooltip" xml:space="preserve"><value>Creates one result per explicit or saved rendered page break. DOCX does not store reliable layout page boundaries, so pagination can differ when the document is rendered.</value></data>
+  <data name="OpenXmlTextSectionMode_IncludeWithTags" xml:space="preserve"><value>Include with tags</value></data>
+  <data name="OpenXmlTextSectionMode_Include" xml:space="preserve"><value>Include without tags</value></data>
+  <data name="OpenXmlTextSectionMode_Exclude" xml:space="preserve"><value>Exclude</value></data>
+  <data name="OpenXml2TextFlowBlock_Notification_FailedToExtractText" xml:space="preserve"><value>Text could not be extracted from the OpenXML Word document.</value></data>
 </root>
 
 

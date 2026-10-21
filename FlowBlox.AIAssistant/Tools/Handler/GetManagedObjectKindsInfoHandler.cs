@@ -10,19 +10,22 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns compact managed object kind metadata. Property flags: N=nullable, W=writable, S=simple, E=enum, C=collection.",
+            "Returns compact managed object metadata. " +
+            "Property flags: N=nullable, W=writable, S=simple, E=enum, C=collection. " +
+            "UI flags: C=create, L=link, U=unlink, E=edit, D=delete, [FLD]=field, [FL]=file, [DI]=directory selection. " +
+            "Attributes: comma-separated Name(arg;member=value).",
             new JObject
             {
                 ["typeFullName"] = "string (type full name, assembly-qualified names are supported)",
-                ["includeAlreadySent"] = "optional: bool (default: false). If true, properties that were already described in this session are returned with full details again."
+                ["includeSummarized"] = "optional: bool (default: false). Re-send full details from the summarized part of this session. Properties already sent in the current live context are never duplicated."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
         {
-            var includeAlreadySent = args.Value<bool?>("includeAlreadySent") ?? false;
+            var includeSummarized = args.Value<bool?>("includeSummarized") ?? false;
             var baseResponse = ToolHandlerUtilities.CreateUnifiedTypeInfoResponse(
                 args.Value<string>("typeFullName"),
-                includeAlreadySent);
+                includeSummarized);
 
             if (!baseResponse.Ok)
             {

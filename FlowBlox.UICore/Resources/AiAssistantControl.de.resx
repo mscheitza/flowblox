@@ -10,5 +10,6 @@
   <data name="Tooltip_Undo" xml:space="preserve"><value>Letzte KI-Projektzustandsaenderung rueckgaengig machen</value></data>
   <data name="Tooltip_Redo" xml:space="preserve"><value>Letzte KI-Projektzustandsaenderung wiederherstellen</value></data>
   <data name="Tooltip_OpenCommunicationProtocolDirectory" xml:space="preserve"><value>Kommunikationsprotokoll-Verzeichnis oeffnen</value></data>
+  <data name="Tooltip_OpenConversationSummary" xml:space="preserve"><value>Zu Debuggingzwecken die aktuelle Zusammenfassung (Summary) des KI-Assistenten betrachten</value></data>
   <data name="Tooltip_Configure" xml:space="preserve"><value>KI-Assistent konfigurieren</value></data>
 </root>

@@ -1,4 +1,4 @@
-Explaining FlowLogic (normal flow execution):
+# Explaining FlowLogic
 
 1) Core normal-flow rules
 - Every flow block executes its next flow blocks.

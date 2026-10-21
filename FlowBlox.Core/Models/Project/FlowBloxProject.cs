@@ -27,6 +27,9 @@ namespace FlowBlox.Core.Models.Project
     [Serializable]
     public class FlowBloxProject
     {
+        [field: NonSerialized]
+        public event EventHandler<ProjectGuidChangedEventArgs> ProjectGuidChanged;
+
         public Guid ProjectGuid { get; set; }
         public string ProjectName { get; set; }
         public string Author { get; set; }
@@ -870,7 +873,11 @@ namespace FlowBlox.Core.Models.Project
             }
         }
 
-        public async Task<ApiResponse> SaveToProjectSpaceAsync(string projectGuid, string userToken, FlowBloxWebApiService webApi)
+        public async Task<ApiResponse> SaveToProjectSpaceAsync(
+            string projectGuid,
+            string userToken,
+            FlowBloxWebApiService webApi,
+            bool generateNewProjectGuid = false)
         {
             if (string.IsNullOrWhiteSpace(projectGuid))
             {
@@ -881,8 +888,12 @@ namespace FlowBlox.Core.Models.Project
                 };
             }
 
+            var previousProjectGuid = ProjectGuid;
             try
             {
+                if (generateNewProjectGuid)
+                    ProjectGuid = Guid.NewGuid();
+
                 // Create ZIP payload (project + extensions only)
                 var base64Zip = CreateProjectSpaceZipBase64();
 
@@ -897,12 +908,21 @@ namespace FlowBlox.Core.Models.Project
                 {
                     ProjectSpaceGuid = projectGuid;
                     ProjectSpaceEndpointUri = webApi.BaseUrl;
+                    if (generateNewProjectGuid)
+                        OnProjectGuidChanged(previousProjectGuid, ProjectGuid);
+                }
+                else if (generateNewProjectGuid)
+                {
+                    ProjectGuid = previousProjectGuid;
                 }
 
                 return result;
             }
             catch (Exception ex)
             {
+                if (generateNewProjectGuid)
+                    ProjectGuid = previousProjectGuid;
+
                 FlowBloxLogManager.Instance.GetLogger().Exception(ex);
                 return new ApiResponse
                 {
@@ -912,11 +932,15 @@ namespace FlowBlox.Core.Models.Project
             }
         }
 
-        public void Save(string fileName)
+        public void Save(string fileName, bool generateNewProjectGuid = false)
         {
             _logger.Info($"Saving project to file: {fileName}");
+            var previousProjectGuid = ProjectGuid;
             try
             {
+                if (generateNewProjectGuid)
+                    ProjectGuid = Guid.NewGuid();
+
                 // Collect current registry state and order by dependency for clean top-level JSON references.
                 RefreshOrderedTopLevelCollectionsForSerialization();
 
@@ -940,8 +964,28 @@ namespace FlowBlox.Core.Models.Project
             }
             catch (Exception ex)
             {
+                if (generateNewProjectGuid)
+                    ProjectGuid = previousProjectGuid;
+
                 _logger.Error($"Failed to save project to file: {fileName}", ex);
                 throw;
+            }
+
+            if (generateNewProjectGuid)
+                OnProjectGuidChanged(previousProjectGuid, ProjectGuid);
+        }
+        private void OnProjectGuidChanged(Guid oldProjectGuid, Guid newProjectGuid)
+        {
+            if (oldProjectGuid == newProjectGuid)
+                return;
+
+            try
+            {
+                ProjectGuidChanged?.Invoke(this, new ProjectGuidChangedEventArgs(oldProjectGuid, newProjectGuid));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("A project GUID changed event handler failed.", ex);
             }
         }
 

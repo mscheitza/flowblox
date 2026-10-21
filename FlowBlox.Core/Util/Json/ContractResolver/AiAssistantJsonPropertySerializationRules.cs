@@ -1,5 +1,5 @@
 using FlowBlox.Core.Models.Base;
-using FlowBlox.Core.Util.Json;
+using FlowBlox.Core.Util.Compression;
 using FlowBlox.Core.Util.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Collections;

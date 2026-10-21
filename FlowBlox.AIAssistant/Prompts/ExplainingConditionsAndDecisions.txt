@@ -1,4 +1,4 @@
-Conditions and decisions:
+# Explaining Conditions and Decisions
 
 Choose the smallest decision level that fits the outcome:
 

@@ -326,12 +326,23 @@
                                                 <ToolTip Style="{StaticResource PropertyView.HelpToolTipStyle}"
                                                          Content="{x:Static resources:TestDefinitionView.Icon_AssociatedFlowBlockRequiredForExecution_Tooltip}" />
                                             </Border.ToolTip>
-                                            <iconPacks:PackIconMaterial Kind="LinkVariant"
-                                                                        Width="16"
+                                            <iconPacks:PackIconMaterial Width="16"
                                                                         Height="16"
                                                                         VerticalAlignment="Center"
-                                                                        HorizontalAlignment="Center"
-                                                                        Foreground="#7B1FA2" />
+                                                                        HorizontalAlignment="Center">
+                                                <iconPacks:PackIconMaterial.Style>
+                                                    <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                                                        <Setter Property="Kind" Value="LinkVariant" />
+                                                        <Setter Property="Foreground" Value="#7B1FA2" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding UIAssociatedFlowBlockRequirementSatisfied}" Value="True">
+                                                                <Setter Property="Kind" Value="CheckCircleOutline" />
+                                                                <Setter Property="Foreground" Value="#2E7D32" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </iconPacks:PackIconMaterial.Style>
+                                            </iconPacks:PackIconMaterial>
                                         </Border>
                                     </StackPanel>
                                     <CheckBox IsChecked="{Binding Execute, ValidatesOnNotifyDataErrors=False}" Grid.Column="1"
@@ -363,12 +374,23 @@
                                                                 <ToolTip Style="{StaticResource PropertyView.HelpToolTipStyle}"
                                                                          Content="{x:Static resources:TestDefinitionView.Icon_UIRequiredForExecution_FieldConfiguration_Tooltip}" />
                                                             </Border.ToolTip>
-                                                            <iconPacks:PackIconMaterial Kind="AlertCircleOutline"
-                                                                                        Width="16" 
+                                                            <iconPacks:PackIconMaterial Width="16"
                                                                                         Height="16"
                                                                                         VerticalAlignment="Center"
-                                                                                        HorizontalAlignment="Center"
-                                                                                        Foreground="#E65100" />
+                                                                                        HorizontalAlignment="Center">
+                                                                <iconPacks:PackIconMaterial.Style>
+                                                                    <Style TargetType="{x:Type iconPacks:PackIconMaterial}">
+                                                                        <Setter Property="Kind" Value="AlertCircleOutline" />
+                                                                        <Setter Property="Foreground" Value="#E65100" />
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding UIRequirementSatisfied}" Value="True">
+                                                                                <Setter Property="Kind" Value="CheckCircleOutline" />
+                                                                                <Setter Property="Foreground" Value="#2E7D32" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </iconPacks:PackIconMaterial.Style>
+                                                            </iconPacks:PackIconMaterial>
                                                         </Border>
                                                     </StackPanel>
 

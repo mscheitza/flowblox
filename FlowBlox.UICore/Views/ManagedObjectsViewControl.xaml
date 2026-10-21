@@ -173,6 +173,7 @@
                               SelectedItem="{Binding SelectedEntry, Mode=TwoWay}"
                               BorderThickness="0"
                               SelectionMode="Single"
+                              MouseDoubleClick="ManagedObjectsListView_MouseDoubleClick"
                               PreviewMouseRightButtonDown="ManagedObjectsListView_PreviewMouseRightButtonDown">
                         <ListView.Resources>
                             <Style TargetType="GridViewColumnHeader">

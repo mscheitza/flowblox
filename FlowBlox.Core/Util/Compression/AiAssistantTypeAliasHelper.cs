@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace FlowBlox.Core.Util.Json
+namespace FlowBlox.Core.Util.Compression
 {
     public static class AiAssistantTypeAliasHelper
     {
@@ -25,9 +25,7 @@ namespace FlowBlox.Core.Util.Json
 
             var result = typeName;
             foreach (var alias in Aliases.OrderByDescending(x => x.Prefix.Length))
-            {
                 result = ReplaceQualifiedPrefix(result, alias.Prefix, alias.Alias);
-            }
 
             return result;
         }
@@ -43,6 +41,7 @@ namespace FlowBlox.Core.Util.Json
             return value.Replace("," + from + ".", "," + to + ".", StringComparison.Ordinal)
                 .Replace("[" + from + ".", "[" + to + ".", StringComparison.Ordinal)
                 .Replace(":" + from + ".", ":" + to + ".", StringComparison.Ordinal)
+                .Replace("'" + from + ".", "'" + to + ".", StringComparison.Ordinal)
                 .Replace(" " + from + ".", " " + to + ".", StringComparison.Ordinal);
         }
     }

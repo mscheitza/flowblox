@@ -8,7 +8,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
     {
         private const string ToolPluginPrefix = "FlowBloxAIToolApi";
         private const string DsmlMarkerPattern = @"(?:\|\|DSML\|\||\uFF5C\uFF5CDSML\uFF5C\uFF5C|\uFF5CDSML\uFF5C)";
-        private const string ToolCallsTagPattern = @"tool\\?_calls";
+        private const string ToolCallsTagPattern = @"(?:tool\\?_calls|calls)";
 
         private static readonly Regex ToolCallsRegex = new(
             $@"<\s*{DsmlMarkerPattern}\s*{ToolCallsTagPattern}\s*>(?<body>.*?)\\?\s*</\s*{DsmlMarkerPattern}\s*{ToolCallsTagPattern}\s*>",

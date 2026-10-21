@@ -1,9 +1,7 @@
 using System.Collections;
-using System.ComponentModel.DataAnnotations;
 using System.Collections.Concurrent;
 using System.Reflection;
 using FlowBlox.AIAssistant.Models;
-using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
@@ -21,6 +19,8 @@ namespace FlowBlox.AIAssistant.Tools.Util
     internal static partial class ToolHandlerUtilities
     {
         private static readonly ConcurrentDictionary<string, ConcurrentDictionary<PropertyCacheKey, string>> PropertyDescriptionCacheBySession =
+            new(StringComparer.Ordinal);
+        private static readonly ConcurrentDictionary<string, ConcurrentDictionary<PropertyCacheKey, string>> LivePropertyDescriptionCacheBySession =
             new(StringComparer.Ordinal);
         private static readonly AsyncLocal<string?> CurrentSessionGuidScope = new();
 
@@ -55,14 +55,15 @@ namespace FlowBlox.AIAssistant.Tools.Util
             nameof(BaseFlowBlock.TestDefinitions)                // Covered by dedicated guidance and tools.
         };
 
-        private static readonly HashSet<Type> ExcludedAttributeTypesForKindsInfo = new()
-        {
-            typeof(DisplayAttribute),
-            typeof(FlowBloxUIAttribute),
-            typeof(FlowBloxListViewAttribute),
-            typeof(FlowBloxDataGridAttribute),
-            typeof(FlowBloxTextBoxAttribute)
-        };
+        private static readonly HashSet<Type> FlowBloxFrameworkBaseFlowBlockTypes =
+        [
+            typeof(BaseFlowBlock),
+            typeof(BaseResultFlowBlock),
+            typeof(BaseSingleResultFlowBlock),
+            typeof(BasePipeFlowBlock),
+            typeof(BaseMultiResultCollectorFlowBlock),
+            typeof(BaseSingleResultCollectorFlowBlock)
+        ];
 
         public static ToolDefinition CreateDefinition(string name, string description, JObject? argumentsSchema = null)
         {
@@ -108,13 +109,46 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
             if (string.IsNullOrWhiteSpace(key))
             {
+                ClearPropertyDescriptionCache();
+                return;
+            }
+
+            ClearPropertyDescriptionCache(key);
+            ExplanationSessionStore.Clear(key);
+            AuxiliaryProjectSessionStore.Clear(key);
+            AiAssistantProjectRunState.Clear(key);
+        }
+
+        public static void ClearPropertyDescriptionCache(string? sessionGuid = null)
+        {
+            var key = string.IsNullOrWhiteSpace(sessionGuid)
+                ? CurrentSessionGuidScope.Value
+                : sessionGuid.Trim();
+
+            if (string.IsNullOrWhiteSpace(key))
+            {
                 PropertyDescriptionCacheBySession.Clear();
+                LivePropertyDescriptionCacheBySession.Clear();
                 return;
             }
 
             PropertyDescriptionCacheBySession.TryRemove(key, out _);
-            AuxiliaryProjectSessionStore.Clear(key);
-            AiAssistantProjectRunState.Clear(key);
+            LivePropertyDescriptionCacheBySession.TryRemove(key, out _);
+        }
+
+        public static void ClearLivePropertyDescriptionCache(string? sessionGuid = null)
+        {
+            var key = string.IsNullOrWhiteSpace(sessionGuid)
+                ? CurrentSessionGuidScope.Value
+                : sessionGuid.Trim();
+
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                LivePropertyDescriptionCacheBySession.Clear();
+                return;
+            }
+
+            LivePropertyDescriptionCacheBySession.TryRemove(key, out _);
         }
 
         public static string CurrentSessionGuid => GetCurrentSessionCacheKey();
@@ -127,12 +161,31 @@ namespace FlowBlox.AIAssistant.Tools.Util
             return "default-session";
         }
 
-        private static bool TryGetAlreadyDescribedInType(PropertyInfo property, out string describedInType)
+        private static bool TryGetAlreadyDescribedInSession(PropertyInfo property, out string describedInType)
+        {
+            return TryGetAlreadyDescribed(
+                PropertyDescriptionCacheBySession,
+                property,
+                out describedInType);
+        }
+
+        private static bool TryGetAlreadyDescribedInLiveContext(PropertyInfo property, out string describedInType)
+        {
+            return TryGetAlreadyDescribed(
+                LivePropertyDescriptionCacheBySession,
+                property,
+                out describedInType);
+        }
+
+        private static bool TryGetAlreadyDescribed(
+            ConcurrentDictionary<string, ConcurrentDictionary<PropertyCacheKey, string>> cacheBySession,
+            PropertyInfo property,
+            out string describedInType)
         {
             describedInType = string.Empty;
 
             var sessionKey = GetCurrentSessionCacheKey();
-            if (!PropertyDescriptionCacheBySession.TryGetValue(sessionKey, out var sessionCache))
+            if (!cacheBySession.TryGetValue(sessionKey, out var sessionCache))
                 return false;
 
             return sessionCache.TryGetValue(PropertyCacheKey.FromProperty(property), out describedInType);
@@ -147,8 +200,13 @@ namespace FlowBlox.AIAssistant.Tools.Util
             var sessionCache = PropertyDescriptionCacheBySession.GetOrAdd(
                 sessionKey,
                 _ => new ConcurrentDictionary<PropertyCacheKey, string>());
+            var liveCache = LivePropertyDescriptionCacheBySession.GetOrAdd(
+                sessionKey,
+                _ => new ConcurrentDictionary<PropertyCacheKey, string>());
+            var propertyCacheKey = PropertyCacheKey.FromProperty(property);
 
-            sessionCache.TryAdd(PropertyCacheKey.FromProperty(property), describedInType);
+            sessionCache.TryAdd(propertyCacheKey, describedInType);
+            liveCache.TryAdd(propertyCacheKey, describedInType);
         }
 
         public static FlowBloxRegistry GetRegistry()

@@ -12,6 +12,7 @@ namespace FlowBlox.AIAssistant.Models
         public string ConversationSummary { get; set; } = string.Empty;
         public int SummarizedMessageCount { get; set; }
         public int EstimatedUsedTokens { get; set; }
+        public List<string> LoadedExplanationKeys { get; set; } = new();
         public List<AssistantSessionMessage> SessionMessages { get; set; } = new();
         public List<AssistantTranscriptLine> Transcripts { get; set; } = new();
     }

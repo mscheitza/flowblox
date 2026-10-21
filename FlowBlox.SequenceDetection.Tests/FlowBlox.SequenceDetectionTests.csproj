@@ -17,6 +17,7 @@
     <None Remove="UnitTest\Mockup\HTMLContent_Complex_MultipleMatches_C2.html" />
     <None Remove="UnitTest\Mockup\HTMLContent_MultipleMatches_Test_C1.html" />
     <None Remove="UnitTest\Mockup\HTMLContent_MultipleMatches_Test_C2.html" />
+    <None Remove="UnitTest\Mockup\HTMLContent_DuplicateMatch_MultilineTermination.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
     <EmbeddedResource Include="UnitTest\Mockup\HTMLContent_MultipleMatches_Test_C2.html" />
     <EmbeddedResource Include="UnitTest\Mockup\HTMLContent_MultipleMatches_Test_C1.html" />
     <EmbeddedResource Include="UnitTest\Mockup\HTMLContent_Complex_MultipleMatches2_C1.html" />
+    <EmbeddedResource Include="UnitTest\Mockup\HTMLContent_DuplicateMatch_MultilineTermination.html" />
   </ItemGroup>
 
   <ItemGroup>

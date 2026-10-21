@@ -6,17 +6,17 @@ namespace FlowBloxTest.AIAssistant
 {
     [TestClass]
     [TestCategory(FlowBloxTestCategories.UnitTest)]
-    public sealed class ExecuteProjectHandlerTests
+    public sealed class ExecuteExternalProjectHandlerTests
     {
         [TestMethod]
-        public async Task ExecuteProject_IsRejectedBeforeRunnerAccessWithoutUserApproval()
+        public async Task ExecuteExternalProject_IsRejectedBeforeRunnerAccessWithoutUserApproval()
         {
             var confirmationRequested = false;
             var api = new DefaultToolApi
             {
                 ToolExecutionConfirmationCallback = request =>
                 {
-                    confirmationRequested = request.ToolName == "ExecuteProject";
+                    confirmationRequested = request.ToolName == "ExecuteExternalProject";
                     return false;
                 }
             };
@@ -24,7 +24,7 @@ namespace FlowBloxTest.AIAssistant
             var response = await api.ExecuteAsync(
                 new ToolRequest
                 {
-                    ToolName = "ExecuteProject",
+                    ToolName = "ExecuteExternalProject",
                     Arguments = new JObject
                     {
                         ["projectFile"] = "untrusted-external-project.fbprj",
@@ -75,7 +75,8 @@ namespace FlowBloxTest.AIAssistant
                             ["datasetIndex"] = 0,
                             ["fieldName"] = "Content",
                             ["searchValues"] = "TARGET",
-                            ["searchMode"] = "LookAround"
+                            ["searchMode"] = "LookAround",
+                            ["maxTokens"] = 3
                         }
                     },
                     CancellationToken.None);
@@ -83,6 +84,7 @@ namespace FlowBloxTest.AIAssistant
                 Assert.IsTrue(response.Ok, response.Error);
                 Assert.AreEqual("TARGET", response.Result["valueInfo"]!.Value<string>("matchedSearchValue"));
                 StringAssert.Contains(response.Result.Value<string>("value"), "TARGET");
+                Assert.AreEqual(3, response.Result["fieldValueOutput"]!.Value<int>("maxTokens"));
             }
             finally
             {

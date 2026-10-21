@@ -20,6 +20,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
     public class JPathMultiSelectorMappingEntry : FlowBloxReactiveObject
     {
         private string _rowPath;
+        private string _fallbackValue;
 
         [Required]
         [Display(Name = "JPathMultiSelectorMappingEntry_JPath", Description = "JPathMultiSelectorMappingEntry_JPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
@@ -38,6 +39,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
         [Display(Name = "JPathMultiSelectorMappingEntry_RowPath", Description = "JPathMultiSelectorMappingEntry_RowPath_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection, ToolboxCategory = nameof(FlowBloxToolboxCategory.JPath))]
+        [CustomValidation(typeof(JPathRowPathValidator), nameof(JPathRowPathValidator.ValidateRowPath))]
+        [DependsOnProperty(MemberName = nameof(FallbackValue))]
         public string RowPath
         {
             get => _rowPath;
@@ -52,11 +55,18 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         }
 
         [Display(Name = "JPathMultiSelectorMappingEntry_FallbackValue", Description = "JPathMultiSelectorMappingEntry_FallbackValue_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
-        [ActivationCondition(ActivationMethod = nameof(IsFallbackValueActive))]
-        [DependsOnProperty(MemberName = nameof(RowPath))]
-        public string FallbackValue { get; set; }
+        public string FallbackValue
+        {
+            get => _fallbackValue;
+            set
+            {
+                if (_fallbackValue == value)
+                    return;
 
-        private bool IsFallbackValueActive() => !string.IsNullOrWhiteSpace(RowPath);
+                _fallbackValue = value;
+                OnPropertyChanged();
+            }
+        }
 
         [Required]
         [Display(Name = "Global_FieldElement", ResourceType = typeof(FlowBloxTexts), Order = 3)]

@@ -1,3 +1,5 @@
+# Explaining Generators
+
 Use this only when the user explicitly asks to generate values from test results.
 If generator/test setup is unclear, load deep-dive test catalog key `explaining_test_definitions_deep_dive` for compact end-to-end examples.
 Terminology note:
@@ -6,6 +8,15 @@ Terminology note:
 Purpose of generators:
 - Configure a flow block from test input/output evidence so that executing it with the referenced field values produces result dataset(s) that satisfy the defined test expectations.
 - Run when required test execution fails or when explicitly triggered.
+
+Standard test-driven + generator workflow (mandatory when the user requests this combination):
+1. Build the flow successively only up to and including the first flow block that needs a generated selector, pattern, or other generated configuration.
+2. Create and configure the required test definition for that target using `explaining_test_definitions` (do not duplicate or bypass its lifecycle rules).
+3. Create/configure the compatible generation strategy on that target.
+4. Call `RunGenerationStrategies` and let the configured generator produce the target value/configuration.
+5. Inspect the generated configuration and test outcome. Once this stage works, extend the flow to the next generator-dependent block and repeat.
+- Hard rule: the AI Assistant must not synthesize and write the selector/pattern/configuration itself in this workflow. `RunGenerationStrategies` is the authoritative generation step and also verifies that the generator setup functions.
+- If generation fails, diagnose and correct the flow prerequisites, test evidence, expectations, or strategy configuration, then call `RunGenerationStrategies` again. Do not silently replace the generator with an assistant-authored value unless the user explicitly abandons the generator-driven approach.
 
 Preconditions:
 - Suitable test cases exist for the target flow block.
@@ -27,16 +38,18 @@ Setup order:
    Important: `GenerationStrategies` is a FlowBloxReactiveObject collection (not a ManagedObject reference list), so do not use `/GenerationStrategies/Link`.
    Use path-based creation/update with typed index when needed, e.g. `/GenerationStrategies/0:FlowBlox.Core.Models.Generators.AIPropertyValueGenerationStrategy/...`.
 4. Before detailed updates, call kind/type info tools (for example `GetTypeKindsInfo`) to confirm valid paths/options.
-5. Configure strategy details via `UpdateFlowBlock` (nested strategy path):
-- provider,
-- prompt/template options.
-Hint for `AIPropertyValueGenerationStrategy` prompt design:
-- New `AIPropertyValueGenerationStrategy` instances are prefilled with the generic `FlowBlox Quick Update Configurator` prompt. Usually do not set the prompt again after creation unless the user explicitly wants to customize it.
-- If unsure how to structure the prompt with referenced field values and test expectations, use `GetToolboxEntries` for toolbox category `AIPropertyValueGenerationPrompts` and adapt a fitting template.
-- For `AIPropertyValueGenerationStrategy`, prefer toolbox templates first; do not invent prompt-template assumptions when a fitting toolbox template exists.
-- Use `$GenerationStrategy::TargetFlowBlockInputValues` for all referenced fully qualified field names and their per-test values. Known names may be used directly as runtime placeholders in generated configuration.
-- Use `$GenerationStrategy::FlowBloxQuickUpdateSchema` and `$GenerationStrategy::FlowBloxQuickUpdateFormat` so the AI returns the unified FlowBlox Quick Update JSON contract.
-6. Execute tests / runtime as requested by the user.
+5. Configure only strategy details that are actually required. For `AIPropertyValueGenerationStrategy`, normally set its required `Provider` via the nested strategy path and keep the generated defaults described below.
+
+`AIPropertyValueGenerationStrategy` standard path (strict):
+- This strategy is supported on `BaseResultFlowBlock` targets and configures the target flow block automatically from the linked `FlowBloxTestDefinition` test evidence; it does not create or configure the test definitions themselves.
+- Creating `AIPropertyValueGenerationStrategy` automatically initializes `PromptTemplate` from toolbox category `AIPromptTemplates`, entry `FlowBlox Quick Update Configurator`, and initializes `SystemInstruction` from `System - FlowBlox Quick Update JSON Output`.
+- The default `FlowBlox Quick Update Configurator` prompt and Quick Update `SystemInstruction` already cover the complete configuration of the target flow block from its linked test data and expectations. Therefore, normally keep both defaults, set `Provider`, and call `RunGenerationStrategies`; adjust the prompts when the user explicitly requests custom prompting.
+- Leave `AIPropertyValueGenerationStrategy.Temperature` unset (`null`) by default so the selected provider/model can apply its supported default; do not set it to `0` unless the user explicitly requests that value and the provider supports it.
+- Because these defaults are assigned by the strategy constructor, `GetToolboxEntries` is normally unnecessary for setup. It remains available for explicit prompt customization or diagnosis of a missing/corrupt default.
+- The default `FlowBlox Quick Update Configurator` resolves `$GenerationStrategy::TargetFlowBlockInputValues`, `$GenerationStrategy::TestExpectations`, `$GenerationStrategy::FlowBlockDescriptions`, `$GenerationStrategy::FlowBloxQuickUpdateSchema`, and `$GenerationStrategy::FlowBloxQuickUpdateFormat` from the target and its linked test runs.
+- The AI provider returns the `FlowBloxQuickUpdate` JSON contract. `FlowBloxQuickUpdateFormat` then applies only schema-supported writable properties to the target flow block; omitted properties remain unchanged and supplied collections replace the existing collection completely.
+- `RunGenerationStrategies` first executes all `FlowBloxTestDefinition` instances linked through the target's `TestDefinitions`. If at least one test fails, it runs the configured strategies with those test results and expectations, applies their generated configuration, and reruns the tests. If all tests already pass, no regeneration is needed.
+6. Execute tests / runtime as requested by the user. For the standard test-driven + generator workflow, call `RunGenerationStrategies` at each successive generator boundary before building beyond it.
    Preferred troubleshooting sequence: run `RunGenerationStrategies` first; only run `RunTestDefinition` when detailed test protocol/results are needed.
 
 Generator evidence at the target flow block:
@@ -62,9 +75,9 @@ Sequence detection tip (complex hierarchical content such as hard-to-read DOM/we
 
 Use-Cases / Examples:
 1. Happy path (simple target property):
-- Create `AIPropertyValueGenerationStrategy` on the target flow block.
-- Use the `FlowBlox Quick Update Configurator` toolbox template.
-- Run tests/generation; generated Quick Update JSON updates the listed configurable flow block properties.
+- Create `AIPropertyValueGenerationStrategy` in the target `BaseResultFlowBlock.GenerationStrategies` collection.
+- Set its `Provider`; keep the automatically assigned `FlowBlox Quick Update Configurator` `PromptTemplate` and default Quick Update `SystemInstruction` unchanged.
+- Call `RunGenerationStrategies`; failing linked tests supply the evidence and expectations used to generate and apply `FlowBloxQuickUpdate` configuration to the target flow block.
 2. Special use-case (collection configuration):
 - Example: `StartEndPatternSelectorFlowBlock.StartEndPatterns`.
 - The Quick Update schema lists allowed collection item properties.

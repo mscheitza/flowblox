@@ -9,6 +9,16 @@ namespace FlowBlox.Services
     {
         private readonly object _lock = new object();
         private readonly List<AppNotification> _notifications = [];
+        private readonly System.Threading.Timer _expirationTimer;
+
+        public AppNotificationService()
+        {
+            _expirationTimer = new System.Threading.Timer(
+                ExpirationTimerElapsed,
+                null,
+                System.Threading.Timeout.InfiniteTimeSpan,
+                System.Threading.Timeout.InfiniteTimeSpan);
+        }
 
         public event EventHandler NotificationsChanged;
 
@@ -17,6 +27,7 @@ namespace FlowBlox.Services
             lock (_lock)
             {
                 RemoveExpiredNotificationsInternal();
+                ScheduleExpirationCheckLocked();
                 return _notifications
                     .OrderByDescending(x => x.CreatedUtc)
                     .FirstOrDefault();
@@ -28,6 +39,7 @@ namespace FlowBlox.Services
             lock (_lock)
             {
                 RemoveExpiredNotificationsInternal();
+                ScheduleExpirationCheckLocked();
                 return _notifications
                     .OrderByDescending(x => x.CreatedUtc)
                     .ToList()
@@ -45,6 +57,7 @@ namespace FlowBlox.Services
                 RemoveExpiredNotificationsInternal();
                 _notifications.RemoveAll(x => x.Id == notification.Id);
                 _notifications.Add(notification);
+                ScheduleExpirationCheckLocked();
             }
 
             NotificationsChanged?.Invoke(this, EventArgs.Empty);
@@ -60,6 +73,7 @@ namespace FlowBlox.Services
             lock (_lock)
             {
                 removed = _notifications.RemoveAll(x => x.Id == notificationId) > 0;
+                ScheduleExpirationCheckLocked();
             }
 
             if (removed)
@@ -73,6 +87,7 @@ namespace FlowBlox.Services
             lock (_lock)
             {
                 removed = RemoveExpiredNotificationsInternal();
+                ScheduleExpirationCheckLocked();
             }
 
             if (removed)
@@ -82,6 +97,42 @@ namespace FlowBlox.Services
         private bool RemoveExpiredNotificationsInternal()
         {
             return _notifications.RemoveAll(x => x.IsExpired) > 0;
+        }
+
+        private void ExpirationTimerElapsed(object state)
+        {
+            bool removed;
+            lock (_lock)
+            {
+                removed = RemoveExpiredNotificationsInternal();
+                ScheduleExpirationCheckLocked();
+            }
+
+            if (removed)
+                NotificationsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ScheduleExpirationCheckLocked()
+        {
+            var nextExpiration = _notifications
+                .Where(x => x.ExpiresUtc.HasValue)
+                .Select(x => x.ExpiresUtc.Value)
+                .DefaultIfEmpty(DateTimeOffset.MaxValue)
+                .Min();
+
+            if (nextExpiration == DateTimeOffset.MaxValue)
+            {
+                _expirationTimer.Change(
+                    System.Threading.Timeout.InfiniteTimeSpan,
+                    System.Threading.Timeout.InfiniteTimeSpan);
+                return;
+            }
+
+            var dueTime = nextExpiration - DateTimeOffset.UtcNow;
+            if (dueTime < TimeSpan.Zero)
+                dueTime = TimeSpan.Zero;
+
+            _expirationTimer.Change(dueTime, System.Threading.Timeout.InfiniteTimeSpan);
         }
     }
 }

@@ -32,6 +32,14 @@ namespace FlowBloxTest.Models.Generators
         }
 
         [TestMethod]
+        public void DefaultsTemperatureToNull()
+        {
+            var strategy = new AIPropertyValueGenerationStrategy();
+
+            Assert.IsNull(strategy.Temperature);
+        }
+
+        [TestMethod]
         public void IncludesExpectedValueInPrompt()
         {
             var startFlowBlock = CreateFlowBlock<StartFlowBlock>();

@@ -10,5 +10,6 @@
   <data name="Tooltip_Undo" xml:space="preserve"><value>Undo last AI project state change</value></data>
   <data name="Tooltip_Redo" xml:space="preserve"><value>Redo last AI project state change</value></data>
   <data name="Tooltip_OpenCommunicationProtocolDirectory" xml:space="preserve"><value>Open communication protocol directory</value></data>
+  <data name="Tooltip_OpenConversationSummary" xml:space="preserve"><value>View the current AI Assistant summary for debugging</value></data>
   <data name="Tooltip_Configure" xml:space="preserve"><value>Configure AI Assistant</value></data>
 </root>

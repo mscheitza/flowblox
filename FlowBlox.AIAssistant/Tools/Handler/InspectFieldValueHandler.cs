@@ -21,6 +21,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["searchIndex"] = "int? (character index; default: 0)",
                 ["searchValues"] = "string? (comma-separated marker values; earliest match is used instead of searchIndex)",
                 ["searchMode"] = "string? (StartAt|LookAround; default: StartAt)",
+                ["maxTokens"] = "int? (default: configured MaxFieldValuesTokensPerResponse, normally 4000; maximum: that configured value). Use only as many tokens as needed.",
                 ["runId"] = "string? (optional safety check)",
                 ["usageHint"] = "Use after GetLastDebugArtefact reports a truncated value; normal values are already returned there."
             });
@@ -52,6 +53,11 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
             if (!FieldValueInspectionToolUtilities.TryCreateOptions(args, out var options, out var optionsError))
                 return Task.FromResult(ToolHandlerUtilities.Fail(optionsError));
+            if (!FieldValueResponseLimiter.TryFromConfiguration(
+                    args.Value<int?>("maxTokens"),
+                    out var limiter,
+                    out var limiterError))
+                return Task.FromResult(ToolHandlerUtilities.Fail(limiterError));
 
             var resolvedValue = hasFieldChangeId
                 ? ResolveFieldChangeValue(snapshot.DebuggingResult, fieldChangeId.GetValueOrDefault(), args.Value<string>("fieldChangeValue"))
@@ -65,8 +71,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             if (!resolvedValue.Ok)
                 return Task.FromResult(ToolHandlerUtilities.Fail(resolvedValue.ErrorMessage));
 
-            var limiter = FieldValueResponseLimiter.FromConfiguration();
-            var inspected = limiter.Inspect(resolvedValue.Value, options);
+            var inspected = limiter!.Inspect(resolvedValue.Value, options);
 
             return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
             {

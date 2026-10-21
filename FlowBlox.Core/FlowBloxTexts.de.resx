@@ -974,7 +974,7 @@ Alle Eingabedaten werden innerhalb jeder referenzierten Iteration gesammelt, und
     <value>Zeilen-/Ausgangspunkt</value>
   </data>
 	<data name="JPathSelectorFlowBlock_RowPath_Tooltip" xml:space="preserve">
-    <value>Optionaler JPath, der pro ausgewähltem JSON-Knoten eine Ausgabezeile festlegt, zum Beispiel $[*]. Fehlende JPath-Werte behalten dadurch ihre Zeile und verwenden den Fallback-Wert.</value>
+    <value>Optionaler JPath, der pro ausgewähltem JSON-Knoten eine Ausgabezeile festlegt, zum Beispiel $[*]. Fehlende JPath-Werte behalten dadurch ihre Zeile und verwenden den Fallback-Wert. Erforderlich, wenn ein Fallback-Wert konfiguriert ist.</value>
   </data>
 	<data name="JPathSelectorFlowBlock_FallbackValue" xml:space="preserve">
     <value>Fallback-Wert</value>
@@ -3722,7 +3722,7 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
     <value>Zeilen-/Ausgangspunkt</value>
   </data>
 	<data name="JPathMultiSelectorMappingEntry_RowPath_Tooltip" xml:space="preserve">
-    <value>Optionaler JPath, der pro ausgewähltem JSON-Knoten eine Ausgabezeile festlegt, zum Beispiel $[*]. Fehlende JPath-Werte behalten dadurch ihre Zeile und verwenden den Fallback-Wert.</value>
+    <value>Optionaler JPath, der pro ausgewähltem JSON-Knoten eine Ausgabezeile festlegt, zum Beispiel $[*]. Fehlende JPath-Werte behalten dadurch ihre Zeile und verwenden den Fallback-Wert. Erforderlich, wenn ein Fallback-Wert konfiguriert ist.</value>
   </data>
 	<data name="JPathMultiSelectorMappingEntry_FallbackValue" xml:space="preserve">
     <value>Fallback-Wert</value>
@@ -4005,6 +4005,18 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
 	</data>
 	<data name="AssistantConfiguration_SummaryCompactionRate_Tooltip" xml:space="preserve">
 		<value>Anteil der zusammenfassbaren Konversationsnachrichten, der auf einmal komprimiert wird, sobald der Assistent die Zusammenfassung aktualisieren muss. Zum Beispiel komprimiert 0,4 insgesamt 40%, behält aber weiterhin die konfigurierte Mindestanzahl neuester Nachrichten unverändert bei.</value>
+	</data>
+	<data name="AssistantConfiguration_SummarizationStyle" xml:space="preserve">
+		<value>Zusammenfassungsstil</value>
+	</data>
+	<data name="AssistantConfiguration_SummarizationStyle_Tooltip" xml:space="preserve">
+		<value>Legt fest, wie Konversationsverlauf, aktueller Projektzustand, Entscheidungen, Diagnosen und wiederverwendbares FlowBlox-Wissen in der dauerhaften Zusammenfassung strukturiert werden.</value>
+	</data>
+	<data name="AssistantSummarizationStyle_DetailedProjectMemory" xml:space="preserve">
+		<value>Detailliertes Projektgedächtnis (klassisch)</value>
+	</data>
+	<data name="AssistantSummarizationStyle_StructuredHistoricalMemory" xml:space="preserve">
+		<value>Strukturierte Projekthistorie und Erinnerung</value>
 	</data>
 	<data name="AssistantConfiguration_MaxContextTokens" xml:space="preserve">
 		<value>Maximale Kontext-Tokens</value>
@@ -4485,7 +4497,7 @@ Setzen Sie AssociatedContextualObject des Index-Flow-Blocks auf den Flow-Block u
     <value>Temperatur</value>
   </data>
   <data name="AIPropertyValueGenerationStrategy_Temperature_Tooltip" xml:space="preserve">
-    <value>Steuert die Zufälligkeit der erzeugten Werte. Verwenden Sie 0 für deterministische Ergebnisse.</value>
+    <value>Optionale Sampling-Temperatur. Leer lassen, um den Anbieterstandard zu verwenden; dies wird empfohlen, da einige Modelle 0 nicht unterstützen.</value>
   </data>
   <data name="AIPropertyValueGenerationStrategy_MaxTokens" xml:space="preserve">
     <value>Maximale Tokenanzahl</value>
@@ -4511,6 +4523,23 @@ Setzen Sie AssociatedContextualObject des Index-Flow-Blocks auf den Flow-Block u
   <data name="FloxBloxCategory_Authorization" xml:space="preserve">
     <value>Autorisierung</value>
   </data>
+  <data name="OpenXml2TextFlowBlock_DisplayName" xml:space="preserve"><value>Text aus OpenXML-Word-Dokument extrahieren</value></data>
+  <data name="OpenXml2TextFlowBlock_Description" xml:space="preserve"><value>Extrahiert Absatztext aus Kopfzeilen, Inhalt und Fußzeilen eines DOCX-Dokuments.</value></data>
+  <data name="OpenXml2TextFlowBlock_WordDocumentField" xml:space="preserve"><value>Word-Dokument</value></data>
+  <data name="OpenXml2TextFlowBlock_WordDocumentField_Tooltip" xml:space="preserve"><value>DOCX-Dokument als Byte-Array, Base64-Zeichenfolge oder vorhandener Dateipfad.</value></data>
+  <data name="OpenXml2TextFlowBlock_Groups_Advanced" xml:space="preserve"><value>Erweiterte Einstellungen</value></data>
+  <data name="OpenXml2TextFlowBlock_HeaderMode" xml:space="preserve"><value>Ausgabe der Kopfzeilen</value></data>
+  <data name="OpenXml2TextFlowBlock_HeaderMode_Tooltip" xml:space="preserve"><value>Legt fest, ob Kopfzeilen ausgelassen, als Text oder innerhalb von &lt;header&gt;-Tags ausgegeben werden.</value></data>
+  <data name="OpenXml2TextFlowBlock_BodyMode" xml:space="preserve"><value>Ausgabe des Inhalts</value></data>
+  <data name="OpenXml2TextFlowBlock_BodyMode_Tooltip" xml:space="preserve"><value>Legt fest, ob Inhaltsabsätze ausgelassen, als Text oder innerhalb von &lt;body&gt;-Tags ausgegeben werden.</value></data>
+  <data name="OpenXml2TextFlowBlock_FooterMode" xml:space="preserve"><value>Ausgabe der Fußzeilen</value></data>
+  <data name="OpenXml2TextFlowBlock_FooterMode_Tooltip" xml:space="preserve"><value>Legt fest, ob Fußzeilen ausgelassen, als Text oder innerhalb von &lt;footer&gt;-Tags ausgegeben werden.</value></data>
+  <data name="OpenXml2TextFlowBlock_SplitAtPageBreaks" xml:space="preserve"><value>An Seitenumbrüchen aufteilen</value></data>
+  <data name="OpenXml2TextFlowBlock_SplitAtPageBreaks_Tooltip" xml:space="preserve"><value>Erzeugt ein Ergebnis pro explizitem oder gespeichertem gerendertem Seitenumbruch. DOCX speichert keine verlässlichen Layout-Seitengrenzen; die Seiteneinteilung kann beim Rendern abweichen.</value></data>
+  <data name="OpenXmlTextSectionMode_IncludeWithTags" xml:space="preserve"><value>Mit Tags einblenden</value></data>
+  <data name="OpenXmlTextSectionMode_Include" xml:space="preserve"><value>Ohne Tags einblenden</value></data>
+  <data name="OpenXmlTextSectionMode_Exclude" xml:space="preserve"><value>Ausblenden</value></data>
+  <data name="OpenXml2TextFlowBlock_Notification_FailedToExtractText" xml:space="preserve"><value>Der Text konnte nicht aus dem OpenXML-Word-Dokument extrahiert werden.</value></data>
 </root>
 
 

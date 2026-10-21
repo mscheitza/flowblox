@@ -4,13 +4,13 @@ using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.Handler
 {
-    internal sealed class GetExplanationContentHandler : ToolHandlerBase
+    internal sealed class LoadExplanationContentHandler : ToolHandlerBase
     {
-        public override string Name => "GetExplanationContent";
+        public override string Name => "LoadExplanationContent";
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns explanation/prompt content by key.",
+            "Loads on-demand explanation content into subsequent system messages. Preloaded or previously loaded content returns Already loaded; no content is returned.",
             new JObject
             {
                 ["key"] = "string"
@@ -30,13 +30,24 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     new JObject { ["availableKeys"] = availableKeys }));
             }
 
+            if (entry.IsIncludedInInitialPrompt)
+            {
+                return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
+                {
+                    ["key"] = entry.Key,
+                    ["loaded"] = false,
+                    ["message"] = $"Already loaded: '{entry.Title}' is part of the initial system guidance."
+                }));
+            }
+
+            var loaded = ExplanationSessionStore.Load(ToolHandlerUtilities.CurrentSessionGuid, entry.Key);
             return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
             {
                 ["key"] = entry.Key,
-                ["title"] = entry.Title,
-                ["hint"] = entry.Hint,
-                ["isIncludedInInitialPrompt"] = entry.IsIncludedInInitialPrompt,
-                ["content"] = entry.Content
+                ["loaded"] = loaded,
+                ["message"] = loaded
+                    ? $"'{entry.Title}' was loaded and will be available as a system message from the next request."
+                    : $"Already loaded: '{entry.Title}' is available as a system message in this session."
             }));
         }
     }

@@ -13,15 +13,15 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Executes a FlowBlox test definition and returns runtime protocol plus serialized test results of the target flow block. " +
+            "Executes a FlowBlox test definition and returns runtime protocol plus target test results and field assignments. " +
             "Use only when test-definition execution is explicitly requested or needed for generator/test debugging.",
             new JObject
             {
                 ["testDefinitionName"] = "string",
                 ["targetFlowBlockName"] = "string? (optional; if omitted, latest linked flow block is used)",
                 ["synchronizeBeforeRun"] = "bool? (default: true)",
-                ["maxProtocolEntries"] = "int? (default: 250)",
-                ["usageHint"] = "Prefer RunGenerationStrategies first for generator work. Use this tool when test-definition execution or detailed test-result inspection is required. Protocol is limited to maxProtocolEntries."
+                ["maxProtocolEntries"] = "optional: int (default: 20). Returns the latest entries in chronological order.",
+                ["usageHint"] = "Prefer RunGenerationStrategies first for generator work. Use this tool when test-definition execution or detailed test-result inspection is required."
             });
 
         public override async Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -38,7 +38,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     1,
                     args.Value<int?>("maxProtocolEntries")
                     ?? args.Value<int?>("maxProtocolPreviewEntries")
-                    ?? 250);
+                    ?? 20);
 
                 var registry = ToolHandlerUtilities.GetRegistry();
                 var testDefinition = ToolHandlerUtilities.ResolveManagedObjectByName(registry, testDefinitionName) as FlowBloxTestDefinition;
@@ -132,14 +132,16 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ct.ThrowIfCancellationRequested();
 
                 var protocolEntryCountTotal = protocolEntries.Count;
-                var protocol = new JArray(protocolEntries.Take(maxProtocolEntries));
+                var protocol = ProtocolEntryWindowing.TakeLastInOriginalOrder(protocolEntries, maxProtocolEntries);
                 var filteredFieldValueAssignments = (testResult?.FieldValueAssignments ?? new Dictionary<string, string>())
                     .Where(x => !x.Key.StartsWith("$user::", StringComparison.OrdinalIgnoreCase))
                     .ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
                 var fieldValueLimiter = FieldValueResponseLimiter.FromConfiguration();
-                var limitedFieldValueAssignments = LimitFieldValueAssignments(
-                    filteredFieldValueAssignments,
-                    fieldValueLimiter);
+                
+                // Both sections share one budget.
+                // Preserve diagnostic result rows before ancillary assignments.
+                var testResults = BuildTestResults(resultSnapshotFlowBlock, fieldValueLimiter);
+                var limitedFieldValueAssignments = LimitFieldValueAssignments(filteredFieldValueAssignments, fieldValueLimiter);
 
                 var payload = new JObject
                 {
@@ -151,8 +153,8 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     ["protocolEntryCountTotal"] = protocolEntryCountTotal,
                     ["maxProtocolEntries"] = maxProtocolEntries,
                     ["protocol"] = protocol,
+                    ["testResults"] = testResults,
                     ["fieldValueAssignments"] = limitedFieldValueAssignments.Values,
-                    ["testResults"] = BuildTestResults(resultSnapshotFlowBlock, fieldValueLimiter),
                     ["fieldValueOutput"] = fieldValueLimiter.CreateMetadata()
                 };
 

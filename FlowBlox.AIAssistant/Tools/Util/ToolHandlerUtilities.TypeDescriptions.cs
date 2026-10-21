@@ -6,6 +6,7 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Util.Compression;
 using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json.Linq;
 
@@ -17,7 +18,8 @@ namespace FlowBlox.AIAssistant.Tools.Util
             string? fullName,
             Type mustAssignType,
             string label,
-            bool includeAlreadySent = false)
+            bool includeSummarized = false,
+            bool includeBaseMembers = false)
         {
             var type = ResolveType(fullName);
             if (type == null || !mustAssignType.IsAssignableFrom(type))
@@ -31,14 +33,16 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 includeChildren: true,
                 additionalKinds,
                 isTopLevel: true,
-                includeAlreadySent);
+                includeSummarized,
+                includeBaseMembers);
 
-            return Ok(BuildTypeInfoResponsePayload(kind, additionalKinds));
+            return Ok(CompressTypeAliases(BuildTypeInfoResponsePayload(kind, additionalKinds)));
         }
 
         public static ToolResponse CreateUnifiedTypeInfoResponse(
             string? fullName,
-            bool includeAlreadySent = false)
+            bool includeSummarized = false,
+            bool includeBaseMembers = false)
         {
             var type = ResolveType(fullName);
             if (type == null)
@@ -48,10 +52,10 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
             if (type.IsEnum)
             {
-                return Ok(new JObject
+                return Ok(CompressTypeAliases(new JObject
                 {
                     ["kind"] = BuildEnumKindInfo(type)
-                });
+                }));
             }
 
             if (!typeof(FlowBloxReactiveObject).IsAssignableFrom(type))
@@ -67,9 +71,21 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 includeChildren: true,
                 additionalKinds,
                 isTopLevel: true,
-                includeAlreadySent);
+                includeSummarized,
+                includeBaseMembers);
 
-            return Ok(BuildTypeInfoResponsePayload(kind, additionalKinds));
+            return Ok(CompressTypeAliases(BuildTypeInfoResponsePayload(kind, additionalKinds)));
+        }
+
+        private static JObject CompressTypeAliases(JObject payload)
+        {
+            foreach (var value in payload.DescendantsAndSelf().OfType<JValue>())
+            {
+                if (value.Type == JTokenType.String && value.Value is string text)
+                    value.Value = AiAssistantTypeAliasHelper.CompressTypeName(text);
+            }
+
+            return payload;
         }
 
         private static JObject BuildTypeInfoResponsePayload(JObject kind, Dictionary<string, JObject> additionalKinds)
@@ -142,27 +158,43 @@ namespace FlowBlox.AIAssistant.Tools.Util
             bool includeChildren,
             Dictionary<string, JObject> additionalKinds,
             bool isTopLevel,
-            bool includeAlreadySent = false)
+            bool includeSummarized = false,
+            bool includeBaseMembers = false)
         {
             var typeDisplayMetadata = GetTypeDisplayMetadata(type);
             var usedTypes = new Dictionary<string, JObject>(StringComparer.Ordinal);
             var properties = type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
-                .Where(p => ShouldIncludeProperty(type, p))
+                .Where(p => ShouldIncludeProperty(type, p, includeBaseMembers))
                 .OrderBy(p => p.Name)
                 .ToList();
 
             var propertyInfos = new JArray();
+            var omittedLivePropertyNames = new List<string>();
+            var omittedSummarizedPropertyNames = new List<string>();
             foreach (var property in properties)
             {
+                if (TryGetAlreadyDescribedInLiveContext(property, out _))
+                {
+                    omittedLivePropertyNames.Add(property.Name);
+                    continue;
+                }
+
+                if (!includeSummarized && TryGetAlreadyDescribedInSession(property, out _))
+                {
+                    omittedSummarizedPropertyNames.Add(property.Name);
+                    continue;
+                }
+
                 propertyInfos.Add(ToPropertyInfo(
                     property,
                     includeChildren,
                     additionalKinds,
                     usedTypes,
-                    includeAlreadySent,
-                    type));
+                    includeSummarized,
+                    type,
+                    includeBaseMembers));
             }
 
             var result = new JObject
@@ -174,6 +206,25 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 ["properties"] = propertyInfos
             };
 
+            if (omittedLivePropertyNames.Count > 0 || omittedSummarizedPropertyNames.Count > 0)
+            {
+                var omittedPropertyMessages = new List<string>();
+                if (omittedLivePropertyNames.Count > 0)
+                {
+                    omittedPropertyMessages.Add(
+                        $"Already present in the available message history: {string.Join(", ", omittedLivePropertyNames)}.");
+                }
+
+                if (omittedSummarizedPropertyNames.Count > 0)
+                {
+                    omittedPropertyMessages.Add(
+                        $"Sent earlier in this session: {string.Join(", ", omittedSummarizedPropertyNames)}. " +
+                        "Use includeSummarized=true only if the summary lacks required details.");
+                }
+
+                result["omittedPropertyDetails"] = string.Join(" ", omittedPropertyMessages);
+            }
+
             var usedTypeInfos = new JArray(usedTypes.Values.OrderBy(x => x.Value<string>("fullName")));
             if (usedTypeInfos.Count > 0)
                 result["usedTypes"] = usedTypeInfos;
@@ -184,7 +235,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 result["specialExplanations"] = specialExplanations;
             }
 
-            if (isTopLevel)
+            if (isTopLevel && propertyInfos.Count > 0)
             {
                 result["rules"] = new JObject
                 {
@@ -203,18 +254,10 @@ namespace FlowBlox.AIAssistant.Tools.Util
             bool includeChildren,
             Dictionary<string, JObject> additionalKinds,
             Dictionary<string, JObject> usedTypes,
-            bool includeAlreadySent = false,
-            Type? describedInType = null)
+            bool includeSummarized = false,
+            Type? describedInType = null,
+            bool includeBaseMembers = false)
         {
-            if (!includeAlreadySent && TryGetAlreadyDescribedInType(property, out var alreadyDescribedInType))
-            {
-                return new JObject
-                {
-                    ["name"] = property.Name,
-                    ["alreadySentHint"] = $"Already sent, see type '{alreadyDescribedInType}'."
-                };
-            }
-
             var displayAttribute = property.GetCustomAttribute<DisplayAttribute>();
             var displayName = displayAttribute != null
                 ? FlowBloxResourceUtil.GetDisplayName(displayAttribute, false)
@@ -239,32 +282,15 @@ namespace FlowBlox.AIAssistant.Tools.Util
             var majorTypeDescriptor = GetMajorTypeDescriptor(nonNullableType, "SimpleProperty");
 
             var flowBlockUi = property.GetCustomAttribute<FlowBloxUIAttribute>();
-            var uiOptions = flowBlockUi != null
-                ? Enum.GetValues(typeof(UIOptions))
-                    .Cast<UIOptions>()
-                    .Where(option => option != 0)
-                    .Where(option => flowBlockUi.UiOptions.HasFlag(option))
-                    .Select(option => option.ToString())
-                : Enumerable.Empty<string>();
-            var uiOperations = flowBlockUi != null
-                ? Enum.GetValues(typeof(UIOperations))
-                    .Cast<UIOperations>()
-                    .Where(operation => operation != UIOperations.None && operation != UIOperations.All)
-                    .Where(operation => flowBlockUi.Operations.HasFlag(operation))
-                    .Select(operation => operation.ToString())
-                : Enumerable.Empty<string>();
 
             var propertyInfo = new JObject
             {
                 ["name"] = property.Name,
                 ["displayName"] = string.IsNullOrWhiteSpace(displayName) ? property.Name : displayName,
-                ["type"] = propertyType.FullName ?? propertyType.Name,
+                ["type"] = AiAssistantGenericTypeNameHelper.GetCompactTypeName(propertyType),
                 ["flags"] = BuildPropertyFlags(nullable, property.CanWrite, isSimple, isEnum, isCollection),
                 ["majorTypeDescriptor"] = majorTypeDescriptor,
-                ["canUpdateViaParentPath"] = !isManagedObject,
-                ["updateRule"] = isManagedObject
-                    ? "Do not update through parent path. Update the target managed object directly."
-                    : "Can be updated via JSON path from the primary object."
+                ["canUpdateViaParentPath"] = !isManagedObject
             };
 
             if (!string.IsNullOrWhiteSpace(description))
@@ -272,15 +298,11 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
             if (flowBlockUi != null)
             {
+                var uiFlags = BuildUiFlags(flowBlockUi.Operations, flowBlockUi.UiOptions);
+                if (!string.IsNullOrEmpty(uiFlags))
+                    propertyInfo["uiFlags"] = uiFlags;
+
                 var uiInfo = new JObject();
-
-                var uiOperationsArray = new JArray(uiOperations);
-                if (uiOperationsArray.Count > 0)
-                    uiInfo["operations"] = uiOperationsArray;
-
-                var uiOptionsArray = new JArray(uiOptions);
-                if (uiOptionsArray.Count > 0)
-                    uiInfo["uiOptions"] = uiOptionsArray;
 
                 var creatableTypes = new JArray((flowBlockUi.CreatableTypes ?? Array.Empty<Type>()).Select(x => x.FullName ?? x.Name));
                 if (creatableTypes.Count > 0)
@@ -299,11 +321,8 @@ namespace FlowBlox.AIAssistant.Tools.Util
             if (isFlowBlockReference)
                 propertyInfo["isFlowBlockReference"] = true;
 
-            var attributes = new JArray(property.GetCustomAttributesData()
-                .Where(ShouldExposePropertyAttribute)
-                .Select(BuildAttributeInfo));
-
-            if (attributes.Count > 0)
+            var attributes = AiAssistantAttributeFormatter.Format(property.GetCustomAttributesData());
+            if (!string.IsNullOrEmpty(attributes))
                 propertyInfo["attributes"] = attributes;
 
             if (isEnum)
@@ -355,7 +374,8 @@ namespace FlowBlox.AIAssistant.Tools.Util
                         includeChildren: false,
                         additionalKinds,
                         isTopLevel: false,
-                        includeAlreadySent);
+                        includeSummarized,
+                        includeBaseMembers);
                 }
             }
 
@@ -392,42 +412,29 @@ namespace FlowBlox.AIAssistant.Tools.Util
             return flags;
         }
 
-        private static JObject BuildAttributeInfo(CustomAttributeData attributeData)
+        internal static string BuildUiFlags(UIOperations operations, UIOptions options)
         {
-            var ctorArgs = attributeData.ConstructorArguments
-                .Select(arg => arg.Value?.ToString() ?? string.Empty);
+            var flags = string.Empty;
 
-            var namedArgs = attributeData.NamedArguments
-                .ToDictionary(
-                    arg => arg.MemberName,
-                    arg => ToAttributeValueToken(arg.TypedValue.Value));
+            if (operations.HasFlag(UIOperations.Create))
+                flags += "C";
+            if (operations.HasFlag(UIOperations.Link))
+                flags += "L";
+            if (operations.HasFlag(UIOperations.Unlink))
+                flags += "U";
+            if (operations.HasFlag(UIOperations.Edit))
+                flags += "E";
+            if (operations.HasFlag(UIOperations.Delete))
+                flags += "D";
 
-            return new JObject
-            {
-                ["attributeType"] = attributeData.AttributeType.FullName ?? attributeData.AttributeType.Name,
-                ["constructorArguments"] = new JArray(ctorArgs),
-                ["namedArguments"] = JObject.FromObject(namedArgs)
-            };
-        }
+            if (options.HasFlag(UIOptions.EnableFieldSelection))
+                flags += "[FLD]";
+            if (options.HasFlag(UIOptions.EnableFileSelection))
+                flags += "[FL]";
+            if (options.HasFlag(UIOptions.EnableFolderSelection))
+                flags += "[DI]";
 
-        private static JToken ToAttributeValueToken(object? value)
-        {
-            if (value == null)
-            {
-                return JValue.CreateNull();
-            }
-
-            if (value is Type type)
-            {
-                return new JValue(type.FullName ?? type.Name);
-            }
-
-            if (value is IReadOnlyCollection<CustomAttributeTypedArgument> typedArguments)
-            {
-                return new JArray(typedArguments.Select(x => ToAttributeValueToken(x.Value)));
-            }
-
-            return JToken.FromObject(value);
+            return flags;
         }
 
         private static void AddSupportedTypeInfo(IDictionary<string, JObject> target, Type type)
@@ -659,9 +666,19 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
         private static bool ShouldIncludeProperty(
             Type ownerType,
-            PropertyInfo property)
+            PropertyInfo property,
+            bool includeBaseMembers)
         {
             if (HasJsonIgnore(property))
+            {
+                return false;
+            }
+
+            if (!includeBaseMembers
+                && typeof(BaseFlowBlock).IsAssignableFrom(ownerType)
+                && property.DeclaringType != ownerType
+                && property.DeclaringType != null
+                && FlowBloxFrameworkBaseFlowBlockTypes.Contains(property.DeclaringType))
             {
                 return false;
             }
@@ -674,22 +691,6 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
             if (typeof(BaseFlowBlock).IsAssignableFrom(ownerType)
                 && ExcludedBaseFlowBlockProperties.Contains(property.Name))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private static bool ShouldExposePropertyAttribute(CustomAttributeData attributeData)
-        {
-            var attributeType = attributeData.AttributeType;
-            if (ExcludedAttributeTypesForKindsInfo.Contains(attributeType))
-            {
-                return false;
-            }
-
-            if (string.Equals(attributeType.Name, "JsonIgnoreAttribute", StringComparison.Ordinal))
             {
                 return false;
             }

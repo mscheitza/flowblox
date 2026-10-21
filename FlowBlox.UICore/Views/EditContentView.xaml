@@ -1,4 +1,4 @@
-﻿<mah:MetroWindow
+<mah:MetroWindow
     x:Class="FlowBlox.UICore.Views.EditContentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -13,18 +13,13 @@
     Title="{x:Static resources:EditContentView.Window_Title}"
     Height="600" Width="900">
 
-    <!-- ViewModel -->
-    <Window.DataContext>
-        <viewModel:EditContentViewModel />
-    </Window.DataContext>
-
-    <!-- Ressourcen inkl. MahApps-Theme -->
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Window.Resources>
 
@@ -35,11 +30,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Toolbar -->
         <ToolBar Grid.Row="0" Padding="4">
-            
-            <!-- Import (Text) -->
             <Button Command="{Binding ImportTextFromFileCommand}"
+                    Visibility="{Binding CanEdit, Converter={StaticResource BooleanToVisibilityConverter}}"
                     ToolTip="{x:Static resources:EditContentView.Toolbar_ImportText_Tooltip}">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="FileImport" Foreground="#1565C0" Width="16" Height="16" Margin="0,0,6,0"/>
@@ -47,8 +40,8 @@
                 </StackPanel>
             </Button>
 
-            <!-- Import (Bytes -> Base64) -->
             <Button Command="{Binding ImportBytesFromFileCommand}"
+                    Visibility="{Binding CanEdit, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Margin="6,0,0,0"
                     ToolTip="{x:Static resources:EditContentView.Toolbar_ImportBytes_Tooltip}">
                 <StackPanel Orientation="Horizontal">
@@ -59,7 +52,7 @@
 
             <Button x:Name="InsertFieldPlaceholderButton"
                     Margin="6,0,0,0"
-                    Visibility="Collapsed"
+                    Visibility="{Binding ShowFieldPlaceholderButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Click="InsertFieldPlaceholderButton_Click"
                     ToolTip="{x:Static resources:EditContentView.Toolbar_InsertPlaceholder_Tooltip}">
                 <StackPanel Orientation="Horizontal">
@@ -70,28 +63,24 @@
 
             <Separator Margin="6,0,6,0"/>
 
-            <!-- Syntax Highlighting Selection -->
             <TextBlock Text="{x:Static resources:EditContentView.Label_Syntax}" VerticalAlignment="Center" Margin="0,0,6,0"/>
             <ComboBox ItemsSource="{Binding AvailableHighlightingNames}"
                       SelectedItem="{Binding SelectedHighlightingName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       MinWidth="180"
-                      ToolTip="{x:Static resources:EditContentView.Combo_Syntax_Tooltip}">
-            </ComboBox>
+                      ToolTip="{x:Static resources:EditContentView.Combo_Syntax_Tooltip}" />
         </ToolBar>
 
-        <!-- AvalonEdit Editor -->
         <avalonedit:TextEditor Grid.Row="1"
                                x:Name="Editor"
                                Document="{Binding Document}"
+                               IsReadOnly="{Binding IsReadOnly}"
                                FontFamily="JetBrains Mono"
                                FontSize="12"
                                ShowLineNumbers="True"
                                HorizontalScrollBarVisibility="Auto"
                                VerticalScrollBarVisibility="Auto"
-                               SyntaxHighlighting="{Binding SelectedHighlightingDefinition}">
-        </avalonedit:TextEditor>
+                               SyntaxHighlighting="{Binding SelectedHighlightingDefinition}" />
 
-        <!-- Bottom Buttons -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
             <Button Content="{x:Static resources:EditContentView.Button_Back}"
                     Command="{Binding CancelCommand}"
@@ -101,6 +90,7 @@
             <Button Content="{x:Static resources:EditContentView.Button_Save}"
                     Command="{Binding SaveCommand}"
                     IsDefault="True"
+                    Visibility="{Binding CanEdit, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Style="{StaticResource FlowBlox.WindowActionButton.Save}" />
         </StackPanel>
     </Grid>

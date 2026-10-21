@@ -126,10 +126,11 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Full files usually do not need to be reread; a fingerprint and a small context section are normally enough.
 
 ## Icon Workflow
-- For new/specific icons (for example for new FlowBlocks/ManagedObjects), do not copy random SVGs from `FlowBloxIcons.resx` first.
-- First search for the best matching icon in Pictogrammers MDI.
-- Download the selected SVG to `FlowBlox.Core/Resources`.
-- Import it into `FlowBlox.Core/FlowBloxIcons.resx`, then use the generated key in code.
+- For every new FlowBlock or other component that needs a specific icon, first decide which Pictogrammers Material Design Icons (MDI) symbol best communicates its purpose. Do not browse or reuse `FlowBloxIcons.resx` as the initial source of ideas.
+- After selecting the semantic match in the Pictogrammers MDI library, check whether that exact icon is already imported. If so, reuse it.
+- Otherwise download the original MDI SVG to `FlowBloxResources/temp`, copy the required SVG to `FlowBlox.Core/Resources`, and import it into `FlowBlox.Core/FlowBloxIcons.resx`.
+- Regenerate `FlowBloxIcons.Designer.cs` with `scripts/Update-StronglyTypedResourceDesigner.ps1`, then use the generated resource key in code.
+- Keep the FlowBlox icon resources limited to directly downloaded Pictogrammers SVGs that are actually used; do not import speculative alternatives or custom approximations.
 - If the icon is not imported yet, use `FlowBloxComponent` icon as temporary compile-safe fallback and switch to the final icon after import.
 
 ## FlowBlock Execute Contract

@@ -1,4 +1,4 @@
-Editing and Deletion Guide (FlowBlox Update Tool API, compact)
+# Explaining Edit and Delete
 
 Scope:
 - Applies to UpdateFlowBlock and UpdateManagedObject.

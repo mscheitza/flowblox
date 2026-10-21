@@ -3,6 +3,7 @@ using Aspose.Words.Saving;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using FlowBlox.Core.Models.FlowBlocks.AWS;
+using FlowBlox.Core.Models.FlowBlocks.IO;
 using FlowBlox.Core.Models.Components.IO;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.FlowBlocks.TextOperations;
@@ -42,6 +43,27 @@ namespace FlowBloxTest.FlowBlocks.IO
             Assert.AreEqual("Header 42", main.HeaderParts.Single().Header.InnerText);
             Assert.AreEqual("Footer Ada", main.FooterParts.Single().Footer.InnerText);
             Assert.IsNotNull(body.Descendants<Run>().First().RunProperties?.Bold);
+        }
+
+        [TestMethod]
+        public void OpenXml2TextFlowBlock_ExtractsTaggedHeaderBodyAndFooterPerPageBreak()
+        {
+            var start = CreateFlowBlock<StartFlowBlock>();
+            var sourceField = CreateUserField("WordDocument");
+            sourceField.FieldType.FieldType = FlowBlox.Core.Enums.FieldTypes.ByteArray;
+            sourceField.StringValue = Convert.ToBase64String(CreatePagedDocument());
+            var converter = CreateFlowBlock<OpenXml2TextFlowBlock>(start);
+            converter.WordDocumentField = sourceField;
+            var runtime = new FlowBloxUnitTestRuntime(_project);
+
+            Assert.IsTrue(converter.Execute(runtime, null));
+
+            var results = converter.GridElementResult.Results
+                .Select(result => result.FieldValueMappings.Single().Value)
+                .ToList();
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(TaggedPage("Header text", "First page", "Footer text"), results[0]);
+            Assert.AreEqual(TaggedPage("Header text", "Second page", "Footer text"), results[1]);
         }
 
         [TestMethod]
@@ -148,5 +170,33 @@ namespace FlowBloxTest.FlowBlocks.IO
             }
             return stream.ToArray();
         }
+
+        private static byte[] CreatePagedDocument()
+        {
+            using var stream = new MemoryStream();
+            using (var package = WordprocessingDocument.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document, true))
+            {
+                var main = package.AddMainDocumentPart();
+                main.Document = new WDocument(new Body(new Paragraph(
+                    new Run(new Text("First page")),
+                    new Run(new Break { Type = BreakValues.Page }),
+                    new Run(new Text("Second page")))));
+                var header = main.AddNewPart<HeaderPart>();
+                header.Header = new Header(new Paragraph(new Run(new Text("Header text"))));
+                var footer = main.AddNewPart<FooterPart>();
+                footer.Footer = new Footer(new Paragraph(new Run(new Text("Footer text"))));
+                var section = main.Document.Body!.AppendChild(new SectionProperties());
+                section.Append(new HeaderReference { Id = main.GetIdOfPart(header) });
+                section.Append(new FooterReference { Id = main.GetIdOfPart(footer) });
+                main.Document.Save();
+            }
+
+            return stream.ToArray();
+        }
+
+        private static string TaggedPage(string header, string body, string footer) =>
+            $"<header>{Environment.NewLine}{header}{Environment.NewLine}</header>{Environment.NewLine}" +
+            $"<body>{Environment.NewLine}{body}{Environment.NewLine}</body>{Environment.NewLine}" +
+            $"<footer>{Environment.NewLine}{footer}{Environment.NewLine}</footer>";
     }
 }

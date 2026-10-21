@@ -709,6 +709,7 @@ namespace FlowBlox.UICore.ViewModels
         {
             var entries = _testDefinition?.Entries?.ToList() ?? new List<FlowBlockTestDataset>();
             var neighbourFlowBlocks = ResolveTargetNeighbours(targetFlowBlock);
+            var hiddenNeighbourTree = ResolveSuccessorTree(neighbourFlowBlocks, targetFlowBlock);
             var capturedFlowBlocks = CapturedFlowBlocks?.ToHashSet() ?? new HashSet<BaseFlowBlock>();
 
             foreach (var entry in entries)
@@ -716,11 +717,14 @@ namespace FlowBlox.UICore.ViewModels
                 bool isTarget = entry.FlowBlock != null && entry.FlowBlock == targetFlowBlock;
                 bool isNeighbour = entry.FlowBlock != null && neighbourFlowBlocks.Contains(entry.FlowBlock);
                 bool isCaptured = entry.FlowBlock == null || capturedFlowBlocks.Count == 0 || capturedFlowBlocks.Contains(entry.FlowBlock);
-                bool hideNeighbour = HasExplicitFlowBlockContext && HideLastLayerNeighbours && isNeighbour;
+                bool hideNeighbourTree = entry.FlowBlock != null &&
+                                         HasExplicitFlowBlockContext &&
+                                         HideLastLayerNeighbours &&
+                                         hiddenNeighbourTree.Contains(entry.FlowBlock);
 
                 entry.UIIsTargetFlowBlock = isTarget;
                 entry.UIIsTargetNeighbour = isNeighbour;
-                entry.UIIsVisibleInCurrentContext = HasExplicitFlowBlockContext ? (isCaptured && !hideNeighbour) : true;
+                entry.UIIsVisibleInCurrentContext = HasExplicitFlowBlockContext ? (isCaptured && !hideNeighbourTree) : true;
             }
         }
 
@@ -743,6 +747,29 @@ namespace FlowBlox.UICore.ViewModels
             }
 
             return neighbours;
+        }
+
+        private static HashSet<BaseFlowBlock> ResolveSuccessorTree(
+            IEnumerable<BaseFlowBlock> roots,
+            BaseFlowBlock targetFlowBlock)
+        {
+            var successors = new HashSet<BaseFlowBlock>();
+            var pending = new Queue<BaseFlowBlock>(roots.Where(x => x != null && x != targetFlowBlock));
+
+            while (pending.Count > 0)
+            {
+                var flowBlock = pending.Dequeue();
+                if (!successors.Add(flowBlock))
+                    continue;
+
+                foreach (var nextFlowBlock in flowBlock.GetNextFlowBlocks())
+                {
+                    if (nextFlowBlock != null && nextFlowBlock != targetFlowBlock)
+                        pending.Enqueue(nextFlowBlock);
+                }
+            }
+
+            return successors;
         }
 
         private static bool ResolveHideLastLayerNeighboursOption()

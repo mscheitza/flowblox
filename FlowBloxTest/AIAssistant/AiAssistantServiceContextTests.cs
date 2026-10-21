@@ -34,6 +34,7 @@ namespace FlowBloxTest.AIAssistant
                 .ToList();
 
             Assert.AreEqual(1, summaryRequests.Count);
+            AssertContains(summaryRequests[0].SystemMessages.Single().Content, "Structured Historical Memory");
             AssertContains(summaryRequests[0].Messages.Single().Content, "USER-1");
             AssertContains(summaryRequests[0].Messages.Single().Content, "ASSISTANT-USER-1");
             AssertDoesNotContain(summaryRequests[0].Messages.Single().Content, "USER-2");
@@ -493,11 +494,15 @@ namespace FlowBloxTest.AIAssistant
         {
             var request = AssistantSummaryRequestBuilder.Build(
                 "## Goals\n- Existing goal",
-                [new AssistantMessagePair { AssistantRequest = "ASSISTANT-REQUEST-1", ToolApiResponse = "TOOL-RESPONSE-1" }]);
+                [new AssistantMessagePair { AssistantRequest = "ASSISTANT-REQUEST-1", ToolApiResponse = "TOOL-RESPONSE-1" }],
+                AssistantSummarizationStyle.DetailedProjectMemory);
 
             var systemMessage = request.SystemMessages.Single().Content;
 
             AssertContains(systemMessage, "Project Summarization Schema (PSS)");
+            Assert.AreEqual(
+                AIChatCacheBehavior.PreferCache,
+                request.SystemMessages.Single().CacheBehavior);
             AssertContains(systemMessage, "Goals");
             AssertContains(systemMessage, "Decisions");
             AssertContains(systemMessage, "Completed Changes");
@@ -513,6 +518,31 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(request.Messages.Single().Content, "ASSISTANT-REQUEST-1");
             AssertContains(request.Messages.Single().Content, "TOOL-RESPONSE-1");
             AssertContains(request.Messages.Single().Content, "MessagePair (AssistantRequest + ToolApiResponse):");
+        }
+
+        [TestMethod]
+        public void BuildSummaryRequest_UsesStructuredHistoricalMemoryWhenConfigured()
+        {
+            var request = AssistantSummaryRequestBuilder.Build(
+                "## Goals\n- Existing goal",
+                [new AssistantMessagePair { AssistantRequest = "ASSISTANT-REQUEST-1", ToolApiResponse = "TOOL-RESPONSE-1" }],
+                AssistantSummarizationStyle.StructuredHistoricalMemory);
+
+            var systemMessage = request.SystemMessages.Single().Content;
+
+            AssertContains(systemMessage, "Structured Historical Memory");
+            AssertContains(systemMessage, "Current Project State");
+            AssertContains(systemMessage, "Decision And Change History");
+            AssertContains(systemMessage, "Reusable FlowBlox And Tool Knowledge");
+            AssertContains(systemMessage, "Active Diagnostics");
+            AssertDoesNotContain(systemMessage, "Provider And Configuration Constraints");
+            AssertContains(systemMessage, "AI provider objects and their links");
+            AssertContains(systemMessage, "active run IDs");
+            AssertContains(systemMessage, "FieldChange IDs");
+            AssertContains(systemMessage, "why a FlowBlock was configured");
+            AssertContains(systemMessage, "DRY principle");
+            AssertContains(systemMessage, "Minimize token usage and request traffic");
+            AssertContains(systemMessage, "completeness and explainability take precedence over brevity");
         }
 
         [TestMethod]
@@ -544,6 +574,34 @@ namespace FlowBloxTest.AIAssistant
             var finalMessage = AssertIsInstanceOfType<AssistantSingleMessage>(history.SessionMessages[2]);
             Assert.AreEqual("assistant", finalMessage.Role);
             AssertContains(finalMessage.CompleteMessage, "Done.");
+        }
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_LoadsExplanationIntoNextSystemRequestWithoutToolPayload()
+        {
+            var executor = new QueuedAiExecutor(
+                "{\"assistantMessage\":\"Load generator guidance.\",\"final\":false,\"toolCalls\":[{\"toolName\":\"LoadExplanationContent\",\"arguments\":{\"key\":\"explaining_generators\"}}]}",
+                "{\"assistantMessage\":\"Done.\",\"final\":true,\"toolCalls\":[]}");
+            var config = CreateConfiguration(maxLatestMessages: 10);
+            config.MaxToolRounds = 2;
+            var service = CreateService(executor, new DefaultToolApi(), config);
+
+            var result = await service.GenerateProjectAsync("LOAD-EXPLANATION", CancellationToken.None);
+
+            Assert.IsTrue(result.Success, string.Join(Environment.NewLine, result.Errors));
+            Assert.AreEqual(2, executor.ChatRequests.Count);
+            Assert.AreEqual(2, executor.ChatRequests[0].SystemMessages.Count);
+            Assert.AreEqual(3, executor.ChatRequests[1].SystemMessages.Count);
+            AssertContains(executor.ChatRequests[1].SystemMessages[2].Content, "# Explaining Generators");
+            Assert.AreEqual(
+                AIChatCacheBehavior.PreferCache,
+                executor.ChatRequests[1].SystemMessages[2].CacheBehavior);
+
+            var history = new AiAssistantHistoryDocument();
+            service.UpdateHistorySessionMetadata(history);
+            var toolResponse = AssertIsInstanceOfType<AssistantMessagePair>(history.SessionMessages[1]).ToolApiResponse;
+            AssertContains(toolResponse, "will be available as a system message from the next request");
+            AssertDoesNotContain(toolResponse, "Purpose of generators");
         }
 
         [TestMethod]
@@ -580,6 +638,43 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(initialPrompt, "Project attachment note:");
             AssertContains(initialPrompt, "changed since the last conversation state was saved");
             AssertContains(initialPrompt, "latest project state");
+        }
+
+        [TestMethod]
+        public void CurrentConversationSummary_ReturnsSummaryFromRestoredSession()
+        {
+            var service = CreateService(new RecordingAiExecutor(), CreateConfiguration(maxLatestMessages: 10));
+            var summaryChangedCount = 0;
+            service.ConversationSummaryChanged += (_, _) => summaryChangedCount++;
+            service.RestoreSession(new AiAssistantHistoryDocument
+            {
+                ConversationSummary = "CURRENT-SUMMARY"
+            });
+
+            Assert.AreEqual("CURRENT-SUMMARY", service.CurrentConversationSummary);
+            Assert.AreEqual(1, summaryChangedCount);
+
+            service.ResetSession();
+
+            Assert.AreEqual(string.Empty, service.CurrentConversationSummary);
+            Assert.AreEqual(2, summaryChangedCount);
+        }
+
+        [TestMethod]
+        public void RestoreSession_PreservesLoadedOnDemandExplanations()
+        {
+            var service = CreateService(new RecordingAiExecutor(), CreateConfiguration(maxLatestMessages: 10));
+            service.RestoreSession(new AiAssistantHistoryDocument
+            {
+                LoadedExplanationKeys = [AssistantPromptCatalog.SpecialGeneratorsKey]
+            });
+
+            var restored = new AiAssistantHistoryDocument();
+            service.UpdateHistorySessionMetadata(restored);
+
+            CollectionAssert.AreEqual(
+                new[] { AssistantPromptCatalog.SpecialGeneratorsKey },
+                restored.LoadedExplanationKeys);
         }
 
         [TestMethod]

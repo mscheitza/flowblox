@@ -21,7 +21,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
         protected override string? OrganizationIdForRequest => OrganizationId;
 
-        public OpenAIProvider() : base("https://api.openai.com/v1", "gpt-5.6-terra")
+        public OpenAIProvider() : base("https://api.openai.com/v1", "gpt-6.1-sol")
         {
             EstimatedSystemPromptCacheSavingsRate = 0.80d;
         }

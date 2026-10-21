@@ -9,7 +9,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Inspects one output field value from the last ExecuteProject run.",
+            "Inspects one output field value from the last ExecuteExternalProject run.",
             new JObject
             {
                 ["outputName"] = "string (ProjectOutputFlowBlock name)",
@@ -18,6 +18,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["searchIndex"] = "int? (character index; default: 0)",
                 ["searchValues"] = "string? (comma-separated markers; earliest match replaces searchIndex)",
                 ["searchMode"] = "string? (StartAt|LookAround; default: StartAt)",
+                ["maxTokens"] = "optional: int (default: configured MaxFieldValuesTokensPerResponse, normally 4000; maximum: that configured value). Use only as many tokens as needed.",
                 ["runId"] = "string? (optional safety check)"
             });
 
@@ -26,14 +27,14 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             ct.ThrowIfCancellationRequested();
             var snapshot = AiAssistantProjectRunState.Get(ToolHandlerUtilities.CurrentSessionGuid);
             if (snapshot == null)
-                return Task.FromResult(ToolHandlerUtilities.Fail("No ExecuteProject run is available in this session."));
+                return Task.FromResult(ToolHandlerUtilities.Fail("No ExecuteExternalProject run is available in this session."));
 
             var requestedRunId = (args.Value<string>("runId") ?? string.Empty).Trim();
             if (!string.IsNullOrWhiteSpace(requestedRunId) &&
                 !string.Equals(requestedRunId, snapshot.RunId, StringComparison.OrdinalIgnoreCase))
             {
                 return Task.FromResult(ToolHandlerUtilities.Fail(
-                    $"Requested runId '{requestedRunId}' does not match last ExecuteProject run '{snapshot.RunId}'."));
+                    $"Requested runId '{requestedRunId}' does not match last ExecuteExternalProject run '{snapshot.RunId}'."));
             }
 
             var outputName = (args.Value<string>("outputName") ?? string.Empty).Trim();
@@ -48,7 +49,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
             var outputProperty = snapshot.Outputs.Property(outputName, StringComparison.OrdinalIgnoreCase);
             if (outputProperty?.Value is not JArray datasets)
-                return Task.FromResult(ToolHandlerUtilities.Fail($"Output '{outputName}' was not found in the last ExecuteProject run."));
+                return Task.FromResult(ToolHandlerUtilities.Fail($"Output '{outputName}' was not found in the last ExecuteExternalProject run."));
             if (datasetIndex.Value >= datasets.Count || datasets[datasetIndex.Value] is not JObject dataset)
             {
                 return Task.FromResult(ToolHandlerUtilities.Fail(
@@ -61,12 +62,16 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 return Task.FromResult(ToolHandlerUtilities.Fail($"Output field '{fieldName}' was not found in '{outputName}'."));
             if (!FieldValueInspectionToolUtilities.TryCreateOptions(args, out var options, out var error))
                 return Task.FromResult(ToolHandlerUtilities.Fail(error));
+            if (!FieldValueResponseLimiter.TryFromConfiguration(
+                    args.Value<int?>("maxTokens"),
+                    out var limiter,
+                    out var limiterError))
+                return Task.FromResult(ToolHandlerUtilities.Fail(limiterError));
 
             var value = valueProperty.Value.Type == JTokenType.String
                 ? valueProperty.Value.Value<string>() ?? string.Empty
                 : valueProperty.Value.ToString(Newtonsoft.Json.Formatting.None);
-            var limiter = FieldValueResponseLimiter.FromConfiguration();
-            var inspected = limiter.Inspect(value, options);
+            var inspected = limiter!.Inspect(value, options);
 
             return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
             {

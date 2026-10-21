@@ -18,7 +18,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
         private FieldValueResponseLimiter(AssistantTokenBudget tokenBudget, int maxTokens)
         {
             _tokenBudget = tokenBudget ?? throw new ArgumentNullException(nameof(tokenBudget));
-            _maxTokens = Math.Clamp(maxTokens, 1, 20000);
+            _maxTokens = Math.Max(1, maxTokens);
         }
 
         public int MaxTokens => _maxTokens;
@@ -28,17 +28,47 @@ namespace FlowBlox.AIAssistant.Tools.Util
         public static FieldValueResponseLimiter FromConfiguration()
         {
             var configuration = LoadConfiguration();
+            TryCreate(configuration, null, out var limiter, out _);
+            return limiter!;
+        }
+
+        public static bool TryFromConfiguration(
+            int? requestedMaxTokens,
+            out FieldValueResponseLimiter? limiter,
+            out string error)
+        {
+            return TryCreate(LoadConfiguration(), requestedMaxTokens, out limiter, out error);
+        }
+
+        internal static bool TryCreate(
+            AssistantConfiguration configuration,
+            int? requestedMaxTokens,
+            out FieldValueResponseLimiter? limiter,
+            out string error)
+        {
+            configuration ??= new AssistantConfiguration();
             var approximateCharactersPerToken = Math.Clamp(
                 configuration.ApproximateCharactersPerToken,
                 AssistantConfigurationLimits.MinApproximateCharactersPerToken,
                 AssistantConfigurationLimits.MaxApproximateCharactersPerToken);
+            var configuredMaxTokens = Math.Max(1, configuration.MaxFieldValuesTokensPerResponse);
 
-            return new FieldValueResponseLimiter(
+            if (requestedMaxTokens.HasValue &&
+                (requestedMaxTokens.Value <= 0 || requestedMaxTokens.Value > configuredMaxTokens))
+            {
+                limiter = null;
+                error = $"maxTokens must be between 1 and the configured MaxFieldValuesTokensPerResponse ({configuredMaxTokens}).";
+                return false;
+            }
+
+            limiter = new FieldValueResponseLimiter(
                 new AssistantTokenBudget
                 {
                     ApproximateCharactersPerToken = approximateCharactersPerToken
                 },
-                configuration.MaxFieldValuesTokensPerResponse);
+                requestedMaxTokens ?? configuredMaxTokens);
+            error = string.Empty;
+            return true;
         }
 
         public LimitedFieldValue Limit(string? value)
@@ -76,7 +106,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
             _limitedValues++;
             var suffix = $"... (truncated due to max field-value tokens per response limit of {_maxTokens} tokens)";
-            var maxCharacters = Math.Max(1, RemainingTokens * _tokenBudget.ApproximateCharactersPerToken);
+            var maxCharacters = CalculateMaximumCharacters(RemainingTokens);
             var allowedCharacters = Math.Max(0, maxCharacters - suffix.Length);
             var visibleValue = allowedCharacters <= 0
                 ? suffix
@@ -103,7 +133,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
             var searchResult = ResolveSearchIndex(value, options.SearchValues);
             var searchIndex = searchResult.Index
                 ?? (options.SearchIndex.HasValue ? Math.Clamp(options.SearchIndex.Value, 0, value.Length) : 0);
-            var maxCharacters = Math.Max(1, _maxTokens * _tokenBudget.ApproximateCharactersPerToken);
+            var maxCharacters = CalculateMaximumCharacters(_maxTokens);
             var range = ResolveInspectionRange(value.Length, searchIndex, maxCharacters, options.SearchMode);
             var currentValue = value.Substring(range.StartIndex, range.Length);
             var estimatedReturnedTokens = _tokenBudget.EstimateTokens(currentValue);
@@ -145,6 +175,14 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 .Value ?? string.Empty;
             var parseResult = AssistantConfigurationJson.Parse(rawConfig);
             return parseResult.Configuration ?? new AssistantConfiguration();
+        }
+
+        private int CalculateMaximumCharacters(int tokens)
+        {
+            return (int)Math.Clamp(
+                (long)Math.Max(1, tokens) * _tokenBudget.ApproximateCharactersPerToken,
+                1L,
+                int.MaxValue);
         }
 
         private static SearchIndexResult ResolveSearchIndex(string value, string? searchValues)

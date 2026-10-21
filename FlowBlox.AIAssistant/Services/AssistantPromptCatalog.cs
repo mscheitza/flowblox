@@ -185,7 +185,7 @@ namespace FlowBlox.AIAssistant.Services
                     "Version Notes",
                     "FlowBlox.AIAssistant.Prompts.ExplainingVersionNotes.txt",
                     "Current release limitations and implementation-status hints for AI Assistant editing.",
-                    false)
+                    true)
             };
 
         private static readonly Lazy<IReadOnlyDictionary<string, PromptEntry>> Entries = new(LoadEntries, isThreadSafe: true);
@@ -232,6 +232,9 @@ namespace FlowBlox.AIAssistant.Services
                 if (normalized.Length == 0)
                     continue;
 
+                if (definition.Key != SystemMessageKey && definition.Key != SessionBootstrapKey)
+                    normalized = EnsureTitleHeader(normalized, definition.Title);
+
                 result[definition.Key] = new PromptEntry(
                     definition.Key,
                     definition.Title,
@@ -242,6 +245,28 @@ namespace FlowBlox.AIAssistant.Services
             }
 
             return result;
+        }
+
+        private static string EnsureTitleHeader(string content, string title)
+        {
+            if (content.StartsWith("# ", StringComparison.Ordinal))
+                return content;
+
+            var lineBreakIndex = content.IndexOf('\n');
+            var firstLine = lineBreakIndex < 0 ? content : content[..lineBreakIndex];
+            var remainder = lineBreakIndex < 0 ? string.Empty : content[(lineBreakIndex + 1)..];
+            var remainderStartsWithContinuation = remainder.TrimStart().StartsWith("(", StringComparison.Ordinal);
+            var firstLineLooksLikeTitle = firstLine.EndsWith(":", StringComparison.Ordinal) ||
+                                          (!firstLine.EndsWith(".", StringComparison.Ordinal) &&
+                                           !firstLine.EndsWith("?", StringComparison.Ordinal) &&
+                                           !firstLine.EndsWith("!", StringComparison.Ordinal) &&
+                                           !remainderStartsWithContinuation);
+            if (firstLineLooksLikeTitle)
+                return string.IsNullOrWhiteSpace(remainder)
+                    ? $"# {title}"
+                    : $"# {title}\n{remainder}";
+
+            return $"# {title}\n\n{content}";
         }
 
         private static string ReplaceGlobalUrlTokens(string text)

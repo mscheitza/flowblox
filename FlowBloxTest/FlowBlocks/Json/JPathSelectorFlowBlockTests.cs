@@ -2,9 +2,7 @@ using FlowBlox.Core.Models.FlowBlocks.Json;
 using FlowBlox.Core.Models.FlowBlocks.SequenceFlow;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
-using FlowBlox.Core.Attributes;
 using FlowBlox.Test.Runtime;
-using System.Reflection;
 
 namespace FlowBloxTest.FlowBlocks.Json
 {
@@ -134,18 +132,16 @@ namespace FlowBloxTest.FlowBlocks.Json
         }
 
         [TestMethod]
-        public void FallbackValue_IsActiveOnlyWhenRowPathIsConfigured()
+        public void ValidateObject_FallbackValueWithoutRowPath_ReportsRowPathError()
         {
             var selector = CreateSelector("[]", "$[*].name");
-            var activationCondition = typeof(JPathSelectorFlowBlock)
-                .GetProperty(nameof(JPathSelectorFlowBlock.FallbackValue))!
-                .GetCustomAttribute<ActivationConditionAttribute>()!;
+            selector.FallbackValue = "Missing";
 
-            Assert.IsFalse(activationCondition.IsActive(selector));
+            var errors = selector.ValidateObject();
 
+            Assert.IsTrue(errors.ContainsKey(nameof(JPathSelectorFlowBlock.RowPath)));
             selector.RowPath = "$[*]";
-
-            Assert.IsTrue(activationCondition.IsActive(selector));
+            Assert.IsFalse(selector.ValidateObject().ContainsKey(nameof(JPathSelectorFlowBlock.RowPath)));
         }
 
         private JPathSelectorFlowBlock CreateSelector(string jsonContent, string path)

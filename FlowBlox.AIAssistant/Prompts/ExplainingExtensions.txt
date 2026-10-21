@@ -1,4 +1,4 @@
-Explaining FlowBlox Extensions:
+# Explaining FlowBlox Extensions
 
 1) What extensions are for
 - Use extensions when required FlowBlocks or managed objects are missing from the standard FlowBlox installation, or when project-, customer-, or user-specific behavior must be packaged separately.

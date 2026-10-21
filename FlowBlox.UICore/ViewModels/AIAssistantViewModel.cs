@@ -47,6 +47,7 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public bool IsChatVisible => !IsHistoryOverviewVisible;
+        public string CurrentConversationSummary => ChatViewModel.CurrentConversationSummary;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

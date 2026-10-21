@@ -1,10 +1,12 @@
-﻿using FlowBlox.UICore.Commands;
+using FlowBlox.UICore.Commands;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -15,23 +17,23 @@ namespace FlowBlox.UICore.ViewModels
     {
         private const string DefaultTextHighlighting = "TEXT";
 
-        private TextDocument _document;
+        private readonly TextDocument _document;
         private string _selectedHighlightingName;
         private ObservableCollection<string> _availableHighlightingNames;
         private readonly Window _window;
+        private bool _isReadOnly;
+        private bool _enableFieldSelection;
 
         public EditContentViewModel()
         {
             _document = new TextDocument();
 
-            // Determine all highlights dynamically
             var highlightingDefinitionNames = HighlightingManager.Instance.HighlightingDefinitions
                 .Select(h => h.Name)
                 .OrderBy(n => n)
                 .ToList();
 
             _availableHighlightingNames = [DefaultTextHighlighting, .. highlightingDefinitionNames];
-
             SelectedHighlightingName = DefaultTextHighlighting;
 
             ImportTextFromFileCommand = new RelayCommand(_ => ImportTextFromFile());
@@ -45,13 +47,45 @@ namespace FlowBlox.UICore.ViewModels
             _window = window;
         }
 
+        public bool IsReadOnly
+        {
+            get => _isReadOnly;
+            set
+            {
+                if (_isReadOnly == value)
+                    return;
+
+                _isReadOnly = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CanEdit));
+                OnPropertyChanged(nameof(ShowFieldPlaceholderButton));
+            }
+        }
+
+        public bool EnableFieldSelection
+        {
+            get => _enableFieldSelection;
+            set
+            {
+                if (_enableFieldSelection == value)
+                    return;
+
+                _enableFieldSelection = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowFieldPlaceholderButton));
+            }
+        }
+
+        public bool CanEdit => !IsReadOnly;
+        public bool ShowFieldPlaceholderButton => EnableFieldSelection && CanEdit;
+
         public ObservableCollection<string> AvailableHighlightingNames
         {
             get => _availableHighlightingNames;
-            set 
-            { 
-                _availableHighlightingNames = value; 
-                OnPropertyChanged(); 
+            set
+            {
+                _availableHighlightingNames = value;
+                OnPropertyChanged();
             }
         }
 
@@ -60,12 +94,12 @@ namespace FlowBlox.UICore.ViewModels
             get => _selectedHighlightingName;
             set
             {
-                if (_selectedHighlightingName != value)
-                {
-                    _selectedHighlightingName = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(SelectedHighlightingDefinition));
-                }
+                if (_selectedHighlightingName == value)
+                    return;
+
+                _selectedHighlightingName = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedHighlightingDefinition));
             }
         }
 
@@ -73,23 +107,15 @@ namespace FlowBlox.UICore.ViewModels
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(SelectedHighlightingName))
-                    return null;
-
-                if (SelectedHighlightingName == DefaultTextHighlighting)
+                if (string.IsNullOrWhiteSpace(SelectedHighlightingName) ||
+                    SelectedHighlightingName == DefaultTextHighlighting)
                     return null;
 
                 return HighlightingManager.Instance.GetDefinition(SelectedHighlightingName);
             }
         }
 
-        public TextDocument Document
-        {
-            get
-            {
-                return _document;
-            }
-        }
+        public TextDocument Document => _document;
 
         public string ContentText
         {
@@ -112,11 +138,15 @@ namespace FlowBlox.UICore.ViewModels
 
         private void ImportTextFromFile()
         {
+            if (IsReadOnly)
+                return;
+
             var ofd = new OpenFileDialog
             {
                 Title = "Open File",
                 Filter = "All Files (*.*)|*.*"
             };
+
             if (ofd.ShowDialog() == true)
             {
                 ContentText = File.ReadAllText(ofd.FileName);
@@ -133,11 +163,15 @@ namespace FlowBlox.UICore.ViewModels
 
         private void ImportBytesFromFile()
         {
+            if (IsReadOnly)
+                return;
+
             var ofd = new OpenFileDialog
             {
                 Title = "Open binary file",
                 Filter = "All files (*.*)|*.*"
             };
+
             if (ofd.ShowDialog() == true)
             {
                 var bytes = File.ReadAllBytes(ofd.FileName);
@@ -167,12 +201,18 @@ namespace FlowBlox.UICore.ViewModels
 
         private void Save()
         {
+            if (IsReadOnly || _window == null)
+                return;
+
             _window.DialogResult = true;
             _window.Close();
         }
 
         private void Cancel()
         {
+            if (_window == null)
+                return;
+
             _window.DialogResult = false;
             _window.Close();
         }

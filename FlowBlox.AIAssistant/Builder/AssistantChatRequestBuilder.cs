@@ -27,7 +27,8 @@ namespace FlowBlox.AIAssistant.Builder
             int minLatestMessages,
             AIProviderBase? provider,
             AssistantTokenBudget tokenBudget,
-            int summarizedMessageCount = 0)
+            int summarizedMessageCount = 0,
+            IReadOnlyList<string>? loadedExplanationContents = null)
         {
             var request = new AIChatRequest();
             request.SystemMessages.Add(new AIChatMessage
@@ -42,6 +43,18 @@ namespace FlowBlox.AIAssistant.Builder
                 Content = sessionBootstrapPrompt,
                 CacheBehavior = AIChatCacheBehavior.PreferCache
             });
+            foreach (var content in loadedExplanationContents ?? [])
+            {
+                if (string.IsNullOrWhiteSpace(content))
+                    continue;
+
+                request.SystemMessages.Add(new AIChatMessage
+                {
+                    Role = "system",
+                    Content = content.Trim(),
+                    CacheBehavior = AIChatCacheBehavior.PreferCache
+                });
+            }
 
             var summaryMessageForBudget = default(AIChatMessage);
             if (!string.IsNullOrWhiteSpace(conversationSummary))
@@ -51,15 +64,10 @@ namespace FlowBlox.AIAssistant.Builder
                 {
                     Role = "summary",
                     Content = summaryContent,
-                    CacheBehavior = AIChatCacheBehavior.PreferCache
-                };
-                request.Messages.Add(new AIChatMessage
-                {
-                    Role = "summary",
-                    Content = summaryContent,
                     CacheBehavior = AIChatCacheBehavior.PreferCache,
                     SemanticContent = new ChatMessageContent(AuthorRole.User, summaryContent)
-                });
+                };
+                request.Messages.Add(summaryMessageForBudget);
             }
 
             var fixedMessagesForBudget = request.SystemMessages.ToList();
