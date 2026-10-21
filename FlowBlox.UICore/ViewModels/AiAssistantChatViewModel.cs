@@ -1,4 +1,4 @@
-﻿using FlowBlox.AIAssistant.History;
+using FlowBlox.AIAssistant.History;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.Core.DependencyInjection;
@@ -24,12 +24,21 @@ namespace FlowBlox.UICore.ViewModels
 {
     public class AiAssistantChatViewModel : INotifyPropertyChanged, IDisposable
     {
+        private enum RunInterruption
+        {
+            None,
+            Paused,
+            Stopped
+        }
+
+        private RunInterruption _interruption;
         private readonly AiAssistantService _service;
         private readonly IDialogService _dialogService;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
         private readonly IRuntimeStateService _runtimeStateService;
         private readonly SynchronizationContext? _uiContext;
         private CancellationTokenSource? _cts;
+        private AssistantRunControl? _runControl;
         private string _currentInput = string.Empty;
         private bool _isBusy;
         private bool _isRuntimeActive;
@@ -51,11 +60,16 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand NewHistoryCommand { get; }
         public RelayCommand BackToHistoryCommand { get; }
         public RelayCommand SubmitCommand { get; }
+        public RelayCommand ContinueCommand { get; }
         public RelayCommand StopCommand { get; }
+        public RelayCommand PauseCommand { get; }
+        public bool IsPauseRequested => _runControl?.IsPauseRequested == true;
+        public string PauseButtonText => FlowBloxResourceUtil.GetLocalizedString(
+            IsPauseRequested ? "Button_PausePending" : "Button_Pause", typeof(Resources.AiAssistantChatView));
         public RelayCommand CopyTranscriptEntryCommand { get; }
         public RelayCommand OpenTranscriptEntryInEditorCommand { get; }
         public RelayCommand OpenCommunicationProtocolDirectoryCommand { get; }
-        public RelayCommand OpenConversationSummaryCommand { get; }
+        public RelayCommand OpenDebugToolsCommand { get; }
         public RelayCommand UndoProjectStateCommand { get; }
         public RelayCommand RedoProjectStateCommand { get; }
         public RelayCommand ResetTokenUsageCommand { get; }
@@ -69,6 +83,8 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     _currentInput = value;
                     OnPropertyChanged(nameof(CurrentInput));
+                    OnPropertyChanged(nameof(SubmitButtonText));
+                    OnPropertyChanged(nameof(SubmitButtonIcon));
                     SubmitCommand.Invalidate();
                 }
             }
@@ -86,6 +102,8 @@ namespace FlowBlox.UICore.ViewModels
                     OnPropertyChanged(nameof(CanEditInput));
                     SubmitCommand.Invalidate();
                     StopCommand.Invalidate();
+                    ContinueCommand.Invalidate();
+                    PauseCommand.Invalidate();
                     NewHistoryCommand.Invalidate();
                     BackToHistoryCommand.Invalidate();
                     RefreshUndoRedoState();
@@ -94,6 +112,17 @@ namespace FlowBlox.UICore.ViewModels
         }
 
         public bool CanEditInput => !IsBusy;
+        private bool ShouldContinue => _interruption == RunInterruption.Paused && string.IsNullOrWhiteSpace(CurrentInput);
+        public string ContinueButtonText => FlowBloxResourceUtil.GetLocalizedString(
+            "Button_Continue", typeof(Resources.AiAssistantChatView));
+        public string ContinueTooltip => FlowBloxResourceUtil.GetLocalizedString(
+            "Tooltip_Continue", typeof(Resources.AiAssistantChatView));
+        public string SubmitButtonText => ShouldContinue
+            ? ContinueButtonText
+            : FlowBloxResourceUtil.GetLocalizedString(
+                _interruption == RunInterruption.Paused ? "Button_SendAndContinue" : "Button_Submit",
+                typeof(Resources.AiAssistantChatView));
+        public string SubmitButtonIcon => ShouldContinue ? "Play" : "Send";
         public string CurrentConversationSummary => _service.CurrentConversationSummary;
         public bool HasConversationSummary => !string.IsNullOrWhiteSpace(CurrentConversationSummary);
 
@@ -166,7 +195,7 @@ namespace FlowBlox.UICore.ViewModels
 
         public event EventHandler? NewHistoryRequested;
         public event EventHandler? HistoryRequested;
-        public event EventHandler? ConversationSummaryRequested;
+        public event EventHandler? DebugToolsRequested;
         public event EventHandler? BeforeAutomaticLayoutAdjustment;
         private bool _isProviderConfigured;
 
@@ -192,14 +221,17 @@ namespace FlowBlox.UICore.ViewModels
 
             NewHistoryCommand = new RelayCommand(() => NewHistoryRequested?.Invoke(this, EventArgs.Empty), () => !IsBusy);
             BackToHistoryCommand = new RelayCommand(RequestHistoryOverview, () => CanGoBackToHistory);
-            SubmitCommand = new RelayCommand(async () => await SubmitAsync(), CanSubmit);
-            StopCommand = new RelayCommand(Stop, () => IsBusy);
+            SubmitCommand = new RelayCommand(
+                async () => await SubmitAsync(continueRun: ShouldContinue),
+                CanSubmit);
+            ContinueCommand = new RelayCommand(async () => await SubmitAsync(continueRun: true), CanContinue);
+            StopCommand = new RelayCommand(Stop, () => IsBusy || _interruption == RunInterruption.Paused);
+            PauseCommand = new RelayCommand(Pause, () => IsBusy && !IsPauseRequested);
             CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
             OpenTranscriptEntryInEditorCommand = new RelayCommand(OpenTranscriptEntryInEditor);
             OpenCommunicationProtocolDirectoryCommand = new RelayCommand(OpenCommunicationProtocolDirectory);
-            OpenConversationSummaryCommand = new RelayCommand(
-                () => ConversationSummaryRequested?.Invoke(this, EventArgs.Empty),
-                () => HasConversationSummary);
+            OpenDebugToolsCommand = new RelayCommand(
+                () => DebugToolsRequested?.Invoke(this, EventArgs.Empty));
             UndoProjectStateCommand = new RelayCommand(async () => await UndoProjectStateAsync(), () => CanUndoProjectState);
             RedoProjectStateCommand = new RelayCommand(async () => await RedoProjectStateAsync(), () => CanRedoProjectState);
             ResetTokenUsageCommand = new RelayCommand(ResetTokenUsage, () => HasEstimatedUsedTokens);
@@ -216,7 +248,27 @@ namespace FlowBlox.UICore.ViewModels
 
         private bool CanSubmit()
         {
-            return !IsBusy && !_isRuntimeActive && !_isExternalProjectEditActive && !string.IsNullOrWhiteSpace(CurrentInput);
+            if (ShouldContinue)
+                return CanContinue();
+
+            return CanEditInput && !_isRuntimeActive && !_isExternalProjectEditActive && !string.IsNullOrWhiteSpace(CurrentInput);
+        }
+
+        private bool CanContinue()
+        {
+            return !IsBusy && !_isRuntimeActive && !_isExternalProjectEditActive &&
+                _interruption != RunInterruption.None;
+        }
+
+        private void SetInterruption(RunInterruption interruption)
+        {
+            _interruption = interruption;
+            OnPropertyChanged(nameof(CanEditInput));
+            OnPropertyChanged(nameof(SubmitButtonText));
+            OnPropertyChanged(nameof(SubmitButtonIcon));
+            SubmitCommand.Invalidate();
+            ContinueCommand.Invalidate();
+            StopCommand.Invalidate();
         }
 
         private void Service_BeforeAutomaticLayoutAdjustment(object? sender, EventArgs e)
@@ -225,11 +277,14 @@ namespace FlowBlox.UICore.ViewModels
             BeforeAutomaticLayoutAdjustment?.Invoke(this, EventArgs.Empty);
         }
 
-        private async Task SubmitAsync()
+        private async Task SubmitAsync(bool continueRun = false)
         {
-            var input = CurrentInput?.Trim();
-            if (string.IsNullOrWhiteSpace(input) || IsBusy)
+            if (continueRun ? !CanContinue() : !CanSubmit())
                 return;
+
+            var input = continueRun
+                ? FlowBloxResourceUtil.GetLocalizedString("Prompt_Continue", typeof(Resources.AiAssistantChatView))
+                : CurrentInput.Trim();
 
             EnsureCurrentHistory();
             var stateBeforePrompt = _captureProjectState?.Invoke();
@@ -246,20 +301,34 @@ namespace FlowBlox.UICore.ViewModels
 
             try
             {
+                _runControl = new AssistantRunControl();
+                NotifyPauseStateChanged();
                 IsBusy = true;
+                SetInterruption(RunInterruption.None);
                 externalProjectEditActivated = true;
                 _runtimeStateService?.SetExternalProjectEditActive(true);
                 _cts = new CancellationTokenSource();
 
-                await _service.GenerateProjectAsync(input, _cts.Token);
+                var result = await _service.GenerateProjectAsync(input, _cts.Token, _runControl);
+                if (result.IsPaused)
+                {
+                    SetInterruption(RunInterruption.Paused);
+                    AddTranscriptLine(new AssistantTranscriptLine
+                    {
+                        Kind = AssistantTranscriptKind.Status,
+                        Text = FlowBloxResourceUtil.GetLocalizedString("Status_Paused", typeof(Resources.AiAssistantChatView)),
+                        Timestamp = DateTime.Now
+                    });
+                }
                 promptCompleted = true;
             }
             catch (OperationCanceledException)
             {
+                SetInterruption(RunInterruption.Stopped);
                 AddTranscriptLine(new AssistantTranscriptLine
                 {
                     Kind = AssistantTranscriptKind.Status,
-                    Text = "Stopped.",
+                    Text = FlowBloxResourceUtil.GetLocalizedString("Status_Stopped", typeof(Resources.AiAssistantChatView)),
                     Timestamp = DateTime.Now
                 });
             }
@@ -274,7 +343,10 @@ namespace FlowBlox.UICore.ViewModels
             }
             finally
             {
-                CurrentInput = string.Empty;
+                _runControl = null;
+                NotifyPauseStateChanged();
+                if (!continueRun)
+                    CurrentInput = string.Empty;
                 IsBusy = false;
                 if (externalProjectEditActivated)
                     _runtimeStateService?.SetExternalProjectEditActive(false);
@@ -316,11 +388,41 @@ namespace FlowBlox.UICore.ViewModels
                 _isRuntimeActive = e.IsRuntimeActive;
                 _isExternalProjectEditActive = e.IsExternalProjectEditActive;
                 SubmitCommand.Invalidate();
+                ContinueCommand.Invalidate();
             });
+        }
+
+        private void Pause()
+        {
+            if (!IsBusy || _runControl == null || IsPauseRequested)
+                return;
+
+            _runControl.RequestPause();
+            NotifyPauseStateChanged();
+        }
+
+        private void NotifyPauseStateChanged()
+        {
+            OnPropertyChanged(nameof(IsPauseRequested));
+            OnPropertyChanged(nameof(PauseButtonText));
+            PauseCommand.Invalidate();
         }
 
         private void Stop()
         {
+            if (_interruption == RunInterruption.Paused)
+            {
+                SetInterruption(RunInterruption.Stopped);
+                AddTranscriptLine(new AssistantTranscriptLine
+                {
+                    Kind = AssistantTranscriptKind.Status,
+                    Text = FlowBloxResourceUtil.GetLocalizedString("Status_Stopped", typeof(Resources.AiAssistantChatView)),
+                    Timestamp = DateTime.Now
+                });
+                SaveCurrentHistory();
+                return;
+            }
+
             if (!IsBusy)
                 return;
 
@@ -402,13 +504,15 @@ namespace FlowBlox.UICore.ViewModels
             CommunicationStatusText = text;
         }
 
+        public AiAssistantDebugViewModel CreateDebugViewModel() => new(_service, this);
+
         private void Service_ConversationSummaryChanged(object? sender, EventArgs e)
         {
             void NotifySummaryChanged()
             {
                 OnPropertyChanged(nameof(CurrentConversationSummary));
                 OnPropertyChanged(nameof(HasConversationSummary));
-                OpenConversationSummaryCommand.Invalidate();
+
             }
 
             if (_uiContext != null && _uiContext != SynchronizationContext.Current)
@@ -624,6 +728,7 @@ namespace FlowBlox.UICore.ViewModels
 
             var snapshot = _captureProjectState?.Invoke();
             _service.ResetSession();
+            SetInterruption(RunInterruption.None);
             Transcript.Clear();
             NotifyTranscriptStateChanged();
             ClearCommunicationStatus();
@@ -655,6 +760,7 @@ namespace FlowBlox.UICore.ViewModels
                 Transcript.Add(line);
 
             _service.RestoreSession(history);
+            SetInterruption(RunInterruption.None);
             EstimatedUsedTokens = _service.EstimatedUsedTokens;
             ClearCommunicationStatus();
             NotifyTranscriptStateChanged();
@@ -750,6 +856,7 @@ namespace FlowBlox.UICore.ViewModels
         {
             Stop();
             _service.ResetSession();
+            SetInterruption(RunInterruption.None);
             Transcript.Clear();
             NotifyTranscriptStateChanged();
             ClearCommunicationStatus();

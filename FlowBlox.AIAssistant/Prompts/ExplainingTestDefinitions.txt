@@ -67,3 +67,7 @@ Invalid configuration (must avoid):
 - `SelectionMode=UserInput` injects a value even when the producing flow block is not executed and therefore does not require a real result list. `SelectionMode=UserInput_ExpectedValue` is different: the flow block must execute and the supplied value must occur in its actual results.
 
 Do not create test definitions proactively. Only do it when the user asks.
+
+Test execution inspection:
+- RunTestDefinition and RunGenerationStrategies retain full assignment/result values in the latest session/project artifact. GetLatestTestExecutionArtifact lists executions (including before/after generation); select executionId to retrieve limited rows and assignment keys.
+- For truncated values, use InspectExecutedTestFieldValue with runId, executionId and either assignmentFQFieldName or datasetIndex + fullyQualifiedFieldName. Search with searchValues/searchIndex; LookAround adds surrounding context. Request the smallest useful maxTokens. No further debug run is needed.

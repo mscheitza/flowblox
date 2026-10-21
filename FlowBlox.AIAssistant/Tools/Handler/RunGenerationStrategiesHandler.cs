@@ -11,12 +11,12 @@ namespace FlowBlox.AIAssistant.Tools.Handler
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
             "Executes generation strategies for a specific flow block and returns protocol logs (status/message). " +
-            "Use this to validate generator configuration without running full project debug execution.",
+            "Retains internal test executions for GetLatestTestExecutionArtifact and InspectExecutedTestFieldValue.",
             new JObject
             {
                 ["flowBlockName"] = "string",
                 ["maxProtocolEntries"] = "optional: int (default: 20). Returns the latest entries in chronological order.",
-                ["usageHint"] = "After generator configuration on a flow block, run this tool to generate values. Then verify generated target values via GetComponentSnapshot."
+                ["usageHint"] = "After generator configuration on a flow block, run this tool to generate values. Verify configuration via GetComponentSnapshot; inspect test values via GetLatestTestExecutionArtifact, then InspectExecutedTestFieldValue."
             });
 
         public override async Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -45,6 +45,12 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
                 ct.ThrowIfCancellationRequested();
 
+                var snapshot = new AiAssistantTestExecutionSnapshot
+                {
+                    Project = ToolHandlerUtilities.TryGetProject(),
+                    Source = Name
+                };
+                AiAssistantTestExecutionState.Set(ToolHandlerUtilities.CurrentSessionGuid, snapshot);
                 var protocolEntries = new List<JObject>();
                 var generationExecutor = new FlowBlockGenerationStrategyExecutor(flowBlock);
 
@@ -61,6 +67,15 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     }
                 }
 
+                void OnTestExecuted(FlowBlox.Core.Models.Testing.FlowBloxTestDefinition definition,
+                    FlowBlox.Core.Models.Testing.FlowBloxTestResult result, string phase)
+                {
+                    snapshot.Executions.Add(TestExecutionArtifactUtilities.Capture(
+                        snapshot.Executions.Count + 1, definition.Name, flowBlock, result, phase));
+                    AiAssistantTestExecutionState.Set(ToolHandlerUtilities.CurrentSessionGuid, snapshot);
+                }
+
+                generationExecutor.TestExecuted += OnTestExecuted;
                 generationExecutor.LogCreated += OnLogCreated;
                 bool success;
                 try
@@ -70,6 +85,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 finally
                 {
                     generationExecutor.LogCreated -= OnLogCreated;
+                    generationExecutor.TestExecuted -= OnTestExecuted;
                 }
 
                 ct.ThrowIfCancellationRequested();
@@ -79,6 +95,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 var payload = new JObject
                 {
                     ["flowBlockName"] = flowBlock.Name,
+                    ["testExecutionArtifact"] = snapshot.Summary(),
                     ["generationStrategyCount"] = flowBlock.GenerationStrategies.Count,
                     ["success"] = success,
                     ["protocolEntryCount"] = protocol.Count,

@@ -1,4 +1,4 @@
-﻿using FlowBlox.AIAssistant.Models;
+using FlowBlox.AIAssistant.Models;
 using Newtonsoft.Json.Linq;
 using FlowBlox.Core.Provider;
 
@@ -134,7 +134,7 @@ namespace FlowBlox.AIAssistant.Tools
             [
                 new GetProjectJsonHandler(),
                 new GetExplanationManifestHandler(),
-                new LoadExplanationContentHandler(),
+                new GetExplanationContentHandler(),
                 new GetDistributedDataHandler(),
                 new GetDistributedDataContentHandler(),
                 new GetProjectMetadataHandler(),
@@ -175,6 +175,8 @@ namespace FlowBlox.AIAssistant.Tools
                 new RunGenerationStrategiesHandler(),
                 new GetLastDebugArtefactHandler(),
                 new InspectFieldValueHandler(),
+                new GetLatestTestExecutionArtifactHandler(),
+                new InspectExecutedTestFieldValueHandler(),
                 new InspectOutputFieldValueHandler(),
                 new BatchExecuteToolRequestsHandler(ExecuteAsync)
             ];

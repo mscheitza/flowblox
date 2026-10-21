@@ -19,7 +19,6 @@
   <data name="ContextMenu_OpenInEditor" xml:space="preserve"><value>Im Editor öffnen</value></data>
   <data name="Watermark_Title" xml:space="preserve"><value>FlowBlox AI-Assistant</value></data>
   <data name="Button_Submit" xml:space="preserve"><value>Senden</value></data>
-  <data name="Button_Cancel" xml:space="preserve"><value>Anhalten</value></data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Title" xml:space="preserve"><value>Kommunikationsprotokoll-Verzeichnis nicht gefunden</value></data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Description" xml:space="preserve"><value>Das Kommunikationsprotokoll-Verzeichnis existiert nicht: {0}</value></data>
   <data name="Message_CommunicationProtocolDirectory_OpenFailed_Title" xml:space="preserve"><value>Kommunikationsprotokoll-Verzeichnis konnte nicht geöffnet werden</value></data>
@@ -36,4 +35,15 @@
   <data name="Message_ExternalProjectExecution_Review" xml:space="preserve"><value>Projekt überprüfen</value></data>
   <data name="Message_ExternalProjectExecution_Execute" xml:space="preserve"><value>Ausführen</value></data>
   <data name="Message_ExternalProjectExecution_Cancel" xml:space="preserve"><value>Abbrechen</value></data>
+  <data name="Button_Pause" xml:space="preserve"><value>Pausieren</value></data>
+  <data name="Button_PausePending" xml:space="preserve"><value>Wird pausiert…</value></data>
+  <data name="Button_Stop" xml:space="preserve"><value>Stoppen</value></data>
+  <data name="Tooltip_Pause" xml:space="preserve"><value>Die laufende AI-Antwort und alle zugehörigen Tool-Aufrufe abschließen, danach pausieren. Anschließend eine weitere Nachricht senden oder ohne neue Nachricht mit Fortfahren fortsetzen.</value></data>
+  <data name="Tooltip_Stop" xml:space="preserve"><value>Sofortiges Stoppen durch Abbruchanforderung für die laufende AI-Anfrage oder Tool-Ausführung. Bereits ausgeführte Änderungen bleiben erhalten.</value></data>
+  <data name="Status_Paused" xml:space="preserve"><value>Nach Abschluss der laufenden Runde pausiert. Eine weitere Nachricht senden oder mit Fortfahren fortsetzen.</value></data>
+  <data name="Status_Stopped" xml:space="preserve"><value>Gestoppt.</value></data>
+  <data name="Button_Continue" xml:space="preserve"><value>Fortfahren</value></data>
+  <data name="Tooltip_Continue" xml:space="preserve"><value>Die unterbrochene Aufgabe mit dem aktuellen Gesprächs- und Projektstand fortsetzen. Ein ungesendeter Entwurf bleibt erhalten.</value></data>
+  <data name="Prompt_Continue" xml:space="preserve"><value>Setze die unterbrochene Aufgabe anhand des bisherigen Gesprächs und des aktuellen Projektstands fort. Prüfe vor weiteren Änderungen, welche Schritte bereits abgeschlossen wurden.</value></data>
+  <data name="Button_SendAndContinue" xml:space="preserve"><value>Senden und fortfahren</value></data>
 </root>

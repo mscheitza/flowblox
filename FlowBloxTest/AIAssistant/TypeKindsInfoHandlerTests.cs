@@ -83,22 +83,19 @@ namespace FlowBloxTest.AIAssistant
             var copyMoveResponse = await handler.HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(CopyMoveFlowBlock).FullName,
-                    ["includeSummarized"] = true
+                    ["typeFullName"] = typeof(CopyMoveFlowBlock).FullName
                 },
                 CancellationToken.None);
             var openXmlResponse = await handler.HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(OpenXml2TextFlowBlock).FullName,
-                    ["includeSummarized"] = true
+                    ["typeFullName"] = typeof(OpenXml2TextFlowBlock).FullName
                 },
                 CancellationToken.None);
             var tableMappingResponse = await handler.HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(TableSelectorMappingEntry).FullName,
-                    ["includeSummarized"] = true
+                    ["typeFullName"] = typeof(TableSelectorMappingEntry).FullName
                 },
                 CancellationToken.None);
 
@@ -132,8 +129,7 @@ namespace FlowBloxTest.AIAssistant
             var response = await new GetTypeKindsInfoHandler().HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(FormatFlowBlock).FullName,
-                    ["includeSummarized"] = true
+                    ["typeFullName"] = typeof(FormatFlowBlock).FullName
                 },
                 CancellationToken.None);
 
@@ -156,8 +152,7 @@ namespace FlowBloxTest.AIAssistant
             var response = await new GetTypeKindsInfoHandler().HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(NullableMetadataFixture).FullName,
-                    ["includeSummarized"] = true
+                    ["typeFullName"] = typeof(NullableMetadataFixture).FullName
                 },
                 CancellationToken.None);
 
@@ -179,9 +174,7 @@ namespace FlowBloxTest.AIAssistant
             var response = await new GetTypeKindsInfoHandler().HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(TableReaderFlowBlock).FullName,
-                    ["includeSummarized"] = true,
-                    ["includeBaseMembers"] = true
+                    ["typeFullName"] = typeof(TableReaderFlowBlock).FullName
                 },
                 CancellationToken.None);
 
@@ -244,58 +237,30 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public async Task DerivedFlowBlockMetadata_ExcludesBaseMembersByDefaultAndIncludesThemOnRequest()
+        public async Task DerivedFlowBlockMetadata_AlwaysIncludesBaseMembers()
         {
             FlowBloxProjectManager.Instance.ActiveProject = new FlowBloxProject();
             ToolHandlerUtilities.ClearSessionCache();
-
-            var handler = new GetTypeKindsInfoHandler();
-            var compactBaseResultType = Compact(typeof(FlowBlox.Core.Models.FlowBlocks.Base.BaseResultFlowBlock));
-            var defaultResponse = await handler.HandleAsync(
+            var response = await new GetTypeKindsInfoHandler().HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(TableReaderFlowBlock).FullName,
-                    ["includeSummarized"] = true
+                    ["typeFullName"] = typeof(TableReaderFlowBlock).FullName
                 },
                 CancellationToken.None);
-
-            Assert.IsTrue(defaultResponse.Ok, defaultResponse.Error);
-            var defaultKind = defaultResponse.Result["kind"];
-            var defaultPropertyNames = defaultKind?["properties"]?
-                .Children<JObject>()
+            Assert.IsTrue(response.Ok, response.Error);
+            var names = response.Result["kind"]!["properties"]!.Children<JObject>()
                 .Select(x => x.Value<string>("name"))
-                .ToList();
-
-            CollectionAssert.Contains(defaultPropertyNames, "MappingEntries");
-            CollectionAssert.Contains(defaultPropertyNames, "ReferencedTable");
-            CollectionAssert.DoesNotContain(defaultPropertyNames, "OutputIgnoreDuplicates");
-            CollectionAssert.DoesNotContain(defaultPropertyNames, "ActivationConditions");
-            CollectionAssert.Contains(
-                defaultKind?["inheritanceHierarchy"]?.Values<string>().ToList(),
-                compactBaseResultType);
-
-            var responseWithBaseMembers = await handler.HandleAsync(
-                new JObject
-                {
-                    ["typeFullName"] = typeof(TableReaderFlowBlock).FullName,
-                    ["includeSummarized"] = true,
-                    ["includeBaseMembers"] = true
-                },
-                CancellationToken.None);
-
-            Assert.IsTrue(responseWithBaseMembers.Ok, responseWithBaseMembers.Error);
-            var propertyNamesWithBaseMembers = responseWithBaseMembers.Result["kind"]?["properties"]?
-                .Children<JObject>()
-                .Select(x => x.Value<string>("name"))
-                .ToList();
-
-            CollectionAssert.Contains(propertyNamesWithBaseMembers, "OutputIgnoreDuplicates");
-            CollectionAssert.Contains(propertyNamesWithBaseMembers, "ActivationConditions");
-            CollectionAssert.DoesNotContain(propertyNamesWithBaseMembers, "DefinedManagedObjects");
-            CollectionAssert.DoesNotContain(propertyNamesWithBaseMembers, "Location");
-            CollectionAssert.DoesNotContain(propertyNamesWithBaseMembers, "TestDefinitions");
+                .ToArray();
+            CollectionAssert.IsSubsetOf(
+                new[] { "MappingEntries",
+                    "ReferencedTable",
+                    "OutputIgnoreDuplicates",
+                    "ActivationConditions" },
+                names);
+            CollectionAssert.DoesNotContain(names, "DefinedManagedObjects");
+            CollectionAssert.DoesNotContain(names, "Location");
+            CollectionAssert.DoesNotContain(names, "TestDefinitions");
         }
-
         [TestMethod]
         public async Task DerivedFlowBlockMetadata_IncludesIntermediateDomainBaseMembersByDefault()
         {
@@ -305,8 +270,7 @@ namespace FlowBloxTest.AIAssistant
             var response = await new GetTypeKindsInfoHandler().HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(WebEventFlowBlock).FullName,
-                    ["includeSummarized"] = true
+                    ["typeFullName"] = typeof(WebEventFlowBlock).FullName
                 },
                 CancellationToken.None);
 
@@ -317,75 +281,8 @@ namespace FlowBloxTest.AIAssistant
                 .ToList();
 
             CollectionAssert.Contains(propertyNames, "AssociatedWebBrowser");
-            CollectionAssert.DoesNotContain(propertyNames, "OutputIgnoreDuplicates");
-            CollectionAssert.DoesNotContain(propertyNames, "ResultField");
-        }
-
-        [TestMethod]
-        public async Task PropertyDescriptionCaches_DistinguishLiveAndPreviouslySummarizedDetails()
-        {
-            FlowBloxProjectManager.Instance.ActiveProject = new FlowBloxProject();
-            var sessionId = Guid.NewGuid().ToString("N");
-            ToolHandlerUtilities.SetCurrentSessionGuid(sessionId);
-            ToolHandlerUtilities.ClearPropertyDescriptionCache(sessionId);
-
-            try
-            {
-                var handler = new GetTypeKindsInfoHandler();
-                var args = new JObject
-                {
-                    ["typeFullName"] = typeof(TableReaderFlowBlock).FullName
-                };
-
-                var firstResponse = await handler.HandleAsync(args, CancellationToken.None);
-                var repeatedLiveResponse = await handler.HandleAsync(
-                    new JObject
-                    {
-                        ["typeFullName"] = typeof(TableReaderFlowBlock).FullName,
-                        ["includeSummarized"] = true
-                    },
-                    CancellationToken.None);
-
-                Assert.IsNotNull(FindProperty(firstResponse, "MappingEntries")?["type"]);
-                Assert.IsNull(FindProperty(repeatedLiveResponse, "MappingEntries"));
-                var repeatedLiveOmissionMessage = repeatedLiveResponse.Result["kind"]?["omittedPropertyDetails"]?.Value<string>();
-                StringAssert.Contains(
-                    repeatedLiveOmissionMessage,
-                    "available message history");
-                StringAssert.Contains(repeatedLiveOmissionMessage, "MappingEntries");
-                Assert.AreEqual(0, repeatedLiveResponse.Result["kind"]?["properties"]?.Count());
-                Assert.IsNull(repeatedLiveResponse.Result["kind"]?["rules"]);
-                Assert.IsTrue(
-                    repeatedLiveResponse.Result.ToString(Newtonsoft.Json.Formatting.None).Length < 1500,
-                    "A fully cached kind-info response should remain compact.");
-
-                ToolHandlerUtilities.ClearLivePropertyDescriptionCache(sessionId);
-                var summarizedResponse = await handler.HandleAsync(args, CancellationToken.None);
-
-                Assert.IsNull(FindProperty(summarizedResponse, "MappingEntries"));
-                var summarizedOmissionMessage = summarizedResponse.Result["kind"]?["omittedPropertyDetails"]?.Value<string>();
-                StringAssert.Contains(
-                    summarizedOmissionMessage,
-                    "earlier in this session");
-                StringAssert.Contains(summarizedOmissionMessage, "MappingEntries");
-                StringAssert.Contains(summarizedOmissionMessage, "includeSummarized=true");
-
-                var explicitlyRepeatedResponse = await handler.HandleAsync(
-                    new JObject
-                    {
-                        ["typeFullName"] = typeof(TableReaderFlowBlock).FullName,
-                        ["includeSummarized"] = true
-                    },
-                    CancellationToken.None);
-
-                Assert.IsNotNull(FindProperty(explicitlyRepeatedResponse, "MappingEntries")?["type"]);
-                Assert.IsNull(explicitlyRepeatedResponse.Result["kind"]?["omittedPropertyDetails"]);
-            }
-            finally
-            {
-                ToolHandlerUtilities.ClearPropertyDescriptionCache(sessionId);
-                ToolHandlerUtilities.SetCurrentSessionGuid(null);
-            }
+            CollectionAssert.Contains(propertyNames, "OutputIgnoreDuplicates");
+            CollectionAssert.Contains(propertyNames, "ResultField");
         }
 
         [TestMethod]
@@ -412,8 +309,7 @@ namespace FlowBloxTest.AIAssistant
                 var response = await handler.HandleAsync(
                     new JObject
                     {
-                        ["typeFullName"] = baseType.FullName,
-                        ["includeSummarized"] = true
+                        ["typeFullName"] = baseType.FullName
                     },
                     CancellationToken.None);
 
@@ -431,8 +327,7 @@ namespace FlowBloxTest.AIAssistant
             var response = await new GetTypeKindsInfoHandler().HandleAsync(
                 new JObject
                 {
-                    ["typeFullName"] = typeof(SQLTable).FullName,
-                    ["includeSummarized"] = true
+                    ["typeFullName"] = typeof(SQLTable).FullName
                 },
                 CancellationToken.None);
 

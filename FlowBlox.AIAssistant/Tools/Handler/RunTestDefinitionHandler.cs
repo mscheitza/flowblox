@@ -1,6 +1,5 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Extensions;
-using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Testing;
 using Newtonsoft.Json.Linq;
@@ -14,7 +13,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
             "Executes a FlowBlox test definition and returns runtime protocol plus target test results and field assignments. " +
-            "Use only when test-definition execution is explicitly requested or needed for generator/test debugging.",
+            "Retains full values for GetLatestTestExecutionArtifact and InspectExecutedTestFieldValue. Use only when test execution is requested or needed for generator/test debugging.",
             new JObject
             {
                 ["testDefinitionName"] = "string",
@@ -74,11 +73,17 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     .Distinct()
                     .ToList();
 
+                var snapshot = new AiAssistantTestExecutionSnapshot
+                {
+                    Project = ToolHandlerUtilities.TryGetProject(),
+                    Source = Name
+                };
+                AiAssistantTestExecutionState.Set(ToolHandlerUtilities.CurrentSessionGuid, snapshot);
                 var protocolEntries = new List<JObject>();
                 var testExecutor = new FlowBloxTestExecutor();
                 FlowBloxTestResult? testResult = null;
                 bool initialized = false;
-                BaseFlowBlock? resultSnapshotFlowBlock = null;
+                JObject? execution = null;
 
                 void OnLogCreated(FlowBlox.Core.Models.Runtime.BaseRuntime runtime, string message, FlowBlox.Core.Enums.FlowBloxLogLevel logLevel)
                 {
@@ -99,13 +104,15 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
                     testExecutor.Initialize(testDefinition, effectiveTargetFlowBlock, includedFlowBlocks);
                     initialized = true;
-                    resultSnapshotFlowBlock = effectiveTargetFlowBlock;
 
                     var runtime = testExecutor.GetRuntime();
                     runtime.LogMessageCreated += OnLogCreated;
                     try
                     {
                         testResult = await testExecutor.ExecuteTestAsync();
+                        execution = TestExecutionArtifactUtilities.Capture(1, testDefinition.Name, effectiveTargetFlowBlock, testResult, "Test");
+                        snapshot.Executions.Add(execution);
+                        AiAssistantTestExecutionState.Set(ToolHandlerUtilities.CurrentSessionGuid, snapshot);
                     }
                     finally
                     {
@@ -133,15 +140,8 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
                 var protocolEntryCountTotal = protocolEntries.Count;
                 var protocol = ProtocolEntryWindowing.TakeLastInOriginalOrder(protocolEntries, maxProtocolEntries);
-                var filteredFieldValueAssignments = (testResult?.FieldValueAssignments ?? new Dictionary<string, string>())
-                    .Where(x => !x.Key.StartsWith("$user::", StringComparison.OrdinalIgnoreCase))
-                    .ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
                 var fieldValueLimiter = FieldValueResponseLimiter.FromConfiguration();
-                
-                // Both sections share one budget.
-                // Preserve diagnostic result rows before ancillary assignments.
-                var testResults = BuildTestResults(resultSnapshotFlowBlock, fieldValueLimiter);
-                var limitedFieldValueAssignments = LimitFieldValueAssignments(filteredFieldValueAssignments, fieldValueLimiter);
+                var limitedExecution = TestExecutionArtifactUtilities.Limit(execution!, fieldValueLimiter);
 
                 var payload = new JObject
                 {
@@ -153,13 +153,14 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     ["protocolEntryCountTotal"] = protocolEntryCountTotal,
                     ["maxProtocolEntries"] = maxProtocolEntries,
                     ["protocol"] = protocol,
-                    ["testResults"] = testResults,
-                    ["fieldValueAssignments"] = limitedFieldValueAssignments.Values,
+                    ["testExecutionArtifact"] = snapshot.Summary(),
+                    ["testResults"] = limitedExecution["testResults"],
+                    ["fieldValueAssignments"] = limitedExecution["fieldValueAssignments"],
                     ["fieldValueOutput"] = fieldValueLimiter.CreateMetadata()
                 };
 
-                if (limitedFieldValueAssignments.Metadata.HasValues)
-                    payload["fieldValueAssignmentInfo"] = limitedFieldValueAssignments.Metadata;
+                if (limitedExecution["fieldValueAssignmentInfo"] is JObject assignmentInfo)
+                    payload["fieldValueAssignmentInfo"] = assignmentInfo;
 
                 if (testResult?.Success == true)
                     return ToolHandlerUtilities.Ok(payload);
@@ -178,94 +179,5 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 return ToolHandlerUtilities.Fail(ex.Message);
             }
         }
-
-        private static LimitedFieldValueAssignments LimitFieldValueAssignments(
-            IReadOnlyDictionary<string, string> fieldValueAssignments,
-            FieldValueResponseLimiter limiter)
-        {
-            var values = new JObject();
-            var metadata = new JObject();
-
-            foreach (var assignment in fieldValueAssignments)
-            {
-                var limited = limiter.Limit(assignment.Value);
-                values[assignment.Key] = limited.Value;
-                var valueInfo = limited.ToMetadata();
-                if (valueInfo.HasValues)
-                    metadata[assignment.Key] = valueInfo;
-            }
-
-            return new LimitedFieldValueAssignments(values, metadata);
-        }
-
-        private static JObject BuildTestResults(
-            BaseFlowBlock? flowBlock,
-            FieldValueResponseLimiter limiter)
-        {
-            if (flowBlock is not BaseResultFlowBlock resultFlowBlock)
-            {
-                return new JObject
-                {
-                    ["available"] = false,
-                    ["reason"] = "Target flow block is not a BaseResultFlowBlock."
-                };
-            }
-
-            var results = resultFlowBlock.GridElementResult?.Results ?? new List<FlowBlockOutDataset>();
-            if (results.Count == 0)
-            {
-                return new JObject
-                {
-                    ["available"] = true,
-                    ["resultCount"] = 0,
-                    ["columns"] = new JArray(),
-                    ["rows"] = new JArray()
-                };
-            }
-
-            var columns = results
-                .First()
-                .FieldValueMappings
-                .Select(x => x.Field?.Name ?? string.Empty)
-                .ToList();
-
-            var rows = new JArray();
-            for (int i = 0; i < results.Count; i++)
-            {
-                var row = results[i];
-                var values = new JArray(
-                    row.FieldValueMappings.Select(mapping =>
-                    {
-                        var limited = limiter.Limit(mapping.Value);
-                        var valueObject = new JObject
-                        {
-                            ["fieldName"] = mapping.Field?.Name ?? string.Empty,
-                            ["fullyQualifiedFieldName"] = mapping.Field?.FullyQualifiedName ?? string.Empty,
-                            ["value"] = limited.Value
-                        };
-                        var valueInfo = limited.ToMetadata();
-                        if (valueInfo.HasValues)
-                            valueObject["valueInfo"] = valueInfo;
-
-                        return valueObject;
-                    }));
-
-                rows.Add(new JObject
-                {
-                    ["index"] = i,
-                    ["values"] = values
-                });
-            }
-
-            return new JObject
-            {
-                ["available"] = true,
-                ["resultCount"] = results.Count,
-                ["columns"] = new JArray(columns),
-                ["rows"] = rows
-            };
-        }
-
-        private sealed record LimitedFieldValueAssignments(JObject Values, JObject Metadata);
     }
 }

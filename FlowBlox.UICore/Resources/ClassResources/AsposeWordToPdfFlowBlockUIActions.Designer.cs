@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources.ClassResources
-{
+namespace FlowBlox.UICore.Resources.ClassResources {
     using System;
     
     
@@ -20,31 +19,26 @@ namespace FlowBlox.UICore.Resources.ClassResources
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AsposeWordToPdfFlowBlockUIActions
-    {
+    public class AsposeWordToPdfFlowBlockUIActions {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AsposeWordToPdfFlowBlockUIActions()
-        {
+        internal AsposeWordToPdfFlowBlockUIActions() {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ClassResources.AsposeWordToPdfFlowBlockUIActions", typeof(AsposeWordToPdfFlowBlockUIActions).Assembly);
                     resourceMan = temp;
                 }
@@ -57,14 +51,11 @@ namespace FlowBlox.UICore.Resources.ClassResources
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
@@ -72,10 +63,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The Aspose.Words license could not be imported. ähnelt.
         /// </summary>
-        public static string ImportLicense_Failed
-        {
-            get
-            {
+        public static string ImportLicense_Failed {
+            get {
                 return ResourceManager.GetString("ImportLicense_Failed", resourceCulture);
             }
         }
@@ -83,10 +72,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die The Aspose.Words license was imported and stored in the application options. ähnelt.
         /// </summary>
-        public static string ImportLicense_Success
-        {
-            get
-            {
+        public static string ImportLicense_Success {
+            get {
                 return ResourceManager.GetString("ImportLicense_Success", resourceCulture);
             }
         }
@@ -94,10 +81,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Aspose.Words license ähnelt.
         /// </summary>
-        public static string ImportLicense_Title
-        {
-            get
-            {
+        public static string ImportLicense_Title {
+            get {
                 return ResourceManager.GetString("ImportLicense_Title", resourceCulture);
             }
         }

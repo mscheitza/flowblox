@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources.ClassResources
-{
+namespace FlowBlox.UICore.Resources.ClassResources {
     using System;
     
     
@@ -20,31 +19,26 @@ namespace FlowBlox.UICore.Resources.ClassResources
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ListViewFactory
-    {
+    public class ListViewFactory {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ListViewFactory()
-        {
+        internal ListViewFactory() {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ClassResources.ListViewFactory", typeof(ListViewFactory).Assembly);
                     resourceMan = temp;
                 }
@@ -57,14 +51,11 @@ namespace FlowBlox.UICore.Resources.ClassResources
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
@@ -72,10 +63,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
-        public static string Buttons_Add
-        {
-            get
-            {
+        public static string Buttons_Add {
+            get {
                 return ResourceManager.GetString("Buttons_Add", resourceCulture);
             }
         }
@@ -83,10 +72,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
         /// </summary>
-        public static string Buttons_Edit
-        {
-            get
-            {
+        public static string Buttons_Edit {
+            get {
                 return ResourceManager.GetString("Buttons_Edit", resourceCulture);
             }
         }
@@ -94,10 +81,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Link ähnelt.
         /// </summary>
-        public static string Buttons_Link
-        {
-            get
-            {
+        public static string Buttons_Link {
+            get {
                 return ResourceManager.GetString("Buttons_Link", resourceCulture);
             }
         }
@@ -105,10 +90,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Move down ähnelt.
         /// </summary>
-        public static string Buttons_MoveDown
-        {
-            get
-            {
+        public static string Buttons_MoveDown {
+            get {
                 return ResourceManager.GetString("Buttons_MoveDown", resourceCulture);
             }
         }
@@ -116,10 +99,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Move up ähnelt.
         /// </summary>
-        public static string Buttons_MoveUp
-        {
-            get
-            {
+        public static string Buttons_MoveUp {
+            get {
                 return ResourceManager.GetString("Buttons_MoveUp", resourceCulture);
             }
         }
@@ -127,10 +108,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
-        public static string Buttons_Remove
-        {
-            get
-            {
+        public static string Buttons_Remove {
+            get {
                 return ResourceManager.GetString("Buttons_Remove", resourceCulture);
             }
         }
@@ -138,10 +117,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Unlink ähnelt.
         /// </summary>
-        public static string Buttons_Unlink
-        {
-            get
-            {
+        public static string Buttons_Unlink {
+            get {
                 return ResourceManager.GetString("Buttons_Unlink", resourceCulture);
             }
         }
@@ -149,10 +126,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No selection method (SelectionFilterMethod) was defined for the property &apos;{0}&apos;. ähnelt.
         /// </summary>
-        public static string MissingFilterMethod_Message
-        {
-            get
-            {
+        public static string MissingFilterMethod_Message {
+            get {
                 return ResourceManager.GetString("MissingFilterMethod_Message", resourceCulture);
             }
         }
@@ -160,10 +135,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Selection method missing ähnelt.
         /// </summary>
-        public static string MissingFilterMethod_Title
-        {
-            get
-            {
+        public static string MissingFilterMethod_Title {
+            get {
                 return ResourceManager.GetString("MissingFilterMethod_Title", resourceCulture);
             }
         }
@@ -171,10 +144,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No selectable objects could be found. ähnelt.
         /// </summary>
-        public static string NoItemsFound_Message
-        {
-            get
-            {
+        public static string NoItemsFound_Message {
+            get {
                 return ResourceManager.GetString("NoItemsFound_Message", resourceCulture);
             }
         }
@@ -182,10 +153,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die No selection possible ähnelt.
         /// </summary>
-        public static string NoItemsFound_Title
-        {
-            get
-            {
+        public static string NoItemsFound_Title {
+            get {
                 return ResourceManager.GetString("NoItemsFound_Title", resourceCulture);
             }
         }
@@ -193,10 +162,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Please select an entry from the list. ähnelt.
         /// </summary>
-        public static string SelectionDialog_Message
-        {
-            get
-            {
+        public static string SelectionDialog_Message {
+            get {
                 return ResourceManager.GetString("SelectionDialog_Message", resourceCulture);
             }
         }
@@ -204,10 +171,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Select entry ähnelt.
         /// </summary>
-        public static string SelectionDialog_Title
-        {
-            get
-            {
+        public static string SelectionDialog_Title {
+            get {
                 return ResourceManager.GetString("SelectionDialog_Title", resourceCulture);
             }
         }

@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources.ClassResources
-{
+namespace FlowBlox.UICore.Resources.ClassResources {
     using System;
     
     
@@ -20,31 +19,26 @@ namespace FlowBlox.UICore.Resources.ClassResources
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AssociatedFlowBlockResolvableCustomHintTextResolver
-    {
+    public class AssociatedFlowBlockResolvableCustomHintTextResolver {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AssociatedFlowBlockResolvableCustomHintTextResolver()
-        {
+        internal AssociatedFlowBlockResolvableCustomHintTextResolver() {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ClassResources.AssociatedFlowBlockResolvableCustomHintT" +
                             "extResolver", typeof(AssociatedFlowBlockResolvableCustomHintTextResolver).Assembly);
                     resourceMan = temp;
@@ -58,14 +52,11 @@ namespace FlowBlox.UICore.Resources.ClassResources
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
@@ -73,10 +64,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Automatic resolution not possible. ähnelt.
         /// </summary>
-        public static string NotResolvable
-        {
-            get
-            {
+        public static string NotResolvable {
+            get {
                 return ResourceManager.GetString("NotResolvable", resourceCulture);
             }
         }
@@ -84,10 +73,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Resolved automatically: {0} ähnelt.
         /// </summary>
-        public static string Resolvable
-        {
-            get
-            {
+        public static string Resolvable {
+            get {
                 return ResourceManager.GetString("Resolvable", resourceCulture);
             }
         }

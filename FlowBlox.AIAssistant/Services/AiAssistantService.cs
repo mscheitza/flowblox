@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Constants;
 using FlowBlox.AIAssistant.Models;
@@ -40,6 +40,7 @@ namespace FlowBlox.AIAssistant.Services
         public event EventHandler<AssistantTranscriptLine>? TranscriptLineAdded;
         public event EventHandler<int>? EstimatedUsedTokensChanged;
         public event EventHandler<AssistantCommunicationStatusChangedEventArgs>? CommunicationStatusChanged;
+        public event EventHandler? DebugStateChanged;
         public event EventHandler? ConversationSummaryChanged;
         public event EventHandler? BeforeAutomaticLayoutAdjustment;
 
@@ -70,6 +71,7 @@ namespace FlowBlox.AIAssistant.Services
 
             RaiseEstimatedUsedTokensChanged(estimatedUsedTokens);
             ConversationSummaryChanged?.Invoke(this, EventArgs.Empty);
+            DebugStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
 
@@ -95,15 +97,13 @@ namespace FlowBlox.AIAssistant.Services
 
                 session.Messages.AddRange(sessionMessages);
                 session.SummarizedMessageCount = Math.Clamp(session.SummarizedMessageCount, 0, session.Messages.Count);
+                session.RuntimeBindingsReset = session.Messages.Count > 0 || !string.IsNullOrWhiteSpace(session.ConversationSummary);
                 _session = session;
-                ExplanationSessionStore.Restore(
-                    session.SessionId,
-                    (history?.LoadedExplanationKeys ?? [])
-                        .Where(IsLoadableExplanationKey));
                 RaiseEstimatedUsedTokensChanged(session.EstimatedUsedTokens);
             }
 
             ConversationSummaryChanged?.Invoke(this, EventArgs.Empty);
+            DebugStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateHistorySessionMetadata(AiAssistantHistoryDocument history)
@@ -118,7 +118,7 @@ namespace FlowBlox.AIAssistant.Services
                 history.ConversationSummary = session.ConversationSummary;
                 history.SummarizedMessageCount = session.SummarizedMessageCount;
                 history.EstimatedUsedTokens = session.EstimatedUsedTokens;
-                history.LoadedExplanationKeys = ExplanationSessionStore.GetLoadedKeys(session.SessionId).ToList();
+                history.LoadedExplanationKeys = []; // Ignore legacy persisted runtime bindings.
                 history.SessionMessages = session.Messages
                     .Where(x => !string.IsNullOrWhiteSpace(x?.CompleteMessage))
                     .Select(x => x.Clone())
@@ -216,7 +216,7 @@ namespace FlowBlox.AIAssistant.Services
             };
         }
 
-        public async Task<AssistantResult> GenerateProjectAsync(string userPrompt, CancellationToken ct)
+        public async Task<AssistantResult> GenerateProjectAsync(string userPrompt, CancellationToken ct, AssistantRunControl? runControl = null)
         {
             var result = new AssistantResult();
 
@@ -274,7 +274,10 @@ namespace FlowBlox.AIAssistant.Services
                 projectJsonChanged);
             var toolDefinitions = _tools.GetToolDefinitions();
             var systemPrompt = AssistantPromptBuilder.BuildSystemPrompt();
-            var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions);
+            var sessionBootstrapPrompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt(toolDefinitions, session.RuntimeBindingsReset);
+            lock (_sessionSync)
+                session.InitialSystemMessages = CreateInitialSystemMessages(systemPrompt, sessionBootstrapPrompt);
+            DebugStateChanged?.Invoke(this, EventArgs.Empty);
             var protocolWriter = TryCreateCommunicationProtocolWriter(config, userPrompt, session.SessionId);
             var formatRetryIssued = false;
             var hasExecutedLayoutRelevantToolCall = false;
@@ -285,9 +288,13 @@ namespace FlowBlox.AIAssistant.Services
             {
                 Interlocked.Increment(ref _activeRunCount);
                 var summaryTargetMessageCount = session.SummarizedMessageCount;
+
                 for (var toolRound = 1; toolRound <= maxToolRounds; toolRound++)
                 {
                     ct.ThrowIfCancellationRequested();
+                    if (toolRound > 1 && runControl?.IsPauseRequested == true)
+                        return await FinishPausedRunAsync(result, session,
+                            hasExecutedLayoutRelevantToolCall, ct).ConfigureAwait(false);
                     var initialUserPrompt = toolRound == 1
                         ? AssistantPromptBuilder.BuildInitialUserPrompt(
                             userPrompt,
@@ -320,7 +327,7 @@ namespace FlowBlox.AIAssistant.Services
                         config.Provider,
                         tokenBudget,
                         session.SummarizedMessageCount,
-                        GetLoadedExplanationContents(session.SessionId));
+                        GetRuntimeSystemContents(session.SessionId));
                     summaryTargetMessageCount = Math.Max(
                         summaryTargetMessageCount,
                         CalculateSummaryCompactionTarget(
@@ -341,7 +348,7 @@ namespace FlowBlox.AIAssistant.Services
                         config.Provider,
                         tokenBudget,
                         session.SummarizedMessageCount,
-                        GetLoadedExplanationContents(session.SessionId));
+                        GetRuntimeSystemContents(session.SessionId));
                     var chatRequest = chatRequestResult.Request;
                     if (toolRound == 1)
                         AppendSingleSessionMessage(session, "user", initialUserPrompt);
@@ -466,12 +473,11 @@ namespace FlowBlox.AIAssistant.Services
                                 (request.Arguments ?? new JObject()).ToString(Formatting.Indented));
 
                             var response = await _tools.ExecuteAsync(request, ct).ConfigureAwait(false);
+                            DebugStateChanged?.Invoke(this, EventArgs.Empty);
                             if (response.IsLayoutRelevantForAutoAdjustment)
                                 hasExecutedLayoutRelevantToolCall = true;
 
-                            protocolWriter?.AppendToolCall(toolRound, request, response);
 
-                            roundToolTranscript.Add(SerializeToolTranscript(request, response));
                             executedToolCalls.Add(new ExecutedToolCallInfo
                             {
                                 ToolName = request.ToolName,
@@ -487,6 +493,22 @@ namespace FlowBlox.AIAssistant.Services
 
                         }
 
+                        // A later call may promote declarations listed by an earlier call in this same round.
+                        // Re-render metadata after all calls, without executing handlers or counting again.
+                        foreach (var executed in executedToolCalls)
+                        {
+                            executed.Response.RefreshForSerialization();
+                            var completedRequest = new ToolRequest
+                            {
+                                ToolName = executed.ToolName,
+                                Arguments = executed.Arguments
+                            };
+                            protocolWriter?.AppendToolCall(
+                                toolRound,
+                                completedRequest,
+                                executed.Response);
+                            roundToolTranscript.Add(SerializeToolTranscript(completedRequest, executed.Response));
+                        }
                         var toolApiResponse = AssistantPromptBuilder.BuildToolApiResponsePrompt(
                             roundToolTranscript,
                             ToolHandlerUtilities.GetActiveAuxiliaryProjectName());
@@ -519,6 +541,15 @@ namespace FlowBlox.AIAssistant.Services
                         toolExecutionKind,
                         toolExecutionMessage,
                         internalStatus);
+
+                    // Keep every requested tool response paired with its assistant call before yielding to the user.
+                    ct.ThrowIfCancellationRequested();
+                    if (runControl?.IsPauseRequested == true)
+                    {
+                        result.AssistantText = instruction.AssistantMessage;
+                        return await FinishPausedRunAsync(result, session,
+                            hasExecutedLayoutRelevantToolCall, ct).ConfigureAwait(false);
+                    }
                 }
 
                 result.Success = false;
@@ -532,9 +563,28 @@ namespace FlowBlox.AIAssistant.Services
             finally
             {
                 ToolHandlerUtilities.SetCurrentSessionGuid(null);
+                DebugStateChanged?.Invoke(this, EventArgs.Empty);
                 Interlocked.Decrement(ref _activeRunCount);
                 protocolWriter?.TryWrite(_logger);
             }
+        }
+
+        private async Task<AssistantResult> FinishPausedRunAsync(
+            AssistantResult result,
+            AssistantSessionState session,
+            bool hasExecutedLayoutRelevantToolCall,
+            CancellationToken ct)
+        {
+            ct.ThrowIfCancellationRequested();
+            if (hasExecutedLayoutRelevantToolCall)
+                await DelayAndRunAutomaticAdjustmentIfEnabledAsync("AI run paused", ct).ConfigureAwait(false);
+
+            result.Success = true;
+            result.IsPaused = true;
+            result.Summary = "Paused by user after completing the current round.";
+            UpdateKnownProjectJsonHash(session);
+            ct.ThrowIfCancellationRequested();
+            return result;
         }
 
         private async Task DelayAndRunAutomaticAdjustmentIfEnabledAsync(string reason, CancellationToken ct)
@@ -608,21 +658,52 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
-        private static IReadOnlyList<string> GetLoadedExplanationContents(string sessionId)
-        {
-            return ExplanationSessionStore.GetLoadedKeys(sessionId)
-                .Select(key => AssistantPromptCatalog.TryGetEntry(key, out var entry) && entry?.IsIncludedInInitialPrompt == false
-                    ? entry.Content
-                    : null)
-                .Where(content => !string.IsNullOrWhiteSpace(content))
-                .Cast<string>()
-                .ToList();
-        }
+        private static IReadOnlyList<string> GetRuntimeSystemContents(string sessionId) =>
+            AssistantSessionContentStore.Get(sessionId).GetSystemMessages().Select(x => x.Content).ToArray();
 
-        private static bool IsLoadableExplanationKey(string key)
+        private static IReadOnlyList<AssistantSystemMessage> CreateInitialSystemMessages(
+            string systemPrompt,
+            string bootstrap) =>
+            [
+                new(
+                    "system",
+                    "System Prompt",
+                    AssistantSystemMessageKind.SystemPrompt,
+                    systemPrompt),
+                new(
+                    "bootstrap",
+                    "Session Bootstrap",
+                    AssistantSystemMessageKind.SessionBootstrap,
+                    bootstrap)
+            ];
+
+        public AssistantDebugSnapshot GetDebugSnapshot()
         {
-            return AssistantPromptCatalog.TryGetEntry(key, out var entry) &&
-                   entry?.IsIncludedInInitialPrompt == false;
+            var configuration = GetConfiguration(out _);
+            lock (_sessionSync)
+            {
+                var session = GetOrCreateSession();
+                session.InitialSystemMessages ??= CreateInitialSystemMessages(
+                    AssistantPromptBuilder.BuildSystemPrompt(),
+                    AssistantPromptBuilder.BuildSessionBootstrapPrompt(_tools.GetToolDefinitions(), session.RuntimeBindingsReset));
+                var systemMessages = session.InitialSystemMessages
+                    .Concat(AssistantSessionContentStore.Get(session.SessionId).GetSystemMessages())
+                    .ToArray();
+                return new AssistantDebugSnapshot(
+                    session.ConversationSummary,
+                    session.Messages.Select((
+                        message,
+                        index) => new AssistantDebugHistoryMessage(
+                        message.Clone(),
+                        index < session.SummarizedMessageCount))
+                        .ToArray(),
+                    systemMessages,
+                    BuildTokenBudget(configuration).ApproximateCharactersPerToken,
+                    Math.Clamp(
+                        configuration.Provider?.EstimatedSystemPromptCacheSavingsRate ?? 0d,
+                        0d,
+                        1d));
+            }
         }
 
         private void AppendSingleSessionMessage(AssistantSessionState session, string role, string content)
@@ -640,6 +721,7 @@ namespace FlowBlox.AIAssistant.Services
                     Message = content.Trim()
                 });
             }
+            DebugStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void AppendMessagePair(
@@ -662,6 +744,7 @@ namespace FlowBlox.AIAssistant.Services
                     Metadata = metadata?.Clone() ?? new AIChatMessageMetadata()
                 });
             }
+            DebugStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private async Task TryUpdateConversationSummaryAsync(
@@ -718,10 +801,8 @@ namespace FlowBlox.AIAssistant.Services
                     session.ConversationSummary = summaryResult.OutputText.Trim();
                     session.SummarizedMessageCount = Math.Max(session.SummarizedMessageCount, targetSummarizedMessageCount);
                 }
-
                 ConversationSummaryChanged?.Invoke(this, EventArgs.Empty);
-
-                ToolHandlerUtilities.ClearLivePropertyDescriptionCache(session.SessionId);
+                DebugStateChanged?.Invoke(this, EventArgs.Empty);
             }
             catch (OperationCanceledException)
             {
@@ -1153,6 +1234,8 @@ namespace FlowBlox.AIAssistant.Services
 
         private sealed class AssistantSessionState
         {
+            public IReadOnlyList<AssistantSystemMessage>? InitialSystemMessages { get; set; }
+            public bool RuntimeBindingsReset { get; set; }
             public string SessionId { get; set; } = Guid.NewGuid().ToString("N");
             public string ConversationSummary { get; set; } = string.Empty;
             public int SummarizedMessageCount { get; set; }

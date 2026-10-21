@@ -18,10 +18,6 @@ namespace FlowBlox.AIAssistant.Tools.Util
 {
     internal static partial class ToolHandlerUtilities
     {
-        private static readonly ConcurrentDictionary<string, ConcurrentDictionary<PropertyCacheKey, string>> PropertyDescriptionCacheBySession =
-            new(StringComparer.Ordinal);
-        private static readonly ConcurrentDictionary<string, ConcurrentDictionary<PropertyCacheKey, string>> LivePropertyDescriptionCacheBySession =
-            new(StringComparer.Ordinal);
         private static readonly AsyncLocal<string?> CurrentSessionGuidScope = new();
 
         private static readonly NullabilityInfoContext _nullabilityInfoContext = new();
@@ -55,15 +51,6 @@ namespace FlowBlox.AIAssistant.Tools.Util
             nameof(BaseFlowBlock.TestDefinitions)                // Covered by dedicated guidance and tools.
         };
 
-        private static readonly HashSet<Type> FlowBloxFrameworkBaseFlowBlockTypes =
-        [
-            typeof(BaseFlowBlock),
-            typeof(BaseResultFlowBlock),
-            typeof(BaseSingleResultFlowBlock),
-            typeof(BasePipeFlowBlock),
-            typeof(BaseMultiResultCollectorFlowBlock),
-            typeof(BaseSingleResultCollectorFlowBlock)
-        ];
 
         public static ToolDefinition CreateDefinition(string name, string description, JObject? argumentsSchema = null)
         {
@@ -109,105 +96,21 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
             if (string.IsNullOrWhiteSpace(key))
             {
-                ClearPropertyDescriptionCache();
+                ClearSessionCache("default-session");
                 return;
             }
 
-            ClearPropertyDescriptionCache(key);
-            ExplanationSessionStore.Clear(key);
+            AssistantSessionContentStore.Clear(key);
             AuxiliaryProjectSessionStore.Clear(key);
             AiAssistantProjectRunState.Clear(key);
+            AiAssistantTestExecutionState.Clear(key);
         }
 
-        public static void ClearPropertyDescriptionCache(string? sessionGuid = null)
-        {
-            var key = string.IsNullOrWhiteSpace(sessionGuid)
-                ? CurrentSessionGuidScope.Value
-                : sessionGuid.Trim();
-
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                PropertyDescriptionCacheBySession.Clear();
-                LivePropertyDescriptionCacheBySession.Clear();
-                return;
-            }
-
-            PropertyDescriptionCacheBySession.TryRemove(key, out _);
-            LivePropertyDescriptionCacheBySession.TryRemove(key, out _);
-        }
-
-        public static void ClearLivePropertyDescriptionCache(string? sessionGuid = null)
-        {
-            var key = string.IsNullOrWhiteSpace(sessionGuid)
-                ? CurrentSessionGuidScope.Value
-                : sessionGuid.Trim();
-
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                LivePropertyDescriptionCacheBySession.Clear();
-                return;
-            }
-
-            LivePropertyDescriptionCacheBySession.TryRemove(key, out _);
-        }
+        public static AssistantSessionContentCache CurrentContentCache => AssistantSessionContentStore.Get(CurrentSessionGuid);
 
         public static string CurrentSessionGuid => GetCurrentSessionCacheKey();
 
-        private static string GetCurrentSessionCacheKey()
-        {
-            if (!string.IsNullOrWhiteSpace(CurrentSessionGuidScope.Value))
-                return CurrentSessionGuidScope.Value!;
-
-            return "default-session";
-        }
-
-        private static bool TryGetAlreadyDescribedInSession(PropertyInfo property, out string describedInType)
-        {
-            return TryGetAlreadyDescribed(
-                PropertyDescriptionCacheBySession,
-                property,
-                out describedInType);
-        }
-
-        private static bool TryGetAlreadyDescribedInLiveContext(PropertyInfo property, out string describedInType)
-        {
-            return TryGetAlreadyDescribed(
-                LivePropertyDescriptionCacheBySession,
-                property,
-                out describedInType);
-        }
-
-        private static bool TryGetAlreadyDescribed(
-            ConcurrentDictionary<string, ConcurrentDictionary<PropertyCacheKey, string>> cacheBySession,
-            PropertyInfo property,
-            out string describedInType)
-        {
-            describedInType = string.Empty;
-
-            var sessionKey = GetCurrentSessionCacheKey();
-            if (!cacheBySession.TryGetValue(sessionKey, out var sessionCache))
-                return false;
-
-            return sessionCache.TryGetValue(PropertyCacheKey.FromProperty(property), out describedInType);
-        }
-
-        private static void MarkPropertyAsDescribed(PropertyInfo property, string describedInType)
-        {
-            if (string.IsNullOrWhiteSpace(describedInType))
-                return;
-
-            var sessionKey = GetCurrentSessionCacheKey();
-            var sessionCache = PropertyDescriptionCacheBySession.GetOrAdd(
-                sessionKey,
-                _ => new ConcurrentDictionary<PropertyCacheKey, string>());
-            var liveCache = LivePropertyDescriptionCacheBySession.GetOrAdd(
-                sessionKey,
-                _ => new ConcurrentDictionary<PropertyCacheKey, string>());
-            var propertyCacheKey = PropertyCacheKey.FromProperty(property);
-
-            sessionCache.TryAdd(propertyCacheKey, describedInType);
-            liveCache.TryAdd(propertyCacheKey, describedInType);
-        }
+        private static string GetCurrentSessionCacheKey() => CurrentSessionGuidScope.Value ?? "default-session";
 
         public static FlowBloxRegistry GetRegistry()
         {
@@ -356,32 +259,5 @@ namespace FlowBlox.AIAssistant.Tools.Util
             public JToken Value { get; set; } = JValue.CreateNull();
         }
 
-        private sealed class PropertyCacheKey : IEquatable<PropertyCacheKey>
-        {
-            public string PropertyName { get; init; } = string.Empty;
-            public string DeclaringTypeName { get; init; } = string.Empty;
-
-            public static PropertyCacheKey FromProperty(PropertyInfo property)
-            {
-                return new PropertyCacheKey
-                {
-                    PropertyName = property.Name ?? string.Empty,
-                    DeclaringTypeName = property.DeclaringType?.FullName ?? property.DeclaringType?.Name ?? string.Empty
-                };
-            }
-
-            public bool Equals(PropertyCacheKey? other)
-            {
-                if (other == null)
-                    return false;
-
-                return string.Equals(PropertyName, other.PropertyName, StringComparison.Ordinal) &&
-                       string.Equals(DeclaringTypeName, other.DeclaringTypeName, StringComparison.Ordinal);
-            }
-
-            public override bool Equals(object? obj) => Equals(obj as PropertyCacheKey);
-
-            public override int GetHashCode() => HashCode.Combine(PropertyName, DeclaringTypeName);
-        }
     }
 }

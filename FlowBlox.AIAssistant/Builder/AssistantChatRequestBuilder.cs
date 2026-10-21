@@ -28,7 +28,7 @@ namespace FlowBlox.AIAssistant.Builder
             AIProviderBase? provider,
             AssistantTokenBudget tokenBudget,
             int summarizedMessageCount = 0,
-            IReadOnlyList<string>? loadedExplanationContents = null)
+            IReadOnlyList<string>? runtimeSystemContents = null)
         {
             var request = new AIChatRequest();
             request.SystemMessages.Add(new AIChatMessage
@@ -43,7 +43,7 @@ namespace FlowBlox.AIAssistant.Builder
                 Content = sessionBootstrapPrompt,
                 CacheBehavior = AIChatCacheBehavior.PreferCache
             });
-            foreach (var content in loadedExplanationContents ?? [])
+            foreach (var content in runtimeSystemContents ?? [])
             {
                 if (string.IsNullOrWhiteSpace(content))
                     continue;

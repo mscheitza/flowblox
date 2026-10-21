@@ -345,15 +345,36 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,0,2,0">
-            <Button Content="{x:Static resources:AiAssistantChatView.Button_Submit}"
-                    MinWidth="90"
-                    Style="{StaticResource FlowBlox.RoundedActionButtonStyle}"
-                    Margin="0,0,8,0"
-                    Command="{Binding SubmitCommand}" />
-            <Button Content="{x:Static resources:AiAssistantChatView.Button_Cancel}"
-                    MinWidth="90"
-                    Style="{StaticResource FlowBlox.RoundedActionButtonStyle}"
-                    Command="{Binding StopCommand}" />
+            <StackPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource FlowBlox.RoundedActionButtonStyle}">
+                    <Setter Property="MinWidth" Value="0" />
+                    <Setter Property="MinHeight" Value="0" />
+                    <Setter Property="Height" Value="28" />
+                    <Setter Property="Padding" Value="8,3" />
+                    <Setter Property="FontSize" Value="12" />
+                </Style>
+            </StackPanel.Resources>
+            <Button Margin="0,0,6,0" Command="{Binding SubmitCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="{Binding SubmitButtonIcon}" Width="13" Height="13" Margin="0,0,4,0" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding SubmitButtonText}" />
+                </StackPanel>
+            </Button>
+            <Button Margin="0,0,6,0"
+                    ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Pause}"
+                    ToolTipService.ShowOnDisabled="True" Command="{Binding PauseCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Pause" Width="13" Height="13" Margin="0,0,4,0" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding PauseButtonText}" />
+                </StackPanel>
+            </Button>
+            <Button ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Stop}"
+                    ToolTipService.ShowOnDisabled="True" Command="{Binding StopCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Stop" Width="13" Height="13" Margin="0,0,4,0" VerticalAlignment="Center" />
+                    <TextBlock Text="{x:Static resources:AiAssistantChatView.Button_Stop}" />
+                </StackPanel>
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

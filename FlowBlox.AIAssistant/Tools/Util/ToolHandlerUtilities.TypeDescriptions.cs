@@ -14,90 +14,172 @@ namespace FlowBlox.AIAssistant.Tools.Util
 {
     internal static partial class ToolHandlerUtilities
     {
-        public static ToolResponse CreateTypeInfoResponse(
-            string? fullName,
-            Type mustAssignType,
-            string label,
-            bool includeSummarized = false,
-            bool includeBaseMembers = false)
-        {
-            var type = ResolveType(fullName);
-            if (type == null || !mustAssignType.IsAssignableFrom(type))
-            {
-                return Fail($"Type '{fullName}' is not a {label} type.");
-            }
+        internal const string TypeInfoCacheDescription =
+            "Includes base members and nested ReactiveObjects. Repeated retrieval promotes complete declaring types to runtime system messages. " +
+            "omitted=[{type,properties}] means promoted; type identifies the defining declaration. A repeated requested type returns only a promotion notice. " +
+            "Conflicting inherited/overridden property names include declaringType. Promotions reset after application restart.";
 
-            var additionalKinds = new Dictionary<string, JObject>(StringComparer.Ordinal);
-            var kind = BuildTypeKindInfo(
-                type,
-                includeChildren: true,
-                additionalKinds,
-                isTopLevel: true,
-                includeSummarized,
-                includeBaseMembers);
-
-            return Ok(CompressTypeAliases(BuildTypeInfoResponsePayload(kind, additionalKinds)));
-        }
-
-        public static ToolResponse CreateUnifiedTypeInfoResponse(
-            string? fullName,
-            bool includeSummarized = false,
-            bool includeBaseMembers = false)
+        public static ToolResponse CreateUnifiedTypeInfoResponse(string? fullName)
         {
             var type = ResolveType(fullName);
             if (type == null)
-            {
                 return Fail($"Type '{fullName}' could not be resolved.");
-            }
 
+            if (!type.IsEnum && !typeof(FlowBloxReactiveObject).IsAssignableFrom(type))
+                return Fail($"Type '{fullName}' is not supported for kind info. Only FlowBloxReactiveObject types and Enums are supported.");
+
+            var cache = CurrentContentCache;
+            if (cache.IsTypePromoted(type.FullName!))
+                return Ok(CompressTypeAliases(AssistantSessionContentCache.PromotionNotice(type.FullName!).Result));
+
+            var descriptions = new Dictionary<string, JObject>(StringComparer.Ordinal);
             if (type.IsEnum)
-            {
-                return Ok(CompressTypeAliases(new JObject
-                {
-                    ["kind"] = BuildEnumKindInfo(type)
-                }));
-            }
+                descriptions[type.FullName!] = BuildEnumKindInfo(type);
+            else
+                BuildTypeKindInfo(
+                    type,
+                    true,
+                    descriptions);
 
-            if (!typeof(FlowBloxReactiveObject).IsAssignableFrom(type))
-            {
-                return Fail(
-                    $"Type '{fullName}' is not supported for kind info. " +
-                    "Only FlowBloxReactiveObject types (including FlowBlock/ManagedObject) and Enums are supported.");
-            }
+            var declaringTypes = descriptions.Keys.ToArray();
+            cache.RegisterDeclaringTypes(
+                declaringTypes,
+                declaringType => new AssistantSystemMessage(
+                    "type:" + declaringType,
+                    declaringType,
+                    AssistantSystemMessageKind.TypeInfo,
+                    CompressTypeAliases(RenderTypePayload(
+                        declaringType,
+                        descriptions,
+                        cache,
+                        true)).ToString(Newtonsoft.Json.Formatting.None),
+                    true));
+            var response = Ok(new JObject());
+            response.RefreshBeforeSerialization = () =>
+                response.Result = CompressTypeAliases(RenderTypePayload(
+                    type.FullName!,
+                    descriptions,
+                    cache,
+                    false));
+            response.RefreshForSerialization();
+            return response;
+        }
 
-            var additionalKinds = new Dictionary<string, JObject>(StringComparer.Ordinal);
-            var kind = BuildTypeKindInfo(
+        private static JObject RenderTypePayload(
+            string type,
+            Dictionary<string, JObject> descriptions,
+            AssistantSessionContentCache cache,
+            bool systemDeclaration)
+        {
+            if (!systemDeclaration && cache.IsTypePromoted(type))
+                return AssistantSessionContentCache.PromotionNotice(type).Result;
+
+            var kind = RenderTypeKind(
                 type,
-                includeChildren: true,
-                additionalKinds,
-                isTopLevel: true,
-                includeSummarized,
-                includeBaseMembers);
-
-            return Ok(CompressTypeAliases(BuildTypeInfoResponsePayload(kind, additionalKinds)));
-        }
-
-        private static JObject CompressTypeAliases(JObject payload)
-        {
-            foreach (var value in payload.DescendantsAndSelf().OfType<JValue>())
-            {
-                if (value.Type == JTokenType.String && value.Value is string text)
-                    value.Value = AiAssistantTypeAliasHelper.CompressTypeName(text);
-            }
-
-            return payload;
-        }
-
-        private static JObject BuildTypeInfoResponsePayload(JObject kind, Dictionary<string, JObject> additionalKinds)
-        {
+                descriptions,
+                cache,
+                systemDeclaration);
             var payload = new JObject
             {
                 ["kind"] = kind
             };
+            if (systemDeclaration)
+                return payload;
 
-            var additionalTypeKindsInfo = new JArray(additionalKinds.Values.OrderBy(x => x.Value<string>("fullName")));
-            if (additionalTypeKindsInfo.Count > 0)
-                payload["additionalTypeKindsInfo"] = additionalTypeKindsInfo;
+            var hierarchy = descriptions[type]["inheritanceHierarchy"]?.Values<string>()
+                .ToHashSet(StringComparer.Ordinal) ?? [];
+            hierarchy.Add(type);
+            var referenced = descriptions.Values.SelectMany(x => x["usedTypes"]?.Children<JObject>() ?? [])
+                .Select(x => x.Value<string>("fullName"))
+                .ToHashSet(StringComparer.Ordinal);
+            var additional = new JArray(descriptions.Keys.Where(x => !hierarchy.Contains(x) && referenced.Contains(x))
+                .Select(x => cache.IsTypePromoted(x)
+                ? new JObject
+                {
+                    ["fullName"] = x,
+                    ["message"] = "Provided as a runtime session system message."
+                }
+                : RenderTypeKind(
+                    x,
+                    descriptions,
+                    cache,
+                    false)));
+            if (additional.Count > 0)
+                payload["additionalTypeKindsInfo"] = additional;
+
+            return payload;
+        }
+
+        private static JObject RenderTypeKind(
+            string type,
+            Dictionary<string, JObject> descriptions,
+            AssistantSessionContentCache cache,
+            bool systemDeclaration)
+        {
+            var result = (JObject)descriptions[type].DeepClone();
+            if (result["properties"] == null)
+                return result; // Enum metadata.
+
+            var hierarchy = result["inheritanceHierarchy"]?.Values<string>() ?? [];
+            var declarations = hierarchy.Append(type)
+                .Distinct(StringComparer.Ordinal)
+                .Where(descriptions.ContainsKey)
+                .ToArray();
+            var conflicts = declarations.SelectMany(x => descriptions[x]["properties"]?.Children<JObject>() ?? [])
+                .GroupBy(x => x.Value<string>("name"))
+                .Where(x => x.Count() > 1)
+                .Select(x => x.Key)
+                .ToHashSet(StringComparer.Ordinal);
+            var properties = new List<JObject>();
+            var omitted = new JArray();
+            var usedTypes = new Dictionary<string, JToken>(StringComparer.Ordinal);
+            foreach (var declaringType in declarations)
+            {
+                var declaration = descriptions[declaringType];
+                var declaredProperties = declaration["properties"]?.Children<JObject>()
+                    .ToArray() ?? [];
+                if (cache.IsTypePromoted(declaringType) && !(systemDeclaration && declaringType == type))
+                {
+                    if (declaredProperties.Length > 0)
+                        omitted.Add(new JObject
+                        {
+                            ["type"] = declaringType,
+                            ["properties"] = new JArray(declaredProperties.Select(x => x.Value<string>("name")))
+                        });
+
+                    continue;
+                }
+
+                foreach (var property in declaredProperties)
+                {
+                    var copy = (JObject)property.DeepClone();
+                    if (conflicts.Contains(copy.Value<string>("name")))
+                        copy["declaringType"] = declaringType;
+
+                    properties.Add(copy);
+                }
+
+                foreach (var used in declaration["usedTypes"]?.Children<JObject>() ?? [])
+                    usedTypes.TryAdd(used.Value<string>("fullName")!, used.DeepClone());
+            }
+
+            result["properties"] = new JArray(properties.OrderBy(x => x.Value<string>("name")));
+            result.Remove("usedTypes");
+            if (usedTypes.Count > 0)
+                result["usedTypes"] = new JArray(usedTypes.Values);
+
+            if (omitted.Count > 0)
+                result["omitted"] = omitted;
+
+            return result;
+        }
+
+        private static JObject CompressTypeAliases(JObject payload)
+        {
+            foreach (var value in payload.DescendantsAndSelf()
+                .OfType<JValue>())
+                if (value.Type == JTokenType.String && value.Value is string text)
+                    value.Value = AiAssistantTypeAliasHelper.CompressTypeName(text);
 
             return payload;
         }
@@ -156,86 +238,50 @@ namespace FlowBlox.AIAssistant.Tools.Util
         private static JObject BuildTypeKindInfo(
             Type type,
             bool includeChildren,
-            Dictionary<string, JObject> additionalKinds,
-            bool isTopLevel,
-            bool includeSummarized = false,
-            bool includeBaseMembers = false)
+            Dictionary<string, JObject> descriptions)
         {
-            var typeDisplayMetadata = GetTypeDisplayMetadata(type);
-            var usedTypes = new Dictionary<string, JObject>(StringComparer.Ordinal);
-            var properties = type
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
-                .Where(p => ShouldIncludeProperty(type, p, includeBaseMembers))
-                .OrderBy(p => p.Name)
-                .ToList();
+            var key = type.FullName ?? type.Name;
+            if (descriptions.TryGetValue(key, out var known))
+                return known;
 
-            var propertyInfos = new JArray();
-            var omittedLivePropertyNames = new List<string>();
-            var omittedSummarizedPropertyNames = new List<string>();
-            foreach (var property in properties)
-            {
-                if (TryGetAlreadyDescribedInLiveContext(property, out _))
-                {
-                    omittedLivePropertyNames.Add(property.Name);
-                    continue;
-                }
-
-                if (!includeSummarized && TryGetAlreadyDescribedInSession(property, out _))
-                {
-                    omittedSummarizedPropertyNames.Add(property.Name);
-                    continue;
-                }
-
-                propertyInfos.Add(ToPropertyInfo(
-                    property,
-                    includeChildren,
-                    additionalKinds,
-                    usedTypes,
-                    includeSummarized,
-                    type,
-                    includeBaseMembers));
-            }
-
+            var metadata = GetTypeDisplayMetadata(type);
             var result = new JObject
             {
-                ["fullName"] = type.FullName ?? type.Name,
-                ["displayName"] = typeDisplayMetadata.DisplayName,
-                ["description"] = typeDisplayMetadata.Description,
-                ["inheritanceHierarchy"] = new JArray(GetTypeHierarchy(type)),
-                ["properties"] = propertyInfos
+                ["fullName"] = key,
+                ["displayName"] = metadata.DisplayName,
+                ["description"] = metadata.Description,
+                ["inheritanceHierarchy"] = new JArray(GetTypeHierarchy(type))
             };
 
-            if (omittedLivePropertyNames.Count > 0 || omittedSummarizedPropertyNames.Count > 0)
-            {
-                var omittedPropertyMessages = new List<string>();
-                if (omittedLivePropertyNames.Count > 0)
-                {
-                    omittedPropertyMessages.Add(
-                        $"Already present in the available message history: {string.Join(", ", omittedLivePropertyNames)}.");
-                }
+            descriptions.Add(key, result); // Guard recursive ReactiveObject graphs.
+            if (type.BaseType != null && typeof(FlowBloxReactiveObject).IsAssignableFrom(type.BaseType))
+                BuildTypeKindInfo(
+                    type.BaseType,
+                    includeChildren,
+                    descriptions);
 
-                if (omittedSummarizedPropertyNames.Count > 0)
-                {
-                    omittedPropertyMessages.Add(
-                        $"Sent earlier in this session: {string.Join(", ", omittedSummarizedPropertyNames)}. " +
-                        "Use includeSummarized=true only if the summary lacks required details.");
-                }
+            var usedTypes = new Dictionary<string, JObject>(StringComparer.Ordinal);
+            var properties = type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
+                .Where(p => ShouldIncludeProperty(type, p))
+                .OrderBy(p => p.Name)
+                .ToArray();
 
-                result["omittedPropertyDetails"] = string.Join(" ", omittedPropertyMessages);
-            }
+            result["properties"] = new JArray(properties.Select(p => ToPropertyInfo(
+                p,
+                includeChildren,
+                descriptions,
+                usedTypes)));
 
-            var usedTypeInfos = new JArray(usedTypes.Values.OrderBy(x => x.Value<string>("fullName")));
-            if (usedTypeInfos.Count > 0)
-                result["usedTypes"] = usedTypeInfos;
+            if (usedTypes.Count > 0)
+                result["usedTypes"] = new JArray(usedTypes.Values.OrderBy(x => x.Value<string>("fullName")));
 
-            var specialExplanations = BuildSpecialExplanations(type);
-            if (specialExplanations.Count > 0)
-            {
-                result["specialExplanations"] = specialExplanations;
-            }
+            var explanations = BuildSpecialExplanations(type);
+            if (explanations.Count > 0)
+                result["specialExplanations"] = explanations;
 
-            if (isTopLevel && propertyInfos.Count > 0)
+            if (properties.Length > 0)
             {
                 result["rules"] = new JObject
                 {
@@ -253,10 +299,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
             PropertyInfo property,
             bool includeChildren,
             Dictionary<string, JObject> additionalKinds,
-            Dictionary<string, JObject> usedTypes,
-            bool includeSummarized = false,
-            Type? describedInType = null,
-            bool includeBaseMembers = false)
+            Dictionary<string, JObject> usedTypes)
         {
             var displayAttribute = property.GetCustomAttribute<DisplayAttribute>();
             var displayName = displayAttribute != null
@@ -372,10 +415,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
                     additionalKinds[key] = BuildTypeKindInfo(
                         nonNullableType,
                         includeChildren: false,
-                        additionalKinds,
-                        isTopLevel: false,
-                        includeSummarized,
-                        includeBaseMembers);
+                        additionalKinds);
                 }
             }
 
@@ -384,7 +424,6 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 AddUsedReactiveObjectType(usedTypes, nonNullableType);
             }
 
-            MarkPropertyAsDescribed(property, describedInType?.FullName ?? describedInType?.Name ?? "unknown");
 
             return propertyInfo;
         }
@@ -666,24 +705,14 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
         private static bool ShouldIncludeProperty(
             Type ownerType,
-            PropertyInfo property,
-            bool includeBaseMembers)
+            PropertyInfo property)
         {
             if (HasJsonIgnore(property))
             {
                 return false;
             }
 
-            if (!includeBaseMembers
-                && typeof(BaseFlowBlock).IsAssignableFrom(ownerType)
-                && property.DeclaringType != ownerType
-                && property.DeclaringType != null
-                && FlowBloxFrameworkBaseFlowBlockTypes.Contains(property.DeclaringType))
-            {
-                return false;
-            }
-
-            if (typeof(FlowBloxComponent).IsAssignableFrom(ownerType)
+            if ((typeof(FlowBloxComponent).IsAssignableFrom(ownerType) || ownerType == typeof(FlowBloxReactiveObject))
                 && ExcludedFlowBloxComponentProperties.Contains(property.Name))
             {
                 return false;

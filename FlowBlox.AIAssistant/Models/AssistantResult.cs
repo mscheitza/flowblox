@@ -3,6 +3,7 @@ namespace FlowBlox.AIAssistant.Models
     public class AssistantResult
     {
         public bool Success { get; set; }
+        public bool IsPaused { get; set; }
         public string Summary { get; set; } = string.Empty;
         public string AssistantText { get; set; } = string.Empty;
         public string RawModelOutput { get; set; } = string.Empty;

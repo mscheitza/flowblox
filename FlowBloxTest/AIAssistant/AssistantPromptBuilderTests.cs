@@ -27,7 +27,7 @@ namespace FlowBloxTest.AIAssistant
                 "counts as loaded when its manifest entry is tagged `:included`");
             StringAssert.Contains(
                 prompt,
-                "or when its content is present as a system message after `LoadExplanationContent`");
+                "or when a repeated `GetExplanationContent` retrieval has bound its content as a system message");
             StringAssert.Matches(
                 prompt,
                 new System.Text.RegularExpressions.Regex(

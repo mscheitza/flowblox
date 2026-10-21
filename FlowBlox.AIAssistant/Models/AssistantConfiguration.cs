@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Attributes;
+using FlowBlox.Core.Attributes;
 using FlowBlox.Core;
 using FlowBlox.Core.Enums;
 using FlowBlox.Core.Models.Base;

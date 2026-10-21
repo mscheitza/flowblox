@@ -9,6 +9,12 @@ This file summarizes core project conventions for AI/coding agents working in th
 - `FlowBlox.Core` contains execution/runtime logic and the core domain model.
 - FlowBlock execution logic belongs to `FlowBlox.Core` (runtime, testing, generation, execution pipeline).
 
+## Code Formatting
+- Prefer open, readable formatting over compressed code: one statement or initializer entry per line.
+- Put conditional bodies on separate lines; use braces for multi-line bodies and object assignments.
+- Wrap longer signatures and calls with one parameter or argument per line; put LINQ steps on separate lines.
+- Separate logical steps with blank lines and use descriptive local names. Keep the implementation simple without squeezing its layout.
+
 ## FlowBlock UI Generation Model
 - FlowBlock property UIs are generated via attributes (annotation-driven UI).
 - Main pipeline:

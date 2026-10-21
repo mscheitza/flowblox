@@ -19,7 +19,6 @@
   <data name="ContextMenu_OpenInEditor" xml:space="preserve"><value>Open in Editor</value></data>
   <data name="Watermark_Title" xml:space="preserve"><value>FlowBlox AI-Assistant</value></data>
   <data name="Button_Submit" xml:space="preserve"><value>Submit</value></data>
-  <data name="Button_Cancel" xml:space="preserve"><value>Stop</value></data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Title" xml:space="preserve"><value>Communication Protocol Directory Not Found</value></data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Description" xml:space="preserve"><value>The communication protocol directory does not exist: {0}</value></data>
   <data name="Message_CommunicationProtocolDirectory_OpenFailed_Title" xml:space="preserve"><value>Failed to Open Communication Protocol Directory</value></data>
@@ -36,4 +35,15 @@
   <data name="Message_ExternalProjectExecution_Review" xml:space="preserve"><value>Review project</value></data>
   <data name="Message_ExternalProjectExecution_Execute" xml:space="preserve"><value>Execute</value></data>
   <data name="Message_ExternalProjectExecution_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Button_Pause" xml:space="preserve"><value>Pause</value></data>
+  <data name="Button_PausePending" xml:space="preserve"><value>Pausing…</value></data>
+  <data name="Button_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="Tooltip_Pause" xml:space="preserve"><value>Finish the current AI response and all its tool calls, then pause. You can then send another message or choose Continue to resume without a new message.</value></data>
+  <data name="Tooltip_Stop" xml:space="preserve"><value>Stop immediately by requesting cancellation of the current AI request or tool execution. Work already performed remains.</value></data>
+  <data name="Status_Paused" xml:space="preserve"><value>Paused after completing the current round. Send another message or choose Continue to resume.</value></data>
+  <data name="Status_Stopped" xml:space="preserve"><value>Stopped.</value></data>
+  <data name="Button_Continue" xml:space="preserve"><value>Continue</value></data>
+  <data name="Tooltip_Continue" xml:space="preserve"><value>Continue the interrupted task using the current conversation and project state. An unsent draft is preserved.</value></data>
+  <data name="Prompt_Continue" xml:space="preserve"><value>Continue the interrupted task using the latest conversation and current project state. Check which steps have already completed before performing further changes.</value></data>
+  <data name="Button_SendAndContinue" xml:space="preserve"><value>Send and continue</value></data>
 </root>

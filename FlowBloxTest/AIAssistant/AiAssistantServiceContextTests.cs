@@ -1,4 +1,4 @@
-﻿using FlowBlox.AIAssistant.Builder;
+using FlowBlox.AIAssistant.Builder;
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Services;
 using FlowBlox.Core.Services;
@@ -577,34 +577,6 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public async Task GenerateProjectAsync_LoadsExplanationIntoNextSystemRequestWithoutToolPayload()
-        {
-            var executor = new QueuedAiExecutor(
-                "{\"assistantMessage\":\"Load generator guidance.\",\"final\":false,\"toolCalls\":[{\"toolName\":\"LoadExplanationContent\",\"arguments\":{\"key\":\"explaining_generators\"}}]}",
-                "{\"assistantMessage\":\"Done.\",\"final\":true,\"toolCalls\":[]}");
-            var config = CreateConfiguration(maxLatestMessages: 10);
-            config.MaxToolRounds = 2;
-            var service = CreateService(executor, new DefaultToolApi(), config);
-
-            var result = await service.GenerateProjectAsync("LOAD-EXPLANATION", CancellationToken.None);
-
-            Assert.IsTrue(result.Success, string.Join(Environment.NewLine, result.Errors));
-            Assert.AreEqual(2, executor.ChatRequests.Count);
-            Assert.AreEqual(2, executor.ChatRequests[0].SystemMessages.Count);
-            Assert.AreEqual(3, executor.ChatRequests[1].SystemMessages.Count);
-            AssertContains(executor.ChatRequests[1].SystemMessages[2].Content, "# Explaining Generators");
-            Assert.AreEqual(
-                AIChatCacheBehavior.PreferCache,
-                executor.ChatRequests[1].SystemMessages[2].CacheBehavior);
-
-            var history = new AiAssistantHistoryDocument();
-            service.UpdateHistorySessionMetadata(history);
-            var toolResponse = AssertIsInstanceOfType<AssistantMessagePair>(history.SessionMessages[1]).ToolApiResponse;
-            AssertContains(toolResponse, "will be available as a system message from the next request");
-            AssertDoesNotContain(toolResponse, "Purpose of generators");
-        }
-
-        [TestMethod]
         public async Task GenerateProjectAsync_AttachesInitialProjectReasonWhenProjectWasNotTransferred()
         {
             var executor = new RecordingAiExecutor();
@@ -661,7 +633,7 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public void RestoreSession_PreservesLoadedOnDemandExplanations()
+        public void RestoreSession_DiscardsLegacyRuntimeExplanationBindings()
         {
             var service = CreateService(new RecordingAiExecutor(), CreateConfiguration(maxLatestMessages: 10));
             service.RestoreSession(new AiAssistantHistoryDocument
@@ -672,9 +644,8 @@ namespace FlowBloxTest.AIAssistant
             var restored = new AiAssistantHistoryDocument();
             service.UpdateHistorySessionMetadata(restored);
 
-            CollectionAssert.AreEqual(
-                new[] { AssistantPromptCatalog.SpecialGeneratorsKey },
-                restored.LoadedExplanationKeys);
+            Assert.AreEqual(0, restored.LoadedExplanationKeys.Count);
+            Assert.IsFalse(service.GetDebugSnapshot().SystemMessages.Any(x => x.IsRuntimeBound));
         }
 
         [TestMethod]
@@ -832,6 +803,48 @@ namespace FlowBloxTest.AIAssistant
             AssertContains(retryPrompt, "JsonReaderException");
             AssertContains(retryPrompt, "Previous assistant response content:");
             AssertContains(retryPrompt, "{\"assistantMessage\":\"Broken\"");
+        }
+
+        [TestMethod]
+        public async Task GenerateProjectAsync_RepeatedStaticContentBecomesVisibleInDebuggerAndSubsequentRequests()
+        {
+            var retrieve = "{\"assistantMessage\":\"Read guidance.\",\"final\":false,\"toolCalls\":[{\"toolName\":\"GetExplanationContent\",\"arguments\":{\"key\":\"explaining_generators\"}}]}";
+            var executor = new QueuedAiExecutor(
+                retrieve,
+                retrieve,
+                "{\"assistantMessage\":\"Done.\",\"final\":true,\"toolCalls\":[]}");
+            var config = CreateConfiguration(maxLatestMessages: 10);
+            config.MaxToolRounds = 3;
+            var service = CreateService(
+                executor,
+                new DefaultToolApi(),
+                config);
+            var snapshots = new List<AssistantDebugSnapshot>();
+            service.DebugStateChanged += (_, _) => snapshots.Add(service.GetDebugSnapshot());
+            var result = await service.GenerateProjectAsync("READ-GUIDANCE", CancellationToken.None);
+            Assert.IsTrue(result.Success, string.Join(Environment.NewLine, result.Errors));
+            Assert.AreEqual(2, executor.ChatRequests[0].SystemMessages.Count);
+            Assert.AreEqual(2, executor.ChatRequests[1].SystemMessages.Count);
+            Assert.AreEqual(3, executor.ChatRequests[2].SystemMessages.Count);
+            Assert.AreEqual(AIChatCacheBehavior.PreferCache, executor.ChatRequests[2].SystemMessages.Last().CacheBehavior);
+            var snapshot = service.GetDebugSnapshot();
+            Assert.AreEqual(1, snapshot.SystemMessages.Count(x => x.IsRuntimeBound));
+            Assert.AreEqual(4, snapshot.History.Count);
+            var direct = (AssistantMessagePair)snapshot.History[1].Message;
+            var bound = (AssistantMessagePair)snapshot.History[2].Message;
+            StringAssert.Contains(direct.ToolApiResponse, "# Explaining Generators");
+            AssertDoesNotContain(bound.ToolApiResponse, "# Explaining Generators");
+            AssertContains(bound.ToolApiResponse, "because of repeated retrieval");
+            Assert.IsTrue(snapshots.Any(x => x.SystemMessages.Any(m => m.IsRuntimeBound)));
+            direct.AssistantRequest = "MUTATED-SNAPSHOT";
+            AssertDoesNotContain(service.GetDebugSnapshot().History[1].Message.CompleteMessage, "MUTATED-SNAPSHOT");
+            var saved = new AiAssistantHistoryDocument();
+            service.UpdateHistorySessionMetadata(saved);
+            service.RestoreSession(saved);
+            Assert.AreEqual(0, service.GetDebugSnapshot().SystemMessages.Count(x => x.IsRuntimeBound));
+            Assert.AreEqual(4, service.GetDebugSnapshot().History.Count);
+            service.ResetSession();
+            Assert.AreEqual(0, snapshots.Last().History.Count);
         }
 
         private static AiAssistantService CreateService(RecordingAiExecutor executor, AssistantConfiguration configuration)

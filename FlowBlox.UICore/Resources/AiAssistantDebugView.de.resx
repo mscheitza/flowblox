@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Title" xml:space="preserve"><value>AI-Assistant Debugging Tools</value></data>
+  <data name="Summary" xml:space="preserve"><value>Aktuelle Zusammenfassung</value></data>
+  <data name="SummaryDescription" xml:space="preserve"><value>Das historische Gedächtnis für die nächste Anfrage.</value></data>
+  <data name="History" xml:space="preserve"><value>Nachrichtenhistorie</value></data>
+  <data name="HistoryDescription" xml:space="preserve"><value>AI-Aufrufe, Tool-Antworten und Benutzernachrichten einschließlich zusammengefasster Historie.</value></data>
+  <data name="SystemMessages" xml:space="preserve"><value>Systemnachrichten</value></data>
+  <data name="SystemMessagesDescription" xml:space="preserve"><value>Initiale Vorgaben und dynamisch gebundene Laufzeitinhalte.</value></data>
+  <data name="Empty" xml:space="preserve"><value>In diesem Bereich sind noch keine Nachrichten vorhanden.</value></data>
+  <data name="Tokens" xml:space="preserve"><value>Geschätzte Tokens: {0:N0}</value></data>
+  <data name="HistoryStatistics" xml:space="preserve"><value>Aktive Historie: {0:N0} Tokens · Zusammengefasste Historie: {1:N0} Tokens (lokale Schätzungen)</value></data>
+  <data name="SystemStatistics" xml:space="preserve"><value>Systemnachrichten: {0:N0} Tokens · Geschätzt nach Caching: {1:N0} Tokens</value></data>
+  <data name="ContextStatistics" xml:space="preserve"><value>Lokal geschätzter Kontext: {0:N0} Tokens (System + Zusammenfassung + aktive Historie) · Angenommene Provider-Cache-Ersparnis: {1:P0}. Die tatsächliche Anfrage kann durch die Fensterauswahl weniger Historie enthalten.</value></data>
+  <data name="RuntimeBindingTooltip" xml:space="preserve"><value>Nur während der aktuellen Anwendungslaufzeit an diese Session gebunden. Nach einem Anwendungsneustart lädt die AI diesen Inhalt bei Bedarf erneut.</value></data>
+  <data name="Active" xml:space="preserve"><value>Aktive Historie</value></data>
+  <data name="Summarized" xml:space="preserve"><value>Zusammengefasste Historie</value></data>
+  <data name="Pair" xml:space="preserve"><value>Paar</value></data>
+  <data name="Single" xml:space="preserve"><value>Einzeln</value></data>
+  <data name="AI" xml:space="preserve"><value>AI</value></data>
+  <data name="User" xml:space="preserve"><value>Benutzer</value></data>
+  <data name="ToolAPI" xml:space="preserve"><value>Tool-API</value></data>
+  <data name="SystemPrompt" xml:space="preserve"><value>System-Prompt</value></data>
+  <data name="SessionBootstrap" xml:space="preserve"><value>Session-Bootstrap</value></data>
+  <data name="Explanation" xml:space="preserve"><value>Explanation</value></data>
+  <data name="TypeInfo" xml:space="preserve"><value>Typinformationen</value></data>
+  <data name="Runtime_Label" xml:space="preserve"><value>AI-Assistant Laufzeit</value></data>
+</root>

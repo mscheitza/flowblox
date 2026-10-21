@@ -1,4 +1,4 @@
-﻿using FlowBlox.Core.Enums;
+using FlowBlox.Core.Enums;
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Models.FlowBlocks.Additions;
 using FlowBlox.Core.Models.Runtime;
@@ -13,6 +13,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         {
 
         }
+
+        /// <summary>Reports completed tests before shutdown or the next execution overwrites result datasets.</summary>
+        public event Action<FlowBloxTestDefinition, FlowBloxTestResult, string>? TestExecuted;
 
         public bool ExecuteGeneration()
         {
@@ -45,6 +48,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                     runtime.LogMessageCreated += Runtime_LogMessageCreated;
 
                     var testResult = await testExecutor.ExecuteTestAsync();
+                    TestExecuted?.Invoke(testDefinition, testResult, "BeforeGeneration");
                     if (!testResult.Success)
                     {
                         OnLogCreated(new LogCreatedEventArgs($"Test case \"{testDefinition.Name}\" failed, so the generation strategies are executed.", FlowBloxLogLevel.Info));
@@ -83,6 +87,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
                         testExecutor.Initialize(testDefinition, FlowBlock, includedFlowBlocks);
 
                         var testResult1 = await testExecutor.ExecuteTestAsync();
+                        TestExecuted?.Invoke(testDefinition, testResult1, "AfterGeneration");
                         testExecutor.Shutdown();
 
                         if (!testResult1.Success)

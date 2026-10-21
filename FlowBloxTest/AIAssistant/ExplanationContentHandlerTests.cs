@@ -28,9 +28,9 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public async Task LoadExplanationContent_LoadsOnlyOnDemandContentOnce()
+        public async Task GetExplanationContent_LoadsOnlyOnDemandContentOnce()
         {
-            var handler = new LoadExplanationContentHandler();
+            var handler = new GetExplanationContentHandler();
 
             var first = await handler.HandleAsync(
                 new JObject { ["key"] = AssistantPromptCatalog.SpecialGeneratorsKey },
@@ -40,26 +40,26 @@ namespace FlowBloxTest.AIAssistant
                 CancellationToken.None);
 
             Assert.IsTrue(first.Ok);
-            Assert.AreEqual(true, first.Result.Value<bool>("loaded"));
-            Assert.IsNull(first.Result["content"]);
-            Assert.AreEqual(false, second.Result.Value<bool>("loaded"));
-            StringAssert.StartsWith(second.Result.Value<string>("message"), "Already loaded:");
+            Assert.IsNotNull(first.Result["content"]);
+            Assert.IsNull(second.Result["content"]);
+            Assert.AreEqual(1, ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Count);
+            StringAssert.Contains(second.Result.Value<string>("message"), "because of repeated retrieval");
             CollectionAssert.AreEqual(
                 new[] { AssistantPromptCatalog.SpecialGeneratorsKey },
-                ExplanationSessionStore.GetLoadedKeys(_sessionId).ToArray());
+                ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Select(x => x.Key.Replace("explanation:", "")).ToArray());
         }
 
         [TestMethod]
-        public async Task LoadExplanationContent_DoesNotDuplicateInitiallyLoadedContent()
+        public async Task GetExplanationContent_DoesNotDuplicateInitiallyLoadedContent()
         {
-            var response = await new LoadExplanationContentHandler().HandleAsync(
+            var response = await new GetExplanationContentHandler().HandleAsync(
                 new JObject { ["key"] = AssistantPromptCatalog.DebuggingKey },
                 CancellationToken.None);
 
             Assert.IsTrue(response.Ok);
-            Assert.AreEqual(false, response.Result.Value<bool>("loaded"));
+            Assert.IsNull(response.Result["content"]);
             StringAssert.StartsWith(response.Result.Value<string>("message"), "Already loaded:");
-            Assert.AreEqual(0, ExplanationSessionStore.GetLoadedKeys(_sessionId).Count);
+            Assert.AreEqual(0, ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Count);
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace FlowBloxTest.AIAssistant
                     ReservedResponseTokens = 0,
                     ApproximateCharactersPerToken = 4
                 },
-                loadedExplanationContents: [explanation]);
+                runtimeSystemContents: [explanation]);
 
             Assert.AreEqual(3, result.Request.SystemMessages.Count);
             Assert.AreEqual(explanation, result.Request.SystemMessages[2].Content);

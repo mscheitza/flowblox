@@ -1,4 +1,4 @@
-﻿using FlowBlox.AIAssistant.Models;
+using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.DependencyInjection;
 using FlowBlox.Core.Logging;
 using FlowBlox.Core.Models.Project;
@@ -24,6 +24,7 @@ namespace FlowBlox.AppWindow.Contents
         private readonly ElementHost _elementHost;
         private readonly AIAssistantControl _assistantControl;
         private readonly AIAssistantViewModel _viewModel;
+        private AiAssistantDebugView _debugWindow;
 
         public AIAssistantView()
         {
@@ -45,7 +46,7 @@ namespace FlowBlox.AppWindow.Contents
             if (_viewModel != null)
             {
                 _viewModel.ConfigureProjectStateAccess(CaptureCurrentProjectState, RestoreProjectStateAsync);
-                _viewModel.ChatViewModel.ConversationSummaryRequested += ChatViewModel_ConversationSummaryRequested;
+                _viewModel.ChatViewModel.DebugToolsRequested += ChatViewModel_DebugToolsRequested;
             }
         }
 
@@ -59,26 +60,28 @@ namespace FlowBlox.AppWindow.Contents
             _viewModel?.ConfigureBeforeAutomaticLayoutAdjustment(beforeAutomaticLayoutAdjustment);
         }
 
-        internal void ShowCurrentSummary()
+        internal void ShowDebugTools()
         {
             if (_viewModel == null)
                 return;
 
-            var summaryWindow = new EditContentView(_viewModel.CurrentConversationSummary)
+            if (_debugWindow != null)
             {
-                Title = "AI Assistant Summary",
-                Height = 760,
-                Width = 980
-            };
+                _debugWindow.Activate();
+                return;
+            }
 
+            _debugWindow = new AiAssistantDebugView(_viewModel.ChatViewModel.CreateDebugViewModel());
+            _debugWindow.Closed += (_, _) => _debugWindow = null;
             var owner = ControlHelper.FindParentOfType<Form>(this, true);
-            WindowsFormWPFHelper.ShowDialog(summaryWindow, owner);
+            if (owner != null)
+                new System.Windows.Interop.WindowInteropHelper(_debugWindow).Owner = owner.Handle;
+
+            ElementHost.EnableModelessKeyboardInterop(_debugWindow);
+            _debugWindow.Show();
         }
 
-        private void ChatViewModel_ConversationSummaryRequested(object sender, EventArgs e)
-        {
-            ShowCurrentSummary();
-        }
+        private void ChatViewModel_DebugToolsRequested(object sender, EventArgs e) => ShowDebugTools();
 
         private AIAssistantProjectStateSnapshot? CaptureCurrentProjectState()
         {
@@ -130,10 +133,11 @@ namespace FlowBlox.AppWindow.Contents
         {
             if (disposing)
             {
+                _debugWindow?.Close();
                 _assistantControl.ConfigurationRequested -= AssistantControl_ConfigurationRequested;
                 if (_viewModel != null)
                 {
-                    _viewModel.ChatViewModel.ConversationSummaryRequested -= ChatViewModel_ConversationSummaryRequested;
+                    _viewModel.ChatViewModel.DebugToolsRequested -= ChatViewModel_DebugToolsRequested;
                     _viewModel.Dispose();
                 }
             }

@@ -23,7 +23,9 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["requests"] = "[{toolName,arguments}]"
             });
 
-        public override async Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
+        public override async Task<ToolResponse> HandleAsync(
+            JObject args,
+            CancellationToken ct)
         {
             if (args["requests"] is not JArray requests || !requests.Any())
             {
@@ -34,6 +36,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             var allOk = true;
             var isLayoutRelevant = false;
             var batchResults = new JArray();
+            var completed = new List<(JObject Item, ToolResponse Response)>();
 
             foreach (var request in requests.OfType<JObject>())
             {
@@ -41,7 +44,10 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 var toolArgs = request["arguments"] as JObject ?? new JObject();
 
                 if (string.IsNullOrWhiteSpace(toolName)
-                    || string.Equals(toolName, Name, StringComparison.OrdinalIgnoreCase))
+                || string.Equals(
+                    toolName,
+                    Name,
+                    StringComparison.OrdinalIgnoreCase))
                 {
                     allOk = false;
                     batchResults.Add(new JObject
@@ -62,23 +68,25 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 }
 
                 var response = await _executeTool(
-                        new ToolRequest
-                        {
-                            ToolName = toolName,
-                            Arguments = toolArgs
-                        },
-                        ct)
+                    new ToolRequest
+                    {
+                        ToolName = toolName,
+                        Arguments = toolArgs
+                    },
+                    ct)
                     .ConfigureAwait(false);
 
                 allOk &= response.Ok;
                 isLayoutRelevant |= response.Ok && response.IsLayoutRelevantForAutoAdjustment;
-                batchResults.Add(new JObject
+                var item = new JObject
                 {
                     ["toolName"] = toolName,
                     ["ok"] = response.Ok,
                     ["error"] = response.Error,
                     ["result"] = response.Result
-                });
+                };
+                batchResults.Add(item);
+                completed.Add((item, response));
 
                 if (!response.Ok && !continueOnError)
                 {
@@ -93,16 +101,19 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["batchResults"] = batchResults
             };
 
-            if (allOk)
+            var result = allOk ? ToolHandlerUtilities.Ok(payload)
+                : ToolHandlerUtilities.Fail("One or more batch requests failed.", payload);
+            result.IsLayoutRelevantForAutoAdjustment = isLayoutRelevant;
+            result.RefreshBeforeSerialization = () =>
             {
-                var response = ToolHandlerUtilities.Ok(payload);
-                response.IsLayoutRelevantForAutoAdjustment = isLayoutRelevant;
-                return response;
-            }
-
-            var failure = ToolHandlerUtilities.Fail("One or more batch requests failed.", payload);
-            failure.IsLayoutRelevantForAutoAdjustment = isLayoutRelevant;
-            return failure;
+                foreach (var entry in completed)
+                {
+                    entry.Response.RefreshForSerialization();
+                    entry.Item["result"] = entry.Response.Result;
+                }
+            };
+            result.RefreshForSerialization();
+            return result;
         }
     }
 }

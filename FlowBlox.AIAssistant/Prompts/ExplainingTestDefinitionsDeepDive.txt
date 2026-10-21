@@ -110,3 +110,7 @@ Important: one shared definition can cover both branches, but it is still only o
 Focused variants of the same flow:
 - Execute only SequenceDetection: keep WebEvent `Execute=false`; set its DOM result configuration to `SelectionMode=UserInput` and put the complete DOM into `UserInput`. No real WebEvent result list is expected.
 - Execute WebEvent + SequenceDetection: keep WebSelector `Execute=false`; inject the URL/link into the WebSelector result via `UserInput`. Execute WebEvent and also execute its resolved associated `WebBrowserFlowBlock`, because WebEvent requires the initialized browser instance even though its URL field was injected.
+
+Test execution inspection:
+- RunTestDefinition and RunGenerationStrategies retain full assignment/result values in the latest session/project artifact. GetLatestTestExecutionArtifact lists executions (including before/after generation); select executionId to retrieve limited rows and assignment keys.
+- For truncated values, use InspectExecutedTestFieldValue with runId, executionId and either assignmentFQFieldName or datasetIndex + fullyQualifiedFieldName. Search with searchValues/searchIndex; LookAround adds surrounding context. Request the smallest useful maxTokens. No further debug run is needed.

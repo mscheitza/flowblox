@@ -159,9 +159,9 @@
                     </Button>
 
                     <Button Style="{StaticResource ToolbarButtonStyle}"
-                            ToolTip="{x:Static resources:AiAssistantControl.Tooltip_OpenConversationSummary}"
-                            Command="{Binding ChatViewModel.OpenConversationSummaryCommand}">
-                        <iconPacks:PackIconMaterial Kind="DatabaseEyeOutline"
+                            ToolTip="{x:Static resources:AiAssistantControl.Tooltip_OpenDebugTools}"
+                            Command="{Binding ChatViewModel.OpenDebugToolsCommand}">
+                        <iconPacks:PackIconMaterial Kind="BugOutline"
                                                     Width="18"
                                                     Height="18"
                                                     Style="{StaticResource FlowBlox.ToolbarIconBase}" />

@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources.ClassResources
-{
+namespace FlowBlox.UICore.Resources.ClassResources {
     using System;
     
     
@@ -20,31 +19,26 @@ namespace FlowBlox.UICore.Resources.ClassResources
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DataGridFactory
-    {
+    public class DataGridFactory {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DataGridFactory()
-        {
+        internal DataGridFactory() {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.ClassResources.DataGridFactory", typeof(DataGridFactory).Assembly);
                     resourceMan = temp;
                 }
@@ -57,14 +51,11 @@ namespace FlowBlox.UICore.Resources.ClassResources
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
@@ -72,10 +63,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Add ähnelt.
         /// </summary>
-        public static string Buttons_Add
-        {
-            get
-            {
+        public static string Buttons_Add {
+            get {
                 return ResourceManager.GetString("Buttons_Add", resourceCulture);
             }
         }
@@ -83,10 +72,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit ähnelt.
         /// </summary>
-        public static string Buttons_Edit
-        {
-            get
-            {
+        public static string Buttons_Edit {
+            get {
                 return ResourceManager.GetString("Buttons_Edit", resourceCulture);
             }
         }
@@ -94,10 +81,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Move down ähnelt.
         /// </summary>
-        public static string Buttons_MoveDown
-        {
-            get
-            {
+        public static string Buttons_MoveDown {
+            get {
                 return ResourceManager.GetString("Buttons_MoveDown", resourceCulture);
             }
         }
@@ -105,10 +90,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Move up ähnelt.
         /// </summary>
-        public static string Buttons_MoveUp
-        {
-            get
-            {
+        public static string Buttons_MoveUp {
+            get {
                 return ResourceManager.GetString("Buttons_MoveUp", resourceCulture);
             }
         }
@@ -116,10 +99,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Remove ähnelt.
         /// </summary>
-        public static string Buttons_Remove
-        {
-            get
-            {
+        public static string Buttons_Remove {
+            get {
                 return ResourceManager.GetString("Buttons_Remove", resourceCulture);
             }
         }
@@ -127,10 +108,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Insert field or replace selected text ähnelt.
         /// </summary>
-        public static string EnableFieldSelection_Tooltip
-        {
-            get
-            {
+        public static string EnableFieldSelection_Tooltip {
+            get {
                 return ResourceManager.GetString("EnableFieldSelection_Tooltip", resourceCulture);
             }
         }
@@ -138,10 +117,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Objects cannot be created in read-only mode. ähnelt.
         /// </summary>
-        public static string ObjectCreationReadOnlyMessage
-        {
-            get
-            {
+        public static string ObjectCreationReadOnlyMessage {
+            get {
                 return ResourceManager.GetString("ObjectCreationReadOnlyMessage", resourceCulture);
             }
         }
@@ -149,10 +126,8 @@ namespace FlowBlox.UICore.Resources.ClassResources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Read-only mode ähnelt.
         /// </summary>
-        public static string ObjectCreationReadOnlyTitle
-        {
-            get
-            {
+        public static string ObjectCreationReadOnlyTitle {
+            get {
                 return ResourceManager.GetString("ObjectCreationReadOnlyTitle", resourceCulture);
             }
         }

@@ -26,7 +26,7 @@ namespace FlowBlox.AIAssistant.Builder
             return ReplaceRuntimePromptTokens(prompt);
         }
 
-        public static string BuildSessionBootstrapPrompt(IReadOnlyList<ToolDefinition> toolDefinitions)
+        public static string BuildSessionBootstrapPrompt(IReadOnlyList<ToolDefinition> toolDefinitions, bool runtimeBindingsReset = false)
         {
             var rootCategories = FlowBlockCategory.GetAll()
                 .Where(x => x.ParentCategory == null)
@@ -48,7 +48,11 @@ namespace FlowBlox.AIAssistant.Builder
                 .Replace("{{EXPLANATION_MANIFEST}}", BuildExplanationManifestText(), StringComparison.Ordinal)
                 .Replace("{{COMPACT_TYPE_ALIASES}}", AiAssistantTypeAliasHelper.AliasSummary, StringComparison.Ordinal)
                 .Replace("{{STANDARD_AUXILIARY_PROJECTS}}", BuildStandardAuxiliaryProjectsText(), StringComparison.Ordinal)
-                .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal);
+                .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal)
+                + $"\nApplication runtime started at: {AssistantSessionContentStore.ApplicationStartedAt:O}."
+                + (runtimeBindingsReset
+                    ? " Runtime system-message promotions were reset on conversation restore. Older history/summary claims about promoted types or explanations do not establish loaded state; retrieve needed content again."
+                    : string.Empty);
         }
 
         public static string BuildInitialUserPrompt(
