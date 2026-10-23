@@ -133,8 +133,7 @@ namespace FlowBlox.AIAssistant.Tools
             return
             [
                 new GetProjectJsonHandler(),
-                new GetExplanationManifestHandler(),
-                new GetExplanationContentHandler(),
+                new LoadExplanationHandler(),
                 new GetDistributedDataHandler(),
                 new GetDistributedDataContentHandler(),
                 new GetProjectMetadataHandler(),
@@ -165,6 +164,7 @@ namespace FlowBlox.AIAssistant.Tools
                 new GetToolboxEntriesHandler(),
                 new GetInputFilesHandler(),
                 new GetInputFileContentHandler(),
+                new GetOutputFileContentHandler(),
                 new CreateFieldHandler(),
                 new CreateOrUpdateInputFileHandler(),
                 new ExecuteInputFileCommandHandler(),

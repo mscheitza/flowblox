@@ -806,11 +806,10 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public async Task GenerateProjectAsync_RepeatedStaticContentBecomesVisibleInDebuggerAndSubsequentRequests()
+        public async Task GenerateProjectAsync_LoadedExplanationBecomesVisibleInDebuggerAndNextRequest()
         {
-            var retrieve = "{\"assistantMessage\":\"Read guidance.\",\"final\":false,\"toolCalls\":[{\"toolName\":\"GetExplanationContent\",\"arguments\":{\"key\":\"explaining_generators\"}}]}";
+            var retrieve = "{\"assistantMessage\":\"Read guidance.\",\"final\":false,\"toolCalls\":[{\"toolName\":\"LoadExplanation\",\"arguments\":{\"key\":\"explaining_generators\"}}]}";
             var executor = new QueuedAiExecutor(
-                retrieve,
                 retrieve,
                 "{\"assistantMessage\":\"Done.\",\"final\":true,\"toolCalls\":[]}");
             var config = CreateConfiguration(maxLatestMessages: 10);
@@ -824,25 +823,22 @@ namespace FlowBloxTest.AIAssistant
             var result = await service.GenerateProjectAsync("READ-GUIDANCE", CancellationToken.None);
             Assert.IsTrue(result.Success, string.Join(Environment.NewLine, result.Errors));
             Assert.AreEqual(2, executor.ChatRequests[0].SystemMessages.Count);
-            Assert.AreEqual(2, executor.ChatRequests[1].SystemMessages.Count);
-            Assert.AreEqual(3, executor.ChatRequests[2].SystemMessages.Count);
-            Assert.AreEqual(AIChatCacheBehavior.PreferCache, executor.ChatRequests[2].SystemMessages.Last().CacheBehavior);
+            Assert.AreEqual(3, executor.ChatRequests[1].SystemMessages.Count);
+            Assert.AreEqual(AIChatCacheBehavior.PreferCache, executor.ChatRequests[1].SystemMessages.Last().CacheBehavior);
             var snapshot = service.GetDebugSnapshot();
             Assert.AreEqual(1, snapshot.SystemMessages.Count(x => x.IsRuntimeBound));
-            Assert.AreEqual(4, snapshot.History.Count);
-            var direct = (AssistantMessagePair)snapshot.History[1].Message;
-            var bound = (AssistantMessagePair)snapshot.History[2].Message;
-            StringAssert.Contains(direct.ToolApiResponse, "# Explaining Generators");
-            AssertDoesNotContain(bound.ToolApiResponse, "# Explaining Generators");
-            AssertContains(bound.ToolApiResponse, "because of repeated retrieval");
+            Assert.AreEqual(3, snapshot.History.Count);
+            var loaded = (AssistantMessagePair)snapshot.History[1].Message;
+            AssertDoesNotContain(loaded.ToolApiResponse, "# Explaining Generators");
+            AssertContains(loaded.ToolApiResponse, "will be available as a system message from the next request");
             Assert.IsTrue(snapshots.Any(x => x.SystemMessages.Any(m => m.IsRuntimeBound)));
-            direct.AssistantRequest = "MUTATED-SNAPSHOT";
+            loaded.AssistantRequest = "MUTATED-SNAPSHOT";
             AssertDoesNotContain(service.GetDebugSnapshot().History[1].Message.CompleteMessage, "MUTATED-SNAPSHOT");
             var saved = new AiAssistantHistoryDocument();
             service.UpdateHistorySessionMetadata(saved);
             service.RestoreSession(saved);
             Assert.AreEqual(0, service.GetDebugSnapshot().SystemMessages.Count(x => x.IsRuntimeBound));
-            Assert.AreEqual(4, service.GetDebugSnapshot().History.Count);
+            Assert.AreEqual(3, service.GetDebugSnapshot().History.Count);
             service.ResetSession();
             Assert.AreEqual(0, snapshots.Last().History.Count);
         }

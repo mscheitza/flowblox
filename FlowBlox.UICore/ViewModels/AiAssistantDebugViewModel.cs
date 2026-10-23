@@ -55,8 +55,7 @@ public sealed class AiAssistantDebugViewModel : INotifyPropertyChanged, IDisposa
     public ObservableCollection<AiAssistantDebugCard> Cards { get; } = new();
     public AiAssistantChatViewModel Runtime { get; }
     public string RuntimeLabel => Text("Runtime_Label");
-    // Reuse the content editor's document and highlighting behavior without its editing actions.
-    public EditContentViewModel Editor { get; } = new() { IsReadOnly = true };
+    public InnerContentViewModel Editor { get; } = new() { IsReadOnly = true };
     public string Title => Text("Title");
     public string PinTooltip => Text("RuntimeBindingTooltip");
     public string EmptyText => Text("Empty");

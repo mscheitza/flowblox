@@ -1,57 +1,26 @@
-using FlowBlox.UICore.Commands;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using FlowBlox.UICore.Commands;
 
-namespace FlowBlox.UICore.ViewModels
+namespace FlowBlox.UICore.ViewModels;
+
+public sealed class DisplayContentViewModel : InnerContentViewModel
 {
-    public class DisplayContentViewModel : INotifyPropertyChanged
+    private readonly Window _window;
+
+    public DisplayContentViewModel(Window window, string contentText)
     {
-        private readonly Window _window;
-        private string _contentText = string.Empty;
+        _window = window;
+        ContentText = contentText;
+        IsReadOnly = true;
+        CloseCommand = new RelayCommand(Close);
+    }
 
-        public DisplayContentViewModel(Window window, string contentText)
-        {
-            _window = window;
-            _contentText = contentText ?? string.Empty;
+    public ICommand CloseCommand { get; }
 
-            CopyCommand = new RelayCommand(_ => CopyToClipboard());
-            CloseCommand = new RelayCommand(_ => Close());
-        }
-
-        public string ContentText
-        {
-            get => _contentText;
-            set
-            {
-                if (_contentText == value)
-                    return;
-
-                _contentText = value ?? string.Empty;
-                OnPropertyChanged();
-            }
-        }
-
-        public ICommand CopyCommand { get; }
-        public ICommand CloseCommand { get; }
-
-        private void CopyToClipboard()
-        {
-            Clipboard.SetText(ContentText ?? string.Empty);
-        }
-
-        private void Close()
-        {
-            _window.DialogResult = true;
-            _window.Close();
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    private void Close()
+    {
+        _window.DialogResult = true;
+        _window.Close();
     }
 }

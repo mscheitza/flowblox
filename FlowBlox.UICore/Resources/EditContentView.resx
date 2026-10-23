@@ -123,10 +123,28 @@
 </data>
 
 	<data name="Label_Syntax" xml:space="preserve">
-  <value>Syntax:</value>
+  <value>Content type:</value>
 </data>
 	<data name="Combo_Syntax_Tooltip" xml:space="preserve">
-  <value>Select syntax highlighting.</value>
+  <value>Select the content type and syntax highlighting.</value>
+</data>
+	<data name="Toolbar_ExportText_Tooltip" xml:space="preserve">
+  <value>Export the displayed content as a text file.</value>
+</data>
+	<data name="Toolbar_ExportBase64_Tooltip" xml:space="preserve">
+  <value>Decode the displayed Base64 content and export it as a file.</value>
+</data>
+	<data name="Toolbar_FormatDocument_Tooltip" xml:space="preserve">
+  <value>Format document</value>
+</data>
+	<data name="Error_InvalidContent_Title" xml:space="preserve">
+  <value>Invalid content</value>
+</data>
+	<data name="Error_DocumentFormatting" xml:space="preserve">
+  <value>The content is not valid for the selected content type and could not be formatted.</value>
+</data>
+	<data name="Error_InvalidBase64" xml:space="preserve">
+  <value>The content is not valid Base64 and could not be exported.</value>
 </data>
 
 	<data name="Button_Back" xml:space="preserve">

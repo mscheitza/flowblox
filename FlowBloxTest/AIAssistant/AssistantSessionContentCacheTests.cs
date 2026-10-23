@@ -248,23 +248,23 @@ public sealed class AssistantSessionContentCacheTests
                 {
                     ["key"] = AssistantPromptCatalog.SpecialGeneratorsKey
                 };
-                var handler = new GetExplanationContentHandler();
+                var handler = new LoadExplanationHandler();
                 await handler.HandleAsync(args, CancellationToken.None);
-                Assert.AreEqual(0, ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Count);
-                await handler.HandleAsync(args, CancellationToken.None);
+                Assert.AreEqual(1, ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Count);
                 Assert.AreEqual(session, ToolHandlerUtilities.CurrentSessionGuid);
             }));
             ToolHandlerUtilities.ClearSessionCache(sessions[0]);
             Assert.AreEqual(0, AssistantSessionContentStore.Get(sessions[0]).GetSystemMessages().Count);
             Assert.AreEqual(1, AssistantSessionContentStore.Get(sessions[1]).GetSystemMessages().Count);
             ToolHandlerUtilities.SetCurrentSessionGuid(sessions[0]);
-            var fresh = await new GetExplanationContentHandler().HandleAsync(
+            var fresh = await new LoadExplanationHandler().HandleAsync(
                 new JObject
                 {
                     ["key"] = AssistantPromptCatalog.SpecialGeneratorsKey
                 },
                 CancellationToken.None);
-            Assert.IsNotNull(fresh.Result["content"]);
+            Assert.AreEqual(true, fresh.Result.Value<bool>("loaded"));
+            Assert.AreEqual(1, ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Count);
         }
         finally
         {

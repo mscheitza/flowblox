@@ -110,12 +110,16 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ? GetPropertyIgnoreCase(fieldChange, "OldValue", "oldValue")
                 : GetPropertyIgnoreCase(fieldChange, "NewValue", "newValue");
 
+            var fullyQualifiedFieldName = GetStringIgnoreCase(
+                fieldChange,
+                "FullyQualifiedFieldName",
+                "fullyQualifiedFieldName");
             return ResolvedFieldValue.Success(
                 valueProperty?.Value?.Value<string>() ?? string.Empty,
                 "FieldChange",
                 null,
-                GetStringIgnoreCase(fieldChange, "FieldName", "fieldName"),
-                GetStringIgnoreCase(fieldChange, "FullyQualifiedFieldName", "fullyQualifiedFieldName"),
+                GetSimpleFieldName(fullyQualifiedFieldName),
+                fullyQualifiedFieldName,
                 valueName);
         }
 
@@ -153,12 +157,16 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             if (!mapping.Ok)
                 return ResolvedFieldValue.Fail(mapping.ErrorMessage);
 
+            var resolvedFullyQualifiedFieldName = GetStringIgnoreCase(
+                mapping.Value!,
+                "FullyQualifiedFieldName",
+                "fullyQualifiedFieldName");
             return ResolvedFieldValue.Success(
                 GetStringIgnoreCase(mapping.Value!, "Value", "value") ?? string.Empty,
                 "GeneratedResult",
                 datasetIndex.Value,
-                GetStringIgnoreCase(mapping.Value!, "FieldName", "fieldName"),
-                GetStringIgnoreCase(mapping.Value!, "FullyQualifiedFieldName", "fullyQualifiedFieldName"),
+                GetSimpleFieldName(resolvedFullyQualifiedFieldName),
+                resolvedFullyQualifiedFieldName,
                 null);
         }
 
@@ -182,7 +190,10 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             {
                 var matches = mappings
                     .Where(x => string.Equals(
-                        GetStringIgnoreCase(x, "FieldName", "fieldName"),
+                        GetSimpleFieldName(GetStringIgnoreCase(
+                            x,
+                            "FullyQualifiedFieldName",
+                            "fullyQualifiedFieldName")),
                         fieldName,
                         StringComparison.OrdinalIgnoreCase))
                     .ToList();
@@ -198,6 +209,17 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 return FieldMappingResolution.Success(mappings[0]);
 
             return FieldMappingResolution.Fail("Provide fieldName or fullyQualifiedFieldName when the dataset contains multiple field values.");
+        }
+
+        private static string? GetSimpleFieldName(string? fullyQualifiedFieldName)
+        {
+            if (string.IsNullOrWhiteSpace(fullyQualifiedFieldName))
+                return null;
+
+            var separatorIndex = fullyQualifiedFieldName.LastIndexOf("::", StringComparison.Ordinal);
+            return separatorIndex >= 0
+                ? fullyQualifiedFieldName[(separatorIndex + 2)..]
+                : fullyQualifiedFieldName;
         }
 
         private static JArray GetArrayIgnoreCase(JObject root, params string[] keys)

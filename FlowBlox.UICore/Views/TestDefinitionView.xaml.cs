@@ -15,7 +15,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using FlowBlox.UICore.Models.FieldSelection;
 using FlowBlox.UICore.Manager;
-using FlowBlox.UICore.Factory;
 
 namespace FlowBlox.UICore.Views
 {
@@ -32,7 +31,6 @@ namespace FlowBlox.UICore.Views
         public TestDefinitionView(FlowBloxTestDefinition testDefinition, BaseFlowBlock currentFlowBlock)
         {
             InitializeComponent();
-            TransactionMonitorWindowFactory.Register(this);
 
             _requestedCurrentFlowBlock = currentFlowBlock;
             _transactionEventHandler = new FlowBloxTransactionEventHandler(

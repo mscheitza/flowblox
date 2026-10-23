@@ -1,3 +1,5 @@
+using FlowBlox.Core.Interfaces;
+
 namespace FlowBlox.Core.Provider.Registry
 {
     public static class FlowBloxRegistryTransactionHistory
@@ -40,7 +42,7 @@ namespace FlowBlox.Core.Provider.Registry
                     {
                         Id = x.Id,
                         RegistryType = x.RegistryType,
-                        TargetType = x.TargetType,
+                        Target = x.Target,
                         IsDetached = x.IsDetached,
                         IsNested = x.IsNested,
                         Depth = x.Depth,
@@ -80,7 +82,7 @@ namespace FlowBlox.Core.Provider.Registry
                     Id = ++_nextTransactionId,
                     Registry = registry,
                     RegistryType = registry.GetType().Name,
-                    TargetType = target?.GetType().FullName,
+                    Target = GetTargetDisplayName(target),
                     IsDetached = detached,
                     IsNested = nested,
                     Depth = depth,
@@ -128,12 +130,25 @@ namespace FlowBlox.Core.Provider.Registry
         private static void OnTransactionsChanged() =>
             TransactionsChanged?.Invoke(null, EventArgs.Empty);
 
+        private static string GetTargetDisplayName(object target)
+        {
+            if (target == null)
+                return null;
+
+            var typeName = target.GetType().Name;
+            if (target is IFlowBloxComponent component &&
+                !string.IsNullOrWhiteSpace(component.Name))
+                return $"{component.Name} ({typeName})";
+
+            return typeName;
+        }
+
         private sealed class TransactionHistoryEntry
         {
             public long Id { get; init; }
             public FlowBloxRegistry Registry { get; init; }
             public string RegistryType { get; init; }
-            public string TargetType { get; init; }
+            public string Target { get; init; }
             public bool IsDetached { get; init; }
             public bool IsNested { get; init; }
             public int Depth { get; init; }

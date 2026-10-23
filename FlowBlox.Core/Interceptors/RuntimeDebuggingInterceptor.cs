@@ -345,7 +345,7 @@ namespace FlowBlox.Core.Interceptors
                 {
                     Id = id,
                     Elapsed = GetElapsed(),
-                    FieldName = fieldElement?.FullyQualifiedName ?? string.Empty,
+                    FullyQualifiedFieldName = fieldElement?.FullyQualifiedName ?? string.Empty,
                     SourceFlowBlockName = sourceFlowBlockName
                 };
 

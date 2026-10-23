@@ -28,9 +28,9 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public async Task GetExplanationContent_LoadsOnlyOnDemandContentOnce()
+        public async Task LoadExplanation_PromotesOnDemandContentImmediatelyAndOnlyOnce()
         {
-            var handler = new GetExplanationContentHandler();
+            var handler = new LoadExplanationHandler();
 
             var first = await handler.HandleAsync(
                 new JObject { ["key"] = AssistantPromptCatalog.SpecialGeneratorsKey },
@@ -40,23 +40,26 @@ namespace FlowBloxTest.AIAssistant
                 CancellationToken.None);
 
             Assert.IsTrue(first.Ok);
-            Assert.IsNotNull(first.Result["content"]);
+            Assert.AreEqual(true, first.Result.Value<bool>("loaded"));
+            Assert.IsNull(first.Result["content"]);
+            Assert.AreEqual(false, second.Result.Value<bool>("loaded"));
             Assert.IsNull(second.Result["content"]);
             Assert.AreEqual(1, ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Count);
-            StringAssert.Contains(second.Result.Value<string>("message"), "because of repeated retrieval");
+            StringAssert.StartsWith(second.Result.Value<string>("message"), "Already loaded:");
             CollectionAssert.AreEqual(
                 new[] { AssistantPromptCatalog.SpecialGeneratorsKey },
                 ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Select(x => x.Key.Replace("explanation:", "")).ToArray());
         }
 
         [TestMethod]
-        public async Task GetExplanationContent_DoesNotDuplicateInitiallyLoadedContent()
+        public async Task LoadExplanation_DoesNotDuplicateInitiallyLoadedContent()
         {
-            var response = await new GetExplanationContentHandler().HandleAsync(
+            var response = await new LoadExplanationHandler().HandleAsync(
                 new JObject { ["key"] = AssistantPromptCatalog.DebuggingKey },
                 CancellationToken.None);
 
             Assert.IsTrue(response.Ok);
+            Assert.AreEqual(false, response.Result.Value<bool>("loaded"));
             Assert.IsNull(response.Result["content"]);
             StringAssert.StartsWith(response.Result.Value<string>("message"), "Already loaded:");
             Assert.AreEqual(0, ToolHandlerUtilities.CurrentContentCache.GetSystemMessages().Count);

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using FlowBlox.Core.Constants;
 
@@ -100,85 +99,85 @@ namespace FlowBlox.AIAssistant.Services
                     InputFilesKey,
                     "Explaining Managed Input Files",
                     "FlowBlox.AIAssistant.Prompts.ExplainingInputFiles.txt",
-                    "How managed input files are used for schemas, mock data, helper scripts and command execution.",
+                    "Managed input files, schemas, mock data, helper scripts, or file commands",
                     false),
                 [SpecialTestDefinitionsKey] = new PromptEntryDefinition(
                     SpecialTestDefinitionsKey,
                     "Explaining Test Definitions",
                     "FlowBlox.AIAssistant.Prompts.ExplainingTestDefinitions.txt",
-                    "Special: on-demand guidance for creating/linking/configuring test definitions via tool calls.",
+                    "Creating, linking, or configuring test definitions",
                     false),
                 [SpecialTestDefinitionsDeepDiveKey] = new PromptEntryDefinition(
                     SpecialTestDefinitionsDeepDiveKey,
                     "Explaining Test Definitions (Deep Dive)",
                     "FlowBlox.AIAssistant.Prompts.ExplainingTestDefinitionsDeepDive.txt",
-                    "Special: on-demand deep-dive catalog with compact use cases, scope strategies, and advanced test-definition setup guidance.",
+                    "Advanced test-definition use cases and scope strategies",
                     false),
                 [SpecialGeneratorsKey] = new PromptEntryDefinition(
                     SpecialGeneratorsKey,
                     "Explaining Generators",
                     "FlowBlox.AIAssistant.Prompts.ExplainingGenerators.txt",
-                    "Special: on-demand guidance for creating/configuring generation strategies from test results.",
+                    "Configuring generation strategies from test results",
                     false),
                 [SpecialTestDrivenUnknownResourcesKey] = new PromptEntryDefinition(
                     SpecialTestDrivenUnknownResourcesKey,
                     "Test-Driven Approach for Unknown/Inaccessible Resources",
                     "FlowBlox.AIAssistant.Prompts.ExplainingTestDrivenUnknownResources.txt",
-                    "Special: on-demand guidance for iterative flow construction when content is unknown or inaccessible.",
+                    "Iterative/test-driven flows for unknown or inaccessible content",
                     false),
                 [SpecialModifiersAndFieldValidatorsKey] = new PromptEntryDefinition(
                     SpecialModifiersAndFieldValidatorsKey,
                     "Explaining Modifiers and Field Validators",
                     "FlowBlox.AIAssistant.Prompts.ExplainingModifiersAndFieldValidators.txt",
-                    "Special: on-demand guidance for compact field-value post-processing and validation/filtering.",
+                    "Field cleanup, transformation, validation, or filtering",
                     false),
                 [SpecialOnnxGenAIModelsKey] = new PromptEntryDefinition(
                     SpecialOnnxGenAIModelsKey,
                     "Explaining ONNX Runtime GenAI Models",
                     "FlowBlox.AIAssistant.Prompts.ExplainingOnnxGenAIModels.txt",
-                    "Special: on-demand guidance for obtaining and configuring ONNX Runtime GenAI model folders for OnnxGenAIFlowBlock.",
+                    "Obtaining or configuring ONNX Runtime GenAI models",
                     false),
                 [SpecialOnnxQAModelsKey] = new PromptEntryDefinition(
                     SpecialOnnxQAModelsKey,
                     "Explaining ONNX Question Answering Models",
                     "FlowBlox.AIAssistant.Prompts.ExplainingOnnxQAModels.txt",
-                    "Special: on-demand guidance for selecting, exporting and configuring extractive QA model folders for OnnxQAFlowBlock.",
+                    "Selecting, exporting, or configuring ONNX question-answering models",
                     false),
                 [SpecialFlowRecursionKey] = new PromptEntryDefinition(
                     SpecialFlowRecursionKey,
                     "Explaining Flow Recursion",
                     "FlowBlox.AIAssistant.Prompts.ExplainingFlowRecursion.txt",
-                    "Special: compact guidance for RecursiveCallFlowBlock, InjectionFlowBlock, paging, polling, and retry loops.",
+                    "Recursion, paging, polling, or retry loops",
                     false),
                 [SpecialExtensionsKey] = new PromptEntryDefinition(
                     SpecialExtensionsKey,
                     "Explaining Extensions",
                     "FlowBlox.AIAssistant.Prompts.ExplainingExtensions.txt",
-                    "Special: on-demand guidance for custom FlowBlox extensions, debugging, project loading, and publishing extension versions.",
+                    "Developing, debugging, loading, or publishing FlowBlox extensions",
                     false),
                 [SpecialProjectSpaceKey] = new PromptEntryDefinition(
                     SpecialProjectSpaceKey,
                     "Explaining Project Space",
                     "FlowBlox.AIAssistant.Prompts.ExplainingProjectSpace.txt",
-                    "Special: on-demand guidance for Project Space, project sharing, stable versions, and remote execution by Project GUID.",
+                    "Project Space, project sharing, stable versions, or remote execution",
                     false),
                 [SpecialTaskSchedulingKey] = new PromptEntryDefinition(
                     SpecialTaskSchedulingKey,
                     "Explaining Task Scheduling and Service Execution",
                     "FlowBlox.AIAssistant.Prompts.ExplainingTaskScheduling.txt",
-                    "Special: on-demand guidance for scheduled project executions and running a project continuously as a service.",
+                    "Scheduled, recurring, or continuous service execution",
                     false),
                 [SpecialUserInterfaceKey] = new PromptEntryDefinition(
                     SpecialUserInterfaceKey,
                     "Explaining User Interface",
                     "FlowBlox.AIAssistant.Prompts.ExplainingUserInterface.txt",
-                    "Special: on-demand guidance for FlowBlox UI panels, menus, toolbar actions, and common manual workflows.",
+                    "FlowBlox UI panels, menus, actions, or manual workflows",
                     false),
                 [SpecialAuxiliaryProjectsKey] = new PromptEntryDefinition(
                     SpecialAuxiliaryProjectsKey,
                     "Explaining Auxiliary Projects",
                     "FlowBlox.AIAssistant.Prompts.ExplainingAuxiliaryProjects.txt",
-                    "Special: required guidance for temporary AI-built projects used to retrieve external information through FlowBlox capabilities.",
+                    "Local capabilities via auxiliary projects (local skills), using bundled or session-created helpers; examples include accessing internal/external websites and inspecting DOM content, or reading database tables, columns, and types",
                     false),
                 [VersionNotesKey] = new PromptEntryDefinition(
                     VersionNotesKey,
@@ -238,9 +237,8 @@ namespace FlowBlox.AIAssistant.Services
                 result[definition.Key] = new PromptEntry(
                     definition.Key,
                     definition.Title,
-                    definition.Hint,
+                    definition.Description,
                     normalized,
-                    ComputeSha256Hex(normalized),
                     definition.IsIncludedInInitialPrompt);
             }
 
@@ -301,18 +299,18 @@ namespace FlowBlox.AIAssistant.Services
             return reader.ReadToEnd();
         }
 
-        private static string ComputeSha256Hex(string text)
-        {
-            var bytes = Encoding.UTF8.GetBytes(text);
-            var hash = SHA256.HashData(bytes);
-            var sb = new StringBuilder(hash.Length * 2);
-            foreach (var b in hash)
-                sb.Append(b.ToString("x2"));
-            return sb.ToString();
-        }
+        private sealed record PromptEntryDefinition(
+            string Key,
+            string Title,
+            string ResourceName,
+            string Description,
+            bool IsIncludedInInitialPrompt);
 
-        private sealed record PromptEntryDefinition(string Key, string Title, string ResourceName, string Hint, bool IsIncludedInInitialPrompt);
-
-        internal sealed record PromptEntry(string Key, string Title, string Hint, string Content, string ContentHash, bool IsIncludedInInitialPrompt);
+        internal sealed record PromptEntry(
+            string Key,
+            string Title,
+            string Description,
+            string Content,
+            bool IsIncludedInInitialPrompt);
     }
 }

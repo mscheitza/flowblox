@@ -2,7 +2,7 @@ namespace FlowBlox.Core.Models.Runtime.Debugging
 {
     public sealed class RuntimeGeneratedResultFieldValueMapping
     {
-        public string FieldFullyQualifiedName { get; set; } = string.Empty;
+        public string FullyQualifiedFieldName { get; set; } = string.Empty;
         public string Value { get; set; }
     }
 

@@ -9,11 +9,13 @@ namespace FlowBlox.UICore.ViewModels
 
         public bool IsCurrent { get; init; }
 
-        public string TargetType { get; init; }
+        public string Target { get; init; }
 
         public string RegistryType { get; init; }
 
         public string Mode { get; init; }
+
+        public string TransactionType { get; init; }
 
         public int Depth { get; init; }
 
@@ -30,25 +32,21 @@ namespace FlowBlox.UICore.ViewModels
             {
                 Id = snapshot.Id,
                 IsCurrent = snapshot.IsCurrent,
-                TargetType = GetShortTypeName(snapshot.TargetType),
+                Target = string.IsNullOrWhiteSpace(snapshot.Target)
+                    ? TransactionMonitorWindow.Target_Unknown
+                    : snapshot.Target,
                 RegistryType = snapshot.RegistryType,
                 Mode = snapshot.IsDetached
                     ? TransactionMonitorWindow.Mode_Detached
                     : TransactionMonitorWindow.Mode_Standard,
+                TransactionType = snapshot.IsNested
+                    ? TransactionMonitorWindow.Type_Nested
+                    : TransactionMonitorWindow.Type_Regular,
                 Depth = snapshot.Depth,
                 OpenedAt = snapshot.OpenedAt.ToString("HH:mm:ss.fff"),
                 ClosedAt = snapshot.ClosedAt?.ToString("HH:mm:ss.fff") ?? "—",
                 State = GetStateText(snapshot.State)
             };
-        }
-
-        private static string GetShortTypeName(string typeName)
-        {
-            if (string.IsNullOrWhiteSpace(typeName))
-                return TransactionMonitorWindow.Target_Unknown;
-
-            var lastSeparator = typeName.LastIndexOf('.');
-            return lastSeparator >= 0 ? typeName[(lastSeparator + 1)..] : typeName;
         }
 
         private static string GetStateText(FlowBloxRegistryTransactionState state) => state switch

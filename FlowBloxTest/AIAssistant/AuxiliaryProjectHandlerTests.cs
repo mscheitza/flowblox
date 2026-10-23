@@ -191,6 +191,15 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsTrue(projects.All(x => !string.IsNullOrWhiteSpace(x.Value<string>("fileName"))));
             Assert.IsTrue(projects.All(x => x["inputFields"] is JArray && x["outputFields"] is JArray));
 
+            var executeSqlQuery = projects.Single(x =>
+                string.Equals(x.Value<string>("projectName"), "ExecuteSQLQuery", StringComparison.Ordinal));
+            CollectionAssert.AreEquivalent(
+                new[] { "Input_DbType", "Input_SQLConnectionString", "Input_SQLQuery" },
+                executeSqlQuery["inputFields"]!.Values<string>().ToArray());
+            CollectionAssert.AreEqual(
+                new[] { "Content" },
+                executeSqlQuery["outputFields"]!.Values<string>().ToArray());
+
             var expectedProject = projects.First(x =>
                 (x.Value<string>("projectName") ?? string.Empty).Contains("MySql", StringComparison.OrdinalIgnoreCase));
             var filter = "mysql schema database columns tables";

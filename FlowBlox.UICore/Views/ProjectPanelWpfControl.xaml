@@ -238,6 +238,24 @@
                     <TextBlock Text="{x:Static resources:ProjectPanel.Toolbar_Stop}" Margin="5,0,0,0"/>
                 </StackPanel>
             </Button>
+            <Separator />
+            <Button Click="TransactionMenuButton_Click"
+                    Width="20"
+                    Padding="2"
+                    Style="{StaticResource ProjectPanel.ToolbarButton}"
+                    ToolTip="{x:Static resources:ProjectPanel.Toolbar_TransactionMonitor}">
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{x:Static resources:ProjectPanel.Toolbar_TransactionMonitor}"
+                                  Click="TransactionMonitorButton_Click">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterial Kind="SwapHorizontal" Width="16" Height="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </Button.ContextMenu>
+                <iconPacks:PackIconMaterial Kind="ChevronDown" Width="12" Height="12" />
+            </Button>
         </ToolBar>
 
         <ToolBar Grid.Row="1" Background="#454545" Foreground="#F5F5F5">

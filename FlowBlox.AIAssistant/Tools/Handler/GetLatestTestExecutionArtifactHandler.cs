@@ -13,7 +13,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["runId"] = "string? (safety check; only latest run is retained per session/project)",
                 ["executionId"] = "int? (omit to list executions; selects one test and generation phase)",
                 ["datasetIndex"] = "int? (0-based; restrict result rows for the selected execution)",
-                ["usageHint"] = "Use returned datasetIndex + fullyQualifiedFieldName or assignment keys with InspectExecutedTestFieldValue for truncated values."
+                ["usageHint"] = "Use fullyQualifiedFieldName with InspectExecutedTestFieldValue for truncated values; add datasetIndex for a result value and omit it for an assignment."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)

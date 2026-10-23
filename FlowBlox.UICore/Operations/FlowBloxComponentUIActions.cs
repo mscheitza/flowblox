@@ -40,9 +40,7 @@ namespace FlowBlox.UICore.Operations
 
         public bool CanManageUserFields()
         {
-            // A nested transaction is the active detail-edit transaction of a parent view.
-            // User-field management opens another registry-backed editor and must wait until it is closed.
-            return !FlowBloxRegistryProvider.IsCurrentTransactionNested();
+            return !FlowBloxRegistryProvider.IsCurrentNestedTransactionForDifferentTarget(Component);
         }
 
         [UIActionMetadata(OnlyShowInPropertyWindow = true)]

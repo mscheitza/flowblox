@@ -1,0 +1,76 @@
+<UserControl x:Class="FlowBlox.UICore.Views.InnerContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:resources="clr-namespace:FlowBlox.UICore.Resources">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibleIfTrue" />
+        <Style x:Key="ContentToolbarButton" TargetType="Button">
+            <Setter Property="MinWidth" Value="30" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="2,0" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ToolBar Padding="4" ToolBarTray.IsLocked="True">
+            <Button Command="{Binding CopyCommand}" Style="{StaticResource ContentToolbarButton}"
+                    ToolTip="{x:Static resources:DisplayContentView.Tooltip_CopyToClipboard}">
+                <iconPacks:PackIconMaterial Kind="ContentCopy" Width="16" Height="16" />
+            </Button>
+            <Button Command="{Binding ExportTextToFileCommand}" Style="{StaticResource ContentToolbarButton}"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_ExportText_Tooltip}">
+                <iconPacks:PackIconMaterial Kind="FileExport" Width="16" Height="16" />
+            </Button>
+            <Button Command="{Binding ExportBase64ToFileCommand}" Style="{StaticResource ContentToolbarButton}"
+                    IsEnabled="{Binding IsPotentialBase64Content}"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_ExportBase64_Tooltip}">
+                <iconPacks:PackIconMaterial Kind="DatabaseExport" Width="16" Height="16" />
+            </Button>
+            <Separator />
+            <Button Command="{Binding ImportTextFromFileCommand}" Style="{StaticResource ContentToolbarButton}"
+                    Visibility="{Binding CanEdit, Converter={StaticResource VisibleIfTrue}}"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_ImportText_Tooltip}">
+                <iconPacks:PackIconMaterial Kind="FileImport" Width="16" Height="16" />
+            </Button>
+            <Button Command="{Binding ImportBytesFromFileCommand}" Style="{StaticResource ContentToolbarButton}"
+                    Visibility="{Binding CanEdit, Converter={StaticResource VisibleIfTrue}}"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_ImportBytes_Tooltip}">
+                <iconPacks:PackIconMaterial Kind="DatabaseImport" Width="16" Height="16" />
+            </Button>
+            <Button Style="{StaticResource ContentToolbarButton}"
+                    Visibility="{Binding ShowFieldPlaceholderButton, Converter={StaticResource VisibleIfTrue}}"
+                    Click="InsertFieldPlaceholderButton_Click"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_InsertPlaceholder_Tooltip}">
+                <iconPacks:PackIconMaterial Kind="Variable" Width="16" Height="16" />
+            </Button>
+            <Separator />
+            <TextBlock Text="{x:Static resources:EditContentView.Label_Syntax}"
+                       VerticalAlignment="Center" Margin="4,0,6,0" />
+            <ComboBox ItemsSource="{Binding AvailableContentTypes}"
+                      SelectedItem="{Binding SelectedContentType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      MinWidth="130"
+                      ToolTip="{x:Static resources:EditContentView.Combo_Syntax_Tooltip}" />
+            <Button Command="{Binding FormatDocumentCommand}" Style="{StaticResource ContentToolbarButton}"
+                    Visibility="{Binding CanFormatDocument, Converter={StaticResource VisibleIfTrue}}"
+                    ToolTip="{x:Static resources:EditContentView.Toolbar_FormatDocument_Tooltip}"
+                    AutomationProperties.Name="{x:Static resources:EditContentView.Toolbar_FormatDocument_Tooltip}">
+                <iconPacks:PackIconMaterial Kind="CodeBraces" Width="16" Height="16" />
+            </Button>
+        </ToolBar>
+        <avalonedit:TextEditor x:Name="Editor" Grid.Row="1"
+                               Document="{Binding Document}"
+                               IsReadOnly="{Binding IsReadOnly}"
+                               FontFamily="JetBrains Mono"
+                               FontSize="12"
+                               ShowLineNumbers="True"
+                               HorizontalScrollBarVisibility="Auto"
+                               VerticalScrollBarVisibility="Auto"
+                               SyntaxHighlighting="{Binding SelectedHighlightingDefinition}" />
+    </Grid>
+</UserControl>

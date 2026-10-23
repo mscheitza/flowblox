@@ -25,9 +25,7 @@ namespace FlowBlox.UICore.Operations
 
         public bool CanGenerate()
         {
-            // A nested transaction is the active detail-edit transaction of a parent view.
-            // Generation opens another registry-backed editor and must not be stacked on top of it.
-            if (FlowBloxRegistryProvider.IsCurrentTransactionNested())
+            if (FlowBloxRegistryProvider.IsCurrentNestedTransactionForDifferentTarget(Component))
                 return false;
 
             if (_runtimeStateService?.IsRuntimeActive == true ||

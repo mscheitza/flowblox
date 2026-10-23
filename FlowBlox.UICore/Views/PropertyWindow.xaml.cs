@@ -66,7 +66,20 @@ namespace FlowBlox.UICore.Views
         public PropertyWindow()
         {
             InitializeComponent();
-            TransactionMonitorWindowFactory.Register(this);
+        }
+
+        private void TransactionMonitorButton_Click(object sender, System.Windows.RoutedEventArgs e)
+            => TransactionMonitorWindowFactory.Show();
+
+        private void TransactionMenuButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var button = sender as System.Windows.Controls.Button;
+            if (button == null || button.ContextMenu == null)
+                return;
+
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            button.ContextMenu.IsOpen = true;
         }
 
         public PropertyWindow(PropertyWindowArgs propertyWindowArgs) : this()

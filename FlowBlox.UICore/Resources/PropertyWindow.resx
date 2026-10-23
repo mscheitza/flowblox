@@ -141,4 +141,7 @@
 	<data name="RefreshActions" xml:space="preserve">
 		<value>Refresh actions</value>
 	</data>
+	<data name="TransactionMonitor" xml:space="preserve">
+		<value>Transaction monitor</value>
+	</data>
 </root>

@@ -37,10 +37,46 @@
 
         <!-- Header -->
         <Border Background="#FFEEEEEE" DockPanel.Dock="Top" Height="50" Padding="8">
-            <StackPanel Orientation="Horizontal">
-                <Image Source="{Binding HeaderIcon}" Width="32" Height="32" Margin="0,0,10,0"/>
-                <TextBlock Text="{Binding HeaderTitle}" FontWeight="Bold" VerticalAlignment="Center" />
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0"
+                       Source="{Binding HeaderIcon}"
+                       Width="32"
+                       Height="32"
+                       Margin="0,0,10,0" />
+                <TextBlock Grid.Column="1"
+                           Text="{Binding HeaderTitle}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center" />
+                <Button Grid.Column="2"
+                        Width="20"
+                        Height="28"
+                        Padding="2"
+                        VerticalAlignment="Center"
+                        ToolTip="{x:Static resources:PropertyWindow.TransactionMonitor}"
+                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                        Click="TransactionMenuButton_Click">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="{x:Static resources:PropertyWindow.TransactionMonitor}"
+                                      Click="TransactionMonitorButton_Click">
+                                <MenuItem.Icon>
+                                    <iconPacks:PackIconMaterial Kind="SwapHorizontal" Width="16" Height="16" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                    <iconPacks:PackIconMaterial Kind="ChevronDown"
+                                                Width="12"
+                                                Height="12"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}"
+                                                Foreground="#65737E" />
+                </Button>
+            </Grid>
         </Border>
 
         <!-- Description -->

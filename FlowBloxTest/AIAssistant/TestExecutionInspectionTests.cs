@@ -74,7 +74,7 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsNotNull(artifact.Result["execution"]!["testResults"]!["rows"]![0]!["values"]![0]!["valueInfo"]);
             foreach (var args in new[]
             {
-                new JObject { ["assignmentFQFieldName"] = "Input::Content" },
+                new JObject { ["fullyQualifiedFieldName"] = "Input::Content" },
                 new JObject { ["datasetIndex"] = 0, ["fullyQualifiedFieldName"] = "A::Content" }
             })
             {
@@ -88,7 +88,7 @@ namespace FlowBloxTest.AIAssistant
 
             var around = await new InspectExecutedTestFieldValueHandler().HandleAsync(new JObject
             {
-                ["assignmentFQFieldName"] = "Input::Content", ["searchValues"] = "marker:",
+                ["fullyQualifiedFieldName"] = "Input::Content", ["searchValues"] = "marker:",
                 ["searchMode"] = "LookAround", ["maxTokens"] = 20
             }, CancellationToken.None);
             Assert.IsTrue(around.Ok, around.Error);
@@ -96,7 +96,7 @@ namespace FlowBloxTest.AIAssistant
             StringAssert.Contains(around.Result.Value<string>("value"), "marker:");
             var page = await new InspectExecutedTestFieldValueHandler().HandleAsync(new JObject
             {
-                ["assignmentFQFieldName"] = "Input::Content", ["searchIndex"] = FullValue.Length - 7
+                ["fullyQualifiedFieldName"] = "Input::Content", ["searchIndex"] = FullValue.Length - 7
             }, CancellationToken.None);
             Assert.AreEqual(FullValue.Substring(FullValue.Length - 7), page.Result.Value<string>("value"));
         }
@@ -108,10 +108,10 @@ namespace FlowBloxTest.AIAssistant
             {
                 new JObject { ["datasetIndex"] = 0, ["fieldName"] = "Content" },
                 new JObject { ["datasetIndex"] = -1, ["fieldName"] = "Content" },
-                new JObject { ["assignmentFQFieldName"] = "missing" },
-                new JObject { ["assignmentFQFieldName"] = "Input::Content", ["datasetIndex"] = 0 },
-                new JObject { ["assignmentFQFieldName"] = "Input::Content", ["searchMode"] = "invalid" },
-                new JObject { ["assignmentFQFieldName"] = "Input::Content", ["maxTokens"] = int.MaxValue }
+                new JObject { ["fullyQualifiedFieldName"] = "missing" },
+                new JObject { ["fullyQualifiedFieldName"] = "Input::Content", ["datasetIndex"] = 0 },
+                new JObject { ["fullyQualifiedFieldName"] = "Input::Content", ["searchMode"] = "invalid" },
+                new JObject { ["fullyQualifiedFieldName"] = "Input::Content", ["maxTokens"] = int.MaxValue }
             })
                 Assert.IsFalse((await new InspectExecutedTestFieldValueHandler().HandleAsync(args, CancellationToken.None)).Ok, args.ToString());
         }
@@ -188,7 +188,7 @@ namespace FlowBloxTest.AIAssistant
             var list = await new GetLatestTestExecutionArtifactHandler().HandleAsync(new JObject(), CancellationToken.None);
             Assert.AreEqual(2, ((JArray)list.Result["executions"]!).Count);
             var handler = new InspectExecutedTestFieldValueHandler();
-            var args = new JObject { ["assignmentFQFieldName"] = "Input::Content" };
+            var args = new JObject { ["fullyQualifiedFieldName"] = "Input::Content" };
             Assert.IsFalse((await handler.HandleAsync(args, CancellationToken.None)).Ok);
             args["executionId"] = 2;
             Assert.IsTrue((await handler.HandleAsync(args, CancellationToken.None)).Ok);

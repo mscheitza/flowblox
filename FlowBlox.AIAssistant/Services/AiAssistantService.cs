@@ -292,9 +292,12 @@ namespace FlowBlox.AIAssistant.Services
                 for (var toolRound = 1; toolRound <= maxToolRounds; toolRound++)
                 {
                     ct.ThrowIfCancellationRequested();
-                    if (toolRound > 1 && runControl?.IsPauseRequested == true)
-                        return await FinishPausedRunAsync(result, session,
-                            hasExecutedLayoutRelevantToolCall, ct).ConfigureAwait(false);
+                    if (runControl != null)
+                        await PrepareRunControlForNextRoundAsync(
+                            session,
+                            runControl,
+                            hasExecutedLayoutRelevantToolCall,
+                            ct).ConfigureAwait(false);
                     var initialUserPrompt = toolRound == 1
                         ? AssistantPromptBuilder.BuildInitialUserPrompt(
                             userPrompt,
@@ -425,17 +428,21 @@ namespace FlowBlox.AIAssistant.Services
 
                     if (instruction.ToolCalls.Count == 0 || instruction.Final)
                     {
+                        var finalText = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
+                            ? assistantOutput
+                            : instruction.AssistantMessage;
+                        AppendSingleSessionMessage(session, "assistant", finalText);
+
+                        // Continue the run when user messages were staged during the response.
+                        if (runControl != null && !runControl.TryCompleteWhenNoMessagesAreStaged())
+                            continue;
+
                         if (hasExecutedLayoutRelevantToolCall)
                             await DelayAndRunAutomaticAdjustmentIfEnabledAsync("AI run completed", ct).ConfigureAwait(false);
 
                         result.Success = true;
                         result.AssistantText = instruction.AssistantMessage;
                         result.Summary = "Assistant response generated.";
-
-                        var finalText = string.IsNullOrWhiteSpace(instruction.AssistantMessage)
-                            ? assistantOutput
-                            : instruction.AssistantMessage;
-                        AppendSingleSessionMessage(session, "assistant", finalText);
                         UpdateKnownProjectJsonHash(session);
                         await TryUpdateConversationSummaryAsync(session, summaryTargetMessageCount, config, ct).ConfigureAwait(false);
                         return result;
@@ -476,7 +483,6 @@ namespace FlowBlox.AIAssistant.Services
                             DebugStateChanged?.Invoke(this, EventArgs.Empty);
                             if (response.IsLayoutRelevantForAutoAdjustment)
                                 hasExecutedLayoutRelevantToolCall = true;
-
 
                             executedToolCalls.Add(new ExecutedToolCallInfo
                             {
@@ -542,14 +548,7 @@ namespace FlowBlox.AIAssistant.Services
                         toolExecutionMessage,
                         internalStatus);
 
-                    // Keep every requested tool response paired with its assistant call before yielding to the user.
                     ct.ThrowIfCancellationRequested();
-                    if (runControl?.IsPauseRequested == true)
-                    {
-                        result.AssistantText = instruction.AssistantMessage;
-                        return await FinishPausedRunAsync(result, session,
-                            hasExecutedLayoutRelevantToolCall, ct).ConfigureAwait(false);
-                    }
                 }
 
                 result.Success = false;
@@ -562,6 +561,7 @@ namespace FlowBlox.AIAssistant.Services
             }
             finally
             {
+                CompleteRunControl(session, runControl);
                 ToolHandlerUtilities.SetCurrentSessionGuid(null);
                 DebugStateChanged?.Invoke(this, EventArgs.Empty);
                 Interlocked.Decrement(ref _activeRunCount);
@@ -569,22 +569,36 @@ namespace FlowBlox.AIAssistant.Services
             }
         }
 
-        private async Task<AssistantResult> FinishPausedRunAsync(
-            AssistantResult result,
+        private void AppendStagedUserMessages(
             AssistantSessionState session,
+            AssistantRunControl runControl)
+        {
+            foreach (var message in runControl.DrainStagedUserMessages())
+                AppendSingleSessionMessage(session, "user", message);
+        }
+
+        private void CompleteRunControl(
+            AssistantSessionState session,
+            AssistantRunControl? runControl)
+        {
+            if (runControl == null)
+                return;
+
+            runControl.Complete();
+            AppendStagedUserMessages(session, runControl);
+        }
+
+        private async Task PrepareRunControlForNextRoundAsync(
+            AssistantSessionState session,
+            AssistantRunControl runControl,
             bool hasExecutedLayoutRelevantToolCall,
             CancellationToken ct)
         {
-            ct.ThrowIfCancellationRequested();
-            if (hasExecutedLayoutRelevantToolCall)
+            if (runControl.IsPauseRequested && hasExecutedLayoutRelevantToolCall)
                 await DelayAndRunAutomaticAdjustmentIfEnabledAsync("AI run paused", ct).ConfigureAwait(false);
 
-            result.Success = true;
-            result.IsPaused = true;
-            result.Summary = "Paused by user after completing the current round.";
-            UpdateKnownProjectJsonHash(session);
-            ct.ThrowIfCancellationRequested();
-            return result;
+            await runControl.WaitWhilePausedAsync(ct).ConfigureAwait(false);
+            AppendStagedUserMessages(session, runControl);
         }
 
         private async Task DelayAndRunAutomaticAdjustmentIfEnabledAsync(string reason, CancellationToken ct)

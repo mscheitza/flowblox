@@ -5,7 +5,8 @@ Choose the smallest decision level that fits the outcome:
 1) RequiredFields — presence guard
 - Use when a FlowBlock cannot run correctly without a field. A null, empty, or whitespace-only required value prevents execution.
 - A result FlowBlock may still emit one empty iteration when no data was produced, so downstream blocks can otherwise execute once. Prefer a type-native `IsRequired` mapping flag when available; otherwise link every execution-critical field to the consumer's `RequiredFields`.
-- Field references and placeholders are not implicitly required. Ask: "Can this FlowBlock work correctly without this value?" If not, guard it immediately.
+- Field references and placeholders are not implicitly required. For each one, decide immediately: "Can this FlowBlock work correctly without this value?" If not, mark it as required.
+- Example: a `WebRequestFlowBlock` using a URL placeholder cannot work meaningfully without that value, so link the URL field to `RequiredFields`.
 
 2) ActivationConditions — FlowBlock/line guard
 - Conditions are evaluated before the FlowBlock executes. If false, the block is skipped; downstream execution from that path stops. Requirement failure is inherited by default where paths converge.

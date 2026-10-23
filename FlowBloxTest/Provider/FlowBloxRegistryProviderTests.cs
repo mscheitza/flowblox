@@ -1,3 +1,4 @@
+using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
@@ -178,7 +179,68 @@ namespace FlowBloxTest.Provider
         }
 
         [TestMethod]
-        public void OpenTransaction_WhenCurrentTransactionIsNested_ThrowsAndPreservesCurrentTransaction()
+        public void IsCurrentNestedTransactionForDifferentTarget_ResolvesNestedWorkingCopy()
+        {
+            var transactionTarget = new FieldElement { Name = "Nested field" };
+            var nestedRegistry = FlowBloxRegistryProvider.OpenTransaction(
+                detached: true,
+                target: transactionTarget,
+                nested: true);
+
+            try
+            {
+                var workingCopy = new FieldElement();
+                nestedRegistry.ReplaceRef(transactionTarget, workingCopy);
+
+                Assert.IsFalse(FlowBloxRegistryProvider.IsCurrentNestedTransactionForDifferentTarget(transactionTarget));
+                Assert.IsFalse(FlowBloxRegistryProvider.IsCurrentNestedTransactionForDifferentTarget(workingCopy));
+                Assert.IsTrue(FlowBloxRegistryProvider.IsCurrentNestedTransactionForDifferentTarget(new FieldElement()));
+
+                var currentSnapshot = FlowBlox.Core.Provider.Registry.FlowBloxRegistryTransactionHistory
+                    .GetHistory()
+                    .Last(x => x.IsCurrent);
+                Assert.AreEqual("Nested field (FieldElement)", currentSnapshot.Target);
+            }
+            finally
+            {
+                if (FlowBloxRegistryProvider.IsCurrentTransaction(nestedRegistry))
+                    FlowBloxRegistryProvider.CancelTransaction(nestedRegistry);
+            }
+        }
+
+        [TestMethod]
+        public void OpenRegularTransaction_WhenCurrentTransactionIsNested_OpensAndRestoresNestedTransaction()
+        {
+            var nestedRegistry = FlowBloxRegistryProvider.OpenTransaction(
+                detached: true,
+                nested: true);
+
+            try
+            {
+                var regularRegistry = FlowBloxRegistryProvider.OpenTransaction(detached: true);
+                try
+                {
+                    Assert.AreSame(regularRegistry, FlowBloxRegistryProvider.GetRegistry());
+                    Assert.IsFalse(FlowBloxRegistryProvider.IsCurrentTransactionNested());
+                }
+                finally
+                {
+                    if (FlowBloxRegistryProvider.IsCurrentTransaction(regularRegistry))
+                        FlowBloxRegistryProvider.CancelTransaction(regularRegistry);
+                }
+
+                Assert.AreSame(nestedRegistry, FlowBloxRegistryProvider.GetRegistry());
+                Assert.IsTrue(FlowBloxRegistryProvider.IsCurrentTransactionNested());
+            }
+            finally
+            {
+                if (FlowBloxRegistryProvider.IsCurrentTransaction(nestedRegistry))
+                    FlowBloxRegistryProvider.CancelTransaction(nestedRegistry);
+            }
+        }
+
+        [TestMethod]
+        public void OpenNestedTransaction_WhenCurrentTransactionIsNested_ThrowsAndPreservesCurrentTransaction()
         {
             var nestedRegistry = FlowBloxRegistryProvider.OpenTransaction(
                 detached: true,
@@ -187,7 +249,9 @@ namespace FlowBloxTest.Provider
             try
             {
                 Assert.ThrowsExactly<InvalidOperationException>(
-                    () => FlowBloxRegistryProvider.OpenTransaction(detached: true));
+                    () => FlowBloxRegistryProvider.OpenTransaction(
+                        detached: true,
+                        nested: true));
 
                 Assert.AreSame(nestedRegistry, FlowBloxRegistryProvider.GetRegistry());
                 Assert.IsTrue(FlowBloxRegistryProvider.IsCurrentTransactionNested());

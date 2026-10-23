@@ -1,5 +1,6 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.AIAssistant.Tools;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Util.DistributedData;
 using Newtonsoft.Json.Linq;
 
@@ -66,6 +67,16 @@ namespace FlowBloxTest.AIAssistant
             Assert.AreEqual(
                 "example_project",
                 exampleProjects.Result["dataTypes"]!.Single()!.Value<string>("dataType"));
+            const string scraperFileName = "Test-Driven-BooksToScrape-Category-Scraper.fbprj";
+            var exampleProjectFileNames = exampleProjects.Result["dataTypes"]!
+                .Single()!["fileNames"]!
+                .Values<string>()
+                .ToList();
+            CollectionAssert.Contains(exampleProjectFileNames, scraperFileName);
+            var scraperProject = FlowBloxProject.FromFile(
+                DistributedDataCatalog.ResolvePath("example_project", scraperFileName));
+            Assert.AreEqual("Test-Driven BooksToScrape Category Scraper", scraperProject.ProjectName);
+            StringAssert.Contains(scraperProject.ProjectDescription, "Offline SequenceDetection");
             StringAssert.Contains(read.Result.Value<string>("content"), "DEFAULT_MODEL_ROOT");
             Assert.IsFalse(traversal.Ok);
             StringAssert.Contains(traversal.Error, "plain filename");

@@ -12,7 +12,9 @@
 Decision criteria:
 - Choose Downstream when the next block semantically depends on the previous sibling result and should be read as one linear story.
 - Choose Stack when sibling blocks share the same parent/source context but are not semantically dependent on each other.
-- In Stack mode, use `BaseFlowBlock.ExecutionIndex` on siblings to define deterministic order (0 first). Leave index unset (-1) only when order is irrelevant.
+- In Stack mode, `BaseFlowBlock.ExecutionIndex` orders only direct sibling successors, never a linear chain. Use ascending indices (0 first) for deterministic sibling order; otherwise leave it unset or reset it to -1.
+  - Invalid: `A1(index 0) -> A2(index 1) -> A3(index 2)`
+  - Valid: `A0 -> A1(index 0), A2(index 1), A3(index 2)`
 - Default sibling order is creation/link order; explicit ExecutionIndex overrides that default.
 - If a sibling still needs a value from another sibling, model that explicitly via RequiredFields or mapping requirements instead of faking dependency through chain wiring.
 

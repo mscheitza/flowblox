@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources
-{
+namespace FlowBlox.UICore.Resources {
     using System;
     
     
@@ -20,31 +19,26 @@ namespace FlowBlox.UICore.Resources
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class EditContentView
-    {
+    public class EditContentView {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal EditContentView()
-        {
+        internal EditContentView() {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.EditContentView", typeof(EditContentView).Assembly);
                     resourceMan = temp;
                 }
@@ -57,69 +51,110 @@ namespace FlowBlox.UICore.Resources
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
-        /// </summary>
-        public static string Button_Save
-        {
-            get
-            {
-                return ResourceManager.GetString("Button_Save", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Back ähnelt.
         /// </summary>
-        public static string Button_Back
-        {
-            get
-            {
+        public static string Button_Back {
+            get {
                 return ResourceManager.GetString("Button_Back", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Select syntax highlighting. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Save ähnelt.
         /// </summary>
-        public static string Combo_Syntax_Tooltip
-        {
-            get
-            {
+        public static string Button_Save {
+            get {
+                return ResourceManager.GetString("Button_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select the content type and syntax highlighting. ähnelt.
+        /// </summary>
+        public static string Combo_Syntax_Tooltip {
+            get {
                 return ResourceManager.GetString("Combo_Syntax_Tooltip", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Syntax: ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die The content is not valid for the selected content type and could not be formatted. ähnelt.
         /// </summary>
-        public static string Label_Syntax
-        {
-            get
-            {
+        public static string Error_DocumentFormatting {
+            get {
+                return ResourceManager.GetString("Error_DocumentFormatting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The content is not valid Base64 and could not be exported. ähnelt.
+        /// </summary>
+        public static string Error_InvalidBase64 {
+            get {
+                return ResourceManager.GetString("Error_InvalidBase64", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Invalid content ähnelt.
+        /// </summary>
+        public static string Error_InvalidContent_Title {
+            get {
+                return ResourceManager.GetString("Error_InvalidContent_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Content type: ähnelt.
+        /// </summary>
+        public static string Label_Syntax {
+            get {
                 return ResourceManager.GetString("Label_Syntax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Decode the displayed Base64 content and export it as a file. ähnelt.
+        /// </summary>
+        public static string Toolbar_ExportBase64_Tooltip {
+            get {
+                return ResourceManager.GetString("Toolbar_ExportBase64_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Export the displayed content as a text file. ähnelt.
+        /// </summary>
+        public static string Toolbar_ExportText_Tooltip {
+            get {
+                return ResourceManager.GetString("Toolbar_ExportText_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Format document ähnelt.
+        /// </summary>
+        public static string Toolbar_FormatDocument_Tooltip {
+            get {
+                return ResourceManager.GetString("Toolbar_FormatDocument_Tooltip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Import (bytes to Base64) ähnelt.
         /// </summary>
-        public static string Toolbar_ImportBytes
-        {
-            get
-            {
+        public static string Toolbar_ImportBytes {
+            get {
                 return ResourceManager.GetString("Toolbar_ImportBytes", resourceCulture);
             }
         }
@@ -127,10 +162,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Load a binary file and insert it as Base64 text into the editor. ähnelt.
         /// </summary>
-        public static string Toolbar_ImportBytes_Tooltip
-        {
-            get
-            {
+        public static string Toolbar_ImportBytes_Tooltip {
+            get {
                 return ResourceManager.GetString("Toolbar_ImportBytes_Tooltip", resourceCulture);
             }
         }
@@ -138,10 +171,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Import (text) ähnelt.
         /// </summary>
-        public static string Toolbar_ImportText
-        {
-            get
-            {
+        public static string Toolbar_ImportText {
+            get {
                 return ResourceManager.GetString("Toolbar_ImportText", resourceCulture);
             }
         }
@@ -149,32 +180,26 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Load a file as text and insert it into the editor. ähnelt.
         /// </summary>
-        public static string Toolbar_ImportText_Tooltip
-        {
-            get
-            {
+        public static string Toolbar_ImportText_Tooltip {
+            get {
                 return ResourceManager.GetString("Toolbar_ImportText_Tooltip", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Insert placeholder ähnelt.
         /// </summary>
-        public static string Toolbar_InsertPlaceholder
-        {
-            get
-            {
+        public static string Toolbar_InsertPlaceholder {
+            get {
                 return ResourceManager.GetString("Toolbar_InsertPlaceholder", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Insert a project property or option placeholder at the current cursor position. ähnelt.
         /// </summary>
-        public static string Toolbar_InsertPlaceholder_Tooltip
-        {
-            get
-            {
+        public static string Toolbar_InsertPlaceholder_Tooltip {
+            get {
                 return ResourceManager.GetString("Toolbar_InsertPlaceholder_Tooltip", resourceCulture);
             }
         }
@@ -182,10 +207,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Edit content ähnelt.
         /// </summary>
-        public static string Window_Title
-        {
-            get
-            {
+        public static string Window_Title {
+            get {
                 return ResourceManager.GetString("Window_Title", resourceCulture);
             }
         }

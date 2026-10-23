@@ -24,14 +24,6 @@ namespace FlowBlox.UICore.ViewModels
 {
     public class AiAssistantChatViewModel : INotifyPropertyChanged, IDisposable
     {
-        private enum RunInterruption
-        {
-            None,
-            Paused,
-            Stopped
-        }
-
-        private RunInterruption _interruption;
         private readonly AiAssistantService _service;
         private readonly IDialogService _dialogService;
         private readonly IFlowBloxMessageBoxService _messageBoxService;
@@ -55,6 +47,7 @@ namespace FlowBlox.UICore.ViewModels
         private bool _canGoBackToHistory;
         private int _estimatedUsedTokens;
         private string _communicationStatusText = string.Empty;
+        private bool _wasPaused;
 
         public ObservableCollection<AssistantTranscriptLine> Transcript { get; } = new ObservableCollection<AssistantTranscriptLine>();
         public RelayCommand NewHistoryCommand { get; }
@@ -64,8 +57,9 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand StopCommand { get; }
         public RelayCommand PauseCommand { get; }
         public bool IsPauseRequested => _runControl?.IsPauseRequested == true;
+        public bool IsPaused => _runControl?.IsPaused == true;
         public string PauseButtonText => FlowBloxResourceUtil.GetLocalizedString(
-            IsPauseRequested ? "Button_PausePending" : "Button_Pause", typeof(Resources.AiAssistantChatView));
+            IsPauseRequested && !IsPaused ? "Button_PausePending" : "Button_Pause", typeof(Resources.AiAssistantChatView));
         public RelayCommand CopyTranscriptEntryCommand { get; }
         public RelayCommand OpenTranscriptEntryInEditorCommand { get; }
         public RelayCommand OpenCommunicationProtocolDirectoryCommand { get; }
@@ -83,8 +77,7 @@ namespace FlowBlox.UICore.ViewModels
                 {
                     _currentInput = value;
                     OnPropertyChanged(nameof(CurrentInput));
-                    OnPropertyChanged(nameof(SubmitButtonText));
-                    OnPropertyChanged(nameof(SubmitButtonIcon));
+                    OnPropertyChanged(nameof(IsInputEmpty));
                     SubmitCommand.Invalidate();
                 }
             }
@@ -100,6 +93,7 @@ namespace FlowBlox.UICore.ViewModels
                     _isBusy = value;
                     OnPropertyChanged(nameof(IsBusy));
                     OnPropertyChanged(nameof(CanEditInput));
+                    OnPropertyChanged(nameof(InputWatermark));
                     SubmitCommand.Invalidate();
                     StopCommand.Invalidate();
                     ContinueCommand.Invalidate();
@@ -111,18 +105,17 @@ namespace FlowBlox.UICore.ViewModels
             }
         }
 
-        public bool CanEditInput => !IsBusy;
-        private bool ShouldContinue => _interruption == RunInterruption.Paused && string.IsNullOrWhiteSpace(CurrentInput);
+        public bool CanEditInput => true;
+        public bool IsInputEmpty => string.IsNullOrEmpty(CurrentInput);
+        public string InputWatermark => FlowBloxResourceUtil.GetLocalizedString(
+            IsBusy ? "Watermark_FollowUpPrompt" : "Watermark_InitialPrompt",
+            typeof(Resources.AiAssistantChatView));
         public string ContinueButtonText => FlowBloxResourceUtil.GetLocalizedString(
             "Button_Continue", typeof(Resources.AiAssistantChatView));
         public string ContinueTooltip => FlowBloxResourceUtil.GetLocalizedString(
             "Tooltip_Continue", typeof(Resources.AiAssistantChatView));
-        public string SubmitButtonText => ShouldContinue
-            ? ContinueButtonText
-            : FlowBloxResourceUtil.GetLocalizedString(
-                _interruption == RunInterruption.Paused ? "Button_SendAndContinue" : "Button_Submit",
-                typeof(Resources.AiAssistantChatView));
-        public string SubmitButtonIcon => ShouldContinue ? "Play" : "Send";
+        public string SubmitButtonText => FlowBloxResourceUtil.GetLocalizedString(
+            "Button_Submit", typeof(Resources.AiAssistantChatView));
         public string CurrentConversationSummary => _service.CurrentConversationSummary;
         public bool HasConversationSummary => !string.IsNullOrWhiteSpace(CurrentConversationSummary);
 
@@ -221,11 +214,9 @@ namespace FlowBlox.UICore.ViewModels
 
             NewHistoryCommand = new RelayCommand(() => NewHistoryRequested?.Invoke(this, EventArgs.Empty), () => !IsBusy);
             BackToHistoryCommand = new RelayCommand(RequestHistoryOverview, () => CanGoBackToHistory);
-            SubmitCommand = new RelayCommand(
-                async () => await SubmitAsync(continueRun: ShouldContinue),
-                CanSubmit);
-            ContinueCommand = new RelayCommand(async () => await SubmitAsync(continueRun: true), CanContinue);
-            StopCommand = new RelayCommand(Stop, () => IsBusy || _interruption == RunInterruption.Paused);
+            SubmitCommand = new RelayCommand(async () => await SubmitAsync(), CanSubmit);
+            ContinueCommand = new RelayCommand(Continue, CanContinue);
+            StopCommand = new RelayCommand(Stop, () => IsBusy);
             PauseCommand = new RelayCommand(Pause, () => IsBusy && !IsPauseRequested);
             CopyTranscriptEntryCommand = new RelayCommand(CopyTranscriptEntry);
             OpenTranscriptEntryInEditorCommand = new RelayCommand(OpenTranscriptEntryInEditor);
@@ -248,27 +239,17 @@ namespace FlowBlox.UICore.ViewModels
 
         private bool CanSubmit()
         {
-            if (ShouldContinue)
-                return CanContinue();
+            if (string.IsNullOrWhiteSpace(CurrentInput) || _isRuntimeActive)
+                return false;
 
-            return CanEditInput && !_isRuntimeActive && !_isExternalProjectEditActive && !string.IsNullOrWhiteSpace(CurrentInput);
+            return IsBusy
+                ? _runControl != null
+                : !_isExternalProjectEditActive;
         }
 
         private bool CanContinue()
         {
-            return !IsBusy && !_isRuntimeActive && !_isExternalProjectEditActive &&
-                _interruption != RunInterruption.None;
-        }
-
-        private void SetInterruption(RunInterruption interruption)
-        {
-            _interruption = interruption;
-            OnPropertyChanged(nameof(CanEditInput));
-            OnPropertyChanged(nameof(SubmitButtonText));
-            OnPropertyChanged(nameof(SubmitButtonIcon));
-            SubmitCommand.Invalidate();
-            ContinueCommand.Invalidate();
-            StopCommand.Invalidate();
+            return IsBusy && IsPaused;
         }
 
         private void Service_BeforeAutomaticLayoutAdjustment(object? sender, EventArgs e)
@@ -277,54 +258,51 @@ namespace FlowBlox.UICore.ViewModels
             BeforeAutomaticLayoutAdjustment?.Invoke(this, EventArgs.Empty);
         }
 
-        private async Task SubmitAsync(bool continueRun = false)
+        private async Task SubmitAsync()
         {
-            if (continueRun ? !CanContinue() : !CanSubmit())
+            if (!CanSubmit())
                 return;
 
-            var input = continueRun
-                ? FlowBloxResourceUtil.GetLocalizedString("Prompt_Continue", typeof(Resources.AiAssistantChatView))
-                : CurrentInput.Trim();
+            var input = CurrentInput.Trim();
+            CurrentInput = string.Empty;
 
             EnsureCurrentHistory();
+            if (IsBusy)
+            {
+                if (_runControl?.TryStageUserMessage(input) == true)
+                {
+                    AddUserTranscriptLine(input);
+                    SaveCurrentHistory();
+                }
+                else
+                {
+                    CurrentInput = input;
+                }
+                return;
+            }
+
             var stateBeforePrompt = _captureProjectState?.Invoke();
             var promptCompleted = false;
-
-            AddTranscriptLine(new AssistantTranscriptLine
-            {
-                Kind = AssistantTranscriptKind.User,
-                Text = input,
-                Timestamp = DateTime.Now
-            });
+            AddUserTranscriptLine(input);
 
             var externalProjectEditActivated = false;
 
             try
             {
                 _runControl = new AssistantRunControl();
+                _runControl.StateChanged += RunControl_StateChanged;
+                _wasPaused = false;
                 NotifyPauseStateChanged();
                 IsBusy = true;
-                SetInterruption(RunInterruption.None);
                 externalProjectEditActivated = true;
                 _runtimeStateService?.SetExternalProjectEditActive(true);
                 _cts = new CancellationTokenSource();
 
-                var result = await _service.GenerateProjectAsync(input, _cts.Token, _runControl);
-                if (result.IsPaused)
-                {
-                    SetInterruption(RunInterruption.Paused);
-                    AddTranscriptLine(new AssistantTranscriptLine
-                    {
-                        Kind = AssistantTranscriptKind.Status,
-                        Text = FlowBloxResourceUtil.GetLocalizedString("Status_Paused", typeof(Resources.AiAssistantChatView)),
-                        Timestamp = DateTime.Now
-                    });
-                }
+                await _service.GenerateProjectAsync(input, _cts.Token, _runControl);
                 promptCompleted = true;
             }
             catch (OperationCanceledException)
             {
-                SetInterruption(RunInterruption.Stopped);
                 AddTranscriptLine(new AssistantTranscriptLine
                 {
                     Kind = AssistantTranscriptKind.Status,
@@ -343,10 +321,11 @@ namespace FlowBlox.UICore.ViewModels
             }
             finally
             {
+                if (_runControl != null)
+                    _runControl.StateChanged -= RunControl_StateChanged;
                 _runControl = null;
+                _wasPaused = false;
                 NotifyPauseStateChanged();
-                if (!continueRun)
-                    CurrentInput = string.Empty;
                 IsBusy = false;
                 if (externalProjectEditActivated)
                     _runtimeStateService?.SetExternalProjectEditActive(false);
@@ -401,32 +380,61 @@ namespace FlowBlox.UICore.ViewModels
             NotifyPauseStateChanged();
         }
 
+        private void Continue()
+        {
+            if (!CanContinue())
+                return;
+
+            _runControl?.Continue();
+        }
+
+        private void RunControl_StateChanged(object? sender, EventArgs e)
+        {
+            SynchronizationContextHelper.PostToUi(_uiContext, () =>
+            {
+                var isPaused = IsPaused;
+                if (isPaused && !_wasPaused)
+                {
+                    AddTranscriptLine(new AssistantTranscriptLine
+                    {
+                        Kind = AssistantTranscriptKind.Status,
+                        Text = FlowBloxResourceUtil.GetLocalizedString("Status_Paused", typeof(Resources.AiAssistantChatView)),
+                        Timestamp = DateTime.Now
+                    });
+                    SaveCurrentHistory();
+                }
+
+                _wasPaused = isPaused;
+                NotifyPauseStateChanged();
+            });
+        }
+
         private void NotifyPauseStateChanged()
         {
             OnPropertyChanged(nameof(IsPauseRequested));
+            OnPropertyChanged(nameof(IsPaused));
             OnPropertyChanged(nameof(PauseButtonText));
             PauseCommand.Invalidate();
+            ContinueCommand.Invalidate();
+            StopCommand.Invalidate();
         }
 
         private void Stop()
         {
-            if (_interruption == RunInterruption.Paused)
-            {
-                SetInterruption(RunInterruption.Stopped);
-                AddTranscriptLine(new AssistantTranscriptLine
-                {
-                    Kind = AssistantTranscriptKind.Status,
-                    Text = FlowBloxResourceUtil.GetLocalizedString("Status_Stopped", typeof(Resources.AiAssistantChatView)),
-                    Timestamp = DateTime.Now
-                });
-                SaveCurrentHistory();
-                return;
-            }
-
             if (!IsBusy)
                 return;
 
             _cts?.Cancel();
+        }
+
+        private void AddUserTranscriptLine(string input)
+        {
+            AddTranscriptLine(new AssistantTranscriptLine
+            {
+                Kind = AssistantTranscriptKind.User,
+                Text = input,
+                Timestamp = DateTime.Now
+            });
         }
 
         private void RequestHistoryOverview()
@@ -728,7 +736,6 @@ namespace FlowBlox.UICore.ViewModels
 
             var snapshot = _captureProjectState?.Invoke();
             _service.ResetSession();
-            SetInterruption(RunInterruption.None);
             Transcript.Clear();
             NotifyTranscriptStateChanged();
             ClearCommunicationStatus();
@@ -760,7 +767,6 @@ namespace FlowBlox.UICore.ViewModels
                 Transcript.Add(line);
 
             _service.RestoreSession(history);
-            SetInterruption(RunInterruption.None);
             EstimatedUsedTokens = _service.EstimatedUsedTokens;
             ClearCommunicationStatus();
             NotifyTranscriptStateChanged();
@@ -856,7 +862,6 @@ namespace FlowBlox.UICore.ViewModels
         {
             Stop();
             _service.ResetSession();
-            SetInterruption(RunInterruption.None);
             Transcript.Clear();
             NotifyTranscriptStateChanged();
             ClearCommunicationStatus();

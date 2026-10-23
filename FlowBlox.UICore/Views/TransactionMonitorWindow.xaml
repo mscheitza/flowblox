@@ -11,7 +11,8 @@
     Width="1050"
     MinHeight="380"
     MinWidth="760"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterScreen"
+    PreviewKeyDown="Window_PreviewKeyDown">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -39,7 +40,7 @@
                     <TextBlock Text="{x:Static resources:TransactionMonitorWindow.Header}"
                                FontSize="16"
                                FontWeight="Bold" />
-                    <TextBlock Text="{x:Static resources:TransactionMonitorWindow.ShortcutHint}"
+                    <TextBlock Text="{x:Static resources:TransactionMonitorWindow.Description}"
                                Foreground="#65737E"
                                FontSize="11" />
                 </StackPanel>
@@ -88,6 +89,16 @@
                        TextWrapping="Wrap" />
         </Border>
 
+        <StackPanel DockPanel.Dock="Bottom"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0">
+            <Button Content="{x:Static resources:PropertyWindow.Back}"
+                    IsCancel="True"
+                    Click="BackButton_Click"
+                    Style="{StaticResource FlowBlox.WindowActionButton.Back}" />
+        </StackPanel>
+
         <DataGrid ItemsSource="{Binding Transactions}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
@@ -133,9 +144,10 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="55" />
-                <DataGridTextColumn Header="{x:Static resources:TransactionMonitorWindow.Column_Target}" Binding="{Binding TargetType}" Width="2*" />
+                <DataGridTextColumn Header="{x:Static resources:TransactionMonitorWindow.Column_Target}" Binding="{Binding Target}" Width="2*" />
                 <DataGridTextColumn Header="{x:Static resources:TransactionMonitorWindow.Column_Registry}" Binding="{Binding RegistryType}" Width="2*" />
                 <DataGridTextColumn Header="{x:Static resources:TransactionMonitorWindow.Column_Mode}" Binding="{Binding Mode}" Width="95" />
+                <DataGridTextColumn Header="{x:Static resources:TransactionMonitorWindow.Column_Type}" Binding="{Binding TransactionType}" Width="85" />
                 <DataGridTextColumn Header="{x:Static resources:TransactionMonitorWindow.Column_Depth}" Binding="{Binding Depth}" Width="65" />
                 <DataGridTextColumn Header="{x:Static resources:TransactionMonitorWindow.Column_Opened}" Binding="{Binding OpenedAt}" Width="110" />
                 <DataGridTextColumn Header="{x:Static resources:TransactionMonitorWindow.Column_Closed}" Binding="{Binding ClosedAt}" Width="110" />

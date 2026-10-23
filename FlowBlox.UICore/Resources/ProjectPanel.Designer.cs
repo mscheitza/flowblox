@@ -519,5 +519,16 @@ namespace FlowBlox.UICore.Resources
                 return ResourceManager.GetString("Toolbar_Stop", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Transaction monitor ähnelt.
+        /// </summary>
+        public static string Toolbar_TransactionMonitor
+        {
+            get
+            {
+                return ResourceManager.GetString("Toolbar_TransactionMonitor", resourceCulture);
+            }
+        }
     }
 }

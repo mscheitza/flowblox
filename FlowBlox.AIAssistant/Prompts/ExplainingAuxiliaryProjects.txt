@@ -2,6 +2,10 @@
 
 Use only for small helper flows that obtain information missing from the user request or main project, such as an SQL schema, web content, or search result.
 
+## Cost-Benefit Rule
+- Creating or substantially adapting a local auxiliary project can require significant tool calls, tokens, and execution effort. Do it only when the missing local capability or information is necessary to fulfill a core requirement and no existing tool, distributed template, or session project can provide it.
+- Prefer an existing mechanism or auxiliary-project template whenever possible. For example, discovering unknown database tables or columns may be essential to construct the requested flow, while creating an IMAP helper merely to confirm delivery after an SMTP flow already executed successfully is not.
+
 Distributed templates:
 - Before creating an auxiliary project, call `GetAuxiliaryProjects(mode="distributedData",filter=...)`. It searches project names and descriptions and returns `fileName`, `description`, `inputFields`, and `outputFields`; omit `filter` to list all templates.
 - Reuse a suitable file directly with `CreateOrUpdateAuxiliaryProject(mode="full_content",copyFromDistributedData={dataType:"auxiliary_project",fileName:<catalog fileName>},...)`. Use `GetDistributedDataContent(dataType="auxiliary_project",fileName=...)` only when its project JSON must be inspected or adapted first.

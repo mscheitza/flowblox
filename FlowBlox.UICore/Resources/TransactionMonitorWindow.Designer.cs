@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FlowBlox.UICore.Resources
-{
+namespace FlowBlox.UICore.Resources {
     using System;
     
     
@@ -20,31 +19,26 @@ namespace FlowBlox.UICore.Resources
     // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
     // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
     // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class TransactionMonitorWindow
-    {
+    public class TransactionMonitorWindow {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal TransactionMonitorWindow()
-        {
+        internal TransactionMonitorWindow() {
         }
         
         /// <summary>
         ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FlowBlox.UICore.Resources.TransactionMonitorWindow", typeof(TransactionMonitorWindow).Assembly);
                     resourceMan = temp;
                 }
@@ -57,14 +51,11 @@ namespace FlowBlox.UICore.Resources
         ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
@@ -72,10 +63,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Active transactions ähnelt.
         /// </summary>
-        public static string ActiveTransactions
-        {
-            get
-            {
+        public static string ActiveTransactions {
+            get {
                 return ResourceManager.GetString("ActiveTransactions", resourceCulture);
             }
         }
@@ -83,10 +72,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Closed ähnelt.
         /// </summary>
-        public static string Column_Closed
-        {
-            get
-            {
+        public static string Column_Closed {
+            get {
                 return ResourceManager.GetString("Column_Closed", resourceCulture);
             }
         }
@@ -94,10 +81,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Depth ähnelt.
         /// </summary>
-        public static string Column_Depth
-        {
-            get
-            {
+        public static string Column_Depth {
+            get {
                 return ResourceManager.GetString("Column_Depth", resourceCulture);
             }
         }
@@ -105,10 +90,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Mode ähnelt.
         /// </summary>
-        public static string Column_Mode
-        {
-            get
-            {
+        public static string Column_Mode {
+            get {
                 return ResourceManager.GetString("Column_Mode", resourceCulture);
             }
         }
@@ -116,10 +99,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Opened ähnelt.
         /// </summary>
-        public static string Column_Opened
-        {
-            get
-            {
+        public static string Column_Opened {
+            get {
                 return ResourceManager.GetString("Column_Opened", resourceCulture);
             }
         }
@@ -127,10 +108,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Registry ähnelt.
         /// </summary>
-        public static string Column_Registry
-        {
-            get
-            {
+        public static string Column_Registry {
+            get {
                 return ResourceManager.GetString("Column_Registry", resourceCulture);
             }
         }
@@ -138,10 +117,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die State ähnelt.
         /// </summary>
-        public static string Column_State
-        {
-            get
-            {
+        public static string Column_State {
+            get {
                 return ResourceManager.GetString("Column_State", resourceCulture);
             }
         }
@@ -149,21 +126,26 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Target ähnelt.
         /// </summary>
-        public static string Column_Target
-        {
-            get
-            {
+        public static string Column_Target {
+            get {
                 return ResourceManager.GetString("Column_Target", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type ähnelt.
+        /// </summary>
+        public static string Column_Type {
+            get {
+                return ResourceManager.GetString("Column_Type", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Clear inactive transactions ähnelt.
         /// </summary>
-        public static string ContextMenu_ClearInactiveTransactions
-        {
-            get
-            {
+        public static string ContextMenu_ClearInactiveTransactions {
+            get {
                 return ResourceManager.GetString("ContextMenu_ClearInactiveTransactions", resourceCulture);
             }
         }
@@ -171,10 +153,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Root registry · direct repository access ähnelt.
         /// </summary>
-        public static string Current_Root
-        {
-            get
-            {
+        public static string Current_Root {
+            get {
                 return ResourceManager.GetString("Current_Root", resourceCulture);
             }
         }
@@ -182,10 +162,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Current transaction ähnelt.
         /// </summary>
-        public static string CurrentTransaction
-        {
-            get
-            {
+        public static string CurrentTransaction {
+            get {
                 return ResourceManager.GetString("CurrentTransaction", resourceCulture);
             }
         }
@@ -193,21 +171,26 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Depth ähnelt.
         /// </summary>
-        public static string Depth
-        {
-            get
-            {
+        public static string Depth {
+            get {
                 return ResourceManager.GetString("Depth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Live diagnostic view ähnelt.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Registry transactions ähnelt.
         /// </summary>
-        public static string Header
-        {
-            get
-            {
+        public static string Header {
+            get {
                 return ResourceManager.GetString("Header", resourceCulture);
             }
         }
@@ -215,10 +198,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Detached ähnelt.
         /// </summary>
-        public static string Mode_Detached
-        {
-            get
-            {
+        public static string Mode_Detached {
+            get {
                 return ResourceManager.GetString("Mode_Detached", resourceCulture);
             }
         }
@@ -226,10 +207,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Standard ähnelt.
         /// </summary>
-        public static string Mode_Standard
-        {
-            get
-            {
+        public static string Mode_Standard {
+            get {
                 return ResourceManager.GetString("Mode_Standard", resourceCulture);
             }
         }
@@ -237,32 +216,17 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die If no transaction is active, the root registry is current and changes are made directly in the repository. Completed transactions remain visible in the history. ähnelt.
         /// </summary>
-        public static string RootExplanation
-        {
-            get
-            {
+        public static string RootExplanation {
+            get {
                 return ResourceManager.GetString("RootExplanation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Live diagnostic view · Ctrl+Alt+T ähnelt.
-        /// </summary>
-        public static string ShortcutHint
-        {
-            get
-            {
-                return ResourceManager.GetString("ShortcutHint", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Active ähnelt.
         /// </summary>
-        public static string State_Active
-        {
-            get
-            {
+        public static string State_Active {
+            get {
                 return ResourceManager.GetString("State_Active", resourceCulture);
             }
         }
@@ -270,10 +234,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Cancelled ähnelt.
         /// </summary>
-        public static string State_Cancelled
-        {
-            get
-            {
+        public static string State_Cancelled {
+            get {
                 return ResourceManager.GetString("State_Cancelled", resourceCulture);
             }
         }
@@ -281,10 +243,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Committed ähnelt.
         /// </summary>
-        public static string State_Committed
-        {
-            get
-            {
+        public static string State_Committed {
+            get {
                 return ResourceManager.GetString("State_Committed", resourceCulture);
             }
         }
@@ -292,10 +252,8 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Unknown ähnelt.
         /// </summary>
-        public static string Target_Unknown
-        {
-            get
-            {
+        public static string Target_Unknown {
+            get {
                 return ResourceManager.GetString("Target_Unknown", resourceCulture);
             }
         }
@@ -303,11 +261,27 @@ namespace FlowBlox.UICore.Resources
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Transaction monitor ähnelt.
         /// </summary>
-        public static string Title
-        {
-            get
-            {
+        public static string Title {
+            get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Nested ähnelt.
+        /// </summary>
+        public static string Type_Nested {
+            get {
+                return ResourceManager.GetString("Type_Nested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Regular ähnelt.
+        /// </summary>
+        public static string Type_Regular {
+            get {
+                return ResourceManager.GetString("Type_Regular", resourceCulture);
             }
         }
     }

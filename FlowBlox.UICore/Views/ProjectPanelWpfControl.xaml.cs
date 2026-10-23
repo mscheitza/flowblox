@@ -1,3 +1,4 @@
+using FlowBlox.UICore.Factory;
 using FlowBlox.UICore.ViewModels.ProjectPanel;
 using FlowBlox.UICore.Utilities;
 using System.Windows;
@@ -43,6 +44,20 @@ namespace FlowBlox.UICore.Views
             Unloaded += ProjectPanelWpfControl_Unloaded;
             LostKeyboardFocus += ProjectPanelWpfControl_LostKeyboardFocus;
             PreviewMouseDown += ProjectPanelWpfControl_PreviewMouseDown;
+        }
+
+        private void TransactionMonitorButton_Click(object sender, RoutedEventArgs e)
+            => TransactionMonitorWindowFactory.Show();
+
+        private void TransactionMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null || button.ContextMenu == null)
+                return;
+
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.Placement = PlacementMode.Bottom;
+            button.ContextMenu.IsOpen = true;
         }
 
         public void RefreshProject() => ViewModel.Refresh();

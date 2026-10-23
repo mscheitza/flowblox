@@ -14,6 +14,7 @@ This file summarizes core project conventions for AI/coding agents working in th
 - Put conditional bodies on separate lines; use braces for multi-line bodies and object assignments.
 - Wrap longer signatures and calls with one parameter or argument per line; put LINQ steps on separate lines.
 - Separate logical steps with blank lines and use descriptive local names. Keep the implementation simple without squeezing its layout.
+- Do not combine type checks and multiple property checks in compound property-pattern guard clauses. Assign the typed value to a descriptive local first, then express the guard with explicit boolean conditions.
 
 ## FlowBlock UI Generation Model
 - FlowBlock property UIs are generated via attributes (annotation-driven UI).

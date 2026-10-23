@@ -27,7 +27,7 @@
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <data name="Title" xml:space="preserve"><value>Transaktionsmonitor</value></data>
   <data name="Header" xml:space="preserve"><value>Registry-Transaktionen</value></data>
-  <data name="ShortcutHint" xml:space="preserve"><value>Live-Diagnoseansicht · Strg+Alt+T</value></data>
+  <data name="Description" xml:space="preserve"><value>Live-Diagnoseansicht</value></data>
   <data name="ActiveTransactions" xml:space="preserve"><value>Aktive Transaktionen</value></data>
   <data name="CurrentTransaction" xml:space="preserve"><value>Aktuelle Transaktion</value></data>
   <data name="Current_Root" xml:space="preserve"><value>Root-Registry · direkter Repository-Zugriff</value></data>
@@ -35,12 +35,15 @@
   <data name="Column_Target" xml:space="preserve"><value>Ziel</value></data>
   <data name="Column_Registry" xml:space="preserve"><value>Registry</value></data>
   <data name="Column_Mode" xml:space="preserve"><value>Modus</value></data>
+  <data name="Column_Type" xml:space="preserve"><value>Typ</value></data>
   <data name="Column_Depth" xml:space="preserve"><value>Tiefe</value></data>
   <data name="Column_Opened" xml:space="preserve"><value>Geöffnet</value></data>
   <data name="Column_Closed" xml:space="preserve"><value>Geschlossen</value></data>
   <data name="Column_State" xml:space="preserve"><value>Status</value></data>
   <data name="Mode_Standard" xml:space="preserve"><value>Standard</value></data>
   <data name="Mode_Detached" xml:space="preserve"><value>Abgekoppelt</value></data>
+  <data name="Type_Regular" xml:space="preserve"><value>Regulär</value></data>
+  <data name="Type_Nested" xml:space="preserve"><value>Verschachtelt</value></data>
   <data name="State_Active" xml:space="preserve"><value>Aktiv</value></data>
   <data name="State_Committed" xml:space="preserve"><value>Übernommen</value></data>
   <data name="State_Cancelled" xml:space="preserve"><value>Verworfen</value></data>

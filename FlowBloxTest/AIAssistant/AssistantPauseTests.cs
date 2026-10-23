@@ -29,16 +29,26 @@ public sealed class AssistantPauseTests
         var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var control = new AssistantRunControl();
+        var requestNumber = 0;
         var executor = new DelegateExecutor(async (
             _,
             ct) =>
         {
-            entered.SetResult();
-            await release.Task.WaitAsync(ct);
+            if (Interlocked.Increment(ref requestNumber) == 1)
+            {
+                entered.SetResult();
+                await release.Task.WaitAsync(ct);
+                return new()
+                {
+                    Success = true,
+                    OutputText = ToolRound
+                };
+            }
+
             return new()
             {
                 Success = true,
-                OutputText = ToolRound
+                OutputText = FinalRound
             };
         });
         var tools = new RecordingToolApi();
@@ -51,25 +61,31 @@ public sealed class AssistantPauseTests
         await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));
         control.RequestPause();
         release.SetResult();
-        var result = await run;
+        await WaitForPausedAsync(control);
 
-        Assert.IsTrue(result.Success);
-        Assert.IsTrue(result.IsPaused);
+        Assert.IsFalse(run.IsCompleted, "A paused run must keep its original task alive.");
         Assert.IsFalse(cancellation.IsCancellationRequested);
-        CollectionAssert.AreEqual(new[] { 1,
-            2 }, tools.ExecutedIds);
+        CollectionAssert.AreEqual(new[] { 1, 2 }, tools.ExecutedIds);
         Assert.AreEqual(1, executor.Requests.Count);
         var pair = (AssistantMessagePair)service.GetDebugSnapshot().History.Last().Message;
         StringAssert.Contains(pair.ToolApiResponse, "TOOL-2");
         Assert.IsFalse(JObject.Parse(pair.AssistantRequest).Value<bool>("final"));
+
+        control.Continue();
+        var result = await run;
+
+        Assert.IsTrue(result.Success);
+        Assert.IsFalse(result.IsPaused);
+        Assert.AreEqual(2, executor.Requests.Count);
         service.ResetSession();
     }
 
     [TestMethod]
-    public async Task PauseDuringToolBatch_SendAndContinueAppendsNewUserMessageAfterToolResults()
+    public async Task PauseDuringToolBatch_StagesMultipleUserMessagesBeforeContinuationRequest()
     {
         const string originalMessage = "Erstelle eine rote Tabelle.";
         const string insertedMessage = "Bitte blau statt rot.";
+        const string secondInsertedMessage = "Und verwende eine kompakte Darstellung.";
 
         var control = new AssistantRunControl();
         var executor = new DelegateExecutor((
@@ -84,33 +100,34 @@ public sealed class AssistantPauseTests
             OnExecute = _ => control.RequestPause()
         };
         var service = CreateService(executor, tools);
-        // Also verifies that pause on the last configured round succeeds instead of reporting a round-limit failure.
-        var first = await service.GenerateProjectAsync(
+        var run = service.GenerateProjectAsync(
             originalMessage,
             CancellationToken.None,
             control);
-        Assert.IsTrue(first.Success);
-        Assert.IsTrue(first.IsPaused);
-        Assert.AreEqual(0, first.Errors.Count);
+        await WaitForPausedAsync(control);
+
+        Assert.IsFalse(run.IsCompleted);
         Assert.AreEqual(2, tools.ExecutedIds.Count);
+        Assert.IsTrue(control.TryStageUserMessage(insertedMessage));
+        Assert.IsTrue(control.TryStageUserMessage(secondInsertedMessage));
         executor.Handle = (_, _) => Task.FromResult(new AiExecutorResult
         {
             Success = true,
             OutputText = FinalRound
         });
-        var second = await service.GenerateProjectAsync(
-            insertedMessage,
-            CancellationToken.None,
-            new AssistantRunControl());
-        Assert.IsTrue(second.Success);
-        Assert.IsFalse(second.IsPaused);
+        control.Continue();
+        var result = await run;
+
+        Assert.IsTrue(result.Success);
         Assert.AreEqual(2, executor.Requests.Count);
         var resumedMessages = executor.Requests.Last().Messages.ToList();
         var originalMessageIndex = resumedMessages.FindIndex(message =>
             message.Role == "user" && message.Content.Contains(originalMessage, StringComparison.Ordinal));
         var toolResultIndex = resumedMessages.FindLastIndex(message => message.Role == "tool");
         var insertedMessages = resumedMessages
-            .Where(message => message.Content.Contains(insertedMessage, StringComparison.Ordinal))
+            .Where(message => message.Role == "user" &&
+                (message.Content.Contains(insertedMessage, StringComparison.Ordinal) ||
+                 message.Content.Contains(secondInsertedMessage, StringComparison.Ordinal)))
             .ToList();
 
         Assert.IsTrue(originalMessageIndex >= 0, "The original task must remain in the resumed request.");
@@ -119,10 +136,9 @@ public sealed class AssistantPauseTests
             .Select(message => message.Content));
         StringAssert.Contains(toolContext, "TOOL-1");
         StringAssert.Contains(toolContext, "TOOL-2");
-        Assert.AreEqual(1, insertedMessages.Count, "The inserted message must be sent exactly once.");
-        Assert.AreEqual("user", insertedMessages[0].Role);
-        Assert.AreSame(resumedMessages.Last(), insertedMessages[0]);
+        Assert.AreEqual(2, insertedMessages.Count, "Every staged message must be sent exactly once.");
         Assert.IsTrue(resumedMessages.IndexOf(insertedMessages[0]) > toolResultIndex);
+        Assert.IsTrue(resumedMessages.IndexOf(insertedMessages[1]) > resumedMessages.IndexOf(insertedMessages[0]));
 
         var persistedInsertedMessages = service.GetDebugSnapshot().History
             .Where(entry => entry.Message.Role == "user" &&
@@ -130,13 +146,16 @@ public sealed class AssistantPauseTests
             .ToList();
         Assert.AreEqual(1, persistedInsertedMessages.Count,
             "The inserted message must remain in session history after resuming.");
+        Assert.AreEqual(1, service.GetDebugSnapshot().History.Count(entry =>
+            entry.Message.Role == "user" &&
+            entry.Message.CompleteMessage.Contains(secondInsertedMessage, StringComparison.Ordinal)));
         CollectionAssert.AreEqual(new[] { 1, 2 }, tools.ExecutedIds,
             "Resuming must not execute the completed tool calls again.");
         service.ResetSession();
     }
 
     [TestMethod]
-    public async Task PauseWithMalformedResponse_PreservesResponseWithoutStartingFormatRetry()
+    public async Task StopWhilePaused_CancelsWaitAndPreservesCompletedResponse()
     {
         var control = new AssistantRunControl();
         var executor = new DelegateExecutor((
@@ -151,13 +170,23 @@ public sealed class AssistantPauseTests
             });
         });
         var service = CreateService(executor, new RecordingToolApi());
-        var result = await service.GenerateProjectAsync(
+        using var cancellation = new CancellationTokenSource();
+        var run = service.GenerateProjectAsync(
             "Request",
-            CancellationToken.None,
+            cancellation.Token,
             control);
-        Assert.IsTrue(result.IsPaused);
+        await WaitForPausedAsync(control);
         Assert.AreEqual(1, executor.Requests.Count);
+        Assert.IsFalse(run.IsCompleted);
         StringAssert.Contains(service.GetDebugSnapshot().History.Last().Message.CompleteMessage, "MALFORMED RESPONSE");
+
+        cancellation.Cancel();
+        try
+        {
+            await run;
+            Assert.Fail("Stopping a paused run must cancel its wait.");
+        }
+        catch (OperationCanceledException) { }
         service.ResetSession();
     }
 
@@ -200,12 +229,37 @@ public sealed class AssistantPauseTests
             tools,
             configurationProvider: () => new AssistantConfiguration
             {
-                MaxToolRounds = 1,
+                MaxToolRounds = 4,
                 MaxLatestMessages = 10,
                 MinLatestMessages = 1,
                 MaxContextTokens = 100000,
                 EnableAutomaticAdjustment = false
             });
+    }
+
+    private static async Task WaitForPausedAsync(AssistantRunControl control)
+    {
+        if (control.IsPaused)
+            return;
+
+        var paused = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        void StateChanged(object? sender, EventArgs args)
+        {
+            if (control.IsPaused)
+                paused.TrySetResult();
+        }
+
+        control.StateChanged += StateChanged;
+        try
+        {
+            if (control.IsPaused)
+                return;
+            await paused.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        }
+        finally
+        {
+            control.StateChanged -= StateChanged;
+        }
     }
 
     private sealed class DelegateExecutor(Func<AIChatRequest, CancellationToken, Task<AiExecutorResult>> handle) : IAiExecutor

@@ -67,22 +67,13 @@ namespace FlowBlox.UICore.ViewModels
             ActiveTransactionCount = FlowBloxRegistryTransactionHistory.ActiveTransactionCount;
             CurrentTransaction = current == null
                 ? TransactionMonitorWindow.Current_Root
-                : $"#{current.Id} · {GetShortTypeName(current.TargetType)} · {TransactionMonitorWindow.Depth} {current.Depth}";
+                : $"#{current.Id} · {current.Target ?? TransactionMonitorWindow.Target_Unknown} · {TransactionMonitorWindow.Depth} {current.Depth}";
 
             Transactions.Clear();
             foreach (var snapshot in snapshots.OrderByDescending(x => x.Id))
                 Transactions.Add(TransactionMonitorEntryViewModel.FromSnapshot(snapshot));
 
             ClearInactiveTransactionsCommand.Invalidate();
-        }
-
-        private static string GetShortTypeName(string typeName)
-        {
-            if (string.IsNullOrWhiteSpace(typeName))
-                return TransactionMonitorWindow.Target_Unknown;
-
-            var lastSeparator = typeName.LastIndexOf('.');
-            return lastSeparator >= 0 ? typeName[(lastSeparator + 1)..] : typeName;
         }
 
         public void Dispose()

@@ -7,37 +7,29 @@ namespace FlowBloxTest.AIAssistant
     public class AssistantPromptBuilderTests
     {
         [TestMethod]
-        public void BuildSessionBootstrapPrompt_IncludesStandardAuxiliaryProjectOverview()
+        public void BuildSessionBootstrapPrompt_RoutesAuxiliaryProjectUseCasesWithoutEmbeddingTemplateCatalog()
         {
             var prompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt([]);
 
-            Assert.IsFalse(prompt.Contains("{{STANDARD_AUXILIARY_PROJECTS}}", StringComparison.Ordinal));
-            StringAssert.Contains(prompt, "FetchUrlDom:");
-            StringAssert.Contains(prompt, "BraveWebSearch:");
-            StringAssert.Contains(prompt, "SqliteTableDiscovery:");
+            Assert.IsFalse(prompt.Contains("{{EXPLANATION_ROUTING}}", StringComparison.Ordinal));
+            StringAssert.Contains(prompt, "Local capabilities via auxiliary projects (local skills)");
+            StringAssert.Contains(prompt, "bundled or session-created helpers");
+            StringAssert.Contains(prompt, "accessing internal/external websites and inspecting DOM content");
+            StringAssert.Contains(prompt, "reading database tables, columns, and types");
+            StringAssert.Contains(prompt, "`explaining_auxiliary_projects`");
+            Assert.IsFalse(prompt.Contains("FetchUrlDom:", StringComparison.Ordinal));
         }
 
         [TestMethod]
-        public void BuildSessionBootstrapPrompt_ExplainsWhenExplanationIsAlreadyLoaded()
+        public void BuildSessionBootstrapPrompt_ListsOnlyOnDemandExplanations()
         {
             var prompt = AssistantPromptBuilder.BuildSessionBootstrapPrompt([]);
 
-            StringAssert.Contains(
-                prompt,
-                "counts as loaded when its manifest entry is tagged `:included`");
-            StringAssert.Contains(
-                prompt,
-                "or when a repeated `GetExplanationContent` retrieval has bound its content as a system message");
-            StringAssert.Matches(
-                prompt,
-                new System.Text.RegularExpressions.Regex(
-                    "explaining_version_notes:[a-f0-9]{64}:included",
-                    System.Text.RegularExpressions.RegexOptions.CultureInvariant));
-            StringAssert.Matches(
-                prompt,
-                new System.Text.RegularExpressions.Regex(
-                    "explaining_generators:[a-f0-9]{64}:on-demand",
-                    System.Text.RegularExpressions.RegexOptions.CultureInvariant));
+            StringAssert.Contains(prompt, "`explaining_generators`");
+            Assert.IsFalse(prompt.Contains("`explaining_version_notes`", StringComparison.Ordinal));
+            Assert.IsFalse(prompt.Contains("`system_message`", StringComparison.Ordinal));
+            Assert.IsFalse(prompt.Contains("`session_bootstrap`", StringComparison.Ordinal));
         }
+
     }
 }

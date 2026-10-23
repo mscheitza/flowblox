@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.State;
 
-// Runtime-only content. The second successful retrieval promotes a complete declaring type/explanation.
+// Runtime-only content. Repeated type retrieval promotes complete declaring types.
 internal static class AssistantSessionContentStore
 {
     private static readonly ConcurrentDictionary<string, AssistantSessionContentCache> Sessions = new(StringComparer.Ordinal);
@@ -27,7 +27,6 @@ internal sealed class AssistantSessionContentCache
     private readonly object _sync = new();
     private readonly HashSet<string> _listedDeclaringTypes = new(StringComparer.Ordinal);
     private readonly HashSet<string> _promotedDeclaringTypes = new(StringComparer.Ordinal);
-    private readonly HashSet<string> _retrievedExplanations = new(StringComparer.Ordinal);
     private readonly Dictionary<string, AssistantSystemMessage> _bindings = new(StringComparer.Ordinal);
 
     public IReadOnlyList<AssistantSystemMessage> GetSystemMessages()
@@ -83,7 +82,7 @@ internal sealed class AssistantSessionContentCache
         }
     }
 
-    public ToolResponse GetExplanation(
+    public ToolResponse LoadExplanation(
         string key,
         string title,
         string content)
@@ -92,17 +91,14 @@ internal sealed class AssistantSessionContentCache
         {
             var bindingKey = "explanation:" + key;
             if (_bindings.ContainsKey(bindingKey))
-                return PromotionNotice(key);
-
-            if (_retrievedExplanations.Add(key))
                 return new()
                 {
                     Ok = true,
                     Result = new JObject
                     {
                         ["key"] = key,
-                        ["title"] = title,
-                        ["content"] = content
+                        ["loaded"] = false,
+                        ["message"] = $"Already loaded: '{title}' is available as a system message in this session."
                     }
                 };
 
@@ -112,7 +108,16 @@ internal sealed class AssistantSessionContentCache
                 AssistantSystemMessageKind.Explanation,
                 content,
                 true));
-            return PromotionNotice(key);
+            return new()
+            {
+                Ok = true,
+                Result = new JObject
+                {
+                    ["key"] = key,
+                    ["loaded"] = true,
+                    ["message"] = $"'{title}' was loaded and will be available as a system message from the next request."
+                }
+            };
         }
     }
 

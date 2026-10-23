@@ -143,10 +143,28 @@
   </data>
 
 	<data name="Label_Syntax" xml:space="preserve">
-    <value>Syntax:</value>
+    <value>Inhaltstyp:</value>
+  </data>
+	<data name="Toolbar_ExportText_Tooltip" xml:space="preserve">
+    <value>Angezeigten Inhalt als Textdatei exportieren.</value>
+  </data>
+	<data name="Toolbar_ExportBase64_Tooltip" xml:space="preserve">
+    <value>Angezeigten Base64-Inhalt decodieren und als Datei exportieren.</value>
+  </data>
+	<data name="Toolbar_FormatDocument_Tooltip" xml:space="preserve">
+    <value>Dokument formatieren</value>
+  </data>
+	<data name="Error_InvalidContent_Title" xml:space="preserve">
+    <value>Ung&#252;ltiger Inhalt</value>
+  </data>
+	<data name="Error_DocumentFormatting" xml:space="preserve">
+    <value>Der Inhalt ist f&#252;r den ausgew&#228;hlten Inhaltstyp ung&#252;ltig und konnte nicht formatiert werden.</value>
+  </data>
+	<data name="Error_InvalidBase64" xml:space="preserve">
+    <value>Der Inhalt ist kein g&#252;ltiges Base64 und konnte nicht exportiert werden.</value>
   </data>
 	<data name="Combo_Syntax_Tooltip" xml:space="preserve">
-    <value>Syntax-Highlighting auswählen.</value>
+    <value>Inhaltstyp und Syntaxhervorhebung ausw&#228;hlen.</value>
   </data>
 
 	<data name="Button_Back" xml:space="preserve">

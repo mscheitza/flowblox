@@ -328,17 +328,26 @@
                 BorderThickness="1"
                 CornerRadius="10"
                 Padding="6">
-            <TextBox x:Name="PromptTextBox"
-                     Height="180"
-                     MinHeight="120"
-                     AcceptsReturn="True"
-                     TextWrapping="Wrap"
-                     VerticalScrollBarVisibility="Auto"
-                     HorizontalScrollBarVisibility="Disabled"
-                     BorderThickness="0"
-                     Background="Transparent"
-                     IsEnabled="{Binding CanEditInput}"
-                     Text="{Binding CurrentInput, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid>
+                <TextBox x:Name="PromptTextBox"
+                         Height="180"
+                         MinHeight="120"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Disabled"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         IsEnabled="{Binding CanEditInput}"
+                         Text="{Binding CurrentInput, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="2,1,8,0"
+                           VerticalAlignment="Top"
+                           Foreground="#FF9CA3AF"
+                           IsHitTestVisible="False"
+                           Text="{Binding InputWatermark}"
+                           TextWrapping="Wrap"
+                           Visibility="{Binding IsInputEmpty, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </Grid>
         </Border>
 
         <StackPanel Grid.Row="5"
@@ -349,31 +358,40 @@
                 <Style TargetType="Button" BasedOn="{StaticResource FlowBlox.RoundedActionButtonStyle}">
                     <Setter Property="MinWidth" Value="0" />
                     <Setter Property="MinHeight" Value="0" />
-                    <Setter Property="Height" Value="28" />
-                    <Setter Property="Padding" Value="8,3" />
-                    <Setter Property="FontSize" Value="12" />
+                    <Setter Property="Width" Value="30" />
+                    <Setter Property="Height" Value="30" />
+                    <Setter Property="Padding" Value="5" />
+                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
                 </Style>
             </StackPanel.Resources>
-            <Button Margin="0,0,6,0" Command="{Binding SubmitCommand}">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="{Binding SubmitButtonIcon}" Width="13" Height="13" Margin="0,0,4,0" VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding SubmitButtonText}" />
-                </StackPanel>
+            <Button Margin="0,0,6,0"
+                    Command="{Binding SubmitCommand}"
+                    ToolTip="{x:Static resources:AiAssistantChatView.Button_Submit}"
+                    AutomationProperties.Name="{x:Static resources:AiAssistantChatView.Button_Submit}">
+                <iconPacks:PackIconMaterial Kind="Send"
+                                                Width="18"
+                                                Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+            </Button>
+            <Button Margin="0,0,6,0"
+                    Command="{Binding ContinueCommand}"
+                    ToolTip="{Binding ContinueTooltip}"
+                    AutomationProperties.Name="{Binding ContinueButtonText}">
+                <iconPacks:PackIconMaterial Kind="Play" Width="18" Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
             </Button>
             <Button Margin="0,0,6,0"
                     ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Pause}"
-                    ToolTipService.ShowOnDisabled="True" Command="{Binding PauseCommand}">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="Pause" Width="13" Height="13" Margin="0,0,4,0" VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding PauseButtonText}" />
-                </StackPanel>
+                    AutomationProperties.Name="{Binding PauseButtonText}"
+                    Command="{Binding PauseCommand}">
+                <iconPacks:PackIconMaterial Kind="Pause" Width="18" Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
             </Button>
             <Button ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Stop}"
-                    ToolTipService.ShowOnDisabled="True" Command="{Binding StopCommand}">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="Stop" Width="13" Height="13" Margin="0,0,4,0" VerticalAlignment="Center" />
-                    <TextBlock Text="{x:Static resources:AiAssistantChatView.Button_Stop}" />
-                </StackPanel>
+                    AutomationProperties.Name="{x:Static resources:AiAssistantChatView.Button_Stop}"
+                    Command="{Binding StopCommand}">
+                <iconPacks:PackIconMaterial Kind="Stop" Width="18" Height="18"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
             </Button>
         </StackPanel>
     </Grid>

@@ -5,6 +5,11 @@ Verification default:
 - Prefer the smallest focused debug run that proves the changed path; use a full debug run only when the end-to-end result must be proven.
 - If verification cannot be run, explain the blocker and do not present the work as fully verified.
 
+## Final Evidence Rule
+- A successful debug run without errors and with plausible observed field values is sufficient unless the task explicitly requires stronger end-result evidence.
+- Use an existing low-cost verification path when available, for example `GetOutputFileContent` for generated files or an existing `ExecuteSQLQuery` auxiliary project for SQL results.
+- Do not create new tools or auxiliary projects solely for stronger final evidence. If no practical existing check can inspect the actual result, state what was verified and what remains unverified rather than expanding the solution only for confirmation.
+
 Target execution:
 - Prefer focused debug runs with `targetFlowBlockName` for diagnosing individual flow blocks.
 - Use a full debug run when needed to verify the actual end-to-end result or complete the user's goal.

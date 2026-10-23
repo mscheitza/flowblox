@@ -13,7 +13,7 @@ namespace FlowBlox.Core.Provider.Registry
 
         public string RegistryType { get; init; }
 
-        public string TargetType { get; init; }
+        public string Target { get; init; }
 
         public bool IsDetached { get; init; }
 

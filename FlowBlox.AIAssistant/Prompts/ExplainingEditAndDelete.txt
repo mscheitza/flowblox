@@ -11,6 +11,7 @@ Type model:
 Update rules:
 - Always use path-based updates: /Property/0/Nested.
 - UpdateManagedObject accepts the fully qualified field name in name to target a FieldElement; other ManagedObjects use their Name.
+- Never update ManagedObject-internal data through a parent path such as `UpdateFlowBlock /<ManagedObjectCollection>/0/...`; target it directly with `UpdateManagedObject`.
 - Never guess/invent property names or nested paths; inspect target metadata first with `GetTypeKindsInfo` (or `GetManagedObjectKindsInfo` for managed objects) before write operations.
 - For FlowBloxReactiveObject-only values:
   - never assign direct JSON object/array blobs to parent properties
@@ -19,10 +20,19 @@ Update rules:
 - Creation split:
   - FlowBloxReactiveObject-only: create/update via Update path
   - FlowBlocks: create via CreateFlowBlock, then reference via Update
-  - FieldElements: create result fields via CreateField with the owning BaseResultFlowBlock in sourceFlowBlockName (sets Source); create Input/Memory user fields via CreateUserField (no source FlowBlock). 
+  - FieldElements cannot be created with CreateManagedObject.
+  - Multi-result FlowBlocks may pre-create output fields (e.g. WebRequest creates Content). `ResultFieldByEnumValue<TEnum>` pairs an EnumValue output key with a ResultField; the FlowBlock decides which keys are materialized. Inspect `GetComponentSnapshot`, reuse existing fields, and never create one field per enum value indiscriminately.
+  - For a missing multi-result field, use CreateField with the owning BaseResultFlowBlock in sourceFlowBlockName (sets Source).
   - BaseSingleResultFlowBlock normally creates its default ResultField automatically. If you notice a missing ResultField in the available project context, repair it with CreateField using sourceFlowBlockName.
   - BaseSingleResultFlowBlock missing field creation: use DefaultResultFieldType for fieldType and, when set, DefaultResultFieldName for overrideName; otherwise use nameGenerationMode="DeriveFromFlowBlock" (the default for single-result blocks).
-  - Other ManagedObjects: create via CreateManagedObject, then reference via Update. CreateManagedObject rejects FieldElement and its derived types.
+  - Create Input/Memory fields exclusively with CreateUserField. They have no source FlowBlock and receive `UserField=true`, `UserFieldType`, a default `TypeElement` (`FieldType=Text`), and the corresponding `Input_`/`Memory_` prefix.
+  - Inspect FieldElement metadata with `GetManagedObjectKindsInfo`; update every FieldElement, including user fields, directly with UpdateManagedObject.
+  - Other ManagedObjects: create via CreateManagedObject, then reference via Update.
+- After CreateField, assign it to the appropriate result/reactive mapping with UpdateFlowBlock/UpdateManagedObject resolver syntax.
+
+Known BaseFlowBlock collection semantics:
+- `TestDefinitions`: ManagedObject reference collection; use Link/Unlink.
+- `GenerationStrategies`: FlowBloxReactiveObject collection; use path-based nested updates, never Link/Unlink.
 
 Typed index GetOrCreate (reactive-only collections):
 - Optional syntax: /Collection/<index>:<FullTypeName>/...

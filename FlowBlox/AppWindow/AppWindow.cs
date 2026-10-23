@@ -139,12 +139,6 @@ namespace FlowBlox.AppWindow
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == (Keys.Control | Keys.Alt | Keys.T))
-            {
-                TransactionMonitorWindowFactory.Show();
-                return true;
-            }
-
             if (_componentLibraryPanel?.ProcessCmdKey(ref msg, keyData) == true)
                 return true;
 

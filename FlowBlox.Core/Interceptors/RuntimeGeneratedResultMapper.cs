@@ -25,7 +25,7 @@ namespace FlowBlox.Core.Interceptors
                     {
                         serializedDataset.FieldValueMappings.Add(new RuntimeGeneratedResultFieldValueMapping
                         {
-                            FieldFullyQualifiedName = mapping?.Field?.FullyQualifiedName ?? string.Empty,
+                            FullyQualifiedFieldName = mapping?.Field?.FullyQualifiedName ?? string.Empty,
                             Value = mapping?.Value
                         });
                     }

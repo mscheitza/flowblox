@@ -1,9 +1,5 @@
 using FlowBlox.UICore.ViewModels;
-using FlowBlox.UICore.Enums;
-using FlowBlox.UICore.Factory.Adapter;
-using FlowBlox.UICore.Models.FieldSelection;
 using MahApps.Metro.Controls;
-using System.Windows;
 
 namespace FlowBlox.UICore.Views
 {
@@ -26,30 +22,6 @@ namespace FlowBlox.UICore.Views
             };
 
             DataContext = _viewModel;
-        }
-
-        private void InsertFieldPlaceholderButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_viewModel.IsReadOnly || !_viewModel.EnableFieldSelection)
-                return;
-
-            var args = new FieldSelectionWindowArgs
-            {
-                SelectionMode = FieldSelectionMode.Options,
-                IsRequired = false,
-                HideRequired = true,
-                AllowedFieldSelectionModes =
-                [
-                    FieldSelectionMode.ProjectProperties,
-                    FieldSelectionMode.Options
-                ]
-            };
-
-            Utilities.TextBoxHelper.ShowFieldSelectionDialog(
-                target: null,
-                args,
-                new AvalonEditAdapter(Editor),
-                this);
         }
 
         public string ContentText => _viewModel.ContentText;

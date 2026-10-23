@@ -12,10 +12,9 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             {
                 ["runId"] = "string? (latest-run safety check)",
                 ["executionId"] = "int? (required if run contains multiple executions; see GetLatestTestExecutionArtifact)",
-                ["assignmentFQFieldName"] = "string? (assignment key; use either this or datasetIndex)",
-                ["datasetIndex"] = "int? (0-based result row; pair with a field identifier)",
-                ["fullyQualifiedFieldName"] = "string? (preferred result field identifier)",
-                ["fieldName"] = "string? (result field name; must be unambiguous)",
+                ["datasetIndex"] = "int? (0-based result row; omit for an assignment)",
+                ["fullyQualifiedFieldName"] = "string? (required assignment key when datasetIndex is omitted; preferred unambiguous result field identifier when datasetIndex is provided)",
+                ["fieldName"] = "string? (alternative to fullyQualifiedFieldName for result rows only; must identify exactly one field within the selected datasetIndex)",
                 ["searchIndex"] = "int? (character offset; default: 0)",
                 ["searchValues"] = "string? (comma-separated markers; earliest match overrides searchIndex)",
                 ["searchMode"] = "string? (StartAt|LookAround; default: StartAt)",
@@ -26,21 +25,19 @@ namespace FlowBlox.AIAssistant.Tools.Handler
         {
             if (!TestExecutionArtifactUtilities.TryResolve(args, out var snapshot, out var execution, out var error))
                 return Task.FromResult(ToolHandlerUtilities.Fail(error));
-            var assignment = args.Value<string>("assignmentFQFieldName");
             var index = args.Value<int?>("datasetIndex");
-            var isAssignment = !string.IsNullOrWhiteSpace(assignment);
-            if (isAssignment == index.HasValue || (isAssignment &&
-                (!string.IsNullOrWhiteSpace(args.Value<string>("fieldName")) || !string.IsNullOrWhiteSpace(args.Value<string>("fullyQualifiedFieldName")))))
-                return Task.FromResult(ToolHandlerUtilities.Fail("Provide either assignmentFQFieldName, or datasetIndex with a result field identifier."));
+            var fieldName = args.Value<string>("fieldName");
+            var fqName = args.Value<string>("fullyQualifiedFieldName");
+            var isAssignment = !index.HasValue;
+            if (isAssignment && (string.IsNullOrWhiteSpace(fqName) || !string.IsNullOrWhiteSpace(fieldName)))
+                return Task.FromResult(ToolHandlerUtilities.Fail("For an assignment, provide fullyQualifiedFieldName and omit datasetIndex and fieldName."));
 
             string? value;
-            string? fieldName = null;
-            string? fqName = assignment;
             if (isAssignment)
             {
-                var property = ((JObject)execution!["fieldValueAssignments"]!).Property(assignment!, StringComparison.OrdinalIgnoreCase);
+                var property = ((JObject)execution!["fieldValueAssignments"]!).Property(fqName!, StringComparison.OrdinalIgnoreCase);
                 if (property == null)
-                    return Task.FromResult(ToolHandlerUtilities.Fail("assignmentFQFieldName was not found in this execution."));
+                    return Task.FromResult(ToolHandlerUtilities.Fail("fullyQualifiedFieldName was not found in the assignments of this execution."));
                 fqName = property.Name;
                 value = property.Value.Value<string>();
             }
@@ -50,8 +47,6 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     .FirstOrDefault(x => x.Value<int>("datasetIndex") == index);
                 if (row == null)
                     return Task.FromResult(ToolHandlerUtilities.Fail("datasetIndex is out of range for this execution."));
-                fqName = args.Value<string>("fullyQualifiedFieldName");
-                fieldName = args.Value<string>("fieldName");
                 var matches = ((JArray)row["values"]!).OfType<JObject>().Where(x =>
                     !string.IsNullOrWhiteSpace(fqName)
                         ? string.Equals(x.Value<string>("fullyQualifiedFieldName"), fqName, StringComparison.OrdinalIgnoreCase)
@@ -72,7 +67,6 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["createdUtc"] = snapshot.CreatedUtc,
                 ["executionId"] = execution!["executionId"],
                 ["artefactType"] = isAssignment ? "Assignment" : "TestResult",
-                ["assignmentFQFieldName"] = isAssignment ? fqName : null,
                 ["datasetIndex"] = index,
                 ["fieldName"] = fieldName,
                 ["fullyQualifiedFieldName"] = fqName,

@@ -1,3 +1,4 @@
+using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Provider.Registry;
 
@@ -8,6 +9,7 @@ namespace FlowBlox.Core.Provider
         private static readonly object _registryChainSync = new();
         private static readonly List<FlowBloxRegistry> _registryChain = new();
         private static readonly HashSet<FlowBloxRegistry> _nestedTransactionRegistries = new();
+        private static readonly Dictionary<FlowBloxRegistry, object> _transactionTargets = new();
         private static readonly AsyncLocal<FlowBloxRegistry> _scopedRegistry = new();
 
         public static event EventHandler TransactionsChanged;
@@ -68,11 +70,13 @@ namespace FlowBlox.Core.Provider
             int depth;
             lock (_registryChainSync)
             {
-                if (_registryChain.LastOrDefault() is { } currentTransaction &&
+                var currentTransaction = _registryChain.LastOrDefault();
+                if (nested &&
+                    currentTransaction != null &&
                     _nestedTransactionRegistries.Contains(currentTransaction))
                 {
                     throw new InvalidOperationException(
-                        "A transaction cannot be opened on top of a nested transaction.");
+                        "A nested transaction cannot be opened on top of another nested transaction.");
                 }
 
                 var parentRegistry = _registryChain.LastOrDefault() ?? GetRegistry();
@@ -81,6 +85,7 @@ namespace FlowBlox.Core.Provider
                     : new FlowBloxTransientRegistry(parentRegistry);
 
                 _registryChain.Add(transactionRegistry);
+                _transactionTargets[transactionRegistry] = target;
                 if (nested)
                     _nestedTransactionRegistries.Add(transactionRegistry);
                 depth = _registryChain.Count;
@@ -102,6 +107,25 @@ namespace FlowBlox.Core.Provider
             {
                 return _registryChain.Any() &&
                        _nestedTransactionRegistries.Contains(_registryChain.Last());
+            }
+        }
+
+        public static bool IsCurrentNestedTransactionForDifferentTarget(object target)
+        {
+            lock (_registryChainSync)
+            {
+                var currentTransaction = _registryChain.LastOrDefault();
+                if (currentTransaction == null ||
+                    !_nestedTransactionRegistries.Contains(currentTransaction))
+                    return false;
+
+                if (target == null ||
+                    !_transactionTargets.TryGetValue(currentTransaction, out var transactionTarget))
+                    return true;
+
+                var resolvedTarget = ResolveTransactionTarget(currentTransaction, target);
+                var resolvedTransactionTarget = ResolveTransactionTarget(currentTransaction, transactionTarget);
+                return !ReferenceEquals(resolvedTarget, resolvedTransactionTarget);
             }
         }
 
@@ -166,6 +190,7 @@ namespace FlowBlox.Core.Provider
                     return;
 
                 _nestedTransactionRegistries.Remove(registry);
+                _transactionTargets.Remove(registry);
             }
 
             FlowBloxRegistryTransactionHistory.RegisterCompleted(registry, state);
@@ -174,6 +199,14 @@ namespace FlowBlox.Core.Provider
 
         private static void OnTransactionsChanged() =>
             TransactionsChanged?.Invoke(null, EventArgs.Empty);
+
+        private static object ResolveTransactionTarget(FlowBloxRegistry registry, object target)
+        {
+            if (target is IFlowBloxComponent component)
+                return registry.GetOriginalRef(component);
+
+            return target;
+        }
 
         private sealed class ScopedRegistryScope : IDisposable
         {

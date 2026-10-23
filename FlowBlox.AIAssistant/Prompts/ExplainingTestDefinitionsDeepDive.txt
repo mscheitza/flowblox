@@ -113,4 +113,4 @@ Focused variants of the same flow:
 
 Test execution inspection:
 - RunTestDefinition and RunGenerationStrategies retain full assignment/result values in the latest session/project artifact. GetLatestTestExecutionArtifact lists executions (including before/after generation); select executionId to retrieve limited rows and assignment keys.
-- For truncated values, use InspectExecutedTestFieldValue with runId, executionId and either assignmentFQFieldName or datasetIndex + fullyQualifiedFieldName. Search with searchValues/searchIndex; LookAround adds surrounding context. Request the smallest useful maxTokens. No further debug run is needed.
+- For truncated values, use InspectExecutedTestFieldValue with runId, executionId and fullyQualifiedFieldName; add datasetIndex for a result value and omit it for an assignment. Search with searchValues/searchIndex; LookAround adds surrounding context. Request the smallest useful maxTokens. No further debug run is needed.

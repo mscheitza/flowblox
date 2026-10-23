@@ -3,10 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:views="clr-namespace:FlowBlox.UICore.Views"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources"
     Title="{Binding Title}" Height="800" Width="1280" MinHeight="420" MinWidth="760"
-    WindowStartupLocation="CenterOwner">
+    WindowStartupLocation="CenterOwner"
+    PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,10 +19,10 @@
                    BasedOn="{StaticResource FlowBlox.WindowActionButton}">
                 <Setter Property="MinWidth" Value="0" />
                 <Setter Property="MinHeight" Value="0" />
-                <Setter Property="Height" Value="28" />
-                <Setter Property="Padding" Value="8,3" />
+                <Setter Property="Width" Value="30" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Padding" Value="5" />
                 <Setter Property="Margin" Value="4,0,0,0" />
-                <Setter Property="FontSize" Value="12" />
                 <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
@@ -50,7 +51,6 @@
                    BasedOn="{StaticResource FlowBlox.ToolbarIconBase}">
                 <Setter Property="Width" Value="13" />
                 <Setter Property="Height" Value="13" />
-                <Setter Property="Margin" Value="0,0,4,0" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
             </Style>
@@ -84,6 +84,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Border Background="#FFEDF3F9" Padding="12" CornerRadius="6" Margin="0,0,0,12">
             <Grid>
@@ -101,25 +102,19 @@
                          ToolBarTray.IsLocked="True" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock Text="{Binding RuntimeLabel}" VerticalAlignment="Center" Margin="0,0,6,0" />
                     <Button Command="{Binding Runtime.ContinueCommand}" Style="{StaticResource RuntimeContinueButton}"
-                            ToolTip="{Binding Runtime.ContinueTooltip}">
-                        <StackPanel Orientation="Horizontal">
-                            <icons:PackIconMaterial Kind="Play" Style="{StaticResource RuntimeIcon}" />
-                            <TextBlock Text="{Binding Runtime.ContinueButtonText}" />
-                        </StackPanel>
+                            ToolTip="{Binding Runtime.ContinueTooltip}"
+                            AutomationProperties.Name="{Binding Runtime.ContinueButtonText}">
+                        <icons:PackIconMaterial Kind="Play" Style="{StaticResource RuntimeIcon}" />
                     </Button>
                     <Button Command="{Binding Runtime.PauseCommand}" Style="{StaticResource RuntimePauseButton}"
-                            ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Pause}">
-                        <StackPanel Orientation="Horizontal">
-                            <icons:PackIconMaterial Kind="Pause" Style="{StaticResource RuntimeIcon}" />
-                            <TextBlock Text="{Binding Runtime.PauseButtonText}" />
-                        </StackPanel>
+                            ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Pause}"
+                            AutomationProperties.Name="{Binding Runtime.PauseButtonText}">
+                        <icons:PackIconMaterial Kind="Pause" Style="{StaticResource RuntimeIcon}" />
                     </Button>
                     <Button Command="{Binding Runtime.StopCommand}" Style="{StaticResource RuntimeStopButton}"
-                            ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Stop}">
-                        <StackPanel Orientation="Horizontal">
-                            <icons:PackIconMaterial Kind="Stop" Style="{StaticResource RuntimeIcon}" />
-                            <TextBlock Text="{x:Static resources:AiAssistantChatView.Button_Stop}" />
-                        </StackPanel>
+                            ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Stop}"
+                            AutomationProperties.Name="{x:Static resources:AiAssistantChatView.Button_Stop}">
+                        <icons:PackIconMaterial Kind="Stop" Style="{StaticResource RuntimeIcon}" />
                     </Button>
                 </ToolBar>
                 <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding ContextStatistics}"
@@ -187,23 +182,17 @@
                     <TextBlock DockPanel.Dock="Right" Text="{Binding SelectedCard.TokensText}" Foreground="#FF65737E" Margin="8,0,0,0" />
                     <TextBlock Text="{Binding SelectedCard.Title}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
                 </DockPanel>
-                <Grid Grid.Row="1" DataContext="{Binding Editor}">
-                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
-                    <ToolBar Padding="4">
-                        <Button Command="ApplicationCommands.Copy" CommandTarget="{Binding ElementName=Editor}"
-                                ToolTip="{x:Static resources:DisplayContentView.Tooltip_CopyToClipboard}">
-                            <icons:PackIconMaterial Kind="ContentCopy" Width="16" Height="16" />
-                        </Button>
-                        <TextBlock Text="{x:Static resources:EditContentView.Label_Syntax}" VerticalAlignment="Center" Margin="8,0,6,0" />
-                        <ComboBox ItemsSource="{Binding AvailableHighlightingNames}" SelectedItem="{Binding SelectedHighlightingName}"
-                                  MinWidth="130" ToolTip="{x:Static resources:EditContentView.Combo_Syntax_Tooltip}" />
-                    </ToolBar>
-                    <avalonedit:TextEditor x:Name="Editor" Grid.Row="1" Document="{Binding Document}"
-                        IsReadOnly="True" FontFamily="JetBrains Mono" FontSize="12" ShowLineNumbers="True"
-                        HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                        SyntaxHighlighting="{Binding SelectedHighlightingDefinition}" />
-                </Grid>
+                <views:InnerContentView Grid.Row="1" DataContext="{Binding Editor}" />
             </Grid>
         </Grid>
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,10,0,0">
+            <Button Content="{x:Static resources:PropertyWindow.Back}"
+                    IsCancel="True"
+                    Click="BackButton_Click"
+                    Style="{StaticResource FlowBlox.WindowActionButton.Back}" />
+        </StackPanel>
     </Grid>
 </mah:MetroWindow>

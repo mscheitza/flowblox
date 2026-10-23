@@ -7,7 +7,6 @@ using FlowBlox.AIAssistant.Tools.Util;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Util.Compression;
-using FlowBlox.Core.Util.DistributedData;
 using Newtonsoft.Json;
 
 namespace FlowBlox.AIAssistant.Builder
@@ -45,9 +44,8 @@ namespace FlowBlox.AIAssistant.Builder
             return ReplaceRuntimePromptTokens(template)
                 .Replace("{{ROOT_CATEGORIES}}", string.Join(", ", rootCategories), StringComparison.Ordinal)
                 .Replace("{{CENTRAL_GUIDELINES}}", BuildCentralGuidelinesText(), StringComparison.Ordinal)
-                .Replace("{{EXPLANATION_MANIFEST}}", BuildExplanationManifestText(), StringComparison.Ordinal)
+                .Replace("{{EXPLANATION_ROUTING}}", BuildExplanationRoutingText(), StringComparison.Ordinal)
                 .Replace("{{COMPACT_TYPE_ALIASES}}", AiAssistantTypeAliasHelper.AliasSummary, StringComparison.Ordinal)
-                .Replace("{{STANDARD_AUXILIARY_PROJECTS}}", BuildStandardAuxiliaryProjectsText(), StringComparison.Ordinal)
                 .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal)
                 + $"\nApplication runtime started at: {AssistantSessionContentStore.ApplicationStartedAt:O}."
                 + (runtimeBindingsReset
@@ -163,38 +161,14 @@ namespace FlowBlox.AIAssistant.Builder
             };
         }
 
-        private static string BuildExplanationManifestText()
+        private static string BuildExplanationRoutingText()
         {
-            var explanations = AssistantPromptCatalog.GetAllEntries();
-            if (explanations.Count == 0)
-                return "[]";
-
-            return string.Join(
-                ", ",
-                explanations.Select(x => $"{x.Key}:{x.ContentHash}{(x.IsIncludedInInitialPrompt ? ":included" : ":on-demand")}"));
-        }
-
-        private static string BuildStandardAuxiliaryProjectsText()
-        {
-            var auxiliaryProjectType = DistributedDataCatalog.GetDataTypes()
-                .FirstOrDefault(x => string.Equals(
-                    x.Name,
-                    DistributedDataCatalog.AuxiliaryProjectType,
-                    StringComparison.OrdinalIgnoreCase));
-            if (auxiliaryProjectType == null)
-                return "[]";
-
-            var entries = auxiliaryProjectType.FileNames
-                .Select(fileName => DistributedDataCatalog.ResolvePath(
-                    DistributedDataCatalog.AuxiliaryProjectType,
-                    fileName))
-                .Where(path => path != null)
-                .Select(path => AuxiliaryProjectMetadataReader.Read(path!))
-                .OrderBy(metadata => metadata.ProjectName, StringComparer.OrdinalIgnoreCase)
-                .Select(metadata => $"{metadata.ProjectName}: {metadata.Description}")
+            var entries = AssistantPromptCatalog.GetAllEntries()
+                .Where(x => !x.IsIncludedInInitialPrompt && !string.IsNullOrWhiteSpace(x.Description))
+                .Select(x => $"- {x.Description} -> `{x.Key}`")
                 .ToList();
 
-            return entries.Count == 0 ? "[]" : string.Join(" | ", entries);
+            return entries.Count == 0 ? "- None" : string.Join("\n", entries);
         }
 
         private static string BuildCentralGuidelinesText()

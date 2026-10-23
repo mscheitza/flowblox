@@ -4,16 +4,16 @@ using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.Handler;
 
-internal sealed class GetExplanationContentHandler : ToolHandlerBase
+internal sealed class LoadExplanationHandler : ToolHandlerBase
 {
-    public override string Name => "GetExplanationContent";
+    public override string Name => "LoadExplanation";
     public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
-            Name,
-            "Returns explanation content by key. Repeated retrieval automatically binds the content as a cache-preferred session system message; subsequent calls return only a notice.",
-            new JObject
-            {
-                ["key"] = "string"
-            });
+        Name,
+        "Loads on-demand explanation content into subsequent system messages. Preloaded or previously loaded content is not duplicated.",
+        new JObject
+        {
+            ["key"] = "string"
+        });
 
     public override Task<ToolResponse> HandleAsync(
         JObject args,
@@ -36,10 +36,11 @@ internal sealed class GetExplanationContentHandler : ToolHandlerBase
             return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
             {
                 ["key"] = entry.Key,
+                ["loaded"] = false,
                 ["message"] = $"Already loaded: '{entry.Title}' is part of the initial system guidance."
             }));
 
-        return Task.FromResult(ToolHandlerUtilities.CurrentContentCache.GetExplanation(
+        return Task.FromResult(ToolHandlerUtilities.CurrentContentCache.LoadExplanation(
             entry.Key,
             entry.Title,
             entry.Content));
