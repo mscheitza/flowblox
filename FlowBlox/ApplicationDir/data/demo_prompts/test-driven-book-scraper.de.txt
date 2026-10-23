@@ -1,0 +1,27 @@
+Erstelle bitte einen Web-Scraper für https://books.toscrape.com/, der alle Bücher einer angegebenen Kategorie durchläuft. Die Kategorie soll als Projekt-Eingabeparameter bereitgestellt werden.
+
+Standardwert: Travel
+
+Erstelle den Workflow testgetrieben:
+
+- Definiere zuerst die Testfälle und leite anschließend die benötigten Extraktionsmuster automatisch mit Offline-Generatoren ab.
+- Verwende zur Mustergenerierung ausschließlich Offline-Generatoren ohne KI, beispielsweise SequenceDetection.
+- Lasse die Seitennavigation vorerst weg. Verarbeite nur die Bücher auf der ersten Seite der ausgewählten Kategorie.
+
+Testfall 1:
+
+- Kategorie: Travel
+- Erwartetes Buch: It's Only the Himalayas
+- Erwartete URL: https://books.toscrape.com/catalogue/its-only-the-himalayas_981/index.html
+- Erwartete Anzahl erzeugter Links: 11
+
+Testfall 2:
+
+- Kategorie: Mystery
+- Erwartetes Buch: Sharp Objects
+- Erwartete URL: https://books.toscrape.com/catalogue/sharp-objects_997/index.html
+- Erwartete Anzahl erzeugter Links: 20
+
+Extrahiere für jedes Buch Titel, Preis, Bewertung, Verfügbarkeit und Produktbeschreibung von der Produktdetailseite.
+
+Exportiere die extrahierten Daten in eine Excel-Datei (.xlsx) im Ausgabeverzeichnis des Projekts.

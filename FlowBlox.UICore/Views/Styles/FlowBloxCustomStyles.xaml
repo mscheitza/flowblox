@@ -13,6 +13,42 @@
     <!-- FlowBlox Custom Styles -->
     <!-- ====================== -->
 
+    <!-- Shared tooltip appearance for windows, hosted views, and generated controls. -->
+    <Style x:Key="FlowBlox.ToolTipStyle" TargetType="{x:Type ToolTip}">
+        <Setter Property="Placement" Value="Mouse"/>
+        <Setter Property="MaxWidth" Value="460"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HasDropShadow" Value="False"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToolTip}">
+                    <Border Background="#FFE9F3FD"
+                            BorderBrush="#FF7EAEDC"
+                            BorderThickness="2"
+                            CornerRadius="8"
+                            Padding="10">
+                        <TextBlock Text="{TemplateBinding Content}"
+                                   TextWrapping="Wrap"
+                                   Foreground="#FF305E86"
+                                   FontSize="12"
+                                   FontFamily="Segoe UI"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type ToolTip}"
+           BasedOn="{StaticResource FlowBlox.ToolTipStyle}"/>
+
+    <!-- Compatibility key used by the Property and Test Definition views. -->
+    <Style x:Key="PropertyView.HelpToolTipStyle"
+           TargetType="{x:Type ToolTip}"
+           BasedOn="{StaticResource FlowBlox.ToolTipStyle}"/>
+
     <!-- ========================================================= -->
     <!-- FlowBlox Toolbar Icon styling (PackIconMaterial)           -->
     <!-- Ensures proper disabled rendering (greyed out)             -->

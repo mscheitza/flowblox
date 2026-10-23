@@ -21,6 +21,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FlowBlox.UICore;component/Views/MahAppMetroResources.xaml" />
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter"/>
             <converters:LogLevelToBrushConverter x:Key="LogLevelToBrushConverter"/>

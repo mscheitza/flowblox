@@ -21,6 +21,9 @@
   <data name="Watermark_InitialPrompt" xml:space="preserve"><value>Ask a question or describe a flow to create or edit.</value></data>
   <data name="Watermark_FollowUpPrompt" xml:space="preserve"><value>Add instructions or clarifications while the assistant is working.</value></data>
   <data name="Button_Submit" xml:space="preserve"><value>Submit</value></data>
+  <data name="Button_DemoPrompts" xml:space="preserve"><value>Examples</value></data>
+  <data name="Tooltip_DemoPrompts" xml:space="preserve"><value>Choose an example prompt</value></data>
+  <data name="Hint_LineBreakShortcut" xml:space="preserve"><value>Ctrl/Alt + Enter: line break</value></data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Title" xml:space="preserve"><value>Communication Protocol Directory Not Found</value></data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Description" xml:space="preserve"><value>The communication protocol directory does not exist: {0}</value></data>
   <data name="Message_CommunicationProtocolDirectory_OpenFailed_Title" xml:space="preserve"><value>Failed to Open Communication Protocol Directory</value></data>

@@ -1,0 +1,32 @@
+Erstelle bitte einen FlowBlox-Flow, der Datensätze aus meiner lokalen MySQL-Datenbanktabelle liest und alle Zeilen verarbeitet.
+
+Erstelle für jede Zeile:
+
+- Eine Datei namens {{NameField}}.zip (zum Beispiel: fbproject.Name.zip), deren Name aus dem Projektnamensfeld der Zeile stammt.
+- Eine Metadatendatei namens {{NameField}}.metadata im selben Ausgabeverzeichnis.
+
+Wichtig: Die Inhaltsdaten sind bereits ein ZIP-Payload und dürfen nicht erneut komprimiert werden. Schreibe sie direkt als Inhalt der ZIP-Datei.
+
+Die Metadatendatei soll Folgendes enthalten:
+
+- Name
+- Description
+- CreatedAt im Format dd.MM.yyyy
+
+Verwende für jeden Wert das entsprechende Feld der aktuellen Zeile (Flow-Felder, keine fest codierten Werte) und schreibe alle erzeugten Dateien in das Ausgabeverzeichnis des Projekts.
+
+Verwende für meinen konkreten Fall:
+
+- Tabelle: flowbloxdb.fbproject
+- Namensfeld: Name
+- Beschreibungsfeld: Description
+- Inhaltsfeld: Content
+- Erstellungsdatum: CreatedAt
+
+Datenbankverbindung:
+
+- Typ: MySQL
+- Server: 127.0.0.1
+- Benutzer: root
+- SSL: Kein SSL erforderlich
+- Passwort: Kein Passwort

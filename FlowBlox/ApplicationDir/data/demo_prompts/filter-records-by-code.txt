@@ -1,0 +1,7 @@
+Create a FlowBlox flow that reads all rows from a CSV input file with the columns Code, Description, and Amount.
+
+Filter the records by Code so that only rows whose code matches the pattern AA-0000 are processed: exactly two uppercase letters, a hyphen, and four digits. Use the FlowBlox filtering and condition components; do not hardcode individual allowed codes.
+
+For every matching row, create a JSON item containing Code, Description, and Amount. Collect all matching items in a top-level JSON array named Results and write the result to $Project::OutputDirectory\filtered-records.json.
+
+Add test data that includes at least two matching codes (for example AB-1234 and XY-0007) and two non-matching codes. Add a test definition that verifies only the matching records reach the output.

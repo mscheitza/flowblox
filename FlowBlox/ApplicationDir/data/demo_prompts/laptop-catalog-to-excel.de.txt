@@ -1,0 +1,20 @@
+Erstelle einen FlowBlox-Web-Scraping-Flow für https://webscraper.io/test-sites/e-commerce/static mit folgendem Ziel:
+
+Navigiere zu Computers, Laptops. Erfasse alle Laptop-Produkte über sämtliche Ergebnisseiten hinweg.
+
+Extrahiere für jedes Produkt:
+
+- Name (Beispiel: ProBook)
+- Spezifikationen (Beispiel: 14", Core i5 2.6GHz, 4GB, 500GB, Win7 Pro 64bit)
+- Preis (Beispiel: $739.99)
+
+Die Beispielwerte stammen von https://webscraper.io/test-sites/e-commerce/static/product/34 und dienen nur als Beispiele; beschränke die Extraktion nicht auf dieses Produkt.
+
+Ausgabeanforderung:
+
+Schreibe alle erfassten Laptop-Datensätze in eine einzelne XLSX-Datei im Ausgabeverzeichnis des Projekts. Verwende die Spalten Name, Specifications und Price.
+
+Hinweise zur Umsetzung:
+
+- Verwende robuste CSS- oder XPath-Selektoren.
+- Verarbeite die Seitennavigation, bis keine nächste Seite mehr vorhanden ist.

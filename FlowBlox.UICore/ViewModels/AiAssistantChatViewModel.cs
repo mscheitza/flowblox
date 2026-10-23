@@ -53,6 +53,7 @@ namespace FlowBlox.UICore.ViewModels
         public RelayCommand NewHistoryCommand { get; }
         public RelayCommand BackToHistoryCommand { get; }
         public RelayCommand SubmitCommand { get; }
+        public RelayCommand DemoPromptsCommand { get; }
         public RelayCommand ContinueCommand { get; }
         public RelayCommand StopCommand { get; }
         public RelayCommand PauseCommand { get; }
@@ -215,6 +216,7 @@ namespace FlowBlox.UICore.ViewModels
             NewHistoryCommand = new RelayCommand(() => NewHistoryRequested?.Invoke(this, EventArgs.Empty), () => !IsBusy);
             BackToHistoryCommand = new RelayCommand(RequestHistoryOverview, () => CanGoBackToHistory);
             SubmitCommand = new RelayCommand(async () => await SubmitAsync(), CanSubmit);
+            DemoPromptsCommand = new RelayCommand(OpenDemoPrompts);
             ContinueCommand = new RelayCommand(Continue, CanContinue);
             StopCommand = new RelayCommand(Stop, () => IsBusy);
             PauseCommand = new RelayCommand(Pause, () => IsBusy && !IsPauseRequested);
@@ -235,6 +237,18 @@ namespace FlowBlox.UICore.ViewModels
             }
 
             RefreshProviderConfigurationState();
+        }
+
+        private void OpenDemoPrompts()
+        {
+            var dialog = new DemoPromptsWindow();
+            if (_dialogService.ShowWPFDialog(dialog) != true ||
+                string.IsNullOrWhiteSpace(dialog.SelectedPrompt))
+            {
+                return;
+            }
+
+            CurrentInput = dialog.SelectedPrompt;
         }
 
         private bool CanSubmit()

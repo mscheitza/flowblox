@@ -10,6 +10,14 @@
              UseLayoutRounding="True"
              SnapsToDevicePixels="True"
              Focusable="False">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <UserControl.Style>
         <Style TargetType="{x:Type UserControl}">
             <Setter Property="Visibility" Value="Collapsed"/>

@@ -1,0 +1,27 @@
+Please create a web scraper for https://books.toscrape.com/ that iterates through all books in a specified category, provided as a project input parameter.
+
+Default value: Travel
+
+Create the workflow using a test-driven approach:
+
+- Define test cases first and then use offline generators to derive the required extraction patterns automatically.
+- Use only offline, non-AI-based generators, such as SequenceDetection, for pattern generation.
+- Exclude pagination for now. Process only the books listed on the first page of the selected category.
+
+Test case 1:
+
+- Category: Travel
+- Expected book: It's Only the Himalayas
+- Expected URL: https://books.toscrape.com/catalogue/its-only-the-himalayas_981/index.html
+- Expected number of generated links: 11
+
+Test case 2:
+
+- Category: Mystery
+- Expected book: Sharp Objects
+- Expected URL: https://books.toscrape.com/catalogue/sharp-objects_997/index.html
+- Expected number of generated links: 20
+
+For each book, extract its title, price, rating, availability, and product description from the product detail page.
+
+Export the extracted data to an Excel file (.xlsx) in the project's output directory.

@@ -5,13 +5,18 @@
     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:resources="clr-namespace:FlowBlox.UICore.Resources">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="VisibleIfTrue" />
-        <Style x:Key="ContentToolbarButton" TargetType="Button">
-            <Setter Property="MinWidth" Value="30" />
-            <Setter Property="Height" Value="28" />
-            <Setter Property="Padding" Value="5" />
-            <Setter Property="Margin" Value="2,0" />
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FlowBlox.UICore;component/Views/Styles/FlowBloxCustomStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="VisibleIfTrue" />
+            <Style x:Key="ContentToolbarButton" TargetType="Button">
+                <Setter Property="MinWidth" Value="30" />
+                <Setter Property="Height" Value="28" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Margin" Value="2,0" />
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>

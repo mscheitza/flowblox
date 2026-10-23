@@ -1,0 +1,16 @@
+Generate a new flow with the following behavior:
+
+1. Create an Excel input template file (.xlsx) automatically in the project input directory with these headers in the first row:
+   - First Name
+   - Last Name
+   - DateOfBirth
+2. Read all rows from this Excel file.
+3. Build one JSON object using JSON FlowBlocks with this exact structure:
+   - Top-level property: Participants (array)
+   - For each input row, append exactly one object to Participants with these properties directly on the item:
+     - First Name
+     - Last Name
+     - DateOfBirth
+4. Write the resulting JSON to $Project:OutputDirectory\output.json.
+
+The output must include all records from the input table.

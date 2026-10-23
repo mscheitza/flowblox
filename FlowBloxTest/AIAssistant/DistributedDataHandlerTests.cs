@@ -39,6 +39,13 @@ namespace FlowBloxTest.AIAssistant
                     Arguments = new JObject { ["dataType"] = "example_project" }
                 },
                 CancellationToken.None);
+            var demoPrompts = await api.ExecuteAsync(
+                new ToolRequest
+                {
+                    ToolName = "GetDistributedData",
+                    Arguments = new JObject { ["dataType"] = "demo_prompts" }
+                },
+                CancellationToken.None);
             var traversal = await api.ExecuteAsync(
                 new ToolRequest
                 {
@@ -64,6 +71,18 @@ namespace FlowBloxTest.AIAssistant
                 Path.Combine(Path.GetTempPath(), "FlowBlox", "project.fbprj")));
             Assert.IsTrue(read.Ok, read.Error);
             Assert.IsTrue(exampleProjects.Ok, exampleProjects.Error);
+            Assert.IsTrue(demoPrompts.Ok, demoPrompts.Error);
+            var demoPromptFileNames = demoPrompts.Result!["dataTypes"]!
+                .Single()!["fileNames"]!
+                .Values<string>()
+                .ToList();
+            CollectionAssert.Contains(demoPromptFileNames, "filter-records-by-code.txt");
+            Assert.IsFalse(demoPromptFileNames.Any(x =>
+                x?.EndsWith(".de.txt", StringComparison.OrdinalIgnoreCase) == true));
+            var germanDemoPrompt = DistributedDataCatalog.ReadContent(
+                DistributedDataCatalog.DemoPromptType,
+                "filter-records-by-code.de.txt");
+            StringAssert.Contains(germanDemoPrompt, "Datensätze");
             Assert.AreEqual(
                 "example_project",
                 exampleProjects.Result["dataTypes"]!.Single()!.Value<string>("dataType"));

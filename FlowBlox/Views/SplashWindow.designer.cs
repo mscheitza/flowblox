@@ -58,12 +58,12 @@
             // 
             labelMessage.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             labelMessage.BackColor = System.Drawing.Color.Transparent;
-            labelMessage.Font = new System.Drawing.Font("Calibri", 8.5F);
+            labelMessage.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             labelMessage.ForeColor = System.Drawing.Color.White;
-            labelMessage.Location = new System.Drawing.Point(90, 126);
+            labelMessage.Location = new System.Drawing.Point(12, 126);
             labelMessage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             labelMessage.Name = "labelMessage";
-            labelMessage.Size = new System.Drawing.Size(420, 34);
+            labelMessage.Size = new System.Drawing.Size(567, 34);
             labelMessage.TabIndex = 8;
             labelMessage.Tag = "";
             labelMessage.Text = "loading...";

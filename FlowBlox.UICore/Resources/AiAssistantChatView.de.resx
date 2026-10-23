@@ -21,6 +21,9 @@
   <data name="Watermark_InitialPrompt" xml:space="preserve"><value>Stellen Sie eine Frage oder beschreiben Sie einen Flow zum Erstellen oder Bearbeiten.</value></data>
   <data name="Watermark_FollowUpPrompt" xml:space="preserve"><value>Ergänzen Sie Anweisungen oder Präzisierungen während der Verarbeitung.</value></data>
   <data name="Button_Submit" xml:space="preserve"><value>Senden</value></data>
+  <data name="Button_DemoPrompts" xml:space="preserve"><value>Beispiele</value></data>
+  <data name="Tooltip_DemoPrompts" xml:space="preserve"><value>Beispiel-Prompt auswählen</value></data>
+  <data name="Hint_LineBreakShortcut" xml:space="preserve"><value>Strg/Alt + Enter: Zeilenumbruch</value></data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Title" xml:space="preserve"><value>Kommunikationsprotokoll-Verzeichnis nicht gefunden</value></data>
   <data name="Message_CommunicationProtocolDirectory_NotFound_Description" xml:space="preserve"><value>Das Kommunikationsprotokoll-Verzeichnis existiert nicht: {0}</value></data>
   <data name="Message_CommunicationProtocolDirectory_OpenFailed_Title" xml:space="preserve"><value>Kommunikationsprotokoll-Verzeichnis konnte nicht geöffnet werden</value></data>

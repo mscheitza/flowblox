@@ -90,9 +90,7 @@
                             </TabItem.HeaderTemplate>
 
                             <TabItem.ToolTip>
-                                <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Tooltip_Tab_CreateNewProject}"
-                                           TextWrapping="Wrap"
-                                           Width="320"/>
+                                <ToolTip Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Tooltip_Tab_CreateNewProject}" />
                             </TabItem.ToolTip>
 
                             <views:ProjectSpaceProjectFormControl />
@@ -120,9 +118,7 @@
                             </TabItem.HeaderTemplate>
 
                             <TabItem.ToolTip>
-                                <TextBlock Text="{x:Static resources:CreateOrUpdatePSProjectWindow.Tooltip_Tab_UpdateExistingProject}"
-                                           TextWrapping="Wrap"
-                                           Width="320"/>
+                                <ToolTip Content="{x:Static resources:CreateOrUpdatePSProjectWindow.Tooltip_Tab_UpdateExistingProject}" />
                             </TabItem.ToolTip>
 
                             <views:ProjectSpaceProjectFormControl />

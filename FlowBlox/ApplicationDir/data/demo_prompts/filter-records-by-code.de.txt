@@ -1,0 +1,7 @@
+Erstelle einen FlowBlox-Flow, der alle Zeilen aus einer CSV-Eingabedatei mit den Spalten Code, Description und Amount liest.
+
+Filtere die Datensätze anhand von Code, sodass nur Zeilen verarbeitet werden, deren Code dem Muster AA-0000 entspricht: genau zwei Großbuchstaben, ein Bindestrich und vier Ziffern. Verwende die Filter- und Bedingungskomponenten von FlowBlox; kodiere keine einzelnen zulässigen Codes fest ein.
+
+Erstelle für jede passende Zeile ein JSON-Element mit Code, Description und Amount. Sammle alle passenden Elemente in einem JSON-Array namens Results auf oberster Ebene und schreibe das Ergebnis nach $Project::OutputDirectory\filtered-records.json.
+
+Lege Testdaten mit mindestens zwei passenden Codes (zum Beispiel AB-1234 und XY-0007) sowie zwei nicht passenden Codes an. Ergänze eine Testdefinition, die prüft, dass nur die passenden Datensätze die Ausgabe erreichen.

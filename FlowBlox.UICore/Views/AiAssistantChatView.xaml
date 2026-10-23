@@ -350,49 +350,73 @@
             </Grid>
         </Border>
 
-        <StackPanel Grid.Row="5"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,2,0">
-            <StackPanel.Resources>
-                <Style TargetType="Button" BasedOn="{StaticResource FlowBlox.RoundedActionButtonStyle}">
-                    <Setter Property="MinWidth" Value="0" />
-                    <Setter Property="MinHeight" Value="0" />
-                    <Setter Property="Width" Value="30" />
-                    <Setter Property="Height" Value="30" />
-                    <Setter Property="Padding" Value="5" />
-                    <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
-                </Style>
-            </StackPanel.Resources>
-            <Button Margin="0,0,6,0"
-                    Command="{Binding SubmitCommand}"
-                    ToolTip="{x:Static resources:AiAssistantChatView.Button_Submit}"
-                    AutomationProperties.Name="{x:Static resources:AiAssistantChatView.Button_Submit}">
-                <iconPacks:PackIconMaterial Kind="Send"
-                                                Width="18"
-                                                Height="18"
+        <Grid Grid.Row="5" Margin="2,0,2,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       Margin="2,0,10,0"
+                       VerticalAlignment="Center"
+                       Foreground="#FF7A8490"
+                       FontSize="10"
+                       FontStyle="Italic"
+                       TextTrimming="CharacterEllipsis"
+                       Text="{x:Static resources:AiAssistantChatView.Hint_LineBreakShortcut}" />
+
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource FlowBlox.RoundedActionButtonStyle}">
+                        <Setter Property="MinWidth" Value="0" />
+                        <Setter Property="MinHeight" Value="0" />
+                        <Setter Property="Width" Value="30" />
+                        <Setter Property="Height" Value="30" />
+                        <Setter Property="Padding" Value="5" />
+                        <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+                    </Style>
+                </StackPanel.Resources>
+                <Button Margin="0,0,6,0"
+                        Command="{Binding SubmitCommand}"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Button_Submit}"
+                        AutomationProperties.Name="{x:Static resources:AiAssistantChatView.Button_Submit}">
+                    <iconPacks:PackIconMaterial Kind="Send"
+                                                Width="16"
+                                                Height="16"
                                                 Style="{StaticResource FlowBlox.ToolbarIconBase}" />
-            </Button>
-            <Button Margin="0,0,6,0"
-                    Command="{Binding ContinueCommand}"
-                    ToolTip="{Binding ContinueTooltip}"
-                    AutomationProperties.Name="{Binding ContinueButtonText}">
-                <iconPacks:PackIconMaterial Kind="Play" Width="18" Height="18"
+                </Button>
+                <Button Margin="0,0,6,0"
+                        Command="{Binding DemoPromptsCommand}"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_DemoPrompts}"
+                        AutomationProperties.Name="{x:Static resources:AiAssistantChatView.Button_DemoPrompts}">
+                    <iconPacks:PackIconMaterial Kind="PresentationPlay"
+                                                Width="16"
+                                                Height="16"
                                                 Style="{StaticResource FlowBlox.ToolbarIconBase}" />
-            </Button>
-            <Button Margin="0,0,6,0"
-                    ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Pause}"
-                    AutomationProperties.Name="{Binding PauseButtonText}"
-                    Command="{Binding PauseCommand}">
-                <iconPacks:PackIconMaterial Kind="Pause" Width="18" Height="18"
+                </Button>
+                <Button Margin="0,0,6,0"
+                        Command="{Binding ContinueCommand}"
+                        ToolTip="{Binding ContinueTooltip}"
+                        AutomationProperties.Name="{Binding ContinueButtonText}">
+                    <iconPacks:PackIconMaterial Kind="Play" Width="16" Height="16"
                                                 Style="{StaticResource FlowBlox.ToolbarIconBase}" />
-            </Button>
-            <Button ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Stop}"
-                    AutomationProperties.Name="{x:Static resources:AiAssistantChatView.Button_Stop}"
-                    Command="{Binding StopCommand}">
-                <iconPacks:PackIconMaterial Kind="Stop" Width="18" Height="18"
+                </Button>
+                <Button Margin="0,0,6,0"
+                        ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Pause}"
+                        AutomationProperties.Name="{Binding PauseButtonText}"
+                        Command="{Binding PauseCommand}">
+                    <iconPacks:PackIconMaterial Kind="Pause" Width="16" Height="16"
                                                 Style="{StaticResource FlowBlox.ToolbarIconBase}" />
-            </Button>
-        </StackPanel>
+                </Button>
+                <Button ToolTip="{x:Static resources:AiAssistantChatView.Tooltip_Stop}"
+                        AutomationProperties.Name="{x:Static resources:AiAssistantChatView.Button_Stop}"
+                        Command="{Binding StopCommand}">
+                    <iconPacks:PackIconMaterial Kind="Stop" Width="16" Height="16"
+                                                Style="{StaticResource FlowBlox.ToolbarIconBase}" />
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

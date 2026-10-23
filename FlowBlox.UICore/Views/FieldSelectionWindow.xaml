@@ -315,9 +315,7 @@
                                       OnContent="{x:Static resources:FieldSelectionWindow.Required_On}"
                                       OffContent="{x:Static resources:FieldSelectionWindow.Required_Off}">
                         <mah:ToggleSwitch.ToolTip>
-                            <TextBlock Text="{x:Static resources:FieldSelectionWindow.Required_HintShort}"
-                                       TextWrapping="Wrap"
-                                       Width="420"/>
+                            <ToolTip Content="{x:Static resources:FieldSelectionWindow.Required_HintShort}" />
                         </mah:ToggleSwitch.ToolTip>
                     </mah:ToggleSwitch>
 

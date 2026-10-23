@@ -6,6 +6,7 @@ namespace FlowBlox.Core.Util.DistributedData
     {
         public const string PythonType = "python";
         public const string AuxiliaryProjectType = "auxiliary_project";
+        public const string DemoPromptType = "demo_prompts";
         public const string ExampleProjectType = "example_project";
 
         private static readonly IReadOnlyDictionary<string, string> SupportedTypes =
@@ -13,6 +14,7 @@ namespace FlowBlox.Core.Util.DistributedData
             {
                 [PythonType] = ".py",
                 [AuxiliaryProjectType] = ".fbprj",
+                [DemoPromptType] = ".txt",
                 [ExampleProjectType] = ".fbprj"
             };
 
@@ -77,9 +79,20 @@ namespace FlowBlox.Core.Util.DistributedData
                 .SelectMany(x => Directory.EnumerateFiles(x, $"*{extension}", SearchOption.TopDirectoryOnly))
                 .Select(Path.GetFileName)
                 .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Where(x => !string.Equals(dataType, DemoPromptType, StringComparison.OrdinalIgnoreCase) ||
+                            !IsLocalizedPromptFileName(x!))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
                 .ToList()!;
+
+        private static bool IsLocalizedPromptFileName(string fileName)
+        {
+            var nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            var localizationExtension = Path.GetExtension(nameWithoutExtension);
+            return localizationExtension.Length == 3 &&
+                   localizationExtension[0] == '.' &&
+                   localizationExtension[1..].All(char.IsLetter);
+        }
 
         private static IReadOnlyList<string> GetApplicationDataDirectories()
         {

@@ -1,0 +1,32 @@
+Please build a FlowBlox flow that reads records from my local MySQL database table and processes all rows.
+
+For each row, create:
+
+- A file named {{NameField}}.zip (for example: fbproject.Name.zip) using the row's project name field.
+- A metadata file named {{NameField}}.metadata in the same output directory.
+
+Important: The content data is already a ZIP payload and must not be zipped again. Write it directly as the .zip file content.
+
+The metadata file should contain:
+
+- Name
+- Description
+- CreatedAt formatted as dd.MM.yyyy
+
+Use the corresponding field values from each row (flow fields, not hardcoded values), and write all generated files to the project output directory.
+
+For my concrete case, use:
+
+- Table: flowbloxdb.fbproject
+- Name field: Name
+- Description field: Description
+- Content field: Content
+- CreatedAt field: CreatedAt
+
+Database connection:
+
+- Type: MySQL
+- Server: 127.0.0.1
+- User: root
+- SSL: No SSL required
+- Password: No password

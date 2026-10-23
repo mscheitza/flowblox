@@ -78,9 +78,7 @@
                                   OffContent="{x:Static resources:ProjectPanelGridSettingsWindow.Toggle_Off}"
                                   OnContent="{x:Static resources:ProjectPanelGridSettingsWindow.Toggle_On}">
                     <mah:ToggleSwitch.ToolTip>
-                        <TextBlock Text="{x:Static resources:ProjectPanelGridSettingsWindow.Tooltip_AutoIncreaseGridSize}"
-                                   TextWrapping="Wrap"
-                                   MaxWidth="480" />
+                        <ToolTip Content="{x:Static resources:ProjectPanelGridSettingsWindow.Tooltip_AutoIncreaseGridSize}" />
                     </mah:ToggleSwitch.ToolTip>
                 </mah:ToggleSwitch>
 
@@ -91,9 +89,7 @@
                                   OffContent="{x:Static resources:ProjectPanelGridSettingsWindow.Toggle_Off}"
                                   OnContent="{x:Static resources:ProjectPanelGridSettingsWindow.Toggle_On}">
                     <mah:ToggleSwitch.ToolTip>
-                        <TextBlock Text="{x:Static resources:ProjectPanelGridSettingsWindow.Tooltip_ResetNotifications}"
-                                   TextWrapping="Wrap"
-                                   MaxWidth="480" />
+                        <ToolTip Content="{x:Static resources:ProjectPanelGridSettingsWindow.Tooltip_ResetNotifications}" />
                     </mah:ToggleSwitch.ToolTip>
                 </mah:ToggleSwitch>
             </StackPanel>

@@ -1,0 +1,16 @@
+Erstelle einen neuen Flow mit folgendem Verhalten:
+
+1. Erzeuge automatisch eine Excel-Eingabevorlage (.xlsx) im Eingabeverzeichnis des Projekts. Die erste Zeile soll diese Spaltenüberschriften enthalten:
+   - First Name
+   - Last Name
+   - DateOfBirth
+2. Lies alle Zeilen aus dieser Excel-Datei.
+3. Erstelle mit JSON-FlowBlocks genau ein JSON-Objekt mit folgender Struktur:
+   - Eigenschaft auf oberster Ebene: Participants (Array)
+   - Füge für jede Eingabezeile genau ein Objekt zu Participants hinzu. Das Element soll direkt diese Eigenschaften besitzen:
+     - First Name
+     - Last Name
+     - DateOfBirth
+4. Schreibe das erzeugte JSON nach $Project:OutputDirectory\output.json.
+
+Die Ausgabe muss alle Datensätze aus der Eingabetabelle enthalten.
