@@ -810,7 +810,7 @@ Der RecursiveCall-Flow-Block ruft den verbundenen, früheren Ziel-Flow-Block ern
     <value>Update installieren</value>
   </data>
   <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
-    <value>Build, Test, and Run Flows (based on .NET)</value>
+    <value>Build, Test, and Automate Workflows — Visually or with AI.</value>
   </data>
   <data name="AppWindow_itmAutoAdjustFlowLayout_Text" xml:space="preserve">
     <value>Flow automatisch ausrichten</value>
