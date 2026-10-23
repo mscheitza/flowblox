@@ -15,6 +15,7 @@ Standard test-driven + generator workflow (mandatory when the user requests this
 3. Create/configure the compatible generation strategy on that target.
 4. Call `RunGenerationStrategies` and let the configured generator produce the target value/configuration.
 5. Inspect the generated configuration and test outcome. Once this stage works, extend the flow to the next generator-dependent block and repeat.
+- Same-level optimization: If sibling generator targets `S1...Sn` consume the same known content `C`, create/configure those targets and their shared test evidence/expectations together instead of completing each setup end-to-end. Then run and evaluate `RunGenerationStrategies` separately for each target.
 - Hard rule: the AI Assistant must not synthesize and write the selector/pattern/configuration itself in this workflow. `RunGenerationStrategies` is the authoritative generation step and also verifies that the generator setup functions.
 - If generation fails, diagnose and correct the flow prerequisites, test evidence, expectations, or strategy configuration, then call `RunGenerationStrategies` again. Do not silently replace the generator with an assistant-authored value unless the user explicitly abandons the generator-driven approach.
 

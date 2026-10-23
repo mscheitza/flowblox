@@ -810,7 +810,7 @@ The application will now restart to restore a clean environment.</value>
 The Recursive Call flow block invokes the connected earlier target flow block again. The target must lie on the Recursive Call flow block's incoming execution path.</value>
   </data>
   <data name="SplashWindow_LabelMessage_Text" xml:space="preserve">
-    <value>Build, Test, and Automate Workflows — Visually or with AI.</value>
+    <value>Build, Test, and Run Flows — Visually or with AI.</value>
   </data>
   <data name="AppWindow_itmAutoAdjustFlowLayout_Text" xml:space="preserve">
     <value>Auto-align flow</value>

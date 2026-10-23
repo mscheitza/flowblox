@@ -2199,7 +2199,7 @@ namespace FlowBlox {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Build, Test, and Automate Workflows — Visually or with AI. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Build, Test, and Run Flows — Visually or with AI. ähnelt.
         /// </summary>
         internal static string SplashWindow_LabelMessage_Text {
             get {
