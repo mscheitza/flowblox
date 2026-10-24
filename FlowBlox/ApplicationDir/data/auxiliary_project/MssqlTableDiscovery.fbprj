@@ -557,6 +557,7 @@
   "ProjectName": "MssqlTableDiscovery",
   "Author": "",
   "ProjectDescription": "Reads MSSQL table names through SQL username/password authentication and returns them as project output.",
+  "ShortDescription": "Discover table names in an MSSQL database.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

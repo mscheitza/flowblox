@@ -3513,6 +3513,24 @@ namespace FlowBlox.Core {
                 return ResourceManager.GetString("DeepSeekAIProvider_DisplayName_Plural", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DeepSeek web search provider ähnelt.
+        /// </summary>
+        public static string DeepSeekWebSearchProvider_DisplayName {
+            get {
+                return ResourceManager.GetString("DeepSeekWebSearchProvider_DisplayName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die DeepSeek web search providers ähnelt.
+        /// </summary>
+        public static string DeepSeekWebSearchProvider_DisplayName_Plural {
+            get {
+                return ResourceManager.GetString("DeepSeekWebSearchProvider_DisplayName_Plural", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die Delay (milliseconds) ähnelt.

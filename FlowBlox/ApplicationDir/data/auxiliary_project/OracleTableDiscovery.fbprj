@@ -470,6 +470,7 @@
   "ProjectName": "OracleTableDiscovery",
   "Author": "",
   "ProjectDescription": "Reads table names owned by an Oracle user and returns them as project output.",
+  "ShortDescription": "Discover table names owned by an Oracle user.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

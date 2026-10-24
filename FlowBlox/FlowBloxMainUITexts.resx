@@ -676,6 +676,9 @@ The application will now restart to restore a clean environment.</value>
   <data name="ProjectView_lbProjectDescription_Text" xml:space="preserve">
 		<value>Project description</value>
 	</data>
+  <data name="ProjectView_lbShortDescription_Text" xml:space="preserve">
+    <value>Short description</value>
+  </data>
   <data name="ProjectView_lbProjectName_Text" xml:space="preserve">
 		<value>Project name</value>
 	</data>

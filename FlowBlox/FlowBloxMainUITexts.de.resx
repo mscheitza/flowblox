@@ -661,6 +661,9 @@ Die Anwendung wird jetzt neu gestartet, um eine saubere Umgebung wiederherzustel
   <data name="ProjectView_lbProjectDescription_Text" xml:space="preserve">
 		<value>Projektbeschreibung</value>
 	</data>
+  <data name="ProjectView_lbShortDescription_Text" xml:space="preserve">
+    <value>Kurzbeschreibung</value>
+  </data>
   <data name="ProjectView_lbProjectName_Text" xml:space="preserve">
 		<value>Projektbezeichnung</value>
 	</data>

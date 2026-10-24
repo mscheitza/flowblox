@@ -4438,6 +4438,8 @@ If a Join collector should aggregate links across all page iterations:
   <data name="WebSearchProviderBase_TimeoutSeconds_Tooltip" xml:space="preserve"><value>Maximum duration of a search request.</value></data>
   <data name="BraveWebSearchProvider_DisplayName" xml:space="preserve"><value>Brave web search provider</value></data>
   <data name="BraveWebSearchProvider_DisplayName_Plural" xml:space="preserve"><value>Brave web search providers</value></data>
+  <data name="DeepSeekWebSearchProvider_DisplayName" xml:space="preserve"><value>DeepSeek web search provider</value></data>
+  <data name="DeepSeekWebSearchProvider_DisplayName_Plural" xml:space="preserve"><value>DeepSeek web search providers</value></data>
   <data name="WebSearchFlowBlock_DisplayName" xml:space="preserve"><value>Web search</value></data>
   <data name="WebSearchFlowBlock_Description" xml:space="preserve"><value>Searches the web through a configured provider and emits one result dataset per search hit.</value></data>
   <data name="WebSearchFlowBlock_Provider" xml:space="preserve"><value>Provider</value></data>

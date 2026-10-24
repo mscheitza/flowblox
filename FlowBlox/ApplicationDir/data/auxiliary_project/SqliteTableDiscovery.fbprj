@@ -330,6 +330,7 @@
   "ProjectName": "SqliteTableDiscovery",
   "Author": "",
   "ProjectDescription": "Reads user table names from a SQLite database file and returns them as project output.",
+  "ShortDescription": "Discover user table names in a SQLite database file.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

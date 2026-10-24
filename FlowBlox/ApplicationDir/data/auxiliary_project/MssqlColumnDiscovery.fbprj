@@ -1020,6 +1020,7 @@
   "ProjectName": "MssqlColumnDiscovery",
   "Author": "",
   "ProjectDescription": "Reads core column specifications for one MSSQL table and returns them as project output.",
+  "ShortDescription": "Discover columns and core types for an MSSQL table.",
   "Notice": "",
   "GridSizeX": 2602,
   "GridSizeY": 2000,

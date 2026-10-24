@@ -10,6 +10,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web.WebSearch
     [PluralDisplayName("BraveWebSearchProvider_DisplayName_Plural", typeof(FlowBloxTexts))]
     public sealed class BraveWebSearchProvider : WebSearchProviderBase
     {
+        internal override bool SupportsCountry => true;
+        internal override bool SupportsSearchLanguage => true;
+        internal override bool SupportsSafeSearch => true;
+
         public BraveWebSearchProvider()
         {
             BaseUrl = "https://api.search.brave.com/res/v1/web/search";

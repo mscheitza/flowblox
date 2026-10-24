@@ -891,6 +891,7 @@
   "ProjectName": "OracleColumnDiscovery",
   "Author": "",
   "ProjectDescription": "Reads core column specifications for one table owned by the connected Oracle user and returns them as project output.",
+  "ShortDescription": "Discover columns and core types for an Oracle table.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

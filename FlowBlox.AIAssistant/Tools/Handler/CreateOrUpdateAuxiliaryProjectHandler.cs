@@ -20,6 +20,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 ["projectName"] = "string (required; also determines the filename)",
                 ["existingProjectName"] = "string? (metadata_only rename: current name; projectName is the new name)",
                 ["description"] = "string? (required for metadata_only; optional metadata override for full_content)",
+                ["shortDescription"] = "string? (compact capability summary; optional metadata override)",
                 ["mode"] = "string (metadata_only|full_content)",
                 ["projectJson"] = "string? (complete full_content source including description unless overridden; use exactly one content source)",
                 ["copyFromDistributedData"] = "object? ({ dataType: 'auxiliary_project', fileName: string }); alternative full_content source; use exactly one"
@@ -40,6 +41,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 var projectName = (args.Value<string>("projectName") ?? string.Empty).Trim();
                 var existingProjectName = (args.Value<string>("existingProjectName") ?? string.Empty).Trim();
                 var description = (args.Value<string>("description") ?? string.Empty).Trim();
+                var shortDescription = (args.Value<string>("shortDescription") ?? string.Empty).Trim();
                 var mode = (args.Value<string>("mode") ?? string.Empty).Trim().ToLowerInvariant();
                 if (string.IsNullOrWhiteSpace(projectName))
                     return Task.FromResult(ToolHandlerUtilities.Fail("projectName is required."));
@@ -53,8 +55,9 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                         sessionId,
                         string.IsNullOrWhiteSpace(existingProjectName) ? projectName : existingProjectName,
                         description,
+                        shortDescription,
                         args)
-                    : ResolveFullContentProject(description, args);
+                    : ResolveFullContentProject(description, shortDescription, args);
                 var result = AuxiliaryProjectSessionStore.CreateOrUpdateFile(
                     sessionId,
                     projectName,
@@ -66,6 +69,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                     ["operation"] = result.Created ? "created" : "updated",
                     ["mode"] = mode,
                     ["projectName"] = result.Project.ProjectName,
+                    ["shortDescription"] = result.Project.ShortDescription,
                     ["description"] = result.Project.ProjectDescription,
                     ["projectGuid"] = result.Project.ProjectGuid,
                     ["projectFile"] = result.ProjectFile
@@ -81,6 +85,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             string sessionId,
             string projectName,
             string description,
+            string shortDescription,
             JObject args)
         {
             if (string.IsNullOrWhiteSpace(description))
@@ -89,15 +94,24 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 throw new InvalidOperationException("metadata_only does not accept a content source.");
 
             if (!AuxiliaryProjectSessionStore.ProjectExists(sessionId, projectName))
-                return new FlowBloxProject { ProjectDescription = description };
+                return new FlowBloxProject
+                {
+                    ProjectDescription = description,
+                    ShortDescription = shortDescription
+                };
 
             var project = AuxiliaryProjectSerializer.FromFile(
                 AuxiliaryProjectSessionStore.GetStoredProjectFile(sessionId, projectName));
             project.ProjectDescription = description;
+            if (!string.IsNullOrWhiteSpace(shortDescription))
+                project.ShortDescription = shortDescription;
             return project;
         }
 
-        private static FlowBloxProject ResolveFullContentProject(string description, JObject args)
+        private static FlowBloxProject ResolveFullContentProject(
+            string description,
+            string shortDescription,
+            JObject args)
         {
             var projectJson = args.Value<string>("projectJson");
             var distributedData = args["copyFromDistributedData"] as JObject;
@@ -117,6 +131,8 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             var project = AuxiliaryProjectSerializer.FromJson(projectJson!);
             if (!string.IsNullOrWhiteSpace(description))
                 project.ProjectDescription = description;
+            if (!string.IsNullOrWhiteSpace(shortDescription))
+                project.ShortDescription = shortDescription;
             return project;
         }
     }

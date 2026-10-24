@@ -406,6 +406,7 @@
   "ProjectName": "MySqlTableDiscovery",
   "Author": "",
   "ProjectDescription": "Reads table names from a local MySQL instance via `information_schema` and returns them as project output.",
+  "ShortDescription": "Discover table names in a MySQL database.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

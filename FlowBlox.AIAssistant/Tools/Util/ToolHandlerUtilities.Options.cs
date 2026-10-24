@@ -14,6 +14,36 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
         private static Func<AssistantConfiguration>? _assistantConfigurationProvider;
 
+        private static readonly HashSet<string> ImmutableOptionNames = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "AI.AssistantConfiguration",
+            "AI.CommuncationProtocolDir",
+            "AI.AssistantHistoryDirectory",
+            "Account.LicenseToken",
+            "Aspose.Words.LicenseBase64",
+            "SQL.AllowDestructiveStatements"
+        };
+
+        private static readonly string[] ImmutableOptionPrefixes =
+        {
+            "Account.",
+            "Api.",
+            "Editor.",
+            "EPPlus.",
+            "FieldView.",
+            "Grid.",
+            "MainPanel.",
+            "Notifications.",
+            "Paths.",
+            "PopUp.",
+            "PropertyWindow.",
+            "Runtime.Debugging.",
+            "Runtime.Window.",
+            "TestDefinitionView.",
+            "UI.",
+            "Updates."
+        };
+
         public static void SetAssistantConfigurationProvider(Func<AssistantConfiguration>? configurationProvider)
         {
             _assistantConfigurationProvider = configurationProvider;
@@ -39,7 +69,8 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 args["searchForNames"] ?? args["SearchForNames"]);
 
             var candidates = FlowBloxOptions.GetOptionInstance()
-                .GetOptions();
+                .GetOptions()
+                .Where(IsAvailableToAssistant);
 
             var filtered = normalizedTerms.Count == 0
                 ? candidates
@@ -75,6 +106,9 @@ namespace FlowBlox.AIAssistant.Tools.Util
             var option = options.GetOption(key.Trim());
             if (option == null)
                 throw new InvalidOperationException($"Option '{key}' was not found.");
+
+            if (!IsAvailableToAssistant(option))
+                throw new InvalidOperationException($"Option '{option.Name}' is not available to the AI assistant.");
 
             if (option.Type == OptionElement.OptionType.Password)
                 throw new InvalidOperationException(
@@ -118,6 +152,17 @@ namespace FlowBlox.AIAssistant.Tools.Util
                    || ContainsIgnoreCase(option.DisplayName, term)
                    || ContainsIgnoreCase(option.Description, term)
                    || (option.Type != OptionElement.OptionType.Password && ContainsIgnoreCase(option.Value, term));
+        }
+
+        private static bool IsAvailableToAssistant(OptionElement option)
+        {
+            if (option == null || option.Type == OptionElement.OptionType.Password)
+                return false;
+            if (ImmutableOptionNames.Contains(option.Name ?? string.Empty))
+                return false;
+
+            return !ImmutableOptionPrefixes.Any(prefix =>
+                (option.Name ?? string.Empty).StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
         }
 
         private static bool ContainsIgnoreCase(string? value, string term)

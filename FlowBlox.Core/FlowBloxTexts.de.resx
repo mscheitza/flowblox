@@ -4386,6 +4386,8 @@ Wenn ein Join-Collector Links über alle Seiten-Iterationen sammeln soll:
   <data name="WebSearchProviderBase_TimeoutSeconds_Tooltip" xml:space="preserve"><value>Maximale Dauer einer Suchanfrage.</value></data>
   <data name="BraveWebSearchProvider_DisplayName" xml:space="preserve"><value>Brave-Websuchanbieter</value></data>
   <data name="BraveWebSearchProvider_DisplayName_Plural" xml:space="preserve"><value>Brave-Websuchanbieter</value></data>
+  <data name="DeepSeekWebSearchProvider_DisplayName" xml:space="preserve"><value>DeepSeek-Websuchanbieter</value></data>
+  <data name="DeepSeekWebSearchProvider_DisplayName_Plural" xml:space="preserve"><value>DeepSeek-Websuchanbieter</value></data>
   <data name="WebSearchFlowBlock_DisplayName" xml:space="preserve"><value>Websuche</value></data>
   <data name="WebSearchFlowBlock_Description" xml:space="preserve"><value>Durchsucht das Web über einen konfigurierten Anbieter und erzeugt einen Ergebnisdatensatz pro Treffer.</value></data>
   <data name="WebSearchFlowBlock_Provider" xml:space="preserve"><value>Anbieter</value></data>

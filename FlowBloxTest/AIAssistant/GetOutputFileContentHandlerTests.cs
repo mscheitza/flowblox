@@ -4,6 +4,9 @@ using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
 using Newtonsoft.Json.Linq;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 using System.Text;
 
 namespace FlowBloxTest.AIAssistant
@@ -70,12 +73,83 @@ namespace FlowBloxTest.AIAssistant
             StringAssert.Contains(response.Error, "must not contain");
         }
 
-        private static Task<ToolResponse> Execute(string key) =>
+        [TestMethod]
+        public async Task GetOutputFileContent_ConvertsDocxToPageOrientedText()
+        {
+            var project = new FlowBloxProject { ProjectName = "DOCX output content test" };
+            FlowBloxProjectManager.Instance.ActiveProject = project;
+            var outputFile = Path.Combine(project.ProjectOutputDirectory, "report.docx");
+            Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
+            await File.WriteAllBytesAsync(outputFile, CreateDocx());
+
+            var response = await Execute("report.docx");
+
+            Assert.IsTrue(response.Ok, response.Error);
+            Assert.AreEqual("Docx2TextConverter", response.Result.Value<string>("converter"));
+            var content = response.Result.Value<string>("textContent") ?? string.Empty;
+            StringAssert.Contains(content, "<page number=\"1\">");
+            StringAssert.Contains(content, "<page number=\"2\">");
+            StringAssert.Contains(content, "<header>");
+            StringAssert.Contains(content, "Header text");
+            StringAssert.Contains(content, "First page");
+            StringAssert.Contains(content, "Second page");
+            StringAssert.Contains(content, "Footer text");
+        }
+
+        [TestMethod]
+        public async Task GetOutputFileContent_WhenTextConversionDisabled_ReturnsBase64()
+        {
+            var project = new FlowBloxProject { ProjectName = "Base64 output content test" };
+            FlowBloxProjectManager.Instance.ActiveProject = project;
+            var outputFile = Path.Combine(project.ProjectOutputDirectory, "result.txt");
+            Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
+            var bytes = Encoding.UTF8.GetBytes("test content");
+            await File.WriteAllBytesAsync(outputFile, bytes);
+
+            var response = await Execute("result.txt", textConversion: false);
+
+            Assert.IsTrue(response.Ok, response.Error);
+            Assert.AreEqual(string.Empty, response.Result.Value<string>("textContent"));
+            Assert.AreEqual(Convert.ToBase64String(bytes), response.Result.Value<string>("base64Content"));
+            Assert.AreEqual("base64", response.Result.Value<string>("contentEncoding"));
+        }
+
+        private static byte[] CreateDocx()
+        {
+            using var stream = new MemoryStream();
+            using (var document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document, true))
+            {
+                var mainPart = document.AddMainDocumentPart();
+                var headerPart = mainPart.AddNewPart<HeaderPart>();
+                headerPart.Header = new Header(new Paragraph(new Run(new Text("Header text"))));
+                var footerPart = mainPart.AddNewPart<FooterPart>();
+                footerPart.Footer = new Footer(new Paragraph(new Run(new Text("Footer text"))));
+
+                var body = new Body(
+                    new Paragraph(new Run(new Text("First page"))),
+                    new Paragraph(new Run(new Break { Type = BreakValues.Page })),
+                    new Paragraph(new Run(new Text("Second page"))),
+                    new SectionProperties(
+                        new HeaderReference { Type = HeaderFooterValues.Default, Id = mainPart.GetIdOfPart(headerPart) },
+                        new FooterReference { Type = HeaderFooterValues.Default, Id = mainPart.GetIdOfPart(footerPart) }));
+                mainPart.Document = new Document(body);
+            }
+
+            return stream.ToArray();
+        }
+
+        private static Task<ToolResponse> Execute(string key, bool? textConversion = null) =>
             new DefaultToolApi().ExecuteAsync(
                 new ToolRequest
                 {
                     ToolName = "GetOutputFileContent",
-                    Arguments = new JObject { ["key"] = key }
+                    Arguments = new JObject
+                    {
+                        ["key"] = key,
+                        ["textConversion"] = textConversion.HasValue
+                            ? new JValue(textConversion.Value)
+                            : JValue.CreateNull()
+                    }
                 },
                 CancellationToken.None);
     }

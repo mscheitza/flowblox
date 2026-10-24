@@ -34,6 +34,7 @@ namespace FlowBlox.Core.Models.Project
         public string ProjectName { get; set; }
         public string Author { get; set; }
         public string ProjectDescription { get; set; }
+        public string ShortDescription { get; set; }
         public string Notice { get; set; }
         public int GridSizeX { get; set; }
         public int GridSizeY { get; set; }

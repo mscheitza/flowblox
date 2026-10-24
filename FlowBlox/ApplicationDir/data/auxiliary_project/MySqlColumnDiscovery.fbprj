@@ -830,6 +830,7 @@
   "ProjectName": "MySqlColumnDiscovery",
   "Author": "",
   "ProjectDescription": "Reads core column specifications for one MySQL table and returns them as project output.",
+  "ShortDescription": "Discover columns and core types for a MySQL table.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

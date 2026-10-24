@@ -92,6 +92,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             {
                 ["operation"] = operation,
                 ["projectName"] = project.ProjectName ?? string.Empty,
+                ["shortDescription"] = project.ShortDescription ?? string.Empty,
                 ["description"] = project.ProjectDescription ?? string.Empty,
                 ["projectGuid"] = project.ProjectGuid,
                 ["isOpen"] = isOpen

@@ -306,6 +306,7 @@
   "ProjectName": "FetchUrlDom",
   "Author": "",
   "ProjectDescription": "Opens an input URL in the configured web browser and returns the resulting DOM content.",
+  "ShortDescription": "Open a URL and return its rendered DOM content.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

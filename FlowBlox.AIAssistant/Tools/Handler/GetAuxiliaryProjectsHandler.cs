@@ -15,7 +15,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             new JObject
             {
                 ["mode"] = "string? (session|distributedData; default: session)",
-                ["filter"] = "string? (comma/space-separated terms; case-insensitive contains OR match against project name or description)"
+                ["filter"] = "string? (comma/space-separated terms; case-insensitive contains OR match against project name, short description, or description)"
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -104,7 +104,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             IReadOnlyCollection<string> filterTerms)
         {
             return projects.Where(x => ToolHandlerUtilities.ContainsAnySearchTerm(
-                [x.Value<string>("projectName"), x.Value<string>("description")],
+                [x.Value<string>("projectName"), x.Value<string>("shortDescription"), x.Value<string>("description")],
                 filterTerms));
         }
 
@@ -127,6 +127,7 @@ namespace FlowBlox.AIAssistant.Tools.Handler
             new()
             {
                 ["projectName"] = metadata.ProjectName,
+                ["shortDescription"] = metadata.ShortDescription,
                 ["description"] = metadata.Description,
                 ["inputFields"] = new JArray(metadata.InputFields),
                 ["outputFields"] = new JArray(metadata.OutputFields)

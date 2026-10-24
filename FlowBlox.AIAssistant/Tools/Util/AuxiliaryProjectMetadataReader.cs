@@ -14,6 +14,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
         public static AuxiliaryProjectMetadata Read(FlowBloxProject project, string projectFile) =>
             new(
                 project.ProjectName?.Trim() ?? Path.GetFileNameWithoutExtension(projectFile),
+                project.ShortDescription?.Trim() ?? string.Empty,
                 project.ProjectDescription?.Trim() ?? string.Empty,
                 project.UserFields
                     .Where(x => x.UserFieldType == UserFieldTypes.Input)
@@ -35,6 +36,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
     internal sealed record AuxiliaryProjectMetadata(
         string ProjectName,
+        string ShortDescription,
         string Description,
         IReadOnlyList<string> InputFields,
         IReadOnlyList<string> OutputFields,

@@ -32,6 +32,7 @@ namespace FlowBlox.Views
 
             this.tbProjectName.Text = project.ProjectName;
             this.tbProjectDescription.Text = project.ProjectDescription;
+            this.tbShortDescription.Text = project.ShortDescription;
             this.tbAuthor.Text = project.Author;
             this.tbNoteOnOpening.Text = project.Notice;
 
@@ -149,6 +150,7 @@ namespace FlowBlox.Views
             _project.ProjectName = tbProjectName.Text;
             _project.Author = tbAuthor.Text;
             _project.ProjectDescription = tbProjectDescription.Text;
+            _project.ShortDescription = tbShortDescription.Text;
             _project.Notice = tbNoteOnOpening.Text;
 
             this.Close();

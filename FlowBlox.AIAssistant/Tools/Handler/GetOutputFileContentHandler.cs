@@ -10,11 +10,13 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns output file content for one key (relative to $Project::OutputDirectory). Response fields: mimeType, key, textContent, converter, message.",
+            "Returns output file content for one key (relative to $Project::OutputDirectory). Text formats, XLSX, and DOCX are converted for reading; other binary content falls back to bounded Base64.",
             new JObject
             {
                 ["key"] = "string (relative path under $Project::OutputDirectory)",
-                ["usageHint"] = "Returns textContent when possible. XLSX is auto-converted to CSV via Xlsx2CsvConverter."
+                ["textConversion"] = "bool? (default=true; false returns bounded Base64 without conversion)",
+                ["maxTokens"] = "int? (default/maximum: configured MaxFieldValuesTokensPerResponse)",
+                ["usageHint"] = "Returns textContent when possible. XLSX becomes CSV; DOCX becomes page-oriented text with header/body/footer."
             });
 
         public override async Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -29,8 +31,19 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 var normalizedKey = FlowBloxInputFileHelper.NormalizeRelativePath(key);
                 var filePath = ContainedFileResolver.ResolveExistingFile(project.ProjectOutputDirectory, key);
                 var bytes = await File.ReadAllBytesAsync(filePath, ct).ConfigureAwait(false);
+                if (!FieldValueResponseLimiter.TryFromConfiguration(
+                        args.Value<int?>("maxTokens"),
+                        out var limiter,
+                        out var limiterError))
+                    return ToolHandlerUtilities.Fail(limiterError);
                 return ToolHandlerUtilities.Ok(
-                    FileContentResponseBuilder.Build(bytes, normalizedKey, "Output file", filePath));
+                    FileContentResponseBuilder.Build(
+                        bytes,
+                        normalizedKey,
+                        "Output file",
+                        filePath,
+                        args.Value<bool?>("textConversion") ?? true,
+                        limiter!));
             }
             catch (Exception ex)
             {

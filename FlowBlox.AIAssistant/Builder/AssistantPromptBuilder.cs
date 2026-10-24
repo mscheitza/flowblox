@@ -6,8 +6,11 @@ using FlowBlox.AIAssistant.Services;
 using FlowBlox.AIAssistant.Tools.Util;
 using FlowBlox.Core.Constants;
 using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Util.Compression;
+using FlowBlox.Core.Util.DistributedData;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Builder
 {
@@ -45,6 +48,7 @@ namespace FlowBlox.AIAssistant.Builder
                 .Replace("{{ROOT_CATEGORIES}}", string.Join(", ", rootCategories), StringComparison.Ordinal)
                 .Replace("{{CENTRAL_GUIDELINES}}", BuildCentralGuidelinesText(), StringComparison.Ordinal)
                 .Replace("{{EXPLANATION_ROUTING}}", BuildExplanationRoutingText(), StringComparison.Ordinal)
+                .Replace("{{STANDARD_AUXILIARY_PROJECTS}}", BuildStandardAuxiliaryProjectsText(), StringComparison.Ordinal)
                 .Replace("{{COMPACT_TYPE_ALIASES}}", AiAssistantTypeAliasHelper.AliasSummary, StringComparison.Ordinal)
                 .Replace("{{AVAILABLE_TOOLS}}", BuildToolDefinitionsText(toolDefinitions), StringComparison.Ordinal)
                 + $"\nApplication runtime started at: {AssistantSessionContentStore.ApplicationStartedAt:O}."
@@ -166,6 +170,38 @@ namespace FlowBlox.AIAssistant.Builder
             var entries = AssistantPromptCatalog.GetAllEntries()
                 .Where(x => !x.IsIncludedInInitialPrompt && !string.IsNullOrWhiteSpace(x.Description))
                 .Select(x => $"- {x.Description} -> `{x.Key}`")
+                .ToList();
+
+            return entries.Count == 0 ? "- None" : string.Join("\n", entries);
+        }
+
+        private static string BuildStandardAuxiliaryProjectsText()
+        {
+            var dataType = DistributedDataCatalog.GetDataTypes()
+                .SingleOrDefault(x => string.Equals(
+                    x.Name,
+                    DistributedDataCatalog.AuxiliaryProjectType,
+                    StringComparison.OrdinalIgnoreCase));
+            if (dataType == null)
+                return "- None";
+
+            var entries = dataType.FileNames
+                .Select(fileName => DistributedDataCatalog.ResolvePath(
+                    DistributedDataCatalog.AuxiliaryProjectType,
+                    fileName))
+                .Where(path => !string.IsNullOrWhiteSpace(path))
+                .Select(path => new
+                {
+                    Path = path!,
+                    Project = JObject.Parse(File.ReadAllText(path!))
+                })
+                .Select(x => new
+                {
+                    ProjectName = x.Project.Value<string>(nameof(FlowBloxProject.ProjectName)) ?? Path.GetFileNameWithoutExtension(x.Path),
+                    ShortDescription = x.Project.Value<string>(nameof(FlowBloxProject.ShortDescription)) ?? string.Empty
+                })
+                .OrderBy(metadata => metadata.ProjectName, StringComparer.OrdinalIgnoreCase)
+                .Select(metadata => $"- {metadata.ProjectName}: {metadata.ShortDescription}")
                 .ToList();
 
             return entries.Count == 0 ? "- None" : string.Join("\n", entries);

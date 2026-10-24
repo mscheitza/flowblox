@@ -124,7 +124,9 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public async Task Create_CopiesDistributedProject_AndUpdateRequiresClosedProject()
+        [DataRow("BraveWebSearch.fbprj")]
+        [DataRow("DeepSeekWebSearch.fbprj")]
+        public async Task Create_CopiesDistributedProject_AndUpdateRequiresClosedProject(string distributedProjectFile)
         {
             var api = new DefaultToolApi();
             var createWithoutDescription = await Execute(api, "CreateOrUpdateAuxiliaryProject", new JObject
@@ -139,7 +141,7 @@ namespace FlowBloxTest.AIAssistant
                 ["copyFromDistributedData"] = new JObject
                 {
                     ["dataType"] = "auxiliary_project",
-                    ["fileName"] = "BraveWebSearch.fbprj"
+                    ["fileName"] = distributedProjectFile
                 }
             });
             var opened = await Execute(api, "AuxiliaryProjectEditing", new JObject
@@ -221,6 +223,7 @@ namespace FlowBloxTest.AIAssistant
             Assert.IsTrue(filteredProjects.All(x =>
                 filterTerms.Any(term =>
                     (x.Value<string>("projectName") ?? string.Empty).Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                    (x.Value<string>("shortDescription") ?? string.Empty).Contains(term, StringComparison.OrdinalIgnoreCase) ||
                     (x.Value<string>("description") ?? string.Empty).Contains(term, StringComparison.OrdinalIgnoreCase))));
         }
 

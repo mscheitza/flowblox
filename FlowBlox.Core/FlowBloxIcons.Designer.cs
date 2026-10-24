@@ -752,6 +752,18 @@ namespace FlowBlox.Core
                 return ((byte[])(obj));
             }
         }
+
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        public static byte[] search_web
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("search_web", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
         
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].

@@ -41,7 +41,7 @@ namespace FlowBloxTest.AIAssistant
         }
 
         [TestMethod]
-        public async Task SearchOptions_WithReadPermission_MasksPasswordOptionValue()
+        public async Task SearchOptions_WithReadPermission_HidesPasswordOption()
         {
             var options = FlowBloxOptions.GetOptionInstance();
             options.OptionCollection[TestPasswordOptionName] = new OptionElement(
@@ -60,10 +60,37 @@ namespace FlowBloxTest.AIAssistant
                 CancellationToken.None);
 
             Assert.IsTrue(response.Ok, response.Error);
-            var option = response.Result["options"]?.OfType<JObject>().Single();
-            Assert.AreEqual(TestPasswordOptionName, option?["name"]?.Value<string>());
-            Assert.AreEqual("Password", option?["type"]?.Value<string>());
-            Assert.AreEqual(ToolHandlerUtilities.PasswordOptionProtectedValueMessage, option?["value"]?.Value<string>());
+            Assert.AreEqual(0, response.Result["options"]?.Count());
+        }
+
+        [TestMethod]
+        public async Task SetOptionValue_RejectsImmutableOption()
+        {
+            var toolApi = CreateToolApi(AssistantOptionsAccessLevel.ReadWrite);
+            var option = FlowBloxOptions.GetOptionInstance().GetOption("SQL.AllowDestructiveStatements")!;
+            var originalValue = option.Value;
+            try
+            {
+                var response = await toolApi.ExecuteAsync(
+                    new ToolRequest
+                    {
+                        ToolName = "SetOptionValue",
+                        Arguments = new JObject
+                        {
+                            ["key"] = option.Name,
+                            ["stringValue"] = "true"
+                        }
+                    },
+                    CancellationToken.None);
+
+                Assert.IsFalse(response.Ok);
+                StringAssert.Contains(response.Error, "not available to the AI assistant");
+                Assert.AreEqual(originalValue, option.Value);
+            }
+            finally
+            {
+                option.Value = originalValue;
+            }
         }
 
         [TestMethod]

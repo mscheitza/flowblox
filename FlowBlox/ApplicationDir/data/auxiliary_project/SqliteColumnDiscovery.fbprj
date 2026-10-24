@@ -751,6 +751,7 @@
   "ProjectName": "SqliteColumnDiscovery",
   "Author": "",
   "ProjectDescription": "Reads core column specifications for one SQLite table and returns them as project output.",
+  "ShortDescription": "Discover columns and core types for a SQLite table.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

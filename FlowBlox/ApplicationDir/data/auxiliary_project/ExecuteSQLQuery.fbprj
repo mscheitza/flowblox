@@ -1045,6 +1045,7 @@
   "ProjectName": "ExecuteSQLQuery",
   "Author": "",
   "ProjectDescription": "Executes a SQL read query against MSSQL, Oracle, MySQL, or SQLite and returns the complete result as CSV content.",
+  "ShortDescription": "Run a read-only SQL query and return the result as CSV.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

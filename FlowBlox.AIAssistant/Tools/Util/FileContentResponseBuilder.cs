@@ -5,17 +5,30 @@ namespace FlowBlox.AIAssistant.Tools.Util
 {
     internal static class FileContentResponseBuilder
     {
-        public static JObject Build(byte[] bytes, string key, string fileKind, string logPath)
+        public static JObject Build(
+            byte[] bytes,
+            string key,
+            string fileKind,
+            string logPath,
+            bool textConversion,
+            FieldValueResponseLimiter limiter)
         {
             bytes ??= Array.Empty<byte>();
+            ArgumentNullException.ThrowIfNull(limiter);
             var mimeType = MimeTypeResolver.ResolveFromExtension(Path.GetExtension(key) ?? string.Empty);
             var converter = string.Empty;
             var textContent = string.Empty;
+            var base64Content = string.Empty;
             var message = string.Empty;
 
             if (bytes.Length == 0)
             {
                 message = $"{fileKind} is empty.";
+            }
+            else if (!textConversion)
+            {
+                base64Content = Convert.ToBase64String(bytes);
+                message = "Text conversion was disabled; content is returned as Base64.";
             }
             else if (IsTextualMimeType(mimeType))
             {
@@ -35,14 +48,43 @@ namespace FlowBlox.AIAssistant.Tools.Util
                         $"Failed to convert {fileKind.ToLowerInvariant()} '{logPath}' from Excel to CSV.",
                         ex);
                     converter = Xlsx2CsvConverter.Name;
-                    message =
-                        $"Spreadsheet conversion to CSV failed. Legacy/binary Excel format may not be supported. Details: {ex.Message}";
+                    base64Content = Convert.ToBase64String(bytes);
+                    message = $"Spreadsheet conversion to CSV failed; content is returned as Base64. Details: {ex.Message}";
+                }
+            }
+            else if (IsDocxMimeType(mimeType))
+            {
+                try
+                {
+                    textContent = Docx2TextConverter.Convert(bytes);
+                    converter = Docx2TextConverter.Name;
+                    message = "DOCX content was converted to page-oriented text including headers, body, and footers.";
+                }
+                catch (Exception ex)
+                {
+                    FlowBloxLogManager.Instance.GetLogger().Error(
+                        $"Failed to convert {fileKind.ToLowerInvariant()} '{logPath}' from DOCX to text.",
+                        ex);
+                    converter = Docx2TextConverter.Name;
+                    base64Content = Convert.ToBase64String(bytes);
+                    message = $"DOCX conversion to text failed; content is returned as Base64. Details: {ex.Message}";
                 }
             }
             else
             {
-                message =
-                    "Content cannot be returned as text. Format is neither a textual data format nor a supported convertible format.";
+                base64Content = Convert.ToBase64String(bytes);
+                message = "No text converter is available for this format; content is returned as Base64.";
+            }
+
+            var content = !string.IsNullOrEmpty(textContent) ? textContent : base64Content;
+            var limitedContent = limiter.Limit(content);
+            if (!limitedContent.IsComplete)
+            {
+                if (!string.IsNullOrEmpty(textContent))
+                    textContent = limitedContent.Value;
+                else
+                    base64Content = limitedContent.Value;
+                message += " Content was truncated to the configured response limit.";
             }
 
             return new JObject
@@ -50,8 +92,14 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 ["mimeType"] = mimeType,
                 ["key"] = key,
                 ["textContent"] = textContent,
+                ["base64Content"] = base64Content,
+                ["contentEncoding"] = string.IsNullOrEmpty(base64Content)
+                    ? "text"
+                    : limitedContent.IsComplete ? "base64" : "base64-prefix",
                 ["converter"] = converter,
-                ["message"] = message
+                ["message"] = message,
+                ["contentInfo"] = limitedContent.ToMetadata(),
+                ["fileContentOutput"] = limiter.CreateMetadata()
             };
         }
 
@@ -73,6 +121,12 @@ namespace FlowBlox.AIAssistant.Tools.Util
             string.Equals(mimeType, "application/vnd.ms-excel", StringComparison.OrdinalIgnoreCase) ||
             string.Equals(mimeType, "application/vnd.ms-excel.sheet.macroEnabled.12", StringComparison.OrdinalIgnoreCase) ||
             string.Equals(mimeType, "application/vnd.ms-excel.sheet.binary.macroEnabled.12", StringComparison.OrdinalIgnoreCase);
+
+        private static bool IsDocxMimeType(string mimeType) =>
+            string.Equals(
+                mimeType,
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                StringComparison.OrdinalIgnoreCase);
 
         private static string DecodeText(byte[] bytes, string fileKind, string logPath)
         {

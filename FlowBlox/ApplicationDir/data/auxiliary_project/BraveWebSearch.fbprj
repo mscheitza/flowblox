@@ -462,6 +462,7 @@
   "ProjectName": "BraveWebSearch",
   "Author": "",
   "ProjectDescription": "Searches the web through Brave Search and returns title, URL, and description for each result.",
+  "ShortDescription": "Search the public web via Brave and return titles, URLs, and summaries; requires a Brave Search API key.",
   "Notice": "",
   "GridSizeX": 2500,
   "GridSizeY": 2000,

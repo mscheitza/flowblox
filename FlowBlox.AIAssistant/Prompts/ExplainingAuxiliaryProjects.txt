@@ -1,15 +1,18 @@
 # Explaining Auxiliary Projects
 
-Use only for small helper flows that obtain information missing from the user request or main project, such as an SQL schema, web content, or search result.
+Use auxiliary projects as local skills that provide a capability or information unavailable through the standard Tool API or main project.
 
 ## Cost-Benefit Rule
-- Creating or substantially adapting a local auxiliary project can require significant tool calls, tokens, and execution effort. Do it only when the missing local capability or information is necessary to fulfill a core requirement and no existing tool, distributed template, or session project can provide it.
-- Prefer an existing mechanism or auxiliary-project template whenever possible. For example, discovering unknown database tables or columns may be essential to construct the requested flow, while creating an IMAP helper merely to confirm delivery after an SMTP flow already executed successfully is not.
+1. Quick wins first: use an existing Tool API call, distributed template, or session auxiliary project whenever it supplies the capability.
+2. Create or substantially adapt an auxiliary project only when the missing capability is essential to completing the core requirement; keep that helper minimal.
+
+Examples:
+- **Do:** Essential information is otherwise unavailable, such as the unknown directory tree below a user-provided root. Build a minimal helper with a recursive `FSDirectoryIteratorFlowBlock`, inspect its results, and add targeted file reads only where needed.
+- **Don't:** Debugging already proved correct execution and plausible values; only stronger final evidence is missing. Use an existing low-cost check or report the remaining real-world verification gap instead of building a helper solely for confirmation.
 
 Distributed templates:
-- Before creating an auxiliary project, call `GetAuxiliaryProjects(mode="distributedData",filter=...)`. It searches project names and descriptions and returns `fileName`, `description`, `inputFields`, and `outputFields`; omit `filter` to list all templates.
+- Before creating an auxiliary project, call `GetAuxiliaryProjects(mode="distributedData",filter=...)`. It searches project names and descriptions and returns `fileName`, `shortDescription`, `description`, `inputFields`, and `outputFields`; omit `filter` to list all templates.
 - Reuse a suitable file directly with `CreateOrUpdateAuxiliaryProject(mode="full_content",copyFromDistributedData={dataType:"auxiliary_project",fileName:<catalog fileName>},...)`. Use `GetDistributedDataContent(dataType="auxiliary_project",fileName=...)` only when its project JSON must be inspected or adapted first.
-- Available templates may include flows for retrieving a page DOM from a URL, web searches, or database schema information such as table names and core column specifications. The catalog can grow over time.
 
 Default workflow:
 1. Search distributed templates with `GetAuxiliaryProjects(mode="distributedData",filter=...)` and prefer a suitable one.

@@ -48,6 +48,8 @@
             tbAuthor = new System.Windows.Forms.TextBox();
             lbProjectDescription = new System.Windows.Forms.Label();
             tbProjectDescription = new System.Windows.Forms.TextBox();
+            lbShortDescription = new System.Windows.Forms.Label();
+            tbShortDescription = new System.Windows.Forms.TextBox();
             lbNoteOnOpening = new System.Windows.Forms.Label();
             tbNoteOnOpening = new System.Windows.Forms.TextBox();
             flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -78,13 +80,15 @@
             tableLayoutPanel1.Controls.Add(tbAuthor, 1, 8);
             tableLayoutPanel1.Controls.Add(lbProjectDescription, 1, 9);
             tableLayoutPanel1.Controls.Add(tbProjectDescription, 1, 10);
-            tableLayoutPanel1.Controls.Add(lbNoteOnOpening, 1, 11);
-            tableLayoutPanel1.Controls.Add(tbNoteOnOpening, 1, 12);
-            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 1, 13);
+            tableLayoutPanel1.Controls.Add(lbShortDescription, 1, 11);
+            tableLayoutPanel1.Controls.Add(tbShortDescription, 1, 12);
+            tableLayoutPanel1.Controls.Add(lbNoteOnOpening, 1, 13);
+            tableLayoutPanel1.Controls.Add(tbNoteOnOpening, 1, 14);
+            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 1, 15);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 14;
+            tableLayoutPanel1.RowCount = 16;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 58F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
@@ -97,9 +101,11 @@
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(625, 509);
+            tableLayoutPanel1.Size = new System.Drawing.Size(625, 564);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // pictureBox
@@ -334,6 +340,28 @@
             tbProjectDescription.Name = "tbProjectDescription";
             tbProjectDescription.Size = new System.Drawing.Size(565, 52);
             tbProjectDescription.TabIndex = 4;
+            //
+            // lbShortDescription
+            //
+            lbShortDescription.AutoSize = true;
+            lbShortDescription.BackColor = System.Drawing.SystemColors.Control;
+            lbShortDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            lbShortDescription.ForeColor = System.Drawing.SystemColors.ControlText;
+            lbShortDescription.Location = new System.Drawing.Point(57, 382);
+            lbShortDescription.Name = "lbShortDescription";
+            lbShortDescription.Size = new System.Drawing.Size(565, 30);
+            lbShortDescription.TabIndex = 38;
+            lbShortDescription.Tag = "style_header";
+            lbShortDescription.Text = "lbShortDescription_Text";
+            lbShortDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            //
+            // tbShortDescription
+            //
+            tbShortDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            tbShortDescription.Location = new System.Drawing.Point(57, 415);
+            tbShortDescription.Name = "tbShortDescription";
+            tbShortDescription.Size = new System.Drawing.Size(565, 22);
+            tbShortDescription.TabIndex = 5;
             // 
             // lbNoteOnOpening
             // 
@@ -342,7 +370,7 @@
             lbNoteOnOpening.Dock = System.Windows.Forms.DockStyle.Fill;
             lbNoteOnOpening.Font = new System.Drawing.Font("Calibri", 9.75F);
             lbNoteOnOpening.ForeColor = System.Drawing.SystemColors.ControlText;
-            lbNoteOnOpening.Location = new System.Drawing.Point(57, 382);
+            lbNoteOnOpening.Location = new System.Drawing.Point(57, 437);
             lbNoteOnOpening.Margin = new System.Windows.Forms.Padding(3, 2, 3, 1);
             lbNoteOnOpening.Name = "lbNoteOnOpening";
             lbNoteOnOpening.Size = new System.Drawing.Size(565, 27);
@@ -355,11 +383,11 @@
             // 
             tbNoteOnOpening.Dock = System.Windows.Forms.DockStyle.Fill;
             tbNoteOnOpening.Font = new System.Drawing.Font("Calibri", 8.25F);
-            tbNoteOnOpening.Location = new System.Drawing.Point(57, 413);
+            tbNoteOnOpening.Location = new System.Drawing.Point(57, 468);
             tbNoteOnOpening.Multiline = true;
             tbNoteOnOpening.Name = "tbNoteOnOpening";
             tbNoteOnOpening.Size = new System.Drawing.Size(565, 52);
-            tbNoteOnOpening.TabIndex = 5;
+            tbNoteOnOpening.TabIndex = 6;
             // 
             // flowLayoutPanel1
             // 
@@ -367,10 +395,10 @@
             flowLayoutPanel1.Controls.Add(btCancel);
             flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new System.Drawing.Point(57, 471);
+            flowLayoutPanel1.Location = new System.Drawing.Point(57, 526);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new System.Drawing.Size(565, 35);
-            flowLayoutPanel1.TabIndex = 6;
+            flowLayoutPanel1.TabIndex = 7;
             // 
             // btApply
             // 
@@ -417,7 +445,7 @@
             AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             CancelButton = btCancel;
-            ClientSize = new System.Drawing.Size(625, 509);
+            ClientSize = new System.Drawing.Size(625, 564);
             Controls.Add(tableLayoutPanel1);
             Font = new System.Drawing.Font("Calibri", 9F);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
@@ -462,6 +490,8 @@
 
         private System.Windows.Forms.Label lbProjectDescription;
         private System.Windows.Forms.TextBox tbProjectDescription;
+        private System.Windows.Forms.Label lbShortDescription;
+        private System.Windows.Forms.TextBox tbShortDescription;
 
         private System.Windows.Forms.Label lbNoteOnOpening;
         private System.Windows.Forms.TextBox tbNoteOnOpening;

@@ -177,7 +177,7 @@ namespace FlowBlox.AIAssistant.Services
                     SpecialAuxiliaryProjectsKey,
                     "Explaining Auxiliary Projects",
                     "FlowBlox.AIAssistant.Prompts.ExplainingAuxiliaryProjects.txt",
-                    "Local capabilities via auxiliary projects (local skills), using bundled or session-created helpers; examples include accessing internal/external websites and inspecting DOM content, or reading database tables, columns, and types",
+                    "Using bundled or session-created auxiliary projects as local skills",
                     false),
                 [VersionNotesKey] = new PromptEntryDefinition(
                     VersionNotesKey,

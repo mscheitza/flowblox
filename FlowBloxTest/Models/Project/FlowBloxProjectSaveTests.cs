@@ -11,6 +11,33 @@ namespace FlowBloxTest.Models.Project
     public sealed class FlowBloxProjectSaveTests
     {
         [TestMethod]
+        public void Save_PreservesShortDescription()
+        {
+            var directory = Path.Combine(Path.GetTempPath(), "FlowBloxTest", Guid.NewGuid().ToString("N"));
+            var file = Path.Combine(directory, "project.fbprj");
+            Directory.CreateDirectory(directory);
+            try
+            {
+                var project = new FlowBloxProject
+                {
+                    ProjectName = "Project with summary",
+                    ShortDescription = "Compact capability summary."
+                };
+
+                project.Save(file);
+
+                Assert.AreEqual(
+                    project.ShortDescription,
+                    JObject.Parse(File.ReadAllText(file)).Value<string>(nameof(FlowBloxProject.ShortDescription)));
+            }
+            finally
+            {
+                if (Directory.Exists(directory))
+                    Directory.Delete(directory, recursive: true);
+            }
+        }
+
+        [TestMethod]
         public void Save_WithNewProjectGuid_UpdatesProjectAndSerializedGuid()
         {
             var directory = Path.Combine(Path.GetTempPath(), "FlowBloxTest", Guid.NewGuid().ToString("N"));

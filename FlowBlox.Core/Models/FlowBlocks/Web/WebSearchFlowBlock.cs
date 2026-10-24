@@ -32,14 +32,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         [Display(Name = "WebSearchFlowBlock_MaxResults", Description = "WebSearchFlowBlock_MaxResults_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         public int MaxResults { get; set; } = 10;
 
+        [ActivationCondition(ActivationMethod = nameof(IsCountryActive))]
         [Display(Name = "WebSearchFlowBlock_Country", Description = "WebSearchFlowBlock_Country_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Country { get; set; } = string.Empty;
 
+        [ActivationCondition(ActivationMethod = nameof(IsSearchLanguageActive))]
         [Display(Name = "WebSearchFlowBlock_SearchLanguage", Description = "WebSearchFlowBlock_SearchLanguage_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 4)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string SearchLanguage { get; set; } = string.Empty;
 
+        [ActivationCondition(ActivationMethod = nameof(IsSafeSearchActive))]
         [Display(Name = "WebSearchFlowBlock_SafeSearch", Description = "WebSearchFlowBlock_SafeSearch_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 5)]
         public WebSearchSafeSearch SafeSearch { get; set; } = WebSearchSafeSearch.Moderate;
 
@@ -47,8 +50,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
         [FlowBloxUI(Factory = UIFactory.GridView)]
         public ObservableCollection<ResultFieldByEnumValue<WebSearchDestinations>> ResultFields { get; set; } = [];
 
-        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.web, 16, SKColors.SteelBlue);
-        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.web, 32, SKColors.SteelBlue);
+        public override SKImage Icon16 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.search_web, 16, SKColors.SteelBlue);
+        public override SKImage Icon32 => FlowBloxIconUtil.CreateFromSVG(FlowBloxIcons.search_web, 32, SKColors.SteelBlue);
         public override FlowBlockCategory GetCategory() => FlowBlockCategory.Web;
         public override FlowBlockCardinalities GetInputCardinality() => FlowBlockCardinalities.Many;
 
@@ -60,6 +63,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web
 
         public IEnumerable<WebSearchProviderBase> GetPossibleProviders() =>
             FlowBloxRegistryProvider.GetRegistry().GetManagedObjects<WebSearchProviderBase>();
+
+        private bool IsCountryActive() => Provider?.SupportsCountry == true;
+        private bool IsSearchLanguageActive() => Provider?.SupportsSearchLanguage == true;
+        private bool IsSafeSearchActive() => Provider?.SupportsSafeSearch == true;
 
         public override List<string> GetDisplayableProperties()
         {

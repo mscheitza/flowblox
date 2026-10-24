@@ -12,6 +12,10 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web.WebSearch
     [PluralDisplayName("WebSearchProviderBase_DisplayName_Plural", typeof(FlowBloxTexts))]
     public abstract class WebSearchProviderBase : ManagedObject
     {
+        internal virtual bool SupportsCountry => false;
+        internal virtual bool SupportsSearchLanguage => false;
+        internal virtual bool SupportsSafeSearch => false;
+
         [Required]
         [Display(Name = "WebSearchProviderBase_ApiKey", Description = "WebSearchProviderBase_ApiKey_Tooltip", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]

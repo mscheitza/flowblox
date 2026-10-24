@@ -8,7 +8,7 @@ Verification default:
 ## Final Evidence Rule
 - A successful debug run without errors and with plausible observed field values is sufficient unless the task explicitly requires stronger end-result evidence.
 - Use an existing low-cost verification path when available, for example `GetOutputFileContent` for generated files or an existing `ExecuteSQLQuery` auxiliary project for SQL results.
-- Do not create new tools or auxiliary projects solely for stronger final evidence. If no practical existing check can inspect the actual result, state what was verified and what remains unverified rather than expanding the solution only for confirmation.
+- If no known Tool API call or existing auxiliary project can inspect the produced artifact or result data, stop after the available verification and tell the user what remains unverified. Do not create an auxiliary project solely for final evidence; its cost is not justified by confirmation alone.
 
 Target execution:
 - Prefer focused debug runs with `targetFlowBlockName` for diagnosing individual flow blocks.

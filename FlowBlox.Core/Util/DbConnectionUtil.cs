@@ -12,6 +12,7 @@ namespace FlowBlox.Core.Util
 
         public static int ExecuteSqlQuery(string sqlStatement, Dictionary<string, object> parameters, DbConnection connection)
         {
+            SqlStatementSafetyGuard.EnsureAllowed(sqlStatement);
             using var command = connection.CreateCommand();
             command.CommandText = sqlStatement;
 
@@ -28,6 +29,7 @@ namespace FlowBlox.Core.Util
 
         public static DataTable GetOutputAsDataTable(string sqlStatement, Dictionary<string, object> parameters, DbConnection connection)
         {
+            SqlStatementSafetyGuard.EnsureAllowed(sqlStatement);
             using var command = connection.CreateCommand();
             command.CommandText = sqlStatement;
 
@@ -50,6 +52,7 @@ namespace FlowBlox.Core.Util
 
         public static object ExecuteScalarQuery(string sqlStatement, Dictionary<string, object> parameters, DbConnection connection)
         {
+            SqlStatementSafetyGuard.EnsureAllowed(sqlStatement);
             using var command = connection.CreateCommand();
             command.CommandText = sqlStatement;
 

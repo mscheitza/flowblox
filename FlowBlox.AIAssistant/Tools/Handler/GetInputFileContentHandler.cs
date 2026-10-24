@@ -10,11 +10,13 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Returns managed input file content for a single key (relative to $Project::InputDirectory). Response fields: mimeType, key, textContent, converter, message.",
+            "Returns managed input file content for a single key (relative to $Project::InputDirectory). Text formats, XLSX, and DOCX are converted for reading; other binary content falls back to bounded Base64.",
             new JObject
             {
                 ["key"] = "string (relative path under $Project::InputDirectory)",
-                ["usageHint"] = "Returns textContent when possible. XLSX is auto-converted to CSV via Xlsx2CsvConverter."
+                ["textConversion"] = "bool? (default=true; false returns bounded Base64 without conversion)",
+                ["maxTokens"] = "int? (default/maximum: configured MaxFieldValuesTokensPerResponse)",
+                ["usageHint"] = "Returns textContent when possible. XLSX becomes CSV; DOCX becomes page-oriented text with header/body/footer."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -40,11 +42,19 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 if (inputFile == null)
                     return Task.FromResult(ToolHandlerUtilities.Fail($"Input file '{normalizedKey}' was not found."));
 
+                if (!FieldValueResponseLimiter.TryFromConfiguration(
+                        args.Value<int?>("maxTokens"),
+                        out var limiter,
+                        out var limiterError))
+                    return Task.FromResult(ToolHandlerUtilities.Fail(limiterError));
+
                 var result = FileContentResponseBuilder.Build(
                     inputFile.ContentBytes ?? Array.Empty<byte>(),
                     normalizedKey,
                     "Input file",
-                    inputFile.RelativePath);
+                    inputFile.RelativePath,
+                    args.Value<bool?>("textConversion") ?? true,
+                    limiter!);
                 return Task.FromResult(ToolHandlerUtilities.Ok(result));
             }
             catch (Exception ex)
