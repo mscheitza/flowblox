@@ -222,7 +222,9 @@ For custom hosting and execution, integrate `FlowBlox.Core` runner components su
 
 ## Example projects
 
-Explore bundled examples through **Open example project**. Source examples are also available in the repository's [example_project directory](FlowBlox/ApplicationDir/data/example_project).
+Explore bundled examples directly in FlowBlox using **Open example project**.
+
+The example project files are also available in the repository's [example_project directory](FlowBlox/ApplicationDir/data/example_project).
 
 ### AI-generated XPath selectors
 
