@@ -226,20 +226,6 @@ Explore bundled examples directly in FlowBlox using **Open example project**.
 
 The example project files are also available in the repository's [example_project directory](FlowBlox/ApplicationDir/data/example_project).
 
-### AI-generated XPath selectors
-
-Generate XPath selectors with a cloud AI provider to extract country, address, and company information from XML. Store the selectors as Memory Fields (**Tools → Custom Fields → Memory Fields**), validate them against a test case, and insert the extracted information into an OpenXML/Word document.
-
-### Sequence Detection: paginated website
-
-Demonstrates a minimal configuration of the `SequenceDetection` FlowBlock using [webscraper.io's pagination test site](https://webscraper.io/test-sites/pagination). Two test cases specify expected record counts and target links as expectation conditions.
-
-### Hockey Table Extraction to CSV
-
-Retrieves hockey team statistics from [scrapethissite.com](https://www.scrapethissite.com/), extracts team names, years, wins, and losses using XPath selectors, and exports the results to `ExtractedTable.csv`.
-
-![Example FlowBlox extraction project](docs/images/example-project.png)
-
 ## Local AI and ONNX
 
 Configure local AI execution under **FlowBlox App → Extras → Options → AI → AI Execution Provider**.
