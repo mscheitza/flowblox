@@ -14,9 +14,10 @@ FlowBlox turns real-world data-processing problems into reusable automation proj
 
 ## Video overview
 
+<!-- TODO: Replace VIDEO_ID with the published FlowBlox overview video ID and add its thumbnail at docs/images/youtube-overview.png. -->
+
 [![Watch the FlowBlox overview](docs/images/youtube-overview.png)](https://www.youtube.com/watch?v=VIDEO_ID)
 
-> Replace the video URL above with your published YouTube overview URL.
 
 ## Why FlowBlox?
 
@@ -46,18 +47,21 @@ Compose reusable FlowBlocks on a project grid, connect operations, configure pro
 
 Attach test cases and expectation conditions to FlowBlocks. Supply predecessor values manually or select them automatically to validate extraction and transformation behavior.
 
+<!-- TODO: Add/verify the workflow testing screenshot at docs/images/workflow-testing.png. -->
 ![FlowBlox test cases and expectation conditions](docs/images/workflow-testing.png)
 
 ### Generate extraction logic from examples
 
 FlowBlox generators can infer configuration from test data. For example, Sequence Detection can derive structural patterns from multiple examples without a cloud AI call.
 
+<!-- TODO: Add/verify the Sequence Detection screenshot at docs/images/sequence-detection.png. -->
 ![Sequence Detection generator and test cases](docs/images/sequence-detection.png)
 
 ## How FlowBlox works
 
 The AI Assistant can translate a natural-language request into a **normal, editable FlowBlox project**. The local runtime executes that project using built-in or extension FlowBlocks and accesses resources available in the local environment. Auxiliary Projects provide reusable tools to the assistant. **Execution approval belongs to the AI Assistant**: executing scripts (such as PowerShell or Python) and Auxiliary Projects requires user confirmation.
 
+<!-- TODO: Add/verify the architecture diagram at docs/diagrams/flowblox-architecture.svg. -->
 ![FlowBlox AI-to-editable-project architecture](docs/diagrams/flowblox-architecture.svg)
 
 ### Example: find Word documents missing a required code
@@ -80,12 +84,11 @@ This approach also applies to structured website extraction, including internal 
 
 ### Install
 
-1. Download the Windows x64 MSI from the project's download page: **[FlowBlox website](https://flowblox.net/)**. Confirm that a current release is published before following this step.
+<!-- TODO: Confirm that a public Windows x64 MSI release is available and update this step with the verified download URL. -->
+1. Download the Windows x64 MSI from the project's download page: **[FlowBlox website](https://flowblox.net/)**.
 2. Install the MSI package. The installer includes required ONNX runtime packages.
 3. Start FlowBlox.
 4. Explore bundled sample projects through **Open example project**.
-
-> **Release URL check:** The previous README linked to `https://flowbloxweb.net/` and a **Download for Windows x64** button. Verify the canonical public download URL and availability before publishing this README.
 
 ### Create your first workflow
 
@@ -113,7 +116,7 @@ The integrated AI Assistant can:
 - Discuss a solution concept before creating the implementation.
 - Use bundled Auxiliary Projects as skills and create additional auxiliary flows from FlowBlocks.
 
-**Supported cloud model integrations described for the current application:** OpenAI, Anthropic, DeepSeek, and Kimi. The earlier README also lists Google Gemini; verify its current integration status before publication. Cloud model use is optional for manually built workflows and offline-capable features, but requires access to the chosen provider when enabled.
+**Supported cloud model integrations described for the current application:** OpenAI, Anthropic, DeepSeek, and Kimi. Cloud model use is optional for manually built workflows and offline-capable features, but requires access to the chosen provider when enabled.
 
 ### Local access and execution approval
 
@@ -215,7 +218,7 @@ FlowBlox projects can be executed through the desktop application, launched from
 
 For custom hosting and execution, integrate `FlowBlox.Core` runner components such as `FlowBloxProjectRunner`. See the repository source and scripts for the supported build and hosting approach.
 
-> Add exact CLI commands and service installation instructions once verified against the current release; commands are intentionally not invented here.
+<!-- TODO: Document verified CLI commands and Windows service installation/configuration steps for the current release. -->
 
 ## Example projects
 
@@ -232,8 +235,6 @@ Demonstrates a minimal configuration of the `SequenceDetection` FlowBlock using 
 ### Hockey Table Extraction to CSV
 
 Retrieves hockey team statistics from [scrapethissite.com](https://www.scrapethissite.com/), extracts team names, years, wins, and losses using XPath selectors, and exports the results to `ExtractedTable.csv`.
-
-Suggested project filename: `Hockey-Table-Extraction-to-CSV.fbprj` (previously `Table-Extraction-Example.fbprj`). Verify the filename in the repository before adding a direct download link.
 
 ![Example FlowBlox extraction project](docs/images/example-project.png)
 
@@ -253,12 +254,12 @@ This applies to ONNX Runtime-based and ONNX GenAI-based features. Hardware requi
 ## Platform support and building
 
 - **Current desktop platform:** Windows x64.
-- **UI portability:** Work toward WPF migration and planned Avalonia XPF usage was documented in the earlier README; macOS and Linux/Unix desktop support remain future targets unless a current build confirms otherwise.
+- **UI portability:** macOS and Linux/Unix desktop support are future targets.
 - **Runtime portability:** `FlowBlox.Core` is conceptually platform-independent and can be built or hosted separately in suitable non-Windows environments.
 - **Build scripts:** See [`scripts/`](scripts/).
 - **Runtime integration:** `FlowBloxProjectRunner` is an example of the core runner API for custom hosts, potentially including cloud services such as Azure.
 
-The project is being developed with **.NET 10**. Verify current repository target frameworks and published binaries before presenting this as a release requirement.
+The project is being developed with **.NET 10**.
 
 ## Contributing
 
@@ -275,7 +276,10 @@ You can help by:
 
 Start with [GitHub Issues](https://github.com/mscheitza/flowblox/issues) and the repository source. New contributors are welcome; small, focused improvements are valuable.
 
-FlowBlock APIs are adaptable, and the Extension API and Project Space API can evolve with community contributions. A dedicated `CONTRIBUTING.md`, contributor build guide, and beginner-friendly issues are recommended next steps.
+FlowBlock APIs are adaptable, and the Extension API and Project Space API can evolve with community contributions.
+
+<!-- TODO: Create CONTRIBUTING.md with contribution guidelines and a contributor build guide. -->
+<!-- TODO: Label beginner-friendly GitHub issues (e.g. "good first issue") to help new contributors get started. -->
 
 ## License
 
