@@ -23,6 +23,7 @@ using FlowBlox.UICore.Events;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Models;
 using FlowBlox.UICore.Utilities;
+using FlowBlox.UICore.Util;
 using FlowBlox.UICore.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -1287,21 +1288,11 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             if (firstFlowBlock == null)
                 return;
 
-            if (TryShowDependencyViolation(selectedFlowBlocks))
-            {
-                Refresh();
+            var report = FlowBloxDeletionHelper.Analyze(_registry, selectedFlowBlocks.Cast<object>());
+            if (!DeletionConfirmationService.Confirm(_dialogService, report))
                 return;
-            }
 
-            var deleteAction = new FlowBloxDeleteAction
-            {
-                FlowBlock = firstFlowBlock
-            };
-
-            deleteAction.AssociatedActions.AddRange(selectedFlowBlocks.Skip(1).Select(flowBlock => new FlowBloxDeleteAction
-            {
-                FlowBlock = flowBlock
-            }));
+            var deleteAction = FlowBloxDeletionHelper.CreateAction(_registry, report);
 
             deleteAction.Invoke();
             _componentProvider?.GetCurrentChangelist()?.AddChange(deleteAction);
@@ -1549,60 +1540,6 @@ namespace FlowBlox.UICore.ViewModels.ProjectPanel
             }
 
             return false;
-        }
-
-        private bool TryShowDependencyViolation(IReadOnlyCollection<BaseFlowBlock> selectedFlowBlocks)
-        {
-            if (selectedFlowBlocks == null || selectedFlowBlocks.Count == 0)
-                return false;
-
-            var selectedDefinedManagedObjects = selectedFlowBlocks
-                .SelectMany(x => x.DefinedManagedObjects)
-                .ToList();
-            var references = new List<string>();
-
-            foreach (var selectedFlowBlock in selectedFlowBlocks)
-            {
-                if (!selectedFlowBlock.IsDeletable(out var flowBlockDependentComponents))
-                {
-                    flowBlockDependentComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
-                    references.AddRange(flowBlockDependentComponents.Select(component =>
-                        string.Format(
-                            FlowBloxResourceUtil.GetLocalizedString("Message_DeleteDependencyViolation_Entry", typeof(Resources.ProjectPanel)),
-                            selectedFlowBlock,
-                            component)));
-                }
-
-                foreach (var managedObject in selectedFlowBlock.DefinedManagedObjects)
-                {
-                    if (managedObject.IsDeletable(out var managedObjectDependentComponents))
-                        continue;
-
-                    managedObjectDependentComponents.RemoveAll(x => selectedFlowBlocks.Contains(x));
-                    managedObjectDependentComponents.RemoveAll(x => selectedDefinedManagedObjects.Contains(x));
-                    references.AddRange(managedObjectDependentComponents.Select(component =>
-                        string.Format(
-                            FlowBloxResourceUtil.GetLocalizedString("Message_DeleteDependencyViolation_Entry", typeof(Resources.ProjectPanel)),
-                            managedObject,
-                            component)));
-                }
-            }
-
-            references = references
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .Distinct()
-                .ToList();
-
-            if (!references.Any())
-                return false;
-
-            ShowMessage(
-                string.Format(
-                    FlowBloxResourceUtil.GetLocalizedString("Message_DeleteDependencyViolation_Description", typeof(Resources.ProjectPanel)),
-                    string.Join(Environment.NewLine, references.Select(description => string.Concat(" - ", description)))),
-                FlowBloxResourceUtil.GetLocalizedString("Message_DeleteDependencyViolation_Title", typeof(Resources.ProjectPanel)),
-                FlowBloxMessageBoxTypes.Warning);
-            return true;
         }
 
         private void ShowMessage(string message, string title, FlowBloxMessageBoxTypes messageBoxType)

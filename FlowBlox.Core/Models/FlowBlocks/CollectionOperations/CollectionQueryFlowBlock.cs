@@ -29,11 +29,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.CollectionOperations
         [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public FieldElement OutputField { get; set; }
 
-        public bool IsDeletable(out List<IFlowBloxComponent> dependencies)
-        {
-            if (OutputField == null) { dependencies = []; return true; }
-            return OutputField.IsDeletable(out dependencies);
-        }
+        public override string ToString() => $"{InputField} → {OutputField}";
     }
 
     [FlowBloxUIGroup("CollectionQueryFlowBlock_Groups_Query", 0)]
@@ -116,7 +112,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.CollectionOperations
             var obsolete = OutputMappings.Where(x => x.InputField == null || !inputFields.Contains(x.InputField)).ToList();
             foreach (var mapping in obsolete)
             {
-                if (mapping.OutputField != null && !FlowBloxDeletionHelper.IsDeletable(mapping.OutputField, out _))
+                if (mapping.OutputField != null &&
+                    FlowBloxDeletionHelper.Analyze(registry, mapping.OutputField).Dependencies.Count > 0)
                     continue;
                 OutputMappings.Remove(mapping);
                 if (mapping.OutputField != null)

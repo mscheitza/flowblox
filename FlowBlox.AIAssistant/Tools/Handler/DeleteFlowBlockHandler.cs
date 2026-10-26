@@ -10,14 +10,11 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Deletes flow block by name.",
+            "Deletes a flow block and automatically handles dependent references.",
             new JObject
             {
                 ["name"] = "string",
-                ["usageHint"] = "Precondition: remove all blocking references first. For EnableFieldSelection string values, remove placeholders that reference fields from this flow block. " + 
-                    "Unlink direct FlowBlock/ManagedObject/FieldElement references. " + 
-                    "Remove obsolete reactive list entries (for example column mappings) that still reference this block/fields. " + 
-                    "If delete is blocked, inspect result.blockedBy."
+                ["usageHint"] = "result.deletionReport is present only when dependencies were handled because of this deletion; absence means there were none. reviewStatus describes whether an entry is informational, should be reviewed, or requires manual follow-up. Entries with automaticallyRemoved=false require manual correction."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -33,36 +30,18 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 return Task.FromResult(ToolHandlerUtilities.Fail($"FlowBlock '{name}' was not found."));
             }
 
-            if (!flowBlock.IsDeletable(out var dependencies))
-            {
-                var blockedBy = ToolHandlerUtilities.BuildBlockedBy(
-                    dependencies?.Where(x => !ReferenceEquals(x, flowBlock)));
+            var report = FlowBloxDeletionHelper.Analyze(registry, flowBlock);
+            var action = FlowBloxDeletionHelper.CreateAction(registry, report);
+            action.Invoke();
+            ToolHandlerUtilities.RegisterDeletionHistory(action);
 
-                return Task.FromResult(ToolHandlerUtilities.Fail(
-                    $"FlowBlock '{name}' cannot be deleted because blocking references still exist.",
-                    new JObject
-                    {
-                        ["deleted"] = false,
-                        ["name"] = name,
-                        ["blockedBy"] = blockedBy
-                    }));
-            }
-
-            registry.RemoveFlowBlock(flowBlock);
-
-            foreach (var other in registry.GetFlowBlocks())
-            {
-                if (other.ReferencedFlowBlocks.Contains(flowBlock))
-                {
-                    other.ReferencedFlowBlocks.Remove(flowBlock);
-                }
-            }
-
-            return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
+            var result = new JObject
             {
                 ["deleted"] = true,
                 ["name"] = name
-            }));
+            };
+            ToolHandlerUtilities.AddDeletionReportIfAny(result, report);
+            return Task.FromResult(ToolHandlerUtilities.Ok(result));
         }
     }
 }

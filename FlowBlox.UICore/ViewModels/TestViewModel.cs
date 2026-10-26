@@ -18,6 +18,7 @@ using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.TestView;
 using FlowBlox.UICore.Views;
+using FlowBlox.UICore.Util;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -357,40 +358,17 @@ namespace FlowBlox.UICore.ViewModels
             if (targets.Count == 0)
                 return;
 
-            foreach (var target in targets)
-            {
-                var testDefinition = target.TestDefinition;
-                if (testDefinition == null)
-                    continue;
-
-                if (!testDefinition.IsDeletable(out var dependencies))
-                {
-                    var dependencyText = string.Join(", ", dependencies
-                        .Select(x => x.Name)
-                        .Where(x => !string.IsNullOrWhiteSpace(x))
-                        .Distinct());
-
-                    _messageBoxService.ShowMessageBox(
-                        string.Format(Resources.TestView.Message_DeleteBlocked_Description, testDefinition.Name, dependencyText),
-                        Resources.TestView.Message_DeleteBlocked_Title,
-                        FlowBloxMessageBoxTypes.Warning);
-                    return;
-                }
-            }
-
-            var confirmResult = _messageBoxService.ShowMessageBox(
-                string.Format(Resources.TestView.Message_DeleteConfirm_Description, targets.Count),
-                Resources.TestView.Message_DeleteConfirm_Title,
-                FlowBloxMessageBoxTypes.Question);
-
-            if (confirmResult != FlowBloxMessageBoxDialogResult.Yes)
+            var definitions = targets.Select(x => x.TestDefinition).Where(x => x != null).Cast<object>().ToList();
+            var report = FlowBloxDeletionHelper.Analyze(_registry, definitions);
+            if (!DeletionConfirmationService.Confirm(_dialogService, report))
                 return;
 
             foreach (var target in targets)
-            {
                 DeleteProtocolFile(target);
-                _registry.Unregister(target.TestDefinition);
-            }
+
+            var action = FlowBloxDeletionHelper.CreateAction(_registry, report);
+            action.Invoke();
+            FlowBloxServiceLocator.Instance.GetService<FlowBlox.Core.Interfaces.IFlowBloxActionHistoryService>()?.RegisterAction(action);
         }
 
         private bool CanDeleteTestCases()

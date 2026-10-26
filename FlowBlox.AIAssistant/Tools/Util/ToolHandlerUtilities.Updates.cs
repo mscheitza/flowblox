@@ -5,6 +5,7 @@ using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Deletion;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using Newtonsoft.Json.Linq;
@@ -13,6 +14,8 @@ namespace FlowBlox.AIAssistant.Tools.Util
 {
     internal static partial class ToolHandlerUtilities
     {
+        private static readonly AsyncLocal<List<DeletionReport>?> CurrentDeletionReports = new();
+
         public static ToolResponse ApplyUpdates(JObject args, object target, FlowBloxRegistry registry, string kind, string name)
         {
             var updates = CollectUpdates(args);
@@ -22,6 +25,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
             }
 
             var applied = new JArray();
+            CurrentDeletionReports.Value = new List<DeletionReport>();
 
             foreach (var update in updates)
             {
@@ -50,7 +54,9 @@ namespace FlowBlox.AIAssistant.Tools.Util
                         ["name"] = name,
                         ["applied"] = applied
                     };
+                    AddCombinedDeletionReportIfAny(payload, CurrentDeletionReports.Value);
 
+                    CurrentDeletionReports.Value = null;
                     return Fail($"Update failed at path '{update.Path}': {ex.Message}", payload);
                 }
             }
@@ -60,14 +66,17 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 component.OnAfterSave();
             }
 
-            return Ok(new JObject
+            var result = new JObject
             {
                 ["updated"] = true,
                 ["kind"] = kind,
                 ["name"] = name,
                 ["applied"] = applied,
                 ["count"] = applied.Count
-            });
+            };
+            AddCombinedDeletionReportIfAny(result, CurrentDeletionReports.Value);
+            CurrentDeletionReports.Value = null;
+            return Ok(result);
         }
 
         private static List<UpdateOperation> CollectUpdates(JObject args)
@@ -499,13 +508,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
                     .Distinct(ReferenceEqualityComparer.Instance)
                     .ToList();
 
-                foreach (var element in elements)
-                {
-                    EnsureReactiveDeleteAllowed(element, path);
-                    FlowBloxDeletionHelper.DeleteInstance(GetRegistry(), element);
-                }
-
-                listValue.Clear();
+                ExecuteReactiveDeletion(elements, path);
                 return;
             }
 
@@ -519,12 +522,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
             var propertyValue = property.GetValue(current);
             if (propertyValue != null)
-            {
-                EnsureReactiveDeleteAllowed(propertyValue, path);
-                FlowBloxDeletionHelper.DeleteInstance(GetRegistry(), propertyValue);
-            }
-
-            property.SetValue(current, null);
+                ExecuteReactiveDeletion([propertyValue], path);
         }
 
         private static void DeleteIndexedValue(IList list, Type elementType, int index, string path)
@@ -542,23 +540,32 @@ namespace FlowBlox.AIAssistant.Tools.Util
             {
                 var item = list[index];
                 if (item != null)
-                {
-                    EnsureReactiveDeleteAllowed(item, path);
-                    FlowBloxDeletionHelper.DeleteInstance(GetRegistry(), item);
-                }
-
-                list.RemoveAt(index);
+                    ExecuteReactiveDeletion([item], path);
             }
         }
 
-        private static void EnsureReactiveDeleteAllowed(object instance, string path)
+        private static void ExecuteReactiveDeletion(IReadOnlyCollection<object> instances, string path)
         {
-            if (FlowBloxDeletionHelper.IsDeletable(instance, out var dependencies))
-                return;
+            var registry = GetRegistry();
+            var report = FlowBloxDeletionHelper.Analyze(registry, instances);
+            var action = FlowBloxDeletionHelper.CreateAction(registry, report);
+            action.Invoke();
+            RegisterDeletionHistory(action);
+            CurrentDeletionReports.Value?.Add(report);
+        }
 
-            var blockedBy = BuildBlockedBy(dependencies);
-            throw new InvalidOperationException(
-                $"Path '{path}' delete operation is blocked by existing references: {blockedBy.ToString(Newtonsoft.Json.Formatting.None)}");
+        private static JArray BuildCombinedDeletionReport(IEnumerable<DeletionReport>? reports)
+            => reports == null
+                ? new JArray()
+                : new JArray(reports.SelectMany(x => BuildDeletionReport(x)));
+
+        private static void AddCombinedDeletionReportIfAny(
+            JObject result,
+            IEnumerable<DeletionReport>? reports)
+        {
+            var deletionReport = BuildCombinedDeletionReport(reports);
+            if (deletionReport.Count > 0)
+                result["deletionReport"] = deletionReport;
         }
 
         private static void UnlinkIndexedValue(IList list, int index)
@@ -760,12 +767,12 @@ namespace FlowBlox.AIAssistant.Tools.Util
         private static string GetDirectDeleteToolHint(Type type)
         {
             if (typeof(BaseFlowBlock).IsAssignableFrom(type))
-                return "Delete the flow block via DeleteFlowBlock after dependencies are removed.";
+                return "Delete the flow block via DeleteFlowBlock; dependencies are analyzed and handled automatically.";
 
             if (typeof(IManagedObject).IsAssignableFrom(type))
-                return "Delete the managed object via DeleteManagedObject after dependencies are removed.";
+                return "Delete the managed object via DeleteManagedObject; dependencies are analyzed and handled automatically.";
 
-            return "Delete reference components via DeleteFlowBlock/DeleteManagedObject after dependencies are removed.";
+            return "Delete reference components via DeleteFlowBlock/DeleteManagedObject; dependencies are analyzed and handled automatically.";
         }
 
         private static object? ConvertToken(JToken token, Type targetType, FlowBloxRegistry registry)

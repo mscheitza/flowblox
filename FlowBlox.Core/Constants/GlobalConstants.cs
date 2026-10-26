@@ -14,7 +14,6 @@
 
         public const string DataGridViewColumnAssociationSuffix = "Association";
 
-        public const string IsDeletableMethodName = "IsDeletable";
         
         public const int GridSizeX = 2500;
 

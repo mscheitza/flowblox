@@ -14,5 +14,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         [FlowBloxTextBox(IsCodingMode = true)]
         public string Value { get; set; }
+
+        public override string ToString() => Value ?? string.Empty;
     }
 }

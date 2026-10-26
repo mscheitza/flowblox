@@ -24,5 +24,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.IO
         [Required()]
         [Display(Name = "TableColumnDefinition_ColumnName", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         public string ColumnName { get; set; }
+
+        public override string ToString() =>
+            !string.IsNullOrWhiteSpace(ColumnName) ? ColumnName : Field?.ToString() ?? string.Empty;
     }
 }

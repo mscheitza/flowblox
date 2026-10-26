@@ -474,37 +474,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
             return false;
         }
 
-        public override bool IsDeletable(out List<IFlowBloxComponent> dependencies)
-        {
-            dependencies = new List<IFlowBloxComponent>();
-
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-
-            foreach (var flowBlock in registry.GetFlowBlocks())
-            {
-                if (flowBlock.ReferencedFlowBlocks.Contains(registry.GetOriginalRef(this)))
-                    dependencies.AddIfNotExists(flowBlock);
-
-                if (flowBlock.GetAssociatedFlowBlocks().Contains(registry.GetOriginalRef(this)))
-                    dependencies.AddIfNotExists(flowBlock);
-            }
-
-            foreach (var testDefinition in registry.GetManagedObjects().OfType<FlowBloxTestDefinition>())
-            {
-                if (testDefinition.Entries.Any(x => x.FlowBlock == this || x.FlowBlock == registry.GetOriginalRef(this)))
-                    dependencies.AddIfNotExists(testDefinition);
-            }
-
-            EnsureDeletable(dependencies);
-            FlowBloxTestDefinitionDependencyFilter.FilterDependencies(dependencies);
-            return !dependencies.Any();
-        }
-
-        protected override bool EnsureDeletable(List<IFlowBloxComponent> dependencies)
-        {
-            return new FlowBloxTestDeletionEnsurer().EnsureFlowBlockDeletable(this, dependencies);
-        }
-
         protected virtual void OnAfterReferencedFlowBlocksChanged(
             IReadOnlyCollection<BaseFlowBlock> addedFlowBlocks = null,
             IReadOnlyCollection<BaseFlowBlock> removedFlowBlocks = null)

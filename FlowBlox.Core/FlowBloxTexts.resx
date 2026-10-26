@@ -4540,6 +4540,23 @@ Set AssociatedContextualObject of the Index flow block to the flow block immedia
   <data name="OpenXmlTextSectionMode_Include" xml:space="preserve"><value>Include without tags</value></data>
   <data name="OpenXmlTextSectionMode_Exclude" xml:space="preserve"><value>Exclude</value></data>
   <data name="OpenXml2TextFlowBlock_Notification_FailedToExtractText" xml:space="preserve"><value>Text could not be extracted from the OpenXML Word document.</value></data>
+  <data name="FlowBloxUIAttribute_Validation_FieldReferenceMissing" xml:space="preserve"><value>The referenced field no longer exists. Remove the reference or replace it with a valid field expression.</value></data>
+  <data name="DeletionConfirmation_Title" xml:space="preserve"><value>Confirm deletion</value></data>
+  <data name="DeletionConfirmation_Header" xml:space="preserve"><value>Impact on existing references</value></data>
+  <data name="DeletionConfirmation_Description" xml:space="preserve"><value>This deletion adjusts the references listed below as described. Entries marked accordingly should be reviewed or completed manually afterwards.</value></data>
+  <data name="DeletionConfirmation_Object" xml:space="preserve"><value>Referencing object</value></data>
+  <data name="DeletionConfirmation_Property" xml:space="preserve"><value>Property</value></data>
+  <data name="DeletionConfirmation_Impact" xml:space="preserve"><value>Impact</value></data>
+  <data name="DeletionConfirmation_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="DeletionConfirmation_Back" xml:space="preserve"><value>Back</value></data>
+  <data name="DeletionConfirmation_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="DeletionConfirmation_Impact_DirectReferenceRemoved" xml:space="preserve"><value>Reference will be removed</value></data>
+  <data name="DeletionConfirmation_Impact_CollectionEntryRemoved" xml:space="preserve"><value>Entry will be removed completely from the collection</value></data>
+  <data name="DeletionConfirmation_Impact_FieldReferenceInvalidated" xml:space="preserve"><value>Field reference will become invalid</value></data>
+  <data name="DeletionConfirmation_Status_Information" xml:space="preserve"><value>Information</value></data>
+  <data name="DeletionConfirmation_Status_ReviewRecommended" xml:space="preserve"><value>Review recommended</value></data>
+  <data name="DeletionConfirmation_Status_ManualActionRequired" xml:space="preserve"><value>Manual follow-up required</value></data>
+  <data name="InputBehaviorAssignment_DisplayName" xml:space="preserve"><value>Input behavior assignment</value></data>
 </root>
 
 

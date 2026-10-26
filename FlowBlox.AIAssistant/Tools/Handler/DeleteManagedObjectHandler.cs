@@ -1,5 +1,4 @@
 using FlowBlox.AIAssistant.Models;
-using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
 using Newtonsoft.Json.Linq;
 
@@ -12,11 +11,11 @@ namespace FlowBlox.AIAssistant.Tools.Handler
 
         public override ToolDefinition Definition => ToolHandlerUtilities.CreateDefinition(
             Name,
-            "Deletes managed object.",
+            "Deletes a managed object and automatically handles dependent references.",
             new JObject
             {
                 ["name"] = "string",
-                ["usageHint"] = "Precondition: remove all blocking references first. For EnableFieldSelection string values, remove placeholders that reference this managed object or its fields. Unlink direct FlowBlock/ManagedObject/FieldElement references. Remove obsolete reactive list entries that still depend on it. If delete is blocked, inspect result.blockedBy."
+                ["usageHint"] = "result.deletionReport is present only when dependencies were handled because of this deletion; absence means there were none. reviewStatus describes whether an entry is informational, should be reviewed, or requires manual follow-up. Entries with automaticallyRemoved=false require manual correction."
             });
 
         public override Task<ToolResponse> HandleAsync(JObject args, CancellationToken ct)
@@ -33,28 +32,18 @@ namespace FlowBlox.AIAssistant.Tools.Handler
                 return Task.FromResult(ToolHandlerUtilities.Fail($"Managed object '{name}' was not found."));
             }
 
-            if (!managedObject.IsDeletable(out var dependencies))
-            {
-                var blockedBy = ToolHandlerUtilities.BuildBlockedBy(
-                    dependencies?.Where(x => !ReferenceEquals(x, managedObject)));
+            var report = FlowBloxDeletionHelper.Analyze(registry, managedObject);
+            var action = FlowBloxDeletionHelper.CreateAction(registry, report);
+            action.Invoke();
+            ToolHandlerUtilities.RegisterDeletionHistory(action);
 
-                return Task.FromResult(ToolHandlerUtilities.Fail(
-                    $"Managed object '{name}' cannot be deleted because blocking references still exist.",
-                    new JObject
-                    {
-                        ["deleted"] = false,
-                        ["name"] = name,
-                        ["blockedBy"] = blockedBy
-                    }));
-            }
-
-            registry.RemoveManagedbject((IManagedObject)managedObject);
-
-            return Task.FromResult(ToolHandlerUtilities.Ok(new JObject
+            var result = new JObject
             {
                 ["deleted"] = true,
                 ["name"] = name
-            }));
+            };
+            ToolHandlerUtilities.AddDeletionReportIfAny(result, report);
+            return Task.FromResult(ToolHandlerUtilities.Ok(result));
         }
     }
 }

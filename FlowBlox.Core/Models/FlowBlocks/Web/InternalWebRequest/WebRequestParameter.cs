@@ -13,5 +13,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web.InternalWebRequest
         [Display(Name = "WebRequestParameter_Value", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(Factory = UIFactory.Default, UiOptions = UIOptions.EnableFieldSelection)]
         public string Value { get; set; }
+
+        public override string ToString() => Key ?? string.Empty;
     }
 }

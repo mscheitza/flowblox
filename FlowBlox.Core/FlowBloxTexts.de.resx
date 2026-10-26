@@ -4542,6 +4542,23 @@ Setzen Sie AssociatedContextualObject des Index-Flow-Blocks auf den Flow-Block u
   <data name="OpenXmlTextSectionMode_Include" xml:space="preserve"><value>Ohne Tags einblenden</value></data>
   <data name="OpenXmlTextSectionMode_Exclude" xml:space="preserve"><value>Ausblenden</value></data>
   <data name="OpenXml2TextFlowBlock_Notification_FailedToExtractText" xml:space="preserve"><value>Der Text konnte nicht aus dem OpenXML-Word-Dokument extrahiert werden.</value></data>
+  <data name="FlowBloxUIAttribute_Validation_FieldReferenceMissing" xml:space="preserve"><value>Das referenzierte Feld existiert nicht mehr. Bitte entfernen Sie die Referenz oder ersetzen Sie diese durch einen gültigen Feldausdruck.</value></data>
+  <data name="DeletionConfirmation_Title" xml:space="preserve"><value>Löschen bestätigen</value></data>
+  <data name="DeletionConfirmation_Header" xml:space="preserve"><value>Auswirkungen auf bestehende Referenzen</value></data>
+  <data name="DeletionConfirmation_Description" xml:space="preserve"><value>Durch diese Löschung werden die nachfolgend aufgeführten Referenzen entsprechend der beschriebenen Maßnahme angepasst. Entsprechend gekennzeichnete Einträge sollten anschließend überprüft oder manuell nachbearbeitet werden.</value></data>
+  <data name="DeletionConfirmation_Object" xml:space="preserve"><value>Referenzierendes Objekt</value></data>
+  <data name="DeletionConfirmation_Property" xml:space="preserve"><value>Property</value></data>
+  <data name="DeletionConfirmation_Impact" xml:space="preserve"><value>Auswirkung</value></data>
+  <data name="DeletionConfirmation_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="DeletionConfirmation_Back" xml:space="preserve"><value>Zurück</value></data>
+  <data name="DeletionConfirmation_Delete" xml:space="preserve"><value>Löschen</value></data>
+  <data name="DeletionConfirmation_Impact_DirectReferenceRemoved" xml:space="preserve"><value>Referenz wird entfernt</value></data>
+  <data name="DeletionConfirmation_Impact_CollectionEntryRemoved" xml:space="preserve"><value>Eintrag wird vollständig aus der Collection entfernt</value></data>
+  <data name="DeletionConfirmation_Impact_FieldReferenceInvalidated" xml:space="preserve"><value>Feldreferenz wird ungültig</value></data>
+  <data name="DeletionConfirmation_Status_Information" xml:space="preserve"><value>Information</value></data>
+  <data name="DeletionConfirmation_Status_ReviewRecommended" xml:space="preserve"><value>Überprüfung empfohlen</value></data>
+  <data name="DeletionConfirmation_Status_ManualActionRequired" xml:space="preserve"><value>Manuelle Nacharbeit erforderlich</value></data>
+  <data name="InputBehaviorAssignment_DisplayName" xml:space="preserve"><value>Eingabeverhaltenszuweisung</value></data>
 </root>
 
 

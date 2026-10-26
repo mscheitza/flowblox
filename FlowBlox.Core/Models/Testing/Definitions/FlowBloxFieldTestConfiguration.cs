@@ -25,6 +25,8 @@ namespace FlowBlox.Core.Models.Testing
             this.ExpectationConditions = new ObservableCollection<ExpectationCondition>();
         }
 
+        public override string ToString() => FieldElement?.ToString() ?? string.Empty;
+
         [JsonIgnore]
         public bool UIRequiredForExecution
         {

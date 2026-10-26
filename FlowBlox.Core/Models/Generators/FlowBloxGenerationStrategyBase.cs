@@ -62,5 +62,8 @@ namespace FlowBlox.Core.Models.Generators
         public abstract object Execute(BaseRuntime runtime, Dictionary<FlowBloxTestDefinition, FlowBloxTestResult> testResults);
 
         public abstract void Assign(object value);
+
+        public override string ToString() =>
+            string.IsNullOrWhiteSpace(Name) ? base.ToString() : Name;
     }
 }

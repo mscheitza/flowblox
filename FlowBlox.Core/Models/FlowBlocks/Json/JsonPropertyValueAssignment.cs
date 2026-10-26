@@ -24,5 +24,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
 
         [Display(Name = "JsonPropertyValueAssignment_IsArray", Description = "JsonPropertyValueAssignment_IsArray_Tooltip", ResourceType = typeof(FlowBloxTexts))]
         public bool IsArray { get; set; }
+
+        public override string ToString() => PropertyName ?? string.Empty;
     }
 }

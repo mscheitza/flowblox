@@ -73,16 +73,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.Json
         [FlowBloxUI(Factory = UIFactory.Association, Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public FieldElement Field { get; set; }
 
-        public bool IsDeletable(out List<IFlowBloxComponent> dependencies)
-        {
-            if (Field == null)
-            {
-                dependencies = null;
-                return true;
-            }
-
-            return Field.IsDeletable(out dependencies);
-        }
+        public override string ToString() =>
+            !string.IsNullOrWhiteSpace(JPath) ? JPath : RowPath ?? string.Empty;
     }
 
     [FlowBloxUIGroup("JPathMultiSelectorFlowBlock_Groups_Mappings", 0)]

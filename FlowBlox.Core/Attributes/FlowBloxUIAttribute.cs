@@ -42,7 +42,7 @@
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class FlowBloxUIAttribute : Attribute
+    public class FlowBloxUIAttribute : System.ComponentModel.DataAnnotations.ValidationAttribute
     {
         public FlowBloxUIAttribute()
         {
@@ -110,5 +110,40 @@
         /// If set, only these concrete types may be created for abstract/interface property types.
         /// </summary>
         public Type[] CreatableTypes { get; set; }
+
+        protected override System.ComponentModel.DataAnnotations.ValidationResult IsValid(
+            object value,
+            System.ComponentModel.DataAnnotations.ValidationContext validationContext)
+        {
+            if (!UiOptions.HasFlag(UIOptions.EnableFieldSelection) || value is not string text)
+                return System.ComponentModel.DataAnnotations.ValidationResult.Success;
+
+            var registry = Provider.FlowBloxRegistryProvider.GetRegistry();
+            if (registry == null)
+                return System.ComponentModel.DataAnnotations.ValidationResult.Success;
+
+            foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(
+                         text,
+                         Models.FlowBlocks.Base.BaseFlowBlock.Regex_FullyQualifiedFieldNames))
+            {
+                var sourceId = Models.Components.FieldElement.GetSourceId(match.Value);
+                if (string.Equals(sourceId, "Project", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(sourceId, "Options", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (!registry.HasField(match.Value))
+                {
+                    return new System.ComponentModel.DataAnnotations.ValidationResult(
+                        Util.Resources.FlowBloxResourceUtil.GetLocalizedString(
+                            "FlowBloxUIAttribute_Validation_FieldReferenceMissing",
+                            typeof(FlowBloxTexts)),
+                        [validationContext.MemberName]);
+                }
+            }
+
+            return System.ComponentModel.DataAnnotations.ValidationResult.Success;
+        }
     }
 }

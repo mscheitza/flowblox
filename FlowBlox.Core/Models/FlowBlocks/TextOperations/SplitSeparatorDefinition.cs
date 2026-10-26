@@ -28,6 +28,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
             return Separator;
         }
 
+        public override string ToString() =>
+            SpecialSeparator?.ToString() ?? Separator ?? string.Empty;
+
         public static ValidationResult ValidateSeparator(object value, ValidationContext validationContext)
         {
             var separatorDefinition = (SplitSeparatorDefinition)validationContext.ObjectInstance;

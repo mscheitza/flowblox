@@ -99,6 +99,12 @@ namespace FlowBlox.Core.Util.DeepCopier
             _recopies.Clear();
         }
 
+        public T ResolveCopy(T source) {
+            return source != null && _copies.TryGetValue(source, out var copy)
+                ? copy
+                : source;
+        }
+
         public T Copy(T source)
         {
             if (source == null)

@@ -19,5 +19,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow.ExecuteProject
         [Display(Name = "ExecuteProjectParameterMappingEntry_TargetValue", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string TargetValue { get; set; }
+
+        public override string ToString() => $"{TargetType}: {TargetKey}";
     }
 }

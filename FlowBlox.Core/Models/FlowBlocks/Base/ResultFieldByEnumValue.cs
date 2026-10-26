@@ -23,17 +23,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.Base
         [FlowBloxUI(Factory = UIFactory.ComboBox)]
         public TEnum? EnumValue { get; set; }
 
-        public bool IsDeletable(out List<IFlowBloxComponent> dependencies)
-        {
-            if (ResultField == null)
-            {
-                dependencies = null;
-                return true;
-            }
-
-            return ResultField.IsDeletable(out dependencies);
-        }
-
         public override string ToString()
         {
             var notSetText = FlowBloxResourceUtil.GetLocalizedString("ResultFieldByEnumValue_NotSet", typeof(FlowBloxTexts));

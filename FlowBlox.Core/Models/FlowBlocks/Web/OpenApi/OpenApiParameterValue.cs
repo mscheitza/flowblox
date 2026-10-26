@@ -25,5 +25,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Web.OpenApi
         [Display(Name = "OpenApiParameterValue_Value", ResourceType = typeof(FlowBloxTexts), Order = 4)]
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Value { get; set; }
+
+        public override string ToString() => Name ?? string.Empty;
     }
 }

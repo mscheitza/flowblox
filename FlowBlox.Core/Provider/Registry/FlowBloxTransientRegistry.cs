@@ -1,5 +1,6 @@
 ﻿using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.FlowBlocks.Base;
 
 namespace FlowBlox.Core.Provider.Registry
 {
@@ -8,12 +9,41 @@ namespace FlowBlox.Core.Provider.Registry
         private FlowBloxRegistry _parentRegistry;
         private HashSet<IManagedObject> _transientManagedObjects;
         private HashSet<IManagedObject> _unregisteredManagedObjects;
+        private HashSet<BaseFlowBlock> _stagedDeletedFlowBlocks;
+        private HashSet<IManagedObject> _stagedDeletedManagedObjects;
+        private HashSet<BaseFlowBlock> _unregisteredFlowBlocks;
+
+        public override bool SupportsDeletionStaging => true;
 
         public FlowBloxTransientRegistry(FlowBloxRegistry parentRegistry) : base(parentRegistry)
         {
             _parentRegistry = parentRegistry;
             _transientManagedObjects = new HashSet<IManagedObject>();
             _unregisteredManagedObjects = new HashSet<IManagedObject>();
+            _stagedDeletedFlowBlocks = new HashSet<BaseFlowBlock>();
+            _stagedDeletedManagedObjects = new HashSet<IManagedObject>();
+            _unregisteredFlowBlocks = new HashSet<BaseFlowBlock>();
+        }
+
+        public override void StageDeletion(object target)
+        {
+            if (target is BaseFlowBlock flowBlock)
+                _stagedDeletedFlowBlocks.Add(Reload(flowBlock));
+            if (target is IManagedObject managedObject)
+                _stagedDeletedManagedObjects.Add(Reload(managedObject));
+        }
+
+        public override IEnumerable<BaseFlowBlock> GetFlowBlocks()
+        {
+            return base.GetFlowBlocks()
+                .Except(_stagedDeletedFlowBlocks)
+                .Except(_unregisteredFlowBlocks);
+        }
+
+        public override void RemoveFlowBlock(BaseFlowBlock flowBlock)
+        {
+            _stagedDeletedFlowBlocks.Remove(flowBlock);
+            _unregisteredFlowBlocks.Add(flowBlock);
         }
 
         public override void RegisterManagedObject(IManagedObject managedObject)
@@ -24,6 +54,7 @@ namespace FlowBlox.Core.Provider.Registry
         public override void RemoveManagedbject(IManagedObject managedObject)
         {
             _transientManagedObjects.Remove(managedObject);
+            _stagedDeletedManagedObjects.Remove(managedObject);
             _unregisteredManagedObjects.Add(managedObject);
         }
 
@@ -31,14 +62,13 @@ namespace FlowBlox.Core.Provider.Registry
         {
             return base.GetManagedObjects()
                 .Concat(_transientManagedObjects)
+                .Except(_stagedDeletedManagedObjects)
                 .Except(_unregisteredManagedObjects);
         }
 
         public override IEnumerable<T> GetManagedObjects<T>()
         {
-            return base.GetManagedObjects<T>()
-                .Concat(_transientManagedObjects.OfType<T>())
-                .Except(_unregisteredManagedObjects.OfType<T>());
+            return GetManagedObjects().OfType<T>();
         }
 
         public override void ReplaceRef(IManagedObject from, IManagedObject to)
@@ -71,9 +101,16 @@ namespace FlowBlox.Core.Provider.Registry
             {
                 _parentRegistry.RemoveManagedbject((ManagedObject)GetOriginalRef(obj));
             }
+            foreach (var flowBlock in _unregisteredFlowBlocks)
+            {
+                _parentRegistry.RemoveFlowBlock((BaseFlowBlock)GetOriginalRef(flowBlock));
+            }
 
             _transientManagedObjects.Clear();
             _unregisteredManagedObjects.Clear();
+            _unregisteredFlowBlocks.Clear();
+            _stagedDeletedManagedObjects.Clear();
+            _stagedDeletedFlowBlocks.Clear();
         }
     }
 }

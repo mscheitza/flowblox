@@ -1,6 +1,7 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base;
+using FlowBlox.Core.Models.Deletion;
 using FlowBlox.Core.Util.FlowBlocks;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,7 +11,7 @@ namespace FlowBlox.Core.Models.Testing
 {
     [Display(Name = "FlowBloxTestDefinition_DisplayName", Description = "FlowBloxTestDefinition_Description", ResourceType = typeof(FlowBloxTexts))]
     [PluralDisplayName("FlowBloxTestDefinition_DisplayName_Plural", typeof(FlowBloxTexts))]
-    public class FlowBloxTestDefinition : ManagedObject
+    public class FlowBloxTestDefinition : ManagedObject, IDeletionMeasureProvider
     {
         private ObservableCollection<FlowBlockTestDataset> _entries;
 
@@ -123,5 +124,74 @@ namespace FlowBlox.Core.Models.Testing
 
         public override List<string> GetDisplayableProperties()
             => [nameof(Name)];
+
+        public void ContributeDeletionMeasures(IList<DeletionDependency> dependencies)
+        {
+            foreach (var dataset in Entries.ToList())
+            {
+                var datasetObjects = dataset.GetNestedReactiveObjects()
+                    .Cast<object>()
+                    .Prepend(dataset)
+                    .ToHashSet(ReferenceEqualityComparer.Instance);
+                var removesDataset = dependencies.Any(x =>
+                    ReferenceEquals(x.ReferencingObject, dataset) &&
+                    x.Property.Name == nameof(FlowBlockTestDataset.FlowBlock) &&
+                    x.Impact == DeletionImpact.DirectReferenceRemoved);
+
+                if (removesDataset)
+                {
+                    RemoveDependenciesFor(dependencies, datasetObjects);
+                    dependencies.Add(new DeletionDependency
+                    {
+                        ReferencingObject = this,
+                        Property = typeof(FlowBloxTestDefinition).GetProperty(nameof(Entries))!,
+                        ReferencedObject = dataset,
+                        Impact = DeletionImpact.CollectionEntryRemoved,
+                        ReviewStatus = DeletionReviewStatus.Information,
+                        EditTarget = this,
+                        CollectionIndex = Entries.IndexOf(dataset)
+                    });
+                    continue;
+                }
+
+                foreach (var configuration in dataset.FlowBloxTestConfigurations.ToList())
+                {
+                    if (!dependencies.Any(x =>
+                            ReferenceEquals(x.ReferencingObject, configuration) &&
+                            x.Property.Name == nameof(FlowBloxFieldTestConfiguration.FieldElement) &&
+                            x.Impact == DeletionImpact.DirectReferenceRemoved))
+                    {
+                        continue;
+                    }
+
+                    var configurationObjects = configuration.GetNestedReactiveObjects()
+                        .Cast<object>()
+                        .Prepend(configuration)
+                        .ToHashSet(ReferenceEqualityComparer.Instance);
+                    RemoveDependenciesFor(dependencies, configurationObjects);
+                    dependencies.Add(new DeletionDependency
+                    {
+                        ReferencingObject = dataset,
+                        Property = typeof(FlowBlockTestDataset).GetProperty(nameof(FlowBlockTestDataset.FlowBloxTestConfigurations))!,
+                        ReferencedObject = configuration,
+                        Impact = DeletionImpact.CollectionEntryRemoved,
+                        ReviewStatus = DeletionReviewStatus.Information,
+                        EditTarget = this,
+                        CollectionIndex = dataset.FlowBloxTestConfigurations.IndexOf(configuration)
+                    });
+                }
+            }
+        }
+
+        private static void RemoveDependenciesFor(
+            IList<DeletionDependency> dependencies,
+            IReadOnlySet<object> owners)
+        {
+            for (var i = dependencies.Count - 1; i >= 0; i--)
+            {
+                if (owners.Contains(dependencies[i].ReferencingObject))
+                    dependencies.RemoveAt(i);
+            }
+        }
     }
 }

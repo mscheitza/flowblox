@@ -106,6 +106,12 @@
         <Setter Property="Foreground" Value="#3A6EA5"/>
     </Style>
 
+    <Style x:Key="FlowBlox.WindowActionIcon.Delete"
+           TargetType="{x:Type iconPacks:PackIconMaterial}"
+           BasedOn="{StaticResource FlowBlox.WindowActionIconBase}">
+        <Setter Property="Foreground" Value="#B42318"/>
+    </Style>
+
     <Style x:Key="FlowBlox.WindowActionButton"
            TargetType="{x:Type Button}"
            BasedOn="{StaticResource MahApps.Styles.Button}">
@@ -156,6 +162,22 @@
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial Kind="ContentSave"
                                                         Style="{StaticResource FlowBlox.WindowActionIcon.Save}"/>
+                        <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FlowBlox.WindowActionButton.Delete"
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource FlowBlox.WindowActionButton}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial Kind="DeleteOutline"
+                                                        Style="{StaticResource FlowBlox.WindowActionIcon.Delete}"/>
                         <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </DataTemplate>

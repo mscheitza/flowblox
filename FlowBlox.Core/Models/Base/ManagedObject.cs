@@ -11,27 +11,6 @@ namespace FlowBlox.Core.Models.Base
     [PluralDisplayName("TypeNames_ManagedObject_Plural", typeof(FlowBloxTexts))]
     public abstract class ManagedObject : FlowBloxComponent, IManagedObject
     {
-        public override bool IsDeletable(out List<IFlowBloxComponent> dependencies)
-        {
-            base.IsDeletable(out dependencies);
-
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-
-            foreach (var flowBlock in registry.GetFlowBlocks())
-            {
-                if (flowBlock.GetAssociatedManagedObjects().Contains(registry.GetOriginalRef(this)))
-                    dependencies.AddIfNotExists(flowBlock);
-            }
-
-            foreach (var managedObject in registry.GetManagedObjects())
-            {
-                if (managedObject.GetAssociatedManagedObjects().Contains(registry.GetOriginalRef(this)))
-                    dependencies.AddIfNotExists(managedObject);
-            }
-
-            return !dependencies.Any();
-        }
-
         public override string ToString() => $"{FlowBloxComponentHelper.GetDisplayName(this)} \"{this.Name}\"";
     }
 }

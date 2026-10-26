@@ -69,7 +69,7 @@ namespace FlowBlox.AIAssistant.Services
                     EditAndDeleteKey,
                     "Explaining Edit and Delete",
                     "FlowBlox.AIAssistant.Prompts.ExplainingEditAndDelete.txt",
-                    "How to update, link/unlink, and delete safely (including dependency order).",
+                    "How to update, link/unlink, and delete safely with automatic dependency handling.",
                     true),
                 [NamingConventionsKey] = new PromptEntryDefinition(
                     NamingConventionsKey,

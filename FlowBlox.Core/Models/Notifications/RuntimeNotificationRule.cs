@@ -13,5 +13,7 @@ namespace FlowBlox.Core.Models.Notifications
 
         [Display(Name = "RuntimeNotificationRule_Enabled", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         public bool Enabled { get; set; }
+
+        public override string ToString() => Type.ToString();
     }
 }

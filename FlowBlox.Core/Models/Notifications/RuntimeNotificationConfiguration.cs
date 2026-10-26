@@ -71,6 +71,8 @@ namespace FlowBlox.Core.Models.Notifications
         [Display(Name = "RuntimeNotificationConfiguration_BccAddresses", Description = "RuntimeNotificationConfiguration_BccAddresses_Tooltip", GroupName = "RuntimeNotificationConfiguration_Groups_Recipients", ResourceType = typeof(FlowBloxTexts), Order = 3)]
         public string BccAddresses { get; set; } = string.Empty;
 
+        public override string ToString() => Host;
+
         public bool IsEnabled(RuntimeNotificationType type) =>
             Notifications?.Any(x => x != null && x.Type == type && x.Enabled) == true;
 

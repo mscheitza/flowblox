@@ -7,6 +7,8 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
+using FlowBlox.Core.Actions;
+using FlowBlox.UICore.Util;
 using System.Reflection;
 
 namespace FlowBlox.UICore.Factory.Base
@@ -18,6 +20,8 @@ namespace FlowBlox.UICore.Factory.Base
         protected readonly FlowBloxUIAttribute _uiAttribute;
         protected readonly FlowBloxRegistry _registry;
         protected readonly bool _readOnly;
+        private FlowBloxBaseAction _pendingDeletionAction;
+        private object _pendingDeletionTarget;
 
         protected PropertyViewControlFactoryBase(PropertyInfo property, object target, bool readOnly)
         {
@@ -134,40 +138,40 @@ namespace FlowBlox.UICore.Factory.Base
 
         protected virtual void DeleteInstance(object instance)
         {
-            FlowBloxDeletionHelper.DeleteInstance(_registry, instance);
-        }
-
-        public async Task<bool> IsDeletableAsync(object instance, TOwner owner, object excludeTarget = null)
-        {
-            var isDeletable = FlowBloxDeletionHelper.IsDeletable(instance, out var dependencies);
-            if (isDeletable || dependencies == null)
-                return true;
-
-            var excludedTargets = new HashSet<object>(ReferenceEqualityComparer.Instance)
+            if (ReferenceEquals(instance, _pendingDeletionTarget) && _pendingDeletionAction != null)
             {
-                instance
-            };
-
-            if (_target != null)
-                excludedTargets.Add(_target);
-
-            if (excludeTarget != null)
-                excludedTargets.Add(excludeTarget);
-
-            var allReferences = new List<string>();
-            foreach (var dependency in dependencies.Where(x => !excludedTargets.Contains(x)))
-            {
-                allReferences.Add(string.Format(
-                    FlowBloxResourceUtil.GetLocalizedString("DependencyViolation_Message_Entry", typeof(PropertyViewControlFactoryBaseResources)),
-                    instance,
-                    dependency));
+                if (_registry.SupportsDeletionStaging &&
+                    FlowBloxRegistryProvider.IsCurrentTransaction(_registry))
+                {
+                    FlowBloxPendingActionStore.Add(_registry, _pendingDeletionAction);
+                }
+                else
+                {
+                    _pendingDeletionAction.Invoke();
+                }
+                _pendingDeletionAction = null;
+                _pendingDeletionTarget = null;
+                return;
             }
 
-            if (!allReferences.Any())
-                return true;
+            FlowBloxDeletionHelper.Delete(_registry, instance);
+        }
 
-            await ShowDependencyViolationDialogAsync(owner, allReferences, dependencies);
-            return false;
+        public async Task<bool> ConfirmDeletionAsync(object instance, TOwner owner, object excludeTarget = null)
+        {
+            var excludedDependencyContexts = new[] { _target, excludeTarget }
+                .Where(x => x != null);
+            var report = FlowBloxDeletionHelper.Analyze(
+                _registry,
+                new[] { instance },
+                excludedDependencyContexts);
+            if (owner is not System.Windows.Window window ||
+                !DeletionConfirmationService.Confirm(window, report))
+                return false;
+
+            _pendingDeletionTarget = instance;
+            _pendingDeletionAction = FlowBloxDeletionHelper.CreateAction(_registry, report);
+            return true;
         }
 
         public MethodInfo GetSelectionFilterMethod(object target, string methodName, Type listType = null)

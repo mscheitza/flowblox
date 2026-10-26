@@ -90,37 +90,6 @@ namespace FlowBlox.Core.Models.Components
             }
         }
 
-        public override bool IsDeletable(out List<IFlowBloxComponent> dependencies)
-        {
-            base.IsDeletable(out dependencies);
-
-            var registry = FlowBloxRegistryProvider.GetRegistry();
-
-            foreach (var flowBlock in registry.GetFlowBlocks())
-            {
-                if (flowBlock.GetAssociatedFields().Contains(registry.GetOriginalRef(this)))
-                    dependencies.AddIfNotExists(flowBlock);
-            }
-
-            foreach (var managedObject in registry.GetManagedObjects())
-            {
-                if (managedObject.GetAssociatedFields().Contains(this) ||
-                    managedObject.GetAssociatedFields().Contains(registry.GetOriginalRef(this)))
-                {
-                    dependencies.AddIfNotExists(managedObject);
-                }
-            }
-
-            EnsureDeletable(dependencies);
-            FlowBloxTestDefinitionDependencyFilter.FilterDependencies(dependencies);
-            return !dependencies.Any();
-        }
-
-        protected override bool EnsureDeletable(List<IFlowBloxComponent> dependencies)
-        {
-            return new FlowBloxTestDeletionEnsurer().EnsureFieldElementDeletable(this, dependencies);
-        }
-
         private static string GetDefaultFieldName(
             BaseResultFlowBlock source,
             FieldElement field = null,

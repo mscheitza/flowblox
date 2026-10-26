@@ -27,6 +27,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow
         [Required]
         [Display(Name = "ProjectOutputMappingEntry_OutputPropertyName", ResourceType = typeof(FlowBloxTexts), Order = 0)]
         public string OutputPropertyName { get; set; }
+
+        public override string ToString() =>
+            !string.IsNullOrWhiteSpace(OutputPropertyName) ? OutputPropertyName : Field?.ToString() ?? string.Empty;
     }
 
     [FlowBloxUIGroup("ProjectOutputFlowBlock_Groups_Mapping", 0)]

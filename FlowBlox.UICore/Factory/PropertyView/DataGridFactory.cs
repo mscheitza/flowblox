@@ -359,7 +359,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
             {
                 foreach (var item in dataGrid.SelectedItems.Cast<object>().ToList())
                 {
-                    if (await IsDeletableAsync(item, _window))
+                    if (await ConfirmDeletionAsync(item, _window))
                     {
                         DeleteInstance(item);
                         list.Remove(item);

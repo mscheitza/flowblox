@@ -25,6 +25,16 @@ namespace FlowBlox.Core.Actions
             RepetitionObject = _repetitionDeepCopier.Copy(Target);
         }
 
+        public void CaptureRepetitionState(Action<object, DynamicDeepCopier> change)
+        {
+            if (change == null)
+                throw new ArgumentNullException(nameof(change));
+
+            _repetitionDeepCopier = new DynamicDeepCopier(FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(Target));
+            RepetitionObject = _repetitionDeepCopier.Copy(Target);
+            change(RepetitionObject, _repetitionDeepCopier);
+        }
+
         public override void Undo()
         {
             _restoreDeepCopier.PropertyActions = FlowBloxDeepCopyStrategy.Instance.GetDeepCopyActions(RestoreObject);

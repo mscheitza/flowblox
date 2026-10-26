@@ -20,8 +20,6 @@ namespace FlowBlox.Core.Interfaces
 
         List<string> GetDisplayableProperties();
 
-        bool IsDeletable(out List<IFlowBloxComponent> dependencies);
-
         void OnAfterCreate();
 
         void OnAfterLoad();

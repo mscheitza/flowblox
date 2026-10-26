@@ -15,6 +15,12 @@ namespace FlowBlox.Services
             _componentProvider = componentProvider;
         }
 
+        public void RegisterAction(FlowBloxBaseAction action)
+        {
+            if (action != null)
+                _componentProvider.GetCurrentChangelist()?.AddChange(action);
+        }
+
         public void RegisterAutoLayoutMoves(IReadOnlyList<FlowBloxMoveAction> moveActions)
         {
             if (moveActions == null || moveActions.Count == 0)

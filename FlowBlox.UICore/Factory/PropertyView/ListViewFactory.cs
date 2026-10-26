@@ -395,7 +395,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
 
         protected virtual async Task ExecuteDeleteAsync(object item)
         {
-            if (item != null && await IsDeletableAsync(item, _window))
+            if (item != null && await ConfirmDeletionAsync(item, _window))
             {
                 _list.Remove(item);
                 _property.SetValue(_target, _list);

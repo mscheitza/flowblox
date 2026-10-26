@@ -12,6 +12,9 @@ namespace FlowBlox.Core.Models.Components
         [Required()]
         [Display(Name = "ValueItem_Value", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         public string Value { get; set; }
+
+        public override string ToString() =>
+            !string.IsNullOrWhiteSpace(DisplayName) ? DisplayName : Value ?? string.Empty;
     }
 }
 

@@ -59,13 +59,13 @@ Delete rules:
   - /Path/Delete
   - /Collection/<index>/Delete
   - Applies only to FlowBloxReactiveObject-only (non-reference component) values in the current parent context.
-  - Before reactive delete, the runtime checks IsDeletable; if blocked, remove blocking references first.
+  - Reactive delete uses the same central dependency analysis as direct component deletion.
 - Permanent delete for reference components:
   - DeleteFlowBlock / DeleteManagedObject
-- Reference dependencies must be removed first (leaf-to-root), otherwise delete fails and returns blockedBy entries.
-- blockedBy semantics: these are components that still hold references to the target object or its field elements.
+- Direct and collection references are removed automatically. EnableFieldSelection strings remain unchanged and are returned with reviewStatus=ManualActionRequired in deletionReport.
+- Deletion is always performed. When dependencies are affected, deletionReport lists every dependent reference handled because of the deletion. Collection removals have reviewStatus=Information. Optional references set to null have reviewStatus=ReviewRecommended; currently required references and invalid field expressions have reviewStatus=ManualActionRequired. If deletionReport is absent, no dependencies were affected.
 
-Examples:
-- Fb1 => Mo1 => Mo2: remove Fb1->Mo1 reference before deleting Mo1.
-- Fb1 => Fb2 => Fb3: delete Fb3 first, then Fb2, then Fb1.
+Deletion workflow:
+- Do not unlink references or reorder dependent objects before permanent deletion. Call DeleteFlowBlock or DeleteManagedObject directly; the deletion action analyzes and adjusts dependencies atomically so Undo/Redo remains complete.
+- Inspect deletionReport after deletion. It contains only dependencies handled because of that deletion; its absence means no dependencies were affected.
 

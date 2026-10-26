@@ -28,6 +28,8 @@ namespace FlowBlox.Core.Provider.Registry
         public event FlowBlockRemovedHandler OnFlowBlockRemoved;
         public event FlowBlockAddedHandler OnFlowBlockAdded;
 
+        public virtual bool SupportsDeletionStaging => false;
+
         public FlowBloxRegistry()
         {
             _flowBlocks = new HashSet<BaseFlowBlock>();
@@ -49,7 +51,7 @@ namespace FlowBlox.Core.Provider.Registry
         
         public List<BaseFlowBlock> GetInputFlowBlocks()
         {
-            return _flowBlocks
+            return GetFlowBlocks()
                 .Where(x => x.GetInputCardinality() != FlowBlockCardinalities.None)
                 .ToList();
         }
@@ -150,7 +152,7 @@ namespace FlowBlox.Core.Provider.Registry
 
         public void RemoveField(string fullyQualifiedFieldName)
         {
-            foreach(var fieldElement in _managedObjects
+            foreach(var fieldElement in GetManagedObjects()
                 .OfType<FieldElement>()
                 .Where(x => x.FullyQualifiedName == fullyQualifiedFieldName))
             {
@@ -198,11 +200,16 @@ namespace FlowBlox.Core.Provider.Registry
 
         public IEnumerable<BaseFlowBlock> GetFlowBlocks(Type type) => this.GetFlowBlocks().Where(x => type.IsAssignableFrom(x.GetType()));
 
-        public IEnumerable<BaseFlowBlock> GetFlowBlocks() => _flowBlocks;
+        public virtual IEnumerable<BaseFlowBlock> GetFlowBlocks() => _flowBlocks;
+
+        public virtual void StageDeletion(object target)
+        {
+            throw new NotSupportedException($"{GetType().Name} does not support deletion staging.");
+        }
 
         public virtual IEnumerable<IManagedObject> GetManagedObjects() => _managedObjects;
 
-        public virtual IEnumerable<T> GetManagedObjects<T>() where T : IManagedObject => _managedObjects.OfType<T>();
+        public virtual IEnumerable<T> GetManagedObjects<T>() where T : IManagedObject => GetManagedObjects().OfType<T>();
 
         public virtual IEnumerable<IManagedObject> GetManagedObjects(Type type)
         {
@@ -212,7 +219,7 @@ namespace FlowBlox.Core.Provider.Registry
             if (!typeof(IManagedObject).IsAssignableFrom(type))
                 throw new ArgumentException($"Type {type.FullName} does not implement IManagedObject.", nameof(type));
 
-            return _managedObjects.Where(obj => type.IsInstanceOfType(obj));
+            return GetManagedObjects().Where(obj => type.IsInstanceOfType(obj));
         }
 
         public IEnumerable<BaseFlowBlock> GetFlowBlocksRecursiveOrderedByExecutionFlow(BaseFlowBlock baseFlowBlock)
@@ -291,11 +298,11 @@ namespace FlowBlox.Core.Provider.Registry
             if (orderedByExecutionFlow && startFlowBlock != null)
             {
                 var result = GetFieldElementsRecursiveOrderedByExecutionFlow(startFlowBlock);
-                return result.Concat(_managedObjects.OfType<FieldElement>().Except(result));
+                return result.Concat(GetManagedObjects().OfType<FieldElement>().Except(result));
             }
             else
             {
-                return _managedObjects.OfType<FieldElement>();
+                return GetManagedObjects().OfType<FieldElement>();
             }
         }
 

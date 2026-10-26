@@ -24,12 +24,6 @@ namespace FlowBlox.Core.Util.FlowBlocks
                     return true;
             }
 
-            if (parentObj is FieldElement fieldElement)
-            {
-                if (propertyName == nameof(FieldElement.FieldType))
-                    return true;
-            }
-
             if (parentObj is FlowBloxComponent component)
             {
                 if (propertyName == nameof(FlowBloxComponent.RequiredFields))

@@ -113,6 +113,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.ControlFlow
         [Display(Name = "InvocationFieldTransferConfig_TransferTo", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         [FlowBloxUI(Factory = UIFactory.ComboBox, SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName), SelectionFilterMethod = nameof(InjectionFlowBlock.GetPossibleTransferToFieldElements), SelectionFilterDependency = nameof(InjectionFlowBlock.TargetFlowBlock))]
         public FieldElement TransferTo { get; set; }
+
+        public override string ToString() => $"{TransferFrom} → {TransferTo}";
     }
 
     [FlowBloxUIGroup("InjectionFlowBlock_Groups_FieldTransfers", 0)]

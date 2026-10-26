@@ -16,7 +16,6 @@ using FlowBlox.Core.Constants;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Services;
-using FlowBlox.Core.Services.Notifications;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Interfaces;
@@ -42,6 +41,7 @@ using FlowBlox.Styles;
 using FlowBlox.Util.Controls;
 using FlowBlox.Util.WPF;
 using FlowBlox.Core.Util.DistributedData;
+using FlowBlox.Core.Services.Notifications;
 
 namespace FlowBlox.AppWindow
 {

@@ -19,15 +19,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.SequenceFlow.ExecuteProject
         [FlowBloxUI(Factory = UIFactory.Association,  Operations = UIOperations.Create | UIOperations.Edit | UIOperations.Delete)]
         public FieldElement Field { get; set; }
 
-        public bool IsDeletable(out List<IFlowBloxComponent> dependencies)
-        {
-            if (Field == null)
-            {
-                dependencies = null;
-                return true;
-            }
-
-            return Field.IsDeletable(out dependencies);
-        }
+        public override string ToString() => $"{OutputPropertyName} → {Field}";
     }
 }

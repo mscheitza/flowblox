@@ -18,5 +18,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.Selection
 
         [Display(Name = "StartEndPattern_ReturnOptions", Description = "StartEndPattern_ReturnOptions_Tooltip", ResourceType = typeof(FlowBloxTexts))]
         public StartEndPatternReturnOptions? ReturnOptions { get; set; }
+
+        public override string ToString() => string.IsNullOrWhiteSpace(EndPattern)
+            ? StartPattern ?? string.Empty
+            : $"{StartPattern} … {EndPattern}";
     }
 }

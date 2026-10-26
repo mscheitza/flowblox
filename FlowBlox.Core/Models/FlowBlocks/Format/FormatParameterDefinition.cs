@@ -23,5 +23,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Format
 
         [Display(Name = "FormatParameterDefinition_IsRequired", ResourceType = typeof(FlowBloxTexts), Order = 1)]
         public override bool IsRequired { get; set; }
+
+        public override string ToString() => Field?.ToString() ?? string.Empty;
     }
 }

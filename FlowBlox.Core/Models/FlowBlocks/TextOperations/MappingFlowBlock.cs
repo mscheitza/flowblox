@@ -27,6 +27,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.TextOperations
         [FlowBloxUI(UiOptions = UIOptions.EnableFieldSelection)]
         public string Value { get; set; } = string.Empty;
 
+        public override string ToString() =>
+            !string.IsNullOrWhiteSpace(Key) ? Key : RegularExpression;
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var hasKey = !string.IsNullOrWhiteSpace(Key);

@@ -31,6 +31,7 @@ using FlowBlox.Core.Provider;
 using System.IO;
 using FlowBlox.Core.Models.Testing;
 using FlowBlox.Core.Util.Fields;
+using FlowBlox.UICore.Util;
 
 namespace FlowBlox.UICore.ViewModels
 {
@@ -691,25 +692,13 @@ namespace FlowBlox.UICore.ViewModels
             if (_registry == null || managedObject == null)
                 return;
 
-            if (!managedObject.IsDeletable(out var dependencies))
-            {
-                var dependencyText = string.Join(", ", dependencies.Select(x => x.Name).Where(x => !string.IsNullOrWhiteSpace(x)).Distinct());
-                _messageBoxService.ShowMessageBox(
-                    string.Format(Resources.ManagedObjectsView.Message_DeleteBlocked_Description, managedObject.Name, dependencyText),
-                    Resources.ManagedObjectsView.Message_DeleteBlocked_Title,
-                    FlowBloxMessageBoxTypes.Warning);
-                return;
-            }
-
-            var confirmResult = _messageBoxService.ShowMessageBox(
-                string.Format(Resources.ManagedObjectsView.Message_DeleteConfirm_Description, managedObject.Name),
-                Resources.ManagedObjectsView.Message_DeleteConfirm_Title,
-                FlowBloxMessageBoxTypes.Question);
-
-            if (confirmResult != FlowBloxMessageBoxDialogResult.Yes)
+            var report = FlowBloxDeletionHelper.Analyze(_registry, managedObject);
+            if (!DeletionConfirmationService.Confirm(_dialogService, report))
                 return;
 
-            _registry.Unregister(managedObject);
+            var action = FlowBloxDeletionHelper.CreateAction(_registry, report);
+            action.Invoke();
+            FlowBloxServiceLocator.Instance.GetService<IFlowBloxActionHistoryService>()?.RegisterAction(action);
         }
 
         private bool CanDeleteManagedObject()

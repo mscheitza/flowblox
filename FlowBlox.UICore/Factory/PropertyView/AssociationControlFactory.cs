@@ -324,7 +324,7 @@ namespace FlowBlox.UICore.Factory.PropertyView
         private async void ExecuteDelete()
         {
             var item = _property.GetValue(_target);
-            if (item != null && await IsDeletableAsync(item, _window))
+            if (item != null && await ConfirmDeletionAsync(item, _window))
             {
                 _property.SetValue(_target, null);
                 FlowBloxComponentHelper.RaisePropertyChanged(_target, _property.Name);

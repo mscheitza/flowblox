@@ -107,6 +107,7 @@ namespace FlowBlox.UICore.Manager
 			if (_transactionRegistry == null)
 				return;
 
+            FlowBloxPendingActionStore.Take(_transactionRegistry);
 			FlowBloxRegistryProvider.CancelTransaction(_transactionRegistry);
 			_transactionRegistry = null;
 		}
@@ -129,6 +130,27 @@ namespace FlowBlox.UICore.Manager
 
 			// Create repetition object
 			editAction.CaptureRepetitionState();
+
+            var pendingActions = FlowBloxPendingActionStore.Take(_transactionRegistry);
+            var invokedActions = new List<FlowBloxBaseAction>();
+            try
+            {
+                foreach (var action in pendingActions)
+                {
+                    action.Invoke();
+                    invokedActions.Add(action);
+                }
+            }
+            catch
+            {
+                foreach (var action in invokedActions.AsEnumerable().Reverse())
+                    action.Undo();
+                editAction.Undo();
+                throw;
+            }
+
+            foreach (var action in pendingActions)
+				editAction.AssociatedActions.Add(action);
 
 			// Create and append change
 			CreateAndAppendChange(editAction);

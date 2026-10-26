@@ -20,5 +20,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.Xml
             SelectionDisplayMember = nameof(FieldElement.FullyQualifiedName),
             SelectionFilterMethod = nameof(FlowBloxComponent.GetPossibleFieldElements))]
         public FieldElement FieldValue { get; set; }
+
+        public override string ToString() => XPath ?? string.Empty;
     }
 }

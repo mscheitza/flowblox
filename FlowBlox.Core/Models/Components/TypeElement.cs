@@ -97,6 +97,9 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
+                if (FieldType != FieldTypes.Boolean)
+                    return default;
+
                 if (bool.TryParse(fieldElement.StringValue.Trim(), out bool result))
                     return result;
 
@@ -141,6 +144,9 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
+                if (FieldType != FieldTypes.Integer)
+                    return default;
+
                 if (int.TryParse(fieldElement.StringValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out int result))
                     return result;
 
@@ -154,6 +160,9 @@ namespace FlowBlox.Core.Models.Components
             get
             {
                 if (!IsFieldElementSet(out FieldElement fieldElement))
+                    return default;
+
+                if (FieldType != FieldTypes.Long)
                     return default;
 
                 if (long.TryParse(fieldElement.StringValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out long result))
@@ -171,6 +180,9 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
+                if (FieldType != FieldTypes.Float)
+                    return default;
+
                 return new FloatParsingStrategy(GetNumberFormat()).Parse(fieldElement.StringValue);
             }
         }
@@ -181,6 +193,9 @@ namespace FlowBlox.Core.Models.Components
             get
             {
                 if (!IsFieldElementSet(out FieldElement fieldElement))
+                    return default;
+
+                if (FieldType != FieldTypes.Double)
                     return default;
 
                 return new DoubleParsingStrategy(GetNumberFormat()).Parse(fieldElement.StringValue);
@@ -195,6 +210,9 @@ namespace FlowBlox.Core.Models.Components
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return default;
 
+                if (FieldType != FieldTypes.DateTime)
+                    return default;
+
                 return new DateTimeParsingStrategy(DateFormat).Parse(fieldElement.StringValue);
             }
         }
@@ -206,6 +224,9 @@ namespace FlowBlox.Core.Models.Components
             {
                 if (!IsFieldElementSet(out FieldElement fieldElement))
                     return [];
+
+                if (FieldType != FieldTypes.ByteArray)
+                    return default;
 
                 try
                 {

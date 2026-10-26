@@ -143,5 +143,15 @@ namespace FlowBlox.Core.Models.Testing
         {
             FlowBloxTestConfigurations = new List<FlowBloxFieldTestConfiguration>();
         }
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrWhiteSpace(ParentTestDefinition?.Name))
+                return ParentTestDefinition.Name;
+
+            return !string.IsNullOrWhiteSpace(FlowBlock?.Name)
+                ? FlowBlock.Name
+                : base.ToString();
+        }
     }
 }

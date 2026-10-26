@@ -58,6 +58,8 @@ namespace FlowBlox.Core.Models.FlowBlocks.DateOperations
 
         [Display(Name = "DateTimeComponentAdjustmentEntry_Value", Description = "DateTimeComponentAdjustmentEntry_Value_Description", ResourceType = typeof(FlowBloxTexts), Order = 2)]
         public int Value { get; set; } = 1;
+
+        public override string ToString() => $"{Mode} {Value} {Target}";
     }
 
     [FlowBloxUIGroup("DateTimeComponentAdjustFlowBlock_Groups_Adjustments", 0)]
