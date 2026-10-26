@@ -1,5 +1,6 @@
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Util.FlowBlocks;
 using System.Collections;
 using System.Reflection;
 
@@ -80,7 +81,8 @@ namespace FlowBlox.Core.Validations
             HashSet<object> visited,
             List<string> messages)
         {
-            if (child is not FlowBloxReactiveObject reactiveChild || child is IFlowBloxComponent)
+            if (child is not FlowBloxReactiveObject reactiveChild ||
+                !FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(reactiveChild))
                 return;
 
             var path = string.IsNullOrWhiteSpace(parentPath)

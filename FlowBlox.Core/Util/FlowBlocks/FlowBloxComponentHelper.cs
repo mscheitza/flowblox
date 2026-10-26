@@ -5,7 +5,7 @@ using SkiaSharp;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace FlowBlox.Grid.Elements.Util
+namespace FlowBlox.Core.Util.FlowBlocks
 {
     public class FlowBloxComponentHelper
     {

@@ -6,7 +6,6 @@ using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters;
 using FlowBlox.UICore.Converters.PropertyView;

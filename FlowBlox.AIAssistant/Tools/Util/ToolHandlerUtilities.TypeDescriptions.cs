@@ -7,6 +7,7 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Compression;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using Newtonsoft.Json.Linq;
 
@@ -222,7 +223,8 @@ namespace FlowBlox.AIAssistant.Tools.Util
                     continue;
                 }
 
-                if (IsNonComponentReactiveObjectType(baseType) && !IsNonComponentReactiveObjectType(type))
+                if (FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(baseType) &&
+                    !FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(type))
                 {
                     continue;
                 }
@@ -407,7 +409,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 propertyInfo["supportedTypes"] = new JArray(supportedTypes);
             }
 
-            if (includeChildren && IsNonComponentReactiveObjectType(nonNullableType) && !isManagedObject && !isSimple)
+            if (includeChildren && FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(nonNullableType) && !isManagedObject && !isSimple)
             {
                 var key = nonNullableType.FullName ?? nonNullableType.Name;
                 if (!additionalKinds.ContainsKey(key))
@@ -419,7 +421,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 }
             }
 
-            if (IsNonComponentReactiveObjectType(nonNullableType))
+            if (FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(nonNullableType))
             {
                 AddUsedReactiveObjectType(usedTypes, nonNullableType);
             }
@@ -628,12 +630,6 @@ namespace FlowBlox.AIAssistant.Tools.Util
                    || type == typeof(Guid)
                    || type == typeof(DateTimeOffset)
                    || type == typeof(TimeSpan);
-        }
-
-        private static bool IsNonComponentReactiveObjectType(Type type)
-        {
-            return typeof(FlowBloxReactiveObject).IsAssignableFrom(type)
-                   && !typeof(FlowBloxComponent).IsAssignableFrom(type);
         }
 
         private static bool IsNullable(PropertyInfo property)

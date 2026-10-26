@@ -4,7 +4,7 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Project;
 using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Events;
 using FlowBlox.UICore.Interfaces;

@@ -7,6 +7,7 @@ using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.DependencyInjection;
 using System.IO;
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Actions;
 using FlowBlox.UICore.Interfaces;
 
@@ -49,8 +50,7 @@ namespace FlowBlox.UICore.Manager
                 component.OnAfterLoad();
             }
             else if (copy is FlowBloxReactiveObject reactiveObject &&
-                     copy is not IManagedObject &&
-                     copy is not IFlowBloxComponent)
+                     FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(reactiveObject))
             {
                 reactiveObject.OnAfterLoad();
             }

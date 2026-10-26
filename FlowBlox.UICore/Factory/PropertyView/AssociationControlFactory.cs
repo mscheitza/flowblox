@@ -3,7 +3,7 @@ using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Converters.PropertyView;
 using FlowBlox.UICore.Factory.PropertyView.HintTextResolver;

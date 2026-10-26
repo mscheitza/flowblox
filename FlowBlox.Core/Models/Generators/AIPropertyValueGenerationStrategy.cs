@@ -13,7 +13,7 @@ using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Toolbox;
 using FlowBlox.Core.Services;
 using FlowBlox.Core.Util.Fields;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text;

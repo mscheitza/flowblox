@@ -1,7 +1,7 @@
 using FlowBlox.Core;
 using FlowBlox.Core.Models.Deletion;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
 using MahApps.Metro.Controls;
 using MahApps.Metro.IconPacks;
 using System.ComponentModel.DataAnnotations;

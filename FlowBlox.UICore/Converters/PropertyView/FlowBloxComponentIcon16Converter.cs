@@ -1,4 +1,4 @@
-﻿using FlowBlox.Grid.Elements.Util;
+﻿using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.UICore.Utilities;
 using System.Globalization;
 using System.Windows.Data;

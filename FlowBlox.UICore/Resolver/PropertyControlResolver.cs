@@ -2,7 +2,6 @@
 using FlowBlox.Core.Extensions;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Factory.PropertyView;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.PropertyView.Resolver;

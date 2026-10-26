@@ -1,7 +1,7 @@
 using FlowBlox.AIAssistant.Models;
 using FlowBlox.Core.Models.Components;
 using FlowBlox.Core.Models.FlowBlocks.Base;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.Handler

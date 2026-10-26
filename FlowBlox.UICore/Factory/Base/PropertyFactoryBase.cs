@@ -6,6 +6,7 @@ using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
 using FlowBlox.Core.Actions;
 using FlowBlox.UICore.Util;
@@ -84,9 +85,8 @@ namespace FlowBlox.UICore.Factory.Base
                 _registry.PostProcessManagedObjectCreated(managedObject);
             }
             
-            if (newInstance is FlowBloxReactiveObject reactiveObject && 
-                newInstance is not IFlowBloxComponent && 
-                newInstance is not IManagedObject)
+            if (newInstance is FlowBloxReactiveObject reactiveObject &&
+                FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(reactiveObject))
             {
                 reactiveObject.OnAfterLoad();
             }

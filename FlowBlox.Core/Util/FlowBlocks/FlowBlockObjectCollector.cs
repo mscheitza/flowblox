@@ -162,8 +162,9 @@ namespace FlowBlox.Core.Util.FlowBlocks
             return CollectObjects<FlowBloxReactiveObject>(
                 root,
                 new HashSet<object>(ReferenceEqualityComparer.Instance),
-                excludedTypes: [typeof(ManagedObject), typeof(BaseFlowBlock)])
-                .Where(x => !ReferenceEquals(x, root) && x is not ManagedObject && x is not BaseFlowBlock);
+                excludedTypes: [typeof(FlowBloxComponent)])
+                .Where(x => !ReferenceEquals(x, root) &&
+                            FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(x));
         }
 
         public static IEnumerable<FieldElement> CollectReferencedFieldElementsRecursive(object root)
@@ -171,7 +172,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
             var reactiveObjects = CollectObjects<FlowBloxReactiveObject>(
                 root,
                 new HashSet<object>(),
-                excludedTypes: [typeof(ManagedObject), typeof(BaseFlowBlock)],
+                excludedTypes: [typeof(FlowBloxComponent)],
                 customNavigator: NavigateReferencedFieldsFromString);
 
             if (root is FieldElement rootFieldElement)
@@ -224,7 +225,7 @@ namespace FlowBlox.Core.Util.FlowBlocks
             _ = CollectObjects<FlowBloxReactiveObject>(
                 root,
                 new HashSet<object>(),
-                excludedTypes: [typeof(ManagedObject), typeof(BaseFlowBlock)],
+                excludedTypes: [typeof(FlowBloxComponent)],
                 customNavigator: (obj, props, _) => NavigateFieldSelectionStringProperties(obj, props, matches)
             );
 

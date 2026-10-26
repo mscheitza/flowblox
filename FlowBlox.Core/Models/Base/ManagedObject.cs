@@ -2,7 +2,7 @@ using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Provider;
 using FlowBlox.Core.Util;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.Base

@@ -16,7 +16,6 @@ using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.DeepCopier;
 using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Commands;
 using FlowBlox.UICore.Enums;
 using FlowBlox.UICore.Events;

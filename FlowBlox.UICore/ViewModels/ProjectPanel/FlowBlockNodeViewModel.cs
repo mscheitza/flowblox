@@ -2,7 +2,7 @@ using FlowBlox.Core.Models.FlowBlocks;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Runtime;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using System.Collections.ObjectModel;

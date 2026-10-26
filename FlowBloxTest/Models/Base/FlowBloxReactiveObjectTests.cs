@@ -1,5 +1,6 @@
-using FlowBlox.Core.Interfaces;
 using FlowBlox.Core.Models.Base;
+using FlowBlox.Core.Models.Components;
+using FlowBlox.Core.Util.FlowBlocks;
 
 namespace FlowBloxTest.Models.Base
 {
@@ -8,6 +9,21 @@ namespace FlowBloxTest.Models.Base
     public sealed class FlowBloxReactiveObjectTests
     {
         [TestMethod]
+        public void IsReactiveObjectOnly_DistinguishesOwnedReactiveObjectsFromComponents()
+        {
+            var reactiveObject = new FlowBloxReactiveObject();
+            var component = new FieldElement();
+
+            Assert.IsTrue(FlowBloxReactiveObjectHelper.IsReactiveObjectOnly((object)reactiveObject));
+            Assert.IsTrue(FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(reactiveObject));
+            Assert.IsTrue(FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(typeof(FlowBloxReactiveObject)));
+
+            Assert.IsFalse(FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(new object()));
+            Assert.IsFalse(FlowBloxReactiveObjectHelper.IsReactiveObjectOnly((FlowBloxReactiveObject)component));
+            Assert.IsFalse(FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(typeof(FieldElement)));
+        }
+
+        [TestMethod]
         public void ConcreteNonComponentTypes_OverrideToString()
         {
             var typesWithoutMeaningfulToString = typeof(FlowBloxReactiveObject).Assembly
@@ -15,8 +31,7 @@ namespace FlowBloxTest.Models.Base
                 .Where(type =>
                     type != typeof(FlowBloxReactiveObject) &&
                     !type.IsAbstract &&
-                    typeof(FlowBloxReactiveObject).IsAssignableFrom(type) &&
-                    !typeof(IFlowBloxComponent).IsAssignableFrom(type))
+                    FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(type))
                 .Where(type => type.GetMethod(nameof(ToString), Type.EmptyTypes)?.DeclaringType == typeof(object))
                 .Select(type => type.FullName)
                 .OrderBy(typeName => typeName)

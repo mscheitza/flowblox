@@ -53,7 +53,8 @@ namespace FlowBlox.Core.Util.FlowBlocks
 
                 visitor(root, instance, property, value);
 
-                if (value is FlowBloxReactiveObject nested && nested is not FlowBloxComponent)
+                if (value is FlowBloxReactiveObject nested &&
+                    FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(nested))
                 {
                     VisitPropertiesRecursive(root, nested, visitor, visited);
                     continue;
@@ -61,7 +62,9 @@ namespace FlowBlox.Core.Util.FlowBlocks
 
                 if (value is IEnumerable enumerable && value is not string)
                 {
-                    foreach (var item in enumerable.OfType<FlowBloxReactiveObject>().Where(x => x is not FlowBloxComponent))
+                    foreach (var item in enumerable
+                                 .OfType<FlowBloxReactiveObject>()
+                                 .Where(FlowBloxReactiveObjectHelper.IsReactiveObjectOnly))
                     {
                         VisitPropertiesRecursive(root, item, visitor, visited);
                     }

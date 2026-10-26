@@ -1,4 +1,4 @@
-﻿using FlowBlox.Grid.Elements.Util;
+﻿using FlowBlox.Core.Util.FlowBlocks;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;

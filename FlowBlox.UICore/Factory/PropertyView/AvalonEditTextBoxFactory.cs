@@ -1,6 +1,6 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util.Fields;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.UICore.Factory.PropertyView.Colorizer;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;

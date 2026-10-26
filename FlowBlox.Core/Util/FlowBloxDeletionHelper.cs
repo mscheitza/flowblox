@@ -215,7 +215,8 @@ namespace FlowBlox.Core.Util
                 };
             }
 
-            if (target is FlowBloxReactiveObject)
+            if (target is FlowBloxReactiveObject reactiveObject &&
+                FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(reactiveObject))
             {
                 var managedObjects = GetNestedManagedObjects(target)
                     .Distinct()
@@ -384,8 +385,7 @@ namespace FlowBlox.Core.Util
 
         private static bool IsNestedRowDeleteScope(object instance)
         {
-            return instance is FlowBloxReactiveObject &&
-                   instance is not FlowBloxComponent;
+            return FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(instance);
         }
 
         private static IEnumerable<IManagedObject> GetNestedManagedObjects(object instance)

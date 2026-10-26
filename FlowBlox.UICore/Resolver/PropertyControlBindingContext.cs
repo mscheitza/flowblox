@@ -1,6 +1,5 @@
 ﻿using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Util.FlowBlocks;
-using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.ViewModels.PropertyView;
 using System.ComponentModel;
 using System.Reflection;

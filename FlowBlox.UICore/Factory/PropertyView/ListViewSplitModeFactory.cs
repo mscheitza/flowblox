@@ -1,5 +1,5 @@
 ﻿using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using FlowBlox.UICore.Interfaces;
 using FlowBlox.UICore.Utilities;
 using FlowBlox.UICore.ViewModels.PropertyView;

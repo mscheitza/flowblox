@@ -8,7 +8,6 @@ using FlowBlox.Core.Provider.Project;
 using FlowBlox.Core.Util;
 using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
 using FlowBlox.UICore.Factory.Adapter;
 using FlowBlox.UICore.Factory.PropertyView;
 using FlowBlox.UICore.Interfaces;
@@ -20,6 +19,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using FlowBlox.Core.Util.FlowBlocks;
 
 namespace FlowBlox.UICore.Resolver
 {

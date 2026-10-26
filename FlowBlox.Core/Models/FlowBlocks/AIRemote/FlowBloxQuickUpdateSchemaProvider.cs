@@ -1,7 +1,7 @@
 using FlowBlox.Core.Models.Base;
 using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Util.Resources;
-using FlowBlox.Grid.Elements.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
@@ -108,7 +108,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
             if (collectionElementType != null)
             {
                 var elementType = Nullable.GetUnderlyingType(collectionElementType) ?? collectionElementType;
-                if (IsFlowBloxReactiveObjectOnly(elementType))
+                if (FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(elementType))
                 {
                     return new QuickUpdatePropertyDefinition(
                         property,
@@ -119,7 +119,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
                 return null;
             }
 
-            if (IsFlowBloxReactiveObjectOnly(nonNullableType))
+            if (FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(nonNullableType))
                 return new QuickUpdatePropertyDefinition(property, QuickUpdatePropertyKind.ReactiveObject);
 
             return null;
@@ -230,14 +230,6 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote
                 .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
 
             return enumerableInterface?.GetGenericArguments().FirstOrDefault();
-        }
-
-        internal static bool IsFlowBloxReactiveObjectOnly(Type type)
-        {
-            return typeof(FlowBloxReactiveObject).IsAssignableFrom(type) &&
-                   !typeof(BaseFlowBlock).IsAssignableFrom(type) &&
-                   !typeof(ManagedObject).IsAssignableFrom(type) &&
-                   !typeof(FlowBloxComponent).IsAssignableFrom(type);
         }
 
         internal static bool IsSimpleType(Type type)

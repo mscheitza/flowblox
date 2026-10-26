@@ -8,6 +8,7 @@ using FlowBlox.Core.Models.FlowBlocks.Base;
 using FlowBlox.Core.Models.Deletion;
 using FlowBlox.Core.Provider.Registry;
 using FlowBlox.Core.Util;
+using FlowBlox.Core.Util.FlowBlocks;
 using Newtonsoft.Json.Linq;
 
 namespace FlowBlox.AIAssistant.Tools.Util
@@ -494,7 +495,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
             if (elementType != null && property.GetValue(current) is IList listValue)
             {
-                if (!IsNonComponentReactiveObjectType(actualType))
+                if (!FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(actualType))
                 {
                     throw new InvalidOperationException(
                         $"Path '{path}' delete operation is only supported for FlowBloxReactiveObject-only (non-reference component) values. " +
@@ -512,7 +513,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 return;
             }
 
-            if (!IsNonComponentReactiveObjectType(actualType))
+            if (!FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(actualType))
             {
                 throw new InvalidOperationException(
                     $"Path '{path}' delete operation is only supported for FlowBloxReactiveObject-only (non-reference component) values. " +
@@ -527,7 +528,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
 
         private static void DeleteIndexedValue(IList list, Type elementType, int index, string path)
         {
-            if (!IsNonComponentReactiveObjectType(elementType))
+            if (!FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(elementType))
             {
                 throw new InvalidOperationException(
                     $"Path '{path}' delete operation targets '{elementType.FullName}'. " +
@@ -1132,7 +1133,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
                 return CreateInstance(elementType, collectionOwner);
             }
 
-            if (IsNonComponentReactiveObjectType(elementType))
+            if (FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(elementType))
             {
                 var supportedTypes = GetSupportedTypeInfos(elementType)
                     .Select(x => x.Value<string>("fullName"))
@@ -1164,7 +1165,7 @@ namespace FlowBlox.AIAssistant.Tools.Util
             var elementType = GetElementType(nonNullableTargetType);
             var valueTargetType = Nullable.GetUnderlyingType(elementType ?? nonNullableTargetType) ?? (elementType ?? nonNullableTargetType);
 
-            if (!IsNonComponentReactiveObjectType(valueTargetType))
+            if (!FlowBloxReactiveObjectHelper.IsReactiveObjectOnly(valueTargetType))
                 return;
 
             if (value.Type != JTokenType.Object && value.Type != JTokenType.Array)
