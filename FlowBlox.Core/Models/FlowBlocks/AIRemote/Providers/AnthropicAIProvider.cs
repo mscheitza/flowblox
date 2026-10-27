@@ -21,7 +21,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
         public AnthropicAIProvider()
         {
             BaseUrl = "https://api.anthropic.com/v1";
-            DefaultModel = "claude-opus-5";
+            DefaultModel = "claude-opus-5-5";
             EstimatedSystemPromptCacheSavingsRate = 0.70d;
         }
 
@@ -129,7 +129,9 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
                 PromptCaching = PromptCacheType.FineGrained
             };
 
-            if (request.Temperature is >= 0 and <= 1)
+            // Opus 5.5 rejects sampling parameters; preserve temperature for older models.
+            if (!resolvedModel.StartsWith("claude-opus-5-5", StringComparison.OrdinalIgnoreCase) &&
+                request.Temperature is >= 0 and <= 1)
                 parameters.Temperature = (decimal)request.Temperature.Value;
 
             return parameters;

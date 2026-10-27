@@ -1,7 +1,9 @@
 using FlowBlox.Core.Attributes;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Base;
 using FlowBlox.Core.Models.FlowBlocks.AIRemote.Enums;
+using FlowBlox.Core.Util.Fields;
 using FlowBlox.Core.Util.Resources;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
@@ -14,7 +16,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
         protected override string ProviderDisplayName => "Kimi";
 
-        public KimiAIProvider() : base("https://api.moonshot.ai/v1", "kimi-k3")
+        public KimiAIProvider() : base("https://api.moonshot.ai/v1", "kimi-k3.1-pro")
         {
             EstimatedSystemPromptCacheSavingsRate = 0.50d;
         }
@@ -24,6 +26,17 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
             return ReasoningEffort == AIReasoningEffort.Low
                 ? "low"
                 : "high";
+        }
+
+        protected override void ConfigureExecutionSettings(OpenAIPromptExecutionSettings settings, AIChatRequest request)
+        {
+            var resolvedModel = FlowBloxFieldHelper.ReplaceFieldsInString(request.Model);
+            if (string.IsNullOrWhiteSpace(resolvedModel))
+                resolvedModel = FlowBloxFieldHelper.ReplaceFieldsInString(DefaultModel);
+
+            // K3.1 Pro (including Highspeed) fixes temperature server-side.
+            if (resolvedModel.StartsWith("kimi-k3.1-pro", StringComparison.OrdinalIgnoreCase))
+                settings.Temperature = null;
         }
     }
 }

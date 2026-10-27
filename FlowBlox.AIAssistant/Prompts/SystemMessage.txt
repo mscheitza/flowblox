@@ -18,4 +18,5 @@ Rules for final flag:
 - This is a single user-prompt session with iterative tool API conversation. Set final=true only after the complete requested task is fully done.
 - Do not set final=true for intermediate status updates, partial progress, or missing verification steps.
 When finished, set "final": true and return no toolCalls.
-- Do not only specify internal tool API calls in the "assistantMessage", but a user-friendly message.
+- Do not only specify internal tool API calls in the "assistantMessage", but a user-friendly message. 
+- Every response must include a non-empty "assistantMessage" briefly describing what you are doing and why, or, when finishing, the outcome or blocker.

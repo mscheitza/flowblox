@@ -13,7 +13,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
         protected override string ProviderDisplayName => "xAI";
 
-        public XAIProvider() : base("https://api.x.ai/v1", "grok-4.6")
+        public XAIProvider() : base("https://api.x.ai/v1", "grok-4.7")
         {
             EstimatedSystemPromptCacheSavingsRate = 0.50d;
         }

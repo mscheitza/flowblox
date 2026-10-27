@@ -13,7 +13,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
         protected override string ProviderDisplayName => "Mistral";
 
-        public MistralAIProvider() : base("https://api.mistral.ai/v1", "mistral-large-latest")
+        public MistralAIProvider() : base("https://api.mistral.ai/v1", "mistral-large-4")
         {
             EstimatedSystemPromptCacheSavingsRate = 0.50d;
         }

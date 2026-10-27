@@ -15,7 +15,7 @@ namespace FlowBlox.Core.Models.FlowBlocks.AIRemote.Providers
 
         protected override string ProviderDisplayName => "DeepSeek";
 
-        public DeepSeekAIProvider() : base("https://api.deepseek.com", "deepseek-v4-pro")
+        public DeepSeekAIProvider() : base("https://api.deepseek.com", "deepseek-flash")
         {
             EstimatedSystemPromptCacheSavingsRate = 0.60d;
         }
