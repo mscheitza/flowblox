@@ -458,9 +458,8 @@ namespace FlowBlox.AppWindow
             var project = new FlowBloxProject();
             this._recentProjectPath = string.Empty;
 
-            ProjectView projectView = new ProjectView(project, ProjectViewMode.CreateProject);
-            projectView.ShowDialog(this);
-            if (string.IsNullOrEmpty(project.ProjectName))
+            var projectView = new CreateEditProjectWindow(project);
+            if (WindowsFormWPFHelper.ShowDialog(projectView, this) != true)
             {
                 UnloadProject();
             }
@@ -1052,8 +1051,8 @@ namespace FlowBlox.AppWindow
             if (FlowBloxProjectManager.Instance.ActiveProject == null)
                 return;
 
-            ProjectView ProjectView = new ProjectView(FlowBloxProjectManager.Instance.ActiveProject, ProjectViewMode.EditProject);
-            ProjectView.ShowDialog(this);
+            var projectView = new CreateEditProjectWindow(FlowBloxProjectManager.Instance.ActiveProject, isEditing: true);
+            WindowsFormWPFHelper.ShowDialog(projectView, this);
             UpdateUI();
             UpdateUI_ProjectName();
         }
@@ -1096,8 +1095,8 @@ namespace FlowBlox.AppWindow
 
         private void itmAbout_Click(object sender, EventArgs e)
         {
-            About aboutWindow = new About();
-            aboutWindow.ShowDialog(this);
+            var aboutWindow = new AboutWindow();
+            WindowsFormWPFHelper.ShowDialog(aboutWindow, this);
             UpdateUI();
         }
 

@@ -26,9 +26,16 @@ namespace FlowBlox
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            using (var splash = new SplashWindow())
+            var splash = new UICore.Views.SplashWindow(AppWindow.AppWindow.InitApp);
+            if (splash.ShowDialog() != true)
             {
-                splash.ShowDialog();
+                var error = splash.InitializationError;
+                FlowBloxLogManager.Instance.GetLogger().Error("Application initialization failed.", e: error);
+                System.Windows.MessageBox.Show(
+                    string.Format(UICore.Resources.SplashWindow.Error, error?.Message),
+                    UICore.Resources.SplashWindow.ErrorTitle,
+                    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                return;
             }
 
             var options = ParseCommandLine(args);

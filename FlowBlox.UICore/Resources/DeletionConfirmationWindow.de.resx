@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+  <data name="MessagesHeader" xml:space="preserve">
+    <value>Abhängigkeiten</value>
+  </data>
+  <data name="NoMessages" xml:space="preserve">
+    <value>Keine Abhängigkeiten vorhanden.</value>
+  </data>
+  <data name="NoSelection" xml:space="preserve">
+    <value>Wählen Sie ein Objekt aus, um die Details anzuzeigen.</value>
+  </data>
+  <data name="RootTargetsHeader" xml:space="preserve">
+    <value>Betroffene Objekte</value>
+  </data>
+  <data name="SelectionHint" xml:space="preserve">
+    <value>Wählen Sie ein Objekt aus, um seine Abhängigkeiten zu prüfen.</value>
+  </data>
+  <data name="Summary_Information" xml:space="preserve">
+    <value>{0} Hinweise</value>
+  </data>
+  <data name="Summary_ManualActionRequired" xml:space="preserve">
+    <value>{0} mit Handlungsbedarf</value>
+  </data>
+  <data name="Summary_ReviewRecommended" xml:space="preserve">
+    <value>{0} zu prüfen</value>
+  </data>
+</root>

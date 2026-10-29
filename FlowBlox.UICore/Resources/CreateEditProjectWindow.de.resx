@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+  <data name="Apply" xml:space="preserve">
+    <value>_Annehmen</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Ersteller</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>_Zurück</value>
+  </data>
+  <data name="CreateDirectory" xml:space="preserve">
+    <value>Verzeichnis erstellen</value>
+  </data>
+  <data name="CreateTitle" xml:space="preserve">
+    <value>Projekt erstellen</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Projektbeschreibung (empfohlen)</value>
+  </data>
+  <data name="DescriptionHint" xml:space="preserve">
+    <value>Hier können Sie ein neues Projekt erstellen oder die Projekteigenschaften bearbeiten.</value>
+  </data>
+  <data name="DirectoryError" xml:space="preserve">
+    <value>Die Verzeichnisaktion ist fehlgeschlagen: {0}</value>
+  </data>
+  <data name="EditTitle" xml:space="preserve">
+    <value>Projekt bearbeiten</value>
+  </data>
+  <data name="InputDirectory" xml:space="preserve">
+    <value>Projekt-Eingabeverzeichnis</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Bitte geben Sie eine gültige Projektbezeichnung an.</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Hinweis beim Öffnen</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>Verzeichnis öffnen</value>
+  </data>
+  <data name="OutputDirectory" xml:space="preserve">
+    <value>Projekt-Ausgabeverzeichnis</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>Projektbezeichnung</value>
+  </data>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>Kurzbeschreibung</value>
+  </data>
+  <data name="InputDirectoryTooltip" xml:space="preserve">
+    <value>Eingabeverzeichnis, abgeleitet aus dem konfigurierten Eingabe-Basisverzeichnis und dem Projektnamen.</value>
+  </data>
+  <data name="OutputDirectoryTooltip" xml:space="preserve">
+    <value>Ausgabeverzeichnis, abgeleitet aus dem konfigurierten Ausgabe-Basisverzeichnis und dem Projektnamen.</value>
+  </data>
+  <data name="DescriptionTooltip" xml:space="preserve">
+    <value>Beschreiben Sie Ziel, Umfang und die wichtigsten Verarbeitungsschritte des Flows. Damit geben Sie externen Tools und dem AI Assistant hilfreichen Kontext, um Sie bei der Bedienung und Verwendung des Flows zu unterstützen.</value>
+  </data>
+  <data name="NoticeTooltip" xml:space="preserve">
+    <value>Optionaler Hinweis, der beim Öffnen des Projekts angezeigt wird, etwa Voraussetzungen oder Bedienhinweise.</value>
+  </data>
+</root>

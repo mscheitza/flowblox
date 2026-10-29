@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+  <data name="Apply" xml:space="preserve">
+    <value>_Apply</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Creator</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>_Back</value>
+  </data>
+  <data name="CreateDirectory" xml:space="preserve">
+    <value>Create directory</value>
+  </data>
+  <data name="CreateTitle" xml:space="preserve">
+    <value>Create project</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Project description (recommended)</value>
+  </data>
+  <data name="DescriptionHint" xml:space="preserve">
+    <value>Here you can create a new project or edit the project properties.</value>
+  </data>
+  <data name="DirectoryError" xml:space="preserve">
+    <value>The directory operation failed: {0}</value>
+  </data>
+  <data name="EditTitle" xml:space="preserve">
+    <value>Edit project</value>
+  </data>
+  <data name="InputDirectory" xml:space="preserve">
+    <value>Project input directory</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Please enter a valid project name.</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Notice on open</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>Open directory</value>
+  </data>
+  <data name="OutputDirectory" xml:space="preserve">
+    <value>Project output directory</value>
+  </data>
+  <data name="ProjectName" xml:space="preserve">
+    <value>Project name</value>
+  </data>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>Short description</value>
+  </data>
+  <data name="InputDirectoryTooltip" xml:space="preserve">
+    <value>Input directory derived from the configured input base directory and the project name.</value>
+  </data>
+  <data name="OutputDirectoryTooltip" xml:space="preserve">
+    <value>Output directory derived from the configured output base directory and the project name.</value>
+  </data>
+  <data name="DescriptionTooltip" xml:space="preserve">
+    <value>Describe the flow's purpose, scope, and key processing steps. This gives external tools and the AI Assistant useful context to help you operate and use the flow.</value>
+  </data>
+  <data name="NoticeTooltip" xml:space="preserve">
+    <value>Optional notice displayed when the project is opened, for example prerequisites or instructions.</value>
+  </data>
+</root>

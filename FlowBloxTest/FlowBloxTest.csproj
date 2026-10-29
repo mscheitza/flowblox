@@ -4,12 +4,15 @@
     <TargetFramework>net10.0-windows7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="System.Net.Http" />
+    <Using Include="System.IO" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.12" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="4.2.3" />
@@ -24,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FlowBlox.AIAssistant\FlowBlox.AIAssistant.csproj" />
     <ProjectReference Include="..\FlowBlox.Core\FlowBlox.Core.csproj" />
+    <ProjectReference Include="..\FlowBlox.UICore\FlowBlox.UICore.csproj" />
   </ItemGroup>
 
 </Project>

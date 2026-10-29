@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    Title="{Binding Title}" Width="920" Height="680" MinWidth="720" MinHeight="480"
+    Title="{Binding Title}" Width="1120" Height="720" MinWidth="900" MinHeight="480"
     WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Window.Resources>
         <ResourceDictionary>
@@ -50,105 +50,207 @@
             </Grid>
         </Border>
 
-        <ListBox Grid.Row="1"
-                 Margin="20,0,20,16"
-                 Padding="0"
-                 BorderThickness="0"
-                 Background="Transparent"
-                 ItemsSource="{Binding Entries}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Padding" Value="0" />
-                    <Setter Property="Margin" Value="0,0,0,6" />
-                    <Setter Property="Focusable" Value="False" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border Padding="11"
-                            Background="{Binding CardBackground}"
-                            BorderBrush="{Binding CardBorder}"
-                            BorderThickness="1"
-                            CornerRadius="5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <Border Grid.RowSpan="3"
-                                    Width="34"
-                                    Height="34"
-                                    Margin="0,1,11,0"
-                                    VerticalAlignment="Top"
-                                    Background="{Binding IconBackground}"
-                                    CornerRadius="17">
-                                <icons:PackIconMaterial Kind="{Binding Icon}"
-                                                        Width="18"
-                                                        Height="18"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        Foreground="{Binding Accent}" />
+        <Grid Grid.Row="1" Margin="20,0,20,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.9*" MinWidth="260" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="1.8*" MinWidth="480" />
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding RootTargetsHeader}" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8" />
+                <ListBox x:Name="RootCards" Grid.Row="1"
+                         ItemsSource="{Binding RootTargets}"
+                         SelectedItem="{Binding SelectedRoot, Mode=TwoWay}"
+                         SelectionMode="Single"
+                         IsSynchronizedWithCurrentItem="False"
+                         PreviewMouseLeftButtonDown="RootCards_PreviewMouseLeftButtonDown"
+                         PreviewKeyDown="RootCards_PreviewKeyDown"
+                         AutomationProperties.Name="{Binding RootTargetsHeader}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         Padding="0" BorderThickness="0" Background="Transparent">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="Margin" Value="0,0,0,6" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="SelectionBorder" BorderThickness="2" Padding="2" CornerRadius="8" Background="Transparent" BorderBrush="Transparent">
+                                            <ContentPresenter />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="SelectionBorder" Property="BorderBrush" Value="#FF90A4AE" />
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="SelectionBorder" Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                            </Trigger>
+                                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                                <Setter TargetName="SelectionBorder" Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="11" Background="{Binding CardBackground}" BorderBrush="{Binding CardBorder}" BorderThickness="1" CornerRadius="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34" Height="34" Margin="0,1,11,0" VerticalAlignment="Top" Background="{Binding IconBackground}" CornerRadius="17">
+                                        <icons:PackIconMaterial Kind="{Binding Icon}" Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding Accent}" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="{Binding ObjectType}" FontSize="10.5" FontWeight="SemiBold" Foreground="{Binding Accent}" TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding ObjectName}" Margin="0,1,0,0" FontSize="13" FontWeight="SemiBold" Foreground="#FF263238" TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding Summary}" Margin="0,6,0,0" Foreground="#FF37474F" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
                             </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Grid.Row="2" Text="{Binding SelectionHint}" FontSize="11" Foreground="#FF607D8B" TextWrapping="Wrap" Margin="0,8,0,0" />
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding MessagesHeader}" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8" />
+                <ListBox Grid.Row="1" x:Name="Messages"
+                         Padding="0"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         ItemsSource="{Binding Entries}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Margin" Value="0,0,0,6" />
+                            <Setter Property="Focusable" Value="False" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="11"
+                                    Background="{Binding CardBackground}"
+                                    BorderBrush="{Binding CardBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                            <StackPanel Grid.Column="1" Margin="0,0,12,0">
-                                <TextBlock Text="{Binding ObjectType}"
-                                           FontSize="10.5"
-                                           FontWeight="SemiBold"
-                                           Foreground="{Binding Accent}" />
-                                <TextBlock Text="{Binding ObjectName}"
-                                           Margin="0,1,0,0"
-                                           FontSize="13"
-                                           FontWeight="SemiBold"
-                                           Foreground="#FF263238"
-                                           TextWrapping="Wrap" />
-                            </StackPanel>
+                                    <Border Grid.RowSpan="3"
+                                            Width="34"
+                                            Height="34"
+                                            Margin="0,1,11,0"
+                                            VerticalAlignment="Top"
+                                            Background="{Binding IconBackground}"
+                                            CornerRadius="17">
+                                        <icons:PackIconMaterial Kind="{Binding Icon}"
+                                                                Width="18"
+                                                                Height="18"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                Foreground="{Binding Accent}" />
+                                    </Border>
 
-                            <Border Grid.Column="2"
-                                    Padding="8,3"
-                                    VerticalAlignment="Top"
-                                    Background="{Binding StatusBackground}"
-                                    CornerRadius="3">
-                                <TextBlock Text="{Binding Status}"
-                                           FontSize="11"
-                                           FontWeight="SemiBold"
-                                           Foreground="{Binding Accent}" />
+                                    <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                                        <TextBlock Text="{Binding ObjectType}"
+                                                   FontSize="10.5"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{Binding Accent}" />
+                                        <TextBlock Text="{Binding ObjectName}"
+                                                   Margin="0,1,0,0"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#FF263238"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+
+                                    <Border Grid.Column="2"
+                                            Padding="8,3"
+                                            VerticalAlignment="Top"
+                                            Background="{Binding StatusBackground}"
+                                            CornerRadius="3">
+                                        <TextBlock Text="{Binding Status}"
+                                                   FontSize="11"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{Binding Accent}" />
+                                    </Border>
+
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
+                                        <TextBlock Text="{Binding PropertyLabel}"
+                                                   FontSize="11"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#FF607D8B" />
+                                        <TextBlock Text="{Binding Property}"
+                                                   Margin="0,1,0,0"
+                                                   Foreground="#FF37474F"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
+                                        <TextBlock Text="{Binding ImpactLabel}"
+                                                   FontSize="11"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#FF607D8B" />
+                                        <TextBlock Text="{Binding Impact}"
+                                                   Margin="0,1,0,0"
+                                                   Foreground="#FF37474F"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Grid>
                             </Border>
-
-                            <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
-                                <TextBlock Text="{Binding PropertyLabel}"
-                                           FontSize="11"
-                                           FontWeight="SemiBold"
-                                           Foreground="#FF607D8B" />
-                                <TextBlock Text="{Binding Property}"
-                                           Margin="0,1,0,0"
-                                           Foreground="#FF37474F"
-                                           TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
-                                <TextBlock Text="{Binding ImpactLabel}"
-                                           FontSize="11"
-                                           FontWeight="SemiBold"
-                                           Foreground="#FF607D8B" />
-                                <TextBlock Text="{Binding Impact}"
-                                           Margin="0,1,0,0"
-                                           Foreground="#FF37474F"
-                                           TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Border Grid.Row="1" Padding="24" Background="#FFF4F8FC" BorderBrush="#FFB8D3EA" BorderThickness="1" CornerRadius="5">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasEntries}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <StackPanel VerticalAlignment="Center">
+                        <icons:PackIconMaterial Kind="InformationOutline" Width="28" Height="28" Foreground="#FF3A6EA5" HorizontalAlignment="Center" Margin="0,0,0,12" />
+                        <TextBlock Text="{Binding EmptyStateText}" Foreground="#FF37474F" TextWrapping="Wrap" TextAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
         <Border Grid.Row="2"
                 Background="#FFF7F9FB"
                 BorderBrush="#FFD4DEE9"
